@@ -1,4 +1,5 @@
 ﻿using KantanMitsumori.Model;
+using KantanMitsumori.Model.Request;
 
 namespace KantanMitsumori.IService
 {

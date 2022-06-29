@@ -1,11 +1,14 @@
 ﻿using KantanMitsumori.Helper.Constant;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
     public static class CommonFunction
     {
+        private static readonly ILogger _logger;
+
         /// <summary>
         /// シングルクウォーテーションで囲む（SQL用）
         /// </summary>
@@ -90,7 +93,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <returns></returns>
         public static string SetFormat(long text2, string unit, string formatText)
         {
-            formatText = Convert.ToString(string.Format("#,##", text2) + unit);
+            formatText = Convert.ToString(Strings.Format(text2, "#,##") + unit);
             return formatText;
         }
 
@@ -304,25 +307,192 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="vEncNo"></param>
         /// <param name="vDecNo"></param>
         /// <returns></returns>
-        //public static bool DecUserNo(string vEncNo, string vDecNo)
-        //{
-        //    string wOne = "";
-        //    string wStr = "";
-        //    string wInt = "";
-        //    string wDec = "";
-        //    int i = 0;
+        public static bool DecUserNo(string vEncNo, string vDecNo)
+        {
+            string wOne = "";
+            string wStr = "";
+            string wInt = "";
+            int i = 0;
 
-        //    try
-        //    {
+            try
+            {
+                // 文字数分ループ
+                for (i = 1; i < vEncNo.Length; i++)
+                {
+                    wOne = Mid(vEncNo, i, 1);
+                    // 取り出した文字が英小文字(a～z)の場合
+                    if (Strings.Asc(wOne) >= 97 && Strings.Asc(wOne) <= 122)
+                    {
+                        // 英小文字と数字がすでに格納されていれば1文字分デコード
+                        if (wStr.Length == 1 && wInt.Length > 0)
+                        {
+                            vDecNo += Strings.Chr(Strings.Asc(wStr) - Convert.ToInt32(wInt));
+                            // ワーククリア
+                            wStr = "";
+                            wInt = "";
+                        }
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return false;
-        //    }
-        //}
+                        //英小文字を格納
+                        wStr = wOne;
+                    }
+                    else
+                    {
+                        // 数字を格納（'－'マイナスもありえる）
+                        wInt += wOne;
+                    }
+                }
 
+                // 最後の文字分のデコード
+                vDecNo += Strings.Chr(Strings.Asc(wStr) - Convert.ToInt32(wInt));
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CommonFuncs - DecUserNo - GCMF-010C ◆会員認証エラー◆ 復号化前会員番号：{0}", vEncNo);
+                return false;
+            }
+        }
 
+        /// <summary>
+        /// 見積書データ項目 税抜／税込切替時の再計算
+        /// </summary>
+        /// <param name="oldVal"></param>
+        /// <param name="conTaxInputKb"></param>
+        /// <param name="vTax"></param>
+        /// <returns></returns>
+        public static long reCalcItem(long oldVal, string conTaxInputKb, double vTax)
+        {
+            if (oldVal == 0)
+            {
+                return 0;
+            }
 
+            decimal wkVal;      // 浮動小数点の計算誤差回避のため
+            if (conTaxInputKb == "False")
+            {
+                // 税込 → 税抜
+                wkVal = oldVal / (1 + Convert.ToDecimal(vTax));
+                return Convert.ToInt64(Math.Ceiling(wkVal));
+            }
+            else
+            {
+                // 抜 → 税込
+                wkVal = oldVal * (1 + Convert.ToDecimal(vTax));
+                return Convert.ToInt64(Math.Floor(wkVal)); ;
+            }
+        }
+
+        /// <summary>
+        /// 日付の"/"を外す
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static string DateFormatReplace(string date)
+        {
+            if (Strings.InStr(1, date, "/") > 0)
+            {
+                date = date.Replace("/", "");
+                return date;
+            }
+            else
+            {
+                return date;
+            }
+        }
+
+        /// <summary>
+        /// Check date format
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static bool IsDate(this string input)
+        {
+            if (!string.IsNullOrEmpty(input))
+            {
+                DateTime dt;
+                return (DateTime.TryParse(input, out dt));
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 車検有効期限 判定・編集
+        /// </summary>
+        /// <param name="inYM"></param>
+        /// <param name="inFlagNone"></param>
+        /// <returns></returns>
+        public static string setCheckCarYm(string inYM, bool inFlgNone = false)
+        {
+            string none = "無し";
+
+            long ret;
+
+            // 「無し」フラグ On
+            if (inFlgNone)
+            {
+                return none;
+            }
+
+            // 入力なし
+            if (inYM == "" || IsNumeric(inYM))
+            {
+                return "";
+            }
+
+            if (inYM.Length == 6 && Mid(inYM, 5) == "00")
+            {
+                //MM が "00" の場合、YYYY 部分のみ生かす
+                inYM = Left(inYM, 4);
+            }
+
+            if (inYM.Length == 4)
+            {
+                if (IsDate(inYM + "/01/01"))
+                {
+                    ret = DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(inYM + "/01/01"));
+                    if (ret > 3)
+                    {
+                        // 未来過ぎて不正なので、入力なし扱い
+                        return "";
+                    }
+                    else if (ret < 0)
+                    {
+                        // 過去なので、「無し」扱い
+                        return none;
+                    }
+                    else
+                    {
+                        return inYM;
+                    }
+                }
+            }
+            else if (inYM.Length == 6)      // 年月の場合
+            {
+                if (IsDate(Left(inYM, 4) + "/" + Right(inYM, 2) + "/01"))
+                {
+                    ret = DateAndTime.DateDiff(DateInterval.Month, DateTime.Today, DateTime.Parse(Left(inYM, 4) + "/" + Right(inYM, 2)));
+                    if (ret > 36)
+                    {
+                        // 未来過ぎて不正なので、入力なし扱い
+                        return "";
+                    }
+                    else if (ret < 0)
+                    {
+                        // 過去なので、「無し」扱い
+                        return none;
+                    }
+                    else
+                    {
+                        return inYM;
+                    }
+                }
+            }
+
+            // 年月形式不正の場合、「無し」となす
+            return none;
+        }
     }
 }

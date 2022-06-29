@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using KantanMitsumori.DataAccess;
-using KantanMitsumori.Model;
+using KantanMitsumori.Model.Request;
 
 namespace KantanMitsumori.Service.Mapper
 {

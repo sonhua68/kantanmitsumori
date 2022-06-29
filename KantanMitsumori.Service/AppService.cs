@@ -2,6 +2,7 @@
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
+using KantanMitsumori.Model.Request;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
 
@@ -31,12 +32,11 @@ namespace KantanMitsumori.Service
 
                 var makerList = _unitOfWork.Makers.GetAll().Select(i => _mapper.Map<MakerModel>(i)).ToList();
 
-
                 return ResponseHelper.Ok<List<MakerModel>>("", "", makerList);
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error" + ex.Message);
+                _logger.LogError(ex, "Error EstNo={0} EstSubNo={1}", "00000", "000000");
                 return ResponseHelper.Error<List<MakerModel>>("Error", "Error");
             }
         }
