@@ -1,0 +1,35 @@
+﻿@using KantanMitsumori.Model;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model List<MakerModel>
+
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+     @foreach(var item in Model)
+    {
+        <table >
+             <tr> 
+        <td>
+            @Html.DisplayFor(modelItem => item.MakerId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MakerName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Rdate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Udate)
+        </td>
+    </tr>
+        </table>
+       
+    }
+    <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
+
+</div>
