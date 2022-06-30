@@ -1,13 +1,16 @@
+
 ﻿@using KantanMitsumori.Model.Request;
 
 @{
-    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Home Page";       
 }
 
 @model List<MakerModel>
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <input type="button" onclick="alertTest()">building Web apps with ASP.NET Core/>.</p>
+
      @foreach(var item in Model)
     {
         <table >

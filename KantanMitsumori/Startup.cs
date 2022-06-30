@@ -2,6 +2,7 @@
 using KantanMitsumori.Infrastructure;
 using KantanMitsumori.Service;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace KantanMitsumori
 {
@@ -72,7 +73,12 @@ namespace KantanMitsumori
             //app.UseAuthentication();
 
             //app.UseAuthorization();
-
+            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Resources")),
+                RequestPath = "/Resources"
+            });
             app.UseSession();
 
             app.UseEndpoints(endpoints =>
