@@ -5,44 +5,13 @@ using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
-    public static class CommonFunction
+    public class CommonFunction
     {
-        private static readonly ILogger _logger;
+        private readonly ILogger _logger;
 
-        /// <summary>
-        /// シングルクウォーテーションで囲む（SQL用）
-        /// </summary>
-        public static string AddQuote(string inStr)
+        public CommonFunction(ILogger logger)
         {
-            inStr = inStr.Trim();
-
-            if (inStr != "")
-            {
-                return "'" + inStr.Replace("'", "''") + "'";
-            }
-            else
-            {
-                return "Null";
-            }
-        }
-
-        /// <summary>
-        /// DBNullチェック
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static string chkDbNull(object obj)
-        {
-            if (Convert.IsDBNull(obj))
-            {
-                return "";
-            }
-            else
-            {
-#pragma warning disable CS8603 // Possible null reference return.
-                return obj.ToString();
-#pragma warning restore CS8603 // Possible null reference return.
-            }
+            _logger = logger;
         }
 
         /// <summary>
@@ -50,14 +19,14 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool IsNumeric(this string value) => value.All(char.IsNumber);
+        public bool IsNumeric(string value) => value.All(char.IsNumber);
 
         /// <summary>
         /// 西暦を和暦に変換する(年のみ)
         /// </summary>
         /// <param name="year"></param>
         /// <returns></returns>
-        public static string GetWareki(string year)
+        public string GetWareki(string year)
         {
             if (!IsNumeric(year.Trim()))
             {
@@ -91,7 +60,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="unit"></param>
         /// <param name="formatText"></param>
         /// <returns></returns>
-        public static string SetFormat(long text2, string unit, string formatText)
+        public string SetFormat(long text2, string unit, string formatText)
         {
             formatText = Convert.ToString(Strings.Format(text2, "#,##") + unit);
             return formatText;
@@ -104,7 +73,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="sessionName"></param>
         /// <param name="defValue"></param>
         /// <returns></returns>
-        public static int GetSessionNum(HttpContext context, string sessionName, int defValue)
+        public int GetSessionNum(HttpContext context, string sessionName, int defValue)
         {
             var session = context.Session.Keys.Where(element => element == sessionName).FirstOrDefault();
 
@@ -123,7 +92,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="sessionName"></param>
         /// <param name="defValue"></param>
         /// <returns></returns>
-        public static string GetSessionStr(HttpContext context, string sessionName, string defValue)
+        public string GetSessionStr(HttpContext context, string sessionName, string defValue)
         {
             var session = context.Session.Keys.Where(element => element == sessionName).FirstOrDefault();
 
@@ -139,7 +108,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// Returns the left part of this string instance.
         /// </summary>
         /// <param name="count">Number of characters to return.</param>
-        public static string Left(this string input, int count)
+        public string Left(string input, int count)
         {
             return input.Substring(0, Math.Min(input.Length, count));
         }
@@ -148,7 +117,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// Returns the right part of the string instance.
         /// </summary>
         /// <param name="count">Number of characters to return.</param>
-        public static string Right(this string input, int count)
+        public string Right(string input, int count)
         {
             return input.Substring(Math.Max(input.Length - count, 0), Math.Min(count, input.Length));
         }
@@ -158,7 +127,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="start">Character index to start return the midstring from.</param>
         /// <returns>Substring or empty string when start is outside range.</returns>
-        public static string Mid(this string input, int start)
+        public string Mid(string input, int start)
         {
             return input.Substring(Math.Min(start, input.Length));
         }
@@ -169,7 +138,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="start">Starting character index number.</param>
         /// <param name="count">Number of characters to return.</param>
         /// <returns>Substring or empty string when out of range.</returns>
-        public static string Mid(this string input, int start, int count)
+        public string Mid(string input, int start, int count)
         {
             return input.Substring(Math.Min(start, input.Length), Math.Min(count, Math.Max(input.Length - start, 0)));
         }
@@ -179,11 +148,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="mDDate"></param>
         /// <returns></returns>
-        public static string DateFormatZero(string mDDate)
+        public string DateFormatZero(string mDDate)
         {
-            if (mDDate.Left(1) == "0")
+            if (Left(mDDate, 1) == "0")
             {
-                mDDate = mDDate.Right(1);
+                mDDate = Right(mDDate, 1);
                 return mDDate;
             }
             else
@@ -198,7 +167,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="strDay"></param>
         /// <param name="year"></param>
         /// <param name="month"></param>
-        public static void FormatDay(string strDay, string year, string month)
+        public void FormatDay(string strDay, string year, string month)
         {
             int leday = strDay.Replace("/", "").Length;
             switch (leday)
@@ -209,23 +178,23 @@ namespace KantanMitsumori.Helper.CommonFuncs
                     break;
                 case 1:
                     year = CommonConst.def_Space;
-                    month = DateFormatZero(strDay.Right(1)).Trim();
+                    month = DateFormatZero(Right(strDay, 1)).Trim();
                     break;
                 case 2:
                     year = CommonConst.def_Space;
-                    month = DateFormatZero(strDay.Right(2)).Trim();
+                    month = DateFormatZero(Right(strDay, 2)).Trim();
                     break;
                 case 4:
-                    year = strDay.Left(4).Trim();
+                    year = Left(strDay, 4).Trim();
                     month = CommonConst.def_Space;
                     break;
                 case 5:
-                    year = strDay.Left(4).Trim();
-                    month = DateFormatZero(strDay.Right(1)).Trim();
+                    year = Left(strDay, 4).Trim();
+                    month = DateFormatZero(Right(strDay, 1)).Trim(); ;
                     break;
                 case 6:
-                    year = strDay.Left(4).Trim();
-                    month = DateFormatZero(strDay.Right(2)).Trim();
+                    year = Left(strDay, 4).Trim();
+                    month = DateFormatZero(Right(strDay, 2)).Trim();
                     break;
             }
         }
@@ -235,7 +204,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="strYM"></param>
         /// <returns></returns>
-        public static string FormatDay(string strYM)
+        public string FormatDay(string strYM)
         {
             strYM = strYM.Trim();
 
@@ -269,7 +238,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="chkData"></param>
         /// <returns></returns>
-        public static string DateFormat(string chkData)
+        public string DateFormat(string chkData)
         {
             if (chkData.Length == 1)
             {
@@ -287,7 +256,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="dValue"></param>
         /// <param name="iDigits"></param>
         /// <returns></returns>
-        public static double ToRoundDown(double dValue, int iDigits)
+        public double ToRoundDown(double dValue, int iDigits)
         {
             double dCoef = Math.Pow(10, iDigits);
 
@@ -307,7 +276,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="vEncNo"></param>
         /// <param name="vDecNo"></param>
         /// <returns></returns>
-        public static bool DecUserNo(string vEncNo, string vDecNo)
+        public bool DecUserNo(string vEncNo, string vDecNo)
         {
             string wOne = "";
             string wStr = "";
@@ -360,7 +329,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="conTaxInputKb"></param>
         /// <param name="vTax"></param>
         /// <returns></returns>
-        public static long reCalcItem(long oldVal, string conTaxInputKb, double vTax)
+        public long reCalcItem(long oldVal, string conTaxInputKb, double vTax)
         {
             if (oldVal == 0)
             {
@@ -387,7 +356,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="date"></param>
         /// <returns></returns>
-        public static string DateFormatReplace(string date)
+        public string DateFormatReplace(string date)
         {
             if (Strings.InStr(1, date, "/") > 0)
             {
@@ -405,7 +374,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static bool IsDate(this string input)
+        public bool IsDate(string input)
         {
             if (!string.IsNullOrEmpty(input))
             {
@@ -424,7 +393,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="inYM"></param>
         /// <param name="inFlagNone"></param>
         /// <returns></returns>
-        public static string setCheckCarYm(string inYM, bool inFlgNone = false)
+        public string setCheckCarYm(string inYM, bool inFlgNone = false)
         {
             string none = "無し";
 

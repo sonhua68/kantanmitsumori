@@ -1,16 +1,13 @@
-﻿@    using KantanMitsumori.Model;
-    using KantanMitsumori.Model.Request;
+﻿@using KantanMitsumori.Model.Request;
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
 @model List<MakerModel>
-
-
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>Learn about <input type="button" onclick="alertTest()">building Web apps with ASP.NET Core/>.</p>
      @foreach(var item in Model)
     {
         <table >
@@ -32,5 +29,13 @@
        
     }
     <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
-
 </div>
+
+@section Scripts {
+     <!-- add jquery -->
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <!-- Add js bootstrap-->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script> 
+    <script src="~/js/site.js" type="text/javascript"></script> 
+}
+

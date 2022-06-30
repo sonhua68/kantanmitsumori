@@ -51,6 +51,16 @@ namespace KantanMitsumori
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
+            //app.UseDefaultFiles();
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(env.ContentRootPath, "Scripts")),
+            //    RequestPath = "/Scripts"
+            //});
+
             //loggerFactory.AddLog4Net("log4net.config");
 
             app.UseHttpsRedirection();
