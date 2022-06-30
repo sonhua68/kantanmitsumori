@@ -18,8 +18,8 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Index()
         {
-            var response = _appService.GetMaker();         
-                
+            var response = _appService.GetMaker();
+
             if (response.ResultStatus != 0)
             {
                 return ErrorAction(response);
@@ -31,5 +31,13 @@ namespace KantanMitsumori.Controllers
         {
             return View();
         }
+
+        public IActionResult Header()
+        {
+            ViewData["MemberId"] = "333333";
+            ViewData["MemberName"] = "Test";
+            return PartialView();
+        }
+       
     }
 }
