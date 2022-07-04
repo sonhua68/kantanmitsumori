@@ -1,5 +1,4 @@
-
-﻿@using KantanMitsumori.Model.Request;
+@using KantanMitsumori.Model.Request;
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -34,11 +33,18 @@
     <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
 </div>
 
-@section Scripts {
+@section Scripts{
      <!-- add jquery -->
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <!-- Add js bootstrap-->
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script> 
-    <script src="~/js/site.js" type="text/javascript"></script> 
+    <script src="~/js/app.js"></script> 
 }
+
+
+    
+
+
+
+
 
