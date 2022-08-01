@@ -1,4 +1,5 @@
 ﻿using KantanMitsumori.IService;
+using KantanMitsumori.Model;
 using KantanMitsumori.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -38,6 +39,13 @@ namespace KantanMitsumori.Controllers
             ViewData["MemberName"] = "Test";
             return PartialView();
         }
-       
+
+        [HttpPost]
+        public async Task<JsonResult> TestSummitFormAjax(MakerModel model)
+        {
+            var response = await _appService.CreateMaker(model);
+            return Json(response);
+        }
+
     }
 }

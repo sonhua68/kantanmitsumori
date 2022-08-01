@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using KantanMitsumori.DataAccess;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
@@ -22,6 +23,26 @@ namespace KantanMitsumori.Service
             _unitOfWork = unitOfWork;
         }
 
+        public async Task<ResponseBase<int>>  CreateMaker(MakerModel model)
+        {
+              ResponseBase<int> iResult = new ResponseBase<int>();
+            try
+            {
+
+             var   data = _mapper.Map<MMaker>(model);
+                _unitOfWork.Makers.Add(data);
+                await _unitOfWork.CommitAsync();
+                iResult.Data = 0;
+                iResult.MessageCode = "E0001";
+                iResult.MessageCode = "";
+                return ResponseHelper.Ok<int>("", "", 0);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error" + ex.Message);
+                return ResponseHelper.Ok<int>("", "", 0);
+            }
+        }
 
         public ResponseBase<List<MakerModel>> GetMaker()
         {
@@ -40,5 +61,7 @@ namespace KantanMitsumori.Service
                 return ResponseHelper.Error<List<MakerModel>>("Error", "Error");
             }
         }
+
+       
     }
 }
