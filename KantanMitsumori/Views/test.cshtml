@@ -1,0 +1,223 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="shift_jis" />
+<title>かんたん見積もりテスト画面</title>
+<style>
+    body {
+        margin: 0;
+        padding: 5px;
+    }
+    table {
+        border-collapse:collapse;
+        border: 1px solid #606060;
+        width: 100%;
+    }
+    th {
+        text-align: left;
+        background-color: #f0f0f0;
+        font-weight: normal;
+        border: 1px solid #606060;
+        padding: 3px;
+        width: 150px;
+    }
+    td {
+        border: 1px solid #606060;
+        padding: 3px;
+        width: 500px;
+    }
+    .inputTxt {
+        width: 98%;
+    }
+</style>
+</head>
+<body>
+<h1>かんたん見積もりテスト画面</h1>
+<form method="post" action="EstMain.aspx" target=_blank>
+<input type="submit" value="送信" /><br><br>
+@*<a asp-action="Edit"></a>*@
+<table>
+    <tr>
+        <th>ログインID(txtLoginId)</th>
+        <td><input type="text" class="inputTxt" name="txtLoginId"  value="asnet"></td>
+    </tr>
+    <tr>
+        <th>パスワード(txtPassword)</th>
+        <td><input type="text" class="inputTxt" name="txtPassword" value="3431"></td>
+    </tr>
+    <tr>
+        <th>オークション名(aan)</th>
+        <td><input type="text" class="inputTxt" name="aan"  value="テスト会場"></td>
+    </tr>
+    <tr>
+        <th>aac(aac)</th>
+        <td><input type="text" class="inputTxt" name="aac"  value=""></td>
+    </tr>
+    <tr>
+        <th>出品番号(exh)</th>
+        <td><input type="text" class="inputTxt" name="exh"  value="00100001"></td>
+    </tr>
+    <tr>
+        <th>fex(fex)</th>
+        <td><input type="text" class="inputTxt" name="fex"  value="00100001"></td>
+    </tr>
+    <tr>
+        <th>lim(lim)</th>
+        <td><input type="text" class="inputTxt" name="lim"  value="20170823"></td>
+    </tr>
+    <tr>
+        <th>価格(pri)</th>
+        <td><input type="text" class="inputTxt" name="pri"  value="1130000"></td>
+    </tr>
+    <tr>
+        <th>評価点(poi)</th>
+        <td><input type="text" class="inputTxt" name="poi"  value="3.5"></td>
+    </tr>
+    <tr>
+        <th>mod(mod)</th>
+        <td><input type="text" class="inputTxt" name="mod"  value="2016"></td>
+    </tr>
+    <tr>
+        <th>メーカー(mak)</th>
+        <td><input type="text" class="inputTxt" name="mak"  value="ﾄﾖﾀ"></td>
+    </tr>
+    <tr>
+        <th>車名(cna)</th>
+        <td><input type="text" class="inputTxt" name="cna"  value="bB"></td>
+    </tr>
+    <tr>
+        <th>グレード(gra)</th>
+        <td><input type="text" class="inputTxt" name="gra"  value="1.5 Z 煌"></td>
+    </tr>
+    <tr>
+        <th>排気量(vol)</th>
+        <td><input type="text" class="inputTxt" name="vol"  value="1500"></td>
+    </tr>
+    <tr>
+        <th>型式(for)</th>
+        <td><input type="text" class="inputTxt" name="for"  value="QNC21"></td>
+    </tr>
+    <tr>
+        <th>車台番号(pla)</th>
+        <td><input type="text" class="inputTxt" name="pla"  value="12345"></td>
+    </tr>
+    <tr>
+        <th>shi(shi)</th>
+        <td><input type="text" class="inputTxt" name="shi"  value=""></td>
+    </tr>
+    <tr>
+        <th>ins(ins)</th>
+        <td><input type="text" class="inputTxt" name="ins"  value="      "></td>
+    </tr>
+    <tr>
+        <th>走行距離(mil)</th>
+        <td><input type="text" class="inputTxt" name="mil"  value="5"></td>
+    </tr>
+    <tr>
+        <th>色(col)</th>
+        <td><input type="text" class="inputTxt" name="col"  value="ブラック"></td>
+    </tr>
+    <tr>
+        <th>燃料(fue)</th>
+        <td><input type="text" class="inputTxt" name="fue"  value="ガソリン"></td>
+    </tr>
+    <tr>
+        <th>車歴(his)</th>
+        <td><input type="text" class="inputTxt" name="his"  value="自家用"></td>
+    </tr>
+    <tr>
+        <th>装備(equ)</th>
+        <td><input type="text" class="inputTxt" name="equ"  value="AW PS PW TV エアバッグ ナビ"></td>
+    </tr>
+    <tr>
+        <th>mem(mem)</th>
+        <td><input type="text" class="inputTxt" name="mem"  value="b42d44c43u61f46a48a40u64"></td>
+    </tr>
+    <tr>
+        <th>手数料(fee)</th>
+        <td><input type="text" class="inputTxt" name="fee"  value="20000"></td>
+    </tr>
+    <tr>
+        <th>フロント画像(img)</th>
+        <td><input type="text" class="inputTxt" name="img"  value="http://imgl.asnet2.com/ASDATA/15/L/00003892/1538920152f.jpg"></td>
+    </tr>
+    <tr>
+        <th>cot(cot)</th>
+        <td><input type="text" class="inputTxt" name="cot"  value="5"></td>
+    </tr>
+    <tr>
+        <th>自動車税(tax)</th>
+        <td><input type="text" class="inputTxt" name="tax"  value=""></td>
+    </tr>
+    <tr>
+        <th>rec(rec)</th>
+        <td><input type="text" class="inputTxt" name="rec"  value=""></td>
+    </tr>
+    <tr>
+        <th>コーナー区分(cor)</th>
+        <td><input type="text" class="inputTxt" name="cor"  value="0A"></td>
+    </tr>
+    <tr>
+        <th>メモ画像１(img1)</th>
+        <td><input type="text" class="inputTxt" name="img1" value="http://imgl.asnet2.com/ASDATA/15/L/00003892/1538920152r.jpg"></td>
+    </tr>
+    <tr>
+        <th>メモ画像２(img2)</th>
+        <td><input type="text" class="inputTxt" name="img2" value="http://imgl.asnet2.com/ASDATA/15/L/00003892/1538920152i.jpg"></td>
+    </tr>
+    <tr>
+        <th>メモ画像３(img3)</th>
+        <td><input type="text" class="inputTxt" name="img3" value="http://imgl.asnet2.com/ASDATA/15/L/00003892/1538920152x.jpg"></td>
+    </tr>
+    <tr>
+        <th>メモ画像４(img4)</th>
+        <td><input type="text" class="inputTxt" name="img4" value="http://imgl.asnet2.com/ASDATA/15/L/00003892/1538920152w.jpg"></td>
+    </tr>
+    <tr>
+        <th>メモ画像５(img5)</th>
+        <td><input type="text" class="inputTxt" name="img5" value="http://imgl.asnet2.com/ASDATA/15/L/00003892/1538920152v.jpgs"></td>
+    </tr>
+    <tr>
+        <th>メモ画像６(img6)</th>
+        <td><input type="text" class="inputTxt" name="img6" value=""></td>
+    </tr>
+    <tr>
+        <th>メモ画像７(img7)</th>
+        <td><input type="text" class="inputTxt" name="img7" value=""></td>
+    </tr>
+    <tr>
+        <th>メモ画像８(img8)</th>
+        <td><input type="text" class="inputTxt" name="img8" value=""></td>
+    </tr>
+    <tr>
+        <th>rest(rest)</th>
+        <td><input type="text" class="inputTxt" name="rest" value="0"></td>
+    </tr>
+    <tr>
+        <th>volunit(volunit)</th>
+        <td><input type="text" class="inputTxt" name="volUnit"  value="null"></td>
+    </tr>
+    <tr>
+        <th>milUnit(milUnit)</th>
+        <td><input type="text" class="inputTxt" name="milUnit"  value="千km"></td>
+    </tr>
+    <tr>
+        <th>mode(mode)</th>
+        <td><input type="text" class="inputTxt" name="mode" value="0"></td>
+    </tr>
+      <tr>
+        <th>LeaseFlag</th>
+        <td><input type="text" class="inputTxt" name="leaseFlag" value="0"></td>
+    </tr>
+</table>    
+<input type="hidden" name="nonTax" value="1" />
+</form>
+</body>
+</html>

@@ -1,7 +1,5 @@
 ﻿using KantanMitsumori.IService;
-using KantanMitsumori.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace KantanMitsumori.Controllers
 {
@@ -16,6 +14,11 @@ namespace KantanMitsumori.Controllers
             _logger = logger;
         }
 
+        public IActionResult Test()
+        {
+            return View();
+        }
+
         public IActionResult Index()
         {
             var response = _appService.GetMaker();
@@ -27,10 +30,6 @@ namespace KantanMitsumori.Controllers
             return View(response.Data);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         public IActionResult Header()
         {
@@ -38,6 +37,11 @@ namespace KantanMitsumori.Controllers
             ViewData["MemberName"] = "Test";
             return PartialView();
         }
-       
+
+        public IActionResult EstMain()
+        {
+            return View();
+        }
+
     }
 }
