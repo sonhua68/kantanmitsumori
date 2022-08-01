@@ -2,49 +2,34 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "Home Page";       
+    ViewData["Title"] = "Home Page";
 }
 
 @model List<MakerModel>
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <input type="button" onclick="alertTest()">building Web apps with ASP.NET Core/>.</p>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form id="formDataList">
+        <label for="fname">MakerId:</label><br>
+        <input type="text" id="MakerId" name="MakerId" value=""><br>
+        <label for="lname">MakerName</label><br>
+        <input type="text" id="MakerName" name="MakerName" value=""><br><br>
+        <button type="submit" form="formDataList" value="Submit">submit</button>
+    </form>
 
-     @foreach(var item in Model)
-    {
-        <table >
-             <tr> 
-        <td>
-            @Html.DisplayFor(modelItem => item.MakerId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MakerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Rdate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Udate)
-        </td>
-    </tr>
-        </table>
-       
-    }
-    <input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');" />
 </div>
+<script>
+    $('#formDataList').validate({
+        rules: {
+            MakerId: {
+                required: true
+            }
+        },  
+        submitHandler: function (form) {
+            var model = Framework.getFormData($("#formDataList"));
+            Framework.submitAjaxFormCreateAwait(model, "Home/TestSummitFormAjax");
+            console.log(model);
+        }
 
-@section Scripts{
-     <!-- add jquery -->
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <!-- Add js bootstrap-->
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script> 
-    <script src="~/js/app.js"></script> 
-}
-
-
-    
-
-
-
-
-
+    });
+</script>
