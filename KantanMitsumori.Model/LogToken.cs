@@ -8,7 +8,7 @@ namespace KantanMitsumori.Model
 {
     public class LogToken
     {
-        public string EstNo { get; set; }
-        public string EstSubNo { get; set; }
+        public string? EstNo { get; set; }
+        public string? EstSubNo { get; set; }
     }
 }

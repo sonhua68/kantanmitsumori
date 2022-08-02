@@ -32,8 +32,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
-                    ValidateAudience = false,
-                    // set clockskew to zero so tokens expire exactly at token expiration time (instead of 5 minutes later)
+                    ValidateAudience = false,               
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
                 var jwtToken = (JwtSecurityToken)validatedToken;
@@ -52,7 +51,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         }
         public static string GenerateJsonToken(LogToken model)
         {           
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config!["JwtSettings:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             string genderStr = JsonConvert.SerializeObject(model);
             var claims = new[]
