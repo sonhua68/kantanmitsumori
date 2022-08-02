@@ -3,13 +3,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Home Page";
 }
-@model LogToken
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-        <label for="fname">EstNo:@Model.EstNo </label>  <label for="fname">EstSubNo: @Model.EstSubNo</label><br>
-    <input type="hidden" id="Token" name="Token" value="@ViewData["Token"]"><br>
     <form id="formDataList">
         <label for="fname">MakerId:</label><br>
         <input type="number" id="MakerId" name="MakerId" value=""><br>
@@ -17,7 +14,6 @@
         <input type="text" id="MakerName" name="MakerName" value=""><br><br>
         <button type="submit" form="formDataList" value="Submit">submit</button>
     </form>
-
 </div>
 <script>
     $('#formDataList').validate({
@@ -31,6 +27,5 @@
             Framework.submitAjaxFormCreateAwait(model, "Home/TestSummitFormAjax");
             console.log(model);
         }
-
     });
 </script>

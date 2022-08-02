@@ -18,22 +18,21 @@ namespace KantanMitsumori.Controllers
         }
 
         public IActionResult Index()
-        {
-            var mode = new LogToken();
-            mode.EstNo = "22071200085"; mode.EstSubNo = "01";
-            var token = HelperToken.GenerateJsonToken(mode);
-            ViewData["Token"] = token;        
-            return View(mode);
+        {               
+            return View();
         }
 
         public IActionResult Privacy()
         {
             return View();
         }
-
         public IActionResult Header()
         {
-            return PartialView();
+            var mode = new LogToken();
+            mode.EstNo = "22071200085"; mode.EstSubNo = "01";
+            var token = HelperToken.GenerateJsonToken(mode);
+            mode.Token = token;
+            return PartialView("_Header", mode);
         }
 
         [HttpPost]    

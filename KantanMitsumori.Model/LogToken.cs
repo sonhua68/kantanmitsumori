@@ -10,5 +10,6 @@ namespace KantanMitsumori.Model
     {
         public string? EstNo { get; set; }
         public string? EstSubNo { get; set; }
+        public string? Token { get; set; }
     }
 }
