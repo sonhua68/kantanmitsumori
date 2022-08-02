@@ -33,6 +33,8 @@ namespace KantanMitsumori.Controllers
             mode.EstNo = "22071200085"; mode.EstSubNo = "01";
             var token = HelperToken.GenerateJsonToken(mode);
             mode.Token = token;
+            mode.UserNo = "88888195";
+            mode.UserNm = "testuser88888195";
             return PartialView("_Header", mode);
         }
 

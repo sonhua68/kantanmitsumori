@@ -1,41 +1,26 @@
-﻿<!DOCTYPE html>
-<html lang="ja">
-    <head>
-        <title>かんたん見積</title>
-        <meta http-equiv="content-type" content="text/html" charset="shift_jis" />
-        <meta http-equiv="expires" content="Sun, 10 Jan 1990 01:01:01 GMT"/>
-        <meta http-equiv="content-language" content="ja" />
-        <meta name="MSSmartTagsPreventParsing" content="true" />
-        <meta http-equiv="" content="false" />
-        <link rel="stylesheet" type="text/css" href="~/css/estmain.css" />
-        <link rel="stylesheet" type="text/css" href="~/css/site.css" />
-    </head>
-    <body>
-        <form id="frm">
-            <img id="imgLogo" src="~/img/AsLogo.png" />
-            <img id="imgHeaTitle" src="~/img/HeadTitle.gif"/>
-            <img id="imgHeaLine" src="~/img/HeadLine.gif" />
-            <span id="lblUsr">88888195　testuser88888195　様</span>
-            <img id="imgLogoMini" src="~/img/BlankLogoMini.png" />
-            <!-- 固定表示 -->
-            <span id="lblInfoEst">
-                ・&nbsp;この見積は既に保存されています<br>
-                ・&nbsp;データの保存期間は3ヶ月です<br>
-                ・&nbsp;保存データは見積検索から呼び出しが出来ます<br>
-                ・&nbsp;注文書は会員様責任にてご利用ください
-            </span>
-            <!-- メニュー -->
-            <div id="menu_left">
-                <a href="javascript:window.close();">
-                    <img id="btnClose" src="~/img/btn閉じる.png"/>
-                </a>
-                <input type="image" name="btnEst" id="btnEst" src="~/img/btn見積印刷.png" />
-                <input type="image" name="btnOrd" id="btnOrd" src="~/img/btn注文印刷.png" />
-                <input type="image" name="btnSearch" id="btnSearch" src="~/img/btn検索.png">
-                <input type="image" name="btnFreeQuote" id="btnFreeQuote" src="~/img/btnフリー見積.png" />
-                <input type="image" name="btnExpSetting" id="btnExpSetting" src="~/img/btn諸費用設定.png" />
-                <span id="lblInfoSetting">※事前設定必要</span>
-            </div>
-        </form>
-    </body>
-</html>
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "EstMain";
+}
+  
+<!-- 固定表示 -->
+<span id="lblInfoEst">
+    ・&nbsp;この見積は既に保存されています<br>
+    ・&nbsp;データの保存期間は3ヶ月です<br>
+    ・&nbsp;保存データは見積検索から呼び出しが出来ます<br>
+    ・&nbsp;注文書は会員様責任にてご利用ください
+</span>
+<!-- メニュー -->
+<div id="menu_left">
+    <a href="javascript:window.close();">
+        <img id="btnClose" src="~/img/btn閉じる.png" />
+    </a>
+    <input type="image" name="btnEst" id="btnEst" src="~/img/btn見積印刷.png" />
+    <input type="image" name="btnOrd" id="btnOrd" src="~/img/btn注文印刷.png" />
+    <input type="image" name="btnSearch" id="btnSearch" src="~/img/btn検索.png">
+    <input type="image" name="btnFreeQuote" id="btnFreeQuote" src="~/img/btnフリー見積.png" />
+    <input type="image" name="btnExpSetting" id="btnExpSetting" src="~/img/btn諸費用設定.png" />
+    <span id="lblInfoSetting">※事前設定必要</span>
+</div>
+
+ 
