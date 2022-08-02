@@ -19,13 +19,11 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Index()
         {
-            var response = _appService.GetMaker();
-
-            if (response.ResultStatus != 0)
-            {
-                return ErrorAction(response);
-            }
-            return View(response.Data);
+            var mode = new LogToken();
+            mode.EstNo = "22071200085"; mode.EstSubNo = "01";
+            var token = HelperToken.GenerateJsonToken(mode);
+            ViewData["Token"] = token;        
+            return View(mode);
         }
 
         public IActionResult Privacy()
@@ -38,14 +36,10 @@ namespace KantanMitsumori.Controllers
             return PartialView();
         }
 
-        [HttpPost]
-        public async Task<JsonResult> TestSummitFormAjax(MakerModel model)
-        {
-            var mode = new LogToken();
-            mode.EstNo = "22071200085"; mode.EstSubNo = "01";
-            var token = HelperToken.GenerateJsonToken(mode);
-            var response = await _appService.CreateMaker(model);
-   
+        [HttpPost]    
+        public async Task<JsonResult> TestSummitFormAjax(string token,MakerModel requestData)
+        {         
+            var response = await _appService.CreateMaker(requestData);   
             var logToken  = HelperToken.EncodingToken(token);
             return Json(response);
         }       

@@ -35,7 +35,7 @@ var Framework =
                         "name": this.name,
                         "value": 1
                     };
-                }).get(); 
+                }).get();
                 var number = $form.find('input[type=number]').map(function () {
                     if (!this.value) {
                         return {
@@ -92,12 +92,12 @@ var Framework =
                 unindexed_array = null;
                 checkFalse = null;
                 checkTrue = null;
-                textarea =null
+                textarea = null
                 hidden = null;
                 text = null;
                 return indexed_array;
             }
-        },   
+        },
         {
             key: "convertToDate",
             value: function convertToDate(value) {
@@ -200,7 +200,7 @@ var Framework =
                 });
                 return result;
             }
-        },       
+        },
         {
             key: "alertSuccess",
             value: function alertSuccess(responseText) {
@@ -255,7 +255,7 @@ var Framework =
                     position: 'top-right'
                 });
             }
-        },     
+        },
         {
             key: "submitAjaxFormCreateAwait",
             value: function submitAjaxFormCreateAwait(data, url) {
@@ -263,7 +263,55 @@ var Framework =
                 $.ajax({
                     type: "POST",
                     url: url,
-                    data: data,
+                    data: {
+                        token: $("#Token").val(),
+                        requestData: data
+                    },
+                    async: false,
+                    success: function success(r) {
+                        result = r;
+                    },
+                    error: function error(xhr, status, thrownError, _error) {
+                        //result.success = false;
+                        //result.responseText = xhr.status + ' ' + thrownError;
+                    }
+                });
+                return result;
+            }
+        },
+        {
+            key: "submitAjaxFormDeleteEstNoAndEstSubNoAwait",
+            value: function submitAjaxFormDeleteEstNoAndEstSubNoAwait(url) {
+                var result = {};
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        token: $("#Token").val(),
+                    },
+                    async: false,
+                    success: function success(r) {
+                        result = r;
+                    },
+                    error: function error(xhr, status, thrownError, _error) {
+                        //result.success = false;
+                        //result.responseText = xhr.status + ' ' + thrownError;
+                    }
+                });
+                return result;
+            }
+        },
+        {
+            key: "submitAjaxFormDeleteAwait",
+            value: function submitAjaxFormDeleteAwait(data, url) {
+                var result = {};
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        token: $("#Token").val(),
+                        requestData: data
+                    },
                     async: false,
                     success: function success(r) {
                         result = r;
@@ -284,7 +332,10 @@ var Framework =
                 $.ajax({
                     type: "POST",
                     url: url,
-                    data: data,
+                    data: {
+                        token: $("#Token").val(),
+                        requestData: data
+                    },
                     async: false,
                     success: function success(r) {
                         result = r;
@@ -296,7 +347,7 @@ var Framework =
                 });
                 return result;
             }
-        },       
+        },
         {
             key: "formatNumber",
             value: function formatNumber(n) {
@@ -306,28 +357,28 @@ var Framework =
         {
             key: "toCurrency",
             value: function toCurrency(input_val) {
-               
-                if (input_val === "") { return ""; }                
-                var original_len = input_val.length;              
+
+                if (input_val === "") { return ""; }
+                var original_len = input_val.length;
                 var mark = "";
                 if (input_val.charAt(0) === "-") {
                     mark = "-";
-                }    
+                }
                 if (input_val.indexOf(".") >= 0) {
-                    var decimal_pos = input_val.indexOf(".");                 
+                    var decimal_pos = input_val.indexOf(".");
                     var left_side = input_val.substring(0, decimal_pos);
                     var right_side = input_val.substring(decimal_pos);
-                
-                    left_side = Framework.formatNumber(left_side);             
-                    right_side = Framework.formatNumber(right_side);                  
-                    right_side = right_side.substring(0, 2);                
+
+                    left_side = Framework.formatNumber(left_side);
+                    right_side = Framework.formatNumber(right_side);
+                    right_side = right_side.substring(0, 2);
                     return mark + left_side + "." + right_side;
 
-                } else {                 
+                } else {
                     return mark + Framework.formatNumber(input_val);
                 }
             }
-        },   
+        },
         {
             key: "CreateDataOnRow",
             value: function CreateDataOnRow(r, $row, $rowClone, $td, $table, columns) {
@@ -349,10 +400,10 @@ var Framework =
                             break;
                         case "file":
                             $row.find('.' + item.field).html('<a class="link-css" href="' + r.data[item.field] + '" >Download</a>');
-                            break;                     
+                            break;
                         case "DownloadfileAll":
                             $row.find('.' + item.field).html('<a class="link-css btnDownLoadAll"  href="javascript:void(0)" >DownloadFiles</a>');
-                            break;                 
+                            break;
                         case "link":
                             $row.find('.' + item.field).html('<a class="link-css btnViewDetail" href="javascript:void(0)" >' + r.data[item.field] + '</a>');
                             break;
@@ -372,7 +423,7 @@ var Framework =
                 $row.removeClass("hidden");
                 $table.columns.adjust();
             }
-        },     
+        },
         {
             key: "getStringInput",
             value: function getStringInput(name, formatCol, defaultValue) {
@@ -476,7 +527,7 @@ var Framework =
                 return self.indexOf(value) === index;
 
             }
-        },      
+        },
 
         ]);
 
