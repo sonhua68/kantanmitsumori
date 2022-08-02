@@ -2,7 +2,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "EstMain";
 }
-  
+
 <!-- 固定表示 -->
 <span id="lblInfoEst">
     ・&nbsp;この見積は既に保存されています<br>
@@ -22,5 +22,108 @@
     <input type="image" name="btnExpSetting" id="btnExpSetting" src="~/img/btn諸費用設定.png" />
     <span id="lblInfoSetting">※事前設定必要</span>
 </div>
+<!-- 編集ナビ -->
+<table id="tbl_menu_page">
+    <tr>
+        <td class="EstTitle1" style="text-align: center; color: #0000cc;">
+            ＜編集ナビ＞
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">見積車両</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">販売価格</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">付属品</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">税金・保険料</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">預り法定費用</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">手続代行費用</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">下取車</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">価格調整</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">リース計算</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">お客様カナ</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">販売店</a>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            &nbsp;<input type="image" class="imgBtn" src="~/img/page_edit.png">
+            <a class="TxtLink">備考</a>
+        </td>
+    </tr>
+</table>
+<!-- CSV 出力 -->
+<div class="div_ExportCSV">
+    <input type="image" name="btnCSV" id="btnCSV" src="~/img/btnCSV.png">
+</div>
+<!-- 見積情報 -->
+<table cellpadding="1" class="nomal">
+    <tr>
+        <td class="title">
+            見積書番号
+        </td>
+        <td class="data">
+            <span id="lbEstNo" class="EstTitle1" >22080200001-01</span>
+        </td>
+        <td class="title">
+            見積日
+        </td>
+        <td class="data">
+            <span id="lbTradeDate" class="EstTitle1">2022年8月2日</span>
+        </td>
+    </tr>
+</table>
+<!-- お支払総額 -->
 
- 
+
+
