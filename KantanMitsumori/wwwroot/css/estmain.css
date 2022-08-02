@@ -1,0 +1,108 @@
+﻿#imgLogo {
+    left: 2px;
+    position: absolute;
+    top: 1px;
+}
+
+#imgHeaTitle {
+    left: 123px;
+    position: absolute;
+    top: 4px;
+}
+
+#imgHeaLine {
+    left: 0px;
+    position: absolute;
+    top: 39px;
+}
+
+#lblUsr {
+    font-family: 'ＭＳ Ｐゴシック';
+    font-size: 12pt;
+    font-weight: bold;
+    width: 451px;
+    left: 476px;
+    position: absolute;
+    top: 18px;
+    text-align: right;
+}
+
+#imgLogoMini {
+    left: 934px;
+    position: absolute;
+    top: 5px;
+}
+
+#lblInfoEst {
+    font-family: 'ＭＳ Ｐゴシック';
+    color: Red;
+    background-color: Transparent;
+    font-size: 9pt;
+    font-weight: bold;
+    left: 693px;
+    vertical-align: top;
+    direction: ltr;
+    position: absolute;
+    top: 67px;
+    line-height: 1.6em;
+}
+
+#menu_left {
+    border-right: #3c82ed 1px solid;
+    border-top: #3c82ed 1px solid;
+    border-left: #3c82ed 1px solid;
+    width: 142px;
+    left: 8px;
+    border-bottom: #3c82ed 1px solid;
+    position: absolute;
+    top: 68px;
+    height: 315px;
+    background-color: transparent;
+}
+
+#btnClose {
+    left: 16px;
+    position: absolute;
+    top: 8px;
+}
+
+#btnEst {
+    left: 17px;
+    position: absolute;
+    top: 67px;
+}
+
+#btnOrd {
+    left: 17px;
+    position: absolute;
+    top: 106px;
+}
+
+#btnSearch {
+    left: 17px;
+    position: absolute;
+    top: 161px;
+}
+
+#btnFreeQuote {
+    left: 17px;
+    position: absolute;
+    top: 200px;
+}
+
+#btnExpSetting {
+    left: 17px;
+    position: absolute;
+    top: 255px;
+}
+
+#lblInfoSetting {
+    color: Red;
+    background-color: Transparent;
+    font-family: ＭＳ Ｐゴシック;
+    font-size: 9pt;
+    font-weight: bold;
+    left: 28px;
+    position: absolute;
+    top: 295px;
+}
