@@ -6,17 +6,17 @@
 }
 
 @model List<MakerModel>
+
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     <form id="formDataList">
         <label for="fname">MakerId:</label><br>
-        <input type="text" id="MakerId" name="MakerId" value=""><br>
+        <input type="number" id="MakerId" name="MakerId" value=""><br>
         <label for="lname">MakerName</label><br>
         <input type="text" id="MakerName" name="MakerName" value=""><br><br>
         <button type="submit" form="formDataList" value="Submit">submit</button>
     </form>
-
 </div>
 <script>
     $('#formDataList').validate({
@@ -24,12 +24,11 @@
             MakerId: {
                 required: true
             }
-        },  
+        },
         submitHandler: function (form) {
             var model = Framework.getFormData($("#formDataList"));
             Framework.submitAjaxFormCreateAwait(model, "Home/TestSummitFormAjax");
             console.log(model);
         }
-
     });
 </script>
