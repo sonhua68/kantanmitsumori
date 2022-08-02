@@ -23,7 +23,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KantanMitsumori.IService", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KantanMitsumori.Model", "KantanMitsumori.Model\KantanMitsumori.Model.csproj", "{7393C22B-D326-4FE6-923D-85ADBAC992AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KantanMitsumori.Helper", "KantanMitsumori.Helper\KantanMitsumori.Helper.csproj", "{B114D629-29EA-4E2E-9276-DC22FE54F6DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KantanMitsumori.Helper", "KantanMitsumori.Helper\KantanMitsumori.Helper.csproj", "{B114D629-29EA-4E2E-9276-DC22FE54F6DC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{979B1623-B9BB-4685-99B7-86D0F392F3FC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

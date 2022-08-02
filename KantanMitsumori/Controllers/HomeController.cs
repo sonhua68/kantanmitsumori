@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.IService;
+﻿using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.IService;
 using KantanMitsumori.Model;
 using KantanMitsumori.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,10 @@ namespace KantanMitsumori.Controllers
     {
         private readonly IAppService _appService;
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(IAppService appService, ILogger<HomeController> logger)
         {
             _appService = appService;
-            _logger = logger;
+            _logger = logger;      
         }
 
         public IActionResult Index()
@@ -35,17 +35,19 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Header()
         {
-            ViewData["MemberId"] = "333333";
-            ViewData["MemberName"] = "Test";
             return PartialView();
         }
 
         [HttpPost]
         public async Task<JsonResult> TestSummitFormAjax(MakerModel model)
         {
+            var mode = new LogToken();
+            mode.EstNo = "22071200085"; mode.EstSubNo = "01";
+            var token = HelperToken.GenerateJsonToken(mode);
             var response = await _appService.CreateMaker(model);
+   
+            var logToken  = HelperToken.EncodingToken(token);
             return Json(response);
-        }
-
+        }       
     }
 }
