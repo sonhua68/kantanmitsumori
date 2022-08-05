@@ -1,108 +1,129 @@
-﻿#imgLogo {
-    left: 2px;
-    position: absolute;
-    top: 1px;
+﻿tr > td.title {
+    background: #d2e0fb;
+    background-color: #eee;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    border: solid 1px #000;
 }
 
-#imgHeaTitle {
-    left: 123px;
-    position: absolute;
-    top: 4px;
-}
-
-#imgHeaLine {
-    left: 0px;
-    position: absolute;
-    top: 39px;
-}
-
-#lblUsr {
-    font-family: 'ＭＳ Ｐゴシック';
+tr > td.data {
     font-size: 12pt;
-    font-weight: bold;
-    width: 451px;
-    left: 476px;
-    position: absolute;
-    top: 18px;
-    text-align: right;
+    background-color: #fff;
+    padding: 5px 0px 5px 5px;
+    vertical-align: middle;
+    text-align: left;
+    border: solid 1px #000;
 }
 
-#imgLogoMini {
-    left: 934px;
-    position: absolute;
-    top: 5px;
+tr > td.dataInfo {
+    font-size: 12pt;
+    background-color: #fff;
+    vertical-align: middle;
+    border: none;
+    text-align: left
 }
 
-#lblInfoEst {
+input.inpbox {
+    width: 75%;
+}
+/* Hoai Phong custom header*/
+.label-header {
     font-family: 'ＭＳ Ｐゴシック';
+    background-color: Transparent;
+    font-weight: bold;
+}
+
+.label-text {
+    display: inline-block;
     color: Red;
     background-color: Transparent;
-    font-size: 9pt;
+    font-family: 'ＭＳ Ｐゴシック';
     font-weight: bold;
-    left: 693px;
-    vertical-align: top;
-    direction: ltr;
-    position: absolute;
-    top: 67px;
-    line-height: 1.6em;
 }
 
-#menu_left {
+.border-button {
     border-right: #3c82ed 1px solid;
     border-top: #3c82ed 1px solid;
+    z-index: 118;
     border-left: #3c82ed 1px solid;
-    width: 142px;
-    left: 8px;
+    width: 165px;
     border-bottom: #3c82ed 1px solid;
     position: absolute;
-    top: 68px;
-    height: 315px;
+    /*top: 68px;*/
     background-color: transparent;
 }
 
-#btnClose {
-    left: 16px;
+.label-note-left {
+    vertical-align: top;
+    direction: ltr;
     position: absolute;
-    top: 8px;
+    text-align: left;
+    line-height: 1.6em;
 }
 
-#btnEst {
-    left: 17px;
-    position: absolute;
-    top: 67px;
-}
-
-#btnOrd {
-    left: 17px;
-    position: absolute;
-    top: 106px;
-}
-
-#btnSearch {
-    left: 17px;
-    position: absolute;
-    top: 161px;
-}
-
-#btnFreeQuote {
-    left: 17px;
-    position: absolute;
-    top: 200px;
-}
-
-#btnExpSetting {
-    left: 17px;
-    position: absolute;
-    top: 255px;
-}
-
-#lblInfoSetting {
-    color: Red;
+.label-red {
+    display: inline-block;
     background-color: Transparent;
-    font-family: ＭＳ Ｐゴシック;
+    color: Red;
+    font-family: 'ＭＳ Ｐゴシック';
     font-size: 9pt;
     font-weight: bold;
-    left: 28px;
-    position: absolute;
-    top: 295px;
 }
+
+.label-note-right {
+    z-index: 103;
+    vertical-align: top;
+    direction: ltr;
+    text-align: left;
+    line-height: 1.6em;
+}
+
+.table-color {
+    background-color: #d2e0fb;
+    text-align: left;
+    width: 140px;
+    border: solid 1px #000;
+    color: #000;
+    height: 25px;
+    padding: 0 2px 0 2px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.table-text {
+    display: inline-block;
+    font-size: 12pt;
+    height: 20px;
+    width: 140px;
+}
+
+.estTitle {
+    font-size: 20pt;
+    font-family: "ＭＳ Ｐゴシック";
+    color: black;
+    background-color: transparent;
+    text-align: left;
+    vertical-align: middle;
+    padding-left: 1px;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+}
+
+.estTitle-color-text {
+    border-bottom: solid 2px crimson;
+    width: 170px;
+    font-size: 20pt;
+}
+
+.estTitle-color-price {
+    border-bottom: solid 2px crimson;
+    width: 270px;
+    font-size: 20pt;
+    text-align: right;
+}
+
+/*End Hoai Phong custom header*/
