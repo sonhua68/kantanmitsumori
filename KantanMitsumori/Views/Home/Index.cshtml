@@ -7,17 +7,126 @@
 
 @model List<MakerModel>
 
-<div class="text-center">
+@*<div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     <form id="formDataList">
-        <label for="fname">MakerId:</label><br>
-        <input type="number" id="MakerId" name="MakerId" value=""><br>
-        <label for="lname">MakerName</label><br>
-        <input type="text" id="MakerName" name="MakerName" value=""><br><br>
-        <button type="submit" form="formDataList" value="Submit">submit</button>
+    <label for="fname">MakerId:</label><br>
+    <input type="number" id="MakerId" name="MakerId" value=""><br>
+    <label for="lname">MakerName</label><br>
+    <input type="text" id="MakerName" name="MakerName" value=""><br><br>
+    <button type="submit" form="formDataList" value="Submit">submit</button>
     </form>
+    </div>*@
+<div class="p-3 m-0 bd-example bd-example-row">
+    <div class="row">
+        <div class="col-sm-3">
+            Level 1: .col-sm-3
+        </div>
+        <div class="col-sm-9">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-4 .col-sm-6
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-4 .col-sm-6
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-4 .col-sm-6
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            Level 1: .col-sm-3
+        </div>
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-4 .col-sm-6
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-4 .col-sm-6
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-4 .col-sm-6
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            Level 1: .col-sm-12
+        </div>
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-1 col-sm-1">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-4 col-sm-4">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-1 col-sm-1">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-4 .col-sm-6
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-4 .col-sm-6
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-8 .col-sm-6
+                </div>
+                <div class="col-6 col-sm-6">
+                    Level 2: .col-4 .col-sm-6
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 </div>
+
+
+
 <script>
     $('#formDataList').validate({
         rules: {
