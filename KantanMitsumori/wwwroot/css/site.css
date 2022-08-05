@@ -1,4 +1,4 @@
-html {
+ï»¿html {
     font-size: 14px;
 }
 
@@ -19,7 +19,7 @@ html {
     margin: 0px;
     padding: 0px;
     font-size: 10pt;
-    font-family: '‚l‚r ‚oƒSƒVƒbƒN',osaka,Arial,Helvetica;
+    font-family: 'â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N',osaka,Arial,Helvetica;
 }*/
 
 body {
@@ -27,7 +27,7 @@ body {
     margin: 0px;
     padding: 0px;
     font-size: 10pt;
-    font-family: '‚l‚r ‚oƒSƒVƒbƒN',osaka,Arial,Helvetica;
+    font-family: 'â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N',osaka,Arial,Helvetica;
 }
 
 
@@ -43,7 +43,7 @@ body {
     BORDER-LEFT: white 1px solid;
     PADDING-TOP: 2px;
     BORDER-BOTTOM: white 1px solid;
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N';
     POSITION: absolute;
     BACKGROUND-COLOR: #c0c0c0;
     TEXT-ALIGN: center
@@ -51,7 +51,7 @@ body {
 
 .EstTitle2 {
     FONT-SIZE: 11pt;
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N';
     COLOR: black;
     BORDER: none;
     BACKGROUND-COLOR: transparent;
@@ -69,7 +69,7 @@ body {
     COLOR: black;
     BORDER-TOP-STYLE: none;
     PADDING-TOP: 2px;
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N';
     BORDER-RIGHT-STYLE: none;
     BORDER-LEFT-STYLE: none;
     BACKGROUND-COLOR: transparent;
@@ -85,7 +85,7 @@ body {
     COLOR: black;
     BORDER-TOP-STYLE: none;
     PADDING-TOP: 2px;
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N';
     BORDER-RIGHT-STYLE: none;
     BORDER-LEFT-STYLE: none;
     BACKGROUND-COLOR: transparent;
@@ -100,7 +100,7 @@ body {
 }
 
 .Btn1 {
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N';
     FONT-WEIGHT: bold;
     FONT-SIZE: 12pt;
     text-align: center;
@@ -142,7 +142,6 @@ td.data {
     background-color: #fff;
     border: solid 1px #000;
     height: 25px;
-    padding: 0px 2px 0px 2px;
     vertical-align: middle;
 }
 
@@ -160,9 +159,9 @@ td.info {
     border: none;
 }
 
-/* Še“ü—Í‰æ–Ê—p */
+/* Å eâ€œÃ¼â€”Ãâ€°Ã¦â€“ÃŠâ€”p */
 .InpTitle1 {
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N';
     FONT-SIZE: 11pt;
     COLOR: black;
     BORDER: none;
@@ -174,7 +173,7 @@ td.info {
 }
 
 .InpBox2 {
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N';
     height: 18px;
     FONT-WEIGHT: bold;
     FONT-SIZE: 11pt;
@@ -186,7 +185,7 @@ td.info {
     height: 18px;
     FONT-WEIGHT: bold;
     FONT-SIZE: 11pt;
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N';
     TEXT-ALIGN: right;
 }
 
@@ -197,7 +196,7 @@ td.info {
     letter-spacing: 0.1em;
 }
 
-/*------“ü—ÍƒXƒ^ƒCƒ‹Œ©’¼‚µ------*/
+/*------â€œÃ¼â€”ÃÆ’XÆ’^Æ’CÆ’â€¹Å’Â©â€™Â¼â€šÂµ------*/
 
 .inptable {
     background-color: #d2e0fb;
@@ -232,27 +231,27 @@ td.info {
 
 .inplabel {
     font-size: 11pt;
-    font-family: ‚l‚r ‚oƒSƒVƒbƒN;
+    font-family: â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N;
 }
 
 .inpbox {
     border: 1px solid #7A96DF;
     background-color: #ffffff;
     font-size: 11pt;
-    font-family: ‚l‚r ‚oƒSƒVƒbƒN;
+    font-family: â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N;
 }
 
 .inpbox_r {
     border: 1px solid #7A96DF;
     background-color: #ffffff;
     font-size: 11pt;
-    font-family: ‚l‚r ‚oƒSƒVƒbƒN;
+    font-family: â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N;
     text-align: right;
 }
 
 .inpboxsum {
     font-size: 11pt;
-    font-family: ‚l‚r ‚oƒSƒVƒbƒN;
+    font-family: â€šlâ€šr â€šoÆ’SÆ’VÆ’bÆ’N;
     text-align: right;
     border: none;
     background-color: Transparent;
@@ -271,3 +270,94 @@ td.info {
     border-right: solid 2px white;
     white-space: nowrap;
 }
+/* Hoai Phong custom header*/
+.label-header {
+    font-family: 'ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯'; 
+    background-color: Transparent;   
+    font-weight: bold;
+}
+.label-text {
+    display: inline-block;
+    color: Red;
+    background-color: Transparent;
+    font-family: 'ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯';
+    font-weight: bold;
+}
+.border-button {
+    border-right: #3c82ed 1px solid;
+    border-top: #3c82ed 1px solid;
+    z-index: 118;
+    border-left: #3c82ed 1px solid;
+    width: 165px;
+    border-bottom: #3c82ed 1px solid;
+    position: absolute;
+    /*top: 68px;*/ 
+    background-color: transparent;
+}
+.label-note-left {    
+    vertical-align: top;
+    direction: ltr;
+    position: absolute;
+    text-align: left;
+    line-height: 1.6em;
+}
+.label-red {
+    display: inline-block;
+    background-color: Transparent;
+    color: Red;
+    font-family: 'ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯';
+    font-size: 9pt;
+    font-weight: bold;
+}
+.label-note-right {  
+    z-index: 103;
+    vertical-align: top;
+    direction: ltr;
+    text-align: left;
+    line-height: 1.6em;
+}
+.table-color {
+    background-color: #d2e0fb;
+    text-align: left;
+    width: 140px;   
+    border: solid 1px #000;
+    color: #000;
+    height: 25px;
+    padding: 0 2px 0 2px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.table-text {
+    display: inline-block;
+    font-size: 12pt;
+    height: 20px;
+    width: 140px;
+}
+.estTitle {
+    font-size: 20pt;
+    font-family: "ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯";
+    color: black;
+    background-color: transparent;
+    text-align: left;
+    vertical-align: middle;
+    padding-left: 1px;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+}
+.estTitle-color-text {
+    border-bottom: solid 2px crimson;
+    width: 170px; 
+    font-size: 20pt;
+}
+.estTitle-color-price {
+    border-bottom: solid 2px crimson;
+    width: 270px; 
+    font-size: 20pt;
+    text-align: right;
+ 
+}
+
+/*End Hoai Phong custom header*/

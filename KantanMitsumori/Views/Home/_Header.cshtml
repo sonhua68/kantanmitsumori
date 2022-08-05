@@ -1,13 +1,19 @@
 ﻿@using KantanMitsumori.Model;
 @model LogToken
-@*<label for="fname">EstNo:@Model.EstNo </label>  <label for="fname">EstSubNo: @Model.EstSubNo</label>
-<br>
-<input type="hidden" id="Token" name="Token" value=" @Model.Token">
-<br>*@
-<input type="hidden" id="Token" name="Token" value=" @Model.Token">
-<img id="imgLogo" src="~/img/AsLogo.png" />
-<img id="imgHeaTitle" src="~/img/HeadTitle.gif" />
-<img id="imgHeaLine" src="~/img/HeadLine.gif" />
-<span id="lblUsr">@Model.UserNo &nbsp;@Model.UserNm &nbsp;様</span>
-<img id="imgLogoMini" src="~/img/BlankLogoMini.png" />
-
+<input type="hidden" id="Token" name="Token" value="@Model.Token">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="row">
+            <div class="col-4 col-sm-4">
+                <img src="~/img/AsLogo.png" />
+                <img src="~/img/HeadTitle.gif" />
+            </div>
+            <div class="col-5 col-sm-5">
+            </div>
+            <div class="col-3 col-sm-3">
+              <h6> <span class="label label-header text-end">@Model.UserNo &nbsp;@Model.UserNm &nbsp;様</span></h6> 
+            </div>
+        </div>
+    </div>
+    <img class="rounded mx-auto d-block" src="~/img/HeadLine.gif" />
+</div>
