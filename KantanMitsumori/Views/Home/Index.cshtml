@@ -25,7 +25,7 @@
                 required: true
             }
         },
-        submitHandler: function (form) {
+        submitHandler: function(form) {
             var model = Framework.getFormData($("#formDataList"));
             Framework.submitAjaxFormCreateAwait(model, "Home/TestSummitFormAjax");
             console.log(model);

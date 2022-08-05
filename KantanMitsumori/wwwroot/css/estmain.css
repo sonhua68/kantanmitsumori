@@ -45,7 +45,6 @@
     position: absolute;
     top: 67px;
     line-height: 1.6em;
-    w
 }
 
 #menu_left {
@@ -160,5 +159,31 @@ tr > td.title {
 tr > td.data {
     font-size: 12pt;
     height: 20px;
-    width: 130px;
+    width: 125px;
+}
+
+#tablelbl_SaleAll .tbl_SaleAll {
+    position: absolute;
+    top: 123px;
+    left: 165px;
+    width: 432px;
+}
+
+#tablelblLeaseTotal .tbl_LeaseTotal {
+    position: absolute;
+    top: 123px;
+    left: 165px;
+    width: 432px;
+}
+
+#tablelbl_SaleAll tr > td {
+    border-bottom: solid 2px crimson;
+    width: 170px;
+    height: 37px;
+}
+
+#tablelblLeaseTotal tr > td {
+    border-bottom: solid 2px crimson;
+    width: 170px;
+    height: 37px;
 }
