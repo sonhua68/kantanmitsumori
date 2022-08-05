@@ -152,14 +152,32 @@ table.nomal {
 
 tr > td.title {
     background: #d2e0fb;
-    text-align: left;
-    width: 93px;
+    background-color: #eee;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    border: solid 1px #000;
 }
 
 tr > td.data {
     font-size: 12pt;
-    height: 20px;
-    width: 125px;
+    background-color: #fff;
+    padding: 5px 0px 5px 5px;
+    vertical-align: middle;
+    text-align: left;
+    border: solid 1px #000;
+}
+
+tr > td.dataInfo {
+    font-size: 12pt;
+    background-color: #fff;
+    vertical-align: middle;
+    border: none;
+    text-align: left
+}
+
+input.inpbox {
+    width: 75%;
 }
 
 #tablelbl_SaleAll .tbl_SaleAll {
