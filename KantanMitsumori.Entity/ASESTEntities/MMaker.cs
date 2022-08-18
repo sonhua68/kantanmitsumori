@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KantanMitsumori.DataAccess
+namespace KantanMitsumori.Entity.ASESTEntities
 {
     public partial class MMaker
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace KantanMitsumori.DataAccess
+namespace KantanMitsumori.Entity.ASESTEntities
 {
     public partial class ASESTContext : DbContext
     {
@@ -30,6 +30,7 @@ namespace KantanMitsumori.DataAccess
         public virtual DbSet<MUserDef> MUserDefs { get; set; } = null!;
         public virtual DbSet<MWeightTax> MWeightTaxes { get; set; } = null!;
         public virtual DbSet<TEstimate> TEstimates { get; set; } = null!;
+        public virtual DbSet<TEstimateIde> TEstimateIdes { get; set; } = null!;
         public virtual DbSet<TEstimateItc> TEstimateItcs { get; set; } = null!;
         public virtual DbSet<TEstimateSub> TEstimateSubs { get; set; } = null!;
         public virtual DbSet<TTaxRatioDef> TTaxRatioDefs { get; set; } = null!;
@@ -40,6 +41,11 @@ namespace KantanMitsumori.DataAccess
         public virtual DbSet<TbSy> TbSys { get; set; } = null!;
         public virtual DbSet<TbSysExh> TbSysExhs { get; set; } = null!;
         public virtual DbSet<WAsMember> WAsMembers { get; set; } = null!;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+           
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -459,6 +465,10 @@ namespace KantanMitsumori.DataAccess
                     .HasMaxLength(60)
                     .IsUnicode(false);
 
+                entity.Property(e => e.BodyName)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.BonusFirst)
                     .HasMaxLength(2)
                     .IsUnicode(false);
@@ -535,6 +545,10 @@ namespace KantanMitsumori.DataAccess
                     .HasMaxLength(10)
                     .IsUnicode(false);
 
+                entity.Property(e => e.DriveName)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Equipment)
                     .HasMaxLength(150)
                     .IsUnicode(false);
@@ -571,6 +585,10 @@ namespace KantanMitsumori.DataAccess
                     .HasMaxLength(6)
                     .IsUnicode(false);
 
+                entity.Property(e => e.FuelName)
+                    .HasMaxLength(32)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.GradeName)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -578,6 +596,11 @@ namespace KantanMitsumori.DataAccess
                 entity.Property(e => e.LastPayMonth)
                     .HasMaxLength(6)
                     .IsUnicode(false);
+
+                entity.Property(e => e.LeaseFlag)
+                    .HasMaxLength(1)
+                    .IsUnicode(false)
+                    .HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.MakerName)
                     .HasMaxLength(20)
@@ -690,6 +713,60 @@ namespace KantanMitsumori.DataAccess
                 entity.Property(e => e.Udate)
                     .HasColumnType("datetime")
                     .HasColumnName("UDate");
+            });
+
+            modelBuilder.Entity<TEstimateIde>(entity =>
+            {
+                entity.HasKey(e => new { e.EstNo, e.EstSubNo });
+
+                entity.ToTable("t_Estimate_Ide");
+
+                entity.Property(e => e.EstNo)
+                    .HasMaxLength(11)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.EstSubNo)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.ContractPlanId).HasColumnName("ContractPlanID");
+
+                entity.Property(e => e.CreateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.EstUserNo)
+                    .HasMaxLength(8)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.FirstRegistration)
+                    .HasMaxLength(6)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.InspectionExpirationDate)
+                    .HasMaxLength(8)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.InsuranceCompanyId).HasColumnName("InsuranceCompanyID");
+
+                entity.Property(e => e.LeaseExpirationDate)
+                    .HasMaxLength(8)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.LeaseStartMonth)
+                    .HasMaxLength(6)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.Smasfee).HasColumnName("SMASFee");
+
+                entity.Property(e => e.UpdateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdateUser).HasMaxLength(20);
             });
 
             modelBuilder.Entity<TEstimateItc>(entity =>

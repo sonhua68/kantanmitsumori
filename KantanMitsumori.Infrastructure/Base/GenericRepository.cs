@@ -1,4 +1,4 @@
-﻿using KantanMitsumori.DataAccess;
+﻿using KantanMitsumori.Entity.ASESTEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;

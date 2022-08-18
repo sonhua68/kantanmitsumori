@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace KantanMitsumori.DataAccess
+namespace KantanMitsumori.Entity.ASESTEntities
 {
     public partial class TEstimate
     {
@@ -125,5 +125,11 @@ namespace KantanMitsumori.DataAccess
         public string? OptionName12 { get; set; }
         public int? OptionPrice12 { get; set; }
         public string? SekininName { get; set; }
+        public string? LeaseFlag { get; set; }
+        public string? FuelName { get; set; }
+        public string? DriveName { get; set; }
+        public int? CarDoors { get; set; }
+        public string? BodyName { get; set; }
+        public int? Capacity { get; set; }
     }
 }

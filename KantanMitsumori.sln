@@ -10,6 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Presentations", "3. Presentations", "{5CB5C2A9-5E17-4F45-A155-661B46BE3402}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Libraries", "1. Libraries", "{32EED17D-1D42-4E18-ABBE-927CAA3E08B5}"
+	ProjectSection(SolutionItems) = preProject
+		TextFile1.txt = TextFile1.txt
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KantanMitsumori.DataAccess", "KantanMitsumori.DataAccess\KantanMitsumori.DataAccess.csproj", "{900F577A-89A8-44BB-BFF1-E25293FBEF3D}"
 EndProject
