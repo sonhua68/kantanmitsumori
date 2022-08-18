@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using KantanMitsumori.DataAccess;
+using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Model.Request;
 
 namespace KantanMitsumori.Service.Mapper

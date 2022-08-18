@@ -1,4 +1,4 @@
-﻿using KantanMitsumori.DataAccess;
+﻿using KantanMitsumori.Entity.ASESTEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
@@ -15,8 +15,8 @@ namespace KantanMitsumori.Infrastructure.Base
         public GenericRepository(ASESTContext context, ILogger logger)
         {
             _context = context;
-            this.dbSet = context.Set<TEntity>();
-            this._logger = logger;
+            dbSet = context.Set<TEntity>();
+            _logger = logger;
         }
 
         public virtual bool Add(TEntity entity)
@@ -88,7 +88,7 @@ namespace KantanMitsumori.Infrastructure.Base
             catch
             {
                 // No records in data set
-                return default(TResult);
+                return default;
             }
         }
 
@@ -101,7 +101,7 @@ namespace KantanMitsumori.Infrastructure.Base
             catch
             {
                 // No records in data set
-                return default(TResult);
+                return default;
             }
         }
 

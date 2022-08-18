@@ -1,4 +1,4 @@
-﻿using KantanMitsumori.DataAccess;
+﻿using KantanMitsumori.Infrastructure.IRepositories;
 using KantanMitsumori.Infrastructure.Repositories;
 
 namespace KantanMitsumori.Infrastructure.Base

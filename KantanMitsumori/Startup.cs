@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.DataAccess;
+﻿using KantanMitsumori.Entity.ASESTEntities;
+using KantanMitsumori.Entity.IDEEnitities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Infrastructure;
 using KantanMitsumori.Service;
@@ -25,10 +26,18 @@ namespace KantanMitsumori
             services.AddDbContext<ASESTContext>(
                 options => options.UseSqlServer(
                 Configuration.GetConnectionString("AsestConnection"))
-#if DEBUG
+
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
-#endif
+
+            );
+            services.AddDbContext<IDEContext>(
+                options => options.UseSqlServer(
+                Configuration.GetConnectionString("IDEConnection"))
+
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors()
+
             );
 
             HelperToken.Configure(Configuration);

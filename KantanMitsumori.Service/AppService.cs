@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using KantanMitsumori.DataAccess;
+using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
