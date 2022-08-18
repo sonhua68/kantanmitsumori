@@ -1,6 +1,6 @@
 ﻿using KantanMitsumori.DataAccess;
 using KantanMitsumori.Infrastructure.Repositories;
-
+using KantanMitsumori.Infrastructure.IRepositories;
 namespace KantanMitsumori.Infrastructure.Base
 {
     public interface IUnitOfWork

@@ -14,4 +14,8 @@
     <ProjectReference Include="..\KantanMitsumori.DataAccess\KantanMitsumori.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="IDE\" />
+  </ItemGroup>
+
 </Project>

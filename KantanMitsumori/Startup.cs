@@ -22,14 +22,14 @@ namespace KantanMitsumori
 
             services.AddControllersWithViews();
 
-            services.AddDbContext<ASESTContext>(
-                options => options.UseSqlServer(
-                Configuration.GetConnectionString("AsestConnection"))
-#if DEBUG
-                .EnableSensitiveDataLogging()
-                .EnableDetailedErrors()
-#endif
-            );
+//            services.AddDbContext<ASESTContext>(
+//                options => options.UseSqlServer(
+//                Configuration.GetConnectionString("AsestConnection"))
+//#if DEBUG
+//                .EnableSensitiveDataLogging()
+//                .EnableDetailedErrors()
+//#endif
+//            );
 
             HelperToken.Configure(Configuration);
             services.AddUnitOfWork();

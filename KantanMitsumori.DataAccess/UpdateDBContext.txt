@@ -1,0 +1,3 @@
+﻿Scaffold-DbContext "Server=HOAIPHONG\SQLEXPRESS;Database=ASEST;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -ContextDir "F:\KantanMitsumori\KantanMitsumori.DataAccess" -Force -OutputDir "F:\KantanMitsumori\KantanMitsumori.Entity"-Namespace "KantanMitsumori.Entity.ASESTEntities"
+
+Scaffold-DbContext "Server=HOAIPHONG\SQLEXPRESS;Database=ASEST;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -ContextDir "F:\KantanMitsumori\KantanMitsumori.DataAccess" -Force -OutputDir "F:\KantanMitsumori\KantanMitsumori.Entity\ASESTEntities" -Namespace "KantanMitsumori.Entity.ASESTEntities"
