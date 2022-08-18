@@ -1,22 +1,23 @@
 ﻿using KantanMitsumori.Entity.ASESTEntities;
+using KantanMitsumori.Entity.IDEEnitities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
 namespace KantanMitsumori.Infrastructure.Base
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public class GenericRepositoryIDE<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
 
-        protected ASESTContext _context;
+        protected IDEContext _context;
         internal DbSet<TEntity> dbSet;
         public readonly ILogger _logger;
 
-        public GenericRepository(ASESTContext context, ILogger logger)
+        public GenericRepositoryIDE(IDEContext context, ILogger logger)
         {
             _context = context;
-            dbSet = context.Set<TEntity>();
-            _logger = logger;
+            this.dbSet = context.Set<TEntity>();
+            this._logger = logger;
         }
 
         public virtual bool Add(TEntity entity)
@@ -88,7 +89,7 @@ namespace KantanMitsumori.Infrastructure.Base
             catch
             {
                 // No records in data set
-                return default;
+                return default(TResult);
             }
         }
 
@@ -101,7 +102,7 @@ namespace KantanMitsumori.Infrastructure.Base
             catch
             {
                 // No records in data set
-                return default;
+                return default(TResult);
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using KantanMitsumori.Infrastructure.Base;
+using KantanMitsumori.Infrastructure.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -13,7 +14,8 @@ namespace KantanMitsumori.Infrastructure
         /// <returns>A reference to this instance after the operation has completed.</returns>
         public static IServiceCollection AddUnitOfWork(this IServiceCollection services)
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork>();      
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IUnitOfWorkIDE, UnitOfWorkIDE>();
             return services;
         }
     }
