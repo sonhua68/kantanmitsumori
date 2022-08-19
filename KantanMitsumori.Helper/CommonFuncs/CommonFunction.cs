@@ -463,5 +463,29 @@ namespace KantanMitsumori.Helper.CommonFuncs
             // 年月形式不正の場合、「無し」となす
             return none;
         }
+        public static decimal ConvertDecimal(object value)
+        {
+            if (value == null) return 0;
+            if (value is DBNull) return 0;
+            return Convert.ToDecimal(value);
+        }
+        public static double ConvertToDouble(object value)
+        {
+            if (value == null) return 0;
+            if (value is DBNull) return 0;
+            return Convert.ToDouble(value);
+        }
+        public static int ConvertToInt32(object value)
+        {
+            if (value == null) return 0;
+            if (value is DBNull) return 0;
+            return Convert.ToInt32(value);
+        }
+        public static long ConvertToInt64(object value)
+        {
+            if (value == null) return 0;
+            if (value is DBNull) return 0;
+            return Convert.ToInt64(value);
+        }
     }
 }

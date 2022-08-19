@@ -24,13 +24,25 @@ namespace KantanMitsumori.Infrastructure.Base
         {
             throw new NotImplementedException();
         }
-
+        public bool AddRange(List<TEntity> entities)
+        {
+            dbSet.AddRange(entities);
+            return true;
+        }
         public virtual bool Update(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+        public Task<bool> UpdateRange(List<TEntity> entities)
         {
             throw new NotImplementedException();
         }
 
         public virtual bool Delete(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+        public bool DeleteRange(List<TEntity> entities)
         {
             throw new NotImplementedException();
         }
@@ -57,8 +69,11 @@ namespace KantanMitsumori.Infrastructure.Base
             }
             return query.ToList();
         }
-
-        public virtual TEntity? GetSingle(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy)
+        public virtual async Task<TEntity> GetSingle(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await dbSet.Where(predicate).FirstOrDefaultAsync();
+        }
+        public virtual TEntity? GetSingleOrDefault(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy)
         {
             IQueryable<TEntity> query = dbSet;
             query = query.Where(predicate);
@@ -68,6 +83,12 @@ namespace KantanMitsumori.Infrastructure.Base
             }
             return query.FirstOrDefault();
         }
+
+        public async Task<IEnumerable<TEntity>> Query(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await dbSet.Where(predicate).ToListAsync();
+        }
+
 
         public virtual IEnumerable<TEntity> GetSkipAndTake(Expression<Func<TEntity, bool>> expression, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy, int skipRecord, int takeRecord)
         {
@@ -89,7 +110,7 @@ namespace KantanMitsumori.Infrastructure.Base
             catch
             {
                 // No records in data set
-                return default(TResult);
+                return default;
             }
         }
 
@@ -102,7 +123,7 @@ namespace KantanMitsumori.Infrastructure.Base
             catch
             {
                 // No records in data set
-                return default(TResult);
+                return default;
             }
         }
 
