@@ -48,15 +48,15 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <returns></returns>
         public double GetConsumptionTax()
-        {
-            double ConsumptionTax = 0.0;
+        {    
             var dt = _unitOfWorkIde.ConsumptionTaxs.GetAll().ToList();
             if (dt.Count > 0)
             {
-                ConsumptionTax = dt.FirstOrDefault()!.ConsumptionTax;
+                consumptionTax = dt.FirstOrDefault()!.ConsumptionTax;
+               
             }
-            _logger.LogInformation("4-1 ConsumptionTax:={0}", ConsumptionTax);
-            return ConsumptionTax;
+            _logger.LogInformation("4-1 ConsumptionTax:={0}", consumptionTax);
+            return consumptionTax;
         }
         /// <summary>
         /// 4-2  file doc   tinh gia xe tu du lieu bao gia
@@ -321,7 +321,7 @@ namespace KantanMitsumori.Service.Helper
         public double GetPricePromotional(int salesSum)
         {
             double pricePromotional = 0;
-            var promotion = _unitOfWorkIde.Promotions.GetAll().FirstOrDefault()!.Promotion;
+             promotion = _unitOfWorkIde.Promotions.GetAll().FirstOrDefault()!.Promotion;
             pricePromotional = salesSum * promotion * contractTime;
             _logger.LogInformation("4-6 PricePromotional:={0}", pricePromotional);
             if (pricePromotional > 100000)
