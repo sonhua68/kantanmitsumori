@@ -333,7 +333,7 @@ var Framework =
                     type: "POST",
                     url: url,
                     data: {
-                        token: $("#Token").val(),
+                        //token: $("#Token").val(),
                         requestData: data
                     },
                     async: false,

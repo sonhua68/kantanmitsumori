@@ -62,6 +62,18 @@ namespace KantanMitsumori.Controllers
         {
             return View();
         }
+        #region HoaiPhong
 
+        public IActionResult Inpcar()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveInputCar(InputCarModel requestData)
+        {
+            return Ok();
+        }
+        #endregion HoaiPhong
     }
 }
