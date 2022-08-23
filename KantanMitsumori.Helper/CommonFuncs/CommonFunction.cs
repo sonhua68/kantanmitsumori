@@ -1,19 +1,11 @@
 ﻿using KantanMitsumori.Helper.Constant;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
     public class CommonFunction
     {
-        private readonly ILogger _logger;
-
-        public CommonFunction(ILogger logger)
-        {
-            _logger = logger;
-        }
-
         /// <summary>
         /// Numeric type check
         /// </summary>
@@ -315,9 +307,8 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 vDecNo += Strings.Chr(Strings.Asc(wStr) - Convert.ToInt32(wInt));
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError(ex, "CommonFuncs - DecUserNo - GCMF-010C ◆会員認証エラー◆ 復号化前会員番号：{0}", vEncNo);
                 return false;
             }
         }
@@ -463,5 +454,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
             // 年月形式不正の場合、「無し」となす
             return none;
         }
+
     }
 }
