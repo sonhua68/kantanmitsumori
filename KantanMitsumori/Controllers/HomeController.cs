@@ -34,10 +34,11 @@ namespace KantanMitsumori.Controllers
         {
             var mode = new LogToken();
             mode.EstNo = "22071200085"; mode.EstSubNo = "01";
-            var token = HelperToken.GenerateJsonToken(mode);
-            mode.Token = token;
             mode.UserNo = "88888195";
             mode.UserNm = "testuser88888195";
+            var token = HelperToken.GenerateJsonToken(mode);
+            mode.Token = token;
+            setTokenCookie(token);
             return PartialView("_Header", mode);
         }
 
@@ -47,6 +48,18 @@ namespace KantanMitsumori.Controllers
             var response = await _appService.CreateMaker(requestData);
             var logToken = HelperToken.EncodingToken(token);
             return Json(response);
+        }
+        public async Task<IActionResult> Test(string token, MakerModel requestData)
+        {
+            var response = await _appService.CreateMaker(requestData);
+            var logToken = HelperToken.EncodingToken(token);
+
+
+            if (response.ResultStatus == 0)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
         }
 
         public IActionResult GetEstMain()
