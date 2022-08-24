@@ -44,16 +44,20 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-           
+            if (!optionsBuilder.IsConfigured)
+            {
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AsopCarname>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.MekerCode, e.CarmodelCode });
 
                 entity.ToTable("ASOP_Carname");
+
+                entity.Property(e => e.MekerCode).HasColumnName("meker_code");
 
                 entity.Property(e => e.CarmodelCode).HasColumnName("carmodel_code");
 
@@ -61,17 +65,17 @@ namespace KantanMitsumori.Entity.ASESTEntities
                     .HasMaxLength(30)
                     .IsUnicode(false)
                     .HasColumnName("carmodel_name");
-
-                entity.Property(e => e.MekerCode).HasColumnName("meker_code");
             });
 
             modelBuilder.Entity<AsopMaker>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.MakerCode);
 
                 entity.ToTable("ASOP_Maker");
 
-                entity.Property(e => e.MakerCode).HasColumnName("maker_code");
+                entity.Property(e => e.MakerCode)
+                    .ValueGeneratedNever()
+                    .HasColumnName("maker_code");
 
                 entity.Property(e => e.MakerName)
                     .HasMaxLength(20)
@@ -81,18 +85,18 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<DmtMaker>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.MakerCode);
 
                 entity.ToTable("DMT_MAKER");
+
+                entity.Property(e => e.MakerCode)
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.InsertDate)
                     .HasMaxLength(14)
                     .IsUnicode(false)
                     .IsFixedLength();
-
-                entity.Property(e => e.MakerCode)
-                    .HasMaxLength(3)
-                    .IsUnicode(false);
 
                 entity.Property(e => e.MakerName)
                     .HasMaxLength(30)
@@ -106,9 +110,11 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<MAquisitionTax>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.AquisitionTaxId);
 
                 entity.ToTable("m_AquisitionTax");
+
+                entity.Property(e => e.AquisitionTaxId).ValueGeneratedNever();
 
                 entity.Property(e => e.CarType).HasColumnName("CAR_TYPE");
 
@@ -136,9 +142,11 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<MCar>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.CarId);
 
                 entity.ToTable("m_Car");
+
+                entity.Property(e => e.CarId).ValueGeneratedNever();
 
                 entity.Property(e => e.CaseId).HasColumnName("CaseID");
 
@@ -205,9 +213,11 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<MCarTax>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.CarTaxId);
 
                 entity.ToTable("m_CarTax");
+
+                entity.Property(e => e.CarTaxId).ValueGeneratedNever();
 
                 entity.Property(e => e.Dflag).HasColumnName("DFlag");
 
@@ -233,9 +243,11 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<MMaker>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.MakerId);
 
                 entity.ToTable("m_Maker");
+
+                entity.Property(e => e.MakerId).ValueGeneratedNever();
 
                 entity.Property(e => e.Dflag).HasColumnName("DFlag");
 
@@ -254,7 +266,7 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<MModel>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.MakerId, e.ModelId });
 
                 entity.ToTable("m_Model");
 
@@ -275,9 +287,11 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<MSelfInsurance>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.SelfInsuranceId);
 
                 entity.ToTable("m_SelfInsurance");
+
+                entity.Property(e => e.SelfInsuranceId).ValueGeneratedNever();
 
                 entity.Property(e => e.CarType).HasColumnName("CAR_TYPE");
 
@@ -298,9 +312,13 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<MToffice>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.TofficeId);
 
                 entity.ToTable("mTOffice");
+
+                entity.Property(e => e.TofficeId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("TOfficeID");
 
                 entity.Property(e => e.PlaceNumber)
                     .HasMaxLength(10)
@@ -311,8 +329,6 @@ namespace KantanMitsumori.Entity.ASESTEntities
                     .IsUnicode(false)
                     .HasColumnName("TOfficeCode");
 
-                entity.Property(e => e.TofficeId).HasColumnName("TOfficeID");
-
                 entity.Property(e => e.TofficeName)
                     .HasMaxLength(40)
                     .IsUnicode(false)
@@ -321,9 +337,14 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<MUser>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.UserNo);
 
                 entity.ToTable("m_User");
+
+                entity.Property(e => e.UserNo)
+                    .HasMaxLength(8)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
                 entity.Property(e => e.Dflag).HasColumnName("DFlag");
 
@@ -343,11 +364,6 @@ namespace KantanMitsumori.Entity.ASESTEntities
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UserNo)
-                    .HasMaxLength(8)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
                 entity.Property(e => e.UserTel)
                     .HasMaxLength(13)
                     .IsUnicode(false)
@@ -356,9 +372,14 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<MUserDef>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.UserNo);
 
                 entity.ToTable("m_UserDef");
+
+                entity.Property(e => e.UserNo)
+                    .HasMaxLength(8)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
                 entity.Property(e => e.DamageInsMonth)
                     .HasMaxLength(2)
@@ -423,18 +444,15 @@ namespace KantanMitsumori.Entity.ASESTEntities
                 entity.Property(e => e.Udate)
                     .HasColumnType("datetime")
                     .HasColumnName("UDate");
-
-                entity.Property(e => e.UserNo)
-                    .HasMaxLength(8)
-                    .IsUnicode(false)
-                    .IsFixedLength();
             });
 
             modelBuilder.Entity<MWeightTax>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.WeightTaxId);
 
                 entity.ToTable("m_WeightTax");
+
+                entity.Property(e => e.WeightTaxId).ValueGeneratedNever();
 
                 entity.Property(e => e.CarType).HasColumnName("CAR_TYPE");
 
@@ -457,9 +475,19 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<TEstimate>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.EstNo, e.EstSubNo });
 
                 entity.ToTable("t_Estimate");
+
+                entity.Property(e => e.EstNo)
+                    .HasMaxLength(11)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.EstSubNo)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
                 entity.Property(e => e.BodyColor)
                     .HasMaxLength(60)
@@ -555,16 +583,6 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
                 entity.Property(e => e.EstInpKbn)
                     .HasMaxLength(1)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.EstNo)
-                    .HasMaxLength(11)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.EstSubNo)
-                    .HasMaxLength(2)
                     .IsUnicode(false)
                     .IsFixedLength();
 
@@ -771,9 +789,19 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<TEstimateItc>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.EstNo, e.EstSubNo });
 
                 entity.ToTable("t_EstimateItc");
+
+                entity.Property(e => e.EstNo)
+                    .HasMaxLength(11)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.EstSubNo)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
                 entity.Property(e => e.BodyColor)
                     .HasMaxLength(40)
@@ -829,16 +857,6 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
                 entity.Property(e => e.EstInpKbn)
                     .HasMaxLength(1)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.EstNo)
-                    .HasMaxLength(11)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.EstSubNo)
-                    .HasMaxLength(2)
                     .IsUnicode(false)
                     .IsFixedLength();
 
@@ -954,9 +972,19 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<TEstimateSub>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.EstNo, e.EstSubNo });
 
                 entity.ToTable("t_EstimateSub");
+
+                entity.Property(e => e.EstNo)
+                    .HasMaxLength(11)
+                    .IsUnicode(false)
+                    .IsFixedLength();
+
+                entity.Property(e => e.EstSubNo)
+                    .HasMaxLength(2)
+                    .IsUnicode(false)
+                    .IsFixedLength();
 
                 entity.Property(e => e.Aacount).HasColumnName("AACount");
 
@@ -1008,16 +1036,6 @@ namespace KantanMitsumori.Entity.ASESTEntities
                 entity.Property(e => e.DispVolUnit)
                     .HasMaxLength(10)
                     .IsUnicode(false);
-
-                entity.Property(e => e.EstNo)
-                    .HasMaxLength(11)
-                    .IsUnicode(false)
-                    .IsFixedLength();
-
-                entity.Property(e => e.EstSubNo)
-                    .HasMaxLength(2)
-                    .IsUnicode(false)
-                    .IsFixedLength();
 
                 entity.Property(e => e.EstUserNo)
                     .HasMaxLength(8)
@@ -1073,23 +1091,25 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<TTaxRatioDef>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.UserNo);
 
                 entity.ToTable("t_TaxRatioDef");
-
-                entity.Property(e => e.TaxRatioId).HasColumnName("TaxRatioID");
 
                 entity.Property(e => e.UserNo)
                     .HasMaxLength(8)
                     .IsUnicode(false)
                     .IsFixedLength();
+
+                entity.Property(e => e.TaxRatioId).HasColumnName("TaxRatioID");
             });
 
             modelBuilder.Entity<TUseLog>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.LoginNo);
 
                 entity.ToTable("t_UseLog");
+
+                entity.Property(e => e.LoginNo).ValueGeneratedNever();
 
                 entity.Property(e => e.Dflag).HasColumnName("DFlag");
 
@@ -1119,9 +1139,11 @@ namespace KantanMitsumori.Entity.ASESTEntities
 
             modelBuilder.Entity<TUseLogItc>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.LoginNo);
 
                 entity.ToTable("t_UseLogItc");
+
+                entity.Property(e => e.LoginNo).ValueGeneratedNever();
 
                 entity.Property(e => e.Dflag).HasColumnName("DFlag");
 

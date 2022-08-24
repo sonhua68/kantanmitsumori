@@ -4,10 +4,11 @@ using KantanMitsumori.Model.Request;
 
 namespace KantanMitsumori.IService
 {
-    public interface IEstimateSubService
+    public interface IEstimateService
     {
-        ResponseBase<List<TEstimateSub>> GetList();
-        Task<ResponseBase<int>> Create(TEstimateSub model);
-
+        ResponseBase<List<TEstimate>> GetList(RequestInputCar requestInputCar);
+        ResponseBase<TEstimate> GetDetail(RequestInputCar requestInputCar);
+        Task<ResponseBase<int>> Create(TEstimate model);
+        Task<ResponseBase<int>> UpdateInputCar(RequestUpdateInputCar model);  
     }
 }

@@ -2,6 +2,7 @@
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
+using KantanMitsumori.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -9,10 +10,12 @@ namespace KantanMitsumori.Controllers
     public class HomeController : BaseController
     {
         private readonly IAppService _appService;
+        private readonly IEstimateService _estimateService;
         private readonly ILogger<HomeController> _logger;
-        public HomeController(IAppService appService, ILogger<HomeController> logger)
+        public HomeController(IAppService appService, IEstimateService estimateService,  ILogger<HomeController> logger)
         {
             _appService = appService;
+            _estimateService = estimateService;
             _logger = logger;
         }
 
@@ -65,14 +68,23 @@ namespace KantanMitsumori.Controllers
         #region HoaiPhong
 
         public IActionResult Inpcar()
-        {
-            return View();
+        {            
+            RequestInputCar res = new RequestInputCar();
+            res.EstNo = "22082300011";
+            res.EstSubNo = "01";
+            var response = _estimateService.GetDetail(res);
+            return View(response.Data);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveInputCar(InputCarModel requestData)
+        public async Task<IActionResult> UpdateInputCar(RequestUpdateInputCar requestData)
         {
-            return Ok();
+            var response = await _estimateService.UpdateInputCar(requestData);
+            if (response.ResultStatus == 0)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
         }
         #endregion HoaiPhong
     }

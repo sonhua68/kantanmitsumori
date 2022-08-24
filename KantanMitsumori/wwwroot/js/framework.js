@@ -36,6 +36,18 @@ var Framework =
                         "value": 1
                     };
                 }).get();
+                //var checkRadioFalse = $($form).find('input[type=radio]:not(:checked)').map(function () {
+                //    return {
+                //        "name": this.name,
+                //        "value": this.value
+                //    };
+                //}).get();
+                var checkRadioTrue = $($form).find('input[type=radio]:checked').map(function () {
+                    return {
+                        "name": this.name,
+                        "value": this.value
+                    };
+                }).get();
                 var number = $form.find('input[type=number]').map(function () {
                     if (!this.value) {
                         return {
@@ -84,7 +96,7 @@ var Framework =
                         "value": this.value
                     };
                 }).get();
-                unindexed_array = unindexed_array.concat(checkFalse, checkTrue, number, currency, textarea, hidden, text);
+                unindexed_array = unindexed_array.concat(checkFalse, checkTrue, checkRadioTrue,number, currency, textarea, hidden, text);
                 var indexed_array = {};
                 $.map(unindexed_array, function (n, i) {
                     indexed_array[n['name']] = n['value'];
@@ -92,6 +104,8 @@ var Framework =
                 unindexed_array = null;
                 checkFalse = null;
                 checkTrue = null;
+                //checkRadioFalse = null;
+                checkRadioTrue = null;
                 textarea = null
                 hidden = null;
                 text = null;

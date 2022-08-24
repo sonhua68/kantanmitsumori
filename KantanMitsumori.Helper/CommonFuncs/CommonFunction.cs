@@ -108,7 +108,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// Returns the left part of this string instance.
         /// </summary>
         /// <param name="count">Number of characters to return.</param>
-        public string Left(string input, int count)
+        public static string Left(string input, int count)
         {
             return input.Substring(0, Math.Min(input.Length, count));
         }
@@ -117,7 +117,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// Returns the right part of the string instance.
         /// </summary>
         /// <param name="count">Number of characters to return.</param>
-        public string Right(string input, int count)
+        public static string Right(string input, int count)
         {
             return input.Substring(Math.Max(input.Length - count, 0), Math.Min(count, input.Length));
         }
@@ -127,7 +127,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="start">Character index to start return the midstring from.</param>
         /// <returns>Substring or empty string when start is outside range.</returns>
-        public string Mid(string input, int start)
+        public static string Mid(string input, int start)
         {
             return input.Substring(Math.Min(start, input.Length));
         }
@@ -393,7 +393,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="inYM"></param>
         /// <param name="inFlagNone"></param>
         /// <returns></returns>
-        public string setCheckCarYm(string inYM, bool inFlgNone = false)
+        public string SetCheckCarYm(string inYM, bool inFlgNone = false)
         {
             string none = "無し";
 
@@ -486,6 +486,59 @@ namespace KantanMitsumori.Helper.CommonFuncs
             if (value == null) return 0;
             if (value is DBNull) return 0;
             return Convert.ToInt64(value);
+        }
+
+        public static string setCheckCarYm(string inYM, bool inFlgNone = false)
+        {
+             var NONE = "無し";
+
+            long ret;
+
+            // 「無し」フラグ On
+            if (inFlgNone)
+                return NONE;
+
+            // 入力なし
+            if (inYM == "" | Information.IsNumeric(inYM) == false)
+                return "";
+
+            if (Strings.Len(inYM) == 6 && Strings.Mid(inYM, 5) == "00")
+                // MM が "00" の場合、YYYY 部分のみ生かす
+                inYM = Strings.Left(inYM, 4);
+
+            if (Strings.Len(inYM) == 4)
+            {
+                if (Information.IsDate(inYM + "/01/01"))
+                {
+                    ret = DateAndTime.DateDiff(DateInterval.Year, System.DateTime.Today, DateTime.Parse(inYM + "/01/01"));
+                    if (ret > 3)
+                        // 未来過ぎて不正なので、入力なし扱い
+                        return "";
+                    else if (ret < 0)
+                        // 過去なので、「無し」扱い
+                        return NONE;
+                    else
+                        return inYM;
+                }
+            }
+            else if (Strings.Len(inYM) == 6)
+            {
+                if (Information.IsDate(Strings.Left(inYM, 4) + "/" + Strings.Right(inYM, 2) + "/01"))
+                {
+                    ret = DateAndTime.DateDiff(DateInterval.Month, System.DateTime.Today, DateTime.Parse(Strings.Left(inYM, 4) + "/" + Strings.Right(inYM, 2) + "/01"));
+                    if (ret > 36)
+                        // 未来過ぎて不正なので、入力なし扱い
+                        return "";
+                    else if (ret < 0)
+                        // 過去なので、「無し」扱い
+                        return NONE;
+                    else
+                        return inYM;
+                }
+            }
+
+            // 年月形式不正の場合、「無し」となす
+            return NONE;
         }
     }
 }

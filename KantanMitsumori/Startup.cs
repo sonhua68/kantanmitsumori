@@ -34,7 +34,6 @@ namespace KantanMitsumori
             services.AddDbContext<IDEContext>(
                 options => options.UseSqlServer(
                 Configuration.GetConnectionString("IDEConnection"))
-
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
 
