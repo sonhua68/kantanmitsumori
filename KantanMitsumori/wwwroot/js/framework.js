@@ -282,13 +282,7 @@ var Framework =
                         requestData: data
                     },
                     async: false,
-                    success: function success(r) {
-                        if (r.resultStatus == 0) {
-                            window.history.back();
-                            location.reload();
-                        } else {
-                            console.log(r)
-                        }
+                    success: function success(r) {                      
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
@@ -310,13 +304,7 @@ var Framework =
                         token: $("#Token").val(),
                     },
                     async: false,
-                    success: function success(r) {
-                        if (r.resultStatus == 0) {
-                            window.history.back();
-                            location.reload();
-                        } else {
-                            console.log(r)
-                        }
+                    success: function success(r) {                      
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
@@ -339,13 +327,7 @@ var Framework =
                         requestData: data
                     },
                     async: false,
-                    success: function success(r) {
-                        if (r.resultStatus == 0) {
-                            window.history.back();
-                            location.reload();
-                        } else {
-                            console.log(r)
-                        }
+                    success: function success(r) {                    
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
@@ -369,13 +351,7 @@ var Framework =
                         requestData: data
                     },
                     async: false,
-                    success: function success(r) {
-                        if (r.resultStatus == 0) {
-                            window.history.back();
-                            location.reload();
-                        } else {
-                            console.log(r)
-                        }
+                    success: function success(r) {                      
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
@@ -604,8 +580,9 @@ var Framework =
         {
             key: "GoBackReloadPage",
             value: function GoBackReloadPage() {
-                window.history.back();
-                location.reload();
+                window.setTimeout(window.history.back(), 2000); 
+                location.reload();               
+                return;
                 //console.log(idbtn);
                 //$("#" + idbtn + "").click(function () {
                 //    window.history.back();

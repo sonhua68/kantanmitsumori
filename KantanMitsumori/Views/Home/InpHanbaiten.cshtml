@@ -103,7 +103,10 @@
     $('#formInpHanbaiten').validate({
         submitHandler: function (form) {
             var model = Framework.getFormData($("#formInpHanbaiten"));
-            Framework.submitAjaxFormUpdateAsync(model, "/Home/UpdateInpHanbaiten");
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/Home/UpdateInpHanbaiten");
+            if (result.resultStatus == 0) {
+                Framework.GoBackReloadPage();
+            }
         }
     });
 

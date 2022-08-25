@@ -207,7 +207,7 @@
                                 </tr>
                                 <tr>
                                     <td class="inpbtntd">
-                                        <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();" style="height:32px;width:100px;">
+                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();" style="height:32px;width:100px;">
                                         <input type="submit" name="btnOK" value="Ok" form="formInputCar" class="Btn1" style="height:32px;width:100px;">
                                     </td>
                                 </tr>
@@ -234,7 +234,10 @@
         submitHandler: function (form) {
             var model = Framework.getFormData($("#formInputCar"));
             console.log(model)
-            Framework.submitAjaxFormUpdateAsync(model, "/Home/UpdateInputCar");
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/Home/UpdateInputCar");
+            if (result.resultStatus == 0) {
+                Framework.GoBackReloadPage();
+            }
         }
     });
     function swichUnit(NameId, value) {
