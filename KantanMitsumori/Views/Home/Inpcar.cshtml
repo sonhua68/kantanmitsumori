@@ -141,7 +141,7 @@
                                         <span class="inplabel" style="display:inline-block;width:100px;">排気量</span>
                                         <input name="Haiki" type="text" value="@Model.DispVol" maxlength="5" id="Haiki" class="inpbox_r" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:70px;IME-MODE: disabled">
                                         &nbsp;&nbsp;<span class="inplabel">
-                                            <input id="radDispVolUnitCC" type="radio" name="radDispVol" value="cc" checked="checked" onclick="swichUnitDispVolUnit(false);">
+                                            <input id="radDispVolUnitCC" type="radio" name="radDispVol" value="cc" checked="checked" onclick="swichUnit('DispVolUnit',false);">
                                             <label for="radDispVolUnitCC">cc</label>
                                         </span>
                                         &nbsp;&nbsp;<span class="inplabel">
@@ -207,7 +207,7 @@
                                 </tr>
                                 <tr>
                                     <td class="inpbtntd">
-                                        <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();" style="height:32px;width:100px;">
                                         <input type="submit" name="btnOK" value="Ok" form="formInputCar" class="Btn1" style="height:32px;width:100px;">
                                     </td>
                                 </tr>
@@ -221,6 +221,7 @@
                         <input name="EstNo" type="hidden" id="EstNo" value="@Model.EstNo">
                         <input name="EstSubNo" type="hidden" id="EstSubNo" value="@Model.EstSubNo">
                         <input type="hidden" id="BusinessHis" value="@Model.BusinessHis">
+                        <input type="hidden" id="CheckCarYm" value="@Model.CheckCarYm">
                     </div>
                 </td>
             </tr>
@@ -252,14 +253,28 @@
         } else {
             $("#raSyuhukuU").attr("checked", "checked");
         }
-        var businessHis = $("#BusinessHis").val(); 
-        if (businessHis != "") {
-            $("#ddlCarReki option[value='" + businessHis + "']").attr("selected", "selected");
+        var businessHis = $("#BusinessHis").val() == "" ? "自家用" : $("#BusinessHis").val();
+        Framework.SetSelected("ddlCarReki", businessHis);
+        let firstRegYm = @Model.FirstRegYm;
+        var firstYear = firstRegYm.toString().substring(0, 4);
+        var firstMonth = firstRegYm.toString().substring(4, 6);
+        if (parseInt(firstMonth) < 10) {
+            firstMonth = firstMonth.substring(1, 2)
         }
-        else {
-            $("#ddlCarReki option[value='自家用']").attr("selected", "selected");
+        Framework.SetSelectedConstant("ddlFirstYear", firstYear)
+        Framework.SetSelectedConstant("ddlFirstMonth", firstMonth)
+        let checkCarYm = $("#CheckCarYm").val();
+        if (checkCarYm.includes("無し")) {
+            $("#chkSyaken").attr('checked', true);
+        } else {
+            var syakenYear = checkCarYm.toString().substring(0, 4);
+            var syakenMonth = checkCarYm.toString().substring(4, 6);
+            if (parseInt(syakenMonth) < 10) {
+                syakenMonth = syakenMonth.substring(1, 2)
+            }
+            Framework.SetSelectedConstant("ddlSyakenYear", syakenYear)
+            Framework.SetSelectedConstant("ddlSyakenMonth", syakenMonth)
         }
-
     }
 
 </script>

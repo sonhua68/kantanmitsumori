@@ -100,7 +100,7 @@ namespace KantanMitsumori.Service.Helper
             && n.DisplacementTo >= displacementTo &&
             n.ElapsedYearsFrom <= 0
             && n.ElapsedYearsTo >= 12);
-            monthlyPrice = dt.Result.FirstOrDefault()!.MonthlyPrice;
+            monthlyPrice = dt.FirstOrDefault()!.MonthlyPrice;
             _logger.LogInformation("4-3-1 PriceTax :={0}", monthlyPrice);
             return monthlyPrice;
         }
@@ -129,7 +129,7 @@ namespace KantanMitsumori.Service.Helper
             n.FirstRegistrationDateTo >= firstRegistrationDateTo && n.IsElectricCar == isElectricCar &&
             n.DisplacementFrom <= displacementFrom && n.DisplacementTo >= displacementTo &&
             n.ElapsedYearsFrom <= elapsedYearsFrom && n.ElapsedYearsTo >= elapsedYearsTo);
-            monthlyPrice = dt.Result.FirstOrDefault()!.MonthlyPrice;
+            monthlyPrice = dt.FirstOrDefault()!.MonthlyPrice;
             _logger.LogInformation("4-3-2 PriceTax :={0}", monthlyPrice);
             return monthlyPrice;
         }
@@ -199,7 +199,7 @@ namespace KantanMitsumori.Service.Helper
             DateTime _leaseExpirationDate = DateTime.Parse(leaseExpirationDate);
             if (contractPlan != 99)
             {
-                insuranceFee = _unitOfWorkIde.LiabilityInsurances.Query(n => n.CarType == carType).Result.FirstOrDefault()!.InsuranceFee;
+                insuranceFee = _unitOfWorkIde.LiabilityInsurances.Query(n => n.CarType == carType).FirstOrDefault()!.InsuranceFee;
                 var registrationDate = _expiresDate.AddMonths(1);
                 var startLeaseDate = _leaseSttMonth;
                 var endLeaseDate = _leaseExpirationDate;
@@ -250,7 +250,7 @@ namespace KantanMitsumori.Service.Helper
                     rElapsedYearsTo = 99;
                 }
                 weighTax = _unitOfWorkIde.WeightTaxs.Query(n => n.CarType == carType && n.ElapsedYearsFrom <= rElapsedYearsFrom
-                                                         && n.ElapsedYearsTo >= rElapsedYearsTo).Result.FirstOrDefault()!.WeightTax;
+                                                         && n.ElapsedYearsTo >= rElapsedYearsTo).FirstOrDefault()!.WeightTax;
             }
             return weighTax;
 
@@ -375,7 +375,7 @@ namespace KantanMitsumori.Service.Helper
             {
                 year = 1;
             }
-            priceGuaranteeCharg = _unitOfWorkIde.Guarantees.Query(n => n.Years == year).Result.FirstOrDefault()!.GuaranteeCharge;
+            priceGuaranteeCharg = _unitOfWorkIde.Guarantees.Query(n => n.Years == year).FirstOrDefault()!.GuaranteeCharge;
             _logger.LogInformation("4-8 PriceGuaranteeFee:={0}", priceGuaranteeCharg);
             return priceGuaranteeCharg;
 
@@ -425,7 +425,7 @@ namespace KantanMitsumori.Service.Helper
                 var myMaintenancePrice = _unitOfWorkIde.Maintenances.Query(n => n.CarType == carType
                 && n.LeasePeriod == contractTime &&
                 n.BeforeFirstInspection == isBeforeFirstInspection
-                && n.InspectionCount == inspectionCount).Result.FirstOrDefault()!.MyMaintenancePrice;
+                && n.InspectionCount == inspectionCount).FirstOrDefault()!.MyMaintenancePrice;
                 priceMantance = myMaintenancePrice * contractTime;
                 _logger.LogInformation("4-10 PriceMaintenance:={0}", priceMantance);
             }
@@ -440,7 +440,7 @@ namespace KantanMitsumori.Service.Helper
         {
             double interest = 0;
             interest = _unitOfWorkIde.Interests.Query(n => n.LeasePeriodFrom <= contractTime
-            && n.LeasePeriodTo >= contractTime).Result.FirstOrDefault()!.Interest;
+            && n.LeasePeriodTo >= contractTime).FirstOrDefault()!.Interest;
             _logger.LogInformation("4-11  PriceInterest:={0}", interest);
             return interest;
         }
@@ -584,7 +584,7 @@ namespace KantanMitsumori.Service.Helper
         {
             int pricePropertyFee = 0;
 
-            var commissions = _unitOfWorkIde.Commissions.Query(n => n.Id == id).Result.FirstOrDefault();
+            var commissions = _unitOfWorkIde.Commissions.Query(n => n.Id == id).FirstOrDefault();
             if (commissions!.IsMonthly == 1)
             {
                 pricePropertyFee = commissions!.Fee * contractTime;

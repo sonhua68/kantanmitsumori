@@ -1,4 +1,5 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
@@ -62,7 +63,7 @@ namespace KantanMitsumori.Controllers
         }
 
         public IActionResult EstMain()
-        {
+        {       
             return View();
         }
         #region HoaiPhong
@@ -75,12 +76,30 @@ namespace KantanMitsumori.Controllers
             var response = _estimateService.GetDetail(res);
             return View(response.Data);
         }
+        public IActionResult InpHanbaiten()
+        {
+            RequestInputCar res = new RequestInputCar();
+            res.EstNo = "22082300011";
+            res.EstSubNo = "01";
+            var response = _estimateService.GetDetail(res);
+            return View(response.Data);
+        }
 
         [HttpPost]
         public async Task<IActionResult> UpdateInputCar(RequestUpdateInputCar requestData)
         {
             var response = await _estimateService.UpdateInputCar(requestData);
-            if (response.ResultStatus == 0)
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateInpHanbaiten(RequestUpdateInpHanbaiten requestData)
+        {
+            var response = await _estimateService.UpdateInpHanbaiten(requestData);
+            if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
             }
