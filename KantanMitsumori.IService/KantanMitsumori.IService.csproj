@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\KantanMitsumori.Entity\KantanMitsumori.Entity.csproj" />
     <ProjectReference Include="..\KantanMitsumori.Model\KantanMitsumori.Model.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="IDE\" />
-    <Folder Include="ASEST\" />
   </ItemGroup>
 
 </Project>

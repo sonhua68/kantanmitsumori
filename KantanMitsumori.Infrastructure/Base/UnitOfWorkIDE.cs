@@ -12,8 +12,8 @@ namespace KantanMitsumori.Infrastructure.Base
         private readonly ILogger _logger;
         private readonly IDEContext _context;
         private bool _disposed = false;
-
-      public IMtIdeCarTaxRepository CarTaxs { get; private set; }
+        public IDEContext DbContext => _context;
+        public IMtIdeCarTaxRepository CarTaxs { get; private set; }
    
       public IMtIdeCartypeRepository CarTypes { get; private set; }
    

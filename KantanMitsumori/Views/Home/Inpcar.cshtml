@@ -1,0 +1,280 @@
+﻿@using KantanMitsumori.Helper.CommonFuncs;
+@using KantanMitsumori.Entity.ASESTEntities;
+@model TEstimate
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+    var listMonth = DropDownList.ListMonth(true);
+    var ListDropDownSyakenYM = DropDownList.ListDropDownSyakenYM(true);
+    var ListDropDownFirstYM = DropDownList.ListDropDownFirstYM(true);
+    var NowOdometer = Model.NowOdometer == 0 ? "" : Model.NowOdometer.ToString();
+
+}
+<form id="formInputCar">
+    <table border="0" width="100%">
+        <tbody>
+        <tbody>
+            <tr>
+            </tr>
+            <tr>
+                <td style="width: 1017px" align="center">
+                    <div>
+                        <table class="inptable" id="Table3" cellpadding="2" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td class="inptd" style="background-color:White;" align="left">
+                                        <span class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">見積車両情報の編集</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" style="background-color:White;" align="left">
+                                        <span class="inplabel">お見積する車両の情報を編集できます。</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tabletitle">
+                                        <span class="titlelabel" style="display:inline-block;width:338px;">車両情報</span>
+                                        <span style="display:inline-block;color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Small;font-weight:bold;height:9px;width:480px;">※修復歴は出品票にてご判断いただき、有・無を選択してください</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">メーカー名</span>
+                                        <input name="Maker" type="text" value="@Model.MakerName" maxlength="20" id="Maker" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:206px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">車名</span>
+                                        <input name="CarNM" type="text" value="@Model.ModelName" maxlength="100" id="CarNM" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:700px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">グレード名</span>
+                                        <input name="Grade" type="text" value="@Model.GradeName" maxlength="100" id="Grade" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:700px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">型式</span>
+                                        <input name="Kata" type="text" value="@Model.Case" maxlength="30" id="Kata" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:197px;ime-mode: disabled">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">車台番号</span>
+                                        <input name="CarNo" type="text" value="@Model.ChassisNo" maxlength="30" id="CarNo" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:198px;IME-MODE: disabled">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">初年度登録</span>
+                                        <select name="ddlFirstYear" id="ddlFirstYear" class="inpbox" style="color:Black;background-color:White;font-family:ＭＳ Ｐゴシック;width:109px;">
+                                                @{
+                                                    foreach (var item in ListDropDownFirstYM)
+                                                    {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                }
+                                        </select>
+                                        <span class="inplabel" style="display:inline-block;width:13px;">年</span>
+                                        <select name="ddlFirstMonth" id="ddlFirstMonth" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:48px;">
+                                                @{
+                                                    foreach (var item in listMonth)
+                                                    {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                }
+                                        </select>
+                                        <span class="inplabel" style="display:inline-block;width:46px;">月</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left" style="vertical-align:middle; height: 28px;">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">車検有効期限</span>
+                                        <select name="ddlSyakenYear" id="ddlSyakenYear" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:109px;">
+                                                @{
+                                                    foreach (var item in ListDropDownSyakenYM)
+                                                    {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                }
+                                        </select>
+                                        <span class="inplabel" style="display:inline-block;width:13px;">年</span>
+                                        <select name="ddlSyakenMonth" id="ddlSyakenMonth" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:48px;">
+                                                @{
+                                                    foreach (var item in listMonth)
+                                                    {
+                                                    <option value="@item.Value">@item.Text</option>
+                                                    }
+                                                }
+                                        </select>
+                                        <span class="inplabel" style="display:inline-block;width:23px;">月</span>
+                                        <span class="inplabel" style="display:inline-block;width:52px;">
+                                            <input id="chkSyaken" type="checkbox" name="chkSyaken"><label for="chkSyaken">無し</label>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">走行距離</span>
+                                        <input name="Run" type="text" value="@NowOdometer" maxlength="7" id="Run" class="inpbox_r" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:70px;IME-MODE: disabled;">
+
+                                        &nbsp;&nbsp;<span class="inplabel">
+                                            <input id="radMilUnitTKM" type="radio" name="radMilUnit" value="千km" checked="checked" onclick="swichUnit('MilUnit',false);">
+                                            <label for="radMilUnitTKM">千km</label>
+                                        </span>
+                                        &nbsp;&nbsp;<span class="inplabel">
+                                            <input id="radMilUnitTMILE" type="radio" name="radMilUnit" value="千マイル" onclick="swichUnit('MilUnit',false);">
+                                            <label for="radMilUnitTMILE">千マイル</label>
+                                        </span>
+                                        &nbsp;&nbsp;<span class="inplabel">
+                                            <input id="radMilUnitOther" type="radio" name="radMilUnit" value="その他" onclick="swichUnit('MilUnit',true);">
+                                            <label for="radMilUnitOther">その他</label>
+                                        </span>
+                                        <input name="MilUnit" type="text" maxlength="10" id="MilUnit" value="" class="inpbox" style="width: 80px; visibility: hidden;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">排気量</span>
+                                        <input name="Haiki" type="text" value="@Model.DispVol" maxlength="5" id="Haiki" class="inpbox_r" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:70px;IME-MODE: disabled">
+                                        &nbsp;&nbsp;<span class="inplabel">
+                                            <input id="radDispVolUnitCC" type="radio" name="radDispVol" value="cc" checked="checked" onclick="swichUnit('DispVolUnit',false);">
+                                            <label for="radDispVolUnitCC">cc</label>
+                                        </span>
+                                        &nbsp;&nbsp;<span class="inplabel">
+                                            <input id="radDispVolUnitKW" type="radio" name="radDispVol" value="kw" onclick="swichUnit('DispVolUnit',false);">
+                                            <label for="radDispVolUnitKW">kw</label>
+                                        </span>
+                                        &nbsp;&nbsp;<span class="inplabel">
+                                            <input id="radDispVolUnitRE" type="radio" name="radDispVol" value="RE" onclick="swichUnit('DispVolUnit',false);">
+                                            <label for="radDispVolUnitRE">RE</label>
+                                        </span>
+                                        &nbsp;&nbsp;<span class="inplabel">
+                                            <input id="radDispVolUnitOther" type="radio" name="radDispVol" value="その他" onclick="swichUnit('DispVolUnit',true);">
+                                            <label for="radDispVolUnitOther">その他</label>
+                                        </span>
+                                        <input name="DispVolUnit" type="text" maxlength="10" id="DispVolUnit" class="inpbox" style="width: 80px; visibility: hidden;">
+                                        <br>
+                                        <span id="Label4" class="inplabel" style="display:inline-block;width:100px;"></span>
+                                        <span id="Label5" style="display:inline-block;color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Small;height:9px;">ASNET/店頭商談NETからの排気量単位は「cc」固定です。「cc」以外の場合、自動車税等は別途、ご確認ください</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">シフト</span>
+                                        <input name="Sft" type="text" value="@Model.Mission" maxlength="5" id="Sft" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:55px;IME-MODE: disabled">
+                                    </td>
+                                </tr>
+                                <tr>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">色</span>
+                                        <input name="Color" type="text" value="@Model.BodyColor" maxlength="50" id="Color" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:400px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span id="Label45" class="inplabel" style="display:inline-block;width:100px;">装備</span>
+                                        <input name="Option" type="text" value="@Model.Equipment" maxlength="150" id="Option" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:329px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">車歴</span>
+                                        <select name="ddlCarReki" id="ddlCarReki" class="inpbox" style="color:Black;background-color:White;font-family:ＭＳ Ｐゴシック;width:165px;">
+                                            <option value="教習車">教習車</option>
+                                            <option value="自家用">自家用</option>
+                                            <option value="事業用">事業用</option>
+                                            <option value="身障者用">身障者用</option>
+                                            <option value="タクシー">タクシー</option>
+                                            <option value="ディーラー">ディーラー</option>
+                                            <option value="リース">リース</option>
+                                            <option value="レンタカー">レンタカー</option>
+
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span class="inplabel" style="display:inline-block;width:100px;">修復歴</span>
+                                        <span class="inplabel" style="display:inline-block;width:80px;"><input id="raSyuhukuU" type="radio" name="raJrk" value="1"><label for="raSyuhukuU">有</label></span>
+                                        <span class="inplabel" style="display:inline-block;width:78px;"><input id="raSyuhukuM" type="radio" name="raJrk" value="0"><label for="raSyuhukuM">無</label></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inpbtntd">
+                                        <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();" style="height:32px;width:100px;">
+                                        <input type="submit" name="btnOK" value="Ok" form="formInputCar" class="Btn1" style="height:32px;width:100px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inpbtntd" colspan="2">
+                                        <span id="txMsg" class="inpboxsum" style="display:inline-block;color:Red;width:462px;"></span>&nbsp;
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input name="EstNo" type="hidden" id="EstNo" value="@Model.EstNo">
+                        <input name="EstSubNo" type="hidden" id="EstSubNo" value="@Model.EstSubNo">
+                        <input type="hidden" id="BusinessHis" value="@Model.BusinessHis">
+                        <input type="hidden" id="CheckCarYm" value="@Model.CheckCarYm">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script>
+    SetInitData();
+    $('#formInputCar').validate({
+        submitHandler: function (form) {
+            var model = Framework.getFormData($("#formInputCar"));
+            console.log(model)
+            Framework.submitAjaxFormUpdateAsync(model, "/Home/UpdateInputCar");
+        }
+    });
+    function swichUnit(NameId, value) {
+        var $this = $("#" + NameId + "");
+        if (value == true) {
+            $this.removeAttr("style").attr("style", "width: 80px;");
+        } else {
+            $this.val("");
+            $this.attr("style", "width: 80px; visibility: hidden");
+        }
+    }
+    function SetInitData() {
+        if (@Model.AccidentHis == 0) {
+            $("#raSyuhukuM").attr("checked", "checked");
+
+        } else {
+            $("#raSyuhukuU").attr("checked", "checked");
+        }
+        var businessHis = $("#BusinessHis").val() == "" ? "自家用" : $("#BusinessHis").val();
+        Framework.SetSelected("ddlCarReki", businessHis);
+        let firstRegYm = @Model.FirstRegYm;
+        var firstYear = firstRegYm.toString().substring(0, 4);
+        var firstMonth = firstRegYm.toString().substring(4, 6);
+        if (parseInt(firstMonth) < 10) {
+            firstMonth = firstMonth.substring(1, 2)
+        }
+        Framework.SetSelectedConstant("ddlFirstYear", firstYear)
+        Framework.SetSelectedConstant("ddlFirstMonth", firstMonth)
+        let checkCarYm = $("#CheckCarYm").val();
+        if (checkCarYm.includes("無し")) {
+            $("#chkSyaken").attr('checked', true);
+        } else {
+            var syakenYear = checkCarYm.toString().substring(0, 4);
+            var syakenMonth = checkCarYm.toString().substring(4, 6);
+            if (parseInt(syakenMonth) < 10) {
+                syakenMonth = syakenMonth.substring(1, 2)
+            }
+            Framework.SetSelectedConstant("ddlSyakenYear", syakenYear)
+            Framework.SetSelectedConstant("ddlSyakenMonth", syakenMonth)
+        }
+    }
+
+</script>

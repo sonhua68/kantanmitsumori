@@ -1,5 +1,4 @@
 ﻿using KantanMitsumori.Infrastructure.Base;
-using KantanMitsumori.Infrastructure.Base;
 using Microsoft.Extensions.DependencyInjection;
 
 

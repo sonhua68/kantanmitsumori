@@ -32,7 +32,7 @@ namespace KantanMitsumori.Infrastructure.Base
         {
             throw new NotImplementedException();
         }
-        public Task<bool> UpdateRange(List<TEntity> entities)
+        public bool UpdateRange(List<TEntity> entities)
         {
             throw new NotImplementedException();
         }
@@ -68,11 +68,11 @@ namespace KantanMitsumori.Infrastructure.Base
             }
             return query.ToList();
         }
-        public virtual async Task<TEntity> GetSingle(Expression<Func<TEntity, bool>> predicate)
+        public virtual TEntity? GetSingle(Expression<Func<TEntity, bool>> predicate)
         {
-            return await dbSet.Where(predicate).FirstOrDefaultAsync();
+            return  dbSet.Where(predicate).FirstOrDefault();
         }
-        public virtual TEntity? GetSingleOrDefault(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy)
+        public virtual TEntity GetSingleOrDefault(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy)
         {
             IQueryable<TEntity> query = dbSet;
             query = query.Where(predicate);
@@ -80,12 +80,12 @@ namespace KantanMitsumori.Infrastructure.Base
             {
                 query = orderBy(query);
             }
-            return query.FirstOrDefault();
+            return query.FirstOrDefault()!;
         }
 
-        public async Task<IEnumerable<TEntity>> Query(Expression<Func<TEntity, bool>> predicate)
+        public  IEnumerable<TEntity> Query(Expression<Func<TEntity, bool>> predicate)
         {
-            return await dbSet.Where(predicate).ToListAsync();
+            return  dbSet.Where(predicate).ToList();
         }
 
 
