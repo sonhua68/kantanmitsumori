@@ -68,7 +68,7 @@ namespace KantanMitsumori.Service
             return new EstimateReportModel[] {
                 new EstimateReportModel(){
                     EstNo = "22060600001-01",
-                    BusiDate = DateTime.Now.ToString("yyyyy年M月d日")
+                    BusiDate = DateTime.Now.ToString("yyyy年M月d日")
                 }
             };
         }

@@ -40,9 +40,9 @@
 							</Line>
 							<Textbox Name="Text5">
 								<Top>0.08333334in</Top>
-								<Left>5.490731in</Left>
-								<Width>0.8555555in</Width>
-								<Height>0.1361111in</Height>
+								<Left>5.447916in</Left>
+								<Width>0.8229in</Width>
+								<Height>0.1361in</Height>
 								<Style>
 									<BackgroundColor>White</BackgroundColor>
 									<Calendar>Gregorian US English</Calendar>
@@ -68,14 +68,14 @@
 										<Default>0.5pt</Default>
 									</BorderWidth>
 								</Style>
-								<Top>0.4319444in</Top>
-								<Width>1.934028in</Width>
+								<Top>0.396527in</Top>
+								<Width>4.912432cm</Width>
 							</Line>
 							<Textbox Name="Text6">
 								<Top>0.25in</Top>
-								<Left>5.546288in</Left>
-								<Width>0.8090278in</Width>
-								<Height>0.1416667in</Height>
+								<Left>5.447916in</Left>
+								<Width>0.8282in</Width>
+								<Height>0.1417in</Height>
 								<Style>
 									<BackgroundColor>White</BackgroundColor>
 									<Color>Black</Color>
