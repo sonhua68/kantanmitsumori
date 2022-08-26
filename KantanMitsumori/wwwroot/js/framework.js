@@ -36,6 +36,18 @@ var Framework =
                         "value": 1
                     };
                 }).get();
+                //var checkRadioFalse = $($form).find('input[type=radio]:not(:checked)').map(function () {
+                //    return {
+                //        "name": this.name,
+                //        "value": this.value
+                //    };
+                //}).get();
+                var checkRadioTrue = $($form).find('input[type=radio]:checked').map(function () {
+                    return {
+                        "name": this.name,
+                        "value": this.value
+                    };
+                }).get();
                 var number = $form.find('input[type=number]').map(function () {
                     if (!this.value) {
                         return {
@@ -84,7 +96,7 @@ var Framework =
                         "value": this.value
                     };
                 }).get();
-                unindexed_array = unindexed_array.concat(checkFalse, checkTrue, number, currency, textarea, hidden, text);
+                unindexed_array = unindexed_array.concat(checkFalse, checkTrue, checkRadioTrue, number, currency, textarea, hidden, text);
                 var indexed_array = {};
                 $.map(unindexed_array, function (n, i) {
                     indexed_array[n['name']] = n['value'];
@@ -92,6 +104,8 @@ var Framework =
                 unindexed_array = null;
                 checkFalse = null;
                 checkTrue = null;
+                //checkRadioFalse = null;
+                checkRadioTrue = null;
                 textarea = null
                 hidden = null;
                 text = null;
@@ -333,7 +347,7 @@ var Framework =
                     type: "POST",
                     url: url,
                     data: {
-                        token: $("#Token").val(),
+                        //token: $("#Token").val(),
                         requestData: data
                     },
                     async: false,
@@ -522,9 +536,72 @@ var Framework =
             }
         },
         {
+            key: "SetSelected",
+            value: function SetSelected(nameId, defaultValue) {
+                let idOption = $("#" + nameId + " option");
+                console.log(nameId);
+                console.log(defaultValue);
+                if (defaultValue === null || defaultValue === "" || defaultValue === " ") {
+                    idOption[0].selected == true;
+                }
+                else {
+                    $("#" + nameId + " option[value='" + defaultValue + "']").attr("selected", "selected");
+                }
+                return;
+            }
+        },
+        {
+            key: "SetSelectedConstant",
+            value: function SetSelectedConstant(nameId, defaultValue) {
+                let idOption = $("#" + nameId + " option");
+                if (defaultValue === null || defaultValue === "" || defaultValue === " ") {
+                    idOption[0].selected == true;
+                }
+                else {
+                    let length = idOption.length;
+                    for (let i = 1; i < length; i++) {
+                        let value = idOption[i].value;
+                        if (value.includes(defaultValue)) {
+                            $("#" + nameId + " option[value='" + value + "']").attr("selected", "selected");
+                            return;
+                        }
+                    }
+                }
+                return;
+            }
+        },
+        {
+            key: "SetCheckValueById",
+            value: function SetCheckValueById(nameId, defaultValue) {
+                console.log(nameId);
+                $("#" + nameId + "").attr('checked', true);
+                //var value = $("#" + nameId + "").val();
+                //if (value.includes(defaultValue)) {
+                //    $("#" + nameId + "").attr('checked', true);
+                //} else {
+
+                //}
+                return;
+            }
+        },
+        {
             key: "distinct",
             value: function distinct(value, index, self) {
                 return self.indexOf(value) === index;
+
+            }
+        },
+        {
+            key: "GoBackReloadPage",
+            value: function GoBackReloadPage() {
+                window.setTimeout(window.history.back(), 2000);
+                location.reload();
+                return;
+                //console.log(idbtn);
+                //$("#" + idbtn + "").click(function () {
+                //    window.history.back();
+                //    location.reload();
+                //});
 
             }
         },

@@ -5,9 +5,14 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KantanMitsumori.Entity\KantanMitsumori.Entity.csproj" />
+    <ProjectReference Include="..\KantanMitsumori.Model\KantanMitsumori.Model.csproj" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\KantanMitsumori.Model\KantanMitsumori.Model.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <Folder Include="IDE\" />
+  </ItemGroup>
+
 
 </Project>

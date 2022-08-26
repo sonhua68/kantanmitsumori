@@ -20,7 +20,7 @@ namespace KantanMitsumori
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews().AddSessionStateTempDataProvider();
+            services.AddControllersWithViews();
 
             services.AddDbContext<ASESTContext>(
                 options => options.UseSqlServer(
@@ -33,7 +33,6 @@ namespace KantanMitsumori
             services.AddDbContext<IDEContext>(
                 options => options.UseSqlServer(
                 Configuration.GetConnectionString("IDEConnection"))
-
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
 
@@ -43,15 +42,8 @@ namespace KantanMitsumori
             services.AddUnitOfWork();
             services.AddHttpClient();
             services.AddBusinessServices();
-            services.AddHelpServices();
+            services.AddHelperServices();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
         }
 
 
@@ -70,8 +62,8 @@ namespace KantanMitsumori
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-            //app.UseAuthentication();
-            app.UseSession();
+            app.UseAuthentication();
+            //app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

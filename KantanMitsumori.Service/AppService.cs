@@ -109,7 +109,7 @@ namespace KantanMitsumori.Service
                 logToken.stateLoadWindow = "EstMain";
 
                 // ASNET、店頭商談NETの判定
-                if (request.Mode != "" && _commonFuncHelper.IsNumeric(request.Mode!))
+                if (request.Mode != "" && CommonFunction.IsNumeric(request.Mode!))
                 {
                     logToken.sesMode = request.Mode;
                 }
@@ -122,12 +122,12 @@ namespace KantanMitsumori.Service
                 }
 
                 // 価格表示有無の取得（店頭商談NET
-                if (request.PriDisp != "" && _commonFuncHelper.IsNumeric(request.PriDisp!))
+                if (request.PriDisp != "" && CommonFunction.IsNumeric(request.PriDisp!))
                 {
                     logToken.sesPriDisp = request.PriDisp;
                 }
 
-                if (request.leaseFlag != "" && _commonFuncHelper.IsNumeric(request.leaseFlag!))
+                if (request.leaseFlag != "" && CommonFunction.IsNumeric(request.leaseFlag!))
                 {
                     logToken.sesLeaseFlag = request.leaseFlag;
                 }
@@ -137,7 +137,7 @@ namespace KantanMitsumori.Service
                 }
 
                 // ASNET車両詳細ページからの情報を取得・DB保存
-                var getAsInfo = await getAsnetInfo(request);
+                var getAsInfo = getAsnetInfo(request);
 
                 if (getAsInfo.ResultStatus == 0)
                 {
@@ -156,7 +156,7 @@ namespace KantanMitsumori.Service
         /// <summary>
         /// ASNET車両ページからの情報を取得、DB保存
         /// </summary>
-        private async Task<ResponseBase<bool>> getAsnetInfo(RequestHeaderModel request)
+        private ResponseBase<bool> getAsnetInfo(RequestHeaderModel request)
         {
             if (request.cot == "" || request.cna == "" || request.mem == "")
             {
@@ -291,7 +291,6 @@ namespace KantanMitsumori.Service
         {
             try
             {
-                var a = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
                 var estModel = _mapper.Map<EstmateModel>(_unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false));
 
                 var estSubModel = _mapper.Map<EstmateSubModel>(_unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == estModel.EstNo && x.EstSubNo == estModel.EstSubNo));
@@ -327,7 +326,7 @@ namespace KantanMitsumori.Service
 
                             if (reCalEstModel.Contains(prop.Name))
                             {
-                                objValue = _commonFuncHelper.reCalcItem(objValue, estModel.ConTaxInputKb, vTax);
+                                objValue = CommonFunction.reCalcItem(objValue, estModel.ConTaxInputKb, vTax);
                             }
 
                             prop.SetValue(estModel, objValue);

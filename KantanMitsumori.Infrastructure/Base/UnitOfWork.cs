@@ -1,4 +1,5 @@
 ﻿using KantanMitsumori.Entity.ASESTEntities;
+using KantanMitsumori.Entity.IDEEnitities;
 using KantanMitsumori.Infrastructure.IRepositories;
 using KantanMitsumori.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
@@ -11,7 +12,7 @@ namespace KantanMitsumori.Infrastructure.Base
         private readonly ILogger _logger;
         private readonly ASESTContext _context;
         private bool _disposed = false;
-
+        public ASESTContext DbContext => _context;
 
         public IASOPCarNameRepository ASOPCarNames { get; private set; }
         public IASOPMakerRepository ASOPMakers { get; private set; }
