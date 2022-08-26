@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.IService;
+﻿using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.IService;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -15,12 +16,18 @@ namespace KantanMitsumori.Service
             services.AddTransient<IAppService, AppService>();
             services.AddTransient<IEstimateIdeService, EstimateIdeService>();
             services.AddTransient<IEstimateService, EstimateService>();
-            services.AddTransient<IEstimateSubService, EstimateSubService>();
+            services.AddTransient<IEstimateSubService, EstimateSubService>();    
             return services;
         }
 
         public static IServiceCollection AddAuthenService(this IServiceCollection services)
         {
+            return services;
+        }
+
+        public static IServiceCollection AddHelperServices(this IServiceCollection services)
+        { 
+            services.AddScoped<HelperMapper>();
             return services;
         }
     }

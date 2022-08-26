@@ -1,6 +1,7 @@
 ﻿@using KantanMitsumori.Helper.CommonFuncs;
 @using KantanMitsumori.Entity.ASESTEntities;
-@model TEstimate
+@using KantanMitsumori.Model.Response;
+@model ResponseInputCar
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
@@ -8,7 +9,6 @@
     var ListDropDownSyakenYM = DropDownList.ListDropDownSyakenYM(true);
     var ListDropDownFirstYM = DropDownList.ListDropDownFirstYM(true);
     var NowOdometer = Model.NowOdometer == 0 ? "" : Model.NowOdometer.ToString();
-
 }
 <form id="formInputCar">
     <table border="0" width="100%">
@@ -218,10 +218,12 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <input name="EstNo" type="hidden" id="EstNo" value="@Model.EstNo">
-                        <input name="EstSubNo" type="hidden" id="EstSubNo" value="@Model.EstSubNo">
-                        <input type="hidden" id="BusinessHis" value="@Model.BusinessHis">
-                        <input type="hidden" id="CheckCarYm" value="@Model.CheckCarYm">
+                        <input name="EstNo" type="hidden" id="hidEstNo" value="@Model.EstNo">
+                        <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
+                        <input type="hidden" id="hidBusinessHis" value="@Model.BusinessHis">
+                        <input type="hidden" id="hidCheckCarYm" value="@Model.CheckCarYm">
+                        <input type="hidden" id="hidDispVolUnit" value="@Model.DispVolUnit">
+                        <input type="hidden" id="hidMilUnit" value="@Model.MilUnit">
                     </div>
                 </td>
             </tr>
@@ -256,7 +258,7 @@
         } else {
             $("#raSyuhukuU").attr("checked", "checked");
         }
-        var businessHis = $("#BusinessHis").val() == "" ? "自家用" : $("#BusinessHis").val();
+        var businessHis = $("#hidBusinessHis").val() == "" ? "自家用" : $("#hidBusinessHis").val();
         Framework.SetSelected("ddlCarReki", businessHis);
         let firstRegYm = @Model.FirstRegYm;
         var firstYear = firstRegYm.toString().substring(0, 4);
@@ -266,7 +268,7 @@
         }
         Framework.SetSelectedConstant("ddlFirstYear", firstYear)
         Framework.SetSelectedConstant("ddlFirstMonth", firstMonth)
-        let checkCarYm = $("#CheckCarYm").val();
+        let checkCarYm = $("#hidCheckCarYm").val();
         if (checkCarYm.includes("無し")) {
             $("#chkSyaken").attr('checked', true);
         } else {
@@ -278,6 +280,32 @@
             Framework.SetSelectedConstant("ddlSyakenYear", syakenYear)
             Framework.SetSelectedConstant("ddlSyakenMonth", syakenMonth)
         }
+        var milUnit = $("#hidMilUnit").val();
+        console.log(milUnit)
+        if (milUnit.includes("千km")) {
+            $("#radMilUnitTKM").attr('checked', true);
+        } else if (milUnit.includes("千マイル")) {
+            $("#radMilUnitTMILE").attr('checked', true);
+        } else {
+            $("#radMilUnitOther ").attr('checked', true);
+            swichUnit('MilUnit', true)
+            $("#MilUnit").val(milUnit);
+        };
+        var dispVolUnit = $("#hidDispVolUnit").val();
+        console.log(dispVolUnit)
+        if (dispVolUnit.includes("cc")) {
+            $("#radDispVolUnitCC").attr('checked', true);
+        } else if (dispVolUnit.includes("RE")) {
+            $("#radDispVolUnitRE ").attr('checked', true);
+        } else if (dispVolUnit.includes("kw")) {
+            $("#radDispVolUnitKW ").attr('checked', true);
+        }
+        else {
+            $("#radDispVolUnitOther ").attr('checked', true);
+            swichUnit('DispVolUnit', true)
+            $("#DispVolUnit").val(dispVolUnit);
+        }
+
     }
 
 </script>

@@ -1,13 +1,17 @@
-﻿using KantanMitsumori.Helper.Constant;
+﻿
+using KantanMitsumori.Helper.Constant;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
+using System.Data;
+using System.Reflection;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
     public class CommonFunction
     {
         private readonly ILogger _logger;
+
 
         public CommonFunction(ILogger logger)
         {
@@ -540,5 +544,8 @@ namespace KantanMitsumori.Helper.CommonFuncs
             // 年月形式不正の場合、「無し」となす
             return NONE;
         }
+
+
+    
     }
 }

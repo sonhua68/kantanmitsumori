@@ -186,5 +186,11 @@
         public const string def_ModelNotFoundMsg = "該当する車種が見つかりません";
         public const string def_GradeNotFoundMsg = "該当するグレードが見つかりません";
         public const string def_DataNotFoundMsg = "該当するデータがありませんでした<br>[車名を直接入力する >>] ボタンから作成してください";
+
+
+        public const string language_JP = "jp";
+        public const string language_EN = "En";
+        public const string language_VN = "vn";
+
     }
 }

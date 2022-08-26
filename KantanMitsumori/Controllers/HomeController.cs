@@ -86,7 +86,7 @@ namespace KantanMitsumori.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateInputCar(RequestUpdateInputCar requestData)
+        public async Task<IActionResult> UpdateInputCar([FromForm] RequestUpdateInputCar requestData)
         {
             var response = await _estimateService.UpdateInputCar(requestData);
             if (response.ResultStatus == (int)enResponse.isError)
@@ -96,7 +96,7 @@ namespace KantanMitsumori.Controllers
             return Ok(response);
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateInpHanbaiten(RequestUpdateInpHanbaiten requestData)
+        public async Task<IActionResult> UpdateInpHanbaiten([FromForm] RequestUpdateInpHanbaiten requestData)
         {
             var response = await _estimateService.UpdateInpHanbaiten(requestData);
             if (response.ResultStatus == (int)enResponse.isError)

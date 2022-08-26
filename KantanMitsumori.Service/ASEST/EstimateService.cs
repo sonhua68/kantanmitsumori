@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
+using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
+using System.Data;
+
 namespace KantanMitsumori.Service
 {
     public class EstimateService : IEstimateService
@@ -16,13 +20,15 @@ namespace KantanMitsumori.Service
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
 
+        private readonly HelperMapper _helperMapper;
 
-
-        public EstimateService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork)
+        public EstimateService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork, HelperMapper helperMapper)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _helperMapper = helperMapper;
+
         }
 
         public async Task<ResponseBase<int>> Create(TEstimate model)
@@ -32,12 +38,12 @@ namespace KantanMitsumori.Service
             {
                 _unitOfWork.Estimates.Add(model);
                 await _unitOfWork.CommitAsync();
-                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.I0002));
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CreateTEstimate");
-                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.SICR001S));
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
 
@@ -49,34 +55,40 @@ namespace KantanMitsumori.Service
                 var estimatesList = _unitOfWork.Estimates.Query(n => n.EstNo == requestInputCar.EstNo && n.EstSubNo == requestInputCar.EstSubNo).Select(i => _mapper.Map<TEstimate>(i)).ToList();
                 if (estimatesList == null)
                 {
-                    return ResponseHelper.Error<List<TEstimate>>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.CEST050S));
+                    return ResponseHelper.Error<List<TEstimate>>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
                 }
-                return ResponseHelper.Ok<List<TEstimate>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.I0002), estimatesList);
+                return ResponseHelper.Ok<List<TEstimate>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estimatesList);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInputCar");
-                return ResponseHelper.Error<List<TEstimate>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.SICR001S));
+                return ResponseHelper.Error<List<TEstimate>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
             throw new NotImplementedException();
         }
 
-        public ResponseBase<TEstimate> GetDetail(RequestInputCar requestInputCar)
+        public ResponseBase<ResponseInputCar> GetDetail(RequestInputCar requestInputCar)
         {
             try
             {
-                var estimatesList = _unitOfWork.Estimates.Query(n => n.EstNo == requestInputCar.EstNo && n.EstSubNo == requestInputCar.EstSubNo).FirstOrDefault();
-                if (estimatesList == null)
+                var estimates = _unitOfWork.Estimates.Query(n => n.EstNo == requestInputCar.EstNo && n.EstSubNo == requestInputCar.EstSubNo).ToList();
+                var estimatesSub = _unitOfWork.EstimateSubs.Query(n => n.EstNo == requestInputCar.EstNo && n.EstSubNo == requestInputCar.EstSubNo).ToList();
+                if (estimates == null || estimatesSub == null)
                 {
-                    return ResponseHelper.Error<TEstimate>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.CEST050S));
+                    return ResponseHelper.Error<ResponseInputCar>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
                 }
-                return ResponseHelper.Ok<TEstimate>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.I0002), estimatesList!);
+                var dt = _helperMapper.JoinDataTables(_helperMapper.ToDataTable(estimates), _helperMapper.ToDataTable(estimatesSub),
+               (row1, row2) =>
+               row1.Field<string>("EstNo") == row2.Field<string>("EstNo") &&
+                row1.Field<string>("EstSubNo") == row2.Field<string>("EstSubNo"));
+                var data = _helperMapper.ConvertToList<ResponseInputCar>(dt).FirstOrDefault();           
+                return ResponseHelper.Ok<ResponseInputCar>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInputCar");
-                return ResponseHelper.Error<TEstimate>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.SICR001S));
+                return ResponseHelper.Error<ResponseInputCar>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
             throw new NotImplementedException();
@@ -87,10 +99,10 @@ namespace KantanMitsumori.Service
             try
             {
                 TEstimate dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
-                TEstimateSub dtEstimateSubs =  _unitOfWork.EstimateSubs.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
+                TEstimateSub dtEstimateSubs = _unitOfWork.EstimateSubs.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
                 if (dtEstimates == null || dtEstimateSubs == null)
                 {
-                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.CEST050S));
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
                 }
                 string firstRegYm = ""; string checkCarYm = ""; string firstm = "";
                 if (!string.IsNullOrEmpty(model.ddlFirstYear))
@@ -135,12 +147,12 @@ namespace KantanMitsumori.Service
                 _unitOfWork.Estimates.Update(dtEstimates);
                 _unitOfWork.EstimateSubs.Update(dtEstimateSubs);
                 await _unitOfWork.CommitAsync();
-                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.I0002));
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInputCar");
-                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.SICR001S));
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
 
@@ -148,24 +160,24 @@ namespace KantanMitsumori.Service
         {
             try
             {
-                TEstimate dtEstimates =  _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
-                 if (dtEstimates == null)
+                TEstimate dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
+                if (dtEstimates == null)
                 {
-                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.CEST050S));
-                }    
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
                 dtEstimates.ShopNm = model.HanName;
                 dtEstimates.ShopAdr = model.HanAdd;
-                dtEstimates.ShopTel =model.Tel;
+                dtEstimates.ShopTel = model.Tel;
                 dtEstimates.EstTanName = model.TantoName;
                 dtEstimates.SekininName = model.Sekinin;
-                _unitOfWork.Estimates.Update(dtEstimates);           
+                _unitOfWork.Estimates.Update(dtEstimates);
                 await _unitOfWork.CommitAsync();
-                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.I0002));
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInpHanbaiten");
-                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage("jp", HelperMessage.SICR001S));
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
     }

@@ -282,7 +282,7 @@ var Framework =
                         requestData: data
                     },
                     async: false,
-                    success: function success(r) {                      
+                    success: function success(r) {
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
@@ -304,7 +304,7 @@ var Framework =
                         token: $("#Token").val(),
                     },
                     async: false,
-                    success: function success(r) {                      
+                    success: function success(r) {
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
@@ -327,7 +327,7 @@ var Framework =
                         requestData: data
                     },
                     async: false,
-                    success: function success(r) {                    
+                    success: function success(r) {
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
@@ -351,7 +351,7 @@ var Framework =
                         requestData: data
                     },
                     async: false,
-                    success: function success(r) {                      
+                    success: function success(r) {
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
@@ -571,6 +571,20 @@ var Framework =
             }
         },
         {
+            key: "SetCheckValueById",
+            value: function SetCheckValueById(nameId, defaultValue) {
+                console.log(nameId);
+                $("#" + nameId + "").attr('checked', true);
+                //var value = $("#" + nameId + "").val();
+                //if (value.includes(defaultValue)) {
+                //    $("#" + nameId + "").attr('checked', true);
+                //} else {
+
+                //}
+                return;
+            }
+        },
+        {
             key: "distinct",
             value: function distinct(value, index, self) {
                 return self.indexOf(value) === index;
@@ -580,8 +594,8 @@ var Framework =
         {
             key: "GoBackReloadPage",
             value: function GoBackReloadPage() {
-                window.setTimeout(window.history.back(), 2000); 
-                location.reload();               
+                window.setTimeout(window.history.back(), 2000);
+                location.reload();
                 return;
                 //console.log(idbtn);
                 //$("#" + idbtn + "").click(function () {

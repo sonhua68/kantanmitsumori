@@ -8,7 +8,10 @@ namespace KantanMitsumori.Service.Mapper
     {
         public MapperService()
         {
+            CreateMap<TEstimate, TEstimateSub>();
+            CreateMap<MMaker, MakerModel>();
             CreateMap<MMaker, MakerModel>();
         }
+      
     }
 }
