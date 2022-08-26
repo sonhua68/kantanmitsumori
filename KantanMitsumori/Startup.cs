@@ -43,6 +43,7 @@ namespace KantanMitsumori
             services.AddUnitOfWork();
             services.AddHttpClient();
             services.AddBusinessServices();
+            services.AddHelpServices();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddSession(options =>

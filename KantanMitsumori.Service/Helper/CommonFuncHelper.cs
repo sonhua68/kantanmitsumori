@@ -1,11 +1,141 @@
-﻿using KantanMitsumori.Helper.Constant;
-using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Infrastructure.Base;
+using KantanMitsumori.Model;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 
-namespace KantanMitsumori.Helper.CommonFuncs
+namespace KantanMitsumori.Service.Helper
 {
-    public class CommonFunction
+    public class CommonFuncHelper
     {
+        private readonly IMapper _mapper;
+        private readonly ILogger _logger;
+        private readonly IUnitOfWork _unitOfWork;
+
+
+        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork)
+        {
+            _mapper = mapper;
+            _logger = logger;
+            _unitOfWork = unitOfWork;
+        }
+
+        // 消費税税率ID（5%)
+        private const int TAX_5_PERCENT_ID = 1;
+        // 消費税税率ID（8%)
+        private const int TAX_8_PERCENT_ID = 2;
+        // 消費税税率ID（10%)
+        private const int TAX_10_PERCENT_ID = 3;
+        // 消費税税率（5%)
+        private const decimal TAX_5_PERCENT_VALUE = 0.05M;
+        // 消費税税率（8%)
+        private const decimal TAX_8_PERCENT_VALUE = 0.08M;
+        // 消費税税率（10%)
+        private const decimal TAX_10_PERCENT_VALUE = 0.1M;
+
+        // デフォルトの消費税率を定義。10%へ完全以降が終わったら変更する
+        private const int DEFAULT_TAX_ID = TAX_10_PERCENT_ID;
+        // デフォルトの消費税率を定義。10%へ完全以降が終わったら変更する
+        private const decimal DEFAULT_TAX_PERCENT_VALUE = TAX_10_PERCENT_VALUE;
+        // 移行前の消費税の税率
+        private const decimal OLD_TAX = TAX_8_PERCENT_VALUE;
+        // 消費税率の移行日（併用期間開始日）
+        private DateTime SWICH_DATE = DateTime.Parse("2019/09/18");
+        // NULL値
+        private DateTime NULL_DATE = default(DateTime);
+
+        /// <summary>
+        /// 消費税率を取得
+        /// </summary>
+        /// <returns></returns>
+        public decimal getTax(DateTime uDate, decimal taxRatio, string userNo)
+        {
+            string vUserNo;
+            int taxID;
+
+            if (!NULL_DATE.Equals(uDate) & SWICH_DATE > uDate)
+            {
+                return OLD_TAX;
+            }
+
+            var vTax = taxRatio;
+
+            if (vTax == -1M)
+            {
+                vUserNo = string.IsNullOrEmpty(userNo) ? "" : userNo;
+                taxID = getTaxRatioID(vUserNo);
+
+                if (taxID == TAX_5_PERCENT_ID)
+                {
+                    vTax = TAX_5_PERCENT_VALUE;
+                }
+                else if (taxID == TAX_8_PERCENT_ID)
+                {
+                    vTax = TAX_8_PERCENT_VALUE;
+                }
+                else if (taxID == TAX_10_PERCENT_ID)
+                {
+                    vTax = TAX_10_PERCENT_VALUE;
+                }
+                else
+                {
+                    vTax = DEFAULT_TAX_PERCENT_VALUE;
+                }
+            }
+
+            return vTax;
+        }
+
+        /// <summary>
+        /// 消費税税率ID取得
+        /// </summary>
+        /// <param name="inUserNo"></param>
+        /// <returns></returns>
+        public int getTaxRatioID(string inUserNo)
+        {
+            try
+            {
+                var taxRatioId = _unitOfWork.TaxRatioDefs.GetSingleOrDefault(t => t.UserNo == inUserNo).TaxRatioId.GetValueOrDefault();
+
+                if (string.IsNullOrEmpty(taxRatioId.ToString()))
+                {
+                    return -1;
+                }
+
+                return taxRatioId;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "getTaxRatioID " + "CTAX-010D");
+                return -1;
+            }
+        }
+
+
+        /// <summary>
+        /// 会員初期値データ取得
+        /// </summary>
+        /// <param name="inUserNo"></param>
+        /// <returns></returns>
+        public ResponseBase<UserDefModel> getUserDefData(string inUserNo)
+        {
+            try
+            {
+                var taxRatioId = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.Query(x => x.UserNo == inUserNo && x.Dflag == false));
+
+                return ResponseHelper.Ok<UserDefModel>("Error", "CUSR-010D", taxRatioId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "getUserDefData " + "CUSR-010D");
+                return ResponseHelper.Error<UserDefModel>("Error", "CUSR-010D");
+            }
+        }
+
+        #region  Common Function
+
+
         /// <summary>
         /// Numeric type check
         /// </summary>
@@ -65,16 +195,15 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="sessionName"></param>
         /// <param name="defValue"></param>
         /// <returns></returns>
-        public int GetSessionNum(HttpContext context, string sessionName, int defValue)
+        public int GetSessionNum(string? stateName, int defValue)
         {
-            var session = context.Session.Keys.Where(element => element == sessionName).FirstOrDefault();
 
-            if (session == null || Convert.IsDBNull(session))
+            if (stateName == null || Convert.IsDBNull(stateName))
             {
                 return defValue;
             }
 
-            return Convert.ToInt32(Conversion.Val(session)); ;
+            return Convert.ToInt32(Conversion.Val(stateName)); ;
         }
 
         /// <summary>
@@ -84,16 +213,14 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="sessionName"></param>
         /// <param name="defValue"></param>
         /// <returns></returns>
-        public string GetSessionStr(HttpContext context, string sessionName, string defValue)
+        public string GetSessionStr(string? stateName, string defValue)
         {
-            var session = context.Session.Keys.Where(element => element == sessionName).FirstOrDefault();
-
-            if (session == null || Convert.IsDBNull(session))
+            if (stateName == null || Convert.IsDBNull(stateName))
             {
                 return defValue;
             }
 
-            return Convert.ToString(session);
+            return stateName;
         }
 
         /// <summary>
@@ -320,7 +447,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="conTaxInputKb"></param>
         /// <param name="vTax"></param>
         /// <returns></returns>
-        public long reCalcItem(long oldVal, string conTaxInputKb, double vTax)
+        public int reCalcItem(long oldVal, bool conTaxInputKb, decimal vTax)
         {
             if (oldVal == 0)
             {
@@ -328,17 +455,17 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
 
             decimal wkVal;      // 浮動小数点の計算誤差回避のため
-            if (conTaxInputKb == "False")
+            if (conTaxInputKb == false)
             {
                 // 税込 → 税抜
                 wkVal = oldVal / (1 + Convert.ToDecimal(vTax));
-                return Convert.ToInt64(Math.Ceiling(wkVal));
+                return Convert.ToInt32(Math.Ceiling(wkVal));
             }
             else
             {
                 // 抜 → 税込
                 wkVal = oldVal * (1 + Convert.ToDecimal(vTax));
-                return Convert.ToInt64(Math.Floor(wkVal)); ;
+                return Convert.ToInt32(Math.Floor(wkVal)); ;
             }
         }
 
@@ -478,5 +605,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
             if (value is DBNull) return 0;
             return Convert.ToInt64(value);
         }
+
+        #endregion
     }
 }

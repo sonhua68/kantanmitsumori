@@ -1,29 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="Microsoft.JSInterop" Version="6.0.7" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="11.0.1" />
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+		<PackageReference Include="Microsoft.JSInterop" Version="6.0.7" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\KantanMitsumori.Infrastructure\KantanMitsumori.Infrastructure.csproj" />
-    <ProjectReference Include="..\KantanMitsumori.IService\KantanMitsumori.IService.csproj" />
-    <ProjectReference Include="..\KantanMitsumori.Model\KantanMitsumori.Model.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="IDE\" />
-    <Folder Include="ASEST\" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\KantanMitsumori.Helper\KantanMitsumori.Helper.csproj" />
+		<ProjectReference Include="..\KantanMitsumori.Infrastructure\KantanMitsumori.Infrastructure.csproj" />
+		<ProjectReference Include="..\KantanMitsumori.IService\KantanMitsumori.IService.csproj" />
+		<ProjectReference Include="..\KantanMitsumori.Model\KantanMitsumori.Model.csproj" />
+	</ItemGroup>
 
 </Project>

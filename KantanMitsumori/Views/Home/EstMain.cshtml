@@ -1,1149 +1,1170 @@
-﻿@{
+﻿@using KantanMitsumori.Model.Response
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "EstMain";
 }
 
-@model RequestHeaderModel
+@model FormEstMainModel
 
 <form id="frm" method="post" action="/home/estmain">
-    <div class="row">
-        <!--button-->
-        <div class="col-sm-2">
-            <div class="col d-flex justify-content-between">
-                <div class="border-button container text-center">
-                    <br />
-                    <div class="col d-flex justify-content-between">
-                        <a href="javascript:window.close();">
-                            <img src="~/img/btn閉じる.png" />
-                        </a>
+    <div class="container text-center">
+        <input type="hidden" id="Token" name="Token" value="">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-4 col-sm-4">
+                        <img src="~/img/AsLogo.png" />
+                        <img src="~/img/HeadTitle.gif" />
                     </div>
-                    <br />
-                    <div class="col d-flex justify-content-between">
-                        <a href="">
-                            <img src="~/img/btn見積印刷.png" />
-                        </a>
+                    <div class="col-5 col-sm-5">
                     </div>
-                    <div class="col d-flex justify-content-between">
-                        <a href="">
-                            <img src="~/img/btn注文印刷.png" />
-                        </a>
-                    </div>
-                    <br />
-                    <div class="col d-flex justify-content-between">
-                        <a href="">
-                            <img src="~/img/btn検索.png" />
-                        </a>
-                    </div>
-                    <div class="col d-flex justify-content-between">
-                        <a href="">
-                            <img src="~/img/btnフリー見積.png" />
-                        </a>
-                    </div>
-                    <br />
-                    <div class="col d-flex justify-content-between">
-                        <a href="">
-                            <img src="~/img/btn諸費用設定.png" />
-                        </a>
-                    </div>
-                    <div class="col d-flex justify-content-between">
-                        <span class="label label-text">※事前設定必要</span>
+                    <div class="col-3 col-sm-3">
+                        <h6> <span class="label label-header text-end">様</span></h6>
                     </div>
                 </div>
             </div>
+            <img class="rounded mx-auto d-block" src="~/img/HeadLine.gif" />
         </div>
-        <!--end button-->
-        <!--Container-->
-        <div class="col-sm-10">
-            <div class="row">
-                <div class="col-6 col-sm-6 ">
-                    <table cellpadding="1" class="nomal">
-                        <tbody>
-                            <tr>
-                                <td class=" table-color  ">
-                                    見積書番号
-                                </td>
-                                <td class="data">
-                                    <span id="lbEstNo" class="table-text">22080500007-01</span>
-                                </td>
-                                <td class="table-color ">
-                                    見積日
-                                </td>
-                                <td class="data">
-                                    <span id="lbTradeDate" class="table-text">2022年8月5日</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <br />
-                    <table cellpadding="1" class="nomal">
-                        <tbody>
-                            <tr>
-                                <td class="estTitle-color-text">
-                                    <span id="Label86" class="EstTitle">お支払総額</span>
-                                </td>
-                                <td class="estTitle-color-price">
-                                    <span id="lbl_SaleAll" class="EstTitle " style="">1,198,901 円</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <br />
-                    <span class="label-red label-note-right d-flex justify-content-between">
-                        ※注意※<br>
-                        諸費用設定にて、10月以前に「税込み」表示設定をしている場合は、<br>
-                        10月より税率が10%になりましたので今一度見直しください。
-                    </span>
-                </div>
-                <div class="col-4 col-sm-4 ">
-                    <span class="label-red label-note-left ">
-                        ・&nbsp;この見積は既に保存されています<br>
-                        ・&nbsp;データの保存期間は3ヶ月です<br>
-                        ・&nbsp;保存データは見積検索から呼び出しが出来ます<br>
-                        ・&nbsp;注文書は会員様責任にてご利用ください
-                    </span>
+        <br />
+        <div class="row">
+            <!--button-->
+            <div class="col-sm-2">
+                <div class="col d-flex justify-content-between">
+                    <div class="border-button container text-center">
+                        <br />
+                        <div class="col d-flex justify-content-between">
+                            <a href="javascript:window.close();">
+                                <img src="~/img/btn閉じる.png" />
+                            </a>
+                        </div>
+                        <br />
+                        <div class="col d-flex justify-content-between">
+                            <a href="">
+                                <img src="~/img/btn見積印刷.png" />
+                            </a>
+                        </div>
+                        <div class="col d-flex justify-content-between">
+                            <a href="">
+                                <img src="~/img/btn注文印刷.png" />
+                            </a>
+                        </div>
+                        <br />
+                        <div class="col d-flex justify-content-between">
+                            <a href="">
+                                <img src="~/img/btn検索.png" />
+                            </a>
+                        </div>
+                        <div class="col d-flex justify-content-between">
+                            <a href="">
+                                <img src="~/img/btnフリー見積.png" />
+                            </a>
+                        </div>
+                        <br />
+                        <div class="col d-flex justify-content-between">
+                            <a href="">
+                                <img src="~/img/btn諸費用設定.png" />
+                            </a>
+                        </div>
+                        <div class="col d-flex justify-content-between">
+                            <span class="label label-text">※事前設定必要</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <br />
-            <!-- お客様情報（印字用） -->
-            <div class="row">
-                <div class="col-8 col-sm-8">
-                    <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
-                        <tr>
-                            <td colspan="2" class="title" style="background-color: #d2e0fb; text-align: left;">
-                                見積書/注文書 印字用&nbsp; <strong><span class="spanTxtSubject">※保存はされません</span></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                お名前
-                            </td>
-                            <td class="data">
-                                <input type="text" maxlength="40" class="inpbox" name="CustNm_forPrint" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                郵便番号
-                            </td>
-                            <td class="data">
-                                <input type="text" maxlength="8" class="inpbox" name="CustZip_forPrint" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                住所
-                            </td>
-                            <td class="data">
-                                <input type="text" maxlength="60" class="inpbox" name="CustAdr_forPrint" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                電話番号
-                            </td>
-                            <td class="data">
-                                <input type="text" maxlength="13" class="inpbox" name="CustTel_forPrint" />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="col-4 col-sm-4">
-                    <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
-                        <tr>
-                            <td class="title" style="background-color: #d2e0fb; text-align: left;">
-                                <input type="image" class="imgBtn" src="~/img/sbtn販売店.png" style="width:140px;border-width:0px;vertical-align: middle;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataInfo">
-                                <span id="lbl_ShopName1" style="text-align: left;">testShop88888195</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataInfo">
-                                <span id="lbl_Address" style="text-align: left;">東京都88888195</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataInfo">
-                                <span id="lbl_TantoName" style="text-align: left;">担当 : 担当次郎hoge　　責任者 : 全角DUCvuong　　TEL : 0532-57-5554 </span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <!-- お客様情報（保存用） -->
-            <div class="row">
-                <div class="col-12">
-                    <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
-                        <tr>
-                            <td colspan="4" class="title" style="background-color: #d2e0fb; text-align: left; vertical-align: middle;">
-                                <input type="image" name="ImageButton1" class="imgBtn" src="~/img/sbtnお客様.png" style="width:140px;border-width:0px;vertical-align: middle;">
-                                &nbsp;<strong><span class="spanTxtSubject">※見積書/注文書には印字されません。メモとしてお使いください。個人情報の入力・管理は会員様責任でお願いします</span></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                お客様
-                            </td>
-                            <td class="dataLbl">
-                                <span id="lbl_CustKana" />
-                            </td>
-                            <td class="title">
-                                お客様
-                            </td>
-                            <td class="dataLbl">
-                                <span id="lbl_CustKana" />
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <!-- 詳細情報：見積車両 -->
-            <div class="row">
-                <div class="col-12">
-                    <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
-                        <tr>
-                            <td colspan="9" class="title" style="background-color: #d2e0fb; text-align: left;
-                                vertical-align: middle;">
-                                <input type="image" name="ImageButton4" class="imgBtn" src="~/img/sbtn見積車両.png" style="width:140px;border-width:0px;vertical-align: middle;">
-                                &nbsp; <strong><span class="spanTxtSubject">※修復歴は出品票にてご判断いただき、有・無を選択してください</span></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="height: 20px;">
-                                車名
-                            </td>
-                            <td class="dataLblInfoCar" colspan="7">
-                                <span id="lbl_CarName">ﾄﾖﾀ bB</span>
-                            </td>
-                            <td class="dataLblInfoCar" rowspan="7" align="center">
-                                <img id="imgCar" src="~/img/CarImgDummy.png" style="height:180px;width:250px;border-width:0px;">
-                                <span id="lbl_AAInfo"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                グレード
-                            </td>
-                            <td class="dataLblInfoCar" colspan="7">
-                                <span id="lbl_GradeName">1.5 Z 煌</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                型式
-                            </td>
-                            <td class="dataLblInfoCar" colspan="3">
-                                <span id="lbl_CaseName">QNC21</span>
-                            </td>
-                            <td class="title">
-                                車台番号
-                            </td>
-                            <td class="dataLblInfoCar" colspan="3">
-                                <span id="lbl_CarNo">12345</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                初年度登録
-                            </td>
-                            <td class="dataLblInfoCar" colspan="3">
-                                <span id="lbl_FirstYM">H28年</span>
-                            </td>
-                            <td class="title">
-                                車検
-                            </td>
-                            <td class="dataLblInfoCar">
-                                <span id="lbl_InsYM"></span>
-                            </td>
-                            <td class="title">
-                                走行距離
-                            </td>
-                            <td class="dataLblInfoCar">
-                                <span id="lbl_NowRun">5 千km</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                修復歴
-                            </td>
-                            <td class="dataLblInfoCar">
-                                <input id="raJikoHisMu" type="radio" name="Jrk" value="raJikoHisMu" onclick="upJiko('22081700007','01');"><label for="raJikoHisMu">無</label>
-                                <input id="raJikoHisU" type="radio" name="Jrk" value="raJikoHisU" onclick="upJiko('22081700007','01');"><label for="raJikoHisU">有</label>
-                            </td>
-                            <td class="title">
-                                車歴
-                            </td>
-                            <td class="dataLblInfoCar">
-                                <span id="lbl_JigHis">自家用</span>
-                            </td>
-                            <td class="title">
-                                シフト
-                            </td>
-                            <td class="dataLblInfoCar">
-                                <span id="lbl_Mission"></span>
-                            </td>
-                            <td class="title">
-                                排気量
-                            </td>
-                            <td class="dataLblInfoCar">
-                                <span id="lbl_Vol">1,500 cc</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                色
-                            </td>
-                            <td class="dataLblInfoCar" colspan="7">
-                                <span id="lbl_Color">ブラック</span>
-
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                装備
-                            </td>
-                            <td class="dataLblInfoCar" colspan="7">
-                                <span id="lbl_Equipment">AW PS PW TV エアバッグ ナビ</span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <!-- Msg Notice  -->
-            <div class="row">
-                <div class="col-12">
-                    <strong>
-                        <span class="spanTxt">
-                            ※車両情報は確定されたデータではありません<br>
-                            &nbsp;&nbsp;&nbsp;情報は常に更新されていますので、落札の際は必ずASNET画面にて最終確認をお願い致します
+            <!--end button-->
+            <!--Container-->
+            <div class="col-sm-10">
+                <div class="row">
+                    <div class="col-6 col-sm-6 ">
+                        <table cellpadding="1" class="nomal">
+                            <tbody>
+                                <tr>
+                                    <td class=" table-color  ">
+                                        見積書番号
+                                    </td>
+                                    <td class="data">
+                                        <span id="lbEstNo" class="table-text">22080500007-01</span>
+                                    </td>
+                                    <td class="table-color ">
+                                        見積日
+                                    </td>
+                                    <td class="data">
+                                        <span id="lbTradeDate" class="table-text">2022年8月5日</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        <table cellpadding="1" class="nomal">
+                            <tbody>
+                                <tr>
+                                    <td class="estTitle-color-text">
+                                        <span id="Label86" class="EstTitle">お支払総額</span>
+                                    </td>
+                                    <td class="estTitle-color-price">
+                                        <span id="lbl_SaleAll" class="EstTitle " style="">1,198,901 円</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        <span class="label-red label-note-right d-flex justify-content-between">
+                            ※注意※<br>
+                            諸費用設定にて、10月以前に「税込み」表示設定をしている場合は、<br>
+                            10月より税率が10%になりましたので今一度見直しください。
                         </span>
-                    </strong>
+                    </div>
+                    <div class="col-4 col-sm-4 ">
+                        <span class="label-red label-note-left ">
+                            ・&nbsp;この見積は既に保存されています<br>
+                            ・&nbsp;データの保存期間は3ヶ月です<br>
+                            ・&nbsp;保存データは見積検索から呼び出しが出来ます<br>
+                            ・&nbsp;注文書は会員様責任にてご利用ください
+                        </span>
+                    </div>
                 </div>
-            </div>
-            &nbsp;
-            &nbsp;
-            <!--  Div Price  -->
-            <div class="row">
-                <!-- table Price Left -->
-                <div class="col-6 col-sm-6">
-                    <!-- 詳細情報：販売価格 -->
-                    <table cellpadding="2" class="table table-responsive">
-                        <tr>
-                            <td colspan="4" class="title" style="background-color: #d2e0fb; text-align: left; vertical-align: middle;">
-                                <input type="image" src="~/img/sbtn販売価格.png" style="border-width:0px;vertical-align: middle;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                1
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="lbl_CarPriceTitle">車両本体価格（税抜）</span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_CarPrice">1,027,273 円</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                2
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="lbl_DisCountT"></span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_DisCount"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                3
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="lblSonotaTitle">その他費用（税抜）</span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_Sonota">20,000 円</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                4
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="lblSyakenNewZok">車検整備費用（税抜）</span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_SyakenNew">110 円</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                5
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="lbl_OpSpeCialPriceT">付属品・特別仕様（税抜）</span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_OpSpeCialPrice"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice" style="background-color: #eee;">
-                                6
-                            </td>
-                            <td class="titDataPrice" colspan="2" style="background-color: #eee;">
-                                <span id="lbl_CarKeiTitle">車両販売価格（1～5）</span>
-                            </td>
-                            <td class="txtprice" style="background-color: #eee;">
-                                <span id="lbl_CarKei">1,047,383 円</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                7
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="Label79">税金・保険料（非課税）</span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_TaxInsAll">46,780 円</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                8
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="lbl_TaxInsEquivalentAllT">税金・保険料相当額（税抜）</span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_TaxInsEquivalentAll"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                9
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="Label80">預り法定費用（非課税）</span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_TaxFreeAll"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                10
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="lbl_DaikoAllT">手続代行費用（税抜）</span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_DaikoAll"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                11
-                            </td>
-                            <td class="titDataPrice" colspan="2">
-                                <span id="lbl_TaxName">消費税合計</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_TaxAll">104,738 円</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice" style="background-color: #eee;">
-                                12
-                            </td>
-                            <td class="titDataPrice" colspan="2" style="background-color: #eee;">
-                                <span id="lbl_CarSaleKeiTitle" style="background-color: #eee;">現金販売価格（6～10）</span>
-                            </td>
-                            <td class="txtprice" style="background-color: #eee;">
-                                <span id="lbl_CarSaleKei">1,094,163 円</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                13
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="Label84">下取車価格</span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="alert('リース画面でのみ、下取りの設定が可能。'); return false;">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_ShitaPrice"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice">
-                                14
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="lbl_ZansaiT">下取車残債</span>
-                            </td>
-                            <td class="btnImgPrice">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="alert('リース画面でのみ、下取りの設定が可能。'); return false;">
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_Zansai"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="dataPrice" style="background-color: #eee;">
-                                15
-                            </td>
-                            <td class="titDataPrice" style="background-color: #eee;">
-                                <span id="lbl_SalesSumTitle">お支払総額（11～14）</span>
-                            </td>
-                            <td class="btnImgPrice" style="background-color: #eee;">
-                                <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
-                            </td>
-                            <td class="txtprice" style="background-color: #eee;">
-                                <span id="lbl_SalesSum">1,198,901 円</span>
-                            </td>
-                        </tr>
-                    </table>
-                    <!-- 詳細情報：付属品・特別仕様明細 -->
-                    <table cellpadding="2" class="table table-responsive">
-                        <tr>
-                            <td colspan="2" class="title" style="background-color: #d2e0fb; text-align: left;">
-                                <input type="image" src="~/img/sbtn付属品.png" style="border-width:0px;vertical-align: middle;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title">
-                                <span id="Label51">品名</span>
-                            </td>
-                            <td class="title" style="text-align: center;">
-                                <span id="Label52">金額</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName1"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice1"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName2"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice2"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName3"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice3"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName4"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice4"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName5"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice5"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName6"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice6"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName7"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice7"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName8"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice8"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName9"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice9"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName10"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice10"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName11"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice11"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data">
-                                <span id="lbl_OpName12"></span>
-                            </td>
-                            <td class="data">
-                                <span id="lbl_OpPrice12"></span>
-                            </td>
-                        </tr>
-                    </table>
+                <br />
+                <!-- お客様情報（印字用） -->
+                <div class="row">
+                    <div class="col-8 col-sm-8">
+                        <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
+                            <tr>
+                                <td colspan="2" class="title" style="background-color: #d2e0fb; text-align: left;">
+                                    見積書/注文書 印字用&nbsp; <strong><span class="spanTxtSubject">※保存はされません</span></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    お名前
+                                </td>
+                                <td class="data">
+                                    <input type="text" maxlength="40" class="inpbox" name="CustNm_forPrint" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    郵便番号
+                                </td>
+                                <td class="data">
+                                    <input type="text" maxlength="8" class="inpbox" name="CustZip_forPrint" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    住所
+                                </td>
+                                <td class="data">
+                                    <input type="text" maxlength="60" class="inpbox" name="CustAdr_forPrint" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    電話番号
+                                </td>
+                                <td class="data">
+                                    <input type="text" maxlength="13" class="inpbox" name="CustTel_forPrint" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-4 col-sm-4">
+                        <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
+                            <tr>
+                                <td class="title" style="background-color: #d2e0fb; text-align: left;">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn販売店.png" style="width:140px;border-width:0px;vertical-align: middle;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataInfo">
+                                    <span id="lbl_ShopName1" style="text-align: left;">testShop88888195</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataInfo">
+                                    <span id="lbl_Address" style="text-align: left;">東京都88888195</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataInfo">
+                                    <span id="lbl_TantoName" style="text-align: left;">担当 : 担当次郎hoge　　責任者 : 全角DUCvuong　　TEL : 0532-57-5554 </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
-                <!-- table Price Right -->
-                <div class="col-6 col-sm-6">
-                    <!-- 詳細情報：諸費用明細 -->
-                    <table cellpadding="2" class="table table-responsive">
-                        <tr>
-                            <td class="title" rowspan="9" style="background-color: #d2e0fb;">
-                                <input type="image" src="~/img/sbtn税金保険料2.png" style="border-width:0px;">
-                            </td>
-                            <td class="titDataPrice">
-                                <span id="lbl_CarTaxTitle">自動車税（8月中登録）</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_CarTax">20,100 円</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="info" style="background-color: #d2e0fb;">
-                                <strong><span id="lblInfoCarTax_1" class="spanTxtSubject">※未経過相当額の場合は相当額欄にご入力ください</span></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span id="Label56">環境性能割</span>
-                            </td>
-                            <td id="idGetTax" class="txtprice" style="background-color: rgb(255, 255, 204);">
-                                <span id="lbl_GetTax"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="info" style="background-color: #d2e0fb;">
-                                <strong><span class="spanTxtSubject">※詳細金額は各都道府県税事務所にお問い合わせください</span></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span id="Label59">重量税</span>
-                            </td>
-                            <td id="idWeightTax" class="txtprice" style="background-color: rgb(255, 255, 204);">
-                                <span id="lbl_WeightTax"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="info" style="background-color: #d2e0fb;">
-                                <strong><span class="spanTxtSubject">※減税、13・18年経過車等がある為ご自身でご入力ください</span></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span id="lbl_JibaiTitle">自賠責保険料（25ヶ月）</span>
-                            </td>
-                            <td id="idJibaiHoken" class="txtprice">
-                                <span id="lbl_JibaiHoken">26,680 円</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" class="info" style="background-color: #d2e0fb;">
-                                <strong><span class="spanTxtSubject">※未経過相当額の場合は相当額欄にご入力ください</span></strong>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>任意保険料</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_NiniHoken"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title" rowspan="7" style="background-color: #d2e0fb;">
-                                <input type="image" src="~/img/sbtn預り法定費用2.png" style="border-width:0px;">
-                            </td>
-                            <td class="titDataPrice">
-                                <span>検査登録(印紙代)</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_ChkIns"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>車庫証明(印紙代)</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_SyakoSyomei"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>下取車手続・処分(印紙代)</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_SitaTetuduki"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>リサイクル預託金</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_RecyclePrice"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span id="lbl_TaxFreeSet1Title" x;"></span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_TaxFreeSet1"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span id="lbl_TaxFreeSet2Title"></span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_TaxFreeSet2"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>その他非課税費用</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_OtherPrice"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title" rowspan="10" style="background-color: #d2e0fb;">
-                                <input type="image" src="~/img/sbtn手続代行費用2.png" style="border-width:0px;">
-                            </td>
-                            <td class="titDataPrice">
-                                <span>検査登録手続代行</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_ChkDaikoHiyo"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>車庫証明手続代行</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_SyakoDaiko"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>下取車手続・処分代行</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_SitaKaitaiHiyo"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>下取車査定料</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_TaxTradeInSatei"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>資金管理料金</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_Recycle"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>納車費用</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_NosyaHiyo"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span id="lbl_TaxSet1Title"></span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_TaxSet1"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span id="lbl_TaxSet2Title"></span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_TaxSet2"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span id="lbl_TaxSet3Title"></span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_TaxSet3"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="titDataPrice">
-                                <span>その他費用</span>
-                            </td>
-                            <td class="txtprice">
-                                <span id="lbl_Other"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" style="text-align: right; vertical-align: middle; padding-top: 10px;">
-                                <span id="lblInfoCarTax" style="display:inline-block;color:Red;font-family:ＭＳ Ｐゴシック;font-size:9pt;font-weight:bold;width:400px;">
-                                    ※日野、日産ディーゼル、三菱フソウ、イスズの車両は、<br>&nbsp;&nbsp;&nbsp;自動車税、重量税、自賠責保険料が自動計算されません
-                                </span>
-                            </td>
-                        </tr>
-                    </table>
-                    <!-- 詳細情報：お支払プラン -->
-                    <table class="table table-responsive" style="display:none">
-                        <tr>
-                            <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
+                <!-- お客様情報（保存用） -->
+                <div class="row">
+                    <div class="col-12">
+                        <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
+                            <tr>
+                                <td colspan="4" class="title" style="background-color: #d2e0fb; text-align: left; vertical-align: middle;">
+                                    <input type="image" name="ImageButton1" class="imgBtn" src="~/img/sbtnお客様.png" style="width:140px;border-width:0px;vertical-align: middle;">
+                                    &nbsp;<strong><span class="spanTxtSubject">※見積書/注文書には印字されません。メモとしてお使いください。個人情報の入力・管理は会員様責任でお願いします</span></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    お客様
+                                </td>
+                                <td class="dataLbl">
+                                    <span id="lbl_CustKana" />
+                                </td>
+                                <td class="title">
+                                    お客様
+                                </td>
+                                <td class="dataLbl">
+                                    <span id="lbl_CustKana" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <!-- 詳細情報：見積車両 -->
+                <div class="row">
+                    <div class="col-12">
+                        <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
+                            <tr>
+                                <td colspan="9" class="title" style="background-color: #d2e0fb; text-align: left;
+                                vertical-align: middle;">
+                                    <input type="image" name="ImageButton4" class="imgBtn" src="~/img/sbtn見積車両.png" style="width:140px;border-width:0px;vertical-align: middle;">
+                                    &nbsp; <strong><span class="spanTxtSubject">※修復歴は出品票にてご判断いただき、有・無を選択してください</span></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title" style="height: 20px;">
+                                    車名
+                                </td>
+                                <td class="dataLblInfoCar" colspan="7">
+                                    <span id="lbl_CarName">ﾄﾖﾀ bB</span>
+                                </td>
+                                <td class="dataLblInfoCar" rowspan="7" align="center">
+                                    <img id="imgCar" src="~/img/CarImgDummy.png" style="height:180px;width:250px;border-width:0px;">
+                                    <span id="lbl_AAInfo"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    グレード
+                                </td>
+                                <td class="dataLblInfoCar" colspan="7">
+                                    <span id="lbl_GradeName">1.5 Z 煌</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    型式
+                                </td>
+                                <td class="dataLblInfoCar" colspan="3">
+                                    <span id="lbl_CaseName">QNC21</span>
+                                </td>
+                                <td class="title">
+                                    車台番号
+                                </td>
+                                <td class="dataLblInfoCar" colspan="3">
+                                    <span id="lbl_CarNo">12345</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    初年度登録
+                                </td>
+                                <td class="dataLblInfoCar" colspan="3">
+                                    <span id="lbl_FirstYM">H28年</span>
+                                </td>
+                                <td class="title">
+                                    車検
+                                </td>
+                                <td class="dataLblInfoCar">
+                                    <span id="lbl_InsYM"></span>
+                                </td>
+                                <td class="title">
+                                    走行距離
+                                </td>
+                                <td class="dataLblInfoCar">
+                                    <span id="lbl_NowRun">5 千km</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    修復歴
+                                </td>
+                                <td class="dataLblInfoCar">
+                                    <input id="raJikoHisMu" type="radio" name="Jrk" value="raJikoHisMu" onclick="upJiko('22081700007','01');"><label for="raJikoHisMu">無</label>
+                                    <input id="raJikoHisU" type="radio" name="Jrk" value="raJikoHisU" onclick="upJiko('22081700007','01');"><label for="raJikoHisU">有</label>
+                                </td>
+                                <td class="title">
+                                    車歴
+                                </td>
+                                <td class="dataLblInfoCar">
+                                    <span id="lbl_JigHis">自家用</span>
+                                </td>
+                                <td class="title">
+                                    シフト
+                                </td>
+                                <td class="dataLblInfoCar">
+                                    <span id="lbl_Mission"></span>
+                                </td>
+                                <td class="title">
+                                    排気量
+                                </td>
+                                <td class="dataLblInfoCar">
+                                    <span id="lbl_Vol">1,500 cc</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    色
+                                </td>
+                                <td class="dataLblInfoCar" colspan="7">
+                                    <span id="lbl_Color">ブラック</span>
+
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    装備
+                                </td>
+                                <td class="dataLblInfoCar" colspan="7">
+                                    <span id="lbl_Equipment">AW PS PW TV エアバッグ ナビ</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <!-- Msg Notice  -->
+                <div class="row">
+                    <div class="col-12">
+                        <strong>
+                            <span class="spanTxt">
+                                ※車両情報は確定されたデータではありません<br>
+                                &nbsp;&nbsp;&nbsp;情報は常に更新されていますので、落札の際は必ずASNET画面にて最終確認をお願い致します
+                            </span>
+                        </strong>
+                    </div>
+                </div>
+                &nbsp;
+                &nbsp;
+                <!--  Div Price  -->
+                <div class="row">
+                    <!-- table Price Left -->
+                    <div class="col-6 col-sm-6">
+                        <!-- 詳細情報：販売価格 -->
+                        <table cellpadding="2" class="table table-responsive">
+                            <tr>
+                                <td colspan="4" class="title" style="background-color: #d2e0fb; text-align: left; vertical-align: middle;">
+                                    <input type="image" src="~/img/sbtn販売価格.png" style="border-width:0px;vertical-align: middle;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    1
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="lbl_CarPriceTitle">車両本体価格（税抜）</span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_CarPrice">1,027,273 円</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    2
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="lbl_DisCountT"></span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_DisCount"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    3
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="lblSonotaTitle">その他費用（税抜）</span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_Sonota">20,000 円</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    4
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="lblSyakenNewZok">車検整備費用（税抜）</span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_SyakenNew">110 円</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    5
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="lbl_OpSpeCialPriceT">付属品・特別仕様（税抜）</span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_OpSpeCialPrice"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice" style="background-color: #eee;">
+                                    6
+                                </td>
+                                <td class="titDataPrice" colspan="2" style="background-color: #eee;">
+                                    <span id="lbl_CarKeiTitle">車両販売価格（1～5）</span>
+                                </td>
+                                <td class="txtprice" style="background-color: #eee;">
+                                    <span id="lbl_CarKei">1,047,383 円</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    7
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="Label79">税金・保険料（非課税）</span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_TaxInsAll">46,780 円</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    8
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="lbl_TaxInsEquivalentAllT">税金・保険料相当額（税抜）</span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_TaxInsEquivalentAll"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    9
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="Label80">預り法定費用（非課税）</span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_TaxFreeAll"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    10
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="lbl_DaikoAllT">手続代行費用（税抜）</span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_DaikoAll"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    11
+                                </td>
+                                <td class="titDataPrice" colspan="2">
+                                    <span id="lbl_TaxName">消費税合計</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_TaxAll">104,738 円</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice" style="background-color: #eee;">
+                                    12
+                                </td>
+                                <td class="titDataPrice" colspan="2" style="background-color: #eee;">
+                                    <span id="lbl_CarSaleKeiTitle" style="background-color: #eee;">現金販売価格（6～10）</span>
+                                </td>
+                                <td class="txtprice" style="background-color: #eee;">
+                                    <span id="lbl_CarSaleKei">1,094,163 円</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    13
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="Label84">下取車価格</span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="alert('リース画面でのみ、下取りの設定が可能。'); return false;">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_ShitaPrice"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice">
+                                    14
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="lbl_ZansaiT">下取車残債</span>
+                                </td>
+                                <td class="btnImgPrice">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="alert('リース画面でのみ、下取りの設定が可能。'); return false;">
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_Zansai"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="dataPrice" style="background-color: #eee;">
+                                    15
+                                </td>
+                                <td class="titDataPrice" style="background-color: #eee;">
+                                    <span id="lbl_SalesSumTitle">お支払総額（11～14）</span>
+                                </td>
+                                <td class="btnImgPrice" style="background-color: #eee;">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                </td>
+                                <td class="txtprice" style="background-color: #eee;">
+                                    <span id="lbl_SalesSum">1,198,901 円</span>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- 詳細情報：付属品・特別仕様明細 -->
+                        <table cellpadding="2" class="table table-responsive">
+                            <tr>
+                                <td colspan="2" class="title" style="background-color: #d2e0fb; text-align: left;">
+                                    <input type="image" src="~/img/sbtn付属品.png" style="border-width:0px;vertical-align: middle;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title">
+                                    <span id="Label51">品名</span>
+                                </td>
+                                <td class="title" style="text-align: center;">
+                                    <span id="Label52">金額</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName1"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice1"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName2"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice2"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName3"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice3"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName4"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice4"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName5"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice5"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName6"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice6"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName7"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice7"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName8"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice8"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName9"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice9"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName10"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice10"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName11"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice11"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName12"></span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice12"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- table Price Right -->
+                    <div class="col-6 col-sm-6">
+                        <!-- 詳細情報：諸費用明細 -->
+                        <table cellpadding="2" class="table table-responsive">
+                            <tr>
+                                <td class="title" rowspan="9" style="background-color: #d2e0fb;">
+                                    <input type="image" src="~/img/sbtn税金保険料2.png" style="border-width:0px;">
+                                </td>
+                                <td class="titDataPrice">
+                                    <span id="lbl_CarTaxTitle">自動車税（8月中登録）</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_CarTax">20,100 円</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="info" style="background-color: #d2e0fb;">
+                                    <strong><span id="lblInfoCarTax_1" class="spanTxtSubject">※未経過相当額の場合は相当額欄にご入力ください</span></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span id="Label56">環境性能割</span>
+                                </td>
+                                <td id="idGetTax" class="txtprice" style="background-color: rgb(255, 255, 204);">
+                                    <span id="lbl_GetTax"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="info" style="background-color: #d2e0fb;">
+                                    <strong><span class="spanTxtSubject">※詳細金額は各都道府県税事務所にお問い合わせください</span></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span id="Label59">重量税</span>
+                                </td>
+                                <td id="idWeightTax" class="txtprice" style="background-color: rgb(255, 255, 204);">
+                                    <span id="lbl_WeightTax"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="info" style="background-color: #d2e0fb;">
+                                    <strong><span class="spanTxtSubject">※減税、13・18年経過車等がある為ご自身でご入力ください</span></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span id="lbl_JibaiTitle">自賠責保険料（25ヶ月）</span>
+                                </td>
+                                <td id="idJibaiHoken" class="txtprice">
+                                    <span id="lbl_JibaiHoken">26,680 円</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" class="info" style="background-color: #d2e0fb;">
+                                    <strong><span class="spanTxtSubject">※未経過相当額の場合は相当額欄にご入力ください</span></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>任意保険料</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_NiniHoken"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title" rowspan="7" style="background-color: #d2e0fb;">
+                                    <input type="image" src="~/img/sbtn預り法定費用2.png" style="border-width:0px;">
+                                </td>
+                                <td class="titDataPrice">
+                                    <span>検査登録(印紙代)</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_ChkIns"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>車庫証明(印紙代)</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_SyakoSyomei"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>下取車手続・処分(印紙代)</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_SitaTetuduki"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>リサイクル預託金</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_RecyclePrice"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span id="lbl_TaxFreeSet1Title" x;"></span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_TaxFreeSet1"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span id="lbl_TaxFreeSet2Title"></span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_TaxFreeSet2"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>その他非課税費用</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_OtherPrice"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title" rowspan="10" style="background-color: #d2e0fb;">
+                                    <input type="image" src="~/img/sbtn手続代行費用2.png" style="border-width:0px;">
+                                </td>
+                                <td class="titDataPrice">
+                                    <span>検査登録手続代行</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_ChkDaikoHiyo"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>車庫証明手続代行</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_SyakoDaiko"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>下取車手続・処分代行</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_SitaKaitaiHiyo"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>下取車査定料</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_TaxTradeInSatei"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>資金管理料金</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_Recycle"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>納車費用</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_NosyaHiyo"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span id="lbl_TaxSet1Title"></span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_TaxSet1"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span id="lbl_TaxSet2Title"></span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_TaxSet2"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span id="lbl_TaxSet3Title"></span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_TaxSet3"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="titDataPrice">
+                                    <span>その他費用</span>
+                                </td>
+                                <td class="txtprice">
+                                    <span id="lbl_Other"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align: right; vertical-align: middle; padding-top: 10px;">
+                                    <span id="lblInfoCarTax" style="display:inline-block;color:Red;font-family:ＭＳ Ｐゴシック;font-size:9pt;font-weight:bold;width:400px;">
+                                        ※日野、日産ディーゼル、三菱フソウ、イスズの車両は、<br>&nbsp;&nbsp;&nbsp;自動車税、重量税、自賠責保険料が自動計算されません
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- 詳細情報：お支払プラン -->
+                        <table class="table table-responsive" style="display:none">
+                            <tr>
+                                <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
                                                             vertical-align: middle;">
-                                <input type="image" src="~/img/sbtnローン計算.png" style="border-width:0px;vertical-align: middle;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style="width: 610px; height: 22px;">
-                                <span id="Label160" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">頭金</span>
-                            </td>
-                            <td id="idDeposit" class="data" style="text-align: right; height: 22px;">
-                                <span id="lbl_Deposit" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width: 610px; text-align: left; height: 22px;">
-                                <span id="Label157" class="EstTitle1" style="display:inline-block;font-size:10pt;width:152px;">現金・割賦元金</span>
-                            </td>
-                            <td id="idPrincipal" class="title" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lbl_Principal" class="InpTitle2" style="display:inline-block;width:132px;">1,198,901 円</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style="width: 610px; height: 22px;">
-                                <span id="Label148" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">分割払手数料</span>
-                            </td>
-                            <td id="idPartitionFee" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lbl_PartitionFee" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="title" style="width: 610px; text-align: left; height: 22px;">
-                                <span id="Label145" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">分割支払金合計</span>
-                            </td>
-                            <td id="idPartitionSum" class="title" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lbl_PartitionSum" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style="width: 610px; height: 22px;">
-                                <span id="Label142" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払回数</span>
-                            </td>
-                            <td id="idKaisu" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lbl_Kaisu" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style="width: 610px; height: 22px;">
-                                <span id="Label139" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払期間</span>
-                            </td>
-                            <td id="idKikan" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lbl_Kikan" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style="width: 610px; height: 22px;">
-                                <span id="Label136" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">初回支払額</span>
-                            </td>
-                            <td id="idFirstPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lbl_FirstPrice" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style="width: 610px; height: 22px;">
-                                <span id="Label137" class="EstTitle1" style="display:inline-block;font-size:10pt;width:109px;">2回目以降支払額</span>
-                                <span id="lbl_SecoTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;"></span>
-                            </td>
-                            <td id="idSecoPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lbl_SecoPrice" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style="width: 610px; height: 22px;">
-                                <span id="Label133" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">ボーナス加算月</span>
-                            </td>
-                            <td id="idBonusMonth" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lbl_BonusMonth" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style="width: 610px; height: 22px;">
-                                <span id="Label123" class="EstTitle1" style="display:inline-block;font-size:10pt;width:102px;">ボーナス加算額</span>
-                                <span id="lbl_BonusTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;"></span>
-                            </td>
-                            <td id="idBonusAdd" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lbl_BonusAdd" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" colspan="2" style="border-style: none;">
-                                <span id="lbl_Rate" class="EstTitle1"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td id="idWarningRecalc" class="data" colspan="2" style="border-style: none; padding: 3px;
+                                    <input type="image" src="~/img/sbtnローン計算.png" style="border-width:0px;vertical-align: middle;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style="width: 610px; height: 22px;">
+                                    <span id="Label160" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">頭金</span>
+                                </td>
+                                <td id="idDeposit" class="data" style="text-align: right; height: 22px;">
+                                    <span id="lbl_Deposit" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title" style="width: 610px; text-align: left; height: 22px;">
+                                    <span id="Label157" class="EstTitle1" style="display:inline-block;font-size:10pt;width:152px;">現金・割賦元金</span>
+                                </td>
+                                <td id="idPrincipal" class="title" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lbl_Principal" class="InpTitle2" style="display:inline-block;width:132px;">1,198,901 円</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style="width: 610px; height: 22px;">
+                                    <span id="Label148" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">分割払手数料</span>
+                                </td>
+                                <td id="idPartitionFee" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lbl_PartitionFee" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="title" style="width: 610px; text-align: left; height: 22px;">
+                                    <span id="Label145" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">分割支払金合計</span>
+                                </td>
+                                <td id="idPartitionSum" class="title" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lbl_PartitionSum" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style="width: 610px; height: 22px;">
+                                    <span id="Label142" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払回数</span>
+                                </td>
+                                <td id="idKaisu" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lbl_Kaisu" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style="width: 610px; height: 22px;">
+                                    <span id="Label139" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払期間</span>
+                                </td>
+                                <td id="idKikan" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lbl_Kikan" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style="width: 610px; height: 22px;">
+                                    <span id="Label136" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">初回支払額</span>
+                                </td>
+                                <td id="idFirstPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lbl_FirstPrice" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style="width: 610px; height: 22px;">
+                                    <span id="Label137" class="EstTitle1" style="display:inline-block;font-size:10pt;width:109px;">2回目以降支払額</span>
+                                    <span id="lbl_SecoTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;"></span>
+                                </td>
+                                <td id="idSecoPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lbl_SecoPrice" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style="width: 610px; height: 22px;">
+                                    <span id="Label133" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">ボーナス加算月</span>
+                                </td>
+                                <td id="idBonusMonth" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lbl_BonusMonth" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style="width: 610px; height: 22px;">
+                                    <span id="Label123" class="EstTitle1" style="display:inline-block;font-size:10pt;width:102px;">ボーナス加算額</span>
+                                    <span id="lbl_BonusTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;"></span>
+                                </td>
+                                <td id="idBonusAdd" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lbl_BonusAdd" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" colspan="2" style="border-style: none;">
+                                    <span id="lbl_Rate" class="EstTitle1"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="idWarningRecalc" class="data" colspan="2" style="border-style: none; padding: 3px;
                                                             text-align: right; vertical-align: middle;">
-                            </td>
-                        </tr>
-                    </table>
-                    <!-- リース計算情報 -->
-                    <table class="table table-responsive">
-                        <tr>
-                            <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
+                                </td>
+                            </tr>
+                        </table>
+                        <!-- リース計算情報 -->
+                        <table class="table table-responsive">
+                            <tr>
+                                <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
                                                             vertical-align: middle;">
-                                <input type="image" name="imgBtnLease" id="imgBtnLease" src="~/img/btb_リース計算情報.png" style="border-width:0px;">
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style="height: 22px;">
-                                <span id="Label1" class="EstTitle1" style="font-size:10pt;">初年度登録</span>
-                            </td>
-                            <td id="Td2" class="data" style="text-align: right; height: 22px;">
-                                <span id="lblFirstRegistration" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style=" text-align: left; height: 22px;">
-                                <span id="Label6" class="EstTitle1" style="font-size:10pt;">車検満了日(予定日)</span>
-                            </td>
-                            <td id="Td3" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lblInspectionExpiration" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style=" height: 22px;">
-                                <span id="Label9" class="EstTitle1" style="font-size:10pt;">リース開始月</span>
-                            </td>
-                            <td id="Td4" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lblLeaseStart" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style=" text-align: left; height: 22px;">
-                                <span id="Label11" class="EstTitle1" style="font-size:10pt;">契約期間</span>
-                            </td>
-                            <td id="Td5" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lblLeasePeriod" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style=" height: 22px;">
-                                <span id="Label13" class="EstTitle1" style="font-size:10pt;">リース満了日</span>
-                            </td>
-                            <td id="Td6" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lblLeaseExpirationDate" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style="height: 22px;">
-                                <span id="Label19" class="EstTitle1" style="font-size:10pt;">契約プラン</span>
-                            </td>
-                            <td id="Td13" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lblContractPlanName" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style=" height: 22px;">
-                                <span id="Label15" class="EstTitle1" style="font-size:10pt;">延長保証(+1年)</span>
-                            </td>
-                            <td id="Td7" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lblExtendedGuarantee" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style=" height: 22px;">
-                                <span id="Label17" class="EstTitle1" style="font-size:10pt;">任意保険</span>
-                            </td>
-                            <td id="Td8" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lblInsuranceCompanyName" class="InpTitle2"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style=" height: 22px;">
-                                <span id="Label24" class="EstTitle1" style="font-size:10pt;">保険料)</span>
-                            </td>
-                            <td id="Td9" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lblInsuranceFee" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style=" height: 22px;">
-                                <span id="Label22" class="EstTitle1" style="font-size:10pt;">頭金(税込)</span>
-                            </td>
-                            <td id="Td10" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lblDownPayment" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data" style=" height: 22px;">
-                                <span id="Label29" class="EstTitle1" style="font-size:10pt;">下取(税込)</span>
-                            </td>
-                            <td id="Td11" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                <span id="lblTradeInPrice" class="InpTitle2" style="display:inline-block;width:132px;"></span>
-                            </td>
-                        </tr>
-                    </table>
+                                    <input type="image" name="imgBtnLease" id="imgBtnLease" src="~/img/btb_リース計算情報.png" style="border-width:0px;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style="height: 22px;">
+                                    <span id="Label1" class="EstTitle1" style="font-size:10pt;">初年度登録</span>
+                                </td>
+                                <td id="Td2" class="data" style="text-align: right; height: 22px;">
+                                    <span id="lblFirstRegistration" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style=" text-align: left; height: 22px;">
+                                    <span id="Label6" class="EstTitle1" style="font-size:10pt;">車検満了日(予定日)</span>
+                                </td>
+                                <td id="Td3" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lblInspectionExpiration" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style=" height: 22px;">
+                                    <span id="Label9" class="EstTitle1" style="font-size:10pt;">リース開始月</span>
+                                </td>
+                                <td id="Td4" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lblLeaseStart" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style=" text-align: left; height: 22px;">
+                                    <span id="Label11" class="EstTitle1" style="font-size:10pt;">契約期間</span>
+                                </td>
+                                <td id="Td5" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lblLeasePeriod" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style=" height: 22px;">
+                                    <span id="Label13" class="EstTitle1" style="font-size:10pt;">リース満了日</span>
+                                </td>
+                                <td id="Td6" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lblLeaseExpirationDate" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style="height: 22px;">
+                                    <span id="Label19" class="EstTitle1" style="font-size:10pt;">契約プラン</span>
+                                </td>
+                                <td id="Td13" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lblContractPlanName" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style=" height: 22px;">
+                                    <span id="Label15" class="EstTitle1" style="font-size:10pt;">延長保証(+1年)</span>
+                                </td>
+                                <td id="Td7" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lblExtendedGuarantee" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style=" height: 22px;">
+                                    <span id="Label17" class="EstTitle1" style="font-size:10pt;">任意保険</span>
+                                </td>
+                                <td id="Td8" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lblInsuranceCompanyName" class="InpTitle2"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style=" height: 22px;">
+                                    <span id="Label24" class="EstTitle1" style="font-size:10pt;">保険料)</span>
+                                </td>
+                                <td id="Td9" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lblInsuranceFee" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style=" height: 22px;">
+                                    <span id="Label22" class="EstTitle1" style="font-size:10pt;">頭金(税込)</span>
+                                </td>
+                                <td id="Td10" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lblDownPayment" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data" style=" height: 22px;">
+                                    <span id="Label29" class="EstTitle1" style="font-size:10pt;">下取(税込)</span>
+                                </td>
+                                <td id="Td11" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                    <span id="lblTradeInPrice" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
+                &nbsp;
+                &nbsp;
+                <!-- 詳細情報：下取車 -->
+                <table cellpadding="1" class="table table-responsive">
+                    <tr>
+                        <td colspan="8" class="title" style="background-color: #d2e0fb; text-align: left;
+                                vertical-align: middle;">
+                            <input type="image" src="~/img/sbtn下取車.png" style="border-width:0px;vertical-align: middle;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="height: 25px;">
+                            車名
+                        </td>
+                        <td class="data" colspan="5">
+                            <span id="lbl_Sita" class="EstTitle1" style="display:inline-block;width:542px;"></span>
+                        </td>
+                        <td class="title" style="height: 25px;">
+                            初年度登録
+                        </td>
+                        <td class="data">
+                            <span id="lbl_SitaFirstYM" class="EstTitle1" style="display:inline-block;width:116px;"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="height: 25px;">
+                            車検
+                        </td>
+                        <td class="data">
+                            <span id="lbl_SitaIns" class="EstTitle1" style="display:inline-block;width:86px;"></span>
+                        </td>
+                        <td class="title" style="height: 25px;">
+                            走行距離
+                        </td>
+                        <td class="data">
+                            <span id="lbl_SitaRun" class="EstTitle1" style="display:inline-block;width:87px;"></span>
+                        </td>
+                        <td class="title" style="height: 25px;">
+                            車台番号
+                        </td>
+                        <td class="data">
+                            <span id="lbl_SitaCarNo" class="EstTitle1" style="display:inline-block;width:230px;"></span>
+                        </td>
+                        <td class="title" style="height: 25px;">
+                            登録NO
+                        </td>
+                        <td class="data">
+                            <span id="lbl_IserNo" class="EstTitle1" style="display:inline-block;width:133px;"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="title" style="height: 25px;">
+                            色
+                        </td>
+                        <td class="data" colspan="7">
+                            <span id="lbl_SitaColor" class="EstTitle1" style="display:inline-block;width:700px;"></span>
+                        </td>
+                    </tr>
+                </table>
+                &nbsp;
+                &nbsp;
+                <!-- 詳細情報：商談メモ -->
+                <table cellpadding="1" class="table table-responsive">
+                    <tr>
+                        <td colspan="8" class="title" style="background-color: #d2e0fb; text-align: left;
+                                vertical-align: middle;">
+                            <input type="image" src="~/img/sbtn備考.png" style="border-width:0px;vertical-align: middle;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="data" colspan="8" style="padding: 3px;">
+                            <span id="lbl_Notes" class="EstTitle1" style="display:inline-block;height:36px;width:790px;"></span>
+                        </td>
+                    </tr>
+                </table>
             </div>
-            &nbsp;
-            &nbsp;
-            <!-- 詳細情報：下取車 -->
-            <table cellpadding="1" class="table table-responsive">
-                <tr>
-                    <td colspan="8" class="title" style="background-color: #d2e0fb; text-align: left;
-                                vertical-align: middle;">
-                        <input type="image" src="~/img/sbtn下取車.png" style="border-width:0px;vertical-align: middle;">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="title" style="height: 25px;">
-                        車名
-                    </td>
-                    <td class="data" colspan="5">
-                        <span id="lbl_Sita" class="EstTitle1" style="display:inline-block;width:542px;"></span>
-                    </td>
-                    <td class="title" style="height: 25px;">
-                        初年度登録
-                    </td>
-                    <td class="data">
-                        <span id="lbl_SitaFirstYM" class="EstTitle1" style="display:inline-block;width:116px;"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="title" style="height: 25px;">
-                        車検
-                    </td>
-                    <td class="data">
-                        <span id="lbl_SitaIns" class="EstTitle1" style="display:inline-block;width:86px;"></span>
-                    </td>
-                    <td class="title" style="height: 25px;">
-                        走行距離
-                    </td>
-                    <td class="data">
-                        <span id="lbl_SitaRun" class="EstTitle1" style="display:inline-block;width:87px;"></span>
-                    </td>
-                    <td class="title" style="height: 25px;">
-                        車台番号
-                    </td>
-                    <td class="data">
-                        <span id="lbl_SitaCarNo" class="EstTitle1" style="display:inline-block;width:230px;"></span>
-                    </td>
-                    <td class="title" style="height: 25px;">
-                        登録NO
-                    </td>
-                    <td class="data">
-                        <span id="lbl_IserNo" class="EstTitle1" style="display:inline-block;width:133px;"></span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="title" style="height: 25px;">
-                        色
-                    </td>
-                    <td class="data" colspan="7">
-                        <span id="lbl_SitaColor" class="EstTitle1" style="display:inline-block;width:700px;"></span>
-                    </td>
-                </tr>
-            </table>
-            &nbsp;
-            &nbsp;
-            <!-- 詳細情報：商談メモ -->
-            <table cellpadding="1" class="table table-responsive">
-                <tr>
-                    <td colspan="8" class="title" style="background-color: #d2e0fb; text-align: left;
-                                vertical-align: middle;">
-                        <input type="image" src="~/img/sbtn備考.png" style="border-width:0px;vertical-align: middle;">
-                    </td>
-                </tr>
-                <tr>
-                    <td class="data" colspan="8" style="padding: 3px;">
-                        <span id="lbl_Notes" class="EstTitle1" style="display:inline-block;height:36px;width:790px;"></span>
-                    </td>
-                </tr>
-            </table>
+            <!--end Container-->
         </div>
-        <!--end Container-->
     </div>
 </form>
 
