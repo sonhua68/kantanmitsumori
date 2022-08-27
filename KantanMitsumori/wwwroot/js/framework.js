@@ -595,8 +595,7 @@ var Framework =
             key: "GoBackReloadPage",
             value: function GoBackReloadPage() {
                 window.setTimeout(window.history.back(), 2000);
-                location.reload();
-                return;
+                location.reload();              
                 //console.log(idbtn);
                 //$("#" + idbtn + "").click(function () {
                 //    window.history.back();
