@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using GrapeCity.ActiveReports;
-using GrapeCity.ActiveReports.Export.Pdf.Page;
+using GrapeCity.ActiveReports.Export.Pdf.Section;
 using GrapeCity.ActiveReports.Rendering.IO;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
@@ -35,31 +35,20 @@ namespace KantanMitsumori.Service
         public ResponseBase<ReportFileModel> GetArticleSubReport()
         {
             var assembly = Assembly.GetCallingAssembly();
-            var resourceName = "KantanMitsumori.Reports.EstSubArticle.rdlx";
+            var resourceName = "KantanMitsumori.Reports.EstSubArticle.rpx";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))            
-            {                
-                PageReport report = new PageReport();
-                report.Load(reader);
-                report.Document.LocateDataSource += ArticleReport_LocateDataSource;                
-                // Provide settings for your rendering output.
-                Settings pdfSetting = new Settings();
-
-                // Set the rendering extension and render the report.
-                PdfRenderingExtension pdfRenderingExtension = new PdfRenderingExtension();
-                MemoryStreamProvider outputProvider = new MemoryStreamProvider();
-                report.Document.Render(pdfRenderingExtension, outputProvider, pdfSetting);
-                using (var ms = outputProvider.GetPrimaryStream().OpenStream() as MemoryStream)
-                    return ResponseHelper.Ok(new ReportFileModel(ms.ToArray()));
-            }
-        }
-
-        private void ArticleReport_LocateDataSource(object sender, LocateDataSourceEventArgs args)
-        {
-            if (args.DataSet.Name == "EstPrintDs")
+            using (XmlReader reader = XmlReader.Create(stream))
             {
-                
-                args.Data = LoadSampleData();
+                SectionReport report = new SectionReport();
+                report.LoadLayout(reader);                
+                report.DataSource = LoadSampleData();                
+                report.Run();
+                PdfExport pdf = new PdfExport();                
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    pdf.Export(report.Document, ms);                    
+                    return ResponseHelper.Ok(new ReportFileModel(ms.ToArray()));
+                }
             }
         }
 
@@ -68,7 +57,8 @@ namespace KantanMitsumori.Service
             return new EstimateReportModel[] {
                 new EstimateReportModel(){
                     EstNo = "22060600001-01",
-                    BusiDate = DateTime.Now.ToString("yyyy年M月d日")
+                    BusiDate = DateTime.Now.ToString("yyyy年M月d日"),
+                    MemberURL = "google.com/dang.pham"
                 }
             };
         }
