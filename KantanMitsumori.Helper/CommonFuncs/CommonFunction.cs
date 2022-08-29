@@ -242,7 +242,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="chkData"></param>
         /// <returns></returns>
-        public string DateFormat(string chkData)
+        public static string DateFormat(string chkData)
         {
             if (chkData.Length == 1)
             {
@@ -392,6 +392,23 @@ namespace KantanMitsumori.Helper.CommonFuncs
         }
 
         /// <summary>
+        /// FormatString
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string FormatString(int? value)
+        {
+            if (value == 0)
+            {
+                return "";
+            }
+            else
+            {
+                return value.ToString()!;
+            }
+        }
+
+        /// <summary>
         /// 車検有効期限 判定・編集
         /// </summary>
         /// <param name="inYM"></param>
@@ -494,7 +511,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
         public static string setCheckCarYm(string inYM, bool inFlgNone = false)
         {
-             var NONE = "無し";
+            var NONE = "無し";
 
             long ret;
 
@@ -546,6 +563,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
         }
 
 
-    
+
     }
 }

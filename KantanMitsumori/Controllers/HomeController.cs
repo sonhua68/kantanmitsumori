@@ -71,7 +71,7 @@ namespace KantanMitsumori.Controllers
         public IActionResult Inpcar()
         {            
             RequestInputCar res = new RequestInputCar();
-            res.EstNo = "22082300011";
+            res.EstNo = "22082900004";
             res.EstSubNo = "01";
             var response = _estimateService.GetDetail(res);
             return View(response.Data);
@@ -79,7 +79,15 @@ namespace KantanMitsumori.Controllers
         public IActionResult InpHanbaiten()
         {
             RequestInputCar res = new RequestInputCar();
-            res.EstNo = "22082300011";
+            res.EstNo = "22082900004";
+            res.EstSubNo = "01";
+            var response = _estimateService.GetDetail(res);
+            return View(response.Data);
+        }
+        public IActionResult InpLoan()
+        {
+            RequestInputCar res = new RequestInputCar();
+            res.EstNo = "22082900004";
             res.EstSubNo = "01";
             var response = _estimateService.GetDetail(res);
             return View(response.Data);
