@@ -12,7 +12,8 @@ namespace KantanMitsumori.Service
     {
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
-            services.AddTransient<IAppService, AppService>();  
+            services.AddTransient<IAppService, AppService>();
+            services.AddTransient<IReportService, ReportService>();
             return services;
         }
 

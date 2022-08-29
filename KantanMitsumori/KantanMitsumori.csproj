@@ -6,18 +6,36 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>	  
+	  <None Remove="Reports\EstSubArticle.rpx" />
+    <EmbeddedResource Include="Reports\EstSubArticle.rpx" />
+  </ItemGroup>
+
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
+	<PackageReference Include="GrapeCity.ActiveReports" Version="16.2.0" />
+	<PackageReference Include="GrapeCity.ActiveReports.Chart" Version="16.1.2" />
+	<PackageReference Include="GrapeCity.ActiveReports.Core.DataProviders" Version="2.1.0" />
+	<PackageReference Include="GrapeCity.ActiveReports.Core.Rdl" Version="3.3.0" />
+	<PackageReference Include="GrapeCity.ActiveReports.Core.Rendering" Version="3.3.0" />
+	<PackageReference Include="GrapeCity.ActiveReports.Document" Version="16.2.0" />
+	<PackageReference Include="GrapeCity.ActiveReports.Export.Pdf" Version="16.2.0" />
+	<!--Start: Conflict library with ActiveReport - Solved by use higher version of library  -->
+	<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.0.1" />
+	<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.1" />
+	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
+	<!--End: Conflict library with ActiveReport - Solved by use higher version of library  -->
+	  
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +44,7 @@
     <ProjectReference Include="..\KantanMitsumori.Infrastructure\KantanMitsumori.Infrastructure.csproj" />
     <ProjectReference Include="..\KantanMitsumori.Service\KantanMitsumori.Service.csproj" />
   </ItemGroup>
-
+	
   <ItemGroup>
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
