@@ -1,16 +1,22 @@
-﻿@using KantanMitsumori.Entity.ASESTEntities;
-@using KantanMitsumori.Model.Response;
+﻿@using KantanMitsumori.Model.Response;
 @using KantanMitsumori.Helper.CommonFuncs;
+
 @model ResponseInputCar
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
-    var SalesSum = Model.SalesSum == 0 ? "" : Model.SalesSum.ToString();
-    var Deposit = Model.Deposit == 0 ? "" : Model.Deposit.ToString();
-    var Principal = (Model.SalesSum - Model.Deposit) == 0 ? "" : (Model.SalesSum - Model.Deposit).ToString();
-    var PayTimes = Model.PayTimes == 0 ? "" : Model.PayTimes.ToString();
+    var SalesSum = CommonFunction.FormatString(Model.SalesSum);
+    var Deposit = CommonFunction.FormatString(Model.Deposit);
+    var Principal = CommonFunction.FormatString((Model.SalesSum - Model.Deposit));
+    var PayTimes = CommonFunction.FormatString(Model.PayTimes);
     var MoneyRate = Model.Rate;
-    var BonusAmount = Model.BonusAmount == 0 ? "" : Model.BonusAmount.ToString();
+    var BonusAmount = CommonFunction.FormatString(Model.BonusAmount);
+    var MoneyRateCl = Model.Rate;
+    var PartitionFee = Model.PartitionFee;
+    var PayTotal = CommonFunction.FormatString(Model.PartitionAmount);
+    var FirstPay = CommonFunction.FormatString(Model.FirstPayAmount);
+    var PayMonth = CommonFunction.FormatString(Model.PayAmount);
+    var Fee = Model.PartitionFee;
 }
 <form id="formInpLoan">
     <table border="0" width="100%">
@@ -67,7 +73,7 @@
                                                         <span class="inplabel" style="display:inline-block;width:128px;">金利（実質年率）</span>
                                                     </td>
                                                     <td class="inptd" style="width: 239px" align="left">
-                                                        <input name="txMoneyRate" type="text" id="txMoneyRate"  class="inpbox_r" style="IME-MODE: disabled; WIDTH: 47px; border:solid 1px mediumvioletred;" tabindex="2" value="@MoneyRate">
+                                                        <input name="txMoneyRate" type="text" id="txMoneyRate" class="inpbox_r" style="IME-MODE: disabled; WIDTH: 47px; border:solid 1px mediumvioletred;" tabindex="2" value="@MoneyRate">
                                                         <input id="btMoneyRateUp" style="FONT-SIZE: 9pt; WIDTH: 30px; color:#dc143c; FONT-FAMILY: 'ＭＳ Ｐゴシック'; HEIGHT: 22px; vertical-align: middle; text-align: center;" onclick="return btMoneyRateUp_onclick()" type="button" value="▲" name="Button1">
                                                         <input id="btMoneyRateDown" style="FONT-SIZE: 9pt; WIDTH: 30px; color:#dc143c; FONT-FAMILY: 'ＭＳ Ｐゴシック'; HEIGHT: 22px; vertical-align: middle; text-align: center;" onclick="return btMoneyRateDown_onclick()" type="button" value="▼" name="Button1">
                                                         <span class="inplabel" style="display:inline-block;width:34px;">％</span>
@@ -90,11 +96,11 @@
                                                         <span class="inplabel">第1回支払月</span>
                                                     </td>
                                                     <td class="inptd" style="width: 239px" align="left">
-                                                        <select name="cbFirstMonth" id="cbFirstMonth" tabindex="4" class="inpbox" style="width:65px;border:solid 1px mediumvioletred;">                                                      
+                                                        <select name="cbFirstMonth" id="cbFirstMonth" tabindex="4" class="inpbox" style="width:65px;border:solid 1px mediumvioletred;">
                                                             @{
                                                                 foreach (var item in DropDownList.DropDownFirstMonth(false))
                                                                 {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                        <option value="@item.Value">@item.Text</option>
                                                                 }
                                                             }
 
@@ -116,7 +122,7 @@
                                                         <span class="inplabel">ボーナス加算額</span>
                                                     </td>
                                                     <td class="inptd" style="width: 239px" align="left">
-                                                        <input name="txBonus" type="text" maxlength="8" id="txBonus" tabindex="7" class="inpbox_r" style="width: 91px; border: 1px solid mediumvioletred; background-color: white;">
+                                                        <input name="txBonus" type="text" maxlength="8" id="txBonus"  value="@BonusAmount" tabindex="7" class="inpbox_r" style="width: 91px; border: 1px solid mediumvioletred; background-color: white;">
                                                         <span class="inplabel" style="display:inline-block;width:38px;">円</span>
                                                         <span class="inplabel" style="display:inline-block;width:88px;">例） 50000</span>
                                                     </td>
@@ -130,9 +136,9 @@
                                                             @{
                                                                 foreach (var item in DropDownList.DropDownBonusMonth(true))
                                                                 {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                        <option value="@item.Value">@item.Text</option>
                                                                 }
-                                                            }                                                        
+                                                            }
                                                         </select>
                                                         <span class="inplabel" style="display:inline-block;width:46px;">月</span>
                                                     </td>
@@ -189,7 +195,7 @@
                                                         <span class="inplabel" style="display:inline-block;width:130px;">頭金</span>
                                                     </td>
                                                     <td class="inptd" align="left">
-                                                        <input name="txDepositCl" type="text" id="txDepositCl" value="@Deposit"  class="inpbox_r" onblur="calcResultGankin(); confInputValue('txDepositCl');" style="width:85px;IME-MODE: disabled">
+                                                        <input name="txDepositCl" type="text" id="txDepositCl" value="@Deposit" class="inpbox_r" onblur="calcResultGankin(); confInputValue('txDepositCl');" style="width:85px;IME-MODE: disabled">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">円</span>
                                                         <input name="txDepositCl_old" type="text" id="txDepositCl_old" style="width:0px;visibility:hidden;">
                                                     </td>
@@ -208,9 +214,9 @@
                                                         <span class="inplabel" style="display:inline-block;width:130px;">金利（実質年率）</span>
                                                     </td>
                                                     <td class="inptd" align="left">
-                                                        <input name="txMoneyRateCl" type="text" value="" id="txMoneyRateCl" class="inpbox_r" onblur="confInputValue('txMoneyRateCl');" style="width:85px;IME-MODE: disabled">
+                                                        <input name="txMoneyRateCl" type="text" value="@MoneyRateCl" id="txMoneyRateCl" class="inpbox_r" onblur="confInputValue('txMoneyRateCl');" style="width:85px;IME-MODE: disabled">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">％</span>
-                                                        <input name="txMoneyRateCl_old" type="text" id="txMoneyRateCl_old" style="width:0px;visibility:hidden;">
+                                                        <input name="txMoneyRateCl_old" type="text" value="@MoneyRateCl" id="txMoneyRateCl_old" style="width:0px;visibility:hidden;">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -218,9 +224,9 @@
                                                         <span class="inplabel" style="display:inline-block;width:130px;">分割払手数料</span>
                                                     </td>
                                                     <td class="inptd" align="left">
-                                                        <input name="txFee" type="text" id="txFee" class="inpbox_r" onblur="confInputValue('txFee');" style="width:85px;IME-MODE: disabled">
+                                                        <input name="txFee" type="text" id="txFee" value="@Fee" class="inpbox_r" onblur="confInputValue('txFee');" style="width:85px;IME-MODE: disabled">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">円</span>
-                                                        <input name="txFee_old" type="text" id="txFee_old" style="width:0px;visibility:hidden;">
+                                                        <input name="txFee_old" type="text" id="txFee_old" value="@Fee" style="width:0px;visibility:hidden;">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -228,9 +234,9 @@
                                                         <span class="inplabel" style="display:inline-block;width:130px;">分割支払金合計</span>
                                                     </td>
                                                     <td class="inptd" align="left">
-                                                        <input name="txPayTotal" type="text" id="txPayTotal" class="inpbox_r" onblur="confInputValue('txPayTotal');" style="width:85px;IME-MODE: disabled">
+                                                        <input name="txPayTotal" type="text" value="@PayTotal" id="txPayTotal" class="inpbox_r" onblur="confInputValue('txPayTotal');" style="width:85px;IME-MODE: disabled">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">円</span>
-                                                        <input name="txPayTotal_old" type="text" id="txPayTotal_old" style="width:0px;visibility:hidden;">
+                                                        <input name="txPayTotal_old" type="text" value="@PayTotal" id="txPayTotal_old" style="width:0px;visibility:hidden;">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -238,9 +244,9 @@
                                                         <span class="inplabel" style="display:inline-block;width:130px;">支払回数</span>
                                                     </td>
                                                     <td class="inptd" align="left">
-                                                        <input name="txPayTimesCl" type="text" id="txPayTimesCl" class="inpbox_r" onblur="confInputValue('txPayTimesCl');" style="width:85px;IME-MODE: disabled">
+                                                        <input name="txPayTimesCl" type="text" value="@PayTimes" id="txPayTimesCl" class="inpbox_r" onblur="confInputValue('txPayTimesCl');" style="width:85px;IME-MODE: disabled">
                                                         <span id="Label23" class="inplabel" style="display:inline-block;width:12px;">回</span>
-                                                        <input name="txPayTimesCl_old" type="text" id="txPayTimesCl_old" style="width:0px;visibility:hidden;">
+                                                        <input name="txPayTimesCl_old" value="@PayTimes" type="text" id="txPayTimesCl_old" style="width:0px;visibility:hidden;">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -248,12 +254,12 @@
                                                         <span class="inplabel" style="display:inline-block;width:130px;">支払期間</span>
                                                     </td>
                                                     <td class="inptd" align="left">
-                                                        <input name="txFirstPayMonth" type="text" id="txFirstPayMonth" class="inpbox_r" onblur="confInputValue('txFirstPayMonth');" style="width:85px;IME-MODE: disabled">
+                                                        <input name="txFirstPayMonth" type="text" id="txFirstPayMonth" value="@Model.FirstPayMonth" class="inpbox_r" onblur="confInputValue('txFirstPayMonth');" style="width:85px;IME-MODE: disabled">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">～</span>
-                                                        <input name="txLastPayMonth" type="text" id="txLastPayMonth" class="inpbox_r" onblur="confInputValue('txLastPayMonth');" style="width:85px;IME-MODE: disabled">
+                                                        <input name="txLastPayMonth" type="text" id="txLastPayMonth" value="@Model.LastPayMonth" class="inpbox_r" onblur="confInputValue('txLastPayMonth');" style="width:85px;IME-MODE: disabled">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">年月</span>
-                                                        <input name="txFirstPayMonth_old" type="text" id="txFirstPayMonth_old" style="width:0px;visibility:hidden;">
-                                                        <input name="txLastPayMonth_old" type="text" id="txLastPayMonth_old" style="width:0px;visibility:hidden;">
+                                                        <input name="txFirstPayMonth_old" type="text" id="txFirstPayMonth_old" value="@Model.FirstPayMonth" style="width:0px;visibility:hidden;">
+                                                        <input name="txLastPayMonth_old" type="text" value="@Model.LastPayMonth" id="txLastPayMonth_old" style="width:0px;visibility:hidden;">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -261,9 +267,9 @@
                                                         <span class="inplabel" style="display:inline-block;width:130px;">初回支払額</span>
                                                     </td>
                                                     <td class="inptd" align="left">
-                                                        <input name="txFirstPay" type="text" id="txFirstPay" class="inpbox_r" onblur="confInputValue('txFirstPay');" style="width:85px;IME-MODE: disabled">
+                                                        <input name="txFirstPay" value="@FirstPay" type="text" id="txFirstPay" class="inpbox_r" onblur="confInputValue('txFirstPay');" style="width:85px;IME-MODE: disabled">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">円</span>
-                                                        <input name="txFirstPay_old" type="text" id="txFirstPay_old" style="width:0px;visibility:hidden;">
+                                                        <input name="txFirstPay_old" value="@FirstPay" type="text" id="txFirstPay_old" style="width:0px;visibility:hidden;">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -271,9 +277,9 @@
                                                         <span class="inplabel" style="display:inline-block;width:130px;">2回目以降支払額</span>
                                                     </td>
                                                     <td class="inptd" align="left">
-                                                        <input name="txPayMonth" type="text" id="txPayMonth" class="inpbox_r" onblur="confInputValue('txPayMonth');" style="width:85px;IME-MODE: disabled">
+                                                        <input name="txPayMonth" type="text" id="txPayMonth" value="@PayMonth" class="inpbox_r" onblur="confInputValue('txPayMonth');" style="width:85px;IME-MODE: disabled">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">円</span>
-                                                        <input name="txPayMonth_old" type="text" id="txPayMonth_old" style="width:0px;visibility:hidden;">
+                                                        <input name="txPayMonth_old" type="text" value="@PayMonth" id="txPayMonth_old" style="width:0px;visibility:hidden;">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -292,7 +298,7 @@
                                                     <td class="inptd" align="left">
                                                         <input name="txBonusCl" type="text" value="@BonusAmount" id="txBonusCl" class="inpbox_r" onblur="confInputValue('txBonusCl');" style="width: 85px; background-color: white;">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">円</span>
-                                                        <input name="txBonusCl_old" type="text" id="txBonusCl_old" style="width:0px;visibility:hidden;">
+                                                        <input name="txBonusCl_old" value="@BonusAmount" type="text" id="txBonusCl_old" style="width:0px;visibility:hidden;">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -300,12 +306,12 @@
                                                         <span class="inplabel" style="display:inline-block;width:130px;">ボーナス支払月</span>
                                                     </td>
                                                     <td class="inptd" align="left">
-                                                        <input name="txBonusFirstMonth" type="text" id="txBonusFirstMonth" class="inpbox_r" onblur="confInputValue('txBonusFirstMonth');" style="width: 85px; background-color: white;">
+                                                        <input name="txBonusFirstMonth" type="text" id="txBonusFirstMonth" value="@Model.BonusFirst" class="inpbox_r" onblur="confInputValue('txBonusFirstMonth');" style="width: 85px; background-color: white;">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">／</span>
-                                                        <input name="txBonusSecondMonth" type="text" id="txBonusSecondMonth" class="inpbox_r" onblur="confInputValue('txBonusSecondMonth');" style="width: 85px; background-color: white;">
+                                                        <input name="txBonusSecondMonth" type="text" id="txBonusSecondMonth" value="@Model.BonusSecond" class="inpbox_r" onblur="confInputValue('txBonusSecondMonth');" style="width: 85px; background-color: white;">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">月</span>
-                                                        <input name="txBonusFirstMonth_old" type="text" id="txBonusFirstMonth_old" style="width:0px;IME-MODE: disabled; visibility:hidden;">
-                                                        <input name="txBonusSecondMonth_old" type="text" id="txBonusSecondMonth_old" style="width:0px;IME-MODE: disabled; visibility:hidden;">
+                                                        <input name="txBonusFirstMonth_old" type="text" id="txBonusFirstMonth_old" value="@Model.BonusFirst" style="width:0px;IME-MODE: disabled; visibility:hidden;">
+                                                        <input name="txBonusSecondMonth_old" type="text" id="txBonusSecondMonth_old" value="@Model.BonusSecond" style="width:0px;IME-MODE: disabled; visibility:hidden;">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -313,9 +319,9 @@
                                                         <span class="inplabel" style="display:inline-block;width:130px;">ボーナス加算回数</span>
                                                     </td>
                                                     <td class="inptd" align="left">
-                                                        <input name="txBonusTimes" type="text" id="txBonusTimes" class="inpbox_r" onblur="confInputValue('txBonusTimes');" style="width: 85px; background-color: white;">
+                                                        <input name="txBonusTimes" type="text" id="txBonusTimes" value="@Model.BonusTimes" class="inpbox_r" onblur="confInputValue('txBonusTimes');" style="width: 85px; background-color: white;">
                                                         <span class="inplabel" style="display:inline-block;width:12px;">回</span>
-                                                        <input name="txBonusTimes_old" type="text" id="txBonusTimes_old" style="width:0px;IME-MODE: disabled; visibility:hidden;">
+                                                        <input name="txBonusTimes_old" value="@Model.BonusTimes" type="text" id="txBonusTimes_old" style="width:0px;IME-MODE: disabled; visibility:hidden;">
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -344,7 +350,7 @@
                         <input name="EstNo" type="hidden" id="hidEstNo" value="@Model.EstNo">
                         <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
                         <input name="hidMoneyRate" type="hidden" id="hidMoneyRate" value="@Model.Rate">
-                        <input name="hidBonusSecond" type="hidden" id="hidBonusSecond" value="0">
+                        <input name="hidBonusSecond" type="hidden" id="hidBonusSecond" value="@Model.BonusSecond">
                         <input name="hidTaxRatio" type="hidden" id="hidTaxRatio" value="0.1">
                     </div>
                 </td>
@@ -359,5 +365,13 @@
             Framework.submitAjaxFormUpdateAsync(model, "/Home/UpdateInpHanbaiten");
         }
     });
+     function SetInitData() {
+        //Framework.SetSelectedConstant("cbFirstMonth", @Model.Fi)
+        Framework.SetSelectedConstant("cbBonusFirst", @Model.BonusFirst)
+        Framework.SetSelectedConstant("cbBonusSecond", @Model.BonusSecond)
+     
+     }
+
+
 
 </script>
