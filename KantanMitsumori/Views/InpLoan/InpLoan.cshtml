@@ -1,6 +1,5 @@
 ﻿@using KantanMitsumori.Model.Response;
 @using KantanMitsumori.Helper.CommonFuncs;
-
 @model ResponseInputCar
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -100,7 +99,7 @@
                                                             @{
                                                                 foreach (var item in DropDownList.DropDownFirstMonth(false))
                                                                 {
-                                                                        <option value="@item.Value">@item.Text</option>
+                                                                    <option value="@item.Value">@item.Text</option>
                                                                 }
                                                             }
 
@@ -122,7 +121,7 @@
                                                         <span class="inplabel">ボーナス加算額</span>
                                                     </td>
                                                     <td class="inptd" style="width: 239px" align="left">
-                                                        <input name="txBonus" type="text" maxlength="8" id="txBonus"  value="@BonusAmount" tabindex="7" class="inpbox_r" style="width: 91px; border: 1px solid mediumvioletred; background-color: white;">
+                                                        <input name="txBonus" type="text" maxlength="8" id="txBonus" value="@BonusAmount" tabindex="7" class="inpbox_r" style="width: 91px; border: 1px solid mediumvioletred; background-color: white;">
                                                         <span class="inplabel" style="display:inline-block;width:38px;">円</span>
                                                         <span class="inplabel" style="display:inline-block;width:88px;">例） 50000</span>
                                                     </td>
@@ -136,7 +135,7 @@
                                                             @{
                                                                 foreach (var item in DropDownList.DropDownBonusMonth(true))
                                                                 {
-                                                                        <option value="@item.Value">@item.Text</option>
+                                                                    <option value="@item.Value">@item.Text</option>
                                                                 }
                                                             }
                                                         </select>
@@ -359,18 +358,19 @@
     </table>
 </form>
 <script>
+    SetInitData();
     $('#formInpLoan').validate({
         submitHandler: function (form) {
             var model = Framework.getFormData($("#formInpLoan"));
             Framework.submitAjaxFormUpdateAsync(model, "/Home/UpdateInpHanbaiten");
         }
     });
-     function SetInitData() {
-        //Framework.SetSelectedConstant("cbFirstMonth", @Model.Fi)
+
+    function SetInitData() {
         Framework.SetSelectedConstant("cbBonusFirst", @Model.BonusFirst)
         Framework.SetSelectedConstant("cbBonusSecond", @Model.BonusSecond)
-     
-     }
+    }
+
 
 
 
