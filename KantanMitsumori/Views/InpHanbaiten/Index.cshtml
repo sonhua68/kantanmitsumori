@@ -104,7 +104,7 @@
     $('#formInpHanbaiten').validate({
         submitHandler: function (form) {
             var model = Framework.getFormData($("#formInpHanbaiten"));
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/Home/UpdateInpHanbaiten");
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpHanbaiten/UpdateInpHanbaiten");
             if (result.resultStatus == 0) {
                 Framework.GoBackReloadPage();
             }

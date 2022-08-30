@@ -235,7 +235,7 @@
         submitHandler: function (form) {
             var model = Framework.getFormData($("#formInputCar"));
             console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/Home/UpdateInputCar");
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCar/UpdateInputCar");
             if (result.resultStatus == 0) {
                 Framework.GoBackReloadPage();
             }

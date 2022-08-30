@@ -46,9 +46,9 @@ namespace KantanMitsumori.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateInpLoan([FromForm] RequestUpdateInputCar requestData)
+        public async Task<IActionResult> UpdateInpLoan([FromForm] RequestUpdateInpLoan requestData)
         {
-            var response = await _estimateService.UpdateInputCar(requestData);
+            var response = await _inpLoanService.UpdateInputLoan(requestData);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);

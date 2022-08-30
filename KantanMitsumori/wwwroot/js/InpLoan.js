@@ -3,37 +3,24 @@
 const FALSE_COLOR = '#ffccff';
 const FALSE_COLOR_RES = '#D2E0FB';
 const TRUE_COLOR = 'White';
-//最小・最大金利
 const minrate = 0;
 const maxrate = 20;
 const defrate = 3.9;
-//最小・最大回数
 const mintimes = 6;
 const maxtimes = 84;
 function setInitialValue() {
     chgBonus();
     chgBonus_Result();
 
-    if ($('#hidLoanModifyFlag').val() == "1") {
-        // 手動修正したものに対して、自動計算は行えないようにガード
+    if ($('#hidLoanModifyFlag').val() == "1") {   
         $('#chkProhibitAutoCalc').attr('checked', true);
         $('#chkProhibitAutoCalc').attr("disabled", true);
     }
 
 }
-
-/**
- * [OK] ボタン押下時の処理
- * 
- */
 function clickOK() {
     $('#chkProhibitAutoCalc').disabled = "";
 }
-
-/**
- * 手動修正の検知
- * 
- */
 function confInputValue(element) {
     var target = document.getElementById(element).value;
     if (target == 0) { target = "" }
@@ -46,11 +33,6 @@ function confInputValue(element) {
         $('#chkProhibitAutoCalc').attr("disabled", true);
     }
 }
-
-/**
- * ボーナス表示切り替え（ローン条件部）
- * 
- */
 function chgBonus() {
     var form = $("#formInpLoan");
     var checkedValue = $('input[name=rdBonus]:checked', form).val();
@@ -61,11 +43,9 @@ function chgBonus() {
         $('#cbBonusSecond').attr("disabled", false);
         $('#Bonus').css('background-color', TRUE_COLOR);
         $('#cbBonusFirst').css('background-color', TRUE_COLOR);
-        $('#cbBonusSecond').css('background-color', TRUE_COLOR);
-
-        // PostBack の場合、cbBonusSecond の値がクリアされてしまうのを回避
-        if ($('#hidBonusSecond').value != "") {
-            //chgBonusMonth('PostBack');
+        $('#cbBonusSecond').css('background-color', TRUE_COLOR);  
+        if ($('#hidBonusSecond').value != "") {    
+            chgBonusMonth('PostBack');
             $('#cbBonusSecond').value = $('#hidBonusSecond').value;
         }
 
@@ -83,11 +63,6 @@ function chgBonus() {
 
     }
 }
-
-/**
- * ボーナス表示リセット（ローン計算情報部）
- * 
- */
 function resetBonus_Result() {
     chgBonus_Result();
     confInputValue('BonusCl');
@@ -95,11 +70,6 @@ function resetBonus_Result() {
     confInputValue('BonusSecondMonth');
     confInputValue('BonusTimes');
 }
-
-/**
- * ボーナス表示切り替え（ローン計算情報部）
- * 
- */
 function chgBonus_Result() {
     var form = $("#formInpLoan");
     var checkedValue = $('input[name=rdBonus_Result]:checked', form).val();
@@ -131,203 +101,140 @@ function chgBonus_Result() {
         $('#BonusTimes').css('background-color', FALSE_COLOR_RES);
     }
 }
-
-/**
- * ボーナス月表示切り替え
- * 
- */
 function chgBonusMonth(mode) {
-    //frm.cbBonusSecond.options.length = 0;
-    //var bf = $get('cbBonusFirst').value;
+    for (let i = 0; i <= 12; i++) {
+        $("#cbBonusSecond option[value='"+i+"']").remove();
+    }  
 
-    //if (bf == "6" || bf == "7" || bf == "8" || bf == "9") {
-    //    frm.cbBonusSecond.options[0] = new Option("", 0);
-    //    frm.cbBonusSecond.options[1] = new Option("12", 12);
-    //    frm.cbBonusSecond.options[2] = new Option("1", 1);
-    //    frm.cbBonusSecond.options[3] = new Option("2", 2);
-    //} else if (bf == "12" || bf == "1" || bf == "2") {
-    //    frm.cbBonusSecond.options[0] = new Option("", 0);
-    //    frm.cbBonusSecond.options[1] = new Option("6", 6);
-    //    frm.cbBonusSecond.options[2] = new Option("7", 7);
-    //    frm.cbBonusSecond.options[3] = new Option("8", 8);
-    //    frm.cbBonusSecond.options[4] = new Option("9", 9);
-    //}
+    let bf = $('#cbBonusFirst').val();
+    if (bf == "6" || bf == "7" || bf == "8" || bf == "9") {
+        $("#cbBonusSecond").append(new Option("", "0"));
+        $("#cbBonusSecond").append(new Option("12", "12"));
+        $("#cbBonusSecond").append(new Option("1", "1"));
+        $("#cbBonusSecond").append(new Option("2", "2"));
+      
+    } else if (bf == "12" || bf == "1" || bf == "2") {
+        $("#cbBonusSecond").append(new Option("", "0"));
+        $("#cbBonusSecond").append(new Option("6", "6"));
+        $("#cbBonusSecond").append(new Option("7", "7"));
+        $("#cbBonusSecond").append(new Option("8", "8"));
+        $("#cbBonusSecond").append(new Option("9", "9")); 
+    
+    }
 
-    //if (mode != 'PostBack') {
-    //    $get('hidBonusSecond').value = "0"
-    //}
+    if (mode != 'PostBack') {
+        $('#hidBonusSecond').val("0");
+    }
 }
 
-/**
- * ボーナス月表示切り替え
- * 
- */
 function chgBonusSecond() {
     let value = $('#cbBonusSecond').val();
     $('#hidBonusSecond').val(value);
 }
 
-/**
- * 元金計算（ローン条件部）
- * 
- */
 function calcGankin() {
     var SalesSum = parseFloat($("#lbl_SalesSum").val());
     var Deposit = parseFloat($("#Deposit").val());
     $("#lbl_Principal").val(SalesSum - Deposit);
 }
 
-/**
- * 元金計算（ローン計算情報部）
- * 
- */
 function calcResultGankin() {
     var SalesSum = parseFloat($("#SaleSumCl").val());
     var Deposit = parseFloat($("#DepositCl").val());
     $("#Principal").val(SalesSum - Deposit);
 }
 
-
-
-/**
- * お支払回数 ▲(Up) ボタン押下時の処理
- * 
- */
-function btPayTimesUp_onclick() {
-    //初期化
+function btPayTimesUp_onclick() {  
     numval = 0;
-    $("#Msg").val('');
+    $("#Msg").text('');
     var PayTimes = parseInt($("#PayTimes").val());
-    //数値チェック
-    if (isNaN(PayTimes)) {
-        $("#Msg").val('お支払回数に数値以外は入力出来ません。');
-        return;
-    } else if (isNaN(PayTimes) < 0) {
-        $("#Msg").val('お支払回数にマイナス値は入力できません。');
+        if (PayTimes < 0) {
+        $("#Msg").text('お支払回数にマイナス値は入力できません。');
         return;
     }
-
-    if (PayTimes == '') {
-        PayTimes = 12;
+    if ($("#PayTimes").val() == '') {    
+        $("#PayTimes").val(12)
     } else {
         inval = PayTimes;
-        numval = Number(inval);
-        //10000プラス
-        numval += 1;
-        //最大値以内か
+        numval = Number(inval);       
+        numval += 1;  
         if (numval <= maxtimes) {
             $("#PayTimes").val(numval)
         } else {
-            $("#Msg").val('最大回数です。');
+            $("#Msg").text('最大回数です。');
             $("#PayTimes").val(maxtimes)
         }
     }
 }
-
-/**
- * お支払回数 ▼(Down) ボタン押下時の処理
- * 
- */
 function btPayTimesDown_onclick() {
-    //初期化
     numval = 0;
-    $("#Msg").val('');
-
-    //数値チェック
-    var PayTimes = parseFloat($("#PayTimes").val());
-    if (isNaN(PayTimes)) {
-        $("#Msg").val('お支払回数に数値以外は入力出来ません。');
-        return;
-    } else if (PayTimes < 0) {
-        $("#Msg").val('お支払回数にマイナス値は入力できません。');
+    $("#Msg").text(''); 
+    var PayTimes = parseFloat($("#PayTimes").val());  
+    if (PayTimes < 0) {
+        $("#Msg").text('お支払回数にマイナス値は入力できません。');
         return;
     }
-    if (PayTimes == '') {
-        PayTimes = 12;
+    if ($("#PayTimes").val() == '') {
+        $("#PayTimes").val(12)
     } else {
         inval = PayTimes;
-        numval = Number(inval);
-        //10000プラス
-        numval -= 1;
-        //最小値以内か
+        numval = Number(inval);    
+        numval -= 1;     
         if (numval >= mintimes) {
             $("#PayTimes").val(numval)
         } else {
-            $("#Msg").val('最小回数です。');
+            $("#Msg").text('最小回数です。');
             $("#PayTimes").val(mintimes)
         }
     }
 }
 
-
-
-/**
- * 金利 ▲(Up) ボタン押下時の処理
- * 
- */
 function btMoneyRateUp_onclick() {
-    //初期化
     numval = 0;
-    $("#Msg").val('');
+    $("#Msg").text('');
     let MoneyRate = parseFloat($("#MoneyRate").val());
-    //数値チェック
-    if (isNaN(MoneyRate)) {
-        $("#Msg").val('金利に数値以外は入力出来ません。');
-        return;
-    } else if (MoneyRate < 0) {
-        $("#Msg").val('金利にマイナス値は入力できません。');
+    if (MoneyRate < 0) {
+        $("#Msg").text('金利にマイナス値は入力できません。');
         return;
     }
 
-    if (MoneyRate == '') {
-        MoneyRate.value = format(defrate, 1, 0);
+    if ($("#MoneyRate").val() == '') {
+        MoneyRate = format(defrate, 1, 0);
+        $("#MoneyRate").val(MoneyRate)
     } else {
         inval = MoneyRate;
-        numval = Number(inval);
-        //小数点第2位以下四捨五入
-        numval = format(numval + 0.1, 1, 0);
-        //最大金利より大きい場合
+        numval = Number(inval);    
+        numval = format(numval + 0.1, 1, 0);    
         if (Number(numval) > Number(maxrate)) {
             let max = format(maxrate, 1, 0);
             $("#MoneyRate").val(max)
-            $("#Msg").val('最大金利です。');
+            $("#Msg").text('最大金利です。');
         } else {
             $("#MoneyRate").val(numval)
 
         }
     }
 }
-
-/**
- * 金利 ▼(Down) ボタン押下時の処理
- * 
- */
-function btMoneyRateDown_onclick() {
-    //初期化
+function btMoneyRateDown_onclick() { 
     numval = 0;
-    $("#Msg").val('');
-    let MoneyRate = parseInt($("#MoneyRate").val());
-    //数値チェック
-    if (isNaN(MoneyRate)) {
-        $("#Msg").val('金利に数値以外は入力出来ません。');
-        return;
-    } else if (MoneyRate < 0) {
-        $("#Msg").val('金利にマイナス値は入力できません。');
+    $("#Msg").text('');
+    let MoneyRate = parseFloat($("#MoneyRate").val());  
+        if (MoneyRate < 0) {
+        $("#Msg").text('金利にマイナス値は入力できません。');
         return;
     }
 
-    if (MoneyRate == '') {
+    if ($("#MoneyRate").val() == '') {
         MoneyRate = format(defrate, 1, 0);
+        $("#MoneyRate").val(MoneyRate)
     } else {
         inval = MoneyRate;
-        numval = Number(inval);
-        //小数点第2位以下四捨五入
-        numval = format(numval - 0.1, 1, 0);
-        //最低金利より小さい場合
+        numval = Number(inval);     
+        numval = format(numval - 0.1, 1, 0);       
         if (numval < Number(minrate)) {
             let min = format(minrate, 1, 0);
             $("#MoneyRate").val(min)
-            $("#Msg").val('最低金利です。');
+            $("#Msg").text('最低金利です。');
         } else {
             $("#MoneyRate").val(numval)
         }
@@ -359,6 +266,7 @@ function format(val, digit, flg) {
 }
 
 function CalInpLoan() {
+    $("#Msg").text("");
     var model = {};
     model.SaleSumPrice = $("#lbl_SalesSum").val();
     model.Deposit = $("#Deposit").val();
@@ -373,17 +281,14 @@ function CalInpLoan() {
         model.Bonus = $("#Bonus").val();
         model.BonusFirst = $("#cbBonusFirst").val();
         model.BonusSecond = $("#cbBonusSecond").val();
-
     } else {
         model.Bonus = "0";
         model.BonusFirst = "0";
         model.BonusSecond = "0";
     }
-
-
     console.log(model);
     var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLoan/CalInpLoan");
-    if (result.resultStatus == 0) {
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         console.log(result.data)
         let Items = result.data;
         $("#Fee").val(Items.fee);
@@ -391,24 +296,30 @@ function CalInpLoan() {
         $("#PayTimesCl").val(Items.payTimes);
         $("#FirstPayMonth").val(Items.firstPayMonth);
         $("#LastPayMonth").val(Items.lastPayMonth);
-        $("#FirstPay").val(Items.lirstPay);
+        $("#FirstPay").val(Items.firstPay);
         $("#PayMonth").val(Items.payMonth);
+        $("#MoneyRateCl").val(Items.moneyRate)
+        $("#Deposit").val(Items.deposit)
+        $("#DepositCl").val(Items.deposit)
+        $("#Principal").val(Items.principal)
         var form = $("#formInpLoan");
         var checkedValue = $('input[name=rdBonus]:checked', form).val();
         var valueRbBonusU = $("#rbBonusU").val();
-        if (valueRbBonusU == (checkedValue)) {        
-
+        if (valueRbBonusU == (checkedValue)) {
+            $("#rbBonusU_Result").attr('checked', true);
             $('#BonusCl').attr("disabled", false);
             $('#BonusFirstMonth').attr("disabled", false);
             $('#BonusSecondMonth').attr("disabled", false);
             $('#BonusTimes').attr("disabled", false);
-
+            $('#BonusTimes').val(Items.bonusTimes)
+            $('#BonusCl').val(Items.bonus)
             $('#BonusCl').css('background-color', TRUE_COLOR);
             $('#BonusFirstMonth').css('background-color', TRUE_COLOR);
+            $('#BonusFirstMonth').val(Items.bonusFirst)
             $('#BonusSecondMonth').css('background-color', TRUE_COLOR);
-            $('#BonusTimes').css('background-color', TRUE_COLOR);
-
+            $('#BonusSecondMonth').val(Items.bonusSecond)
         } else {
+            $("#rbBonusM_Result").attr('checked', true);
             $('#BonusCl').val("");
             $('#BonusFirstMonth').val("");
             $('#BonusSecondMonth').val("");
@@ -431,6 +342,10 @@ function CalInpLoan() {
         $("#BonusTimes_old").val(Items.bonusTimes);
         $("#BonusFirstMonth_old").val(Items.bonusFirst);
         $("#BonusSecondMonth_old").val(Items.bonusSecond);
-           
+        $("#MoneyRateCl_old").val(Items.moneyRate)
+
+    } else {
+        let Items = result.data;
+        $("#Msg").text(Items.calcInfo);
     }
 };
