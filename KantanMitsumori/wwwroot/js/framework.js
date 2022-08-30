@@ -551,8 +551,8 @@ var Framework =
             }
         },
         {
-            key: "SetSelectedConstant",
-            value: function SetSelectedConstant(nameId, defaultValue) {
+            key: "SetSelectedString",
+            value: function SetSelectedString(nameId, defaultValue) {
                 let idOption = $("#" + nameId + " option");
                 if (defaultValue === null || defaultValue === "" || defaultValue === " ") {
                     idOption[0].selected == true;
@@ -563,8 +563,28 @@ var Framework =
                         let value = idOption[i].value;
                         if (value.includes(defaultValue)) {
                             $("#" + nameId + " option[value='" + value + "']").attr("selected", "selected");
-                            return;
+                            ;
                         }
+                    }
+                }
+                return;
+            }
+        },
+        {
+            key: "SetSelectedNumber",
+            value: function SetSelectedNumber(nameId, defaultValue) {
+                let idOption = $("#" + nameId + " option");
+                if (defaultValue === null || defaultValue === "" || defaultValue === " ") {
+                    idOption[0].selected == true;
+                }
+                else {
+                    let length = idOption.length;
+                    for (let i = 1; i < length; i++) {
+                        let value = idOption[i].value;
+                        if (value === defaultValue) {
+                            $("#" + nameId + " option[value='" + value + "']").attr("selected", "selected");
+                            return;
+                        }                       
                     }
                 }
                 return;
@@ -595,7 +615,7 @@ var Framework =
             key: "GoBackReloadPage",
             value: function GoBackReloadPage() {
                 window.setTimeout(window.history.back(), 2000);
-                location.reload();              
+                location.reload();
                 //console.log(idbtn);
                 //$("#" + idbtn + "").click(function () {
                 //    window.history.back();

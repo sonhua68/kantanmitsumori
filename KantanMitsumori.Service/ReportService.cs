@@ -46,8 +46,9 @@ namespace KantanMitsumori.Service
                 PdfExport pdf = new PdfExport();                
                 using (MemoryStream ms = new MemoryStream())
                 {
-                    pdf.Export(report.Document, ms);                    
+                    pdf.Export(report.Document, ms);  
                     return ResponseHelper.Ok("", "", new ReportFileModel(ms.ToArray()));
+
                 }
             }
         }

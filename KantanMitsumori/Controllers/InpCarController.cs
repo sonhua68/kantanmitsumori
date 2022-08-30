@@ -18,10 +18,9 @@ namespace KantanMitsumori.Controllers
             _appService = appService;
             _estimateService = estimateService;
             _logger = logger;
-        }     
-        #region HoaiPhong
-
-        public IActionResult Inpcar()
+        }
+        #region HoaiPhong     
+        public IActionResult Index()
         {            
             RequestInputCar res = new RequestInputCar();
             res.EstNo = "22082900004";
