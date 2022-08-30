@@ -33,5 +33,23 @@ namespace KantanMitsumori.Controllers
                 return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
             return File(model.Data, model.ContentType, model.Name);
         }
+
+        /// <summary>
+        /// Demo download memo sub report
+        /// </summary>        
+        public IActionResult DownloadMemoReport()
+        {
+
+            var result = _reportService.GetMemoSubReport();
+            if (result == null)
+                return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
+            if (result.ResultStatus != 0)
+                return ErrorAction(result);
+            var model = result.Data;
+            if (model == null)
+                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
+            return File(model.Data, model.ContentType, model.Name);
+        }
+
     }
 }
