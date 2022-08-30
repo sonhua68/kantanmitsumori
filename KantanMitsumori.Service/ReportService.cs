@@ -47,7 +47,7 @@ namespace KantanMitsumori.Service
                 using (MemoryStream ms = new MemoryStream())
                 {
                     pdf.Export(report.Document, ms);                    
-                    return ResponseHelper.Ok(new ReportFileModel(ms.ToArray()));
+                    return ResponseHelper.Ok("","",new ReportFileModel(ms.ToArray()));
                 }
             }
         }

@@ -20,7 +20,7 @@ namespace KantanMitsumori.Controllers
             _logger = logger;
         }
         #region HoaiPhong
-        public IActionResult InpHanbaiten()
+        public IActionResult Index()
         {
             RequestInputCar res = new RequestInputCar();
             res.EstNo = "22082900004";

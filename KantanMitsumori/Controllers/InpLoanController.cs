@@ -12,19 +12,19 @@ namespace KantanMitsumori.Controllers
     {
         private readonly IAppService _appService;
         private readonly IEstimateService _estimateService;
+        private readonly IInpLoanService _inpLoanService;
         private readonly ILogger<InpLoanController> _logger;
-        public InpLoanController(IAppService appService, IEstimateService estimateService,  ILogger<InpLoanController> logger)
+        public InpLoanController(IAppService appService, IEstimateService estimateService, IInpLoanService inpLoanService, ILogger<InpLoanController> logger)
         {
             _appService = appService;
             _estimateService = estimateService;
+            _inpLoanService = inpLoanService;
             _logger = logger;
-        }    
-
-      
+        }          
         #region HoaiPhong
    
      
-        public IActionResult InpLoan()
+        public IActionResult Index()
         {
             RequestInputCar res = new RequestInputCar();
             res.EstNo = "22082900004";
@@ -32,6 +32,18 @@ namespace KantanMitsumori.Controllers
             var response = _estimateService.GetDetail(res);
             return View(response.Data);
         }
+
+        [HttpPost]
+        public IActionResult CalInpLoan([FromForm] RequestCalInpLoan requestData)
+        {
+            var response =  _inpLoanService.CalInpLoan(requestData);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);    
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> UpdateInpLoan([FromForm] RequestUpdateInputCar requestData)

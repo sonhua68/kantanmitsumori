@@ -265,8 +265,8 @@
         if (parseInt(firstMonth) < 10) {
             firstMonth = firstMonth.substring(1, 2)
         }
-        Framework.SetSelectedConstant("ddlFirstYear", firstYear)
-        Framework.SetSelectedConstant("ddlFirstMonth", firstMonth)
+        Framework.SetSelectedString("ddlFirstYear", firstYear)
+        Framework.SetSelectedNumber("ddlFirstMonth", firstMonth)
         let checkCarYm = $("#hidCheckCarYm").val();
         if (checkCarYm.includes("無し")) {
             $("#chkSyaken").attr('checked', true);
@@ -276,8 +276,8 @@
             if (parseInt(syakenMonth) < 10) {
                 syakenMonth = syakenMonth.substring(1, 2)
             }
-            Framework.SetSelectedConstant("ddlSyakenYear", syakenYear)
-            Framework.SetSelectedConstant("ddlSyakenMonth", syakenMonth)
+            Framework.SetSelectedString("ddlSyakenYear", syakenYear)
+            Framework.SetSelectedNumber("ddlSyakenMonth", syakenMonth)
         }
         var milUnit = $("#hidMilUnit").val();
         console.log(milUnit)
