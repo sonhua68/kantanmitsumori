@@ -28,7 +28,7 @@ namespace KantanMitsumori.Service
             _unitOfWork = unitOfWork;
         }
 
-        public  ResponseBase<ResponseInpLoan> CalInpLoan(RequestCalInpLoan model)
+        public ResponseBase<ResponseInpLoan> CalInpLoan(RequestCalInpLoan model)
         {
             try
             {
@@ -67,7 +67,7 @@ namespace KantanMitsumori.Service
                     response.CalcInfo = simLon.CalcInfo;
                     return ResponseHelper.Ok<ResponseInpLoan>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003), response);
                 }
-               
+
 
             }
             catch (Exception ex)
@@ -115,5 +115,6 @@ namespace KantanMitsumori.Service
                 return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
+    }
        
 }
