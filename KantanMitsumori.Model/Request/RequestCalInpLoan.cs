@@ -17,5 +17,6 @@ namespace KantanMitsumori.Model.Request
         public int BonusFirst { get; set; }
         public int BonusSecond { get; set; }
         public decimal ConTax { get; set; }
+        public bool rdBonus { get; set; }
     }
 }

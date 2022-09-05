@@ -13,7 +13,7 @@ namespace KantanMitsumori.Controllers
         private readonly IAppService _appService;
         private readonly IEstimateService _estimateService;
         private readonly ILogger<InpHanbaitenController> _logger;
-        public InpHanbaitenController(IAppService appService, IEstimateService estimateService, ILogger<InpHanbaitenController> logger)
+        public InpHanbaitenController(IAppService appService, IConfiguration config, IEstimateService estimateService, ILogger<InpHanbaitenController> logger):base(config)
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -22,9 +22,10 @@ namespace KantanMitsumori.Controllers
         #region HoaiPhong
         public IActionResult Index()
         {
-            RequestInputCar res = new RequestInputCar();
-            res.EstNo = "22082900004";
-            res.EstSubNo = "01";
+            RequestInputCar res = new RequestInputCar();         
+            res.EstNo =_logToken.EstNo;
+            res.EstSubNo = _logToken.EstSubNo;
+            res.UserNo = "00000001";
             var response = _estimateService.GetDetail(res);
             return View(response.Data);
         }    

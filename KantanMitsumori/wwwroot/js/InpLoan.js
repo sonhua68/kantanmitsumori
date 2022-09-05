@@ -8,6 +8,7 @@ const maxrate = 20;
 const defrate = 3.9;
 const mintimes = 6;
 const maxtimes = 84;
+setInitialValue();
 function setInitialValue() {
     chgBonus();
     chgBonus_Result();
@@ -102,10 +103,10 @@ function chgBonus_Result() {
     }
 }
 function chgBonusMonth(mode) {
+    let value = $("#cbBonusSecond").val();
     for (let i = 0; i <= 12; i++) {
         $("#cbBonusSecond option[value='"+i+"']").remove();
-    }  
-
+    }
     let bf = $('#cbBonusFirst').val();
     if (bf == "6" || bf == "7" || bf == "8" || bf == "9") {
         $("#cbBonusSecond").append(new Option("", "0"));
@@ -121,7 +122,7 @@ function chgBonusMonth(mode) {
         $("#cbBonusSecond").append(new Option("9", "9")); 
     
     }
-
+    $("#cbBonusSecond option[value='" + value + "']").attr("selected", "selected");
     if (mode != 'PostBack') {
         $('#hidBonusSecond').val("0");
     }
@@ -135,13 +136,23 @@ function chgBonusSecond() {
 function calcGankin() {
     var SalesSum = parseFloat($("#lbl_SalesSum").val());
     var Deposit = parseFloat($("#Deposit").val());
-    $("#lbl_Principal").val(SalesSum - Deposit);
+    if (!isNaN(Deposit)) {
+        $("#lbl_Principal").val(SalesSum - Deposit);
+    } else {
+        $("#lbl_Principal").val(SalesSum);
+    }
+ 
 }
 
 function calcResultGankin() {
     var SalesSum = parseFloat($("#SaleSumCl").val());
     var Deposit = parseFloat($("#DepositCl").val());
-    $("#Principal").val(SalesSum - Deposit);
+    if (!isNaN(Deposit)) {
+        $("#Principal").val(SalesSum - Deposit);
+    } else {
+        $("#Principal").val(SalesSum);
+    }
+   
 }
 
 function btPayTimesUp_onclick() {  
@@ -267,6 +278,9 @@ function format(val, digit, flg) {
 
 function CalInpLoan() {
     $("#Msg").text("");
+    $("#chkProhibitAutoCalc").attr('checked', false);
+    let rdBonus = $("input[type='radio'][name='rdBonus']:checked").val() == "rbBonusU" ? true : false;
+    console.log(rbBonusU)
     var model = {};
     model.SaleSumPrice = $("#lbl_SalesSum").val();
     model.Deposit = $("#Deposit").val();
@@ -274,6 +288,7 @@ function CalInpLoan() {
     model.PayTimes = $("#PayTimes").val();
     model.ConTax = $("#hidTaxRatio").val();
     model.FirstMonth = $("#cbFirstMonth").val();
+    model.rdBonus = rdBonus;
     var form = $("#formInpLoan");
     var checkedValue = $('input[name=rdBonus]:checked', form).val();
     var valueRbBonusU = $("#rbBonusU").val();
@@ -312,6 +327,7 @@ function CalInpLoan() {
             $('#BonusSecondMonth').attr("disabled", false);
             $('#BonusTimes').attr("disabled", false);
             $('#BonusTimes').val(Items.bonusTimes)
+            $('#BonusTimes').css('background-color', TRUE_COLOR);
             $('#BonusCl').val(Items.bonus)
             $('#BonusCl').css('background-color', TRUE_COLOR);
             $('#BonusFirstMonth').css('background-color', TRUE_COLOR);
@@ -346,6 +362,10 @@ function CalInpLoan() {
 
     } else {
         let Items = result.data;
-        $("#Msg").text(Items.calcInfo);
+        if (typeof (Items) != "undefined") {          
+            $("#Msg").html(Items.calcInfo)
+        } else {
+            location.reload();
+        }
     }
 };

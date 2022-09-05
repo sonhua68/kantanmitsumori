@@ -166,27 +166,33 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
             return ListMonth.ToList();
         }
-        public static List<DropDownList> DropDownBonusSecond(bool isEmpty, int month)
+        public static List<DropDownList> DropDownBonusSecond(bool isEmpty, string month)
         {
             var ListMonth = new List<DropDownList>();
-            var isCheck = (month == 1 || month == 2 || month == 12);
-            if ((isEmpty) & isCheck)
+            if (!string.IsNullOrEmpty(month))
             {
-                ListMonth.Add(new DropDownList { Value = "0", Text = "" });
-            }
-            if (month == 6 || month == 7 || month == 8 || month == 9)
-            {
-                ListMonth.Add(new DropDownList { Value = 12, Text = "12" });
-                ListMonth.Add(new DropDownList { Value = 1, Text = "1" });
-                ListMonth.Add(new DropDownList { Value = 2, Text = "2" });
-            }
-            else if (isCheck)
-            {
-                for (int i = 6; i <= 9; i++)
+                int m = int.Parse(month);
+
+                var isCheck = (m == 1 || m == 2 || m == 12);
+                if ((isEmpty) & isCheck)
                 {
-                    ListMonth.Add(new DropDownList { Value = i, Text = i.ToString() });
+                    ListMonth.Add(new DropDownList { Value = "0", Text = "" });
+                }
+                if (m == 6 || m == 7 || m == 8 || m == 9)
+                {
+                    ListMonth.Add(new DropDownList { Value = 12, Text = "12" });
+                    ListMonth.Add(new DropDownList { Value = 1, Text = "1" });
+                    ListMonth.Add(new DropDownList { Value = 2, Text = "2" });
+                }
+                else if (isCheck)
+                {
+                    for (int i = 6; i <= 9; i++)
+                    {
+                        ListMonth.Add(new DropDownList { Value = i, Text = i.ToString() });
+                    }
                 }
             }
+
 
             return ListMonth.ToList();
         }

@@ -286,6 +286,7 @@ var Framework =
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
+                        location.reload();
                         //result.success = false;
                         //result.responseText = xhr.status + ' ' + thrownError;
                     }
@@ -308,6 +309,7 @@ var Framework =
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
+                        location.reload();
                         //result.success = false;
                         //result.responseText = xhr.status + ' ' + thrownError;
                     }
@@ -331,6 +333,7 @@ var Framework =
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
+                        location.reload();
                         //result.success = false;
                         //result.responseText = xhr.status + ' ' + thrownError;
                     }
@@ -355,6 +358,7 @@ var Framework =
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
+                        location.reload();
                         //result.success = false;
                         //result.responseText = xhr.status + ' ' + thrownError;
                     }
@@ -615,7 +619,7 @@ var Framework =
             key: "GoBackReloadPage",
             value: function GoBackReloadPage() {
                 window.setTimeout(window.history.back(), 2000);
-                location.reload();
+                location.reload(true);
                 //console.log(idbtn);
                 //$("#" + idbtn + "").click(function () {
                 //    window.history.back();

@@ -13,12 +13,13 @@
         public string? LastPayMonth { get; set; }
         public int FirstPay { get; set; }
         public int PayMonth { get; set; }
-        public int Bonus { get; set; }
-        public string? BonusFirst { get; set; }
-        public string? BonusSecond { get; set; }
+        public int BonusCl { get; set; }
+        public string? BonusFirstMonth { get; set; }
+        public string? BonusSecondMonth { get; set; }
         public int BonusTimes { get; set; }
         public int PayTimes { get; set; }
         public int LoanModifyFlag { get; set; }
         public int chkProhibitAutoCalc { get; set; }
+        public string? rdBonus_Result { get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace KantanMitsumori.IService
     public interface IInpLoanService
     {   
         ResponseBase<ResponseInpLoan> CalInpLoan(RequestCalInpLoan model);
-        Task<ResponseBase<int>> UpdateInputLoan(RequestUpdateInpLoan model);
+        Task<ResponseBase<string>> UpdateInputLoan(RequestUpdateInpLoan model);
     }
 }

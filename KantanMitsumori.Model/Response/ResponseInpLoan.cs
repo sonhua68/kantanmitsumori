@@ -37,9 +37,9 @@ namespace KantanMitsumori.Model.Response
     
         public long Bonus { get; set; }
     
-        public int BonusFirst { get; set; }
+        public string? BonusFirst { get; set; }
      
-        public int BonusSecond { get; set; }
+        public string? BonusSecond { get; set; }
     
         public decimal ConTax { get; set; }
       

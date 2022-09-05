@@ -1,48 +1,71 @@
-﻿
+﻿@using KantanMitsumori.Models
 @{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = "かんたん見積";
 }
+@model ErrorViewModel
 
-<h1>Error</h1>
 
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" >
-<head runat="server">
+<!DOCTYPE html>
+<html>
+<head>
     <title>かんたん見積</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS" />
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="Cache-Control" content="no-cache" />
-    <meta http-equiv="Expires" content="Sun, 10 Jan 1990 01:01:01 GMT" />
-	<meta name="content-language" content="ja" />
-	<meta http-equiv="Content-Script-Type" content="text/javascript" />
-	<meta http-equiv="Content-Style-Type" content="text/css" />
-	<meta name="MSSmartTagsPreventParsing" content="true" />
-	<meta http-equiv="imagetoolbar" content="false" />
-    <link rel="stylesheet" type="text/css" href="./css/EstStyle.css" />
-    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+
+    <!-- Remove Tap Highlight on Windows Phone IE -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <link rel="shortcut icon" href="~/favicon.ico">
+    <!-- Add css bootstrap-->
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/lib/bootstrap/dist/css/docs.css" rel="stylesheet">
+    <script src="~/lib/bootstrap/dist/css/bootstrap.bundle.min.js"></script>
+    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.css" rel="stylesheet" />
+
+    <!-- custom bootstrap-->
+    <link href="~/css/site.css" rel="stylesheet" />
+    <!-- add jquery -->
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <!--Custom js-->
+    <script src="~/js/framework.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/css/estmain.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 </head>
 <body>
-    <asp:Image ID="imgIcon" runat="server" Height="32px" ImageUrl="./img/BlankLogoMini.png"
-        Style="left: 680px; position: absolute; top: 3px" Width="41px" />
-    <asp:Image ID="Image2" runat="server" Height="32px" ImageUrl="./img/HeadTitle.gif"
-        Style="left: 123px; position: absolute; top: 4px" Width="187px" />
-    <form id="form1" runat="server">
-    <div>
-        <asp:label id="Label34" style="Z-INDEX: 100; LEFT: 16px; POSITION: absolute; TOP: 67px" runat="server"
-						CssClass="InpTitle1" Width="625px" Height="116px" ForeColor="Red" Font-Bold="True" Font-Names="ＭＳ Ｐゴシック" Font-Size="12pt">エラーが発生しました。</asp:label>
-        <asp:Image ID="Image1" runat="server" Height="36px" ImageUrl="~/img/BlankLogo.png" Style="z-index: 100;
-            left: 2px; position: absolute; top: 1px" Width="110px" />
-        &nbsp;&nbsp;
-        <a href="javascript:closeWin();" ><img src="img/btn閉じる.png" class="imgBtn" alt="" style="z-index: 102; left: 19px; position: absolute; top: 256px" /></a>
-        <asp:Label ID="lblInfoMessage" runat="server" CssClass="InpTitle1" Font-Bold="False"
-            Font-Names="ＭＳ Ｐゴシック" Font-Size="11pt" ForeColor="Red" Height="99px" Style="z-index: 100;
-            left: 25px; position: absolute; top: 98px" Width="625px" Visible="False">エラーの原因は・・・</asp:Label>
-        <asp:Label ID="lblExitMessage" runat="server" CssClass="InpTitle1" Font-Bold="False" Font-Names="ＭＳ Ｐゴシック"
-            Font-Size="11pt" ForeColor="Red" Height="23px" Style="z-index: 100; left: 18px;
-            position: absolute; top: 230px" Width="400px">「閉じる」ボタンを押して、かんたん見積を終了してください。</asp:Label>
+    <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <img id="imgIcon" src="~/img/BlankLogoMini.png" style="height:32px;width:41px;border-width:0px;left: 680px; position: absolute; top: 3px" />
+            <img id="Image2" src="~/img/HeadTitle.gif" style="height:32px;width:187px;border-width:0px;left: 123px; position: absolute; top: 4px" />
+            <br />
+            <form name="form1" href="/" id="form1" class="col-12">
+                <div class="form-group">
+                    <span id="Label34" class="InpTitle1" style="display:inline-block;color:Red;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:116px;width:625px;Z-INDEX: 100; LEFT: 16px; POSITION: absolute; TOP: 67px">
+                        @Model.MessageContent
+                        <br>ASNET/店頭商談NETの元の画面から本サービスを起動して下さい。<br>（エラー番号：@Model.MessageCode）
+                    </span>
+                    <img id="Image1" src="~/img/BlankLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
+            left: 2px; position: absolute; top: 1px" />
+                    &nbsp;&nbsp;
+                    <a id="closeWin" href="javascript:closeWin();">
+                        <img src="~/img/btn閉じる.png" class="imgBtn" alt="" style="z-index: 102; left: 19px; position: absolute; top: 256px" />
+                    </a>
+                    <span id="lblExitMessage" class="InpTitle1" style="display:inline-block;color:Red;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;height:23px;width:400px;z-index: 100; left: 18px;
+            position: absolute; top: 230px">「閉じる」ボタンを押して、かんたん見積を終了してください。</span>
+                </div>
+            </form>
+        </div>
     </div>
-    </form>
+    <!-- Add js bootstrap-->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>
 </html>
+
+<script>
+    $('#closeWin').click(function () {
+        location.reload("/");
+    });
+</script>

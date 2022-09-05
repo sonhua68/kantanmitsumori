@@ -14,7 +14,7 @@ namespace KantanMitsumori.Controllers
         private readonly IEstimateService _estimateService;
         private readonly IInpLoanService _inpLoanService;
         private readonly ILogger<InpLoanController> _logger;
-        public InpLoanController(IAppService appService, IEstimateService estimateService, IInpLoanService inpLoanService, ILogger<InpLoanController> logger)
+        public InpLoanController(IAppService appService, IEstimateService estimateService, IConfiguration config ,IInpLoanService inpLoanService, ILogger<InpLoanController> logger):base(config)
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -26,9 +26,10 @@ namespace KantanMitsumori.Controllers
      
         public IActionResult Index()
         {
-            RequestInputCar res = new RequestInputCar();
-            res.EstNo = "22082900004";
-            res.EstSubNo = "01";
+            RequestInputCar res = new RequestInputCar(); 
+            res.EstNo = _logToken.EstNo;
+            res.EstSubNo = _logToken.EstSubNo;
+            res.UserNo = _logToken.UserNo;
             var response = _estimateService.GetDetail(res);
             return View(response.Data);
         }

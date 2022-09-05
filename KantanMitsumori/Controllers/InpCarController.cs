@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
 {
+    [Route("[controller]/[action]")]
     public class InpCarController : BaseController
     {
         private readonly IAppService _appService;
         private readonly IEstimateService _estimateService;
         private readonly ILogger<InpCarController> _logger;
-        public InpCarController(IAppService appService, IEstimateService estimateService,  ILogger<InpCarController> logger)
+        public InpCarController(IAppService appService, IEstimateService estimateService, IConfiguration config,  ILogger<InpCarController> logger):base(config)
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -25,6 +26,7 @@ namespace KantanMitsumori.Controllers
             RequestInputCar res = new RequestInputCar();
             res.EstNo = "22082900004";
             res.EstSubNo = "01";
+            res.UserNo = "00000001";
             var response = _estimateService.GetDetail(res);
             return View(response.Data);
         }  

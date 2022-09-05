@@ -4,6 +4,7 @@ using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Infrastructure;
 using KantanMitsumori.Service;
 using Microsoft.EntityFrameworkCore;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace KantanMitsumori
 {
@@ -38,7 +39,6 @@ namespace KantanMitsumori
                 .EnableDetailedErrors()
 
             );
-
             HelperToken.Configure(Configuration);
             services.AddUnitOfWork();
             services.AddHttpClient();
