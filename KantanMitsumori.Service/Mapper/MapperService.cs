@@ -13,10 +13,10 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<MMaker, MakerModel>();
             CreateMap<MMaker, MakerModel>();
 
-            CreateMap<TEstimate, EstmateModel>().ReverseMap();
-
-            CreateMap<TEstimateSub, EstmateSubModel>().ReverseMap();
+            CreateMap<TEstimate, EstimateModel>().ReverseMap();
+            CreateMap<TEstimateSub, EstimateSubModel>().ReverseMap();
+            CreateMap<MUserDef, UserDefModel>().ReverseMap();
         }
-      
+
     }
 }

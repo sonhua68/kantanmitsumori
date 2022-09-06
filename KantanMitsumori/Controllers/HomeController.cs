@@ -38,13 +38,14 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Header()
         {
+            var userInfo = _appService.getUserName("22071200085");
+
             var mode = new LogToken();
-            mode.EstNo = "22071200085"; mode.EstSubNo = "01";
             mode.UserNo = "88888195";
             mode.UserNm = "testuser88888195";
-            var token = HelperToken.GenerateJsonToken(mode);
-            mode.Token = token;
-            setTokenCookie(token);
+            //var token = HelperToken.GenerateJsonToken(mode);
+            //mode.Token = token;
+            //setTokenCookie(token);
             return PartialView("_Header", mode);
         }
 
@@ -104,7 +105,7 @@ namespace KantanMitsumori.Controllers
             // câu truc link summit qa https://mit.autoserver.co.jp/asest2/EstMain.aspx
             //var response = await _appService.getEstMain(isInputBack, sel, request);
 
-            var response = _appService.calcSum("22071200085", "01");
+            //var response = _appService.calcSum("22071200085", "01");
             return View();
 
         }

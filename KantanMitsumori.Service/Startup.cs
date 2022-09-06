@@ -25,6 +25,7 @@ namespace KantanMitsumori.Service
         public static IServiceCollection AddHelperServices(this IServiceCollection services)
         {
             services.AddScoped<CommonFuncHelper>();
+            services.AddScoped<CommonEstimate>();
             services.AddScoped<HelperMapper>();
             return services;
         }

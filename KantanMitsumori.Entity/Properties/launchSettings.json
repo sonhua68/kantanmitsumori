@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "KantanMitsumori.Entity": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:11101;http://localhost:11102"
+    }
+  }
+}

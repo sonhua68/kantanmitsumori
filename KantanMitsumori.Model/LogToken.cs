@@ -4,8 +4,7 @@
     {
         public string UserNo { get; set; }
         public string UserNm { get; set; }
-        public string EstNo { get; set; }
-        public string EstSubNo { get; set; }
+
         public string Token { get; set; }
 
 
@@ -61,6 +60,16 @@
 
 
         public decimal sesTaxRatio { get; set; } = -1M;
+
+        public string sesCarImgPath { get; set; } // 車両画像格納場所
+        public string sesCarImgPath1 { get; set; }// 車両画像格納場所(サブ1枚目)
+        public string sesCarImgPath2 { get; set; }// 車両画像格納場所(サブ2枚目)
+        public string sesCarImgPath3 { get; set; }// 車両画像格納場所(サブ3枚目)
+        public string sesCarImgPath4 { get; set; }// 車両画像格納場所(サブ4枚目)
+        public string sesCarImgPath5 { get; set; }// 車両画像格納場所(サブ5枚目)
+        public string sesCarImgPath6 { get; set; }// 車両画像格納場所(サブ6枚目)
+        public string sesCarImgPath7 { get; set; }// 車両画像格納場所(サブ7枚目)
+        public string sesCarImgPath8 { get; set; }// 車両画像格納場所(サブ8枚目)
 
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace KantanMitsumori.Model
 {
-    public class EstmateModel
+    public class EstimateModel
     {
         public string EstNo { get; set; } = null!;
         public string EstSubNo { get; set; } = null!;
@@ -80,10 +80,10 @@
         public int Balance { get; set; }
         public int SalesSum { get; set; }
         public string CustKname { get; set; }
-        public double Rate { get; set; }
+        public decimal Rate { get; set; }
         public int Deposit { get; set; }
         public int Principal { get; set; }
-        public double PartitionFee { get; set; }
+        public decimal PartitionFee { get; set; }
         public int PartitionAmount { get; set; }
         public int PayTimes { get; set; }
         public string FirstPayMonth { get; set; }

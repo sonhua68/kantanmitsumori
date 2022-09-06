@@ -51,7 +51,7 @@ namespace KantanMitsumori.Service.Helper
         public decimal getTax(DateTime uDate, decimal taxRatio, string userNo)
         {
             string vUserNo;
-            int taxID;
+            int? taxID;
 
             if (!NULL_DATE.Equals(uDate) & SWICH_DATE > uDate)
             {
@@ -91,18 +91,18 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="inUserNo"></param>
         /// <returns></returns>
-        public int getTaxRatioID(string inUserNo)
+        public int? getTaxRatioID(string inUserNo)
         {
             try
             {
-                var taxRatioId = _unitOfWork.TaxRatioDefs.GetSingleOrDefault(t => t.UserNo == inUserNo).TaxRatioId.GetValueOrDefault();
+                var taxRatio = _unitOfWork.TaxRatioDefs.GetSingle(t => t.UserNo == inUserNo);
 
-                if (string.IsNullOrEmpty(taxRatioId.ToString()))
+                if (taxRatio == null || string.IsNullOrEmpty(taxRatio.TaxRatioId.ToString()))
                 {
                     return -1;
                 }
 
-                return taxRatioId;
+                return taxRatio!.TaxRatioId;
             }
             catch (Exception ex)
             {
@@ -121,9 +121,9 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                var taxRatioId = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.Query(x => x.UserNo == inUserNo && x.Dflag == false));
+                var taxRatioId = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.GetSingle(x => x.UserNo == inUserNo && x.Dflag == false));
 
-                return ResponseHelper.Ok<UserDefModel>("Error", "CUSR-010D", taxRatioId);
+                return ResponseHelper.Ok<UserDefModel>("OK", "CUSR-010D", taxRatioId);
             }
             catch (Exception ex)
             {
@@ -183,5 +183,29 @@ namespace KantanMitsumori.Service.Helper
                 return false;
             }
         }
+
+        public bool GetCornerType(string inCor, int intCornerType)
+        {
+            try
+            {
+                var getTbSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
+
+                if (!Information.IsDBNull(getTbSys.Corner))
+                {
+                    intCornerType = getTbSys.CornerType;
+                }
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CommonFuncs - GetCornerType - GCMF-090D");
+                return false;
+            }
+
+            return true;
+        }
+
+
     }
 }

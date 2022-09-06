@@ -142,7 +142,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="mDDate"></param>
         /// <returns></returns>
-        public string DateFormatZero(string mDDate)
+        public static string DateFormatZero(string mDDate)
         {
             if (Left(mDDate, 1) == "0")
             {
@@ -161,7 +161,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="strDay"></param>
         /// <param name="year"></param>
         /// <param name="month"></param>
-        public void FormatDay(string strDay, string year, string month)
+        public static void FormatDay(string strDay, string year, string month)
         {
             int leday = strDay.Replace("/", "").Length;
             switch (leday)
@@ -483,7 +483,54 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return NONE;
         }
 
+        public static void chkImgFile(string imgPath, string strSesName, string strDefImg)
+        {
+            if (Strings.Trim(imgPath) == "" || File.Exists(imgPath) == false)
+            {
+                strSesName = strDefImg;
+            }
+            else
+            {
+                int maxIndx = imgPath.Split(@"\").GetUpperBound(0);   // 切り分けて格納した配列の最後尾を取得
+                                                                      // 上で取得したファイル部分を置換してpathのみを取り出し、ファイルをgetする(最終確認の為)
+                foreach (string nFileName in Directory.GetFiles(Strings.Replace(imgPath, (string?)imgPath.Split(@"\").GetValue(maxIndx), "")))
+                    strSesName = imgPath;
+            }
+        }
 
+        // **************************************************************************
+        // * フォーマット処理
+        // **************************************************************************
+        public static string setFormat(long param, string unit, string formatParm)
+        {
+            formatParm = Convert.ToString(Strings.Format(param, "#,##0") + unit);
+            return formatParm;
+        }
 
+        /// <summary>
+        /// 西暦を和暦に変換する(年のみ)
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public static string getWareki(string year)
+        {
+            if (!Information.IsNumeric(Strings.Trim(year)))
+            {
+                return "";
+            }
+
+            int intYear = int.Parse(year);
+
+            string retNengo = "";
+
+            if (1926 <= intYear & intYear <= 1988)
+                retNengo = "S" + Convert.ToString(intYear - 1925);
+            else if (intYear <= 2018)
+                retNengo = "H" + Convert.ToString(intYear - 1988);
+            else if (2019 <= intYear)
+                retNengo = "R" + Convert.ToString(intYear - 2018);
+
+            return retNengo;
+        }
     }
 }
