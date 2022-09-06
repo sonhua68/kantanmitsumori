@@ -25,7 +25,7 @@ namespace KantanMitsumori.Controllers
 
         }
         [Route("[controller]/[action]")]
-        public IActionResult Error([FromQuery] string messageCode, string messageContent)
+        public IActionResult ErrorPage([FromQuery] string messageCode, string messageContent)
         {
             var ErrorViewModel = new ErrorViewModel()
             {
@@ -50,7 +50,7 @@ namespace KantanMitsumori.Controllers
                         MessageCode = HelperMessage.SMAL020P,
                         MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL020P)
                     };
-                    filterContext.Result = new RedirectToActionResult("Error", "Home", ErrorViewModel);
+                    filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
                     return;
 
                 }               
@@ -61,7 +61,7 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult ErrorAction<T>(ResponseBase<T> response)
         {
-            return RedirectToAction("Error", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
+            return RedirectToAction("ErrorPage", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
         }
         /// <summary>
         ///setTokenCookie

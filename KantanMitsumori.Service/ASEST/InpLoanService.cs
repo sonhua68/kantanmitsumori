@@ -276,6 +276,7 @@ namespace KantanMitsumori.Service
             }
         }
 
+
         public string chkNumber(string strNumber, string itemName, bool isDec = false)
         {
             var ByteLength = System.Text.Encoding.GetEncoding("Shift_JIS").GetByteCount(strNumber);
