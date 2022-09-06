@@ -85,7 +85,16 @@ namespace KantanMitsumori.Service
                (row1, row2) =>
                row1.Field<string>("EstNo") == row2.Field<string>("EstNo") &&
                 row1.Field<string>("EstSubNo") == row2.Field<string>("EstSubNo"));
+
                 var data = _helperMapper.ConvertToList<ResponseInputCar>(dt).FirstOrDefault();
+                if (data!.Rate == 0)
+                {
+                    var getDetail = _unitOfWork.UserDefs.GetSingle(n => n.UserNo == requestInputCar.UserNo);
+                    if (getDetail != null)
+                    {
+                        data.Rate = getDetail.Rate;
+                    }
+                }
                 return ResponseHelper.Ok<ResponseInputCar>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
             }
             catch (Exception ex)

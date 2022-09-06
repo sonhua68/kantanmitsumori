@@ -1,24 +1,24 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
-using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using Microsoft.AspNetCore.Mvc;
+
 using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Controllers
 {
+
     public class HomeController : BaseController
     {
         private readonly IAppService _appService;
 
         private readonly ILogger<HomeController> _logger;
 
-
         private readonly IEstimateService _estimateService;
 
 
-        public HomeController(IAppService appService, IEstimateService estimateService, ILogger<HomeController> logger)
+        public HomeController(IAppService appService, IEstimateService estimateService, IConfiguration config, ILogger<HomeController> logger) : base(config)
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -35,18 +35,9 @@ namespace KantanMitsumori.Controllers
             return View();
         }
 
-
         public IActionResult Header()
         {
-            var userInfo = _appService.getUserName("22071200085");
-
-            var mode = new LogToken();
-            mode.UserNo = "88888195";
-            mode.UserNm = "testuser88888195";
-            //var token = HelperToken.GenerateJsonToken(mode);
-            //mode.Token = token;
-            //setTokenCookie(token);
-            return PartialView("_Header", mode);
+            return PartialView("_Header", _logToken);
         }
 
         [HttpPost]
@@ -128,6 +119,7 @@ namespace KantanMitsumori.Controllers
             var response = _estimateService.GetDetail(res);
             return View(response.Data);
         }
+
         public IActionResult InpHanbaiten()
         {
             RequestInputCar res = new RequestInputCar();
@@ -146,6 +138,7 @@ namespace KantanMitsumori.Controllers
             }
             return Ok(response);
         }
+
         [HttpPost]
         public async Task<IActionResult> UpdateInpHanbaiten([FromForm] RequestUpdateInpHanbaiten requestData)
         {
@@ -156,6 +149,8 @@ namespace KantanMitsumori.Controllers
             }
             return Ok(response);
         }
-        #endregion HoaiPhong
+
+        #endregion
     }
 }
+

@@ -232,7 +232,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="chkData"></param>
         /// <returns></returns>
-        public string DateFormat(string chkData)
+        public static string DateFormat(string chkData)
         {
             if (chkData.Length == 1)
             {
@@ -326,6 +326,23 @@ namespace KantanMitsumori.Helper.CommonFuncs
             else
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// FormatString
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static string FormatString(int? value)
+        {
+            if (value == 0)
+            {
+                return "";
+            }
+            else
+            {
+                return value.ToString()!;
             }
         }
 

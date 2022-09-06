@@ -8,6 +8,7 @@ namespace KantanMitsumori.Service.Helper
     {
         private readonly ILogger _logger;
 
+        #region Model
         // 販売価格計
         public int SaleSumPrice { get; set; }
         // 車両本体価格
@@ -28,6 +29,7 @@ namespace KantanMitsumori.Service.Helper
         public int Balance { get; set; }
         // 頭金
         public int Deposit { get; set; }
+
         // 金利
         public decimal MoneyRate { get; set; }
         // 支払回数
@@ -86,6 +88,8 @@ namespace KantanMitsumori.Service.Helper
         // 計算後メッセージ
         public string CalcInfo { get; set; }
 
+        #endregion model
+
         public CommonSimLon(ILogger logger)
         {
             _logger = logger;
@@ -112,6 +116,7 @@ namespace KantanMitsumori.Service.Helper
                     AddonDisp = ToHalfAjust(vAddon * 100, 2);
                     // --分割払分手数料(小数点以下切捨て)
                     Fee = (int)ToRoundDown(Principal, vAddon, 0);
+
                 }
 
                 // 支払合計額        
@@ -127,6 +132,7 @@ namespace KantanMitsumori.Service.Helper
                 PartitionPayTotal = PayTotal - BonusTotal;
                 // 第2回目以降分割支払金(100円未満切捨て)
                 PayMonth = (int)ToRoundDown(PartitionPayTotal / (decimal)PayTimes, -2);
+
                 // 第1回目分割支払金
                 FirstPay = PartitionPayTotal - PayMonth * (PayTimes - 1);
 
@@ -193,7 +199,6 @@ namespace KantanMitsumori.Service.Helper
             return true;
         }
 
-
         // **************************************************************************
         // * 小数点以下指定桁未満を四捨五入
         // **************************************************************************
@@ -253,6 +258,8 @@ namespace KantanMitsumori.Service.Helper
             decimal dCoef = (decimal)Math.Pow(10, iDigits);
             int intR = (int)(inSgl * 10000);
             decimal dValue = inint * intR / (decimal)10000;
+
+
             if (dValue > 0)
                 return Math.Floor(dValue * dCoef) / dCoef;
             else
@@ -263,14 +270,15 @@ namespace KantanMitsumori.Service.Helper
         // **************************************************************************
         public int chgNullToZeroLng(string val)
         {
-
             // 前後の空白除去
             val = Strings.Trim(val);
 
             if (val == "")
                 return 0;
             else
+
                 return Convert.ToInt32(val);
+
         }
     }
 }

@@ -49,6 +49,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return null;
             }
         }
+
         public static string GenerateJsonToken(LogToken model)
         {           
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config!["JwtSettings:Key"]));
