@@ -61,7 +61,7 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult ErrorAction<T>(ResponseBase<T> response)
         {
-            return RedirectToAction("ErrorPage", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
+            return new RedirectToActionResult("ErrorPage", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
         }
         /// <summary>
         ///setTokenCookie

@@ -7,10 +7,11 @@ namespace KantanMitsumori.IService
 {
     public interface IEstimateService
     {
-        ResponseBase<List<TEstimate>> GetList(RequestInputCar requestInputCar);
-        ResponseBase<ResponseInputCar> GetDetail(RequestInputCar requestInputCar);
+        ResponseBase<List<TEstimate>> GetList(RequestInp requestInputCar);
+        ResponseBase<ResponseInp> GetDetail(RequestInp requestInputCar);
         Task<ResponseBase<int>> Create(TEstimate model);
         Task<ResponseBase<int>> UpdateInputCar(RequestUpdateInputCar model);
         Task<ResponseBase<int>> UpdateInpHanbaiten(RequestUpdateInpHanbaiten model);
+        Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model);
     }
 }

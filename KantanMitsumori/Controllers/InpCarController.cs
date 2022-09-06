@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
 {
-    [Route("[controller]/[action]")]
+   
     public class InpCarController : BaseController
     {
         private readonly IAppService _appService;
@@ -20,14 +20,18 @@ namespace KantanMitsumori.Controllers
             _estimateService = estimateService;
             _logger = logger;
         }
-        #region HoaiPhong     
+        #region InpCar     
         public IActionResult Index()
         {            
-            RequestInputCar res = new RequestInputCar();
+            RequestInp res = new RequestInp();
             res.EstNo = "22082900004";
             res.EstSubNo = "01";
             res.UserNo = "00000001";
             var response = _estimateService.GetDetail(res);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
             return View(response.Data);
         }  
 
@@ -40,7 +44,7 @@ namespace KantanMitsumori.Controllers
                 return ErrorAction(response);
             }
             return Ok(response);
-        }      
-        #endregion HoaiPhong
+        }
+        #endregion InpCar
     }
 }

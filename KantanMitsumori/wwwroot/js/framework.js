@@ -300,10 +300,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
-                    data: {
-                        token: $("#Token").val(),
-                    },
+                    url: url,                    
                     async: false,
                     success: function success(r) {
                         result = r;
@@ -324,8 +321,7 @@ var Framework =
                 $.ajax({
                     type: "POST",
                     url: url,
-                    data: {
-                        token: $("#Token").val(),
+                    data: {                     
                         requestData: data
                     },
                     async: false,
@@ -349,8 +345,7 @@ var Framework =
                 $.ajax({
                     type: "POST",
                     url: url,
-                    data: {
-                        //token: $("#Token").val(),
+                    data: {                      
                         requestData: data
                     },
                     async: false,

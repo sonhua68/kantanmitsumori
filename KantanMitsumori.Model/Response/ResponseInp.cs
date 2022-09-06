@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KantanMitsumori.Model.Response
 {
-    public class ResponseInputCar
+    public class ResponseInp
     {
         public string EstNo { get; set; } = null!;
         public string EstSubNo { get; set; } = null!;
@@ -107,7 +107,7 @@ namespace KantanMitsumori.Model.Response
         public DateTime? Rdate { get; set; }
         public DateTime? Udate { get; set; }
         public bool? Dflag { get; set; }
-      
+        public string? OptionName7 { get; set; }
         public int? OptionPrice7 { get; set; }
         public string? OptionName8 { get; set; }
         public int? OptionPrice8 { get; set; }

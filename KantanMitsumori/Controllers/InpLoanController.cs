@@ -26,11 +26,15 @@ namespace KantanMitsumori.Controllers
      
         public IActionResult Index()
         {
-            RequestInputCar res = new RequestInputCar(); 
+            RequestInp res = new RequestInp(); 
             res.EstNo = _logToken.EstNo;
             res.EstSubNo = _logToken.EstSubNo;
             res.UserNo = _logToken.UserNo;
-            var response = _estimateService.GetDetail(res);
+            var response = _estimateService.GetDetail(res);           
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
             return View(response.Data);
         }
 
