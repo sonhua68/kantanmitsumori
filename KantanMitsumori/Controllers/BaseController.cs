@@ -76,7 +76,7 @@ namespace KantanMitsumori.Controllers
         public void setTokenCookie(string token)
         {
             var currentDate = DateTime.Now;
-            var RefreshExpires = _config["JwtSettings:RefreshExpires"];
+            var RefreshExpires = _config["JwtSettings:AccessExpires"];
             TimeSpan time = TimeSpan.Parse(RefreshExpires);
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
