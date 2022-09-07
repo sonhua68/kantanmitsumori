@@ -4,9 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
 {
-
-
-
     public class ReportController : BaseController
     {
         private readonly IReportService _reportService;
@@ -21,8 +18,7 @@ namespace KantanMitsumori.Controllers
         /// Demo download article sub report
         /// </summary>        
         public IActionResult DownloadArticleReport()
-        {            
-            
+        {                        
             var result = _reportService.GetArticleSubReport();
             if (result == null)
                 return ErrorAction(ResponseHelper.Error<int>("00000","Result is null."));
@@ -39,8 +35,24 @@ namespace KantanMitsumori.Controllers
         /// </summary>        
         public IActionResult DownloadMemoReport()
         {
-
             var result = _reportService.GetMemoSubReport();
+            if (result == null)
+                return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
+            if (result.ResultStatus != 0)
+                return ErrorAction(result);
+            var model = result.Data;
+            if (model == null)
+                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
+            return File(model.Data, model.ContentType, model.Name);
+        }
+
+        /// <summary>
+        /// Demo download Est sub report
+        /// </summary>        
+        public IActionResult DownloadEstReport()
+        {
+
+            var result = _reportService.GetEstReport();
             if (result == null)
                 return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
             if (result.ResultStatus != 0)
