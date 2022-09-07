@@ -10,6 +10,7 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Data;
 
 namespace KantanMitsumori.Service
@@ -77,19 +78,19 @@ namespace KantanMitsumori.Service
                 if (estimates == null || estimatesSub == null)
                 {
                     return ResponseHelper.Error<ResponseInp>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
-                }                
+                }
                 var dt = _helperMapper.JoinDataTables(_helperMapper.ToDataTable(estimates), _helperMapper.ToDataTable(estimatesSub),
                (row1, row2) =>
                row1.Field<string>("EstNo") == row2.Field<string>("EstNo") &&
                 row1.Field<string>("EstSubNo") == row2.Field<string>("EstSubNo"));
-                var data = _helperMapper.ConvertToList<ResponseInp>(dt).FirstOrDefault();  
-                if(data!.Rate == 0)
+                var data = _helperMapper.ConvertToList<ResponseInp>(dt).FirstOrDefault();
+                if (data!.Rate == 0)
                 {
                     var getDetail = _unitOfWork.UserDefs.GetSingle(n => n.UserNo == requestInputCar.UserNo);
                     if (getDetail != null)
                     {
                         data.Rate = getDetail.Rate;
-                    }                  
+                    }
                 }
                 return ResponseHelper.Ok<ResponseInp>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
             }
@@ -189,7 +190,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public  async Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model)
+        public async Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model)
         {
             try
             {
@@ -230,6 +231,41 @@ namespace KantanMitsumori.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInpOption");
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+
+        public async Task<ResponseBase<int>> UpdateInpZeiHoken(RequestUpdateInpZeiHoken model)
+        {
+            try
+            {
+                TEstimate dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
+                TEstimateSub dtEstimateSubs = _unitOfWork.EstimateSubs.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
+                if (dtEstimates == null || dtEstimateSubs == null)
+                {
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
+                dtEstimates.AutoTax = model.MeiCarTax;
+                dtEstimates.AcqTax = model.MeiGetTax;
+                dtEstimates.WeightTax = model.MeiWeightTax;
+                dtEstimates.DamageIns = model.MeiJibaiHoken;
+                dtEstimates.OptionIns = model.MeiNiniHoken;
+                dtEstimates.TaxInsAll = model.TaxInsAll;
+
+                dtEstimateSubs.AutoTaxMonth = model.ddlCarTaxMonth;
+                dtEstimateSubs.DamageInsMonth = model.ddlJibaiHokenMonth;
+                dtEstimateSubs.AutoTaxEquivalent = model.MeiCarTaxEquivalent;
+                dtEstimateSubs.DamageInsEquivalent = model.MeiJibaiHokenEquivalent;
+                dtEstimateSubs.TaxInsEquivalentAll = model.TaxInsEquivalentAll;
+
+                _unitOfWork.Estimates.Update(dtEstimates);
+                _unitOfWork.EstimateSubs.Update(dtEstimateSubs);
+                await _unitOfWork.CommitAsync();
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateInpZeiHoken");
                 return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }

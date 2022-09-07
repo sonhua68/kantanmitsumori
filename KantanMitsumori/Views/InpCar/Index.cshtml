@@ -7,7 +7,7 @@
     var listMonth = DropDownList.ListMonth(true);
     var ListDropDownSyakenYM = DropDownList.ListDropDownSyakenYM(true);
     var ListDropDownFirstYM = DropDownList.ListDropDownFirstYM(true);
-    var NowOdometer = Model.NowOdometer == 0 ? "" : Model.NowOdometer.ToString();
+    var NowOdometer = CommonFunction.FormatString(Model.NowOdometer);
 }
 <form id="formInputCar">
     <table border="0" width="100%">
@@ -307,8 +307,4 @@
 
     }
 
-</script>
-
-<script>
-    $("#header").load("/Home/Header")
 </script>

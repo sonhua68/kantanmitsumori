@@ -13,5 +13,6 @@ namespace KantanMitsumori.IService
         Task<ResponseBase<int>> UpdateInputCar(RequestUpdateInputCar model);
         Task<ResponseBase<int>> UpdateInpHanbaiten(RequestUpdateInpHanbaiten model);
         Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model);
+        Task<ResponseBase<int>> UpdateInpZeiHoken(RequestUpdateInpZeiHoken model);
     }
 }

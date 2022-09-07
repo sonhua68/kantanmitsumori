@@ -224,6 +224,11 @@ function swichUnit(element) {
         document.getElementById('txt' + element).style.visibility = 'hidden';
     }
 }
+/*
+ * StringNull
+ *  Create By HoaiPhong
+ *  Date 2022/09/07
+ /*/
 
 function StringNull(value) {
     if (value == '0' || value == 0) {
@@ -231,4 +236,86 @@ function StringNull(value) {
     } else {
         return value;
     }
+}
+/*
+ * isNumeric
+ *  Create By HoaiPhong
+ *  Date 2022/09/07
+ /*/
+function isNumeric(str) {
+    if (typeof str != "string") return false
+    return !isNaN(str) &&
+        !isNaN(parseFloat(str))
+}
+/*
+ * getWareki
+ *  Create By HoaiPhong
+ *  Date 2022/09/07
+ /*/
+function getWareki(str) {
+    let isYear = isNumeric(str);
+    if (isYear) {
+        let intYear = parseInt(str)
+        if (1926 <= intYear & intYear <= 1988) {
+            return "S" + (intYear - 1925);
+        } else if (intYear <= 2018) {
+            return "H" + (intYear - 1988);
+        } else if (2019 <= intYear) {
+            return "R" + (intYear - 2018);
+        }
+    }
+   
+}
+const def_Space = "    "
+/*
+ * FormatDayGetYear
+ *  Create By HoaiPhong
+ *  Date 2022/09/07
+ /*/
+function FormatDayGetYear(str) {
+    let vlength = str.length;
+    var year = "";
+    switch (vlength) {     
+        case 2:
+            year = def_Space; 
+            break;
+        case 1:
+            year = def_Space; 
+            break;
+        case 0:
+            year = def_Space;  
+            break;
+        default:
+            year = str.toString().substring(0, 4);  
+            return year
+    }
+}
+
+/*
+ * FormatDayGetMonth
+ *  Create By HoaiPhong
+ *  Date 2022/09/07
+ /*/
+function FormatDayGetMonth(str) {
+    let vlength = str.length;
+    var month = "";
+    switch (vlength) {
+        case 5:
+            month = str.toString().substring(4, 5);
+            break;
+        case 4:
+            month = def_Space;
+            break;
+        case 2:
+            month = def_Space;
+            break;
+        case 0:
+            month = def_Space;
+            break;
+       
+        default:
+            month = str.toString().substring(4, 6);
+            return month
+    }
+
 }
