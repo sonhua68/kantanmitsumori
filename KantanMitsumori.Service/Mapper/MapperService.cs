@@ -2,6 +2,7 @@
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
+using KantanMitsumori.Model.Response;
 
 namespace KantanMitsumori.Service.Mapper
 {
@@ -16,6 +17,7 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<TEstimate, EstimateModel>().ReverseMap();
             CreateMap<TEstimateSub, EstimateSubModel>().ReverseMap();
             CreateMap<MUserDef, UserDefModel>().ReverseMap();
+            CreateMap<MUser, UserModel>().ReverseMap();
         }
 
     }

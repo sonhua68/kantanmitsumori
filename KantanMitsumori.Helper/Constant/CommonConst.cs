@@ -2,6 +2,9 @@
 {
     public class CommonConst
     {
+
+        public const string def_DmyImg = "D:/asest2/CarImg/CarImgDummy.jpg";
+
         /// <summary>
         /// タイトル
         /// ※プログラムで制御してセットする必要がある場合は定数を使用

@@ -1,9 +1,6 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
-using KantanMitsumori.Helper.Enum;
+﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
-using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
-using KantanMitsumori.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -13,7 +10,7 @@ namespace KantanMitsumori.Controllers
         private readonly IAppService _appService;
         private readonly IEstimateService _estimateService;
         private readonly ILogger<InpHanbaitenController> _logger;
-        public InpHanbaitenController(IAppService appService, IConfiguration config, IEstimateService estimateService, ILogger<InpHanbaitenController> logger):base(config)
+        public InpHanbaitenController(IAppService appService, IConfiguration config, IEstimateService estimateService, ILogger<InpHanbaitenController> logger) : base(config)
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -22,13 +19,13 @@ namespace KantanMitsumori.Controllers
         #region HoaiPhong
         public IActionResult Index()
         {
-            RequestInputCar res = new RequestInputCar();         
-            res.EstNo =_logToken.EstNo;
-            res.EstSubNo = _logToken.EstSubNo;
+            RequestInputCar res = new RequestInputCar();
+            res.EstNo = _logToken.sesEstNo;
+            res.EstSubNo = _logToken.sesEstSubNo;
             res.UserNo = "00000001";
             var response = _estimateService.GetDetail(res);
             return View(response.Data);
-        }    
+        }
         [HttpPost]
         public async Task<IActionResult> UpdateInpHanbaiten([FromForm] RequestUpdateInpHanbaiten requestData)
         {

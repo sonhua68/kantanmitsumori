@@ -549,5 +549,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
             return retNengo;
         }
+
     }
 }

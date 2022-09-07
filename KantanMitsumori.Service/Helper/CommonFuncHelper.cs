@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
+using System.Net;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -138,7 +138,7 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="vEncNo"></param>
         /// <param name="vDecNo"></param>
         /// <returns></returns>
-        public bool DecUserNo(string vEncNo, string vDecNo)
+        public bool DecUserNo(string vEncNo, ref string vDecNo)
         {
             string wOne = "";
             string wStr = "";
@@ -148,9 +148,10 @@ namespace KantanMitsumori.Service.Helper
             try
             {
                 // 文字数分ループ
-                for (i = 1; i < vEncNo.Length; i++)
+                for (i = 1; i <= vEncNo.Length; i++)
                 {
-                    wOne = CommonFunction.Mid(vEncNo, i, 1);
+                    wOne = Strings.Mid(vEncNo, i, 1);
+
                     // 取り出した文字が英小文字(a～z)の場合
                     if (Strings.Asc(wOne) >= 97 && Strings.Asc(wOne) <= 122)
                     {
@@ -206,6 +207,156 @@ namespace KantanMitsumori.Service.Helper
             return true;
         }
 
+        public bool GetAACount(string inCor, ref int intAACount)
+        {
+            try
+            {
+                var getSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
 
+                if (getSys != null)
+                {
+                    intAACount = (int)getSys.Aacount;
+                }
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CommonFuncs - GetAACount - GCMF-090D");
+                return false;
+            }
+            return true;
+        }
+
+        // ***************************************************************************
+        // * 画像のダウンロード
+        // ***************************************************************************
+        // 2011/04/12 商談メモ対応画像枚数追加
+        // 2017/08/24 画像の保存名を指定できるようにI/F変更。指定されなかった場合は、URLのファイル名を利用する。
+        public void DownloadImg(string url, string SesName, string DefImage, ref string fileName, string strSaveName)
+        {
+            try
+            {
+                // WebRequestの作成
+                HttpWebRequest webreq = (HttpWebRequest)WebRequest.Create(url);
+
+                string strCarImgPlace;
+                // 画像用に年月フォルダを作成する。
+                strCarImgPlace = "D:/asest2/CarImg/";
+                strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMM") + @"\";
+                if (!Directory.Exists(strCarImgPlace))
+                {
+                    Directory.CreateDirectory(strCarImgPlace);
+                }
+                // 画像用に年月日フォルダを作成する。
+                strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMMdd") + @"\";
+                if (!Directory.Exists(strCarImgPlace))
+                {
+                    Directory.CreateDirectory(strCarImgPlace);
+                }
+
+                // 保存先のファイル名
+                if (string.IsNullOrEmpty(strSaveName))
+                {
+                    fileName = strCarImgPlace + webreq.RequestUri.Segments.LastOrDefault();
+                }
+                else
+                {
+                    fileName = Path.Combine(strCarImgPlace, strSaveName);
+                }
+                // fileName = def_CarImgPlace & webreq.RequestUri.Segments(leng - 1)
+
+                // サーバーからの応答を受信するためのWebResponseを取得
+                HttpWebResponse webres = (HttpWebResponse)webreq.GetResponse();
+
+                // 応答データを受信するためのStreamを取得
+                Stream strm = webres.GetResponseStream();
+
+                // ファイルに書き込むためのFileStreamを作成
+                var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+
+                // 応答データをファイルに書き込む
+                int b;
+                while (true)
+                {
+                    b = strm.ReadByte();
+                    if (b == -1)
+                        break;
+                    fs.WriteByte(Convert.ToByte(b));
+                }
+
+                // 閉じる
+                fs.Close();
+                strm.Close();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CommonFuncs - DownloadImg - GCMF-030F 取得失敗 " + url);
+            }
+        }
+
+
+        // 商談メモ画像枚数追加
+        public void CheckImgPath(string strImagePath, string strSesName, string strDefImage, ref string strOutImagePath, string strImgSuffix, string cor, string fex)
+        {
+            string strOutImg = "";
+            string strSaveName = "";
+            string strTempImagePath = strImagePath.ToUpper();
+
+            // 画像が未設定の場合画像パスはなし
+            if (strImagePath is null || string.IsNullOrEmpty(strImagePath))
+            {
+                strOutImagePath = "";
+            }
+            else
+            {
+                if (!strTempImagePath.EndsWith(".JPG") & !strTempImagePath.EndsWith(".GIF") & !strTempImagePath.EndsWith(".PNG") & strImgSuffix is not null)
+                {
+                    // URLの末尾が画像の拡張子ではなく、サフィックスが設定されている場合は
+                    // コーナー区分、出品番号より画像ファイル名を生成する。
+                    strSaveName = cor + fex + strImgSuffix;
+                }
+
+                // 画像をダウンロードし、ファイル名を取得する
+                DownloadImg(strImagePath, strSesName, strDefImage, ref strOutImg, strSaveName);
+                strOutImagePath = strOutImg;
+            }
+        }
+
+        /// <summary>
+        /// リサイクル預託金の取得
+        /// 存在 = True　無し = False
+        /// </summary>
+        /// <param name="inCor"></param>
+        /// <param name="inFullExhNum"></param>
+        /// <param name="intTaxFreeRecycle"></param>
+        /// <returns></returns>
+        public bool GetRecDeposit(string inCor, string inFullExhNum, ref int intTaxFreeRecycle)
+        {
+            if (inFullExhNum.Length != 8)
+            {
+                return false;
+            }
+
+            try
+            {
+                var getPsinfos = _unitOfWork.Psinfos.GetSingle(x => x.Corner == inCor && x.ExhNum == inFullExhNum);
+
+                if (getPsinfos != null)
+                {
+                    intTaxFreeRecycle = getPsinfos.RecycleFlag == 1 ? Convert.ToInt32(getPsinfos.RecyclingCharge) : 0;
+                }
+                else
+                    return false;
+            }
+            catch (Exception ex)
+            {
+                // エラーログ書出し
+                _logger.LogError(ex, "CommonFuncs - GetRecDeposit - GCMF-100D");
+                return false;
+            }
+
+            return true;
+        }
     }
 }

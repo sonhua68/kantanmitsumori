@@ -63,7 +63,7 @@ namespace KantanMitsumori.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetEstMain([FromQuery] string sel, [FromForm] RequestHeaderModel request)
+        public IActionResult GetEstMain([FromQuery] string sel, [FromForm] RequestHeaderModel request)
         {
             Uri pageUrl;
 
@@ -80,29 +80,29 @@ namespace KantanMitsumori.Controllers
 
             if (Strings.InStr(pageUrl.AbsolutePath, "/asest2/") == 0 || Strings.InStr(pageUrl.AbsolutePath, "/test.htm/") > 0)
             {
-                return await EstMain(sel, request);
+                return EstMain(sel, request);
             }
             else if (Strings.InStr(pageUrl.AbsolutePath, "/asest2/SelGrd.cshtml/") == 0 || Strings.InStr(pageUrl.AbsolutePath, "/test.htm/") > 0)
             {
-                return await EstMainLocal(sel, request);
+                return EstMainLocal(sel, request);
             }
 
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> EstMain(string sel, RequestHeaderModel request)
+        public IActionResult EstMain(string sel, RequestHeaderModel request)
         {
             // câu truc link summit qa https://mit.autoserver.co.jp/asest2/EstMain.aspx
-            //var response = await _appService.getEstMain(isInputBack, sel, request);
+            var response = _appService.getEstMain(sel, request);
 
             //var response = _appService.calcSum("22071200085", "01");
-            return View();
+            return View(response.Data);
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> EstMainLocal(string sel, RequestHeaderModel request)
+        public IActionResult EstMainLocal(string sel, RequestHeaderModel request)
         {
             //var response = await _appService.getEstMain(isInputBack, sel, request);
 

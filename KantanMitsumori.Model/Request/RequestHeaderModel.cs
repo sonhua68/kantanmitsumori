@@ -108,5 +108,32 @@ namespace KantanMitsumori.Model.Request
 
         [FromForm(Name = "nonTax")]
         public string nonTax { get; set; }
+
+        [FromForm(Name = "mod")]
+        public string mod { get; set; }
+
+        [FromForm(Name = "img1")]
+        public string img1 { get; set; }
+
+        [FromForm(Name = "img2")]
+        public string img2 { get; set; }
+
+        [FromForm(Name = "img3")]
+        public string img3 { get; set; }
+
+        [FromForm(Name = "img4")]
+        public string img4 { get; set; }
+
+        [FromForm(Name = "img5")]
+        public string img5 { get; set; }
+
+        [FromForm(Name = "img6")]
+        public string img6 { get; set; }
+
+        [FromForm(Name = "img7")]
+        public string img7 { get; set; }
+
+        [FromForm(Name = "img8")]
+        public string img8 { get; set; }
     }
 }

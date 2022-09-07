@@ -1,9 +1,6 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
-using KantanMitsumori.Helper.Enum;
+﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
-using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
-using KantanMitsumori.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -14,21 +11,21 @@ namespace KantanMitsumori.Controllers
         private readonly IEstimateService _estimateService;
         private readonly IInpLoanService _inpLoanService;
         private readonly ILogger<InpLoanController> _logger;
-        public InpLoanController(IAppService appService, IEstimateService estimateService, IConfiguration config ,IInpLoanService inpLoanService, ILogger<InpLoanController> logger):base(config)
+        public InpLoanController(IAppService appService, IEstimateService estimateService, IConfiguration config, IInpLoanService inpLoanService, ILogger<InpLoanController> logger) : base(config)
         {
             _appService = appService;
             _estimateService = estimateService;
             _inpLoanService = inpLoanService;
             _logger = logger;
-        }          
+        }
         #region HoaiPhong
-   
-     
+
+
         public IActionResult Index()
         {
-            RequestInputCar res = new RequestInputCar(); 
-            res.EstNo = _logToken.EstNo;
-            res.EstSubNo = _logToken.EstSubNo;
+            RequestInputCar res = new RequestInputCar();
+            res.EstNo = _logToken.sesEstNo;
+            res.EstSubNo = _logToken.sesEstSubNo;
             res.UserNo = _logToken.UserNo;
             var response = _estimateService.GetDetail(res);
             return View(response.Data);
@@ -37,12 +34,12 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public IActionResult CalInpLoan([FromForm] RequestCalInpLoan requestData)
         {
-            var response =  _inpLoanService.CalInpLoan(requestData);
+            var response = _inpLoanService.CalInpLoan(requestData);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
             }
-            return Ok(response);    
+            return Ok(response);
         }
 
 
@@ -55,7 +52,7 @@ namespace KantanMitsumori.Controllers
                 return ErrorAction(response);
             }
             return Ok(response);
-        }      
+        }
         #endregion HoaiPhong
     }
 }

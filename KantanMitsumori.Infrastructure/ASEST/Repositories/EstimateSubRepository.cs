@@ -1,7 +1,6 @@
 ﻿using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Infrastructure.IRepositories;
-using KantanMitsumori.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -72,30 +71,6 @@ namespace KantanMitsumori.Infrastructure.Repositories
         private TEstimateSub? isExists(TEstimateSub entity)
         {
             return dbSet.FirstOrDefault(x => x.EstNo.Equals(entity.EstNo) && x.EstSubNo.Equals(entity.EstSubNo));
-        }
-
-        public bool UpdateEstSubCalSum(EstimateSubModel entity)
-        {
-            try
-            {
-                var recordExists = isExists(entity);
-                if (recordExists == null) return false;
-                // Remove old value
-                _context.Entry(recordExists).State = EntityState.Detached;
-                // Update new value
-                _context.Entry(entity).State = EntityState.Modified;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "t_Estimate update error", typeof(EstimateRepository));
-                return false;
-            }
-        }
-
-        private TEstimateSub? isExists(EstimateSubModel entity)
-        {
-            return dbSet.FirstOrDefault(x => x.EstNo.Equals(entity.EstNo) && x.EstSubNo.Equals(entity.EstSubNo) && x.Dflag == false);
         }
     }
 }

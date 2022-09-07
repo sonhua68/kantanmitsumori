@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\KantanMitsumori.Entity\KantanMitsumori.Entity.csproj" />
     <ProjectReference Include="..\KantanMitsumori.Model\KantanMitsumori.Model.csproj" />
   </ItemGroup>
 
