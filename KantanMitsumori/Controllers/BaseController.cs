@@ -12,7 +12,7 @@ using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace KantanMitsumori.Controllers
 {
-  
+
     public class BaseController : Controller
     {
         private const string COOKIES = "CookiesASEST";
@@ -33,8 +33,8 @@ namespace KantanMitsumori.Controllers
                 MessageContent = messageContent
             };
             return View(ErrorViewModel);
-        } 
-        
+        }
+
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
         {
 
@@ -53,9 +53,19 @@ namespace KantanMitsumori.Controllers
                     filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
                     return;
 
-                }               
+                }
             }
             _logToken = HelperToken.EncodingToken(cookies!)!;
+            if (_logToken == null && !controllerName.Contains("Home"))
+            {
+                var ErrorViewModel = new ErrorViewModel()
+                {
+                    MessageCode = HelperMessage.SMAL020P,
+                    MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL020P)
+                };
+                filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
+                return;
+            }
             var resultContext = await next();
         }
 
