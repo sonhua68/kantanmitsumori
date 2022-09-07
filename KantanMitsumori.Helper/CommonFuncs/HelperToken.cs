@@ -49,6 +49,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return null;
             }
         }
+
         public static string GenerateJsonToken(LogToken model)
         {           
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config!["JwtSettings:Key"]));
@@ -60,7 +61,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             var currentDate = DateTime.Now;
-            var RefreshExpires = _config["JwtSettings:RefreshExpires"];
+            var RefreshExpires = _config["JwtSettings:AccessExpires"];
             TimeSpan time = TimeSpan.Parse(RefreshExpires);
             var token = new JwtSecurityToken(
                 issuer: _config["JwtSettings:Issuer"],

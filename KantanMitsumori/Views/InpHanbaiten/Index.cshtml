@@ -1,0 +1,122 @@
+﻿
+@using KantanMitsumori.Model.Response;
+@model ResponseInp
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+}
+<form id="formInpHanbaiten">
+    <table border="0" width="100%">
+        <tbody>
+            <tr>
+            </tr>
+            <tr>
+                <td align="center">
+                    <div>
+                        <table class="inptable" id="Table3" style="z-index: 100;" cellpadding="2" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td colspan="2" class="inptd" style="background-color:White;" align="left">
+                                        <span id="Label4" class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">販売店情報の編集</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="inptd" style="background-color:White;" align="left">
+                                        <span id="Label5" class="inplabel">
+                                            お客様カナ名と簡易メモを編集できます。
+                                        </span><br>
+                                        <span id="Label6" class="inplabel" style="color:Red;">
+                                            ※初期表示は「諸費用設定」で変更できます。
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tabletitle" colspan="2" align="left">
+                                        <span id="Label70" class="titlelabel" style="display:inline-block;width:338px;">販売店情報</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span id="Label73" class="inplabel" style="display:inline-block;width:112px;">販売店</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <textarea name="HanName" rows="2" cols="20" id="HanName" class="inpbox" style="height:34px;width:361px;IME-MODE: active">@Model.ShopNm</textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span id="Label1" class="inplabel" style="display:inline-block;width:112px;">住所</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input name="HanAdd" type="text" value="@Model.ShopAdr" maxlength="120" id="HanAdd" class="inpbox" style="width:417px;IME-MODE: active">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span id="Label2" class="inplabel" style="display:inline-block;width:112px;">電話番号</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input name="Tel" type="text" value="@Model.ShopTel" maxlength="13" id="Tel" class="inpbox" style="width:168px;IME-MODE: active">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span id="Label3" class="inplabel" style="display:inline-block;width:112px;">見積担当者</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input name="TantoName" type="text" value="@Model.EstTanName" maxlength="20" id="TantoName" class="inpbox" style="width:168px;IME-MODE: active">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span id="Label7" class="inplabel" style="display:inline-block;width:112px;">責任者</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input name="Sekinin" type="text" value="@Model.SekininName" maxlength="20" id="Sekinin" class="inpbox" style="width:168px;IME-MODE: active">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td class="inpbtntd" colspan="2">
+                                        <input type="button" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();" style="height:32px;width:100px;">&nbsp;
+                                        <input type="submit" value="OK" id="btnOK" form="formInpHanbaiten" class="Btn1" style="height:32px;width:100px;">
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td class="inpbtntd" colspan="2">
+                                        <span id="txMsg" class="inpboxsum" style="display:inline-block;color:Red;width:462px;"></span>&nbsp;
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input name="EstNo" type="hidden" id="EstNo" value="@Model.EstNo">
+                        <input name="EstSubNo" type="hidden" id="EstSubNo" value="@Model.EstSubNo">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script>
+    $('#formInpHanbaiten').validate({
+        submitHandler: function (form) {
+            var model = Framework.getFormData($("#formInpHanbaiten"));
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpHanbaiten/UpdateInpHanbaiten");
+            if (result.resultStatus == 0) {
+                Framework.GoBackReloadPage();
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#txMsg").html(Items)
+                } else {
+                    location.reload();
+                }
+            }
+        }
+    });
+
+</script>

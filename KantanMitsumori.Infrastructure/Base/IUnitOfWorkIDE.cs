@@ -1,4 +1,6 @@
 ﻿
+using KantanMitsumori.Entity.ASESTEntities;
+using KantanMitsumori.Entity.IDEEnitities;
 using KantanMitsumori.Infrastructure.IRepositories;
 using KantanMitsumori.Infrastructure.Repositories;
 
@@ -24,7 +26,7 @@ namespace KantanMitsumori.Infrastructure.Base
         IMtIdeUnitPriceRepository UnitPrices { get; }
         IMtIdeVoluntaryInsuranceRepository VoluntaryInsurances { get; }
         IMtIdeWeightTaxRepository WeightTaxs { get; }
-
+        IDEContext DbContext { get; }
         Task<bool> CommitAsync();
     }
 }

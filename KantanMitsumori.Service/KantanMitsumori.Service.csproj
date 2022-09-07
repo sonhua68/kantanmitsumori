@@ -19,10 +19,11 @@
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="Microsoft.JSInterop" Version="6.0.7" />
+    <PackageReference Include="Microsoft.JSInterop" Version="6.0.8" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\KantanMitsumori.Helper\KantanMitsumori.Helper.csproj" />
     <ProjectReference Include="..\KantanMitsumori.Infrastructure\KantanMitsumori.Infrastructure.csproj" />
     <ProjectReference Include="..\KantanMitsumori.IService\KantanMitsumori.IService.csproj" />
     <ProjectReference Include="..\KantanMitsumori.Model\KantanMitsumori.Model.csproj" />
@@ -30,7 +31,6 @@
 
   <ItemGroup>
     <Folder Include="IDE\" />
-    <Folder Include="ASEST\" />
   </ItemGroup>
 
 </Project>

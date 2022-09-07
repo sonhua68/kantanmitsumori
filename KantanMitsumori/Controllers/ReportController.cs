@@ -8,7 +8,7 @@ namespace KantanMitsumori.Controllers
     {
         private readonly IReportService _reportService;
         private readonly ILogger<ReportController> _logger;
-        public ReportController(IReportService reportService, ILogger<ReportController> logger)
+        public ReportController(IReportService reportService, IConfiguration config, ILogger<ReportController> logger):base(config)
         {
             _reportService = reportService;
             _logger = logger;

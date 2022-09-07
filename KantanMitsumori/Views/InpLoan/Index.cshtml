@@ -1,0 +1,422 @@
+﻿@using KantanMitsumori.Model.Response;
+@using KantanMitsumori.Helper.CommonFuncs;
+@model ResponseInp
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+    var SalesSum = CommonFunction.FormatString(Model.SalesSum);
+    var Deposit = CommonFunction.FormatString(Model.Deposit);
+    var Principal = CommonFunction.FormatString((Model.SalesSum - Model.Deposit));
+    var PayTimes = CommonFunction.FormatString(Model.PayTimes);
+    var MoneyRate = Model.Rate;
+    var BonusAmount = CommonFunction.FormatString(Model.BonusAmount);
+    var MoneyRateCl = Model.Rate;
+    var PartitionFee = Model.PartitionFee;
+    var PayTotal = CommonFunction.FormatString(Model.PartitionAmount);
+    var FirstPay = CommonFunction.FormatString(Model.FirstPayAmount);
+    var PayMonth = CommonFunction.FormatString(Model.PayAmount);
+    var Fee = Model.PartitionFee;
+    var isRbBonus = Model.BonusAmount;
+    string BonusFirst = string.IsNullOrEmpty(Model.BonusFirst) == true ? "" : Model.BonusFirst;
+    string BonusSecond = string.IsNullOrEmpty(Model.BonusSecond) == true ? "" : Model.BonusSecond;
+    var LoanModifyFlag = Model.LoanModifyFlag == true ? "1" : "0";
+    var LoanRecalcSettingFlag = Model.LoanRecalcSettingFlag == true ? "1" : "0";
+}
+<form id="formInpLoan">
+    <table border="0" width="100%">
+        <tbody>
+            <tr>
+                <td style="height: 477px" align="center">
+                    <div>
+                        <table border="0">
+                            <tbody>
+                                <tr>
+                                    <td class="inptd" style="background-color:White; height: 27px;" align="left">
+                                        <span class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">ローン計算情報の編集</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="right">
+                                        <table class="inptable" id="Table6" cellpadding="2" cellspacing="0" style="background-color: #ffccff; width:450px;">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="tabletitle" colspan="2" style="background-color: mediumvioletred; height: 15px" align="left">
+                                                        <span class="titlelabel" style="display:inline-block;width:150px;">ローン条件</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel">支払総額</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="lbl_SalesSum" type="text" id="lbl_SalesSum" class="inpboxsum" style="WIDTH: 91px; " tabindex="48" maxlength="8" size="10" value="@SalesSum" readonly="readOnly">
+                                                        <span class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel">頭金</span>
+                                                    </td>
+                                                    <td class="inptd" style="width: 239px" align="left">
+                                                        <input name="Deposit" type="text" id="Deposit" value="@Deposit" class="inpbox_r" onblur="calcGankin();" style="WIDTH: 94px; border:solid 1px mediumvioletred;" tabindex="48" maxlength="8" size="10">
+                                                        <span class="inplabel" style="display:inline-block;width:36px;">円</span>
+                                                        <span class="inplabel" style="display:inline-block;width:88px;">例） 100000</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel">割賦元金</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="lbl_Principal" type="text" id="lbl_Principal" class="inpboxsum" style="WIDTH: 91px; " tabindex="48" maxlength="8" size="10" value="@Principal" readonly="readOnly">
+                                                        <span class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:128px;">金利（実質年率）</span>
+                                                    </td>
+                                                    <td class="inptd" style="width: 239px" align="left">
+                                                        <input name="MoneyRate" type="text" id="MoneyRate" class="inpbox_r" style="IME-MODE: disabled; WIDTH: 47px; border:solid 1px mediumvioletred;" tabindex="2" value="@MoneyRate">
+                                                        <input id="btMoneyRateUp" style="FONT-SIZE: 9pt; WIDTH: 30px; color:#dc143c; FONT-FAMILY: 'ＭＳ Ｐゴシック'; HEIGHT: 22px; vertical-align: middle; text-align: center;" onclick="return btMoneyRateUp_onclick()" type="button" value="▲" name="Button1">
+                                                        <input id="btMoneyRateDown" style="FONT-SIZE: 9pt; WIDTH: 30px; color:#dc143c; FONT-FAMILY: 'ＭＳ Ｐゴシック'; HEIGHT: 22px; vertical-align: middle; text-align: center;" onclick="return btMoneyRateDown_onclick()" type="button" value="▼" name="Button1">
+                                                        <span class="inplabel" style="display:inline-block;width:34px;">％</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel">支払回数</span>
+                                                    </td>
+                                                    <td class="inptd" style="width: 239px" align="left">
+                                                        <input name="PayTimes" type="text" id="PayTimes" value="@PayTimes" class="inpbox_r" style="IME-MODE: disabled; WIDTH: 47px; border:solid 1px mediumvioletred;" tabindex="3">
+                                                        <input id="btPayTimesUp" style="FONT-SIZE: 9pt; WIDTH: 30px; color:#dc143c; FONT-FAMILY: 'ＭＳ Ｐゴシック'; HEIGHT: 22px; vertical-align: middle; text-align: center;" onclick="return btPayTimesUp_onclick()" type="button" value="▲" name="Button1">
+                                                        <input id="btPayTimesDown" style="FONT-SIZE: 9pt; WIDTH: 30px; color:#dc143c; FONT-FAMILY: 'ＭＳ Ｐゴシック'; HEIGHT: 22px; vertical-align: middle; text-align: center;" onclick="return btPayTimesDown_onclick()" type="button" value="▼" name="Button1">
+                                                        <span class="inplabel" style="display:inline-block;width:34px;">回</span>
+                                                        <span class="inplabel" style="display:inline-block;width:59px;">例） 36</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel">第1回支払月</span>
+                                                    </td>
+                                                    <td class="inptd" style="width: 239px" align="left">
+                                                        <select name="cbFirstMonth" id="cbFirstMonth" tabindex="4" class="inpbox" style="width:65px;border:solid 1px mediumvioletred;">
+                                                            @{
+                                                                foreach (var item in DropDownList.DropDownFirstMonth(false))
+                                                                {
+                                                                    <option value="@item.Value">@item.Text</option>
+                                                                }
+                                                            }
+
+                                                        </select>
+                                                        <span class="inplabel" style="display:inline-block;width:46px;">月</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel">ボーナス加算</span>
+                                                    </td>
+                                                    <td class="inptd" style="width: 239px" align="left">
+                                                        <input id="rbBonusU" type="radio" name="rdBonus" value="rbBonusU" onclick="chgBonus();"><label for="rbBonusU">有</label>&nbsp;&nbsp;&nbsp;
+                                                        <input id="rbBonusM" type="radio" name="rdBonus" value="rbBonusM" checked="checked" onclick="chgBonus();"><label for="rbBonusM">無</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel">ボーナス加算額</span>
+                                                    </td>
+                                                    <td class="inptd" style="width: 239px" align="left">
+                                                        <input name="Bonus" type="text" maxlength="8" id="Bonus" value="@BonusAmount" tabindex="7" class="inpbox_r" style="width: 91px; border: 1px solid mediumvioletred; background-color: white;">
+                                                        <span class="inplabel" style="display:inline-block;width:38px;">円</span>
+                                                        <span class="inplabel" style="display:inline-block;width:88px;">例） 50000</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:150px;">ボーナス第1回支払月</span>
+                                                    </td>
+                                                    <td class="inptd" style="width: 239px" align="left">
+                                                        <select name="cbBonusFirst" id="cbBonusFirst" tabindex="8" class="inpbox" style="width: 65px; border: 1px solid mediumvioletred; background-color: white;" onchange="chgBonusMonth('change');">
+                                                            @{
+                                                                foreach (var item in DropDownList.DropDownBonusMonth(true))
+                                                                {
+                                                                    if (@item.Text == Model.BonusFirst!)
+                                                                    {
+                                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@item.Value">@item.Text</option>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </select>
+                                                        <span class="inplabel" style="display:inline-block;width:46px;">月</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:146px;">ボーナス第2回支払月</span>
+                                                    </td>
+                                                    <td class="inptd" style="width: 239px" align="left">
+                                                        <select name="cbBonusSecond" id="cbBonusSecond" tabindex="8" style="width: 65px; border: 1px solid mediumvioletred; background-color: white;" class="inpbox" onchange="chgBonusSecond();">
+                                                            @{
+                                                                foreach (var item in DropDownList.DropDownBonusSecond(true, Model.BonusFirst!))
+                                                                {
+                                                                    if (@item.Text == Model.BonusSecond!)
+                                                                    {
+                                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@item.Value">@item.Text</option>
+                                                                    }
+
+                                                                }
+                                                            }
+
+                                                        </select>
+                                                        <span class="inplabel" style="display:inline-block;width:46px;">月</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inpbtntd" colspan="2" style=" height: 21px; text-align:right;">
+                                                        <input type="button" name="btnClear" value="クリア" id="btnClear" class="Btn1" onclick="return location.reload();" style="height:32px;width:100px;">
+                                                        <input type="button" name="btnCalc" value="計算" id="btnCalc" onclick="return CalInpLoan()" class="Btn1" style="height:32px;width:100px;">
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <span id="Msg" class="inpboxsum" style="display:inline-block;color:Red;width:445px;"></span>
+                                    </td>
+
+                                    <td align="center" style="width: 30px; vertical-align:top;">
+                                        <img id="ImageArrow" src="../img/arrow-r.png" style="border-width:0px;padding:320px 0 0 0;">
+                                    </td>
+
+                                    <td valign="top" align="right">
+
+                                        <table class="inptable" id="Table4" cellpadding="2" cellspacing="0" width="450px">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="tabletitle" colspan="2" style="height: 7px; width:330px; text-align:left;">
+                                                        <span class="titlelabel" style="display:inline-block;width:150px;">ローン計算情報</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">支払総額</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="SaleSumCl" type="text" value="@SalesSum" readonly="readonly" id="SaleSumCl" class="inpbox_r" style="background-color:Transparent;width:85px;IME-MODE: disabled; border:none;">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">頭金</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="DepositCl" type="text" id="DepositCl" value="@Deposit" class="inpbox_r" onblur="calcResultGankin(); confInputValue('DepositCl');" style="width:85px;IME-MODE: disabled">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">円</span>
+                                                        <input name="DepositCl_old" type="text" id="DepositCl_old" style="width:0px;visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">割賦元金</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="Principal" type="text" value="@Principal" readonly="readonly" id="Principal" class="inpbox_r" style="background-color:Transparent;width:85px;IME-MODE: disabled; border:none;">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">金利（実質年率）</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="MoneyRateCl" type="text" value="@MoneyRateCl" id="MoneyRateCl" class="inpbox_r" onblur="confInputValue('MoneyRateCl');" style="width:85px;IME-MODE: disabled">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">％</span>
+                                                        <input name="MoneyRateCl_old" type="text" value="@MoneyRateCl" id="MoneyRateCl_old" style="width:0px;visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">分割払手数料</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="Fee" type="text" id="Fee" value="@Fee" class="inpbox_r" onblur="confInputValue('Fee');" style="width:85px;IME-MODE: disabled">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">円</span>
+                                                        <input name="Fee_old" type="text" id="Fee_old" value="@Fee" style="width:0px;visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">分割支払金合計</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="PayTotal" type="text" value="@PayTotal" id="PayTotal" class="inpbox_r" onblur="confInputValue('PayTotal');" style="width:85px;IME-MODE: disabled">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">円</span>
+                                                        <input name="PayTotal_old" type="text" value="@PayTotal" id="PayTotal_old" style="width:0px;visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">支払回数</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="PayTimesCl" type="text" value="@PayTimes" id="PayTimesCl" class="inpbox_r" onblur="confInputValue('PayTimesCl');" style="width:85px;IME-MODE: disabled">
+                                                        <span id="Label23" class="inplabel" style="display:inline-block;width:12px;">回</span>
+                                                        <input name="PayTimesCl_old" value="@PayTimes" type="text" id="PayTimesCl_old" style="width:0px;visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">支払期間</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="FirstPayMonth" type="text" id="FirstPayMonth" value="@Model.FirstPayMonth" class="inpbox_r" onblur="confInputValue('FirstPayMonth');" style="width:85px;IME-MODE: disabled">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">～</span>
+                                                        <input name="LastPayMonth" type="text" id="LastPayMonth" value="@Model.LastPayMonth" class="inpbox_r" onblur="confInputValue('LastPayMonth');" style="width:85px;IME-MODE: disabled">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">年月</span>
+                                                        <input name="FirstPayMonth_old" type="text" id="FirstPayMonth_old" value="@Model.FirstPayMonth" style="width:0px;visibility:hidden;">
+                                                        <input name="LastPayMonth_old" type="text" value="@Model.LastPayMonth" id="LastPayMonth_old" style="width:0px;visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">初回支払額</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="FirstPay" value="@FirstPay" type="text" id="FirstPay" class="inpbox_r" onblur="confInputValue('FirstPay');" style="width:85px;IME-MODE: disabled">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">円</span>
+                                                        <input name="FirstPay_old" value="@FirstPay" type="text" id="FirstPay_old" style="width:0px;visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">2回目以降支払額</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="PayMonth" type="text" id="PayMonth" value="@PayMonth" class="inpbox_r" onblur="confInputValue('PayMonth');" style="width:85px;IME-MODE: disabled">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">円</span>
+                                                        <input name="PayMonth_old" type="text" value="@PayMonth" id="PayMonth_old" style="width:0px;visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">ボーナス加算</span>
+                                                    </td>
+                                                    <td class="inptd" style="width: 239px" align="left">
+                                                        <input id="rbBonusU_Result" type="radio" name="rdBonus_Result" value="rbBonusU_Result" onclick="resetBonus_Result();"><label for="rbBonusU_Result">有</label>&nbsp;&nbsp;&nbsp;
+                                                        <input id="rbBonusM_Result" type="radio" name="rdBonus_Result" value="rbBonusM_Result"  onclick="resetBonus_Result();"><label for="rbBonusM_Result">無</label>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">ボーナス加算額</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="BonusCl" type="text" value="@BonusAmount" id="BonusCl" class="inpbox_r" onblur="confInputValue('BonusCl');" style="width: 85px; background-color: white;">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">円</span>
+                                                        <input name="BonusCl_old" value="@BonusAmount" type="text" id="BonusCl_old" style="width:0px;visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">ボーナス支払月</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="BonusFirstMonth" type="text" id="BonusFirstMonth" value="@Model.BonusFirst" class="inpbox_r" onblur="confInputValue('BonusFirstMonth');" style="width: 85px; background-color: white;">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">／</span>
+                                                        <input name="BonusSecondMonth" type="text" id="BonusSecondMonth" value="@Model.BonusSecond" class="inpbox_r" onblur="confInputValue('BonusSecondMonth');" style="width: 85px; background-color: white;">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">月</span>
+                                                        <input name="BonusFirstMonth_old" type="text" id="BonusFirstMonth_old" value="@Model.BonusFirst" style="width:0px;IME-MODE: disabled; visibility:hidden;">
+                                                        <input name="BonusSecondMonth_old" type="text" id="BonusSecondMonth_old" value="@Model.BonusSecond" style="width:0px;IME-MODE: disabled; visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left">
+                                                        <span class="inplabel" style="display:inline-block;width:130px;">ボーナス加算回数</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="BonusTimes" type="text" id="BonusTimes" value="@Model.BonusTimes" class="inpbox_r" onblur="confInputValue('BonusTimes');" style="width: 85px; background-color: white;">
+                                                        <span class="inplabel" style="display:inline-block;width:12px;">回</span>
+                                                        <input name="BonusTimes_old" value="@Model.BonusTimes" type="text" id="BonusTimes_old" style="width:0px;IME-MODE: disabled; visibility:hidden;">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inpbtntd" align="left" colspan="2" style="height: 20px">
+                                                        <div style="text-align:left;">
+                                                            <span id="lblWarning" class="inplabel" style="color:Red;font-size:9pt;font-weight:bold;">ローン条件を入力して計算したローン計算情報を、[OK]押下で保存した場合<br>お支払い総合計に変更があると、ローン条件に入力した金利等の条件を使用し<br>ローン計算情報を自動的に再計算します</span>
+                                                            <br><br><span class="inplabel" style="color:Red;font-size:9pt;font-weight:bold;">自動再計算をしたくない場合は、以下のチェックボックスをオンにしてください</span>
+                                                            <br><input name="LoanModifyFlag" type="hidden" id="hidLoanModifyFlag" value="0">
+                                                            <input id="chkProhibitAutoCalc" type="checkbox" name="chkProhibitAutoCalc"><label for="chkProhibitAutoCalc">支払総額変更後の自動再計算を行わない</label>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inpbtntd" colspan="2" style=" height: 21px; text-align:right;">
+                                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();" class="Btn1" style="height:32px;width:100px;">
+                                                        <input type="submit" name="btnOK" value="OK"  @*onclick="clickOK();"*@ form="formInpLoan" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <input name="EstNo" type="hidden" id="hidEstNo" value="@Model.EstNo">
+                                        <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
+                                        <input name="hidMoneyRate" type="hidden" id="hidMoneyRate" value="@Model.Rate">
+                                        <input name="hidBonusSecond" type="hidden" id="hidBonusSecond" value="@Model.BonusSecond">
+                                        <input name="hidTaxRatio" type="hidden" id="hidTaxRatio" value="0.1">
+                                        <span id="Msg2" class="inpboxsum" style="display:inline-block;color:Red;width:390px;"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script>
+    SetInitData();
+    $('#formInpLoan').validate({
+        submitHandler: function (form) {
+            var model = Framework.getFormData($("#formInpLoan"));  
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLoan/UpdateInpLoan");
+            if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+                Framework.GoBackReloadPage();
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#Msg2").html(Items)
+                } else {
+                    location.reload();
+                }
+            }
+        }
+    });
+    function SetInitData() {   
+        var isCheck = parseInt(@isRbBonus);
+        if (isCheck > 0) {
+            $("#rbBonusU").prop("checked", true);
+            $("#rbBonusU_Result").prop("checked", true);
+        } else {
+            $("#rbBonusM").prop("checked", true);
+            $("#rbBonusM_Result").prop("checked", true);
+        }
+        //
+        if (@LoanRecalcSettingFlag== 1) {
+            $("#chkProhibitAutoCalc").attr('checked', true);
+        } else {
+            $("#chkProhibitAutoCalc").attr('checked', false);
+        }
+    }
+
+</script>
+<script src="~/js/InpLoan.js"></script>

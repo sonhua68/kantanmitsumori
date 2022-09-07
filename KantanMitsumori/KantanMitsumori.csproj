@@ -55,11 +55,10 @@
 	<PackageReference Include="GrapeCity.ActiveReports.Document" Version="16.2.0" />
 	<PackageReference Include="GrapeCity.ActiveReports.Export.Pdf" Version="16.2.0" />
 	<!--Start: Conflict library with ActiveReport - Solved by use higher version of library  -->
-	<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.0.1" />
-	<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.0.1" />
-	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
+	<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.3.0" />
+	<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.3.0" />
+	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" />
 	<!--End: Conflict library with ActiveReport - Solved by use higher version of library  -->
-	  
   </ItemGroup>
 
   <ItemGroup>
@@ -71,6 +70,13 @@
 	
   <ItemGroup>
     <Folder Include="wwwroot\img\" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <Content Update="Views\InpZeiHoken\Index.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

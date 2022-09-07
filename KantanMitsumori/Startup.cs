@@ -34,16 +34,15 @@ namespace KantanMitsumori
             services.AddDbContext<IDEContext>(
                 options => options.UseSqlServer(
                 Configuration.GetConnectionString("IDEConnection"))
-
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
 
             );
-
             HelperToken.Configure(Configuration);
             services.AddUnitOfWork();
             services.AddHttpClient();
             services.AddBusinessServices();
+            services.AddHelperServices();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddSession(options =>
