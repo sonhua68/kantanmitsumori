@@ -136,7 +136,9 @@ namespace KantanMitsumori.Service
                         string syakenm = syakenMonth < 10 ? "0" + syakenMonth : syakenMonth.ToString();
                         checkCarYm = CommonFunction.Right(model.ddlSyakenYear!, 5).Replace(")", syakenm);
                     }
-                }
+                } 
+                string radDispVol = model.radDispVol! == "その他" ? "" : model.radDispVol!;
+                string radMilUnit = model.radMilUnit! == "その他" ? "" : model.radMilUnit!;
                 dtEstimates.MakerName = model.Maker;
                 dtEstimates.ModelName = model.CarNM;
                 dtEstimates.GradeName = model.Grade;
@@ -151,8 +153,8 @@ namespace KantanMitsumori.Service
                 dtEstimates.Equipment = model.Option;
                 dtEstimates.BusinessHis = model.ddlCarReki;
                 dtEstimates.AccidentHis = Convert.ToByte(model.raJrk);
-                dtEstimateSubs.DispVolUnit = string.IsNullOrEmpty(model.dispVolUnit) ? model.radDispVol : model.dispVolUnit;
-                dtEstimateSubs.MilUnit = string.IsNullOrEmpty(model.MilUnit) ? model.radMilUnit : model.MilUnit;
+                dtEstimateSubs.DispVolUnit = string.IsNullOrEmpty(model.dispVolUnit) ? radDispVol : model.dispVolUnit;
+                dtEstimateSubs.MilUnit = string.IsNullOrEmpty(model.MilUnit) ? radMilUnit : model.MilUnit;
                 _unitOfWork.Estimates.Update(dtEstimates);
                 _unitOfWork.EstimateSubs.Update(dtEstimateSubs);
                 await _unitOfWork.CommitAsync();
