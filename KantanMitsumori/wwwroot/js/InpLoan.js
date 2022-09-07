@@ -296,7 +296,7 @@ function CalInpLoan() {
         model.Bonus = $("#Bonus").val();
         model.BonusFirst = $("#cbBonusFirst").val();
         model.BonusSecond = $("#cbBonusSecond").val();
-    } else {
+    } else {       
         model.Bonus = "0";
         model.BonusFirst = "0";
         model.BonusSecond = "0";
@@ -321,7 +321,7 @@ function CalInpLoan() {
         var checkedValue = $('input[name=rdBonus]:checked', form).val();
         var valueRbBonusU = $("#rbBonusU").val();
         if (valueRbBonusU == (checkedValue)) {
-            $("#rbBonusU_Result").attr('checked', true);
+            $("#rbBonusU_Result").prop("checked", true);
             $('#BonusCl').attr("disabled", false);
             $('#BonusFirstMonth').attr("disabled", false);
             $('#BonusSecondMonth').attr("disabled", false);
@@ -334,8 +334,8 @@ function CalInpLoan() {
             $('#BonusFirstMonth').val(Items.bonusFirst)
             $('#BonusSecondMonth').css('background-color', TRUE_COLOR);
             $('#BonusSecondMonth').val(Items.bonusSecond)
-        } else {
-            $("#rbBonusM_Result").attr('checked', true);
+        } else { 
+            $("#rbBonusM_Result").prop("checked", true); 
             $('#BonusCl').val("");
             $('#BonusFirstMonth').val("");
             $('#BonusSecondMonth').val("");
@@ -347,7 +347,7 @@ function CalInpLoan() {
             $('#BonusCl').css('background-color', FALSE_COLOR_RES);
             $('#BonusFirstMonth').css('background-color', FALSE_COLOR_RES);
             $('#BonusSecondMonth').css('background-color', FALSE_COLOR_RES);
-            $('#BonusTimes').css('background-color', FALSE_COLOR_RES);
+            $('#BonusTimes').css('background-color', FALSE_COLOR_RES);           
         }
         $("#Fee_old").val(Items.fee);
         $("#PayTotal_old").val(Items.payTotal);

@@ -190,7 +190,7 @@ function CallData() {
                     break;
                 case 10:
                     OptionName.val(Items.optionName10)
-                    OptionPrice.val(Items.optionPrice10)
+                    OptionPrice.val(StringNull(Items.optionPrice10))
                     break;
                 case 11:
                     OptionName.val(Items.optionName11)
