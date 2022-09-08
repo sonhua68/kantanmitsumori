@@ -54,7 +54,7 @@
                                         &nbsp;<span id="Label14" class="inplabel" style="display:inline-block;color:White;width:180px;">排気量</span>
                                     </td>
                                     <td colspan="2" class="inptdmst" align="left">
-                                        &nbsp;<span id="lblDispVol" class="inplabel" style="display:inline-block;width:80px;">1500 RE</span>
+                                        &nbsp;<span id="lblDispVol" class="inplabel" style="display:inline-block;width:80px;"></span>
                                         <span id="lblMsgDispVol" style="color: red;">排気量単位に「cc」以外が指定されています</span>
                                     </td>
                                 </tr>
@@ -63,7 +63,7 @@
                                         &nbsp;<span id="Label16" class="inplabel" style="display:inline-block;color:White;width:180px;">車検有効期限</span>
                                     </td>
                                     <td colspan="2" class="inptdmst" align="left">
-                                        &nbsp;<span id="lblCheckCarYm" class="inplabel" style="display:inline-block;width:80px;">R5年1月</span>
+                                        &nbsp;<span id="lblCheckCarYm" class="inplabel" style="display:inline-block;width:80px;"></span>
                                         <span id="lblMsgCheckCarYm" style="color: red;"></span>
                                     </td>
                                 </tr>
@@ -87,11 +87,11 @@
                                                 {
                                                     if (@item.Text == Model.AutoTaxMonth!)
                                                     {
-                                                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                        <option selected="selected" value="@item.Value">@item.Text</option>
                                                     }
                                                     else
                                                     {
-                                                                                        <option value="@item.Value">@item.Text</option>
+                                                        <option value="@item.Value">@item.Text</option>
                                                     }
 
                                                 }
@@ -144,11 +144,11 @@
                                                 {
                                                     if (@item.Text == Model.DamageInsMonth!)
                                                     {
-                                                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                        <option selected="selected" value="@item.Value">@item.Text</option>
                                                     }
                                                     else
                                                     {
-                                                                                        <option value="@item.Value">@item.Text</option>
+                                                        <option value="@item.Value">@item.Text</option>
                                                     }
 
                                                 }
@@ -213,6 +213,7 @@
                         <input name="TaxPercent" type="hidden" id="TaxPercent" value="0.1">
                         <input name="AutoCalcFlg" type="hidden" id="AutoCalcFlg" value="1">
                         <input type="hidden" id="DispVolUnit" value="@Model.DispVolUnit">
+                        <input type="hidden" id="CheckCarYm" value="@Model.CheckCarYm">
                     </div>
                 </td>
             </tr>
@@ -247,21 +248,21 @@
     });
     function setInitData() {
         let LeaseFlag = @Model.LeaseFlag;
-        let CheckCarYm = @Model.CheckCarYm;
-        let DispVolUnit = $("#DispVolUnit").val(); 
+        let CheckCarYm = $("#CheckCarYm").val();
+        let DispVolUnit = $("#DispVolUnit").val();
         if (@Model.LeaseFlag == 1) {
             $("#MeiNiniHoken").attr("disabled", "disabled");
             $('#MeiNiniHoken').css('background-color', "rgb(224, 224, 224)");
         }
-        if (isNaN(CheckCarYm)) {
+        if (CheckCarYm == '' || CheckCarYm == null) {
             $("#lblCheckCarYm").text("不明");
             $("#lblMsgCheckCarYm").text(WARNING_CHECK_CAR_YM);
 
         } else if (CheckCarYm == '無し') {
-            $("#lblCheckCarYm").text(@Model.CheckCarYm);
+            $("#lblCheckCarYm").text(CheckCarYm);
         } else {
             let year = FormatDayGetYear(CheckCarYm);
-            let month = parseInt(FormatDayGetMonth(CheckCarYm));                   
+            let month = parseInt(FormatDayGetMonth(CheckCarYm));
             let vWareki = getWareki(year) + "年" + month + "月";
             $("#lblCheckCarYm").text(vWareki);
         }
@@ -277,6 +278,7 @@
         } else {
             let disp = @Model.DispVol +" " + DispVolUnit;
             $("#lblDispVol").text(disp);
+            $("#lblMsgDispVol").text("");
         }
 
     }
