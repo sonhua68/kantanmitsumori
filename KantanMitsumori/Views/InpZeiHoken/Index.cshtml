@@ -87,11 +87,11 @@
                                                 {
                                                     if (@item.Text == Model.AutoTaxMonth!)
                                                     {
-                                                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                        <option selected="selected" value="@item.Value">@item.Text</option>
                                                     }
                                                     else
                                                     {
-                                                                                        <option value="@item.Value">@item.Text</option>
+                                                        <option value="@item.Value">@item.Text</option>
                                                     }
 
                                                 }
@@ -144,11 +144,11 @@
                                                 {
                                                     if (@item.Text == Model.DamageInsMonth!)
                                                     {
-                                                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                        <option selected="selected" value="@item.Value">@item.Text</option>
                                                     }
                                                     else
                                                     {
-                                                                                        <option value="@item.Value">@item.Text</option>
+                                                        <option value="@item.Value">@item.Text</option>
                                                     }
 
                                                 }
@@ -248,7 +248,7 @@
     function setInitData() {
         let LeaseFlag = @Model.LeaseFlag;
         let CheckCarYm = @Model.CheckCarYm;
-        let DispVolUnit = $("#DispVolUnit").val(); 
+        let DispVolUnit = $("#DispVolUnit").val();
         if (@Model.LeaseFlag == 1) {
             $("#MeiNiniHoken").attr("disabled", "disabled");
             $('#MeiNiniHoken').css('background-color', "rgb(224, 224, 224)");
@@ -261,7 +261,7 @@
             $("#lblCheckCarYm").text(@Model.CheckCarYm);
         } else {
             let year = FormatDayGetYear(CheckCarYm);
-            let month = parseInt(FormatDayGetMonth(CheckCarYm));                   
+            let month = parseInt(FormatDayGetMonth(CheckCarYm));
             let vWareki = getWareki(year) + "年" + month + "月";
             $("#lblCheckCarYm").text(vWareki);
         }
