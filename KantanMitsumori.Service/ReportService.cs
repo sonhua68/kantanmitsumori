@@ -47,7 +47,7 @@ namespace KantanMitsumori.Service
                 using (MemoryStream ms = new MemoryStream())
                 {
                     pdf.Export(report.Document, ms);
-                    return ResponseHelper.Ok(new ReportFileModel(ms.ToArray()));
+                    return ResponseHelper.Ok("","",new ReportFileModel(ms.ToArray()));
                 }
             }
         }
@@ -67,7 +67,7 @@ namespace KantanMitsumori.Service
                 using (MemoryStream ms = new MemoryStream())
                 {
                     pdf.Export(report.Document, ms);
-                    return ResponseHelper.Ok(new ReportFileModel(ms.ToArray()));
+                    return ResponseHelper.Ok("", "", new ReportFileModel(ms.ToArray()));
                 }
             }
         }
@@ -87,7 +87,27 @@ namespace KantanMitsumori.Service
                 using (MemoryStream ms = new MemoryStream())
                 {
                     pdf.Export(report.Document, ms);
-                    return ResponseHelper.Ok(new ReportFileModel(ms.ToArray()));
+                    return ResponseHelper.Ok("", "", new ReportFileModel(ms.ToArray()));
+                }
+            }
+        }
+
+        public ResponseBase<ReportFileModel> GetOrderReport()
+        {
+            var assembly = Assembly.GetCallingAssembly();
+            var resourceName = "KantanMitsumori.Reports.Order.rpx";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (XmlReader reader = XmlReader.Create(stream))
+            {
+                SectionReport report = new SectionReport();
+                report.LoadLayout(reader);
+                report.DataSource = LoadSampleData();
+                report.Run();
+                PdfExport pdf = new PdfExport();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    pdf.Export(report.Document, ms);
+                    return ResponseHelper.Ok("", "", new ReportFileModel(ms.ToArray()));
                 }
             }
         }

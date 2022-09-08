@@ -63,5 +63,23 @@ namespace KantanMitsumori.Controllers
             return File(model.Data, model.ContentType, model.Name);
         }
 
+
+        /// <summary>
+        /// Demo download Order sub report
+        /// </summary>        
+        public IActionResult DownloadOrderReport()
+        {
+
+            var result = _reportService.GetOrderReport();
+            if (result == null)
+                return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
+            if (result.ResultStatus != 0)
+                return ErrorAction(result);
+            var model = result.Data;
+            if (model == null)
+                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
+            return File(model.Data, model.ContentType, model.Name);
+        }
+
     }
 }

@@ -13,5 +13,6 @@ namespace KantanMitsumori.IService
         ResponseBase<ReportFileModel> GetArticleSubReport();
         ResponseBase<ReportFileModel> GetMemoSubReport();
         ResponseBase<ReportFileModel> GetEstReport();
+        ResponseBase<ReportFileModel> GetOrderReport();
     }
 }
