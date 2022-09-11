@@ -243,7 +243,7 @@ namespace KantanMitsumori.Service
                     TradeInRegNo = "",
                     Vol = "1500 cc",
                     WeightTax = "20,000 円",
-
+                    
 
                     CarImg = LoadImage("img_1.jpg"),
                     CarImg1 = LoadImage("img_2.jpg"),
