@@ -156,7 +156,7 @@ namespace KantanMitsumori.Service
                     FirstPayAmount = "",
                     FirstRegYm = "H28年",
                     GradeName = "1.5 Z 煌",
-                    Kikan = "Kikan",
+                    Kikan = "10,000 円",
                     Mission = "AT5",
                     NebikiTitle = "",
                     Notes = "Notes",
