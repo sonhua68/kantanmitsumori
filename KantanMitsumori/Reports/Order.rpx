@@ -336,7 +336,7 @@
       <Control Type="AR.Shape" Name="Box16" Left="5641.92" Top="9208.8" Width="5029.92" Height="2790.72" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Line" Name="Line76" X1="5648" Y1="12660" X2="10663" Y2="12660" />
       <Control Type="AR.Shape" Name="Box10" Left="5641.92" Top="12389.76" Width="5029.92" Height="2880" BackColor="16777215" RoundingRadius="10" />
-      <Control Type="AR.Shape" Name="Box33" Left="4684.44" Top="591.3598" Width="4710" Height="1480" BackStyle="1" RoundingRadius="10" />
+      <Control Type="AR.Shape" Name="Box33" Left="4684.44" Top="591.3598" Width="4710" Height="1480" BackStyle="1" Shape="2" RoundingRadius="10" />
       <Control Type="AR.Label" Name="Text94" Left="4759.2" Top="632.16" Width="815.04" Height="227.52" Caption="【販売店】" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Field" Name="SName1" DataField="SName" Left="4789.44" Top="871.3601" Width="4485" Height="560" Text="SName" Style="color: Black; font-family: MS PGothic; font-size: 10.5pt; text-align: left; vertical-align: top" />
       <Control Type="AR.Field" Name="Address1" DataField="Address" Left="4789.44" Top="1431.36" Width="4485" Height="400" Text="Address" CanGrow="0" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: top" />

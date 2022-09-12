@@ -15,7 +15,7 @@
       <Control Type="AR.Shape" Name="Box42" Left="5640.48" Top="5598.72" Width="5030" Height="240" BackColor="12581113" BackStyle="1" LineStyle="0" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box12" Left="260.64" Top="10170.72" Width="5009.76" Height="269.28" BackColor="10025880" BackStyle="1" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box36" Left="260.64" Top="10435.68" Width="5009.76" Height="250.56" BackColor="13882323" BackStyle="1" RoundingRadius="10" />
-      <Control Type="AR.Shape" Name="Box33" Left="4665" Top="600" Width="6015.48" Height="1480" BackStyle="1" RoundingRadius="10" />
+      <Control Type="AR.Shape" Name="Box33" Left="4665" Top="600" Width="6015.48" Height="1480" BackStyle="1" Shape="2" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box37" Left="5641.92" Top="13436.64" Width="5029.92" Height="260.64" BackColor="13882323" BackStyle="1" LineStyle="0" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box15" Left="260" Top="8650" Width="5010" Height="280" BackColor="13882323" BackStyle="1" LineStyle="0" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box38" Left="260" Top="6970" Width="5010" Height="280" BackColor="10025880" BackStyle="1" LineStyle="0" RoundingRadius="10" />
