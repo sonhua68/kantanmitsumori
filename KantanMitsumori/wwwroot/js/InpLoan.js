@@ -367,6 +367,7 @@ function CalInpLoan() {
             $("#Msg").html(Items.calcInfo)
             CleanForm();
             resetBonus_Result();
+            calcResultGankin();
         } else {
             location.reload();
         }
@@ -381,7 +382,6 @@ function CleanForm() {
     $("#FirstPay").val("");
     $("#PayMonth").val("");
     $("#MoneyRateCl").val("")
-    $("#Deposit").val("")
     $("#DepositCl").val("")
     $("#rbBonusM_Result").prop("checked", true);
     $("#Fee_old").val("");
