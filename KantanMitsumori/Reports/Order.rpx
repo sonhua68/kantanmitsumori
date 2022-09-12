@@ -207,7 +207,7 @@
       <Control Type="AR.Label" Name="Text13" Left="385" Top="13770" Width="460" Height="199" Caption="備考" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="AAInfo1" DataField="AAInfo" Left="7585" Top="4330" Width="2895" Height="211" Text="AAInfo" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Label" Name="Text10" Left="305.28" Top="9770" Width="224.64" Height="279.36" Caption="15" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="PrTitle1" DataField="PrTitle" Left="270" Top="0" Width="4710" Height="500" Text="PrTitle" Style="color: #4455BB; font-family: MS PGothic; font-size: 24pt; text-align: left" />
+      <Control Type="AR.Field" Name="PrTitle1" Left="270" Top="0" Width="4710" Height="500" Text="注　文　書" Style="color: #4455BB; font-family: MS PGothic; font-size: 24pt; text-align: left" />
       <Control Type="AR.Field" Name="CarPriceTitle1" DataField="CarPriceTitle" Left="635" Top="5850.72" Width="2280" Height="279.36" Text="CarPriceTitle" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Field" Name="SonotaTitle1" DataField="SonotaTitle" Left="635" Top="6410" Width="2280" Height="279.36" Text="SonotaTitle" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Field" Name="SyakenNewZokT1" DataField="SyakenNewZokT" Left="635" Top="6690" Width="2280" Height="279.36" Text="SyakenNewZokT" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
@@ -257,7 +257,7 @@
       <Control Type="AR.Line" Name="Line26" X1="5500" Y1="4930" X2="5500" Y2="5500" />
       <Control Type="AR.Line" Name="Line27" X1="7900" Y1="4930" X2="7900" Y2="5500" />
       <Control Type="AR.Line" Name="Line28" X1="8815" Y1="4930" X2="8815" Y2="5500" />
-      <Control Type="AR.Line" Name="Line29" X1="570" Y1="5880" X2="570" Y2="10050" />
+      <Control Type="AR.Line" Name="Line29" X1="570" Y1="5850.72" X2="570" Y2="10050" />
       <Control Type="AR.Line" Name="Line30" X1="267.84" Y1="6130" X2="5263.2" Y2="6130" />
       <Control Type="AR.Line" Name="Line31" X1="267.84" Y1="6410" X2="5263.2" Y2="6410" />
       <Control Type="AR.Line" Name="Line32" X1="267.84" Y1="6690" X2="5263.2" Y2="6690" />
@@ -335,10 +335,9 @@
       <Control Type="AR.Shape" Name="Box16" Left="5641.92" Top="9208.8" Width="5029.92" Height="2790.72" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Line" Name="Line76" X1="5648" Y1="12660" X2="10663" Y2="12660" />
       <Control Type="AR.Shape" Name="Box10" Left="5641.92" Top="12389.76" Width="5029.92" Height="2880" BackColor="16777215" RoundingRadius="10" />
-      <Control Type="AR.Shape" Name="Box9" Left="260" Top="5600" Width="5010" Height="4450" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="BoxRevenueStamp" Left="9469.439" Top="641.3599" Width="1100" Height="1400" BackStyle="1" LineStyle="3" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box33" Left="4684.44" Top="591.3598" Width="4710" Height="1480" BackStyle="1" RoundingRadius="10" />
-      <Control Type="AR.Label" Name="Text94" Left="4759.44" Top="661.3599" Width="815.04" Height="198.72" Caption="【販売店】" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
+      <Control Type="AR.Label" Name="Text94" Left="4759.2" Top="632.16" Width="815.04" Height="227.52" Caption="【販売店】" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Field" Name="SName1" DataField="SName" Left="4789.44" Top="871.3601" Width="4485" Height="560" Text="SName" Style="color: Black; font-family: MS PGothic; font-size: 10.5pt; text-align: left; vertical-align: top" />
       <Control Type="AR.Field" Name="Address1" DataField="Address" Left="4789.44" Top="1431.36" Width="4485" Height="400" Text="Address" CanGrow="0" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: top" />
       <Control Type="AR.Field" Name="Tanto1" DataField="Tanto" Left="4790.161" Top="1836" Width="1935" Height="199" Text="Tanto" CanGrow="0" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: top" />
@@ -347,6 +346,7 @@
       <Control Type="AR.Field" Name="SekininName1" DataField="SekininName" Left="7039.439" Top="1836" Width="2119.68" Height="198.72" Text="SekininName" CanGrow="0" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Label" Name="Text88" Left="6759.438" Top="1821.36" Width="210" Height="211" Caption="印" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Label" Name="Text89" Left="9189.439" Top="1821.36" Width="210" Height="211" Caption="印" Style="color: Black; font-family: MS Gothic; font-size: 9pt; text-align: left; vertical-align: middle" />
+      <Control Type="AR.Shape" Name="Box9" Left="260" Top="5600" Width="5010" Height="4450" BackColor="16777215" RoundingRadius="10" />
     </Section>
   </Sections>
   <ReportComponentTray />
