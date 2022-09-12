@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using KantanMitsumori.Entity.ASESTEntities;
+using KantanMitsumori.Entity.ASESTSQL;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
@@ -9,8 +11,10 @@ using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-
+using Org.BouncyCastle.Asn1.Ocsp;
+using System.Data.SqlClient;
 
 namespace KantanMitsumori.Service.ASEST
 {
@@ -113,6 +117,34 @@ namespace KantanMitsumori.Service.ASEST
 
         }
 
+        [Obsolete]
+        public ResponseBase<List<ResponseTbRuibetsuNew>> GetListRuiBetSu(RequestSelGrd requestSel)
+        {
+            try
+            {
+                var sql = SQLHelper.GetListTB_RUIBETSU_NEW(requestSel);
+                var tbRuibetsuList = _unitOfWork.DbContext.Set<TbRuibetsuEntity>().FromSqlRaw(sql)
+                                                                    .OrderByDescending(n => n.GradeNameOrd).ThenBy(n => n.GradeName)
+                                                                    .ThenByDescending(n => n.RegularCaseOrd).ThenBy(n => n.RegularCase)
+                                                                    .ThenByDescending(n => n.DispVolOrd).ThenBy(n => n.DispVol)
+                                                                    .ThenByDescending(n => n.DriveTypeCodeOrd).ThenBy(n => n.DriveTypeCode)
+                                                                    .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
+                                                                    .ToList();
 
+                if (tbRuibetsuList.Count == 0)
+                {
+
+                    return ResponseHelper.Ok<List<ResponseTbRuibetsuNew>>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003));
+                }
+                return ResponseHelper.Ok<List<ResponseTbRuibetsuNew>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), tbRuibetsuList);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "chkCar");
+                return ResponseHelper.Error<List<ResponseTbRuibetsuNew>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+
+            }
+
+        }
     }
 }

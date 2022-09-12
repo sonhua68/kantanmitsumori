@@ -1,12 +1,17 @@
 ﻿@using KantanMitsumori.Model.Response;
 @using KantanMitsumori.Helper.CommonFuncs;
-@model PaginatedList<ResponseTbRuibetsuN>
+@model PaginatedList<ResponseTbRuibetsuNew>
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
     var MakerName = Model[0].MakerName;
     var ModelName = Model[0].ModelName;
+    var MakerId = Model[0].MakerId;
+    var TotalPages = Convert.ToInt32(ViewData["TotalPages"]);
+    var PageIndex = Convert.ToInt32(ViewData["PageIndex"]);
+
 }
+
 <div class="row">
     <div class="col-sm-2">
     </div>
@@ -89,6 +94,7 @@
                         @{
                             foreach (var item in Model)
                             {
+                                var DriveTypeCode = item.DriveTypeCode == "不明" ? "" : item.DriveTypeCode;
                                 <tr>
                                     <td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">
                                         <input type="button" value="選択" onclick="" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">
@@ -96,24 +102,42 @@
                                     <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">@item.GradeName</td>
                                     <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.RegularCase</td>
                                     <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;white-space:nowrap;">@item.DispVol</td>
-                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.ShiftId</td>
-                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.DriveTypeCode</td>
+                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.Shift</td>
+                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@DriveTypeCode</td>
                                 </tr>
                             }
-                        } 
-                        <tr align="center" style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">
-                            <td colspan="6">
-                                <table border="0">
-                                    <tbody>
-                                        <tr>
-                                            <td><span>1</span></td>
-                                            <td><a href="javascript:__doPostBack('gvGrade','Page$2')" style="color:White;">2</a></td>
-                                            <td><a href="javascript:__doPostBack('gvGrade','Page$3')" style="color:White;">3</a></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </td>
-                        </tr>
+                        }
+                        @{
+                            if (TotalPages > 1)
+                            {
+                                <tr align="center" style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">
+                                    <td colspan="6">
+                                        <table border="0">
+                                            <tbody>
+                                                <tr>
+                                                    @{
+                                                        for (int i = 1; i <= TotalPages; i++)
+                                                            if (i == PageIndex)
+                                                            {
+                                                                <td><span>@i</span></td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td><a href="#" onclick="GoNextPage(@i);return false" style="color:White;">@i</a></td>
+                                                            }
+                                                    }
+                                                </tr>
+
+
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+
+                            }
+                        }
+
                     </tbody>
                 </table>
 
@@ -121,4 +145,8 @@
         </div>
     </div>
 </div>
+
+<input type="hidden" id="sesMakID" value="@MakerId">
+<input type="hidden" id="sesMaker" value="@MakerName">
+<input type="hidden" id="sesCarNM" value="@ModelName">
 <script src="~/js/SelCar.js"></script>

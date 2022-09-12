@@ -10,5 +10,6 @@ namespace KantanMitsumori.IService
         ResponseBase<List<ResponseAsopMaker>> GetListASOPMakers();
         ResponseBase<List<ResponseAsopCarname>> GetListASOPCarName(int makId );
         ResponseBase<List<ResponseTbRuibetsuN>> chkGetListRuiBetSu(RequestSelGrd requestSel, int Flg);
+        ResponseBase<List<ResponseTbRuibetsuNew>> GetListRuiBetSu(RequestSelGrd requestSel);
     }
 }

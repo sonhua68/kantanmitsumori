@@ -4,7 +4,7 @@ using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Infrastructure;
 using KantanMitsumori.Service;
 using Microsoft.EntityFrameworkCore;
-
+using KantanMitsumori.DataAccess;
 namespace KantanMitsumori
 {
     public class Startup

@@ -85,7 +85,7 @@ function btnChkModel() {
     } else {
         if (typeof (Items) != "undefined") {
             $("#lblErrMsg2").html(def_GradeNotFoundMsg)
-        } else {         
+        } else {
             Framework.SummitForm("/SelGrd", result)
         }
     }
@@ -96,6 +96,7 @@ function btnNextGrade() {
     model.sesMakID = $("#ddlMaker").val();
     model.sesMaker = $("#ddlMaker option:selected").text();
     model.sesCarNM = $("#ddlModel option:selected").text();
+    $("#ddlModel option[value='" + model.sesCarNM + "']").attr("selected", "selected");
     var result = Framework.submitAjaxGetList(model, "/SelCar/NextGrade");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
     } else {
@@ -106,4 +107,13 @@ function btnNextGrade() {
             Framework.SummitForm("/SelGrd", result)
         }
     }
+}
+
+function GoNextPage(pageNumber) {
+    var model = {};
+    model.sesMakID = $("#sesMakID").val();
+    model.sesMaker = $("#sesMaker").val();
+    model.sesCarNM = $("#sesCarNM").val();
+    model.pageNumber = pageNumber
+    Framework.SummitForm("/SelGrd", model)
 }

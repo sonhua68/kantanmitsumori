@@ -24,12 +24,14 @@ namespace KantanMitsumori.Controllers
         #region SelCar 
         public async Task<IActionResult> Index([FromForm] RequestSelGrd requestData)
         {
-            var response = _selCarService.chkGetListRuiBetSu(requestData, (int)enTypeButton.isNextGrade);           
-            var dt = await PaginatedList<ResponseTbRuibetsuN>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
+            var response = _selCarService.GetListRuiBetSu(requestData);           
+            var dt = await PaginatedList<ResponseTbRuibetsuNew>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
             }
+            ViewData["TotalPages"] = dt.TotalPages;
+            ViewData["PageIndex"] = dt.PageIndex;
             return View(dt);
         }
 

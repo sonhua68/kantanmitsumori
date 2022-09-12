@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
+using KantanMitsumori.Entity.ASESTSQL;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 
@@ -15,8 +16,9 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<AsopMaker, ResponseAsopMaker>();
             CreateMap<AsopCarname, ResponseAsopCarname>();
             CreateMap<TbRuibetsuN, ResponseTbRuibetsuN>();
-
+            CreateMap<TbRuibetsuEntity, ResponseTbRuibetsuNew>();
         }
-      
+
+
     }
 }

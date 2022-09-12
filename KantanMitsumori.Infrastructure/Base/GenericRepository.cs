@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
-
+using KantanMitsumori.DataAccess;
 namespace KantanMitsumori.Infrastructure.Base
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
