@@ -55,8 +55,7 @@ function chgBonus() {
         $('#cbBonusFirst').val("");
         $('#cbBonusSecond').val("");
         $('#hidBonusSecond').val("");
-        $('#Bonus').attr("disabled", true);
-        c
+        $('#Bonus').attr("disabled", true);        
         $('#cbBonusSecond').attr("disabled", true);
         $('#Bonus').css('background-color', FALSE_COLOR);
         $('#cbBonusFirst').css('background-color', FALSE_COLOR);
