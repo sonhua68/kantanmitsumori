@@ -264,7 +264,7 @@
       <Control Type="AR.Line" Name="Line26" X1="5500" Y1="4930" X2="5500" Y2="5500" />
       <Control Type="AR.Line" Name="Line27" X1="7900" Y1="4930" X2="7900" Y2="5500" />
       <Control Type="AR.Line" Name="Line28" X1="8815" Y1="4930" X2="8815" Y2="5500" />
-      <Control Type="AR.Line" Name="Line29" X1="570" Y1="5880" X2="570" Y2="10050" />
+      <Control Type="AR.Line" Name="Line29" X1="570" Y1="5850.72" X2="570" Y2="10050" />
       <Control Type="AR.Line" Name="Line30" X1="267.84" Y1="6130" X2="5263.2" Y2="6130" />
       <Control Type="AR.Line" Name="Line31" X1="267.84" Y1="6410" X2="5263.2" Y2="6410" />
       <Control Type="AR.Line" Name="Line32" X1="267.84" Y1="6690" X2="5263.2" Y2="6690" />
