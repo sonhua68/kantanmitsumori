@@ -38,10 +38,10 @@
       <Control Type="AR.Shape" Name="Box7" Left="260" Top="7250" Width="5003" Height="280" BackColor="13882323" BackStyle="1" LineStyle="0" RoundingRadius="10" />
       <Control Type="AR.Label" Name="Text2" Left="248" Top="609" Width="720" Height="211" Caption="お名前" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Label" Name="Text3" Left="248" Top="964" Width="742.0001" Height="211" Caption="ご連絡先" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
-      <Control Type="AR.Label" Name="lblEstNo" Left="7768" Top="28" Width="1232" Height="196" Caption="見積書番号：" Style="color: Black; font-family: MS Gothic; font-size: 9pt; text-align: right" />
-      <Control Type="AR.Label" Name="lblBusiDate" Left="7835.042" Top="315.36" Width="1165" Height="204" Caption="見　積　日：" Style="color: Black; font-family: MS Gothic; font-size: 9pt; text-align: right" />
-      <Control Type="AR.Field" Name="EstNo1" DataField="EstNo" Left="9030" Top="10" Width="1740" Height="211" Text="EstNo" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
-      <Control Type="AR.Field" Name="BusiDate1" DataField="BusiDate" Left="9024" Top="316" Width="1731" Height="211" Text="BusiDate" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
+      <Control Type="AR.Label" Name="lblEstNo" Left="7768" Top="9.999999" Width="1232" Height="223.2" Caption="見積書番号：" Style="color: Black; font-family: MS Gothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Label" Name="lblBusiDate" Left="7835.042" Top="315.36" Width="1165" Height="223.2" Caption="見　積　日：" Style="color: Black; font-family: MS Gothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="EstNo1" DataField="EstNo" Left="9030" Top="10" Width="1739.52" Height="223.2" Text="EstNo" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
+      <Control Type="AR.Field" Name="BusiDate1" DataField="BusiDate" Left="9024" Top="316" Width="1731" Height="223.2" Text="BusiDate" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Label" Name="Text8" Left="305.28" Top="2160" Width="1185.12" Height="270.72" Caption="見積車両" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Label" Name="Text11" Left="299.52" Top="2430.72" Width="1019.52" Height="279.36" Caption="車名" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Label" Name="Text12" Left="299.52" Top="2710.08" Width="1019.52" Height="279.36" Caption="グレード" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
@@ -287,7 +287,7 @@
       <Control Type="AR.Line" Name="Line51" X1="5648" Y1="14736" X2="10663" Y2="14736" />
       <Control Type="AR.Line" Name="Line52" X1="5648" Y1="14996" X2="10663" Y2="14996" />
       <Control Type="AR.Line" Name="Line53" X1="8050" Y1="12671" X2="8050" Y2="15260" />
-      <Control Type="AR.Line" Name="Line1" X1="7895" Y1="530" X2="10680" Y2="530" />
+      <Control Type="AR.Line" Name="Line1" X1="7895" Y1="542.88" X2="10680" Y2="542.88" />
       <Control Type="AR.Line" Name="Line55" X1="3250" Y1="10449" X2="3250" Y2="13541.76" />
       <Control Type="AR.Line" Name="Line59" X1="267.84" Y1="10919" X2="5263.2" Y2="10919" />
       <Control Type="AR.Line" Name="Line60" X1="267.84" Y1="11149" X2="5263.2" Y2="11149" />
