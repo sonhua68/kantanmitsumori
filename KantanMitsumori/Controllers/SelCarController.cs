@@ -1,6 +1,7 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model.Request;
+using KantanMitsumori.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -8,41 +9,76 @@ namespace KantanMitsumori.Controllers
     public class SelCarController : BaseController
     {
         private readonly IAppService _appService;
-        private readonly IEstimateService _estimateService;
+
         private readonly ILogger<SelCarController> _logger;
-        public SelCarController(IAppService appService, IEstimateService estimateService, IConfiguration config, ILogger<SelCarController> logger) : base(config)
+        private readonly ISelCarService _selCarService;
+        public SelCarController(IAppService appService, ISelCarService selCarService, IConfiguration config, ILogger<SelCarController> logger) : base(config)
         {
             _appService = appService;
-            _estimateService = estimateService;
+
             _logger = logger;
+            _selCarService = selCarService;
         }
 
         #region SelCar 
         public IActionResult Index()
         {
-            RequestInp res = new RequestInp();
-            res.EstNo = "22082900004";
-            res.EstSubNo = "01";
-            res.UserNo = "00000001";
-            var response = _estimateService.GetDetail(res);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
-            return View(response.Data);
+            return View();
         }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateSelCar([FromForm] RequestUpdateInpZeiHoken requestData)
+        [HttpGet]
+        public IActionResult GetListASOPMaker()
         {
-            var response = await _estimateService.UpdateInpZeiHoken(requestData);
+            var response = _selCarService.GetListASOPMakers();
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
             }
             return Ok(response);
         }
+        [HttpGet]
+        public IActionResult GetListASOPCarName(int markId)
+        {
+            var response = _selCarService.GetListASOPCarName(markId);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
+        }
+        [HttpPost]
+        public IActionResult NextGrade([FromForm] RequestSelGrd requestData)
+        {
+            var response = _selCarService.chkGetListRuiBetSu(requestData, (int)enTypeButton.isNextGrade);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            else if (response.Data != null)
+            {
+                requestData.TypeButton = (int)enTypeButton.isNextGrade;
+                return Ok(requestData);
 
+            }
+            return Ok(response);
+        }
+        [HttpPost]
+        public IActionResult ChkModel([FromForm] RequestSelGrd requestData)
+        {
+            var response = _selCarService.chkGetListRuiBetSu(requestData, (int)enTypeButton.isChkModel);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            else if (response.Data != null)
+            {
+                requestData.TypeButton = (int)enTypeButton.isChkModel;
+                requestData.sesMakID = response.Data[0].MakerId;
+                requestData.sesMaker = response.Data[0].MakerName;
+                requestData.sesCarNM = response.Data[0].ModelName;
+                return Ok(requestData);
+            }
+            return Ok(response);
+        }
 
         #endregion SelCar
     }

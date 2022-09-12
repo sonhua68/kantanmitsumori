@@ -1,14 +1,12 @@
-﻿@using KantanMitsumori.Model.Response;
-@using KantanMitsumori.Helper.CommonFuncs;
-@model ResponseInp
+﻿
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
-
 }
 
 <div class="row">
-    <!--button-->
+     <div class="col-sm-2">
+          </div>
     <div class="col-sm-2">
         <div class="col d-flex justify-content-between">
             <div class="border-button container text-center">
@@ -29,8 +27,7 @@
                     <a href="">
                         <img src="img/btn%E8%AB%B8%E8%B2%BB%E7%94%A8%E8%A8%AD%E5%AE%9A.png">
                     </a>
-                </div>
-                <br>
+                </div>             
 
                 <div class="col d-flex justify-content-between">
                     <span class="label label-text">※事前設定必要</span>
@@ -38,22 +35,20 @@
             </div>
         </div>
     </div>
-    <!--end button-->
-    <!--Container-->
-    <div class="col-sm-10">
+
+    <div class="col-sm-2">
         <div class="row">
             <div class="col-2 col-sm-2 ">
                 <span id="Label4" class="InpTitle1" style="display:inline-block;color:MediumBlue;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:8px;width:283px;z-index: 105;
              top: 66px">フリー見積</span>
                 <br>
-
             </div>
         </div>
         <br>
         <!-- お客様情報（印字用） -->
         <div class="row">
-            <div class="col-8 col-sm-8">
-                <table class="inptable" id="Table4" style="  TOP: 97px;" bordercolor="#ffffff" cellspacing="0">
+            <div class="col-8 col-sm-8">                
+                <table class="inptable" id="Table4" bordercolor="#ffffff" cellspacing="0">
                     <tbody>
                         <tr>
                             <td class="tabletitle" colspan="2">
@@ -63,207 +58,21 @@
                         <tr>
                             <td class="inptd">
                                 <span id="Label2" class="inplabel" style="display:inline-block;">①メーカーを選択</span>
-                                <select name="ddlMaker" onchange="javascript:setTimeout('__doPostBack(\'ddlMaker\',\'\')', 0)" id="ddlMaker" tabindex="1" class="inpbox" style="width:253px;">
-                                    <option value="-1">メーカーを選択して下さい</option>
-                                    <option value="10">トヨタ</option>
-                                    <option value="11">ニッサン</option>
-                                    <option value="12">ミツビシ</option>
-                                    <option selected="selected" value="13">マツダ</option>
-                                    <option value="14">イスズ</option>
-                                    <option value="15">ホンダ</option>
-                                    <option value="16">ダイハツ</option>
-                                    <option value="17">スバル</option>
-                                    <option value="18">スズキ</option>
-                                    <option value="19">ミツオカ</option>
-                                    <option value="20">レクサス</option>
-                                    <option value="21">ヒノ</option>
-                                    <option value="22">ニッサンディーゼル</option>
-                                    <option value="23">ミツビシフソウ</option>
-                                    <option value="51">AMG</option>
-                                    <option value="52">BMW</option>
-                                    <option value="53">BMWアルピナ</option>
-                                    <option value="54">アウディ</option>
-                                    <option value="55">イエス</option>
-                                    <option value="56">オペル</option>
-                                    <option value="57">スマート</option>
-                                    <option value="58">フォルクスワーゲン</option>
-                                    <option value="59">ブラバス</option>
-                                    <option value="60">メルセデスベンツ</option>
-                                    <option value="61">ポルシェ</option>
-                                    <option value="62">マイバッハ</option>
-                                    <option value="63">ルーフ</option>
-                                    <option value="64">ミニ</option>
-                                    <option value="71">サーブ</option>
-                                    <option value="72">ボルボ</option>
-                                    <option value="81">シトロエン</option>
-                                    <option value="82">プジョー</option>
-                                    <option value="83">ルノー</option>
-                                    <option value="91">AMC</option>
-                                    <option value="92">GMC</option>
-                                    <option value="93">ウィネベーゴ</option>
-                                    <option value="94">オールズモービル</option>
-                                    <option value="95">キャデラック</option>
-                                    <option value="96">クライスラー</option>
-                                    <option value="97">サターン</option>
-                                    <option value="98">サリーン</option>
-                                    <option value="99">シボレー</option>
-                                    <option value="100">ダッジ</option>
-                                    <option value="101">ハマー</option>
-                                    <option value="102">ビュイック</option>
-                                    <option value="103">フォード</option>
-                                    <option value="104">プリムス</option>
-                                    <option value="105">ポンテアック</option>
-                                    <option value="106">マーキュリー</option>
-                                    <option value="107">リンカーン</option>
-                                    <option value="108">ジープ</option>
-                                    <option value="111">BL</option>
-                                    <option value="112">MG</option>
-                                    <option value="113">TVR</option>
-                                    <option value="114">アストンマーティン</option>
-                                    <option value="115">ウーズレー</option>
-                                    <option value="116">ウエストフィールド</option>
-                                    <option value="117">オースチン</option>
-                                    <option value="118">ケーターハム</option>
-                                    <option value="119">ジャガー</option>
-                                    <option value="120">デイムラー</option>
-                                    <option value="121">トライアンフ</option>
-                                    <option value="122">バンデンプラ</option>
-                                    <option value="123">パンサー</option>
-                                    <option value="124">ヒーレー</option>
-                                    <option value="125">ベントレー</option>
-                                    <option value="126">マーコス</option>
-                                    <option value="127">モーガン</option>
-                                    <option value="128">モーリス</option>
-                                    <option value="129">ライレー</option>
-                                    <option value="130">ランドローバー</option>
-                                    <option value="131">ロータス</option>
-                                    <option value="132">ローバー</option>
-                                    <option value="133">ロールスロイス</option>
-                                    <option value="141">バーキン</option>
-                                    <option value="151">アウトビアンキ</option>
-                                    <option value="152">アルファロメオ</option>
-                                    <option value="153">イノチェンティ</option>
-                                    <option value="154">デトマソ</option>
-                                    <option value="155">フィアット</option>
-                                    <option value="156">フェラーリ</option>
-                                    <option value="157">ブガッティ</option>
-                                    <option value="158">マセラティ</option>
-                                    <option value="159">ランチア</option>
-                                    <option value="160">ランボルギーニ</option>
-                                    <option value="171">ドンカーブート</option>
-                                    <option value="181">GMデーウ</option>
-                                    <option value="182">GMマティス</option>
-                                    <option value="183">キア</option>
-                                    <option value="184">サンヨン</option>
-                                    <option value="185">ヒュンダイ</option>
-                                    <option value="191">ラーダ</option>
-                                    <option value="201">TD</option>
-                                    <option value="899">輸入車/その他</option>
-                                    <option value="999">その他</option>
-
+                                <select name="ddlMaker" id="ddlMaker" onchange="return GetListASOPCarName()" tabindex="1" class="inpbox" style="width:253px;">
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td class="inptd" colspan="2">
                                 <span id="Label3" class="inplabel" style="display:inline-block;width:128px;">②車種を選択</span>
-                                <select name="ddlModel" onchange="javascript:setTimeout('__doPostBack(\'ddlModel\',\'\')', 0)" id="ddlModel" tabindex="2" class="inpbox" style="width:252px;">
-                                    <option value="-1">車種を選択して下さい</option>
-                                    <option value="1">AZ-1</option>
-                                    <option value="2">AZ-3</option>
-                                    <option value="3">AZ-オフロード</option>
-                                    <option value="4">AZ-ワゴン</option>
-                                    <option value="5">CX-5</option>
-                                    <option selected="selected" value="6">CX-7</option>
-                                    <option value="7">MPV</option>
-                                    <option value="8">MS-6</option>
-                                    <option value="9">MS-8</option>
-                                    <option value="10">MS-9</option>
-                                    <option value="11">MX-6</option>
-                                    <option value="12">RX-7</option>
-                                    <option value="13">RX-8</option>
-                                    <option value="14">アクセラ</option>
-                                    <option value="15">アクセラスポーツ</option>
-                                    <option value="16">アクセラスポーツワゴン</option>
-                                    <option value="17">アテンザ</option>
-                                    <option value="18">アテンザスポーツ</option>
-                                    <option value="19">アテンザスポーツワゴン</option>
-                                    <option value="20">エチュード</option>
-                                    <option value="21">カペラ</option>
-                                    <option value="22">カペラC2</option>
-                                    <option value="23">カペラCG</option>
-                                    <option value="24">カペラカーゴ</option>
-                                    <option value="25">カペラカーゴバン</option>
-                                    <option value="26">カペラワゴン</option>
-                                    <option value="27">キャロル</option>
-                                    <option value="28">クレフ</option>
-                                    <option value="29">クロノス</option>
-                                    <option value="30">コスモ</option>
-                                    <option value="31">コスモクーペ</option>
-                                    <option value="32">コスモスポーツ</option>
-                                    <option value="33">サバンナ</option>
-                                    <option value="34">シャンテ</option>
-                                    <option value="35">スクラム</option>
-                                    <option value="36">スクラムトラック</option>
-                                    <option value="37">スクラムワゴン</option>
-                                    <option value="38">スピアーノ</option>
-                                    <option value="39">センティア</option>
-                                    <option value="40">その他</option>
-                                    <option value="41">タイタン</option>
-                                    <option value="42">タイタンダッシュ</option>
-                                    <option value="43">デミオ</option>
-                                    <option value="44">トリビュート</option>
-                                    <option value="45">パークウェイ</option>
-                                    <option value="46">ビアンテ</option>
-                                    <option value="47">ファミリア</option>
-                                    <option value="48">ファミリアS-ワゴン</option>
-                                    <option value="49">ファミリアアスティナ</option>
-                                    <option value="50">ファミリアカブリオレ</option>
-                                    <option value="51">ファミリアセダン</option>
-                                    <option value="52">ファミリアバン</option>
-                                    <option value="53">ファミリアワゴン</option>
-                                    <option value="54">フレア</option>
-                                    <option value="55">フレアワゴン</option>
-                                    <option value="56">プレマシー</option>
-                                    <option value="57">プロシード</option>
-                                    <option value="58">プロシードマービー</option>
-                                    <option value="59">プロシードレバンテ</option>
-                                    <option value="60">ベリーサ</option>
-                                    <option value="61">ペルソナ</option>
-                                    <option value="62">ポーター</option>
-                                    <option value="63">ボンゴ</option>
-                                    <option value="64">ボンゴトラック</option>
-                                    <option value="65">ボンゴバン</option>
-                                    <option value="66">ボンゴフレンディ</option>
-                                    <option value="67">ボンゴブローニイ</option>
-                                    <option value="68">ボンゴブローニイトラック</option>
-                                    <option value="69">ボンゴブローニイバン</option>
-                                    <option value="70">ボンゴブローニイワゴン</option>
-                                    <option value="71">ボンゴワゴン</option>
-                                    <option value="72">ミレーニア</option>
-                                    <option value="73">ユーノス100</option>
-                                    <option value="74">ユーノス300</option>
-                                    <option value="75">ユーノス500</option>
-                                    <option value="76">ユーノス800</option>
-                                    <option value="77">ユーノスカーゴ</option>
-                                    <option value="78">ユーノスカーゴトラック</option>
-                                    <option value="79">ユーノスコスモ</option>
-                                    <option value="80">ユーノスプレッソ</option>
-                                    <option value="81">ラピュタ</option>
-                                    <option value="82">ランティス</option>
-                                    <option value="83">ランティスクーペ</option>
-                                    <option value="84">ルーチェ</option>
-                                    <option value="85">ルーチェバン</option>
-                                    <option value="86">レビュー</option>
-                                    <option value="87">ロードスター</option>
-                                    <option value="88">ロードスタークーペ</option>
-
+                                <select name="ddlModel" id="ddlModel" tabindex="2" onchange="return onchangeCarName()" class="inpbox" style="width:252px;">
+                                   
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td class="inpbtntd" colspan="2" style="height: 35px">
-                                <input type="submit" name="btnNextGrade" value="この車種のグレードを選択する >>" id="btnNextGrade" tabindex="3" class="Btn1" style="height:33px;width:281px;">
+                                <input type="submit" name="btnNextGrade" value="この車種のグレードを選択する >>" id="btnNextGrade" onclick="btnNextGrade()" tabindex="3" class="Btn1" style="height:33px;width:281px;">
                             </td>
                         </tr>
                         <tr>
@@ -272,9 +81,9 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <table id="Table2" bordercolor="#ffffff" cellpadding="2" cellspacing="0" class="inptable" style=" top: 302px; width: 399px;">
-                    <tbody>
+                </table>             
+                 <table class="inptable" id="Table4" bordercolor="#ffffff" cellspacing="0">
+                    <tbody>                     
                         <tr>
                             <td class="tabletitle">
                                 <span id="Label15" class="titlelabel" style="display:inline-block;width:283px;">車種を型式・類別で指定</span>
@@ -283,335 +92,48 @@
                         <tr>
                             <td class="inptd">
                                 <span id="Label14" class="inplabel" style="display:inline-block;width:80px;">型式指定</span>
-                                <input name="txtCaseSet" type="text" maxlength="5" id="txtCaseSet" tabindex="4" class="inpbox" style="width:80px;ime-mode: disabled">
+                                <input name="CaseSet" type="text" maxlength="5" id="CaseSet" tabindex="4" class="inpbox" style="width:150px;ime-mode: disabled">
                             </td>
                         </tr>
                         <tr>
                             <td class="inptd">
                                 <span id="Label5" class="inplabel" style="display:inline-block;width:80px;">類別区分</span>
-                                <input name="txtKbnSet" type="text" maxlength="4" id="txtKbnSet" tabindex="5" class="inpbox" style="width:80px;ime-mode: disabled">
+                                <input name="KbnSet" type="text" maxlength="4" id="KbnSet" tabindex="5" class="inpbox" style="width:150px;ime-mode: disabled">
                             </td>
                         </tr>
                         <tr>
                             <td class="inpbtntd" colspan="2" style="height: 35px">
-                                <input type="submit" name="btnChkModel" value="車名を確認する >>" id="btnChkModel" tabindex="3" class="Btn1" style="height:33px;width:281px;">
+                                <input type="button" name="btnChkModel" value="車名を確認する >>" onclick="btnChkModel()" id="btnChkModel" tabindex="3" class="Btn1" style="height:33px;width:281px;">
                             </td>
                         </tr>
-                        <tr>
-                            <td class="inpbtntd" colspan="2" style="height: 30px">
-                                <span id="lblErrMsg2" class="inplabel" style="display:inline-block;color:Crimson;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;width:276px;"></span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <table class="inptable" id="Table4" style="  TOP: 97px;" bordercolor="#ffffff" cellspacing="0">
-                    <tbody>
-                        <tr>
-                            <td class="inpbtntd" colspan="2" style="height: 35px">
-                                <input type="submit" name="btnNextGrade" value="車名を直接入力する >>" id="btnNextGrade" tabindex="3" class="Btn1" style="height:33px;width:281px;">
-                            </td>
-                        </tr>
+                                       
                         <tr>
                             <td class="inpbtntd" colspan="2" style="height: 30px;">
-                                <span id="Label34" class="InpTitle1" style="display:inline-block;color:MediumBlue;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:8px;width:467px;z-index: 109;
-             top: 496px">※上の選択機能で車種が見つからない場合はこちらから</span>
+                                <span id="lblErrMsg2" class="inplabel" style="display:inline-block;color:Crimson;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:40px;width:400px;"></span>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <span id="Label34" class="InpTitle1" style="display:inline-block;color:MediumBlue;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:8px;width:467px;z-index: 109;
+             top: 496px">※上の選択機能で車種が見つからない場合はこちらから</span>
+                <table class="inptable" id="Table4" bordercolor="#ffffff" cellspacing="0">
+                    <tbody>                       
+                        <tr>
+                            <td class="inpbtntd" colspan="2" style="height: 35px">
+                                <input type="submit" name="btnNextInpEst" value="車名を直接入力する >>" onclick="Framework.GoBackReloadPage();" id="btnNextInpEst" tabindex="3" class="Btn1" style="height:33px;width:281px;">
+                            </td>
+                        </tr>                       
+                        <tr>
+                            <td class="inpbtntd" colspan="2" style="height: 30px;">
+                                <span id="lblErrMsg6" class="inplabel" style="display:inline-block;color:Crimson;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:40px;width:400px;"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            
+               
             </div>
         </div>
-
-        <!--end Container-->
     </div>
-
-    @*
-
-    <form name="frm" method="post" action="SelCar.aspx" id="frm" onkeydown="return NoSubmit(event);">
-    <div class="row ">
-    <div class="col-12">
-    <div class="col-md-2 col-sm-2">
-    <div id="DIV2" style="border-right: #3c82ed 1px solid;
-    border-top: #3c82ed 1px solid; z-index: 104; left: 12px; border-left: #3c82ed 1px solid;
-    width: 142px; border-bottom: #3c82ed 1px solid;  top: 68px;
-    height: 173px; background-color: transparent;">
-    <input type="image" name="btnBack" id="btnBack" src="./img/btn%e8%a6%8b%e7%a9%8dTOP.png" style="">
-    &nbsp; &nbsp;
-    <input type="image" name="btnSerEst" id="btnSerEst" src="img/btn%E6%A4%9C%E7%B4%A2.png" style="">
-    &nbsp; &nbsp;
-    <input type="image" name="btnInitVal" id="btnInitVal" src="img/btn%E8%AB%B8%E8%B2%BB%E7%94%A8%E8%A8%AD%E5%AE%9A.png">
-    &nbsp; &nbsp;
-    <span id="lblInfoSetting" style="display:inline-block;color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:9pt;font-weight:bold;height:14px;width:100px;font-weight: bold; z-index: 103;
-    left: 25px; vertical-align: top; direction: ltr;
-    top: 151px; text-align: left">※事前設定必要</span>
-    &nbsp; &nbsp;
-    </div>
-    <div class="col-md-2 col-sm-2">
-    <span id="Label4" class="InpTitle1" style="display:inline-block;color:MediumBlue;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:8px;width:283px;z-index: 105; left: 168px;
-    top: 66px">フリー見積</span>
-    </div>
-    <table class="inptable" id="Table4" style="  TOP: 97px;" bordercolor="#ffffff" cellspacing="0">
-    <tbody>
-    <tr>
-    <td class="tabletitle" colspan="2">
-    <span id="Label1" class="titlelabel" style="display:inline-block;color:White;width:283px;">車種を一覧から選択</span>
-    </td>
-    </tr>
-    <tr>
-    <td class="inptd">
-    <span id="Label2" class="inplabel" style="display:inline-block;">①メーカーを選択</span>
-    <select name="ddlMaker" onchange="javascript:setTimeout('__doPostBack(\'ddlMaker\',\'\')', 0)" id="ddlMaker" tabindex="1" class="inpbox" style="width:253px;">
-    <option value="-1">メーカーを選択して下さい</option>
-    <option value="10">トヨタ</option>
-    <option value="11">ニッサン</option>
-    <option value="12">ミツビシ</option>
-    <option selected="selected" value="13">マツダ</option>
-    <option value="14">イスズ</option>
-    <option value="15">ホンダ</option>
-    <option value="16">ダイハツ</option>
-    <option value="17">スバル</option>
-    <option value="18">スズキ</option>
-    <option value="19">ミツオカ</option>
-    <option value="20">レクサス</option>
-    <option value="21">ヒノ</option>
-    <option value="22">ニッサンディーゼル</option>
-    <option value="23">ミツビシフソウ</option>
-    <option value="51">AMG</option>
-    <option value="52">BMW</option>
-    <option value="53">BMWアルピナ</option>
-    <option value="54">アウディ</option>
-    <option value="55">イエス</option>
-    <option value="56">オペル</option>
-    <option value="57">スマート</option>
-    <option value="58">フォルクスワーゲン</option>
-    <option value="59">ブラバス</option>
-    <option value="60">メルセデスベンツ</option>
-    <option value="61">ポルシェ</option>
-    <option value="62">マイバッハ</option>
-    <option value="63">ルーフ</option>
-    <option value="64">ミニ</option>
-    <option value="71">サーブ</option>
-    <option value="72">ボルボ</option>
-    <option value="81">シトロエン</option>
-    <option value="82">プジョー</option>
-    <option value="83">ルノー</option>
-    <option value="91">AMC</option>
-    <option value="92">GMC</option>
-    <option value="93">ウィネベーゴ</option>
-    <option value="94">オールズモービル</option>
-    <option value="95">キャデラック</option>
-    <option value="96">クライスラー</option>
-    <option value="97">サターン</option>
-    <option value="98">サリーン</option>
-    <option value="99">シボレー</option>
-    <option value="100">ダッジ</option>
-    <option value="101">ハマー</option>
-    <option value="102">ビュイック</option>
-    <option value="103">フォード</option>
-    <option value="104">プリムス</option>
-    <option value="105">ポンテアック</option>
-    <option value="106">マーキュリー</option>
-    <option value="107">リンカーン</option>
-    <option value="108">ジープ</option>
-    <option value="111">BL</option>
-    <option value="112">MG</option>
-    <option value="113">TVR</option>
-    <option value="114">アストンマーティン</option>
-    <option value="115">ウーズレー</option>
-    <option value="116">ウエストフィールド</option>
-    <option value="117">オースチン</option>
-    <option value="118">ケーターハム</option>
-    <option value="119">ジャガー</option>
-    <option value="120">デイムラー</option>
-    <option value="121">トライアンフ</option>
-    <option value="122">バンデンプラ</option>
-    <option value="123">パンサー</option>
-    <option value="124">ヒーレー</option>
-    <option value="125">ベントレー</option>
-    <option value="126">マーコス</option>
-    <option value="127">モーガン</option>
-    <option value="128">モーリス</option>
-    <option value="129">ライレー</option>
-    <option value="130">ランドローバー</option>
-    <option value="131">ロータス</option>
-    <option value="132">ローバー</option>
-    <option value="133">ロールスロイス</option>
-    <option value="141">バーキン</option>
-    <option value="151">アウトビアンキ</option>
-    <option value="152">アルファロメオ</option>
-    <option value="153">イノチェンティ</option>
-    <option value="154">デトマソ</option>
-    <option value="155">フィアット</option>
-    <option value="156">フェラーリ</option>
-    <option value="157">ブガッティ</option>
-    <option value="158">マセラティ</option>
-    <option value="159">ランチア</option>
-    <option value="160">ランボルギーニ</option>
-    <option value="171">ドンカーブート</option>
-    <option value="181">GMデーウ</option>
-    <option value="182">GMマティス</option>
-    <option value="183">キア</option>
-    <option value="184">サンヨン</option>
-    <option value="185">ヒュンダイ</option>
-    <option value="191">ラーダ</option>
-    <option value="201">TD</option>
-    <option value="899">輸入車/その他</option>
-    <option value="999">その他</option>
-
-    </select>
-    </td>
-    </tr>
-    <tr>
-    <td class="inptd" colspan="2">
-    <span id="Label3" class="inplabel" style="display:inline-block;width:128px;">②車種を選択</span>
-    <select name="ddlModel" onchange="javascript:setTimeout('__doPostBack(\'ddlModel\',\'\')', 0)" id="ddlModel" tabindex="2" class="inpbox" style="width:252px;">
-    <option value="-1">車種を選択して下さい</option>
-    <option value="1">AZ-1</option>
-    <option value="2">AZ-3</option>
-    <option value="3">AZ-オフロード</option>
-    <option value="4">AZ-ワゴン</option>
-    <option value="5">CX-5</option>
-    <option selected="selected" value="6">CX-7</option>
-    <option value="7">MPV</option>
-    <option value="8">MS-6</option>
-    <option value="9">MS-8</option>
-    <option value="10">MS-9</option>
-    <option value="11">MX-6</option>
-    <option value="12">RX-7</option>
-    <option value="13">RX-8</option>
-    <option value="14">アクセラ</option>
-    <option value="15">アクセラスポーツ</option>
-    <option value="16">アクセラスポーツワゴン</option>
-    <option value="17">アテンザ</option>
-    <option value="18">アテンザスポーツ</option>
-    <option value="19">アテンザスポーツワゴン</option>
-    <option value="20">エチュード</option>
-    <option value="21">カペラ</option>
-    <option value="22">カペラC2</option>
-    <option value="23">カペラCG</option>
-    <option value="24">カペラカーゴ</option>
-    <option value="25">カペラカーゴバン</option>
-    <option value="26">カペラワゴン</option>
-    <option value="27">キャロル</option>
-    <option value="28">クレフ</option>
-    <option value="29">クロノス</option>
-    <option value="30">コスモ</option>
-    <option value="31">コスモクーペ</option>
-    <option value="32">コスモスポーツ</option>
-    <option value="33">サバンナ</option>
-    <option value="34">シャンテ</option>
-    <option value="35">スクラム</option>
-    <option value="36">スクラムトラック</option>
-    <option value="37">スクラムワゴン</option>
-    <option value="38">スピアーノ</option>
-    <option value="39">センティア</option>
-    <option value="40">その他</option>
-    <option value="41">タイタン</option>
-    <option value="42">タイタンダッシュ</option>
-    <option value="43">デミオ</option>
-    <option value="44">トリビュート</option>
-    <option value="45">パークウェイ</option>
-    <option value="46">ビアンテ</option>
-    <option value="47">ファミリア</option>
-    <option value="48">ファミリアS-ワゴン</option>
-    <option value="49">ファミリアアスティナ</option>
-    <option value="50">ファミリアカブリオレ</option>
-    <option value="51">ファミリアセダン</option>
-    <option value="52">ファミリアバン</option>
-    <option value="53">ファミリアワゴン</option>
-    <option value="54">フレア</option>
-    <option value="55">フレアワゴン</option>
-    <option value="56">プレマシー</option>
-    <option value="57">プロシード</option>
-    <option value="58">プロシードマービー</option>
-    <option value="59">プロシードレバンテ</option>
-    <option value="60">ベリーサ</option>
-    <option value="61">ペルソナ</option>
-    <option value="62">ポーター</option>
-    <option value="63">ボンゴ</option>
-    <option value="64">ボンゴトラック</option>
-    <option value="65">ボンゴバン</option>
-    <option value="66">ボンゴフレンディ</option>
-    <option value="67">ボンゴブローニイ</option>
-    <option value="68">ボンゴブローニイトラック</option>
-    <option value="69">ボンゴブローニイバン</option>
-    <option value="70">ボンゴブローニイワゴン</option>
-    <option value="71">ボンゴワゴン</option>
-    <option value="72">ミレーニア</option>
-    <option value="73">ユーノス100</option>
-    <option value="74">ユーノス300</option>
-    <option value="75">ユーノス500</option>
-    <option value="76">ユーノス800</option>
-    <option value="77">ユーノスカーゴ</option>
-    <option value="78">ユーノスカーゴトラック</option>
-    <option value="79">ユーノスコスモ</option>
-    <option value="80">ユーノスプレッソ</option>
-    <option value="81">ラピュタ</option>
-    <option value="82">ランティス</option>
-    <option value="83">ランティスクーペ</option>
-    <option value="84">ルーチェ</option>
-    <option value="85">ルーチェバン</option>
-    <option value="86">レビュー</option>
-    <option value="87">ロードスター</option>
-    <option value="88">ロードスタークーペ</option>
-
-    </select>
-    </td>
-    </tr>
-    <tr>
-    <td class="inpbtntd" colspan="2" style="height: 35px">
-    <input type="submit" name="btnNextGrade" value="この車種のグレードを選択する >>" id="btnNextGrade" tabindex="3" class="Btn1" style="height:33px;width:281px;">
-    </td>
-    </tr>
-    <tr>
-    <td class="inpbtntd" colspan="2" style="height: 30px;">
-    <span id="lblErrMsg1" class="inplabel" style="display:inline-block;color:Crimson;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:40px;width:400px;"></span>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-    <table id="Table2" bordercolor="#ffffff" cellpadding="2" cellspacing="0" class="inptable" style=" top: 302px; width: 399px;">
-    <tbody>
-    <tr>
-    <td class="tabletitle">
-    <span id="Label15" class="titlelabel" style="display:inline-block;width:283px;">車種を型式・類別で指定</span>
-    </td>
-    </tr>
-    <tr>
-    <td class="inptd">
-    <span id="Label14" class="inplabel" style="display:inline-block;width:80px;">型式指定</span>
-    <input name="txtCaseSet" type="text" maxlength="5" id="txtCaseSet" tabindex="4" class="inpbox" style="width:80px;ime-mode: disabled">
-    </td>
-    </tr>
-    <tr>
-    <td class="inptd">
-    <span id="Label5" class="inplabel" style="display:inline-block;width:80px;">類別区分</span>
-    <input name="txtKbnSet" type="text" maxlength="4" id="txtKbnSet" tabindex="5" class="inpbox" style="width:80px;ime-mode: disabled">
-    </td>
-    </tr>
-    <tr>
-    <td class="inpbtntd" colspan="2" style="height: 35px">
-    <input type="submit" name="btnChkModel" value="車名を確認する >>" id="btnChkModel" tabindex="3" class="Btn1" style="height:33px;width:281px;">
-    </td>
-    </tr>
-    <tr>
-    <td class="inpbtntd" colspan="2" style="height: 30px">
-    <span id="lblErrMsg2" class="inplabel" style="display:inline-block;color:Crimson;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;width:276px;"></span>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-
-    <div style=" position:absolute; top:1300px; left:0px; z-index: 112;">&nbsp;</div>
-    <input type="submit" name="btnNextInpEst" value="車名を直接入力する >>" id="btnNextInpEst" tabindex="3" class="Btn1" style="font-family:ＭＳ Ｐゴシック;font-size:12pt;height:33px;width:281px;z-index: 107;
-    left: 283px;  top: 522px">
-    <span id="Label34" class="InpTitle1" style="display:inline-block;color:MediumBlue;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:8px;width:467px;z-index: 109; left: 171px;
-    top: 496px">※上の選択機能で車種が見つからない場合はこちらから</span>
-    &nbsp;
-
-    </div>
-    </div>
-    </div>
-
-    </form>*@
+</div>
+<script src="~/js/SelCar.js"></script>
