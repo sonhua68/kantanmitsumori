@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Model.Request;
+using KantanMitsumori.Model.Response;
 
 namespace KantanMitsumori.Service.Mapper
 {
@@ -11,6 +12,10 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<TEstimate, TEstimateSub>();
             CreateMap<MMaker, MakerModel>();
             CreateMap<MMaker, MakerModel>();
+            CreateMap<AsopMaker, ResponseAsopMaker>();
+            CreateMap<AsopCarname, ResponseAsopCarname>();
+            CreateMap<TbRuibetsuN, ResponseTbRuibetsuN>();
+
         }
       
     }

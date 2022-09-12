@@ -11,4 +11,10 @@ namespace KantanMitsumori.Helper.Enum
         isSuccess = 0,
         isError = -1,      
     }
+
+    public enum enTypeButton
+    {
+        isNextGrade = 1,
+        isChkModel = 2,
+    }
 }
