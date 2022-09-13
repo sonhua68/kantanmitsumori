@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using KantanMitsumori.Entity.ASESTEntities;
 
-namespace KantanMitsumori.Entity.ASESTEntities
+namespace KantanMitsumori.DataAccess
 {
     public partial class ASESTContext : DbContext
     {
@@ -41,6 +42,7 @@ namespace KantanMitsumori.Entity.ASESTEntities
         public virtual DbSet<TbSy> TbSys { get; set; } = null!;
         public virtual DbSet<TbSysExh> TbSysExhs { get; set; } = null!;
         public virtual DbSet<WAsMember> WAsMembers { get; set; } = null!;
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
