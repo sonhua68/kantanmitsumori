@@ -20,7 +20,6 @@
 	  <None Remove="Reports\img_8.jpg" />	  
 	  <None Remove="Reports\img_9.jpg" />	  
 	  <None Remove="Reports\Order.rpx" />	  
-	  <EmbeddedResource Include="Reports\Order.rpx" />	  
 	  <EmbeddedResource Include="Reports\Estimate.rpx" />	  
 	  <EmbeddedResource Include="Reports\EstSubMemo.rpx" />
     <EmbeddedResource Include="Reports\EstSubArticle.rpx" />
@@ -33,6 +32,7 @@
     <EmbeddedResource Include="Reports\img_7.jpg" />
     <EmbeddedResource Include="Reports\img_8.jpg" />
     <EmbeddedResource Include="Reports\img_9.jpg" />
+    <EmbeddedResource Include="Reports\Order.rpx" />
   </ItemGroup>
 
   <ItemGroup>

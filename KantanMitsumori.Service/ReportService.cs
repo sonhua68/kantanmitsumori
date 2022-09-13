@@ -156,7 +156,7 @@ namespace KantanMitsumori.Service
                     FirstPayAmount = "",
                     FirstRegYm = "H28年",
                     GradeName = "1.5 Z 煌",
-                    Kikan = "Kikan",
+                    Kikan = "10,000 円",
                     Mission = "AT5",
                     NebikiTitle = "",
                     Notes = "Notes",
@@ -192,8 +192,7 @@ namespace KantanMitsumori.Service
                     PartitionFee = "20,000 円",
                     PayAmount = "20,000 円",
                     PayTimes = "",
-                    Principal = "",
-                    PrTitle = "御　見　積　書",
+                    Principal = "",                    
                     Rate = "",
                     RevenueStampTitle = "",
                     SaleAll = "1,196,001 円",
@@ -243,7 +242,7 @@ namespace KantanMitsumori.Service
                     TradeInRegNo = "",
                     Vol = "1500 cc",
                     WeightTax = "20,000 円",
-
+                    
 
                     CarImg = LoadImage("img_1.jpg"),
                     CarImg1 = LoadImage("img_2.jpg"),
