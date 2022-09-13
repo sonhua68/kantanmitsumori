@@ -10,6 +10,8 @@ namespace KantanMitsumori.IService
         Task<ResponseBase<int>> CreateMaker(MakerModel model);
         UserModel getUserName(string userNo);
         ResponseBase<UserModel> getUserInfo(string mem);
-        ResponseBase<ResponEstMainModel> getEstMain(string sel, RequestHeaderModel request);
+        Task<ResponseBase<EstimateModelView>> getEstMain(string sel, RequestHeaderModel request);
+
+        Task<ResponseBase<ResponEstMainModel>> setFreeEst();
     }
 }

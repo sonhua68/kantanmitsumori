@@ -3,7 +3,8 @@
     public class CommonConst
     {
 
-        public const string def_DmyImg = "D:/asest2/CarImg/CarImgDummy.jpg";
+        public const string def_DmyImg = "~/img/CarImgDummy.png";
+        public const string def_ExclusionListOfAutoCalc = "~/List/ExclusionList_of_AutoCalc.sjis.txt";
 
         /// <summary>
         /// タイトル

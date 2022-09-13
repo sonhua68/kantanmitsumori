@@ -1,20 +1,11 @@
 ﻿
 using KantanMitsumori.Helper.Constant;
-using Microsoft.AspNetCore.Http;
 using Microsoft.VisualBasic;
-using System.Data;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
     public class CommonFunction
     {
-        /// <summary>
-        /// Numeric type check
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static bool IsNumeric(string value) => value.All(char.IsNumber);
-
         /// <summary>
         /// 西暦を和暦に変換する(年のみ)
         /// </summary>
@@ -22,7 +13,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <returns></returns>
         public string GetWareki(string year)
         {
-            if (!IsNumeric(year.Trim()))
+            if (!Information.IsNumeric(year.Trim()))
             {
                 return "";
             }
@@ -45,57 +36,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
 
             return retNengo;
-        }
-
-        /// <summary>
-        /// フォーマット処理
-        /// </summary>
-        /// <param name="text2"></param>
-        /// <param name="unit"></param>
-        /// <param name="formatText"></param>
-        /// <returns></returns>
-        public string SetFormat(long text2, string unit, string formatText)
-        {
-            formatText = Convert.ToString(Strings.Format(text2, "#,##") + unit);
-            return formatText;
-        }
-
-        /// <summary>
-        /// セッション変数を数値で返す
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="sessionName"></param>
-        /// <param name="defValue"></param>
-        /// <returns></returns>
-        public int GetSessionNum(HttpContext context, string sessionName, int defValue)
-        {
-            var session = context.Session.Keys.Where(element => element == sessionName).FirstOrDefault();
-
-            if (session == null || Convert.IsDBNull(session))
-            {
-                return defValue;
-            }
-
-            return Convert.ToInt32(Conversion.Val(session)); ;
-        }
-
-        /// <summary>
-        /// セッション変数を文字列で返す
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="sessionName"></param>
-        /// <param name="defValue"></param>
-        /// <returns></returns>
-        public string GetSessionStr(HttpContext context, string sessionName, string defValue)
-        {
-            var session = context.Session.Keys.Where(element => element == sessionName).FirstOrDefault();
-
-            if (session == null || Convert.IsDBNull(session))
-            {
-                return defValue;
-            }
-
-            return Convert.ToString(session);
         }
 
         /// <summary>
@@ -250,9 +190,9 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="dValue"></param>
         /// <param name="iDigits"></param>
         /// <returns></returns>
-        public double ToRoundDown(double dValue, int iDigits)
+        public static decimal ToRoundDown(decimal dValue, int iDigits)
         {
-            double dCoef = Math.Pow(10, iDigits);
+            decimal dCoef = (decimal)Math.Pow(10, iDigits);
 
             if (dValue > 0)
             {
@@ -365,7 +305,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
 
             // 入力なし
-            if (inYM == "" || IsNumeric(inYM))
+            if (inYM == "" || Information.IsNumeric(inYM))
             {
                 return "";
             }
@@ -518,12 +458,29 @@ namespace KantanMitsumori.Helper.CommonFuncs
         // **************************************************************************
         // * フォーマット処理
         // **************************************************************************
-        public static string setFormat(long param, string unit, string formatParm)
+        //public static string setFormat(long param, string formatParm = "")
+        //{
+        //    formatParm = Convert.ToString(Strings.Format(param, "#,##0") + " 円");
+        //    return formatParm;
+        //}
+
+        // **************************************************************************
+        // * フォーマット処理
+        // **************************************************************************
+        public static string setFormatCurrency(object value, string unit = " 円")
         {
-            formatParm = Convert.ToString(Strings.Format(param, "#,##0") + unit);
+            var formatParm = "";
+            if (Convert.ToInt32(value) == 0)
+            {
+                return formatParm;
+            }
+            else
+            {
+                formatParm = Convert.ToString(Strings.Format(value, "#,##0") + unit);
+            }
+
             return formatParm;
         }
-
         /// <summary>
         /// 西暦を和暦に変換する(年のみ)
         /// </summary>
@@ -550,5 +507,31 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return retNengo;
         }
 
+        public static string japaneseFormat(DateTime date)
+        {
+            return date.ToString("yyyy") + '年' + date.ToString("MM") + '月' + date.ToString("dd") + '日';
+        }
+
+        public static string getFormatDayYMD(string strDay)
+        {
+            int leDay = Strings.Len(Strings.Replace(strDay, "/", ""));
+            string rtstrDay = "";
+            switch (leDay)
+            {
+                case 8:
+                    {
+                        rtstrDay = Strings.Trim(Strings.Left(strDay, 4)) + "年" + Strings.Trim(DateFormatZero(Strings.Mid(strDay, 5, 2))) + "月" + Strings.Trim(DateFormatZero(Strings.Right(strDay, 2))) + "日";
+                        break;
+                    }
+                case 6:
+                    {
+                        rtstrDay = Strings.Trim(Strings.Left(strDay, 4)) + "年" + Strings.Trim(DateFormatZero(Strings.Mid(strDay, 5, 2))) + "月";
+                        break;
+                    }
+            }
+
+            return rtstrDay;
+
+        }
     }
 }

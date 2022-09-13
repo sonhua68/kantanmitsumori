@@ -1,7 +1,5 @@
 ﻿using KantanMitsumori.Entity.ASESTEntities;
-using KantanMitsumori.Entity.IDEEnitities;
 using KantanMitsumori.Infrastructure.IRepositories;
-using KantanMitsumori.Infrastructure.Repositories;
 
 namespace KantanMitsumori.Infrastructure.Base
 {
@@ -21,6 +19,7 @@ namespace KantanMitsumori.Infrastructure.Base
         IWeightTaxRepository WeightTaxs { get; }
         IOfficeRepository Offices { get; }
         IEstimateRepository Estimates { get; }
+        IEstimateIdeRepository EstimateIdes { get; }
         IEstimateItcRepository EstimateItcs { get; }
         IEstimateSubRepository EstimateSubs { get; }
         ITaxRatioDefRepository TaxRatioDefs { get; }
@@ -31,7 +30,7 @@ namespace KantanMitsumori.Infrastructure.Base
         ISysRepository Syss { get; }
         ISysExhRepository SysExhs { get; }
         IAsMemberRepository AsMembers { get; }
-        ASESTContext DbContext { get; }      
+        ASESTContext DbContext { get; }
         Task<bool> CommitAsync();
     }
 }

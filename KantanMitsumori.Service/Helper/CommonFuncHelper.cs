@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using Microsoft.Extensions.Logging;
@@ -19,6 +21,8 @@ namespace KantanMitsumori.Service.Helper
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
+
+        #region Constant Initialization
 
         // 消費税税率ID（5%)
         private const int TAX_5_PERCENT_ID = 1;
@@ -43,6 +47,11 @@ namespace KantanMitsumori.Service.Helper
         private DateTime SWICH_DATE = DateTime.Parse("2019/09/18");
         // NULL値
         private DateTime NULL_DATE = default(DateTime);
+
+
+        #endregion
+
+        #region Public Function
 
         /// <summary>
         /// 消費税率を取得
@@ -117,18 +126,18 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="inUserNo"></param>
         /// <returns></returns>
-        public ResponseBase<UserDefModel> getUserDefData(string inUserNo)
+        public UserDefModel getUserDefData(string inUserNo)
         {
             try
             {
-                var taxRatioId = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.GetSingle(x => x.UserNo == inUserNo && x.Dflag == false));
+                var getUserDef = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.GetSingle(x => x.UserNo == inUserNo && x.Dflag == false));
 
-                return ResponseHelper.Ok<UserDefModel>("OK", "CUSR-010D", taxRatioId);
+                return getUserDef;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "getUserDefData " + "CUSR-010D");
-                return ResponseHelper.Error<UserDefModel>("Error", "CUSR-010D");
+                return null;
             }
         }
 
@@ -185,6 +194,13 @@ namespace KantanMitsumori.Service.Helper
             }
         }
 
+        /// <summary>
+        /// コーナータイプの取得
+        /// 存在 = True　無し = False
+        /// </summary>
+        /// <param name="inCor"></param>
+        /// <param name="intCornerType"></param>
+        /// <returns></returns>
         public bool GetCornerType(string inCor, int intCornerType)
         {
             try
@@ -207,6 +223,14 @@ namespace KantanMitsumori.Service.Helper
             return true;
         }
 
+
+        /// <summary>
+        /// 開催数の取得
+        /// 存在 = True　無し = False
+        /// </summary>
+        /// <param name="inCor"></param>
+        /// <param name="intAACount"></param>
+        /// <returns></returns>
         public bool GetAACount(string inCor, ref int intAACount)
         {
             try
@@ -242,14 +266,14 @@ namespace KantanMitsumori.Service.Helper
 
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
-                strCarImgPlace = "D:/asest2/CarImg/";
-                strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMM") + @"\";
+                strCarImgPlace = "~/img/CarImg";  //"~/img/CarImg"
+                strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMM") + "/";
                 if (!Directory.Exists(strCarImgPlace))
                 {
                     Directory.CreateDirectory(strCarImgPlace);
                 }
                 // 画像用に年月日フォルダを作成する。
-                strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMMdd") + @"\";
+                strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMMdd") + "/";
                 if (!Directory.Exists(strCarImgPlace))
                 {
                     Directory.CreateDirectory(strCarImgPlace);
@@ -301,15 +325,16 @@ namespace KantanMitsumori.Service.Helper
         {
             string strOutImg = "";
             string strSaveName = "";
-            string strTempImagePath = strImagePath.ToUpper();
+            string strTempImagePath = "";
 
             // 画像が未設定の場合画像パスはなし
-            if (strImagePath is null || string.IsNullOrEmpty(strImagePath))
+            if (string.IsNullOrEmpty(strImagePath))
             {
                 strOutImagePath = "";
             }
             else
             {
+                strTempImagePath = strImagePath.ToUpper();
                 if (!strTempImagePath.EndsWith(".JPG") & !strTempImagePath.EndsWith(".GIF") & !strTempImagePath.EndsWith(".PNG") & strImgSuffix is not null)
                 {
                     // URLの末尾が画像の拡張子ではなく、サフィックスが設定されている場合は
@@ -358,5 +383,162 @@ namespace KantanMitsumori.Service.Helper
 
             return true;
         }
+
+        /// <summary>
+        /// 税金・保険料の自動計算
+        /// 可 = True　不可 = Fals
+        /// </summary>
+        /// <param name="inMakerName"></param>
+        /// <returns></returns>
+        public bool enableTaxCalc(string inMakerName)
+        {
+            // メーカ名が "" の場合、自動計算対象とみなす
+            if (string.IsNullOrEmpty(inMakerName))
+                return true;
+
+            // 除外リスト読み込み
+            System.Text.Encoding enc = System.Text.Encoding.GetEncoding("shift_jis");
+            string strExclusionList = "";
+            string[] arrExclusionList;
+            try
+            {
+                strExclusionList = File.ReadAllText(CommonConst.def_ExclusionListOfAutoCalc, enc);
+                arrExclusionList = Strings.Split(strExclusionList, Constants.vbCrLf);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CommonFuncs - enableTaxCalc - GCMF-110F");
+                return false;
+            }
+
+            if (0 <= Array.IndexOf(arrExclusionList, Strings.Trim(inMakerName)))
+                // 除外リストに存在する場合、自動計算不可
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// 初年度登録年月と排気量を受け取り自動車税を返却する
+        /// </summary>
+        /// <param name="intRegistMonth"></param>
+        /// <param name="intExaust"></param>
+        /// <param name="outCarTax"></param>
+        /// <returns></returns>
+        public bool getCarTax(int intRegistMonth, int intExaust, ref string outCarTax)
+        {
+            // 軽の場合は対象外
+            if (intExaust <= 660)
+            {
+                outCarTax = "";
+                return true;
+            }
+
+            int intYEAR_AMOUNT = 0;
+            // 自動車税年額を取得
+            if (!getYearAmount(intExaust, ref intYEAR_AMOUNT))
+                return false;
+            // 課税月数を求める
+            int intPassedMonth = getCarTaxPassedMonth(intRegistMonth);
+            // 自動車税計算
+            decimal dblCarTax = intYEAR_AMOUNT * Convert.ToDecimal(intPassedMonth / (double)12);
+
+            // 100円未満端数切捨て
+            outCarTax = Convert.ToString(CommonFunction.ToRoundDown(dblCarTax, -2));
+
+            return true;
+        }
+
+        /// <summary>
+        /// 自賠責保険料の取得
+        /// </summary>
+        /// <param name="intExaust"></param>
+        /// <param name="inYear"></param>
+        /// <param name="inMonth"></param>
+        /// <param name="inUserDefMonth"></param>
+        /// <param name="outSelfIns"></param>
+        /// <param name="outRemIns"></param>
+        /// <returns></returns>
+        public bool getSelfInsurance(int intExaust, string inYear, string inMonth, int inUserDefMonth, ref int outSelfIns, ref int outRemIns)
+        {
+            try
+            {
+                // 車検判定
+                DateTime vSyaken;
+
+                int SyakenDiff = 0;
+
+                // 基準月数の既定値セット
+                outRemIns = inUserDefMonth > 0 ? inUserDefMonth : CommonConst.def_DamegeInsMonth25;
+
+                // 基準月数のセット（既定値上書き）
+                if ((inYear != "" & inMonth != "") && Information.IsDate(inYear + "/" + inMonth + "/01"))
+                {
+                    // 車検期限
+                    vSyaken = DateTime.Parse(inYear + "/" + inMonth + "/01");
+                    SyakenDiff = (int)DateAndTime.DateDiff(DateInterval.Month, DateTime.Now, vSyaken);
+                    if (SyakenDiff > 0)
+                        outRemIns = SyakenDiff + 1;// カバー月数の補正（１ヶ月分プラス）
+                }
+
+                // 軽or乗用車(1:乗用車　2:軽)
+                int intCarType = intExaust > 660 ? 1 : 2;
+                int intRemIns = outRemIns;
+
+                // Get m_SelfInsurance
+                var getSelfInsurance = _unitOfWork.SelfInsurances.GetSingle(x => x.CarType == intCarType && x.RemainInspection == intRemIns && x.Dflag == false);
+
+                outSelfIns = getSelfInsurance != null ? Convert.ToInt32(getSelfInsurance.SelfInsurance) : 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
+
+        #region Private Function 
+
+        // DBアクセスを行い
+        // 排気量から年額を取得する
+        private bool getYearAmount(int intTargetExault, ref int outYEAR_AMOUNT)
+        {
+            try
+            {
+                var getCarTax = _unitOfWork.CarTaxs.GetSingle(x => x.ExaustFrom <= intTargetExault && x.ExaustTo >= intTargetExault && x.Dflag == false);
+
+                if (getCarTax != null)
+                {
+                    outYEAR_AMOUNT = Convert.ToInt32(getCarTax.YearAmount);
+                }
+                else
+                    return false;
+            }
+            catch (Exception)
+            {
+                // エラーログ書出し
+                return false;
+            }
+
+            return true;
+        }
+
+        // 登録月を受け取り課税対象月数を返却
+        private int getCarTaxPassedMonth(int intRegistMonth)
+        {
+            int intCloseMonth = 3;
+            int intPassedMonth = -1;
+
+            if (intRegistMonth > 3)
+                intCloseMonth += 12;
+            intPassedMonth = intCloseMonth - intRegistMonth;
+            return intPassedMonth;
+        }
+
+        #endregion
+
     }
 }

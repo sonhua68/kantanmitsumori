@@ -1,10 +1,11 @@
-﻿@using KantanMitsumori.Model.Response
+﻿@using KantanMitsumori.Model
+@*@using KantanMitsumori.Model.Response*@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "EstMain";
 }
 
-@model ResponEstMainModel
+@model EstimateModelView
 
 <form id="frm" method="post" action="/home/estmain">
     <div class="container text-center">
@@ -83,13 +84,13 @@
                                         見積書番号
                                     </td>
                                     <td class="data">
-                                        <span id="lbEstNo" class="table-text">22080500007-01</span>
+                                        <span id="lbEstNo" class="table-text">@Model.dspEstNo</span>
                                     </td>
                                     <td class="table-color ">
                                         見積日
                                     </td>
                                     <td class="data">
-                                        <span id="lbTradeDate" class="table-text">2022年8月5日</span>
+                                        <span id="lbTradeDate" class="table-text">@Model.dspTradeDate</span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -102,7 +103,7 @@
                                         <span id="Label86" class="EstTitle">お支払総額</span>
                                     </td>
                                     <td class="estTitle-color-price">
-                                        <span id="lbl_SaleAll" class="EstTitle " style="">1,198,901 円</span>
+                                        <span id="lbl_SaleAll" class="EstTitle " style="">@Model.dspSalesSum</span>
                                     </td>
                                 </tr>
                             </tbody>
@@ -138,7 +139,7 @@
                                     お名前
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="40" class="inpbox" name="CustNm_forPrint" />
+                                    <input type="text" maxlength="40" class="inpbox" name="CustNm_forPrint" />@Model.dspCustNm_forPrint
                                 </td>
                             </tr>
                             <tr>
@@ -146,7 +147,7 @@
                                     郵便番号
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="8" class="inpbox" name="CustZip_forPrint" />
+                                    <input type="text" maxlength="8" class="inpbox" name="CustZip_forPrint" />@Model.dspCustZip_forPrint
                                 </td>
                             </tr>
                             <tr>
@@ -154,7 +155,7 @@
                                     住所
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="60" class="inpbox" name="CustAdr_forPrint" />
+                                    <input type="text" maxlength="60" class="inpbox" name="CustAdr_forPrint" />@Model.dspCustAdr_forPrint
                                 </td>
                             </tr>
                             <tr>
@@ -162,7 +163,7 @@
                                     電話番号
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="13" class="inpbox" name="CustTel_forPrint" />
+                                    <input type="text" maxlength="13" class="inpbox" name="CustTel_forPrint" />@Model.dspCustTel_forPrint
                                 </td>
                             </tr>
                         </table>
@@ -176,17 +177,17 @@
                             </tr>
                             <tr>
                                 <td class="dataInfo">
-                                    <span id="lbl_ShopName1" style="text-align: left;">testShop88888195</span>
+                                    <span id="lbl_ShopName1" style="text-align: left;">@Model.dspShopNm</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="dataInfo">
-                                    <span id="lbl_Address" style="text-align: left;">東京都88888195</span>
+                                    <span id="lbl_Address" style="text-align: left;">@Model.dspShopAdr</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="dataInfo">
-                                    <span id="lbl_TantoName" style="text-align: left;">担当 : 担当次郎hoge　　責任者 : 全角DUCvuong　　TEL : 0532-57-5554 </span>
+                                    <span id="lbl_TantoName" style="text-align: left;">@Model.dspEstTanName    @Model.dspSekininName    @Model.dspShopTel </span>
                                 </td>
                             </tr>
                         </table>
@@ -207,13 +208,13 @@
                                     お客様
                                 </td>
                                 <td class="dataLbl">
-                                    <span id="lbl_CustKana" />
+                                    <span id="lbl_CustKana" />@Model.dspCustKName
                                 </td>
                                 <td class="title">
                                     お客様
                                 </td>
                                 <td class="dataLbl">
-                                    <span id="lbl_CustKana" />
+                                    <span id="lbl_CustMemo" />@Model.dspCustMemo
                                 </td>
                             </tr>
                         </table>
@@ -235,11 +236,11 @@
                                     車名
                                 </td>
                                 <td class="dataLblInfoCar" colspan="7">
-                                    <span id="lbl_CarName">ﾄﾖﾀ bB</span>
+                                    <span id="lbl_CarName">@Model.dspCarName</span>
                                 </td>
                                 <td class="dataLblInfoCar" rowspan="7" align="center">
                                     <img id="imgCar" src="~/img/CarImgDummy.png" style="height:180px;width:250px;border-width:0px;">
-                                    <span id="lbl_AAInfo"></span>
+                                    <span id="lbl_AAInfo"></span>@Model.dspAAInfoText
                                 </td>
                             </tr>
                             <tr>
@@ -247,7 +248,7 @@
                                     グレード
                                 </td>
                                 <td class="dataLblInfoCar" colspan="7">
-                                    <span id="lbl_GradeName">1.5 Z 煌</span>
+                                    <span id="lbl_GradeName">@Model.dspGradeName</span>
                                 </td>
                             </tr>
                             <tr>
@@ -255,13 +256,13 @@
                                     型式
                                 </td>
                                 <td class="dataLblInfoCar" colspan="3">
-                                    <span id="lbl_CaseName">QNC21</span>
+                                    <span id="lbl_CaseName">@Model.dspCase</span>
                                 </td>
                                 <td class="title">
                                     車台番号
                                 </td>
                                 <td class="dataLblInfoCar" colspan="3">
-                                    <span id="lbl_CarNo">12345</span>
+                                    <span id="lbl_CarNo">@Model.dspChassisNo</span>
                                 </td>
                             </tr>
                             <tr>
@@ -269,19 +270,19 @@
                                     初年度登録
                                 </td>
                                 <td class="dataLblInfoCar" colspan="3">
-                                    <span id="lbl_FirstYM">H28年</span>
+                                    <span id="lbl_FirstYM">@Model.dspFirstRegYm</span>
                                 </td>
                                 <td class="title">
                                     車検
                                 </td>
                                 <td class="dataLblInfoCar">
-                                    <span id="lbl_InsYM"></span>
+                                    <span id="lbl_InsYM">@Model.dspCheckCarYm</span>
                                 </td>
                                 <td class="title">
                                     走行距離
                                 </td>
                                 <td class="dataLblInfoCar">
-                                    <span id="lbl_NowRun">5 千km</span>
+                                    <span id="lbl_NowRun">@Model.dspNowRun</span>
                                 </td>
                             </tr>
                             <tr>
@@ -289,26 +290,26 @@
                                     修復歴
                                 </td>
                                 <td class="dataLblInfoCar">
-                                    <input id="raJikoHisMu" type="radio" name="Jrk" value="raJikoHisMu" onclick="upJiko('22081700007','01');"><label for="raJikoHisMu">無</label>
-                                    <input id="raJikoHisU" type="radio" name="Jrk" value="raJikoHisU" onclick="upJiko('22081700007','01');"><label for="raJikoHisU">有</label>
+                                    <input id="raJikoHisMu" type="radio" name="Jrk" value="raJikoHisMu" checked="@Model.dspRaJikoHisMu"><label for="raJikoHisMu">無</label>
+                                    <input id="raJikoHisU" type="radio" name="Jrk" value="raJikoHisU" checked="@Model.dspRaJikoHisU"><label for="raJikoHisU">有</label>
                                 </td>
                                 <td class="title">
                                     車歴
                                 </td>
                                 <td class="dataLblInfoCar">
-                                    <span id="lbl_JigHis">自家用</span>
+                                    <span id="lbl_JigHis">@Model.dspBusinessHis</span>
                                 </td>
                                 <td class="title">
                                     シフト
                                 </td>
                                 <td class="dataLblInfoCar">
-                                    <span id="lbl_Mission"></span>
+                                    <span id="lbl_Mission">@Model.dspMission</span>
                                 </td>
                                 <td class="title">
                                     排気量
                                 </td>
                                 <td class="dataLblInfoCar">
-                                    <span id="lbl_Vol">1,500 cc</span>
+                                    <span id="lbl_Vol">@Model.dspVol</span>
                                 </td>
                             </tr>
                             <tr>
@@ -316,7 +317,7 @@
                                     色
                                 </td>
                                 <td class="dataLblInfoCar" colspan="7">
-                                    <span id="lbl_Color">ブラック</span>
+                                    <span id="lbl_Color">@Model.dspBodyColor</span>
 
                                 </td>
                             </tr>
@@ -325,7 +326,7 @@
                                     装備
                                 </td>
                                 <td class="dataLblInfoCar" colspan="7">
-                                    <span id="lbl_Equipment">AW PS PW TV エアバッグ ナビ</span>
+                                    <span id="lbl_Equipment">@Model.dspEquipment</span>
                                 </td>
                             </tr>
                         </table>
@@ -360,13 +361,13 @@
                                     1
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_CarPriceTitle">車両本体価格（税抜）</span>
+                                    <span id="lbl_CarPriceTitle">@Model.dspCarPriceTitle</span>
                                 </td>
                                 <td class="btnImgPrice">
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_CarPrice">1,027,273 円</span>
+                                    <span id="lbl_CarPrice">@Model.dspCarPrice</span>
                                 </td>
                             </tr>
                             <tr>
@@ -374,13 +375,13 @@
                                     2
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_DisCountT"></span>
+                                    <span id="lbl_DisCountT">@Model.dspDiscountT</span>
                                 </td>
                                 <td class="btnImgPrice">
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_DisCount"></span>
+                                    <span id="lbl_DisCount">@Model.dspDiscount</span>
                                 </td>
                             </tr>
                             <tr>
@@ -388,13 +389,13 @@
                                     3
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lblSonotaTitle">その他費用（税抜）</span>
+                                    <span id="lblSonotaTitle">@Model.dspSonotaTitle</span>
                                 </td>
                                 <td class="btnImgPrice">
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_Sonota">20,000 円</span>
+                                    <span id="lbl_Sonota">@Model.dspSonota</span>
                                 </td>
                             </tr>
                             <tr>
@@ -402,13 +403,13 @@
                                     4
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lblSyakenNewZok">車検整備費用（税抜）</span>
+                                    <span id="lblSyakenNewZok">@Model.dspSyakenNewZokT</span>
                                 </td>
                                 <td class="btnImgPrice">
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_SyakenNew">110 円</span>
+                                    <span id="lbl_SyakenNew">@Model.dspSyakenNew</span>
                                 </td>
                             </tr>
                             <tr>
@@ -416,13 +417,13 @@
                                     5
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_OpSpeCialPriceT">付属品・特別仕様（税抜）</span>
+                                    <span id="lbl_OpSpeCialPriceT">@Model.dspOpSpeCialTitle</span>
                                 </td>
                                 <td class="btnImgPrice">
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_OpSpeCialPrice"></span>
+                                    <span id="lbl_OpSpeCialPrice">@Model.dspOptionPriceAll</span>
                                 </td>
                             </tr>
                             <tr>
@@ -433,7 +434,7 @@
                                     <span id="lbl_CarKeiTitle">車両販売価格（1～5）</span>
                                 </td>
                                 <td class="txtprice" style="background-color: #eee;">
-                                    <span id="lbl_CarKei">1,047,383 円</span>
+                                    <span id="lbl_CarKei">@Model.dspCarSum</span>
                                 </td>
                             </tr>
                             <tr>
@@ -447,7 +448,7 @@
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxInsAll">46,780 円</span>
+                                    <span id="lbl_TaxInsAll">@Model.dspTaxInsAll</span>
                                 </td>
                             </tr>
                             <tr>
@@ -455,13 +456,13 @@
                                     8
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxInsEquivalentAllT">税金・保険料相当額（税抜）</span>
+                                    <span id="lbl_TaxInsEquivalentAllT">@Model.dspTaxInsEquivalentTitle</span>
                                 </td>
                                 <td class="btnImgPrice">
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxInsEquivalentAll"></span>
+                                    <span id="lbl_TaxInsEquivalentAll">@Model.dspTaxInsEquivalentAll</span>
                                 </td>
                             </tr>
                             <tr>
@@ -475,7 +476,7 @@
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxFreeAll"></span>
+                                    <span id="lbl_TaxFreeAll">@Model.dspTaxFreeAll</span>
                                 </td>
                             </tr>
                             <tr>
@@ -483,13 +484,13 @@
                                     10
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_DaikoAllT">手続代行費用（税抜）</span>
+                                    <span id="lbl_DaikoAllT">@Model.dspDaikoTitle）</span>
                                 </td>
                                 <td class="btnImgPrice">
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_DaikoAll"></span>
+                                    <span id="lbl_DaikoAll">@Model.dspTaxCostAll</span>
                                 </td>
                             </tr>
                             <tr>
@@ -497,10 +498,10 @@
                                     11
                                 </td>
                                 <td class="titDataPrice" colspan="2">
-                                    <span id="lbl_TaxName">消費税合計</span>
+                                    <span id="lbl_TaxName">@Model.dspTaxName</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxAll">104,738 円</span>
+                                    <span id="lbl_TaxAll">@Model.dspConTax</span>
                                 </td>
                             </tr>
                             <tr>
@@ -508,10 +509,10 @@
                                     12
                                 </td>
                                 <td class="titDataPrice" colspan="2" style="background-color: #eee;">
-                                    <span id="lbl_CarSaleKeiTitle" style="background-color: #eee;">現金販売価格（6～10）</span>
+                                    <span id="lbl_CarSaleKeiTitle" style="background-color: #eee;">@Model.dspCarSaleSumTitle</span>
                                 </td>
                                 <td class="txtprice" style="background-color: #eee;">
-                                    <span id="lbl_CarSaleKei">1,094,163 円</span>
+                                    <span id="lbl_CarSaleKei">@Model.dspCarSaleSum</span>
                                 </td>
                             </tr>
                             <tr>
@@ -525,7 +526,7 @@
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="alert('リース画面でのみ、下取りの設定が可能。'); return false;">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_ShitaPrice"></span>
+                                    <span id="lbl_ShitaPrice">@Model.dspTradeInPrice</span>
                                 </td>
                             </tr>
                             <tr>
@@ -533,13 +534,13 @@
                                     14
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_ZansaiT">下取車残債</span>
+                                    <span id="lbl_ZansaiT">@Model.dspBalanceT</span>
                                 </td>
                                 <td class="btnImgPrice">
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="alert('リース画面でのみ、下取りの設定が可能。'); return false;">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_Zansai"></span>
+                                    <span id="lbl_Zansai">@Model.dspBalance</span>
                                 </td>
                             </tr>
                             <tr>
@@ -547,13 +548,13 @@
                                     15
                                 </td>
                                 <td class="titDataPrice" style="background-color: #eee;">
-                                    <span id="lbl_SalesSumTitle">お支払総額（11～14）</span>
+                                    <span id="lbl_SalesSumTitle">@Model.dspSalesSumTitle</span>
                                 </td>
                                 <td class="btnImgPrice" style="background-color: #eee;">
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice" style="background-color: #eee;">
-                                    <span id="lbl_SalesSum">1,198,901 円</span>
+                                    <span id="lbl_SalesSum">@Model.dspSalesSum</span>
                                 </td>
                             </tr>
                         </table>
@@ -574,98 +575,98 @@
                             </tr>
                             <tr>
                                 <td class="data">
-                                    <span id="lbl_OpName1"></span>
+                                    <span id="lbl_OpName1">@Model.dspOptionName1</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice1"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="data">
-                                    <span id="lbl_OpName2"></span>
-                                </td>
-                                <td class="data">
-                                    <span id="lbl_OpPrice2"></span>
+                                    <span id="lbl_OpPrice1">@Model.dspOptionPrice1</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="data">
-                                    <span id="lbl_OpName3"></span>
+                                    <span id="lbl_OpName2">@Model.dspOptionName2</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice3"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="data">
-                                    <span id="lbl_OpName4"></span>
-                                </td>
-                                <td class="data">
-                                    <span id="lbl_OpPrice4"></span>
+                                    <span id="lbl_OpPrice2">@Model.dspOptionPrice2</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="data">
-                                    <span id="lbl_OpName5"></span>
+                                    <span id="lbl_OpName3">@Model.dspOptionName3</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice5"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="data">
-                                    <span id="lbl_OpName6"></span>
-                                </td>
-                                <td class="data">
-                                    <span id="lbl_OpPrice6"></span>
+                                    <span id="lbl_OpPrice3">@Model.dspOptionPrice3</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="data">
-                                    <span id="lbl_OpName7"></span>
+                                    <span id="lbl_OpName4">@Model.dspOptionName4</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice7"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="data">
-                                    <span id="lbl_OpName8"></span>
-                                </td>
-                                <td class="data">
-                                    <span id="lbl_OpPrice8"></span>
+                                    <span id="lbl_OpPrice4">@Model.dspOptionPrice4</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="data">
-                                    <span id="lbl_OpName9"></span>
+                                    <span id="lbl_OpName5">@Model.dspOptionName5</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice9"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="data">
-                                    <span id="lbl_OpName10"></span>
-                                </td>
-                                <td class="data">
-                                    <span id="lbl_OpPrice10"></span>
+                                    <span id="lbl_OpPrice5">@Model.dspOptionPrice5</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="data">
-                                    <span id="lbl_OpName11"></span>
+                                    <span id="lbl_OpName6">@Model.dspOptionName6</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice11"></span>
+                                    <span id="lbl_OpPrice6">@Model.dspOptionPrice6</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="data">
-                                    <span id="lbl_OpName12"></span>
+                                    <span id="lbl_OpName7">@Model.dspOptionName7</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice12"></span>
+                                    <span id="lbl_OpPrice7">@Model.dspOptionPrice7</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName8">@Model.dspOptionName8</span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice8">@Model.dspOptionPrice8</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName9">@Model.dspOptionName9</span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice9">@Model.dspOptionPrice9</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName10">@Model.dspOptionName10</span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice10">@Model.dspOptionPrice10</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName11">@Model.dspOptionName11</span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice11">@Model.dspOptionPrice11</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="data">
+                                    <span id="lbl_OpName12">@Model.dspOptionName12</span>
+                                </td>
+                                <td class="data">
+                                    <span id="lbl_OpPrice12">@Model.dspOptionPrice12</span>
                                 </td>
                             </tr>
                         </table>
@@ -679,10 +680,10 @@
                                     <input type="image" src="~/img/sbtn税金保険料2.png" style="border-width:0px;">
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_CarTaxTitle">自動車税（8月中登録）</span>
+                                    <span id="lbl_CarTaxTitle">@Model.dspAutoTaxMonth</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_CarTax">20,100 円</span>
+                                    <span id="lbl_CarTax">@(Model.dspAutoTaxEquivalent != "" ? Model.dspAutoTaxEquivalent : Model.dspAutoTax)</span>
                                 </td>
                             </tr>
                             <tr>
@@ -695,7 +696,7 @@
                                     <span id="Label56">環境性能割</span>
                                 </td>
                                 <td id="idGetTax" class="txtprice" style="background-color: rgb(255, 255, 204);">
-                                    <span id="lbl_GetTax"></span>
+                                    <span id="lbl_GetTax">@Model.dspAcqTax</span>
                                 </td>
                             </tr>
                             <tr>
@@ -708,7 +709,7 @@
                                     <span id="Label59">重量税</span>
                                 </td>
                                 <td id="idWeightTax" class="txtprice" style="background-color: rgb(255, 255, 204);">
-                                    <span id="lbl_WeightTax"></span>
+                                    <span id="lbl_WeightTax">@Model.dspWeightTax</span>
                                 </td>
                             </tr>
                             <tr>
@@ -718,10 +719,10 @@
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_JibaiTitle">自賠責保険料（25ヶ月）</span>
+                                    <span id="lbl_JibaiTitle">@Model.dspDamageInsMonth</span>
                                 </td>
                                 <td id="idJibaiHoken" class="txtprice">
-                                    <span id="lbl_JibaiHoken">26,680 円</span>
+                                    <span id="lbl_JibaiHoken">@(Model.dspDamageInsEquivalent != "" ? @Model.dspDamageInsEquivalent : @Model.dspDamageIns)</span>
                                 </td>
                             </tr>
                             <tr>
@@ -734,7 +735,7 @@
                                     <span>任意保険料</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_NiniHoken"></span>
+                                    <span id="lbl_NiniHoken">@Model.dspOptionIns</span>
                                 </td>
                             </tr>
                             <tr>
@@ -745,7 +746,7 @@
                                     <span>検査登録(印紙代)</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_ChkIns"></span>
+                                    <span id="lbl_ChkIns">@Model.dspTaxFreeCheck</span>
                                 </td>
                             </tr>
                             <tr>
@@ -753,7 +754,7 @@
                                     <span>車庫証明(印紙代)</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_SyakoSyomei"></span>
+                                    <span id="lbl_SyakoSyomei">@Model.dspTaxFreeGarage</span>
                                 </td>
                             </tr>
                             <tr>
@@ -761,7 +762,7 @@
                                     <span>下取車手続・処分(印紙代)</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_SitaTetuduki"></span>
+                                    <span id="lbl_SitaTetuduki">@Model.dspTaxFreeTradeIn</span>
                                 </td>
                             </tr>
                             <tr>
@@ -769,23 +770,23 @@
                                     <span>リサイクル預託金</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_RecyclePrice"></span>
+                                    <span id="lbl_RecyclePrice">@Model.dspTaxFreeRecycle</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxFreeSet1Title" x;"></span>
+                                    <span id="lbl_TaxFreeSet1Title">@Model.dspTaxFreeSet1Title</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxFreeSet1"></span>
+                                    <span id="lbl_TaxFreeSet1">@Model.dspTaxFreeSet1</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxFreeSet2Title"></span>
+                                    <span id="lbl_TaxFreeSet2Title">@Model.dspTaxFreeSet2Title</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxFreeSet2"></span>
+                                    <span id="lbl_TaxFreeSet2">@Model.dspTaxFreeSet2</span>
                                 </td>
                             </tr>
                             <tr>
@@ -793,7 +794,7 @@
                                     <span>その他非課税費用</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_OtherPrice"></span>
+                                    <span id="lbl_OtherPrice">@Model.dspTaxFreeOther</span>
                                 </td>
                             </tr>
                             <tr>
@@ -804,7 +805,7 @@
                                     <span>検査登録手続代行</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_ChkDaikoHiyo"></span>
+                                    <span id="lbl_ChkDaikoHiyo">@Model.dspTaxCheck</span>
                                 </td>
                             </tr>
                             <tr>
@@ -812,7 +813,7 @@
                                     <span>車庫証明手続代行</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_SyakoDaiko"></span>
+                                    <span id="lbl_SyakoDaiko">@Model.dspTaxGarage</span>
                                 </td>
                             </tr>
                             <tr>
@@ -820,7 +821,7 @@
                                     <span>下取車手続・処分代行</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_SitaKaitaiHiyo"></span>
+                                    <span id="lbl_SitaKaitaiHiyo">@Model.dspTaxTradeIn</span>
                                 </td>
                             </tr>
                             <tr>
@@ -828,7 +829,7 @@
                                     <span>下取車査定料</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxTradeInSatei"></span>
+                                    <span id="lbl_TaxTradeInSatei">@Model.dspTaxTradeInSatei</span>
                                 </td>
                             </tr>
                             <tr>
@@ -836,7 +837,7 @@
                                     <span>資金管理料金</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_Recycle"></span>
+                                    <span id="lbl_Recycle">@Model.dspTaxRecycle</span>
                                 </td>
                             </tr>
                             <tr>
@@ -844,31 +845,31 @@
                                     <span>納車費用</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_NosyaHiyo"></span>
+                                    <span id="lbl_NosyaHiyo">@Model.dspTaxDelivery</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxSet1Title"></span>
+                                    <span id="lbl_TaxSet1Title">@Model.dspTaxSet1Title</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxSet1"></span>
+                                    <span id="lbl_TaxSet1">@Model.dspTaxSet1</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxSet2Title"></span>
+                                    <span id="lbl_TaxSet2Title">@Model.dspTaxSet2Title</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxSet2"></span>
+                                    <span id="lbl_TaxSet2">@Model.dspTaxSet2</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxSet3Title"></span>
+                                    <span id="lbl_TaxSet3Title">@Model.dspTaxSet3Title</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxSet3"></span>
+                                    <span id="lbl_TaxSet3">@Model.dspTaxSet3</span>
                                 </td>
                             </tr>
                             <tr>
@@ -876,7 +877,7 @@
                                     <span>その他費用</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_Other"></span>
+                                    <span id="lbl_Other">@Model.dspTaxOther</span>
                                 </td>
                             </tr>
                             <tr>
@@ -900,7 +901,7 @@
                                     <span id="Label160" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">頭金</span>
                                 </td>
                                 <td id="idDeposit" class="data" style="text-align: right; height: 22px;">
-                                    <span id="lbl_Deposit" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lbl_Deposit" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspDeposit</span>
                                 </td>
                             </tr>
                             <tr>
@@ -908,7 +909,7 @@
                                     <span id="Label157" class="EstTitle1" style="display:inline-block;font-size:10pt;width:152px;">現金・割賦元金</span>
                                 </td>
                                 <td id="idPrincipal" class="title" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lbl_Principal" class="InpTitle2" style="display:inline-block;width:132px;">1,198,901 円</span>
+                                    <span id="lbl_Principal" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspPrincipalTxt</span>
                                 </td>
                             </tr>
                             <tr>
@@ -916,7 +917,7 @@
                                     <span id="Label148" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">分割払手数料</span>
                                 </td>
                                 <td id="idPartitionFee" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lbl_PartitionFee" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lbl_PartitionFee" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspPartitionFee</span>
                                 </td>
                             </tr>
                             <tr>
@@ -924,7 +925,7 @@
                                     <span id="Label145" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">分割支払金合計</span>
                                 </td>
                                 <td id="idPartitionSum" class="title" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lbl_PartitionSum" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lbl_PartitionSum" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspPartitionAmount</span>
                                 </td>
                             </tr>
                             <tr>
@@ -932,7 +933,7 @@
                                     <span id="Label142" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払回数</span>
                                 </td>
                                 <td id="idKaisu" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lbl_Kaisu" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lbl_Kaisu" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspPayTimes</span>
                                 </td>
                             </tr>
                             <tr>
@@ -940,7 +941,7 @@
                                     <span id="Label139" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払期間</span>
                                 </td>
                                 <td id="idKikan" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lbl_Kikan" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;"></span>
+                                    <span id="lbl_Kikan" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;">@Model.dspKikan</span>
                                 </td>
                             </tr>
                             <tr>
@@ -948,16 +949,16 @@
                                     <span id="Label136" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">初回支払額</span>
                                 </td>
                                 <td id="idFirstPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lbl_FirstPrice" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lbl_FirstPrice" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspFirstPayAmount</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="data" style="width: 610px; height: 22px;">
                                     <span id="Label137" class="EstTitle1" style="display:inline-block;font-size:10pt;width:109px;">2回目以降支払額</span>
-                                    <span id="lbl_SecoTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;"></span>
+                                    <span id="lbl_SecoTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;">@Model.dspPayTimes2</span>
                                 </td>
                                 <td id="idSecoPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lbl_SecoPrice" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lbl_SecoPrice" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspPayAmount</span>
                                 </td>
                             </tr>
                             <tr>
@@ -965,26 +966,27 @@
                                     <span id="Label133" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">ボーナス加算月</span>
                                 </td>
                                 <td id="idBonusMonth" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lbl_BonusMonth" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lbl_BonusMonth" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspBonusMonth</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="data" style="width: 610px; height: 22px;">
                                     <span id="Label123" class="EstTitle1" style="display:inline-block;font-size:10pt;width:102px;">ボーナス加算額</span>
-                                    <span id="lbl_BonusTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;"></span>
+                                    <span id="lbl_BonusTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;">@Model.dspBonusTimes</span>
                                 </td>
                                 <td id="idBonusAdd" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lbl_BonusAdd" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lbl_BonusAdd" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspBonusAmount</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="data" colspan="2" style="border-style: none;">
-                                    <span id="lbl_Rate" class="EstTitle1"></span>
+                                    <span id="lbl_Rate" class="EstTitle1"> @Model.dspRate</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td id="idWarningRecalc" class="data" colspan="2" style="border-style: none; padding: 3px;
                                                             text-align: right; vertical-align: middle;">
+                                <strong><span id="lblWarningRecalc" class="spanTxtSubject">@Model.dspWarningRecalc</span></strong>
                                 </td>
                             </tr>
                         </table>
@@ -1001,7 +1003,7 @@
                                     <span id="Label1" class="EstTitle1" style="font-size:10pt;">初年度登録</span>
                                 </td>
                                 <td id="Td2" class="data" style="text-align: right; height: 22px;">
-                                    <span id="lblFirstRegistration" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lblFirstRegistration" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspFirstRegistration</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1009,7 +1011,7 @@
                                     <span id="Label6" class="EstTitle1" style="font-size:10pt;">車検満了日(予定日)</span>
                                 </td>
                                 <td id="Td3" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lblInspectionExpiration" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lblInspectionExpiration" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspInspectionExpirationDate</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1017,7 +1019,7 @@
                                     <span id="Label9" class="EstTitle1" style="font-size:10pt;">リース開始月</span>
                                 </td>
                                 <td id="Td4" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lblLeaseStart" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lblLeaseStart" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspLeaseStartMonth</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1025,7 +1027,7 @@
                                     <span id="Label11" class="EstTitle1" style="font-size:10pt;">契約期間</span>
                                 </td>
                                 <td id="Td5" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lblLeasePeriod" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lblLeasePeriod" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspLeasePeriod</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1033,7 +1035,7 @@
                                     <span id="Label13" class="EstTitle1" style="font-size:10pt;">リース満了日</span>
                                 </td>
                                 <td id="Td6" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lblLeaseExpirationDate" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lblLeaseExpirationDate" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspLeaseExpirationDate</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1041,7 +1043,7 @@
                                     <span id="Label19" class="EstTitle1" style="font-size:10pt;">契約プラン</span>
                                 </td>
                                 <td id="Td13" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lblContractPlanName" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lblContractPlanName" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspContractPlanName</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1049,7 +1051,7 @@
                                     <span id="Label15" class="EstTitle1" style="font-size:10pt;">延長保証(+1年)</span>
                                 </td>
                                 <td id="Td7" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lblExtendedGuarantee" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;"></span>
+                                    <span id="lblExtendedGuarantee" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;">@Model.dspIsExtendedGuarantee</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1057,7 +1059,7 @@
                                     <span id="Label17" class="EstTitle1" style="font-size:10pt;">任意保険</span>
                                 </td>
                                 <td id="Td8" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lblInsuranceCompanyName" class="InpTitle2"></span>
+                                    <span id="lblInsuranceCompanyName" class="InpTitle2">@Model.dspInsuranceCompanyName</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1065,7 +1067,7 @@
                                     <span id="Label24" class="EstTitle1" style="font-size:10pt;">保険料)</span>
                                 </td>
                                 <td id="Td9" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lblInsuranceFee" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lblInsuranceFee" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspInsuranceFee</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1073,7 +1075,7 @@
                                     <span id="Label22" class="EstTitle1" style="font-size:10pt;">頭金(税込)</span>
                                 </td>
                                 <td id="Td10" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lblDownPayment" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lblDownPayment" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspDownPayment</span>
                                 </td>
                             </tr>
                             <tr>
@@ -1081,7 +1083,7 @@
                                     <span id="Label29" class="EstTitle1" style="font-size:10pt;">下取(税込)</span>
                                 </td>
                                 <td id="Td11" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                    <span id="lblTradeInPrice" class="InpTitle2" style="display:inline-block;width:132px;"></span>
+                                    <span id="lblTradeInPrice" class="InpTitle2" style="display:inline-block;width:132px;">@Model.dspIdeTradeInPrice</span>
                                 </td>
                             </tr>
                         </table>
@@ -1102,13 +1104,13 @@
                             車名
                         </td>
                         <td class="data" colspan="5">
-                            <span id="lbl_Sita" class="EstTitle1" style="display:inline-block;width:542px;"></span>
+                            <span id="lbl_Sita" class="EstTitle1" style="display:inline-block;width:542px;">@Model.dspTradeInCarName</span>
                         </td>
                         <td class="title" style="height: 25px;">
                             初年度登録
                         </td>
                         <td class="data">
-                            <span id="lbl_SitaFirstYM" class="EstTitle1" style="display:inline-block;width:116px;"></span>
+                            <span id="lbl_SitaFirstYM" class="EstTitle1" style="display:inline-block;width:116px;">@Model.dspTradeInFirstRegYm</span>
                         </td>
                     </tr>
                     <tr>
@@ -1116,25 +1118,25 @@
                             車検
                         </td>
                         <td class="data">
-                            <span id="lbl_SitaIns" class="EstTitle1" style="display:inline-block;width:86px;"></span>
+                            <span id="lbl_SitaIns" class="EstTitle1" style="display:inline-block;width:86px;">@Model.dspTradeInCheckCarYm</span>
                         </td>
                         <td class="title" style="height: 25px;">
                             走行距離
                         </td>
                         <td class="data">
-                            <span id="lbl_SitaRun" class="EstTitle1" style="display:inline-block;width:87px;"></span>
+                            <span id="lbl_SitaRun" class="EstTitle1" style="display:inline-block;width:87px;">@Model.dspSitaRun</span>
                         </td>
                         <td class="title" style="height: 25px;">
                             車台番号
                         </td>
                         <td class="data">
-                            <span id="lbl_SitaCarNo" class="EstTitle1" style="display:inline-block;width:230px;"></span>
+                            <span id="lbl_SitaCarNo" class="EstTitle1" style="display:inline-block;width:230px;"> @Model.dspTradeInChassisNo</span>
                         </td>
                         <td class="title" style="height: 25px;">
                             登録NO
                         </td>
                         <td class="data">
-                            <span id="lbl_IserNo" class="EstTitle1" style="display:inline-block;width:133px;"></span>
+                            <span id="lbl_IserNo" class="EstTitle1" style="display:inline-block;width:133px;">@Model.dspTradeInRegNo</span>
                         </td>
                     </tr>
                     <tr>
@@ -1142,7 +1144,7 @@
                             色
                         </td>
                         <td class="data" colspan="7">
-                            <span id="lbl_SitaColor" class="EstTitle1" style="display:inline-block;width:700px;"></span>
+                            <span id="lbl_SitaColor" class="EstTitle1" style="display:inline-block;width:700px;">@Model.dspTradeInBodyColor</span>
                         </td>
                     </tr>
                 </table>
@@ -1158,7 +1160,7 @@
                     </tr>
                     <tr>
                         <td class="data" colspan="8" style="padding: 3px;">
-                            <span id="lbl_Notes" class="EstTitle1" style="display:inline-block;height:36px;width:790px;"></span>
+                            <span id="lbl_Notes" class="EstTitle1" style="display:inline-block;height:36px;width:790px;">@Model.dspNotes</span>
                         </td>
                     </tr>
                 </table>

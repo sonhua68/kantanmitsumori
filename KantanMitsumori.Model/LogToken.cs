@@ -71,5 +71,11 @@
         public string sesCarImgPath7 { get; set; }// 車両画像格納場所(サブ7枚目)
         public string sesCarImgPath8 { get; set; }// 車両画像格納場所(サブ8枚目)
 
+        public string sesMaker { get; set; }
+        public string sesCarNM { get; set; }
+        public string sesGrade { get; set; }
+        public string sesKata { get; set; }
+        public string sesHaiki { get; set; }
+        public string sesSft { get; set; }
     }
 }

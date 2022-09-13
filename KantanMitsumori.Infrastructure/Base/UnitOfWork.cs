@@ -1,5 +1,4 @@
 ﻿using KantanMitsumori.Entity.ASESTEntities;
-using KantanMitsumori.Entity.IDEEnitities;
 using KantanMitsumori.Infrastructure.IRepositories;
 using KantanMitsumori.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
@@ -28,6 +27,7 @@ namespace KantanMitsumori.Infrastructure.Base
         public IWeightTaxRepository WeightTaxs { get; private set; }
         public IOfficeRepository Offices { get; private set; }
         public IEstimateRepository Estimates { get; private set; }
+        public IEstimateIdeRepository EstimateIdes { get; private set; }
         public IEstimateItcRepository EstimateItcs { get; private set; }
         public IEstimateSubRepository EstimateSubs { get; private set; }
         public ITaxRatioDefRepository TaxRatioDefs { get; private set; }
@@ -57,6 +57,7 @@ namespace KantanMitsumori.Infrastructure.Base
             WeightTaxs = new WeightTaxRepository(context, logger);
             Offices = new OfficeRepository(context, logger);
             Estimates = new EstimateRepository(context, logger);
+            EstimateIdes = new EstimateIdeRepository(context, logger);
             EstimateItcs = new EstimateItcRepository(context, logger);
             EstimateSubs = new EstimateSubRepository(context, logger);
             TaxRatioDefs = new TaxRatioDefRepository(context, logger);

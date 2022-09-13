@@ -176,5 +176,58 @@
         public string csvSekininName { get; set; }
         public string dspLeaseFlag { get; set; }
         public long dspLeaseTargetRestriction { get; set; }
+
+        public string dspNowRun { get; set; }
+        public string dspVol { get; set; }
+
+        public bool dspRaJikoHisU { get; set; } = false;
+
+        public bool dspRaJikoHisMu { get; set; } = false;
+
+        public string dspSitaRun { get; set; }
+
+        public string dspWarningRecalc { get; set; }
+
+        public string dspPrincipalTxt { get; set; }
+
+        public string dspCustNm_forPrint { get; set; }
+
+        public string dspCustZip_forPrint { get; set; }
+
+        public string dspCustAdr_forPrint { get; set; }
+
+        public string dspCustTel_forPrint { get; set; }
+
+        public string dspAAInfoText { get; set; }
+
+
+        public string dspFirstRegistration { get; set; }
+
+        public string dspInspectionExpirationDate { get; set; }
+
+        public string dspLeaseStartMonth { get; set; }
+
+        public string dspLeasePeriod { get; set; }
+
+        public string dspLeaseExpirationDate { get; set; }
+
+        public int dspContractPlanID { get; set; }
+
+        public string dspContractPlanName { get; set; }
+
+        public string dspIsExtendedGuarantee { get; set; }
+
+        public int dspInsuranceCompanyID { get; set; }
+
+        public string dspInsuranceCompanyName { get; set; }
+
+        public string dspInsuranceFee { get; set; }
+
+        public string dspDownPayment { get; set; }
+
+        public string dspIdeTradeInPrice { get; set; }
+
+        public string dspLeaseTotalMsg { get; set; }
     }
+
 }

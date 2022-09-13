@@ -1,6 +1,6 @@
-﻿namespace KantanMitsumori.Entity.ASESTEntities
+﻿namespace KantanMitsumori.Model
 {
-    public partial class TEstimateIde
+    public class EstimateIdeModel
     {
         public string EstNo { get; set; } = null!;
         public string EstSubNo { get; set; } = null!;

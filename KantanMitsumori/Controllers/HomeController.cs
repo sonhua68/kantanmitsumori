@@ -55,7 +55,7 @@ namespace KantanMitsumori.Controllers
             var logToken = HelperToken.EncodingToken(token);
 
 
-            if (response.ResultStatus == 0)
+            if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
             }
@@ -63,7 +63,7 @@ namespace KantanMitsumori.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetEstMain([FromQuery] string sel, [FromForm] RequestHeaderModel request)
+        public async Task<IActionResult> Estmain([FromQuery] string sel, [FromForm] RequestHeaderModel request)
         {
             Uri pageUrl;
 
@@ -80,33 +80,14 @@ namespace KantanMitsumori.Controllers
 
             if (Strings.InStr(pageUrl.AbsolutePath, "/asest2/") == 0 || Strings.InStr(pageUrl.AbsolutePath, "/test.htm/") > 0)
             {
-                return EstMain(sel, request);
+                var response = await _appService.getEstMain(sel, request);
+                return View(response.Data);
             }
-            else if (Strings.InStr(pageUrl.AbsolutePath, "/asest2/SelGrd.cshtml/") == 0 || Strings.InStr(pageUrl.AbsolutePath, "/test.htm/") > 0)
+            else
             {
-                return EstMainLocal(sel, request);
+                var response = await _appService.setFreeEst();
+                return View(response.Data);
             }
-
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult EstMain(string sel, RequestHeaderModel request)
-        {
-            // câu truc link summit qa https://mit.autoserver.co.jp/asest2/EstMain.aspx
-            var response = _appService.getEstMain(sel, request);
-
-            //var response = _appService.calcSum("22071200085", "01");
-            return View(response.Data);
-
-        }
-
-        [HttpPost]
-        public IActionResult EstMainLocal(string sel, RequestHeaderModel request)
-        {
-            //var response = await _appService.getEstMain(isInputBack, sel, request);
-
-            return View();
         }
 
         #region HoaiPhong

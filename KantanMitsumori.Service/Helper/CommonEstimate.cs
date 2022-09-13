@@ -19,26 +19,27 @@ namespace KantanMitsumori.Service.Helper
 
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWorkIDE _unitOfWorkIDE;
         private readonly IMapper _mapper;
-        private readonly HelperMapper _helperMapper;
 
         private LogToken valToken;
         private CommonFuncHelper _commonFuncHelper;
-
         private List<string> reCalEstModel;
         private List<string> reCalEstSubModel;
 
-        public CommonEstimate(ILogger<CommonEstimate> logger, IUnitOfWork unitOfWork, IMapper mapper, CommonFuncHelper commonFuncHelper, HelperMapper helperMapper)
+        public CommonEstimate(ILogger<CommonEstimate> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, IMapper mapper, CommonFuncHelper commonFuncHelper)
         {
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _unitOfWorkIDE = unitOfWorkIDE;
             _mapper = mapper;
             _commonFuncHelper = commonFuncHelper;
-            _helperMapper = helperMapper;
 
             valToken = new LogToken();
             reCalEstModel = new List<string>();
             reCalEstSubModel = new List<string>();
+
+            EstimateModelView = new EstimateModelView();
         }
 
         /// <summary>
@@ -112,14 +113,16 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="flgRecreate"></param>
         /// <returns></returns>
-        public bool addEstNextSubNo(bool flgRecreate = false)
+        public bool addEstNextSubNo(LogToken logToken, bool flgRecreate = false)
         {
             try
             {
+                valToken = logToken;
+
                 // 見積書番号を取得
                 string vEstNo = !string.IsNullOrEmpty(valToken.sesEstNo) ? valToken.sesEstNo : "";
-                string vLeaseFlag = !string.IsNullOrEmpty(valToken.sesLeaseFlag) ? valToken.sesEstNo : "";
-                string vEstSubNo = !string.IsNullOrEmpty(valToken.sesEstSubNo) ? valToken.sesEstNo : "";
+                string vLeaseFlag = !string.IsNullOrEmpty(valToken.sesLeaseFlag) ? valToken.sesLeaseFlag : "";
+                string vEstSubNo = !string.IsNullOrEmpty(valToken.sesEstSubNo) ? valToken.sesEstSubNo : "";
 
                 if (vEstNo == "" || vEstSubNo == "")
                 {
@@ -128,7 +131,7 @@ namespace KantanMitsumori.Service.Helper
                 }
 
                 // （諸費用設定の最新状態を反映しなければならない場合があるので必要）
-                calcSum(vEstNo, vEstSubNo);
+                calcSum(vEstNo, vEstSubNo, valToken);
 
                 // 見積書データ取得
                 if (!getEstData(vEstNo, vEstSubNo))
@@ -200,7 +203,7 @@ namespace KantanMitsumori.Service.Helper
         /// * 見積書データ 小計・合計計算（税抜／税込切替時の調整、および小計・合計計算）
         /// </summary>
         /// <returns></returns>
-        public bool calcSum(string inEstNo, string inEstSubNo)
+        public async Task<bool> calcSum(string inEstNo, string inEstSubNo, LogToken logToken)
         {
             try
             {
@@ -208,26 +211,23 @@ namespace KantanMitsumori.Service.Helper
 
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == estModel.EstNo && x.EstSubNo == estModel.EstSubNo && x.Dflag == false);
 
-                valToken = new LogToken();  // TO DO: Remove
 
                 // 再計算前の総額
                 long oldSalesSum = (long)estModel.SalesSum;
 
                 // 消費税率取得
-                var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, valToken.sesTaxRatio, estModel.EstUserNo);
+                var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.sesUserNo);
                 valToken.sesTaxRatio = vTax;
 
                 // 会員諸費用設定取得
-                string userNo = estModel.EstUserNo;
+                var getUserDef = _commonFuncHelper.getUserDefData(logToken.sesUserNo);
 
-                var getUserDef = _commonFuncHelper.getUserDefData(userNo);
-
-                if (getUserDef.ResultStatus == 0)
+                if (getUserDef != null)
                 {
-                    if (estModel.ConTaxInputKb != getUserDef.Data!.ConTaxInputKb)
+                    if (estModel.ConTaxInputKb != getUserDef.ConTaxInputKb)
                     {
                         // 消費税区分（税込／税抜）がデータと設定値で不一致の場合、データの各項目を再設定
-                        estModel.ConTaxInputKb = getUserDef.Data!.ConTaxInputKb;
+                        estModel.ConTaxInputKb = getUserDef.ConTaxInputKb;
 
                         Type typeEst = estModel.GetType();
                         Type typeEstSub = estSubModel.GetType();
@@ -362,12 +362,6 @@ namespace KantanMitsumori.Service.Helper
                            - estModel.TradeInPrice
                            + estModel.Balance;
 
-                // update [t_Estimate]
-                _unitOfWork.Estimates.Update(estModel);
-
-                // update [t_EstimateSub]
-                _unitOfWork.EstimateSubs.Update(estSubModel);
-
                 string strClearMsg = "";
 
                 if ((oldSalesSum > 0) && (estModel.SalesSum != oldSalesSum) && (estModel.PayTimes > 0))
@@ -405,30 +399,27 @@ namespace KantanMitsumori.Service.Helper
                         }
                         else
                         {
-                            TEstimate estimate = _mapper.Map<TEstimate>(estModel);
-                            estimate.Rate = (double)simLon.MoneyRate;
-                            estimate.Deposit = simLon.Deposit;
-                            estimate.Principal = simLon.Principal;
-                            estimate.PartitionFee = simLon.Fee;
-                            estimate.PartitionAmount = simLon.PayTotal;
-                            estimate.FirstPayMonth = simLon.FirstPayMonth.ToString();
-                            estimate.LastPayMonth = simLon.LastPayMonth.ToString();
-                            estimate.FirstPayAmount = simLon.FirstPay;
-                            estimate.PayAmount = simLon.PayMonth;
-                            estimate.BonusAmount = simLon.Bonus;
-                            estimate.BonusFirst = simLon.BonusFirst.ToString();
-                            estimate.BonusSecond = simLon.BonusSecond.ToString();
-                            estimate.BonusTimes = simLon.BonusTimes;
-                            estimate.PayTimes = simLon.PayTimes;
 
-                            _unitOfWork.Estimates.Update(estimate);
+                            estModel.Rate = (double)simLon.MoneyRate;
+                            estModel.Deposit = simLon.Deposit;
+                            estModel.Principal = simLon.Principal;
+                            estModel.PartitionFee = simLon.Fee;
+                            estModel.PartitionAmount = simLon.PayTotal;
+                            estModel.FirstPayMonth = simLon.FirstPayMonth.ToString();
+                            estModel.LastPayMonth = simLon.LastPayMonth.ToString();
+                            estModel.FirstPayAmount = simLon.FirstPay;
+                            estModel.PayAmount = simLon.PayMonth;
+                            estModel.BonusAmount = simLon.Bonus;
+                            estModel.BonusFirst = simLon.BonusFirst.ToString();
+                            estModel.BonusSecond = simLon.BonusSecond.ToString();
+                            estModel.BonusTimes = simLon.BonusTimes;
+                            estModel.PayTimes = simLon.PayTimes;
 
-                            TEstimateSub estimateSub = _mapper.Map<TEstimateSub>(estSubModel);
-                            estimateSub.LoanModifyFlag = false;
-                            estimateSub.LoanRecalcSettingFlag = true;
-                            estimateSub.LoanInfo = CommonConst.def_LoanInfo_NormalEnd;
 
-                            _unitOfWork.EstimateSubs.Update(estimateSub);
+                            //TEstimateSub estimateSub = _mapper.Map<TEstimateSub>(estSubModel);
+                            estSubModel.LoanModifyFlag = false;
+                            estSubModel.LoanRecalcSettingFlag = true;
+                            estSubModel.LoanInfo = CommonConst.def_LoanInfo_NormalEnd;
                         }
                     }
                     else
@@ -439,42 +430,39 @@ namespace KantanMitsumori.Service.Helper
                 else
                 {
                     // 総額変更なしの場合、ローン計算情報表示区分のクリア
-                    TEstimateSub estimateSub = _mapper.Map<TEstimateSub>(estSubModel);
-                    estimateSub.LoanInfo = CommonConst.def_LoanInfo_Unexecuted;
-                    _unitOfWork.EstimateSubs.Update(estimateSub);
+                    estSubModel.LoanInfo = CommonConst.def_LoanInfo_Unexecuted;
                 }
 
 
                 if (strClearMsg != "")
                 {
                     // ローンの再計算失敗、または総額変更に伴うローンの自動再計算を行わない場合、ローン情報クリア
-                    TEstimate estimate = _mapper.Map<TEstimate>(estModel);
-                    estimate.Rate = 0;
-                    estimate.Deposit = 0;
-                    estimate.Principal = estModel.SalesSum;
-                    estimate.PartitionFee = 0;
-                    estimate.PartitionAmount = 0;
-                    estimate.FirstPayMonth = "NULL";
-                    estimate.LastPayMonth = "NULL";
-                    estimate.FirstPayAmount = 0;
-                    estimate.PayAmount = 0;
-                    estimate.BonusAmount = 0;
-                    estimate.BonusFirst = "NULL";
-                    estimate.BonusSecond = "NULL";
-                    estimate.BonusTimes = 0;
-                    estimate.PayTimes = 0;
+                    // update Estimates
+                    estModel.Rate = 0;
+                    estModel.Deposit = 0;
+                    estModel.Principal = estModel.SalesSum;
+                    estModel.PartitionFee = 0;
+                    estModel.PartitionAmount = 0;
+                    estModel.FirstPayMonth = "NULL";
+                    estModel.LastPayMonth = "NULL";
+                    estModel.FirstPayAmount = 0;
+                    estModel.PayAmount = 0;
+                    estModel.BonusAmount = 0;
+                    estModel.BonusFirst = "NULL";
+                    estModel.BonusSecond = "NULL";
+                    estModel.BonusTimes = 0;
+                    estModel.PayTimes = 0;
+                    // EstimateSubs
+                    estSubModel.LoanModifyFlag = false;
+                    estSubModel.LoanRecalcSettingFlag = true;
+                    estSubModel.LoanInfo = Convert.ToByte(strClearMsg);
 
-                    _unitOfWork.Estimates.Update(estimate);
-
-                    TEstimateSub estimateSub = _mapper.Map<TEstimateSub>(estSubModel);
-                    estimateSub.LoanModifyFlag = false;
-                    estimateSub.LoanRecalcSettingFlag = true;
-                    estimateSub.LoanInfo = Convert.ToByte(strClearMsg);
-
-                    _unitOfWork.EstimateSubs.Update(estimateSub);
                 }
 
-                _unitOfWork.CommitAsync();
+                _unitOfWork.Estimates.Update(estModel);
+                _unitOfWork.EstimateSubs.Update(estSubModel);
+                await _unitOfWork.CommitAsync();
+
             }
             catch (Exception ex)
             {
@@ -528,7 +516,6 @@ namespace KantanMitsumori.Service.Helper
                 var estModelMap = _mapper.Map<EstimateModel>(estModel);
                 var estSubModelMap = _mapper.Map<EstimateSubModel>(estSubModel);
 
-
                 creDispData(estModelMap, estSubModelMap);
             }
             catch (Exception ex)
@@ -550,10 +537,10 @@ namespace KantanMitsumori.Service.Helper
             // 見積番号
             EstimateModelView.dspEstNo = est.EstNo + "-" + est.EstSubNo;
             // 見積日
-            DateTime edate = (DateTime)est.TradeDate;
-            EstimateModelView.dspTradeDate = Strings.Format(edate, "D");
-            EstimateModelView.csvTradeDate = edate.ToString("yyyyMMdd"); //EstimateModelView.csv用
-                                                                         // 車名
+            //DateTime edate = (DateTime)est.TradeDate;
+            EstimateModelView.dspTradeDate = CommonFunction.japaneseFormat(est.TradeDate);
+            EstimateModelView.csvTradeDate = est.TradeDate.ToString("yyyyMMdd"); //EstimateModelView.csv用
+                                                                                 // 車名
             EstimateModelView.dspCarName = est.MakerName + " " + est.ModelName;
             EstimateModelView.csvMakerName = est.MakerName; //EstimateModelView.csv用
             EstimateModelView.csvModelName = est.ModelName; //EstimateModelView.csv用
@@ -580,7 +567,7 @@ namespace KantanMitsumori.Service.Helper
                 EstimateModelView.csvFirstRegYm = ""; //EstimateModelView.csv用
             }
             // 車検
-            if (est.CheckCarYm == "無し" || est.CheckCarYm == "")
+            if (est.CheckCarYm == "無し" || string.IsNullOrEmpty(est.CheckCarYm))
             {
                 EstimateModelView.dspCheckCarYm = est.CheckCarYm;
                 EstimateModelView.csvCheckCarYm = est.CheckCarYm; //EstimateModelView.csv用
@@ -665,7 +652,7 @@ namespace KantanMitsumori.Service.Helper
                 EstimateModelView.csvTradeInFirstRegYm = ""; //EstimateModelView.csv用
             }
 
-            if (est.TradeInCheckCarYm == "無し" || est.TradeInCheckCarYm == "")
+            if (est.TradeInCheckCarYm == "無し" || string.IsNullOrEmpty(est.TradeInCheckCarYm))
             {
                 EstimateModelView.dspTradeInCheckCarYm = est.TradeInCheckCarYm;
                 EstimateModelView.csvTradeInCheckCarYm = est.TradeInCheckCarYm; //EstimateModelView.csv用
@@ -683,9 +670,9 @@ namespace KantanMitsumori.Service.Helper
             EstimateModelView.dspTradeInNowOdometer = est.TradeInNowOdometer == 0 ? "" : est.TradeInNowOdometer.ToString();
             EstimateModelView.dspTradeInMilUnit = sub.TradeInMilUnit;
             EstimateModelView.dspTradeInChassisNo = est.TradeInChassisNo;
-            EstimateModelView.dspTradeInRegNo = est.TradeInRegNo.Replace("/", "");
+            EstimateModelView.dspTradeInRegNo = string.IsNullOrEmpty(est.TradeInRegNo) ? "" : est.TradeInRegNo.Replace("/", "");
             EstimateModelView.dspTradeInBodyColor = est.TradeInBodyColor;
-            EstimateModelView.dspCarPrice = (est.CarPrice == 0 ? "" : CommonFunction.setFormat(est.CarPrice, " 円", ""));
+            EstimateModelView.dspCarPrice = CommonFunction.setFormatCurrency(est.CarPrice);
 
             // 整備費用
             long wSyakenNew;
@@ -708,15 +695,15 @@ namespace KantanMitsumori.Service.Helper
                     || (Strings.Len(est.CheckCarYm) == 4 && DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(est.CheckCarYm + "/01")) > 0))
                     EstimateModelView.dspSyakenNewZokT = CommonConst.def_TitleSyakenZok;
             }
-            EstimateModelView.dspSyakenNew = (wSyakenNew == 0 ? "" : CommonFunction.setFormat(wSyakenNew, " 円", ""));
+            EstimateModelView.dspSyakenNew = CommonFunction.setFormatCurrency(wSyakenNew);
 
             // 車両計
             // Dim wCarSum As Long = wCarPrice + wSyakenNew
-            EstimateModelView.dspCarSum = (est.CarSum == 0 ? "" : CommonFunction.setFormat(est.CarSum, " 円", ""));
+            EstimateModelView.dspCarSum = CommonFunction.setFormatCurrency(est.CarSum);
             // Call CreateLog(CarSum & ":" &EstimateModelView.dspCarSum, "clsEstimate")
             // その他費用
             EstimateModelView.dspSonotaTitle = sub.SonotaTitle;
-            EstimateModelView.dspSonota = (sub.Sonota == 0 ? "" : CommonFunction.setFormat(sub.Sonota, " 円", ""));
+            EstimateModelView.dspSonota = CommonFunction.setFormatCurrency(sub.Sonota);
             // 落札料
             EstimateModelView.csvRakuSatu = sub.RakuSatu.ToString(); //EstimateModelView.csv用
                                                                      // 陸送代
@@ -731,27 +718,27 @@ namespace KantanMitsumori.Service.Helper
             else
             {
                 EstimateModelView.dspDiscountT = CommonConst.def_TitleDisCount;
-                EstimateModelView.dspDiscount = "▲" + Convert.ToString(CommonFunction.setFormat(est.Discount, " 円", ""));
+                EstimateModelView.dspDiscount = "▲" + Convert.ToString(CommonFunction.setFormatCurrency(est.Discount));
             }
 
             // 付属品
-            EstimateModelView.dspOptionPriceAll = (est.OptionPriceAll == 0 ? "" : CommonFunction.setFormat(est.OptionPriceAll, " 円", ""));
+            EstimateModelView.dspOptionPriceAll = CommonFunction.setFormatCurrency(est.OptionPriceAll);
             // 税金・保険料
-            EstimateModelView.dspTaxInsAll = (est.TaxInsAll == 0 ? "" : CommonFunction.setFormat(est.TaxInsAll, " 円", ""));
+            EstimateModelView.dspTaxInsAll = CommonFunction.setFormatCurrency(est.TaxInsAll);
             // 税金・保険料相当額
-            EstimateModelView.dspTaxInsEquivalentAll = (sub.TaxInsEquivalentAll == 0 ? "" : CommonFunction.setFormat(sub.TaxInsEquivalentAll, " 円", ""));
+            EstimateModelView.dspTaxInsEquivalentAll = CommonFunction.setFormatCurrency(sub.TaxInsEquivalentAll);
             // 預り法定費
-            EstimateModelView.dspTaxFreeAll = (est.TaxFreeAll == 0 ? "" : CommonFunction.setFormat(est.TaxFreeAll, " 円", ""));
+            EstimateModelView.dspTaxFreeAll = CommonFunction.setFormatCurrency(est.TaxFreeAll);
             // 手続代行費用
-            EstimateModelView.dspTaxCostAll = (est.TaxCostAll == 0 ? "" : CommonFunction.setFormat(est.TaxCostAll, " 円", ""));
+            EstimateModelView.dspTaxCostAll = CommonFunction.setFormatCurrency(est.TaxCostAll);
             // 消費税
-            EstimateModelView.dspConTax = CommonFunction.setFormat(est.ConTax, " 円", "");
+            EstimateModelView.dspConTax = CommonFunction.setFormatCurrency(est.ConTax);
             // 車両販売総額
-            EstimateModelView.dspCarSaleSum = CommonFunction.setFormat(est.CarSaleSum, " 円", "");
+            EstimateModelView.dspCarSaleSum = CommonFunction.setFormatCurrency(est.CarSaleSum);
             // 下取車有無
             EstimateModelView.dspTradeInUM = sub.TradeInUm.ToString();
             // 下取車価格
-            EstimateModelView.dspTradeInPrice = (est.TradeInPrice == 0 ? "" : "▲" + Convert.ToString(CommonFunction.setFormat(est.TradeInPrice, " 円", "")));
+            EstimateModelView.dspTradeInPrice = (est.TradeInPrice == 0 ? "" : "▲" + Convert.ToString(CommonFunction.setFormatCurrency(est.TradeInPrice)));
             // 下取車残債
             if (est.Balance == 0)
             {
@@ -761,25 +748,25 @@ namespace KantanMitsumori.Service.Helper
             else
             {
                 EstimateModelView.dspBalanceT = "下取車残債";
-                EstimateModelView.dspBalance = CommonFunction.setFormat(est.Balance, " 円", "");
+                EstimateModelView.dspBalance = CommonFunction.setFormatCurrency(est.Balance);
             }
             // 合計
-            EstimateModelView.dspSalesSum = CommonFunction.setFormat(est.SalesSum, " 円", "");
+            EstimateModelView.dspSalesSum = CommonFunction.setFormatCurrency(est.SalesSum);
             // 頭金
-            EstimateModelView.dspDeposit = (est.Deposit == 0 ? "" : CommonFunction.setFormat(est.Deposit, " 円", ""));
+            EstimateModelView.dspDeposit = CommonFunction.setFormatCurrency(est.Deposit);
             // 割賦元金
-            EstimateModelView.dspPrincipal = CommonFunction.setFormat(est.SalesSum - est.Deposit, " 円", "");
+            EstimateModelView.dspPrincipal = CommonFunction.setFormatCurrency(est.SalesSum - est.Deposit);
 
             // ローン内容
             // -- 分割払手数料
             if (est.PartitionFee > 0)
-                EstimateModelView.dspPartitionFee = CommonFunction.setFormat((long)est.PartitionFee, " 円", "");
+                EstimateModelView.dspPartitionFee = CommonFunction.setFormatCurrency((long)est.PartitionFee);
             else
                 EstimateModelView.dspPartitionFee = "";
 
             // -- 分割払金合計
             if (est.PartitionAmount > 0)
-                EstimateModelView.dspPartitionAmount = CommonFunction.setFormat(est.PartitionAmount, " 円", "");
+                EstimateModelView.dspPartitionAmount = CommonFunction.setFormatCurrency(est.PartitionAmount);
             else
                 EstimateModelView.dspPartitionAmount = "";
 
@@ -811,13 +798,13 @@ namespace KantanMitsumori.Service.Helper
 
             // -- 初回支払額
             if (est.FirstPayAmount > 0)
-                EstimateModelView.dspFirstPayAmount = CommonFunction.setFormat(est.FirstPayAmount, " 円", "");
+                EstimateModelView.dspFirstPayAmount = CommonFunction.setFormatCurrency(est.FirstPayAmount);
             else
                 EstimateModelView.dspFirstPayAmount = "";
 
             // -- 2回目以降支払額
             if (est.PayAmount > 0)
-                EstimateModelView.dspPayAmount = CommonFunction.setFormat(est.PayAmount, " 円", "");
+                EstimateModelView.dspPayAmount = CommonFunction.setFormatCurrency(est.PayAmount);
             else
                 EstimateModelView.dspPayAmount = "";
             if (est.PayTimes > 0)
@@ -850,7 +837,7 @@ namespace KantanMitsumori.Service.Helper
                 }
 
                 // -- ボーナス加算額
-                EstimateModelView.dspBonusAmount = CommonFunction.setFormat(est.BonusAmount, " 円", "0");
+                EstimateModelView.dspBonusAmount = CommonFunction.setFormatCurrency(est.BonusAmount);
 
                 // -- ボーナス加算回数
                 if (est.BonusTimes > 0)
@@ -885,85 +872,85 @@ namespace KantanMitsumori.Service.Helper
             }
 
             // 付属品明細
-            if (est.OptionInputKb == true)
+            if (est.OptionInputKb)
             {
                 EstimateModelView.dspOptionName1 = est.OptionName1;
-                EstimateModelView.dspOptionPrice1 = (int.Parse(est.OptionName1) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName1), " 円", ""));
                 EstimateModelView.dspOptionName2 = est.OptionName2;
-                EstimateModelView.dspOptionPrice2 = (int.Parse(est.OptionName2) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName2), " 円", ""));
                 EstimateModelView.dspOptionName3 = est.OptionName3;
-                EstimateModelView.dspOptionPrice3 = (int.Parse(est.OptionName3) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName3), " 円", ""));
                 EstimateModelView.dspOptionName4 = est.OptionName4;
-                EstimateModelView.dspOptionPrice4 = (int.Parse(est.OptionName4) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName4), " 円", ""));
                 EstimateModelView.dspOptionName5 = est.OptionName5;
-                EstimateModelView.dspOptionPrice5 = (int.Parse(est.OptionName5) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName5), " 円", ""));
                 EstimateModelView.dspOptionName6 = est.OptionName6;
-                EstimateModelView.dspOptionPrice6 = (int.Parse(est.OptionName6) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName6), " 円", ""));
                 EstimateModelView.dspOptionName7 = est.OptionName7;
-                EstimateModelView.dspOptionPrice7 = (int.Parse(est.OptionName7) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName7), " 円", ""));
                 EstimateModelView.dspOptionName8 = est.OptionName8;
-                EstimateModelView.dspOptionPrice8 = (int.Parse(est.OptionName8) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName8), " 円", ""));
                 EstimateModelView.dspOptionName9 = est.OptionName9;
-                EstimateModelView.dspOptionPrice9 = (int.Parse(est.OptionName9) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName9), " 円", ""));
                 EstimateModelView.dspOptionName10 = est.OptionName10;
-                EstimateModelView.dspOptionPrice10 = (int.Parse(est.OptionName10) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName10), " 円", ""));
                 EstimateModelView.dspOptionName11 = est.OptionName11;
-                EstimateModelView.dspOptionPrice11 = (int.Parse(est.OptionName11) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName11), " 円", ""));
                 EstimateModelView.dspOptionName12 = est.OptionName12;
-                EstimateModelView.dspOptionPrice12 = (int.Parse(est.OptionName12) == 0 ? "" : CommonFunction.setFormat(int.Parse(est.OptionName12), " 円", ""));
+                EstimateModelView.dspOptionPrice1 = CommonFunction.setFormatCurrency(est.OptionPrice1);
+                EstimateModelView.dspOptionPrice2 = CommonFunction.setFormatCurrency(est.OptionPrice2);
+                EstimateModelView.dspOptionPrice3 = CommonFunction.setFormatCurrency(est.OptionPrice3);
+                EstimateModelView.dspOptionPrice4 = CommonFunction.setFormatCurrency(est.OptionPrice4);
+                EstimateModelView.dspOptionPrice5 = CommonFunction.setFormatCurrency(est.OptionPrice5);
+                EstimateModelView.dspOptionPrice6 = CommonFunction.setFormatCurrency(est.OptionPrice6);
+                EstimateModelView.dspOptionPrice7 = CommonFunction.setFormatCurrency(est.OptionPrice7);
+                EstimateModelView.dspOptionPrice8 = CommonFunction.setFormatCurrency(est.OptionPrice8);
+                EstimateModelView.dspOptionPrice9 = CommonFunction.setFormatCurrency(est.OptionPrice9);
+                EstimateModelView.dspOptionPrice10 = CommonFunction.setFormatCurrency(est.OptionPrice10);
+                EstimateModelView.dspOptionPrice11 = CommonFunction.setFormatCurrency(est.OptionPrice11);
+                EstimateModelView.dspOptionPrice12 = CommonFunction.setFormatCurrency(est.OptionPrice12);
             }
             // 税金・保険料明細
-            if (est.TaxInsInputKb == true)
+            if (est.TaxInsInputKb)
             {
-                EstimateModelView.dspAutoTax = (est.AutoTax == 0 ? "" : CommonFunction.setFormat(est.AutoTax, " 円", ""));
-                EstimateModelView.dspAutoTaxEquivalent = (sub.AutoTaxEquivalent == 0 ? "" : CommonFunction.setFormat(sub.AutoTaxEquivalent, " 円", ""));
+                EstimateModelView.dspAutoTax = CommonFunction.setFormatCurrency(est.AutoTax);
+                EstimateModelView.dspAutoTaxEquivalent = CommonFunction.setFormatCurrency(sub.AutoTaxEquivalent);
                 if (sub.AutoTaxEquivalent > 0)
                     EstimateModelView.dspAutoTaxMonth = CommonConst.def_TitleAutoTaxEquivalent;
                 else
                     EstimateModelView.dspAutoTaxMonth = CommonConst.def_TitleAutoTax + (est.AutoTax == 0 ? "" : "（" + sub.AutoTaxMonth + "月中登録）");
                 EstimateModelView.csvAutoTaxMonth = sub.AutoTaxMonth; //EstimateModelView.csv用
-                EstimateModelView.dspAcqTax = (est.AcqTax == 0 ? "" : CommonFunction.setFormat(est.AcqTax, " 円", ""));
-                EstimateModelView.dspWeightTax = (est.WeightTax == 0 ? "" : CommonFunction.setFormat(est.WeightTax, " 円", ""));
-                EstimateModelView.dspDamageIns = (est.DamageIns == 0 ? "" : CommonFunction.setFormat(est.DamageIns, " 円", ""));
-                EstimateModelView.dspDamageInsEquivalent = (sub.DamageInsEquivalent == 0 ? "" : CommonFunction.setFormat(sub.DamageInsEquivalent, " 円", ""));
+                EstimateModelView.dspAcqTax = CommonFunction.setFormatCurrency(est.AcqTax);
+                EstimateModelView.dspWeightTax = CommonFunction.setFormatCurrency(est.WeightTax);
+                EstimateModelView.dspDamageIns = CommonFunction.setFormatCurrency(est.DamageIns);
+                EstimateModelView.dspDamageInsEquivalent = CommonFunction.setFormatCurrency(sub.DamageInsEquivalent);
 
                 if (sub.DamageInsEquivalent > 0)
                     EstimateModelView.dspDamageInsMonth = CommonConst.def_TitleDamageInsEquivalent;
                 else
                     EstimateModelView.dspDamageInsMonth = CommonConst.def_TitleDamageIns + (est.DamageIns == 0 ? "" : "（" + sub.DamageInsMonth + "ヶ月）");
                 EstimateModelView.csvDamageInsMonth = sub.DamageInsMonth; //EstimateModelView.csv用
-                EstimateModelView.dspOptionIns = (est.OptionIns == 0 ? "" : CommonFunction.setFormat(est.OptionIns, " 円", ""));
+                EstimateModelView.dspOptionIns = CommonFunction.setFormatCurrency(est.OptionIns);
             }
             // 預り法定費明細
-            if (est.TaxFreeKb == true)
+            if (est.TaxFreeKb)
             {
-                EstimateModelView.dspTaxFreeGarage = (est.TaxFreeGarage == 0 ? "" : CommonFunction.setFormat(est.TaxFreeGarage, " 円", ""));
-                EstimateModelView.dspTaxFreeCheck = (est.TaxFreeCheck == 0 ? "" : CommonFunction.setFormat(est.TaxFreeCheck, " 円", ""));
-                EstimateModelView.dspTaxFreeTradeIn = (est.TaxFreeTradeIn == 0 ? "" : CommonFunction.setFormat(est.TaxFreeTradeIn, " 円", ""));
-                EstimateModelView.dspTaxFreeRecycle = (est.TaxFreeRecycle == 0 ? "" : CommonFunction.setFormat(est.TaxFreeRecycle, " 円", ""));
-                EstimateModelView.dspTaxFreeOther = (est.TaxFreeOther == 0 ? "" : CommonFunction.setFormat(est.TaxFreeOther, " 円", ""));
+                EstimateModelView.dspTaxFreeGarage = CommonFunction.setFormatCurrency(est.TaxFreeGarage);
+                EstimateModelView.dspTaxFreeCheck = CommonFunction.setFormatCurrency(est.TaxFreeCheck);
+                EstimateModelView.dspTaxFreeTradeIn = CommonFunction.setFormatCurrency(est.TaxFreeTradeIn);
+                EstimateModelView.dspTaxFreeRecycle = CommonFunction.setFormatCurrency(est.TaxFreeRecycle);
+                EstimateModelView.dspTaxFreeOther = CommonFunction.setFormatCurrency(est.TaxFreeOther);
                 EstimateModelView.dspTaxFreeSet1Title = sub.TaxFreeSet1Title;
-                EstimateModelView.dspTaxFreeSet1 = (sub.TaxFreeSet1 == 0 ? "" : CommonFunction.setFormat(sub.TaxFreeSet1, " 円", ""));
+                EstimateModelView.dspTaxFreeSet1 = CommonFunction.setFormatCurrency(sub.TaxFreeSet1);
                 EstimateModelView.dspTaxFreeSet2Title = sub.TaxFreeSet2Title;
-                EstimateModelView.dspTaxFreeSet2 = (sub.TaxFreeSet2 == 0 ? "" : CommonFunction.setFormat(sub.TaxFreeSet2, " 円", ""));
+                EstimateModelView.dspTaxFreeSet2 = CommonFunction.setFormatCurrency(sub.TaxFreeSet2);
             }
             // 手続代行費明細
-            if (est.TaxCostKb == true)
+            if (est.TaxCostKb)
             {
-                EstimateModelView.dspTaxGarage = (est.TaxGarage == 0 ? "" : CommonFunction.setFormat(est.TaxGarage, " 円", ""));
-                EstimateModelView.dspTaxCheck = (est.TaxCheck == 0 ? "" : CommonFunction.setFormat(est.TaxCheck, " 円", ""));
-                EstimateModelView.dspTaxTradeIn = (est.TaxTradeIn == 0 ? "" : CommonFunction.setFormat(est.TaxTradeIn, " 円", ""));
-                EstimateModelView.dspTaxDelivery = (est.TaxDelivery == 0 ? "" : CommonFunction.setFormat(est.TaxDelivery, " 円", ""));
-                EstimateModelView.dspTaxRecycle = (est.TaxRecycle == 0 ? "" : CommonFunction.setFormat(est.TaxRecycle, " 円", ""));
-                EstimateModelView.dspTaxOther = (est.TaxOther == 0 ? "" : CommonFunction.setFormat(est.TaxOther, " 円", ""));
+                EstimateModelView.dspTaxGarage = CommonFunction.setFormatCurrency(est.TaxGarage);
+                EstimateModelView.dspTaxCheck = CommonFunction.setFormatCurrency(est.TaxCheck);
+                EstimateModelView.dspTaxTradeIn = CommonFunction.setFormatCurrency(est.TaxTradeIn);
+                EstimateModelView.dspTaxDelivery = CommonFunction.setFormatCurrency(est.TaxDelivery);
+                EstimateModelView.dspTaxRecycle = CommonFunction.setFormatCurrency(est.TaxRecycle);
+                EstimateModelView.dspTaxOther = CommonFunction.setFormatCurrency(est.TaxOther);
 
-                EstimateModelView.dspTaxTradeInSatei = (sub.TaxTradeInSatei == 0 ? "" : CommonFunction.setFormat(sub.TaxTradeInSatei, " 円", ""));
+                EstimateModelView.dspTaxTradeInSatei = CommonFunction.setFormatCurrency(sub.TaxTradeInSatei);
                 EstimateModelView.dspTaxSet1Title = sub.TaxSet1Title;
-                EstimateModelView.dspTaxSet1 = (sub.TaxSet1 == 0 ? "" : CommonFunction.setFormat(sub.TaxSet1, " 円", ""));
+                EstimateModelView.dspTaxSet1 = CommonFunction.setFormatCurrency(sub.TaxSet1);
                 EstimateModelView.dspTaxSet2Title = sub.TaxSet2Title;
-                EstimateModelView.dspTaxSet2 = (sub.TaxSet2 == 0 ? "" : CommonFunction.setFormat(sub.TaxSet2, " 円", ""));
+                EstimateModelView.dspTaxSet2 = CommonFunction.setFormatCurrency(sub.TaxSet2);
                 EstimateModelView.dspTaxSet3Title = sub.TaxSet3Title;
-                EstimateModelView.dspTaxSet3 = (sub.TaxSet3 == 0 ? "" : CommonFunction.setFormat(sub.TaxSet3, " 円", ""));
+                EstimateModelView.dspTaxSet3 = CommonFunction.setFormatCurrency(sub.TaxSet3);
             }
             // 販売店
             EstimateModelView.dspShopNm = est.ShopNm;
@@ -1062,12 +1049,14 @@ namespace KantanMitsumori.Service.Helper
                 string strNow = iYear + iMonth + iDay;
 
                 // 現在の最大Noを取得
-                var getMaxEstNo = _unitOfWork.Estimates.GetList(x => x.EstNo.Substring(0, 7) == strNow).Max(x => new { MaxEstNo = x.EstNo == null ? "0" : x.EstNo });
+                var getMaxEstNo = (from est in _unitOfWork.DbContext.TEstimates
+                                   where est.EstNo.Substring(0, 7) == strNow
+                                   select new { MaxEstNo = string.IsNullOrEmpty(est.EstNo) ? est.EstNo.Max() : '0' }).FirstOrDefault();
 
-                if (getMaxEstNo.MaxEstNo.Trim() == "0")
+                if (getMaxEstNo == null || getMaxEstNo.MaxEstNo.ToString() == "0")
                     outEstNo = strNow + "00001";
                 else
-                    outEstNo = strNow + Strings.Format(Convert.ToInt16(Strings.Right(getMaxEstNo.MaxEstNo.Trim(), 5)) + 1, "00000");
+                    outEstNo = strNow + Strings.Format(Convert.ToInt16(Strings.Right(getMaxEstNo.MaxEstNo.ToString(), 5)) + 1, "00000");
             }
             catch (Exception ex)
             {
@@ -1084,13 +1073,15 @@ namespace KantanMitsumori.Service.Helper
             try
             {
                 // 現在の最大SubNoを取得
-                var getMaxEstNo = _unitOfWork.Estimates.GetList(x => x.EstNo == inEstNo).Max(x => new { MaxEstSubNo = x.EstSubNo == null ? "0" : x.EstSubNo });
+                var getMaxEstSubNo = (from est in _unitOfWork.DbContext.TEstimates
+                                      where est.EstNo == inEstNo
+                                      select new { MaxEstSubNo = string.IsNullOrEmpty(est.EstSubNo) ? est.EstSubNo.Max() : '0' }).FirstOrDefault();
 
                 // 当番号が1件もない場合
-                if (getMaxEstNo.MaxEstSubNo.Trim() == "0")
+                if (getMaxEstSubNo == null || getMaxEstSubNo.MaxEstSubNo.ToString() == "0")
                     outEstSubNo = "01";
                 else
-                    outEstSubNo = Strings.Format(Convert.ToInt16(getMaxEstNo.MaxEstSubNo.Trim()) + 1, "00");
+                    outEstSubNo = Strings.Format(Convert.ToInt16(getMaxEstSubNo.MaxEstSubNo.ToString()) + 1, "00");
             }
             catch (Exception ex)
             {
@@ -1101,5 +1092,236 @@ namespace KantanMitsumori.Service.Helper
 
             return true;
         }
+
+
+        public void setEstData(ref LogToken logToken)
+        {
+            const string LOAN_RECALC_CLEAR = "※ご確認ください<br />お支払い総合計が変更になりましたが、自動計算を行わない設定になっている為、ローン計算情報をクリアしました";
+            const string LOAN_RECALC_NORMAL_END = "※ご確認ください<br />お支払い総合計が変更になりましたので、入力済の金利、支払い条件<br />ボーナス加算条件等のローン条件を元に、ローン再計算を行いました";
+            const string LOAN_RECALC_ERROR = "※ご確認ください<br />お支払い総合計が変更になりましたが、ローン再計算でエラーが発生した為、ローン計算情報をクリアしました";
+
+            // 見積書番号を取得
+            if (string.IsNullOrEmpty(logToken.sesEstNo) || string.IsNullOrEmpty(logToken.sesEstSubNo))
+            {
+                logToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-040S" + CommonConst.def_ErrCodeR;
+                return;
+            }
+
+            // 見積書データ取得
+            if (!getEstData(logToken.sesEstNo, logToken.sesEstSubNo))
+            {
+                valToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "CEST-051D" + CommonConst.def_ErrCodeR;
+                return;
+            }
+
+            // 走行距離
+            if (Information.IsNumeric(EstimateModelView.dspNowOdometer))
+                EstimateModelView.dspNowRun = CommonFunction.setFormatCurrency(EstimateModelView.dspNowOdometer, EstimateModelView.dspMilUnit);
+
+            // 排気量
+            if (Information.IsNumeric(EstimateModelView.dspDispVol))
+                EstimateModelView.dspVol = CommonFunction.setFormatCurrency(EstimateModelView.dspDispVol, EstimateModelView.dspDispVolUnit);
+
+            // 修復歴
+            switch (EstMainModel.AccidentHis)
+            {
+                case 1:
+                    {
+                        EstimateModelView.dspRaJikoHisU = true;
+                        EstimateModelView.dspRaJikoHisMu = false;
+                        break;
+                    }
+
+                case 0:
+                    {
+                        EstimateModelView.dspRaJikoHisU = false;
+                        EstimateModelView.dspRaJikoHisMu = true;
+                        break;
+                    }
+
+                case 2:
+                    {
+                        EstimateModelView.dspRaJikoHisU = false;
+                        EstimateModelView.dspRaJikoHisMu = false;
+                        break;
+                    }
+            }
+
+            // 下取車走行距離
+            if (Information.IsNumeric(EstimateModelView.dspTradeInNowOdometer))
+                EstimateModelView.dspSitaRun = CommonFunction.setFormatCurrency(EstimateModelView.dspTradeInNowOdometer, EstimateModelView.dspTradeInMilUnit);
+
+            EstimateModelView.dspWarningRecalc = EstMainModel.LoanInfo == CommonConst.def_LoanInfo_Clear ? LOAN_RECALC_CLEAR :
+                                                 EstMainModel.LoanInfo == CommonConst.def_LoanInfo_NormalEnd ? LOAN_RECALC_NORMAL_END :
+                                                  EstMainModel.LoanInfo == CommonConst.def_LoanInfo_Error ? LOAN_RECALC_ERROR : "";
+
+            EstimateModelView.dspPrincipalTxt = EstMainModel.Principal == 0 ? EstimateModelView.dspSalesSum : EstimateModelView.dspPrincipal;
+
+            EstimateModelView.dspAAInfoText = valToken.sesMode == "1" ? EstimateModelView.dspAAInfo : "";
+        }
+
+        /// <summary>
+        /// セッションに保持していた会員ユーザーのお客様の情報を画面にセット
+        /// </summary>
+        public void setCustInfo()
+        {
+            EstimateModelView.dspCustNm_forPrint = string.IsNullOrEmpty(valToken.sesCustNm_forPrint) ? "" : valToken.sesCustNm_forPrint;
+            EstimateModelView.dspCustZip_forPrint = string.IsNullOrEmpty(valToken.sesCustZip_forPrint) ? "" : valToken.sesCustZip_forPrint;
+            EstimateModelView.dspCustAdr_forPrint = string.IsNullOrEmpty(valToken.sesCustAdr_forPrint) ? "" : valToken.sesCustAdr_forPrint;
+            EstimateModelView.dspCustTel_forPrint = string.IsNullOrEmpty(valToken.sesCustTel_forPrint) ? "" : valToken.sesCustTel_forPrint;
+        }
+
+        // ******************************************
+        // 会員ユーザーのお客様の情報をセッションにセット
+        // または、セッションに保持していた会員ユーザーのお客様の情報をクリア
+        // ******************************************
+        public void setSesCustInfo(LogToken logToken, bool flgRemove = false)
+        {
+            if (flgRemove)
+            {
+
+                logToken.sesCustNm_forPrint = "";
+                logToken.sesCustZip_forPrint = "";
+                logToken.sesCustAdr_forPrint = "";
+                logToken.sesCustTel_forPrint = "";
+            }
+            else
+            {
+                logToken.sesCustNm_forPrint = EstimateModelView.dspCustNm_forPrint;
+                logToken.sesCustZip_forPrint = EstimateModelView.dspCustZip_forPrint;
+                logToken.sesCustAdr_forPrint = EstimateModelView.dspCustAdr_forPrint;
+                logToken.sesCustTel_forPrint = EstimateModelView.dspCustTel_forPrint;
+            }
+        }
+
+        // ******************************************
+        // 会員ユーザーのお客様の情報をセッションにセット
+        // または、セッションに保持していた会員ユーザーのお客様の情報をクリア
+        // ******************************************
+        public void setEstIDEData(ref LogToken logToken)
+        {
+            // 見積書番号を取得
+            if (string.IsNullOrEmpty(logToken.sesEstNo) || string.IsNullOrEmpty(logToken.sesEstSubNo))
+            {
+                logToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-040S" + CommonConst.def_ErrCodeR;
+                return;
+            }
+
+            // get [t_EstimateIde]
+            if (!getEstIDEData(logToken.sesEstNo, logToken.sesEstSubNo))
+            {
+                valToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-041D" + CommonConst.def_ErrCodeR;
+                return;
+            }
+
+            // get [MT_IDE_CONTRACT_PLAN]
+            var getContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == EstimateModelView.dspInsuranceCompanyID);
+            EstimateModelView.dspContractPlanName = getContractPlan == null ? "" : getContractPlan.PlanName;
+
+            // get [MT_IDE_VOLUNTARY_INSURANCE]
+            var getVoluntaryInsurance = _unitOfWorkIDE.VoluntaryInsurances.GetSingleOrDefault(x => x.Id == EstimateModelView.dspInsuranceCompanyID);
+            EstimateModelView.dspInsuranceCompanyName = getVoluntaryInsurance == null ? "" : getVoluntaryInsurance.CompanyName;
+        }
+
+        /// <summary>
+        /// 見積書データ取得
+        /// </summary>
+        /// <param name="inEstNo"></param>
+        /// <param name="inEstSubNo"></param>
+        /// <returns></returns>
+        public bool getEstIDEData(string inEstNo, string inEstSubNo)
+        {
+            try
+            {
+                var estIdeModel = _unitOfWork.EstimateIdes.GetSingleOrDefault(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo);
+
+                if (estIdeModel == null)
+                {
+                    estIdeModel = new TEstimateIde
+                    {
+                        EstNo = "",
+                        EstSubNo = "",
+                        EstUserNo = "",
+                        CarType = 0,
+                        IsElectricCar = 0,
+                        FirstRegistration = "",
+                        InspectionExpirationDate = "",
+                        LeaseStartMonth = "",
+                        LeasePeriod = 0,
+                        LeaseExpirationDate = "",
+                        ContractPlanId = 0,
+                        //IsExtendedGuarantee = Convert.ToByte("-1"),
+                        InsuranceCompanyId = 0,
+                        InsuranceFee = 0,
+                        DownPayment = 0,
+                        TradeInPrice = 0,
+                        FeeAdjustment = 0,
+                        MonthlyLeaseFee = 0,
+                        IdemitsuKosanFee = 0,
+                        SalesStoreFee = 0,
+                        Smasfee = 0,
+                        IdemitsuCreditFee = 0,
+                        Promotion = 0,
+                        PromotionFee = 0,
+                        ConsumptionTax = 0,
+                        NameChange = 0,
+                        FeeAdjustmentMax = 0,
+                        FeeAdjustmentMin = 0,
+                        Interest = 0,
+                        GuaranteeCharge = 0,
+                        MyMaintenancePrice = 0,
+                        CarTax = 0,
+                        LiabilityInsurance = 0,
+                        WeightTax = 0,
+                        LeaseProgress = 0,
+                        IsApplyLease = 0,
+                    };
+                }
+
+                estIdeModel.IsExtendedGuarantee = unchecked((byte)(-1));
+
+                var estIdeModelMap = _mapper.Map<EstimateIdeModel>(estIdeModel);
+
+                creDispDataIDE(estIdeModelMap);
+            }
+            catch (Exception ex)
+            {
+                // エラーログ書出し
+                _logger.LogError(ex, "getEstIDEData - CEST-040D");
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 見積書データ表示用整形
+        /// </summary>
+        public void creDispDataIDE(EstimateIdeModel estIde)
+        {
+            EstimateModelView.dspFirstRegistration = CommonFunction.getFormatDayYMD(estIde.FirstRegistration);
+
+            EstimateModelView.dspInspectionExpirationDate = !string.IsNullOrEmpty(estIde.InspectionExpirationDate) ? CommonFunction.getFormatDayYMD(estIde.InspectionExpirationDate) : "";
+
+            EstimateModelView.dspLeaseStartMonth = CommonFunction.getFormatDayYMD(estIde.LeaseStartMonth);
+
+            EstimateModelView.dspLeasePeriod = string.IsNullOrEmpty(estIde.LeaseStartMonth) || estIde.LeaseStartMonth == "0" ? "" : estIde.LeasePeriod + "ヶ月";
+
+            EstimateModelView.dspLeaseExpirationDate = CommonFunction.getFormatDayYMD(estIde.LeaseExpirationDate);
+
+            var monthlyLeaseFee = estIde.MonthlyLeaseFee == 0 ? "" : CommonFunction.setFormatCurrency(estIde.MonthlyLeaseFee);
+            EstimateModelView.dspLeaseTotalMsg = string.IsNullOrEmpty(EstimateModelView.dspLeasePeriod) ? "月額リース料(税込)" : "月額リース料(税込) " + monthlyLeaseFee + " (" + EstimateModelView.dspLeasePeriod + ")";
+
+            EstimateModelView.dspContractPlanID = estIde.ContractPlanId;
+
+            EstimateModelView.dspIsExtendedGuarantee = estIde.IsExtendedGuarantee == unchecked((byte)(-1)) ? "" : estIde.IsExtendedGuarantee == 0 ? "あり" : "なし";
+
+            EstimateModelView.dspInsuranceCompanyID = estIde.InsuranceCompanyId;
+
+            EstimateModelView.dspInsuranceFee = estIde.InsuranceFee == 0 ? "" : CommonFunction.setFormatCurrency(estIde.InsuranceFee);
+            EstimateModelView.dspDownPayment = estIde.DownPayment == 0 ? "" : CommonFunction.setFormatCurrency(estIde.DownPayment);
+            EstimateModelView.dspIdeTradeInPrice = estIde.TradeInPrice == 0 ? "" : CommonFunction.setFormatCurrency(estIde.TradeInPrice);
+        }
+
     }
 }
