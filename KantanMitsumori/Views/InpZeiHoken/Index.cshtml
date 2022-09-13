@@ -1,0 +1,288 @@
+﻿@using KantanMitsumori.Model.Response;
+@using KantanMitsumori.Helper.CommonFuncs;
+@model ResponseInp
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+    var MeiCarTax = CommonFunction.FormatString(Model.AutoTax);
+    var MeiGetTax = CommonFunction.FormatString(Model.AcqTax);
+    var MeiWeightTax = CommonFunction.FormatString(Model.WeightTax);
+    var MeiJibaiHoken = CommonFunction.FormatString(Model.DamageIns);
+    var MeiNiniHoken = CommonFunction.FormatString(Model.OptionIns);
+    var TaxInsAll = CommonFunction.FormatString(Model.TaxInsAll);
+    var MeiCarTaxEquivalent = CommonFunction.FormatString(Model.AutoTaxEquivalent);
+    var MeiJibaiHokenEquivalent = CommonFunction.FormatString(Model.DamageInsEquivalent);
+    var TaxInsEquivalentAll = CommonFunction.FormatString(Model.TaxInsEquivalentAll);
+
+}
+<form id="formInpZeiHoken">
+    <table border="0" width="100%">
+        <tbody>
+            <tr>
+                <td style="height: 496px" align="center">
+                    <div>
+                        <table class="inptable" id="Table3" cellpadding="2" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td colspan="3" class="inptd" style="background-color:White;" align="left">
+                                        <span id="Label3" class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">税金・保険料の編集</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" class="inptd" style="background-color:White;" align="left">
+                                        <span id="Label4" class="inplabel">
+                                            税金・保険料を編集できます。
+                                        </span><br>
+                                        <span id="Label5" class="inplabel" style="color:Red;">
+                                            ※税制改正による優遇措置・特例措置には対応しておりません。<br>
+                                            &nbsp;&nbsp;&nbsp;地域によって異なる場合がありますので、詳細は自動車を登録する都道府県にお問合せ下さい。
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" colspan="3" style="background-color:White; font-size:4pt;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" colspan="3" style="background-color:White; text-align:left; margin:0; padding:0;">
+                                        <span id="Label17" style="color:Red;">
+                                            ※排気量、車検有効期限の変更は、[キャンセル] または [OK] ボタンでメイン画面に戻った後に行えます。
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tabletitle" style="height: 20px; width: 200px;" align="left">
+                                        &nbsp;<span id="Label14" class="inplabel" style="display:inline-block;color:White;width:180px;">排気量</span>
+                                    </td>
+                                    <td colspan="2" class="inptdmst" align="left">
+                                        &nbsp;<span id="lblDispVol" class="inplabel" style="display:inline-block;width:80px;"></span>
+                                        <span id="lblMsgDispVol" style="color: red;">排気量単位に「cc」以外が指定されています</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="tabletitle" style="height: 20px; width: 200px;" align="left">
+                                        &nbsp;<span id="Label16" class="inplabel" style="display:inline-block;color:White;width:180px;">車検有効期限</span>
+                                    </td>
+                                    <td colspan="2" class="inptdmst" align="left">
+                                        &nbsp;<span id="lblCheckCarYm" class="inplabel" style="display:inline-block;width:80px;"></span>
+                                        <span id="lblMsgCheckCarYm" style="color: red;"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" colspan="3" style="background-color:White; font-size:4pt;">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="tabletitle" align="left">
+                                        <span id="lblOption" class="titlelabel">税金・保険料（非課税）</span>
+                                    </td>
+                                    <td class="tabletitle" align="left" style="width: 180px">
+                                        <span id="lblTitle_TaxInsEquivalent" class="titlelabel">相当額（税抜）</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span id="Label38" class="inplabel" style="display:inline-block;width:107px;">自動車税</span>
+                                        <select name="ddlCarTaxMonth" id="ddlCarTaxMonth" class="inpbox" style="width:72px;" onchange="getCarTax();">
+                                            @{
+                                                foreach (var item in DropDownList.ListMonth(true))
+                                                {
+                                                    if (@item.Text == Model.AutoTaxMonth!)
+                                                    {
+                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+
+                                                }
+                                            }
+
+
+                                        </select>
+                                        <span id="Label1" class="inplabel" style="display:inline-block;width:52px;">月中登録</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input name="MeiCarTax" type="text" id="MeiCarTax" language="javascript" value="@MeiCarTax" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="width: 94px; background: rgb(255, 255, 255);" size="10">
+                                        <span id="Label55" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input id="chkMeiCarTaxEquivalent" type="checkbox" onclick="clickBox('MeiCarTax');">
+                                        <input name="MeiCarTaxEquivalent" type="text" value="@MeiCarTaxEquivalent" id="MeiCarTaxEquivalent" language="javascript" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="width: 94px; background-color: rgb(224, 224, 224);" size="10" readonly="">
+                                        <span id="Label15" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span id="Label6" class="inplabel" style="display:inline-block;width:211px;">環境性能割</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input name="MeiGetTax" type="text" id="MeiGetTax" language="javascript" value="@MeiGetTax" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+                                        <span id="Label7" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" style="border-right:solid 2px white;" align="left">
+                                        <span id="Label8" class="inplabel" style="display:inline-block;width:211px;">重量税</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input name="MeiWeightTax" type="text" id="MeiWeightTax" language="javascript" value="@MeiWeightTax" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+                                        <span id="Label9" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span id="Label10" class="inplabel" style="display:inline-block;width:107px;">自賠責保険料</span>
+                                        <select name="ddlJibaiHokenMonth" id="ddlJibaiHokenMonth" class="inpbox" style="width:72px;" onchange="getJibai();">
+                                            @{
+                                                foreach (var item in DropDownList.DropDownJibaiHokenMonth(true))
+                                                {
+                                                    if (@item.Text == Model.DamageInsMonth!)
+                                                    {
+                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                    }
+                                                    else
+                                                    {
+                                                        <option value="@item.Value">@item.Text</option>
+                                                    }
+
+                                                }
+                                            }
+                                        </select>
+                                        <span id="Label2" class="inplabel" style="display:inline-block;width:52px;">ヶ月</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input name="MeiJibaiHoken" type="text" id="MeiJibaiHoken" language="javascript" value="@MeiJibaiHoken" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="width: 94px; background: rgb(255, 255, 255);" size="10">
+                                        <span id="Label11" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input id="chkMeiJibaiHokenEquivalent" type="checkbox" onclick="clickBox('MeiJibaiHoken');">
+                                        <input name="MeiJibaiHokenEquivalent" type="text" id="MeiJibaiHokenEquivalent" value="@MeiJibaiHokenEquivalent" language="javascript" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="width: 94px; background-color: rgb(224, 224, 224);" size="10" readonly="">
+                                        <span id="Label18" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inptd" align="left">
+                                        <span id="Label12" class="inplabel" style="display:inline-block;width:211px;">任意保険料</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <input name="MeiNiniHoken" type="text" id="MeiNiniHoken" language="javascript" maxlength="8" value="@MeiNiniHoken" class="inpbox_r" tabindex="48" onblur="EstSum();" style="width: 94px; background-color: rgb(224, 224, 224);" size="10">
+                                        <span id="Label13" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                    </td>
+                                    <td class="inptd" align="left">
+                                        <br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="sumtd" style="text-align:right;" align="left">
+                                        <span id="Labelaa6" class="inplabel">小計</span>
+                                    </td>
+                                    <td class="sumtd" align="left">
+                                        <input name="TaxInsAll" type="text" id="TaxInsAll" language="javascript" value="@TaxInsAll" maxlength="8" class="inpboxsum" tabindex="48" onblur="EstSum();" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                        <span id="Labela7" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                    </td>
+                                    <td class="sumtd" align="left">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <input name="TaxInsEquivalentAll" type="text" id="TaxInsEquivalentAll" language="javascript" value="@TaxInsEquivalentAll" maxlength="8" class="inpboxsum" tabindex="48" onblur="EstSum();" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                        <span id="Label20" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="3" class="inpbtntd">
+                                        <input type="button" name="btnCancel" onclick="Framework.GoBackReloadPage();" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="inpbtntd" colspan="3">
+                                        <span id="Msg" class="inpboxsum" style="display:inline-block;color:Red;width:500px;"></span>&nbsp;
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input name="EstNo" type="hidden" id="EstNo" value="@Model.EstNo">
+                        <input name="EstSubNo" type="hidden" id="EstSubNo" value="@Model.EstSubNo">
+                        <input name="DispVol" type="hidden" id="DispVol" value="@Model.DispVol">
+                        <input name="ConTaxInputKb" type="hidden" id="ConTaxInputKb" value="@Model.ConTaxInputKb">
+                        <input name="TaxPercent" type="hidden" id="TaxPercent" value="0.1">
+                        <input name="AutoCalcFlg" type="hidden" id="AutoCalcFlg" value="1">
+                        <input type="hidden" id="DispVolUnit" value="@Model.DispVolUnit">
+                        <input type="hidden" id="CheckCarYm" value="@Model.CheckCarYm">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script>
+    const WARNING_CHECK_CAR_YM = "自動計算が行われない場合があります";
+    const WARNING_DISP_VOL = "自動計算が行われない場合があります";
+    const WARNING_DISP_VOL_UNIT = "排気量単位に「cc」以外が指定されています";
+    const def_DispVolUnitCC = "cc"
+    const def_DispVolUnitKW = "kw"
+    const def_DispVolUnitRE = "RE"
+    setInitData();
+    $('#formInpZeiHoken').validate({
+        submitHandler: function (form) {
+            var model = Framework.getFormData($("#formInpZeiHoken"));
+            console.log(model)
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpZeiHoken/UpdateInpZeiHoken");
+            if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+                Framework.GoBackReloadPage();
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#Msg").html(Items)
+                } else {
+                    location.reload();
+                }
+            }
+        }
+    });
+    function setInitData() {
+        let LeaseFlag = @Model.LeaseFlag;
+        let CheckCarYm = $("#CheckCarYm").val();
+        let DispVolUnit = $("#DispVolUnit").val();
+        if (@Model.LeaseFlag == 1) {
+            $("#MeiNiniHoken").attr("disabled", "disabled");
+            $('#MeiNiniHoken').css('background-color', "rgb(224, 224, 224)");
+        }
+        if (CheckCarYm == '' || CheckCarYm == null) {
+            $("#lblCheckCarYm").text("不明");
+            $("#lblMsgCheckCarYm").text(WARNING_CHECK_CAR_YM);
+
+        } else if (CheckCarYm == '無し') {
+            $("#lblCheckCarYm").text(CheckCarYm);
+        } else {
+            let year = FormatDayGetYear(CheckCarYm);
+            let month = parseInt(FormatDayGetMonth(CheckCarYm));
+            let vWareki = getWareki(year) + "年" + month + "月";
+            $("#lblCheckCarYm").text(vWareki);
+        }
+        if (isNaN(@Model.DispVol)) {
+            $("#lblDispVol").text("不明");
+            $("#lblMsgDispVol").Text(WARNING_DISP_VOL)
+            $("#AutoCalcFlg").Val("0");
+        } else if (DispVolUnit != def_DispVolUnitCC) {
+            let disp = @Model.DispVol +" " + DispVolUnit;
+            $("#lblDispVol").text(disp);
+            $("#lblMsgDispVol").text(WARNING_DISP_VOL_UNIT)
+            $("#AutoCalcFlg").val("0");
+        } else {
+            let disp = @Model.DispVol +" " + DispVolUnit;
+            $("#lblDispVol").text(disp);
+            $("#lblMsgDispVol").text("");
+        }
+
+    }
+
+
+</script>
+<script src="~/js/InpZeiHoken.js"></script>

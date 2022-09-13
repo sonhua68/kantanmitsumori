@@ -278,7 +278,6 @@ var Framework =
                     type: "POST",
                     url: url,
                     data: {
-                        token: $("#Token").val(),
                         requestData: data
                     },
                     async: false,
@@ -295,15 +294,51 @@ var Framework =
             }
         },
         {
+            key: "submitAjaxGetList",
+            value: function submitAjaxGetList(data, url) {
+                var result = {};
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        requestData: data
+                    },
+                    async: false,
+                    success: function success(r) {
+                        result = r;
+                    },
+                    error: function error(xhr, status, thrownError, _error) {
+
+                        //location.reload();
+                        //result.success = false;
+                        //result.responseText = xhr.status + ' ' + thrownError;
+                    }
+                });
+                return result;
+            }
+        },
+        {
+            key: "submitAjaxRedrict",
+            value: function submitAjaxRedrict(data, url) {
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: {
+                        requestData: data
+                    },
+                    complete: function (jqxhr) {
+                        window.location.href(url)
+                    }
+                });
+            }
+        },
+        {
             key: "submitAjaxFormDeleteEstNoAndEstSubNoAwait",
             value: function submitAjaxFormDeleteEstNoAndEstSubNoAwait(url) {
                 var result = {};
                 $.ajax({
                     type: "POST",
                     url: url,
-                    data: {
-                        token: $("#Token").val(),
-                    },
                     async: false,
                     success: function success(r) {
                         result = r;
@@ -325,7 +360,6 @@ var Framework =
                     type: "POST",
                     url: url,
                     data: {
-                        token: $("#Token").val(),
                         requestData: data
                     },
                     async: false,
@@ -350,7 +384,6 @@ var Framework =
                     type: "POST",
                     url: url,
                     data: {
-                        //token: $("#Token").val(),
                         requestData: data
                     },
                     async: false,
@@ -364,6 +397,27 @@ var Framework =
                     }
                 });
                 return result;
+            }
+        },
+        {
+            key: "SummitForm",
+            value: function SummitForm(path, params, method = 'post') {
+                const form = document.createElement('form');
+                form.method = method;
+                form.action = path;
+
+                for (const key in params) {
+                    if (params.hasOwnProperty(key)) {
+                        const hiddenField = document.createElement('input');
+                        hiddenField.type = 'hidden';
+                        hiddenField.name = key;
+                        hiddenField.value = params[key];
+                        form.appendChild(hiddenField);
+                    }
+                }
+
+                document.body.appendChild(form);
+                form.submit();
             }
         },
         {
@@ -588,7 +642,7 @@ var Framework =
                         if (value === defaultValue) {
                             $("#" + nameId + " option[value='" + value + "']").attr("selected", "selected");
                             return;
-                        }                       
+                        }
                     }
                 }
                 return;
@@ -620,15 +674,31 @@ var Framework =
             value: function GoBackReloadPage() {
                 window.setTimeout(window.history.back(), 2000);
                 location.reload(true);
-                //console.log(idbtn);
-                //$("#" + idbtn + "").click(function () {
-                //    window.history.back();
-                //    location.reload();
-                //});
+                window.location.href = '';
 
             }
         },
+        {
+            key: "SummitForm",
+            value: function SummitForm(path, params, method = 'post') {
+                const form = document.createElement('form');
+                form.method = method;
+                form.action = path;
 
+                for (const key in params) {
+                    if (params.hasOwnProperty(key)) {
+                        const hiddenField = document.createElement('input');
+                        hiddenField.type = 'hidden';
+                        hiddenField.name = key;
+                        hiddenField.value = params[key];
+                        form.appendChild(hiddenField);
+                    }
+                }
+
+                document.body.appendChild(form);
+                form.submit();
+            }
+        },
         ]);
 
         return Framework;

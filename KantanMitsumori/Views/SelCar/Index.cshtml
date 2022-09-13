@@ -1,0 +1,139 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+}
+
+<div class="row">
+     <div class="col-sm-2">
+          </div>
+    <div class="col-sm-2">
+        <div class="col d-flex justify-content-between">
+            <div class="border-button container text-center">
+                <br>
+                <div class="col d-flex justify-content-between">
+                    <a href="javascript:window.close();">
+                        <img src="./img/btn%e8%a6%8b%e7%a9%8dTOP.png">
+                    </a>
+                </div>
+                <br>
+                <div class="col d-flex justify-content-between">
+                    <a href="">
+                        <img src="img/btn%E6%A4%9C%E7%B4%A2.png">
+                    </a>
+                </div>
+                <br>
+                <div class="col d-flex justify-content-between">
+                    <a href="">
+                        <img src="img/btn%E8%AB%B8%E8%B2%BB%E7%94%A8%E8%A8%AD%E5%AE%9A.png">
+                    </a>
+                </div>             
+
+                <div class="col d-flex justify-content-between">
+                    <span class="label label-text">※事前設定必要</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-2">
+        <div class="row">
+            <div class="col-2 col-sm-2 ">
+                <span id="Label4" class="InpTitle1" style="display:inline-block;color:MediumBlue;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:8px;width:283px;z-index: 105;
+             top: 66px">フリー見積</span>
+                <br>
+            </div>
+        </div>
+        <br>
+        <!-- お客様情報（印字用） -->
+        <div class="row">
+            <div class="col-8 col-sm-8">                
+                <table class="inptable" id="Table4" bordercolor="#ffffff" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td class="tabletitle" colspan="2">
+                                <span id="Label1" class="titlelabel" style="display:inline-block;color:White;width:283px;">車種を一覧から選択</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inptd">
+                                <span id="Label2" class="inplabel" style="display:inline-block;">①メーカーを選択</span>
+                                <select name="ddlMaker" id="ddlMaker" onchange="return GetListASOPCarName()" tabindex="1" class="inpbox" style="width:253px;">
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inptd" colspan="2">
+                                <span id="Label3" class="inplabel" style="display:inline-block;width:128px;">②車種を選択</span>
+                                <select name="ddlModel" id="ddlModel" tabindex="2" onchange="return onchangeCarName()" class="inpbox" style="width:252px;">
+                                   
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inpbtntd" colspan="2" style="height: 35px">
+                                <input type="submit" name="btnNextGrade" value="この車種のグレードを選択する >>" id="btnNextGrade" onclick="btnNextGrade()" tabindex="3" class="Btn1" style="height:33px;width:281px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inpbtntd" colspan="2" style="height: 30px;">
+                                <span id="lblErrMsg1" class="inplabel" style="display:inline-block;color:Crimson;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:40px;width:400px;"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>             
+                 <table class="inptable" id="Table4" bordercolor="#ffffff" cellspacing="0">
+                    <tbody>                     
+                        <tr>
+                            <td class="tabletitle">
+                                <span id="Label15" class="titlelabel" style="display:inline-block;width:283px;">車種を型式・類別で指定</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inptd">
+                                <span id="Label14" class="inplabel" style="display:inline-block;width:80px;">型式指定</span>
+                                <input name="CaseSet" type="text" maxlength="5" id="CaseSet" tabindex="4" class="inpbox" style="width:150px;ime-mode: disabled">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inptd">
+                                <span id="Label5" class="inplabel" style="display:inline-block;width:80px;">類別区分</span>
+                                <input name="KbnSet" type="text" maxlength="4" id="KbnSet" tabindex="5" class="inpbox" style="width:150px;ime-mode: disabled">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inpbtntd" colspan="2" style="height: 35px">
+                                <input type="button" name="btnChkModel" value="車名を確認する >>" onclick="btnChkModel()" id="btnChkModel" tabindex="3" class="Btn1" style="height:33px;width:281px;">
+                            </td>
+                        </tr>
+                                       
+                        <tr>
+                            <td class="inpbtntd" colspan="2" style="height: 30px;">
+                                <span id="lblErrMsg2" class="inplabel" style="display:inline-block;color:Crimson;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:40px;width:400px;"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <span id="Label34" class="InpTitle1" style="display:inline-block;color:MediumBlue;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:8px;width:467px;z-index: 109;
+             top: 496px">※上の選択機能で車種が見つからない場合はこちらから</span>
+                <table class="inptable" id="Table4" bordercolor="#ffffff" cellspacing="0">
+                    <tbody>                       
+                        <tr>
+                            <td class="inpbtntd" colspan="2" style="height: 35px">
+                                <input type="submit" name="btnNextInpEst" value="車名を直接入力する >>" onclick="Framework.GoBackReloadPage();" id="btnNextInpEst" tabindex="3" class="Btn1" style="height:33px;width:281px;">
+                            </td>
+                        </tr>                       
+                        <tr>
+                            <td class="inpbtntd" colspan="2" style="height: 30px;">
+                                <span id="lblErrMsg6" class="inplabel" style="display:inline-block;color:Crimson;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:40px;width:400px;"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            
+               
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/SelCar.js"></script>

@@ -50,7 +50,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public ResponseBase<List<TEstimate>> GetList(RequestInputCar requestInputCar)
+        public ResponseBase<List<TEstimate>> GetList(RequestInp requestInputCar)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace KantanMitsumori.Service
             throw new NotImplementedException();
         }
 
-        public ResponseBase<ResponseInputCar> GetDetail(RequestInputCar requestInputCar)
+        public ResponseBase<ResponseInp> GetDetail(RequestInp requestInputCar)
         {
             try
             {
@@ -79,14 +79,13 @@ namespace KantanMitsumori.Service
                 var estimatesSub = _unitOfWork.EstimateSubs.Query(n => n.EstNo == requestInputCar.EstNo && n.EstSubNo == requestInputCar.EstSubNo).ToList();
                 if (estimates == null || estimatesSub == null)
                 {
-                    return ResponseHelper.Error<ResponseInputCar>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                    return ResponseHelper.Error<ResponseInp>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
                 }
                 var dt = _helperMapper.JoinDataTables(_helperMapper.ToDataTable(estimates), _helperMapper.ToDataTable(estimatesSub),
                (row1, row2) =>
                row1.Field<string>("EstNo") == row2.Field<string>("EstNo") &&
                 row1.Field<string>("EstSubNo") == row2.Field<string>("EstSubNo"));
-
-                var data = _helperMapper.ConvertToList<ResponseInputCar>(dt).FirstOrDefault();
+                var data = _helperMapper.ConvertToList<ResponseInp>(dt).FirstOrDefault();
                 if (data!.Rate == 0)
                 {
                     var getDetail = _unitOfWork.UserDefs.GetSingle(n => n.UserNo == requestInputCar.UserNo);
@@ -95,12 +94,12 @@ namespace KantanMitsumori.Service
                         data.Rate = getDetail.Rate;
                     }
                 }
-                return ResponseHelper.Ok<ResponseInputCar>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
+                return ResponseHelper.Ok<ResponseInp>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInputCar");
-                return ResponseHelper.Error<ResponseInputCar>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                return ResponseHelper.Error<ResponseInp>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
             throw new NotImplementedException();
@@ -140,6 +139,8 @@ namespace KantanMitsumori.Service
                         checkCarYm = CommonFunction.Right(model.ddlSyakenYear!, 5).Replace(")", syakenm);
                     }
                 }
+                string radDispVol = model.radDispVol! == "その他" ? "" : model.radDispVol!;
+                string radMilUnit = model.radMilUnit! == "その他" ? "" : model.radMilUnit!;
                 dtEstimates.MakerName = model.Maker;
                 dtEstimates.ModelName = model.CarNM;
                 dtEstimates.GradeName = model.Grade;
@@ -154,8 +155,8 @@ namespace KantanMitsumori.Service
                 dtEstimates.Equipment = model.Option;
                 dtEstimates.BusinessHis = model.ddlCarReki;
                 dtEstimates.AccidentHis = Convert.ToByte(model.raJrk);
-                dtEstimateSubs.DispVolUnit = string.IsNullOrEmpty(model.dispVolUnit) ? model.radDispVol : model.dispVolUnit;
-                dtEstimateSubs.MilUnit = string.IsNullOrEmpty(model.MilUnit) ? model.radMilUnit : model.MilUnit;
+                dtEstimateSubs.DispVolUnit = string.IsNullOrEmpty(model.dispVolUnit) ? radDispVol : model.dispVolUnit;
+                dtEstimateSubs.MilUnit = string.IsNullOrEmpty(model.MilUnit) ? radMilUnit : model.MilUnit;
                 _unitOfWork.Estimates.Update(dtEstimates);
                 _unitOfWork.EstimateSubs.Update(dtEstimateSubs);
                 await _unitOfWork.CommitAsync();
@@ -189,6 +190,86 @@ namespace KantanMitsumori.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInpHanbaiten");
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+
+        public async Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model)
+        {
+            try
+            {
+                TEstimate dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
+                if (dtEstimates == null)
+                {
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
+                dtEstimates.OptionName1 = model.OptionName1;
+                dtEstimates.OptionPrice1 = model.OptionPrice1;
+                dtEstimates.OptionName2 = model.OptionName2;
+                dtEstimates.OptionPrice2 = model.OptionPrice2;
+                dtEstimates.OptionName3 = model.OptionName3;
+                dtEstimates.OptionPrice3 = model.OptionPrice3;
+                dtEstimates.OptionName4 = model.OptionName4;
+                dtEstimates.OptionPrice4 = model.OptionPrice4;
+                dtEstimates.OptionName5 = model.OptionName5;
+                dtEstimates.OptionPrice5 = model.OptionPrice5;
+                dtEstimates.OptionName6 = model.OptionName6;
+                dtEstimates.OptionPrice6 = model.OptionPrice6;
+                dtEstimates.OptionName7 = model.OptionName7;
+                dtEstimates.OptionPrice7 = model.OptionPrice7;
+                dtEstimates.OptionName8 = model.OptionName8;
+                dtEstimates.OptionPrice8 = model.OptionPrice8;
+                dtEstimates.OptionName9 = model.OptionName9;
+                dtEstimates.OptionPrice9 = model.OptionPrice9;
+                dtEstimates.OptionName10 = model.OptionName10;
+                dtEstimates.OptionPrice10 = model.OptionPrice10;
+                dtEstimates.OptionName11 = model.OptionName11;
+                dtEstimates.OptionPrice11 = model.OptionPrice11;
+                dtEstimates.OptionName12 = model.OptionName12;
+                dtEstimates.OptionPrice12 = model.OptionPrice12;
+                dtEstimates.OptionPriceAll = model.OptionPriceAll;
+                _unitOfWork.Estimates.Update(dtEstimates);
+                await _unitOfWork.CommitAsync();
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateInpOption");
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+
+        public async Task<ResponseBase<int>> UpdateInpZeiHoken(RequestUpdateInpZeiHoken model)
+        {
+            try
+            {
+                TEstimate dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
+                TEstimateSub dtEstimateSubs = _unitOfWork.EstimateSubs.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
+                if (dtEstimates == null || dtEstimateSubs == null)
+                {
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
+                dtEstimates.AutoTax = model.MeiCarTax;
+                dtEstimates.AcqTax = model.MeiGetTax;
+                dtEstimates.WeightTax = model.MeiWeightTax;
+                dtEstimates.DamageIns = model.MeiJibaiHoken;
+                dtEstimates.OptionIns = model.MeiNiniHoken;
+                dtEstimates.TaxInsAll = model.TaxInsAll;
+
+                dtEstimateSubs.AutoTaxMonth = model.ddlCarTaxMonth;
+                dtEstimateSubs.DamageInsMonth = model.ddlJibaiHokenMonth;
+                dtEstimateSubs.AutoTaxEquivalent = model.MeiCarTaxEquivalent;
+                dtEstimateSubs.DamageInsEquivalent = model.MeiJibaiHokenEquivalent;
+                dtEstimateSubs.TaxInsEquivalentAll = model.TaxInsEquivalentAll;
+
+                _unitOfWork.Estimates.Update(dtEstimates);
+                _unitOfWork.EstimateSubs.Update(dtEstimateSubs);
+                await _unitOfWork.CommitAsync();
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateInpZeiHoken");
                 return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }

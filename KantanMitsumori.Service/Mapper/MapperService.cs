@@ -21,6 +21,11 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<TEstimate, ResponEstMainModel>().ReverseMap();
             CreateMap<TEstimateSub, ResponEstMainModel>().ReverseMap();
             CreateMap<TEstimateIde, EstimateIdeModel>().ReverseMap();
+
+            CreateMap<AsopMaker, ResponseAsopMaker>();
+            CreateMap<AsopCarname, ResponseAsopCarname>();
+            CreateMap<TbRuibetsuN, ResponseTbRuibetsuN>();
+
         }
 
     }

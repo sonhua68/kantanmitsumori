@@ -16,14 +16,18 @@ namespace KantanMitsumori.Controllers
             _estimateService = estimateService;
             _logger = logger;
         }
-        #region HoaiPhong
+        #region InpHanbaiten
         public IActionResult Index()
         {
-            RequestInputCar res = new RequestInputCar();
+            RequestInp res = new RequestInp();
             res.EstNo = _logToken.sesEstNo;
             res.EstSubNo = _logToken.sesEstSubNo;
             res.UserNo = "00000001";
             var response = _estimateService.GetDetail(res);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
             return View(response.Data);
         }
         [HttpPost]
@@ -36,6 +40,6 @@ namespace KantanMitsumori.Controllers
             }
             return Ok(response);
         }
-        #endregion HoaiPhong
+        #endregion InpHanbaiten
     }
 }

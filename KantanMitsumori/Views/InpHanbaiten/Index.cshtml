@@ -1,6 +1,6 @@
 ﻿
 @using KantanMitsumori.Model.Response;
-@model ResponseInputCar
+@model ResponseInp
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
@@ -80,7 +80,7 @@
                                 <tr>
                                     <td class="inpbtntd" colspan="2">
                                         <input type="button" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();" style="height:32px;width:100px;">&nbsp;
-                                        <input type="submit" value="OK" id="btnOK" form="formInpHanbaiten" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="submit" value="OK" id="btnOK" form="formInpHanbaiten" onclick="return inputChk();" class="Btn1" style="height:32px;width:100px;">
                                     </td>
 
                                 </tr>
@@ -107,8 +107,17 @@
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpHanbaiten/UpdateInpHanbaiten");
             if (result.resultStatus == 0) {
                 Framework.GoBackReloadPage();
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#txMsg").html(Items)
+                } else {
+                    location.reload();
+                }
             }
         }
     });
 
 </script>
+<script src="~/js/InpHanbaiten.js"></script>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KantanMitsumori.Model.Request
 {
-    public class RequestInputCar
+    public class RequestInp
     {
         public string? EstNo { get; set; }
         public string? EstSubNo { get; set; }

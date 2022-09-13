@@ -1,18 +1,14 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
-using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Model;
 using KantanMitsumori.Models;
-using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Configuration;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace KantanMitsumori.Controllers
 {
-  
+
     public class BaseController : Controller
     {
         private const string COOKIES = "CookiesASEST";
@@ -33,8 +29,8 @@ namespace KantanMitsumori.Controllers
                 MessageContent = messageContent
             };
             return View(ErrorViewModel);
-        } 
-        
+        }
+
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
         {
 
@@ -53,15 +49,25 @@ namespace KantanMitsumori.Controllers
                     filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
                     return;
 
-                }               
+                }
             }
             _logToken = HelperToken.EncodingToken(cookies!)!;
+            if (_logToken == null && !controllerName.Contains("Home"))
+            {
+                var ErrorViewModel = new ErrorViewModel()
+                {
+                    MessageCode = HelperMessage.SMAL020P,
+                    MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL020P)
+                };
+                filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
+                return;
+            }
             var resultContext = await next();
         }
 
         public IActionResult ErrorAction<T>(ResponseBase<T> response)
         {
-            return RedirectToAction("ErrorPage", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
+            return new RedirectToActionResult("ErrorPage", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
         }
         /// <summary>
         ///setTokenCookie
@@ -70,7 +76,7 @@ namespace KantanMitsumori.Controllers
         public void setTokenCookie(string token)
         {
             var currentDate = DateTime.Now;
-            var RefreshExpires = _config["JwtSettings:RefreshExpires"];
+            var RefreshExpires = _config["JwtSettings:AccessExpires"];
             TimeSpan time = TimeSpan.Parse(RefreshExpires);
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions

@@ -1,6 +1,7 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
+using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +38,9 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Header()
         {
+            _logToken = new LogToken();
+            _logToken.UserNo = "88888195";
+            _logToken.UserNm = "test";
             return PartialView("_Header", _logToken);
         }
 
@@ -94,7 +98,7 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Inpcar()
         {
-            RequestInputCar res = new RequestInputCar();
+            RequestInp res = new RequestInp();
             res.EstNo = "22082300011";
             res.EstSubNo = "01";
             var response = _estimateService.GetDetail(res);
@@ -103,7 +107,7 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult InpHanbaiten()
         {
-            RequestInputCar res = new RequestInputCar();
+            RequestInp res = new RequestInp();
             res.EstNo = "22082300011";
             res.EstSubNo = "01";
             var response = _estimateService.GetDetail(res);

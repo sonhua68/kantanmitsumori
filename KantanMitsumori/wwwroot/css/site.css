@@ -1,35 +1,21 @@
-﻿html {
-    font-size: 14px;
-}
-
-@media (min-width: 768px) {
-    html {
-        font-size: 16px;
-    }
-}
-
-html {
-    position: relative;
-    min-height: 100%;
-}
-
-/*body {
-    margin-bottom: 60px;
-    background-color: #FFFFFF;
-    margin: 0px;
-    padding: 0px;
-    font-size: 10pt;
-    font-family: '‚l‚r ‚oƒSƒVƒbƒN',osaka,Arial,Helvetica;
-}*/
-
+﻿
 body {
     background-color: #FFFFFF;
     margin: 0px;
     padding: 0px;
     font-size: 10pt;
-    font-family: '‚l‚r ‚oƒSƒVƒbƒN',osaka,Arial,Helvetica;
+    font-family: 'ＭＳ Ｐゴシック',osaka,Arial,Helvetica;
 }
 
+.Tb1 {
+    Z-INDEX: 103;
+    BORDER-TOP-STYLE: none;
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
+    BORDER-RIGHT-STYLE: none;
+    BORDER-LEFT-STYLE: none;
+    POSITION: absolute;
+    BORDER-BOTTOM-STYLE: none
+}
 
 .Title1 {
     BORDER-RIGHT: white 1px solid;
@@ -43,15 +29,65 @@ body {
     BORDER-LEFT: white 1px solid;
     PADDING-TOP: 2px;
     BORDER-BOTTOM: white 1px solid;
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
     POSITION: absolute;
     BACKGROUND-COLOR: #c0c0c0;
     TEXT-ALIGN: center
 }
 
+.Title2 {
+    BORDER-RIGHT: white 1px solid;
+    PADDING-RIGHT: 3px;
+    BORDER-TOP: white 1px solid;
+    PADDING-LEFT: 2px;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10pt;
+    Z-INDEX: 104;
+    PADDING-BOTTOM: 2px;
+    BORDER-LEFT: white 1px solid;
+    PADDING-TOP: 2px;
+    BORDER-BOTTOM: white 1px solid;
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
+    WHITE-SPACE: nowrap;
+    POSITION: absolute;
+    BACKGROUND-COLOR: #e3e3e3;
+    TEXT-ALIGN: center
+}
+
+.Title3 {
+    BORDER-RIGHT: white 1px solid;
+    PADDING-RIGHT: 3px;
+    BORDER-TOP: white 1px solid;
+    PADDING-LEFT: 5px;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 12pt;
+    Z-INDEX: 104;
+    PADDING-BOTTOM: 2px;
+    BORDER-LEFT: white 1px solid;
+    COLOR: white;
+    PADDING-TOP: 7px;
+    BORDER-BOTTOM: white 1px solid;
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
+    WHITE-SPACE: nowrap;
+    POSITION: absolute;
+    BACKGROUND-COLOR: #4455bb;
+    TEXT-ALIGN: center
+}
+
+.EstTitle1 {
+    FONT-SIZE: 11pt;
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
+    COLOR: black;
+    BORDER: none;
+    BACKGROUND-COLOR: transparent;
+    TEXT-ALIGN: left;
+    vertical-align: middle;
+    padding-left: 1px;
+}
+
 .EstTitle2 {
     FONT-SIZE: 11pt;
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
     COLOR: black;
     BORDER: none;
     BACKGROUND-COLOR: transparent;
@@ -69,7 +105,7 @@ body {
     COLOR: black;
     BORDER-TOP-STYLE: none;
     PADDING-TOP: 2px;
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
     BORDER-RIGHT-STYLE: none;
     BORDER-LEFT-STYLE: none;
     BACKGROUND-COLOR: transparent;
@@ -77,7 +113,7 @@ body {
     BORDER-BOTTOM-STYLE: none
 }
 
-.InpTitle2 {
+.InpTitle3 {
     PADDING-RIGHT: 2px;
     FONT-SIZE: 11pt;
     Z-INDEX: 149;
@@ -85,7 +121,7 @@ body {
     COLOR: black;
     BORDER-TOP-STYLE: none;
     PADDING-TOP: 2px;
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
     BORDER-RIGHT-STYLE: none;
     BORDER-LEFT-STYLE: none;
     BACKGROUND-COLOR: transparent;
@@ -100,7 +136,7 @@ body {
 }
 
 .Btn1 {
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
     FONT-WEIGHT: bold;
     FONT-SIZE: 12pt;
     text-align: center;
@@ -142,6 +178,7 @@ td.data {
     background-color: #fff;
     border: solid 1px #000;
     height: 25px;
+    padding: 0px 2px 0px 2px;
     vertical-align: middle;
 }
 
@@ -159,9 +196,9 @@ td.info {
     border: none;
 }
 
-/* Še“ü—Í‰æ–Ê—p */
+/* 各入力画面用 */
 .InpTitle1 {
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
     FONT-SIZE: 11pt;
     COLOR: black;
     BORDER: none;
@@ -173,7 +210,7 @@ td.info {
 }
 
 .InpBox2 {
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
     height: 18px;
     FONT-WEIGHT: bold;
     FONT-SIZE: 11pt;
@@ -185,7 +222,7 @@ td.info {
     height: 18px;
     FONT-WEIGHT: bold;
     FONT-SIZE: 11pt;
-    FONT-FAMILY: '‚l‚r ‚oƒSƒVƒbƒN';
+    FONT-FAMILY: 'ＭＳ Ｐゴシック';
     TEXT-ALIGN: right;
 }
 
@@ -193,10 +230,9 @@ td.info {
     font-size: 11pt;
     margin: 0px 0px 2px 2px;
     color: #cc0033;
-    letter-spacing: 0.1em;
 }
 
-/*------“ü—ÍƒXƒ^ƒCƒ‹Œ©’¼‚µ------*/
+/*------入力スタイル見直し------*/
 
 .inptable {
     background-color: #d2e0fb;
@@ -215,7 +251,7 @@ td.info {
 }
 
 .inptd {
-    padding: 2px 10px 2px 3px;
+    padding: 2px 20px 2px 3px;
     border-bottom: solid 2px white;
     border-right: solid 2px white;
     white-space: nowrap;
@@ -231,27 +267,27 @@ td.info {
 
 .inplabel {
     font-size: 11pt;
-    font-family: ‚l‚r ‚oƒSƒVƒbƒN;
+    font-family: ＭＳ Ｐゴシック;
 }
 
 .inpbox {
     border: 1px solid #7A96DF;
     background-color: #ffffff;
     font-size: 11pt;
-    font-family: ‚l‚r ‚oƒSƒVƒbƒN;
+    font-family: ＭＳ Ｐゴシック;
 }
 
 .inpbox_r {
     border: 1px solid #7A96DF;
     background-color: #ffffff;
     font-size: 11pt;
-    font-family: ‚l‚r ‚oƒSƒVƒbƒN;
+    font-family: ＭＳ Ｐゴシック;
     text-align: right;
 }
 
 .inpboxsum {
     font-size: 11pt;
-    font-family: ‚l‚r ‚oƒSƒVƒbƒN;
+    font-family: ＭＳ Ｐゴシック;
     text-align: right;
     border: none;
     background-color: Transparent;
@@ -269,4 +305,8 @@ td.info {
     border-bottom: solid 2px white;
     border-right: solid 2px white;
     white-space: nowrap;
+}
+
+input#btnPrintShow {
+    margin-right: 30px;
 }

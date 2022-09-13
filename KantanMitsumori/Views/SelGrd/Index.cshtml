@@ -1,0 +1,124 @@
+﻿@using KantanMitsumori.Model.Response;
+@using KantanMitsumori.Helper.CommonFuncs;
+@model PaginatedList<ResponseTbRuibetsuN>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+    var MakerName = Model[0].MakerName;
+    var ModelName = Model[0].ModelName;
+}
+<div class="row">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-2">
+        <div class="col d-flex justify-content-between">
+            <div class="border-button container text-center">
+                <br>
+                <div class="col d-flex justify-content-between">
+                    <a href="javascript:window.close();">
+                        <img src="./img/btn%e8%a6%8b%e7%a9%8dTOP.png">
+                    </a>
+                </div>
+                <br>
+                <div class="col d-flex justify-content-between">
+                    <a href="">
+                        <img src="img/btn%E6%A4%9C%E7%B4%A2.png">
+                    </a>
+                </div>
+                <br>
+                <div class="col d-flex justify-content-between">
+                    <a href="">
+                        <img src="img/btn%E8%AB%B8%E8%B2%BB%E7%94%A8%E8%A8%AD%E5%AE%9A.png">
+                    </a>
+                </div>
+
+                <div class="col d-flex justify-content-between">
+                    <span class="label label-text">※事前設定必要</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-2">
+        <div class="row">
+            <div class="col-2 col-sm-2 ">
+                <span id="Label4" class="InpTitle1" style="display:inline-block;color:MediumBlue;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:8px;width:283px;z-index: 105;
+             top: 66px">グレード選択</span>
+                <br>
+            </div>
+        </div>
+        <br>
+        <!-- お客様情報（印字用） -->
+        <div class="row">
+            <div class="col-8 col-sm-8">
+                <table id="Table4" bordercolor="#ffffff" cellpadding="2" cellspacing="0" class="inptable" style="z-index: 109; left: 167px; top: 92px;">
+                    <tbody>
+                        <tr>
+                            <td class="tabletitle" colspan="2">
+                                <span id="Label1" class="titlelabel" style="display:inline-block;width:283px;">車種</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inptd" nowrap="nowrap">
+                                <span id="Label2" class="inplabel" style="display:inline-block;font-family:ＭＳ Ｐゴシック;font-size:12pt;width:84px;">メーカー名</span>
+                            </td>
+                            <td class="inptd">
+                                <input name="txtMakNM" type="text" value="@MakerName" readonly="readonly" id="txtMakNM" class="inpbox" style="background-color:#D2E0FB;border-style:None;font-family:ＭＳ Ｐゴシック;font-size:12pt;width:206px;">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="inptd" nowrap="nowrap">
+                                <span id="Label3" class="inplabel" style="display:inline-block;font-family:ＭＳ Ｐゴシック;font-size:12pt;width:84px;">車種</span>
+                            </td>
+                            <td class="inptd">
+                                <input name="txtMdlNM" type="text" value="@ModelName" readonly="readonly" id="txtMdlNM" class="inpbox" style="background-color:#D2E0FB;border-style:None;font-family:ＭＳ Ｐゴシック;font-size:12pt;width:206px;">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="gvnomal" cellspacing="1" cellpadding="1" rules="all" border="1" id="gvGrade" style="background-color:#D2E0FB;border-color:White;border-width:1px;border-style:Solid;height:156px;width:800px;z-index: 100; left: 168px;  top: 250px">
+                    <tbody>
+                        <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
+                            <th scope="col">選択</th>
+                            <th scope="col"><a href="javascript:__doPostBack('gvGrade','Sort$GradeName')" style="color:White;">グレード</a></th>
+                            <th scope="col"><a href="javascript:__doPostBack('gvGrade','Sort$RegularCase')" style="color:White;">型式</a></th>
+                            <th scope="col"><a href="javascript:__doPostBack('gvGrade','Sort$DispVol')" style="color:White;">排気量</a></th>
+                            <th scope="col">シフト</th>
+                            <th scope="col"><a href="javascript:__doPostBack('gvGrade','Sort$DriveTypeCode')" style="color:White;">駆動方式</a></th>
+                        </tr>
+                        @{
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">
+                                        <input type="button" value="選択" onclick="" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">
+                                    </td>
+                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">@item.GradeName</td>
+                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.RegularCase</td>
+                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;white-space:nowrap;">@item.DispVol</td>
+                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.ShiftId</td>
+                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.DriveTypeCode</td>
+                                </tr>
+                            }
+                        } 
+                        <tr align="center" style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">
+                            <td colspan="6">
+                                <table border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td><span>1</span></td>
+                                            <td><a href="javascript:__doPostBack('gvGrade','Page$2')" style="color:White;">2</a></td>
+                                            <td><a href="javascript:__doPostBack('gvGrade','Page$3')" style="color:White;">3</a></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/SelCar.js"></script>

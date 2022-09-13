@@ -1,20 +1,17 @@
 ﻿@using KantanMitsumori.Helper.CommonFuncs;
 @using KantanMitsumori.Model.Response;
-@model ResponseInputCar
+@model ResponseInp
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
     var listMonth = DropDownList.ListMonth(true);
     var ListDropDownSyakenYM = DropDownList.ListDropDownSyakenYM(true);
     var ListDropDownFirstYM = DropDownList.ListDropDownFirstYM(true);
-    var NowOdometer = Model.NowOdometer == 0 ? "" : Model.NowOdometer.ToString();
+    var NowOdometer = CommonFunction.FormatString(Model.NowOdometer);
 }
 <form id="formInputCar">
-    <table border="0" width="100%">
-        <tbody>
-        <tbody>
-            <tr>
-            </tr>
+    <table border="0" width="100%">       
+        <tbody>          
             <tr>
                 <td style="width: 1017px" align="center">
                     <div>
@@ -207,7 +204,7 @@
                                 <tr>
                                     <td class="inpbtntd">
                                         <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();" style="height:32px;width:100px;">
-                                        <input type="submit" name="btnOK" value="Ok" form="formInputCar" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="submit" name="btnInputCar" value="Ok" form="formInputCar" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -223,6 +220,7 @@
                         <input type="hidden" id="hidCheckCarYm" value="@Model.CheckCarYm">
                         <input type="hidden" id="hidDispVolUnit" value="@Model.DispVolUnit">
                         <input type="hidden" id="hidMilUnit" value="@Model.MilUnit">
+                     
                     </div>
                 </td>
             </tr>
@@ -238,6 +236,14 @@
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCar/UpdateInputCar");
             if (result.resultStatus == 0) {
                 Framework.GoBackReloadPage();
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#txMsg").html(Items)
+                } else {
+                    location.reload();
+                }
             }
         }
     });
@@ -307,8 +313,4 @@
 
     }
 
-</script>
-
-<script>
-    $("#header").load("/Home/Header")
 </script>

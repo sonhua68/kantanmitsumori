@@ -1,6 +1,6 @@
 ﻿@using KantanMitsumori.Model.Response;
 @using KantanMitsumori.Helper.CommonFuncs;
-@model ResponseInputCar
+@model ResponseInp
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
@@ -311,7 +311,7 @@
                                                     </td>
                                                     <td class="inptd" style="width: 239px" align="left">
                                                         <input id="rbBonusU_Result" type="radio" name="rdBonus_Result" value="rbBonusU_Result" onclick="resetBonus_Result();"><label for="rbBonusU_Result">有</label>&nbsp;&nbsp;&nbsp;
-                                                        <input id="rbBonusM_Result" type="radio" name="rdBonus_Result" value="rbBonusM_Result" checked="checked" onclick="resetBonus_Result();"><label for="rbBonusM_Result">無</label>
+                                                        <input id="rbBonusM_Result" type="radio" name="rdBonus_Result" value="rbBonusM_Result"  onclick="resetBonus_Result();"><label for="rbBonusM_Result">無</label>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -386,10 +386,7 @@
     SetInitData();
     $('#formInpLoan').validate({
         submitHandler: function (form) {
-            var model = Framework.getFormData($("#formInpLoan"));
-            console.log("--formInpLoan--");
-            console.log(model);
-            console.log("--formInpLoan--");
+            var model = Framework.getFormData($("#formInpLoan"));  
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLoan/UpdateInpLoan");
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
                 Framework.GoBackReloadPage();
@@ -404,19 +401,14 @@
             }
         }
     });
-    function SetInitData() {
-        //console.log(@BonusFirst)
-        //console.log(@BonusSecond)
-        //console.log(@LoanRecalcSettingFlag)
-        //Framework.SetSelectedNumber("cbBonusFirst", `${@BonusFirst}`);
-        //Framework.SetSelectedNumber("cbBonusSecond", `${@BonusSecond}`);
+    function SetInitData() {   
         var isCheck = parseInt(@isRbBonus);
         if (isCheck > 0) {
-            $("#rbBonusU").attr('checked', true);
-            $("#rbBonusU_Result").attr('checked', true);
+            $("#rbBonusU").prop("checked", true);
+            $("#rbBonusU_Result").prop("checked", true);
         } else {
-            $("#rbBonusM").attr('checked', true);
-            $("#rbBonusM_Result").attr('checked', true);
+            $("#rbBonusM").prop("checked", true);
+            $("#rbBonusM_Result").prop("checked", true);
         }
         //
         if (@LoanRecalcSettingFlag== 1) {

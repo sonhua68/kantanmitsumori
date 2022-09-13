@@ -197,6 +197,23 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return ListMonth.ToList();
         }
         #endregion InputLoan
+
+        #region InpZeiHoken 
+        public static List<DropDownList> DropDownJibaiHokenMonth(bool isEmpty)
+        {
+            var ListMonth = new List<DropDownList>();
+            if (isEmpty)
+            {
+                ListMonth.Add(new DropDownList { Value = "", Text = "" });
+
+            }
+            for (int i = 1; i <= 37; i++)
+            {
+                ListMonth.Add(new DropDownList { Value = i, Text = i.ToString() });
+            }
+            return ListMonth.ToList();
+        }
+        #endregion InpZeiHoken
     }
 
 
