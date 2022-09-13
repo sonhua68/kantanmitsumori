@@ -8,6 +8,7 @@
 
   <ItemGroup>	  
 	  <None Remove="Reports\Estimate.rpx" />	  
+	  <None Remove="Reports\EstimateWithMemo.rpx" />	  
 	  <None Remove="Reports\EstSubArticle.rpx" />	  
 	  <None Remove="Reports\EstSubMemo.rpx" />	  
 	  <None Remove="Reports\img_1.jpg" />	  
@@ -20,6 +21,11 @@
 	  <None Remove="Reports\img_8.jpg" />	  
 	  <None Remove="Reports\img_9.jpg" />	  
 	  <None Remove="Reports\Order.rpx" />	  
+	  <None Remove="Reports\OrderWithArticle.rpx" />	  
+	  <EmbeddedResource Include="Reports\OrderWithArticle.rpx">
+	    <SubType>Component</SubType>
+	  </EmbeddedResource>	  
+	  <EmbeddedResource Include="Reports\EstimateWithMemo.rpx" />	  
 	  <EmbeddedResource Include="Reports\Order.rpx" />	  
 	  <EmbeddedResource Include="Reports\Estimate.rpx" />	  
 	  <EmbeddedResource Include="Reports\EstSubMemo.rpx" />

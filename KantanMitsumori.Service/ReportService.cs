@@ -34,7 +34,7 @@ namespace KantanMitsumori.Service
 
         public ResponseBase<ReportFileModel> GetArticleSubReport()
         {
-            var assembly = Assembly.GetCallingAssembly();
+            var assembly = Assembly.GetEntryAssembly();
             var resourceName = "KantanMitsumori.Reports.EstSubArticle.rpx";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (XmlReader reader = XmlReader.Create(stream))
@@ -54,7 +54,7 @@ namespace KantanMitsumori.Service
 
         public ResponseBase<ReportFileModel> GetMemoSubReport()
         {
-            var assembly = Assembly.GetCallingAssembly();
+            var assembly = Assembly.GetEntryAssembly();
             var resourceName = "KantanMitsumori.Reports.EstSubMemo.rpx";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (XmlReader reader = XmlReader.Create(stream))
@@ -74,7 +74,7 @@ namespace KantanMitsumori.Service
 
         public ResponseBase<ReportFileModel> GetEstReport()
         {
-            var assembly = Assembly.GetCallingAssembly();
+            var assembly = Assembly.GetEntryAssembly();
             var resourceName = "KantanMitsumori.Reports.Estimate.rpx";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (XmlReader reader = XmlReader.Create(stream))
@@ -94,8 +94,48 @@ namespace KantanMitsumori.Service
 
         public ResponseBase<ReportFileModel> GetOrderReport()
         {
-            var assembly = Assembly.GetCallingAssembly();
+            var assembly = Assembly.GetEntryAssembly();
             var resourceName = "KantanMitsumori.Reports.Order.rpx";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (XmlReader reader = XmlReader.Create(stream))
+            {
+                SectionReport report = new SectionReport();
+                report.LoadLayout(reader);
+                report.DataSource = LoadSampleData();
+                report.Run();
+                PdfExport pdf = new PdfExport();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    pdf.Export(report.Document, ms);
+                    return ResponseHelper.Ok("", "", new ReportFileModel(ms.ToArray()));
+                }
+            }
+        }
+
+        public ResponseBase<ReportFileModel> GetEstimateWithMemoReport()
+        {
+            var assembly = Assembly.GetEntryAssembly();
+            var resourceName = "KantanMitsumori.Reports.EstimateWithMemo.rpx";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (XmlReader reader = XmlReader.Create(stream))
+            {
+                SectionReport report = new SectionReport();
+                report.LoadLayout(reader);
+                report.DataSource = LoadSampleData();
+                report.Run();
+                PdfExport pdf = new PdfExport();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    pdf.Export(report.Document, ms);
+                    return ResponseHelper.Ok("", "", new ReportFileModel(ms.ToArray()));
+                }
+            }
+        }
+
+        public ResponseBase<ReportFileModel> GetOrderWithArticleReport()
+        {
+            var assembly = Assembly.GetEntryAssembly();
+            var resourceName = "KantanMitsumori.Reports.OrderWithArticle.rpx";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (XmlReader reader = XmlReader.Create(stream))
             {

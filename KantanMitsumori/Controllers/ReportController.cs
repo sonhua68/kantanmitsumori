@@ -81,5 +81,39 @@ namespace KantanMitsumori.Controllers
             return File(model.Data, model.ContentType, model.Name);
         }
 
+        /// <summary>
+        /// Demo download Estimate with memo report
+        /// </summary>    
+        public IActionResult DownloadEstimateWithMemoReport()
+        {
+
+            var result = _reportService.GetEstimateWithMemoReport();
+            if (result == null)
+                return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
+            if (result.ResultStatus != 0)
+                return ErrorAction(result);
+            var model = result.Data;
+            if (model == null)
+                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
+            return File(model.Data, model.ContentType, model.Name);
+        }
+
+        /// <summary>
+        /// Demo download Estimate with memo report
+        /// </summary>    
+        public IActionResult DownloadOrderWithArticleReport()
+        {
+
+            var result = _reportService.GetOrderWithArticleReport();
+            if (result == null)
+                return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
+            if (result.ResultStatus != 0)
+                return ErrorAction(result);
+            var model = result.Data;
+            if (model == null)
+                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
+            return File(model.Data, model.ContentType, model.Name);
+        }
+
     }
 }

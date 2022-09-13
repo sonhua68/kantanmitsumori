@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActiveReportsLayout Version="3.4" PrintWidth="11338.56" DocumentName="ActiveReports Document" ScriptLang="C#" MasterReport="0" CompatibilityMode="CrossPlatform">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-family: Arial; font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; color: Black; ddo-char-set: 186" />
+    <Style Name="Heading1" Value="font-size: 16pt; font-weight: bold" />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-size: 14pt; font-weight: bold; font-style: italic" />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold" />
+  </StyleSheet>
+  <Sections>
+    <Section Type="Detail" Name="Detail" Height="2880" BackColor="16777215">
+      <Control Type="AR.Subreport" Name="subOrder" Left="0" Top="0" Width="11338.56" Height="1440" ReportName="subOrder" />
+      <Control Type="AR.PageBreak" Name="PageBreak1" Top="1454" Left="0" Width="0" Height="0" />
+      <Control Type="AR.Subreport" Name="subArticle" Left="0" Top="1455.84" Width="11338.56" Height="1440" ReportName="subArticle" />
+    </Section>
+  </Sections>
+  <ReportComponentTray />
+  <Script><![CDATA[GrapeCity.ActiveReports.SectionReport _subOrder;
+GrapeCity.ActiveReports.SectionReport _subArticle;
+public void ActiveReport_ReportStart()
+{
+	var assembly = System.Reflection.Assembly.GetEntryAssembly();
+	
+	var orderResName = "KantanMitsumori.Reports.Order.rpx";
+	using (System.IO.Stream stream = assembly.GetManifestResourceStream(orderResName))
+	using (System.Xml.XmlReader reader = System.Xml.XmlReader.Create(stream))
+	{
+		_subOrder = new SectionReport();
+		_subOrder.LoadLayout(reader);		
+	}
+	
+	var articleResName = "KantanMitsumori.Reports.EstSubArticle.rpx";	
+	using (System.IO.Stream stream = assembly.GetManifestResourceStream(articleResName))
+	using (System.Xml.XmlReader reader = System.Xml.XmlReader.Create(stream))
+	{
+		_subArticle = new SectionReport();
+		_subArticle.LoadLayout(reader);		
+	}
+	
+}
+
+public void Detail_Format()
+{
+	_subOrder.DataSource = rpt.DataSource;
+	_subArticle.DataSource = rpt.DataSource;
+	
+	subOrder.Report = _subOrder;	
+	subArticle.Report = _subArticle;
+	
+}
+
+public void ActiveReport_ReportEnd()
+{
+	_subOrder.Dispose();
+	_subArticle.Dispose();
+}]]></Script>
+  <PageSettings LeftMargin="562" RightMargin="0" TopMargin="562" BottomMargin="0" />
+  <Parameters />
+</ActiveReportsLayout>
