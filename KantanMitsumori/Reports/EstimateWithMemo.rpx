@@ -8,8 +8,7 @@
   </StyleSheet>
   <Sections>
     <Section Type="Detail" Name="Detail" Height="2880" BackColor="16777215">
-      <Control Type="AR.Subreport" Name="subEstimate" Left="0" Top="0" Width="11338.56" Height="1440" ReportName="subEstimate" />
-      <Control Type="AR.PageBreak" Name="PageBreak1" Top="1454" Left="0" Width="0" Height="0" />
+      <Control Type="AR.Subreport" Name="subEstimate" Left="0" Top="0" Width="11338.56" Height="1440" ReportName="subEstimate" />      
       <Control Type="AR.Subreport" Name="subMemo" Left="0" Top="1455.84" Width="11338.56" Height="1440" ReportName="subMemo" />
     </Section>
   </Sections>
