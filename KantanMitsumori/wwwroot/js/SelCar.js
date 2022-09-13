@@ -9,7 +9,7 @@ const def_GradeNotFoundMsg = "該当するグレードが見つかりません"
 setIntData();
 GetListASOPMaker();
 function GetListASOPMaker() {
-    var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPMaker");
+    ; var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPMaker");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         console.log(result.data)
         let length = result.data.length;
@@ -19,7 +19,8 @@ function GetListASOPMaker() {
             let text = result.data[i].makerCode;
             let value = result.data[i].makerName;
             $("#ddlMaker").append(new Option(value, text));
-        }
+        }       
+
     } else {
         let Items = result.data;
         if (typeof (Items) != "undefined") {
@@ -38,12 +39,11 @@ function setIntData() {
 
 }
 function GetListASOPCarName() {
-    $("#ddlModel").empty();
-    let vMarkId = $("#ddlMaker").val();
-    setIntData()
-    console.log(vMarkId)
+    let vMarkId = $("#ddlMaker").val();  
     var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPCarName?markId=" + vMarkId);
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        $("#ddlModel").empty();
+        setIntData()
         let length = result.data.length;
         for (let i = 0; i < length; i++) {
             let text = result.data[i].carmodelCode;
@@ -96,7 +96,6 @@ function btnNextGrade() {
     model.sesMakID = $("#ddlMaker").val();
     model.sesMaker = $("#ddlMaker option:selected").text();
     model.sesCarNM = $("#ddlModel option:selected").text();
-    $("#ddlModel option[value='" + model.sesCarNM + "']").attr("selected", "selected");
     var result = Framework.submitAjaxGetList(model, "/SelCar/NextGrade");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
     } else {
