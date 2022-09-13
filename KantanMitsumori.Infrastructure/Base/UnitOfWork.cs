@@ -3,7 +3,7 @@ using KantanMitsumori.Infrastructure.IRepositories;
 using KantanMitsumori.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
 
-
+using KantanMitsumori.DataAccess;
 namespace KantanMitsumori.Infrastructure.Base
 {
     public class UnitOfWork : IUnitOfWork

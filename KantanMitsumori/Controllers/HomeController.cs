@@ -33,6 +33,13 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Index()
         {
+            //var mode = new LogToken();
+            //mode.sesEstNo = "22071200085"; mode.sesEstSubNo = "01";
+            //mode.UserNo = "88888195";
+            //mode.UserNm = "testuser88888195";
+            //var token = HelperToken.GenerateJsonToken(mode);
+            //mode.Token = token;
+            //setTokenCookie(token);
             return View();
         }
 

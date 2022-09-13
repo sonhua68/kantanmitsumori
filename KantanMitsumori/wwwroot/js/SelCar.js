@@ -9,7 +9,7 @@ const def_GradeNotFoundMsg = "該当するグレードが見つかりません"
 setIntData();
 GetListASOPMaker();
 function GetListASOPMaker() {
-    var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPMaker");
+    ; var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPMaker");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         console.log(result.data)
         let length = result.data.length;
@@ -19,7 +19,8 @@ function GetListASOPMaker() {
             let text = result.data[i].makerCode;
             let value = result.data[i].makerName;
             $("#ddlMaker").append(new Option(value, text));
-        }
+        }       
+
     } else {
         let Items = result.data;
         if (typeof (Items) != "undefined") {
@@ -38,12 +39,11 @@ function setIntData() {
 
 }
 function GetListASOPCarName() {
-    $("#ddlModel").empty();
-    let vMarkId = $("#ddlMaker").val();
-    setIntData()
-    console.log(vMarkId)
+    let vMarkId = $("#ddlMaker").val();  
     var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPCarName?markId=" + vMarkId);
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        $("#ddlModel").empty();
+        setIntData()
         let length = result.data.length;
         for (let i = 0; i < length; i++) {
             let text = result.data[i].carmodelCode;
@@ -85,7 +85,7 @@ function btnChkModel() {
     } else {
         if (typeof (Items) != "undefined") {
             $("#lblErrMsg2").html(def_GradeNotFoundMsg)
-        } else {         
+        } else {
             Framework.SummitForm("/SelGrd", result)
         }
     }
@@ -106,4 +106,13 @@ function btnNextGrade() {
             Framework.SummitForm("/SelGrd", result)
         }
     }
+}
+
+function GoNextPage(pageNumber) {
+    var model = {};
+    model.sesMakID = $("#sesMakID").val();
+    model.sesMaker = $("#sesMaker").val();
+    model.sesCarNM = $("#sesCarNM").val();
+    model.pageNumber = pageNumber
+    Framework.SummitForm("/SelGrd", model)
 }

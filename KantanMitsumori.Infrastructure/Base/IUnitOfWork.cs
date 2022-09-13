@@ -1,4 +1,6 @@
-﻿using KantanMitsumori.Entity.ASESTEntities;
+
+using KantanMitsumori.DataAccess;
+
 using KantanMitsumori.Infrastructure.IRepositories;
 
 namespace KantanMitsumori.Infrastructure.Base

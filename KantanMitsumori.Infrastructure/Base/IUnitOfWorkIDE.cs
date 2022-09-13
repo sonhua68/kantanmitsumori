@@ -3,7 +3,7 @@ using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Entity.IDEEnitities;
 using KantanMitsumori.Infrastructure.IRepositories;
 using KantanMitsumori.Infrastructure.Repositories;
-
+using KantanMitsumori.DataAccess;
 namespace KantanMitsumori.Infrastructure.Base
 {
     public interface IUnitOfWorkIDE

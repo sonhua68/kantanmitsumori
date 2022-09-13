@@ -22,7 +22,8 @@ namespace KantanMitsumori.Controllers
             RequestInp res = new RequestInp();
             res.EstNo = _logToken.sesEstNo;
             res.EstSubNo = _logToken.sesEstSubNo;
-            res.UserNo = "00000001";
+            res.UserNo = _logToken.UserNo;
+
             var response = _estimateService.GetDetail(res);
             if (response.ResultStatus == (int)enResponse.isError)
             {

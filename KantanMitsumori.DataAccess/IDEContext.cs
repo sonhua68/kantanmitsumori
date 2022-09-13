@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using KantanMitsumori.Entity.IDEEnitities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace KantanMitsumori.Entity.IDEEnitities
+namespace KantanMitsumori.DataAccess
 {
     public partial class IDEContext : DbContext
     {
