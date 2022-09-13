@@ -209,8 +209,17 @@ namespace KantanMitsumori.Service.Helper
             {
                 var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
 
+                if (estModel == null)
+                {
+                    return false;
+                }
+
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == estModel.EstNo && x.EstSubNo == estModel.EstSubNo && x.Dflag == false);
 
+                if (estSubModel == null)
+                {
+                    return false;
+                }
 
                 // 再計算前の総額
                 long oldSalesSum = (long)estModel.SalesSum;

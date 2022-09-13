@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.Entity.ASESTEntities;
+﻿using KantanMitsumori.DataAccess;
+using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Infrastructure.IRepositories;
 using Microsoft.EntityFrameworkCore;

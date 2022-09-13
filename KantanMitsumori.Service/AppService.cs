@@ -3,6 +3,7 @@ using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
@@ -139,14 +140,14 @@ namespace KantanMitsumori.Service
                 // ASNET車両詳細ページからの情報を取得・DB保存
                 var getAsInfo = await getAsnetInfo(request);
 
-                getAsInfo.Data.Token = valToken.Token;
-                getAsInfo.Data.EstNo = valToken.sesEstNo;
-                getAsInfo.Data.EstSubNo = valToken.sesEstSubNo;
-
                 if (getAsInfo.ResultStatus == (int)enResponse.isError)
                 {
                     return ResponseHelper.Error<EstimateModelView>("Error", getAsInfo.MessageContent);
                 }
+
+                getAsInfo.Data.Token = valToken.Token;
+                getAsInfo.Data.EstNo = valToken.sesEstNo;
+                getAsInfo.Data.EstSubNo = valToken.sesEstSubNo;
 
                 // 見積書データ取得・表示
                 _commonEst.setEstData(ref valToken);
@@ -745,6 +746,7 @@ namespace KantanMitsumori.Service
             if (await regEstData(_commonEst.EstMainModel) == false)
             {
                 valToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-029D" + CommonConst.def_ErrCodeR;
+                return ResponseHelper.Error<ResponEstMainModel>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI010D));
             }
 
             // ワンプラ以外の場合、車両本体価格の確認を促す
@@ -1026,6 +1028,7 @@ namespace KantanMitsumori.Service
             if (await regEstData(_commonEst.EstMainModel) == false)
             {
                 valToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-014D" + CommonConst.def_ErrCodeR;
+                return ResponseHelper.Error<ResponEstMainModel>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI010D));
             }
 
             // 見積書データ取得・表示

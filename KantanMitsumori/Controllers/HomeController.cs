@@ -92,11 +92,23 @@ namespace KantanMitsumori.Controllers
             if (Strings.InStr(pageUrl.AbsolutePath, "/asest2/") == 0 || Strings.InStr(pageUrl.AbsolutePath, "/test.htm/") > 0)
             {
                 var response = await _appService.getEstMain(sel, request);
+
+                if (response.ResultStatus == (int)enResponse.isError)
+                {
+                    return ErrorAction(response);
+                }
+
                 return View(response.Data);
             }
             else
             {
                 var response = await _appService.setFreeEst();
+
+                if (response.ResultStatus == (int)enResponse.isError)
+                {
+                    return ErrorAction(response);
+                }
+
                 return View(response.Data);
             }
         }
