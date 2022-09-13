@@ -7,11 +7,10 @@
     var MakerName = Model[0].MakerName;
     var ModelName = Model[0].ModelName;
     var MakerId = Model[0].MakerId;
-    var TotalPages = Convert.ToInt32(ViewData["TotalPages"]);
-    var PageIndex = Convert.ToInt32(ViewData["PageIndex"]);
+    var TotalPages = Model.TotalPages;
+    var PageIndex = Model.PageIndex;
 
 }
-
 <div class="row">
     <div class="col-sm-2">
     </div>
@@ -20,8 +19,8 @@
             <div class="border-button container text-center">
                 <br>
                 <div class="col d-flex justify-content-between">
-                    <a href="javascript:window.close();">
-                        <img src="./img/btn%e8%a6%8b%e7%a9%8dTOP.png">
+                    <a href="#" onclick="Framework.GoBackReloadPageUrl('/SelCar');return false">
+                        <img src="./img/btn%E6%88%BB%E3%82%8B.png">
                     </a>
                 </div>
                 <br>
@@ -97,7 +96,7 @@
                                 var DriveTypeCode = item.DriveTypeCode == "不明" ? "" : item.DriveTypeCode;
                                 <tr>
                                     <td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">
-                                        <input type="button" value="選択" onclick="" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">
+                                        <input type="button" value="選択" onclick="Framework.GoBackReloadPageUrl('/');return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">
                                     </td>
                                     <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">@item.GradeName</td>
                                     <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.RegularCase</td>
@@ -117,6 +116,7 @@
                                                 <tr>
                                                     @{
                                                         for (int i = 1; i <= TotalPages; i++)
+
                                                             if (i == PageIndex)
                                                             {
                                                                 <td><span>@i</span></td>
@@ -127,17 +127,12 @@
                                                             }
                                                     }
                                                 </tr>
-
-
-
                                             </tbody>
                                         </table>
                                     </td>
                                 </tr>
-
                             }
                         }
-
                     </tbody>
                 </table>
 
@@ -145,7 +140,6 @@
         </div>
     </div>
 </div>
-
 <input type="hidden" id="sesMakID" value="@MakerId">
 <input type="hidden" id="sesMaker" value="@MakerName">
 <input type="hidden" id="sesCarNM" value="@ModelName">

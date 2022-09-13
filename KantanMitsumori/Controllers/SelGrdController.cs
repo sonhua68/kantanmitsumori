@@ -29,9 +29,7 @@ namespace KantanMitsumori.Controllers
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
-            }
-            ViewData["TotalPages"] = dt.TotalPages;
-            ViewData["PageIndex"] = dt.PageIndex;
+            }           
             return View(dt);
         }
 
