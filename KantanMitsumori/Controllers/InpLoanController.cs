@@ -27,8 +27,8 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             RequestInp res = new RequestInp(); 
-            res.EstNo = _logToken.EstNo;
-            res.EstSubNo = _logToken.EstSubNo;
+            res.EstNo = _logToken.sesEstNo;
+            res.EstSubNo = _logToken.sesEstSubNo;
             res.UserNo = _logToken.UserNo;
             var response = _estimateService.GetDetail(res);           
             if (response.ResultStatus == (int)enResponse.isError)

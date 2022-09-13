@@ -51,5 +51,13 @@ namespace KantanMitsumori.Model.Response
         public int DriveTypeCodeOrd { get; set; }
         public string? DriveTypeCode { get; set; }
     }
+    public class ResponseSerEst
+    {
+        public int EstNo { get; set; }
+        public string? TradeDate { get; set; }
+        public string? CustKName { get; set; }
+        public int CarName { get; set; }
+       
+    }
 
 }

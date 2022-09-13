@@ -37,10 +37,10 @@ namespace KantanMitsumori.Controllers
         [HttpGet]
         public  IActionResult GetData()
         {
-            RequestInp res = new RequestInp();
-            res.EstNo = "22082900004";
-            res.EstSubNo = "01";
-            res.UserNo = "00000001";
+            RequestInp res = new RequestInp();        
+            res.EstNo = _logToken.sesEstNo;
+            res.EstSubNo = _logToken.sesEstSubNo;
+            res.UserNo = _logToken.UserNo;
             var response = _estimateService.GetDetail(res);
             if (response.ResultStatus == (int)enResponse.isError)
             {

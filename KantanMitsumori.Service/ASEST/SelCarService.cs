@@ -146,5 +146,9 @@ namespace KantanMitsumori.Service.ASEST
             }
 
         }
+        public ResponseBase<List<ResponseSerEst>> GetListSerEst(RequestSerEst requestSel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
