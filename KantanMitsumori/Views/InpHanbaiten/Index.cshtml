@@ -1,5 +1,4 @@
-﻿
-@using KantanMitsumori.Model.Response;
+﻿@using KantanMitsumori.Model.Response;
 @model ResponseInp
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -106,7 +105,7 @@
             var model = Framework.getFormData($("#formInpHanbaiten"));
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpHanbaiten/UpdateInpHanbaiten");
             if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
+                Framework.GoBackReloadPageUrl('/');
             } else {
                 let Items = result.data;
                 console.log(Items)

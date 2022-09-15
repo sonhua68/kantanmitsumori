@@ -545,5 +545,36 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return rtstrDay;
 
         }
+
+
+        public static string checkwSyakenNew(int? syakenNew ,int? syakenZok)
+        {
+            if (syakenNew > 0 && syakenZok == 0)
+            {
+                return syakenNew.ToString()!;
+
+            }else if (syakenNew ==0 && syakenZok>0)
+            {
+
+                return syakenZok.ToString()!;
+            }
+            return "";
+
+        }
+        public static string Syaken(int? syakenNew, int? syakenZok)
+        {
+            if (syakenNew > 0 && syakenZok == 0)
+            {
+                return "車検整備費用";
+
+            }
+            else if (syakenNew == 0 && syakenZok > 0)
+            {
+
+                return "納車整備費用";
+            }
+            return "";
+
+        }
     }
 }
