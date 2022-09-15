@@ -126,6 +126,7 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="inUserNo"></param>
         /// <returns></returns>
+
         public UserDefModel getUserDefData(string inUserNo)
         {
             try
@@ -415,6 +416,7 @@ namespace KantanMitsumori.Service.Helper
 
             return true;
         }
+
 
         /// <summary>
         /// 初年度登録年月と排気量を受け取り自動車税を返却する

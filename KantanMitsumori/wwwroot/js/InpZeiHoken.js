@@ -3,6 +3,8 @@
 // JScript File
 
 // JScript File
+
+
 setInitialValue();
 function setInitialValue() {
 	if (document.getElementById("MeiCarTaxEquivalent").value != "") {
@@ -107,7 +109,7 @@ function EstSum() {
 
 function getCarTax() {
 	var CarTaxMonth = chkNull($('#ddlCarTaxMonth').val());
-	var DispVol = chkNull($('#DispVol').value);
+	var DispVol = chkNull($('#DispVol').val());
 
 	if (document.getElementById("AutoCalcFlg").value == false) { setCarTax(""); return; }
 	if (CarTaxMonth == "") { setCarTax(""); return; }
@@ -115,6 +117,14 @@ function getCarTax() {
 
 	////自動車税計算
 	//var retCarTax = asest2.WebService.calcCarTax(DispVol, CarTaxMonth, setCarTax)
+	var model = {};
+	model.CarTaxMonth = CarTaxMonth;
+	model.DispVol = DispVol;
+	var result = Framework.submitAjaxGetList(model, "/InpZeiHoken/calcCarTax");
+	console.log(result)
+	if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+		setCarTax(result.data)
+	}
 }
 
 function setCarTax(retCarTax) {
@@ -139,7 +149,15 @@ function getJibai() {
 	if (DispVol == "") { setJibai(""); return; }
 
 	////自動車税計算
-	//var retJibai = asest2.WebService.calcJibai(JibaiMonth, DispVol, setJibai)
+	//var retJibai = asest2.WebService.calcJibai(JibaiMonth, DispVol, setJibai)	
+	var model = {};
+	model.JibaiMonth = JibaiMonth;
+	model.DispVol = DispVol;
+	var result = Framework.submitAjaxGetList(model, "/InpZeiHoken/calcJibai");
+	console.log(result)
+	if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+		setJibai(result.data)
+	}
 }
 
 function setJibai(retJibai) {

@@ -285,7 +285,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return value.ToString()!;
             }
         }
-
         public static string IsNullString(string? value)
         {
             if (String.IsNullOrEmpty(value))
@@ -297,7 +296,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return value.ToString()!;
             }
         }
-
         /// <summary>
         /// 車検有効期限 判定・編集
         /// </summary>
@@ -545,7 +543,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
 
             return rtstrDay;
-
         }
+
     }
 }

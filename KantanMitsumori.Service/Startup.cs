@@ -20,6 +20,7 @@ namespace KantanMitsumori.Service
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IInpLoanService, InpLoanService>();
             services.AddTransient<ISelCarService, SelCarService>();
+            services.AddTransient<IInpZeiHokenService, InpZeiHokenService>();
 
             return services;
         }
@@ -35,6 +36,7 @@ namespace KantanMitsumori.Service
             services.AddScoped<CommonFuncHelper>();
             services.AddScoped<CommonEstimate>();
             services.AddScoped<HelperMapper>();
+            services.AddScoped<CommonFuncHelper>();
             return services;
         }
     }

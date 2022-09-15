@@ -23,6 +23,7 @@ namespace KantanMitsumori.Controllers
             request.EstNo = _logToken.sesEstNo;
             request.EstSubNo = _logToken.sesEstSubNo;
             request.UserNo = _logToken.UserNo;
+            request.TaxRatio = _logToken.sesTaxRatio;
             var response = _estimateService.GetDetail(request);
             if (response.ResultStatus == (int)enResponse.isError)
             {
