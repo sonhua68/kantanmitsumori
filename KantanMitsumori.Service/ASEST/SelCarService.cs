@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GrapeCity.ActiveReports.Core.DataProviders;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Entity.ASESTSQL;
 using KantanMitsumori.Helper.CommonFuncs;
@@ -140,15 +141,68 @@ namespace KantanMitsumori.Service.ASEST
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "chkCar");
+                _logger.LogError(ex, "GetListRuiBetSu");
                 return ResponseHelper.Error<List<ResponseTbRuibetsuNew>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
 
         }
-        public ResponseBase<List<ResponseSerEst>> GetListSerEst(RequestSerEst requestSel)
+        public ResponseBase<List<ResponseSerEst>> GetListSerEst(RequestSerEst requestSerEst)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var res = new List<ResponseSerEst>();
+                if (string.IsNullOrEmpty(requestSerEst.ddlFromSelectM) || string.IsNullOrEmpty(requestSerEst.ddlFromSelectY))
+                {
+                    var date = DateTime.Now;
+                    requestSerEst.ddlToSelectY = date.Year.ToString();
+                    requestSerEst.ddlToSelectM = date.Month.ToString();
+                    requestSerEst.ddlToSelectD = date.Day.ToString();
+                    requestSerEst.ddlFromSelectY = date.Year.ToString();
+                    requestSerEst.ddlFromSelectM = date.Month.ToString();
+                    requestSerEst.ddlFromSelectD = date.Day.ToString();
+                }
+                var sql = SQLHelper.GetListSerEst(requestSerEst);
+                var data = _unitOfWork.DbContext.Set<SerEstEntity>().FromSqlRaw(sql)
+                                                                    .OrderByDescending(n => n.EstNo)
+                                                                    .Select(i =>
+                                                                    _mapper.Map<ResponseSerEst>(i))
+                                                                    .ToList();
+                //data = setRequestSerEst(data, requestSerEst);
+                if (data.Count == 0)
+                {
+
+                    return ResponseHelper.Ok<List<ResponseSerEst>>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003), data);
+                }
+
+                return ResponseHelper.Ok<List<ResponseSerEst>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetListSerEst");
+                return ResponseHelper.Error<List<ResponseSerEst>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+
+            }
         }
+
+        #region Prive
+        private List<ResponseSerEst> setRequestSerEst(List<ResponseSerEst> data, RequestSerEst requestSerEst)
+        {         
+            var dt =  data[0].requestData;
+            dt.EstNo = CommonFunction.IsNullString(requestSerEst.EstNo);
+            dt.EstSubNo = CommonFunction.IsNullString(requestSerEst.EstSubNo);
+            dt.ddlModel = CommonFunction.IsNullString(requestSerEst.ddlModel);
+            dt.ddlMaker = CommonFunction.IsNullString(requestSerEst.ddlMaker);
+            dt.CustKanaName = CommonFunction.IsNullString(requestSerEst.CustKanaName);
+            dt.ChassisNo = CommonFunction.IsNullString(requestSerEst.ChassisNo);
+            dt.ddlFromSelectY = requestSerEst.ddlFromSelectY;
+            dt.ddlFromSelectM = requestSerEst.ddlFromSelectM;
+            dt.ddlFromSelectD = requestSerEst.ddlFromSelectD;
+            dt.ddlToSelectY = requestSerEst.ddlToSelectY;
+            dt.ddlToSelectM = requestSerEst.ddlToSelectM;
+            dt.ddlToSelectD = requestSerEst.ddlToSelectD;
+            return data;
+        }
+        #endregion Prive
     }
 }

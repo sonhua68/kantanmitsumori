@@ -142,7 +142,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="start">Starting character index number.</param>
         /// <param name="count">Number of characters to return.</param>
         /// <returns>Substring or empty string when out of range.</returns>
-        public string Mid(string input, int start, int count)
+        public static string Mid(string input, int start, int count)
         {
             return input.Substring(Math.Min(start, input.Length), Math.Min(count, Math.Max(input.Length - start, 0)));
         }
@@ -399,6 +399,18 @@ namespace KantanMitsumori.Helper.CommonFuncs
         public static string FormatString(int? value)
         {
             if (value == 0)
+            {
+                return "";
+            }
+            else
+            {
+                return value.ToString()!;
+            }
+        }
+
+        public static string IsNullString(string? value)
+        {
+            if (String.IsNullOrEmpty(value))
             {
                 return "";
             }

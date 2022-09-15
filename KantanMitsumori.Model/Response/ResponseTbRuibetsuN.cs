@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KantanMitsumori.Model.Request;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -53,11 +54,12 @@ namespace KantanMitsumori.Model.Response
     }
     public class ResponseSerEst
     {
-        public int EstNo { get; set; }
+        public string? EstNo { get; set; }
         public string? TradeDate { get; set; }
         public string? CustKName { get; set; }
-        public int CarName { get; set; }
-       
+        public string? CarName { get; set; }
+        public RequestSerEst requestData { get; set; }
     }
+
 
 }

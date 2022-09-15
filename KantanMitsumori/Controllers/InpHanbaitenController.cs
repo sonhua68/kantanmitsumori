@@ -22,11 +22,11 @@ namespace KantanMitsumori.Controllers
         #region InpHanbaiten
         public IActionResult Index()
         {
-            RequestInp res = new RequestInp();         
-            res.EstNo =_logToken.sesEstNo;
-            res.EstSubNo = _logToken.sesEstSubNo;
-            res.UserNo = _logToken.UserNo;
-            var response = _estimateService.GetDetail(res);
+            RequestInp request = new RequestInp();
+            request.EstNo =_logToken.sesEstNo;
+            request.EstSubNo = _logToken.sesEstSubNo;
+            request.UserNo = _logToken.UserNo;
+            var response = _estimateService.GetDetail(request);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
