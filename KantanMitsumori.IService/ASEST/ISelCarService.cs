@@ -12,5 +12,8 @@ namespace KantanMitsumori.IService
         ResponseBase<List<ResponseTbRuibetsuN>> chkGetListRuiBetSu(RequestSelGrd requestSel, int Flg);
         ResponseBase<List<ResponseTbRuibetsuNew>> GetListRuiBetSu(RequestSelGrd requestSel);
         ResponseBase<List<ResponseSerEst>> GetListSerEst(RequestSerEst requestSel);
+        
+
+
     }
 }

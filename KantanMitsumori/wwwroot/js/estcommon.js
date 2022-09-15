@@ -319,3 +319,34 @@ function FormatDayGetMonth(str) {
     }
 
 }
+/*
+ * groupBy
+ *  Create By HoaiPhong
+ *  Date 2022/09/07
+ /*/
+function groupBy(list, keyGetter) {
+    const map = new Map();
+    list.forEach((item) => {
+        const key = keyGetter(item);
+        const collection = map.get(key);
+        if (!collection) {
+            map.set(key, [item]);
+        } else {
+            collection.push(item);
+        }
+    });
+    return map;
+}
+/*
+ * compose
+ *  Create By HoaiPhong
+ *  Date 2022/09/14
+ /*/
+String.prototype.compose = (function () {
+    var re = /\{{(.+?)\}}/g;
+    return function (o) {
+        return this.replace(re, function (_, k) {
+            return typeof o[k] != 'undefined' ? o[k] : '';
+        });
+    }
+}());

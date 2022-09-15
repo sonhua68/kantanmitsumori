@@ -52,6 +52,6 @@ public void ActiveReport_ReportEnd()
 	_subEstimate.Dispose();
 	_subMemo.Dispose();
 }]]></Script>
-  <PageSettings LeftMargin="562" RightMargin="0" TopMargin="562" BottomMargin="0" />
+	<PageSettings LeftMargin="562" RightMargin="0" TopMargin="281" BottomMargin="0" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="1" />
   <Parameters />
 </ActiveReportsLayout>
