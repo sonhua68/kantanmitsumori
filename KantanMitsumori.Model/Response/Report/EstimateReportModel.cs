@@ -111,7 +111,6 @@ namespace KantanMitsumori.Model.Response.Report
         public string TaxFreeSet2Title { get; set; } = "";
         public string TaxFreeSet1 { get; set; } = "";
         public string TaxFreeSet2 { get; set; } = "";
-        public string PrTitle { get; set; } = "";
         public string AAInfo { get; set; } = "";
         public string SonotaTitle { get; set; } = "";
         public string Sonota { get; set; } = "";

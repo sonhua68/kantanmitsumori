@@ -286,6 +286,18 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
         }
 
+        public static string IsNullString(string? value)
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                return "";
+            }
+            else
+            {
+                return value.ToString()!;
+            }
+        }
+
         /// <summary>
         /// 車検有効期限 判定・編集
         /// </summary>

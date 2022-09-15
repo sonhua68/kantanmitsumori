@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GrapeCity.DataVisualization.TypeScript;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
@@ -98,7 +99,7 @@ namespace KantanMitsumori.Service
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "UpdateInputCar");
+                _logger.LogError(ex, "GetDetail");
                 return ResponseHelper.Error<ResponseInp>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
@@ -270,6 +271,83 @@ namespace KantanMitsumori.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInpZeiHoken");
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+
+        public ResponseBase<List<ResponseEstimate>> GetMakerNameAndModelName(string userNo, string makerName)
+        {
+            try
+            {
+                var estimates = new List<ResponseEstimate>();
+                var today = DateTime.Now;
+                var def_DurationMonths = -3;
+                var dtFrom = today.AddMonths(def_DurationMonths);
+                dtFrom = dtFrom.AddDays(1);
+                if (string.IsNullOrEmpty(makerName))
+                {
+                    var dt = _unitOfWork.Estimates.Query(n => n.EstUserNo == userNo &&
+                     n.Dflag == false && n.MakerName != null
+                     && n.Rdate >= Convert.ToDateTime(dtFrom.ToString("yyyy/M/d")))
+                     .Select(i => new
+                     {
+                         MakerName = i.MakerName
+                     }).GroupBy(n => n.MakerName).Select(n => new
+                     {
+                         MakerName = n.Key
+                     }).OrderBy(n => n.MakerName).ToList();
+                    estimates = _helperMapper.ConvertToList<ResponseEstimate>(_helperMapper.ToDataTable(dt));
+
+                }
+                else
+                {
+                    var dt = _unitOfWork.Estimates.Query(n => n.EstUserNo == userNo &&
+                     n.Dflag == false && n.MakerName == makerName
+                     && n.Rdate >= Convert.ToDateTime(dtFrom.ToString("yyyy/M/d")))
+                     .Select(i => new
+                     {
+                         ModelName = i.ModelName
+                     }).GroupBy(n => n.ModelName).Select(n => new
+                     {
+                         ModelName = n.Key
+                     }).OrderBy(n => n.ModelName).ToList();
+                    estimates = _helperMapper.ConvertToList<ResponseEstimate>(_helperMapper.ToDataTable(dt));
+
+                }
+
+                if (estimates == null)
+                {
+                    return ResponseHelper.Error<List<ResponseEstimate>>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
+                return ResponseHelper.Ok<List<ResponseEstimate>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estimates!);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetMakerNameAndModelName");
+                return ResponseHelper.Error<List<ResponseEstimate>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+
+        public async Task<ResponseBase<int>> DeleteEstimate(string estNo, string estSubNo)
+        {
+            try
+            {
+                TEstimate dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == estNo && n.EstSubNo == estSubNo);
+                TEstimateSub dtEstimatesSub = _unitOfWork.EstimateSubs.GetSingle(n => n.EstNo == estNo && n.EstSubNo == estSubNo);
+                if (dtEstimates == null || dtEstimatesSub == null)
+                {
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
+                dtEstimates.Dflag = true;
+                dtEstimatesSub.Dflag = true;
+                _unitOfWork.Estimates.Update(dtEstimates);
+                _unitOfWork.EstimateSubs.Update(dtEstimatesSub);
+                await _unitOfWork.CommitAsync();
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "DeleteEstimate");
                 return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }

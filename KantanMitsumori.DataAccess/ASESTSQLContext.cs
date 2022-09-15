@@ -8,7 +8,7 @@ namespace KantanMitsumori.DataAccess
          partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<TbRuibetsuEntity>().HasNoKey();
-      
+            modelBuilder.Entity<SerEstEntity>().HasNoKey();
         }
     }
 }

@@ -34,7 +34,7 @@ namespace KantanMitsumori.Service
 
         public ResponseBase<ReportFileModel> GetArticleSubReport()
         {
-            var assembly = Assembly.GetCallingAssembly();
+            var assembly = Assembly.GetEntryAssembly();
             var resourceName = "KantanMitsumori.Reports.EstSubArticle.rpx";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (XmlReader reader = XmlReader.Create(stream))
@@ -54,7 +54,7 @@ namespace KantanMitsumori.Service
 
         public ResponseBase<ReportFileModel> GetMemoSubReport()
         {
-            var assembly = Assembly.GetCallingAssembly();
+            var assembly = Assembly.GetEntryAssembly();
             var resourceName = "KantanMitsumori.Reports.EstSubMemo.rpx";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (XmlReader reader = XmlReader.Create(stream))
@@ -74,7 +74,7 @@ namespace KantanMitsumori.Service
 
         public ResponseBase<ReportFileModel> GetEstReport()
         {
-            var assembly = Assembly.GetCallingAssembly();
+            var assembly = Assembly.GetEntryAssembly();
             var resourceName = "KantanMitsumori.Reports.Estimate.rpx";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (XmlReader reader = XmlReader.Create(stream))
@@ -94,8 +94,48 @@ namespace KantanMitsumori.Service
 
         public ResponseBase<ReportFileModel> GetOrderReport()
         {
-            var assembly = Assembly.GetCallingAssembly();
+            var assembly = Assembly.GetEntryAssembly();
             var resourceName = "KantanMitsumori.Reports.Order.rpx";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (XmlReader reader = XmlReader.Create(stream))
+            {
+                SectionReport report = new SectionReport();
+                report.LoadLayout(reader);
+                report.DataSource = LoadSampleData();
+                report.Run();
+                PdfExport pdf = new PdfExport();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    pdf.Export(report.Document, ms);
+                    return ResponseHelper.Ok("", "", new ReportFileModel(ms.ToArray()));
+                }
+            }
+        }
+
+        public ResponseBase<ReportFileModel> GetEstimateWithMemoReport()
+        {
+            var assembly = Assembly.GetEntryAssembly();
+            var resourceName = "KantanMitsumori.Reports.EstimateWithMemo.rpx";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (XmlReader reader = XmlReader.Create(stream))
+            {
+                SectionReport report = new SectionReport();
+                report.LoadLayout(reader);
+                report.DataSource = LoadSampleData();
+                report.Run();
+                PdfExport pdf = new PdfExport();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    pdf.Export(report.Document, ms);
+                    return ResponseHelper.Ok("", "", new ReportFileModel(ms.ToArray()));
+                }
+            }
+        }
+
+        public ResponseBase<ReportFileModel> GetOrderWithArticleReport()
+        {
+            var assembly = Assembly.GetEntryAssembly();
+            var resourceName = "KantanMitsumori.Reports.OrderWithArticle.rpx";
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (XmlReader reader = XmlReader.Create(stream))
             {
@@ -156,7 +196,7 @@ namespace KantanMitsumori.Service
                     FirstPayAmount = "",
                     FirstRegYm = "H28年",
                     GradeName = "1.5 Z 煌",
-                    Kikan = "Kikan",
+                    Kikan = "10,000 円",
                     Mission = "AT5",
                     NebikiTitle = "",
                     Notes = "Notes",
@@ -192,8 +232,7 @@ namespace KantanMitsumori.Service
                     PartitionFee = "20,000 円",
                     PayAmount = "20,000 円",
                     PayTimes = "",
-                    Principal = "",
-                    PrTitle = "御　見　積　書",
+                    Principal = "",                    
                     Rate = "",
                     RevenueStampTitle = "",
                     SaleAll = "1,196,001 円",
@@ -243,7 +282,7 @@ namespace KantanMitsumori.Service
                     TradeInRegNo = "",
                     Vol = "1500 cc",
                     WeightTax = "20,000 円",
-
+                    
 
                     CarImg = LoadImage("img_1.jpg"),
                     CarImg1 = LoadImage("img_2.jpg"),
