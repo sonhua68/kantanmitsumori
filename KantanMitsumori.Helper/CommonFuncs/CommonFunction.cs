@@ -1,30 +1,11 @@
 ﻿
 using KantanMitsumori.Helper.Constant;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
-using System.Data;
-using System.Reflection;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
     public class CommonFunction
     {
-        private readonly ILogger _logger;
-
-
-        public CommonFunction(ILogger logger)
-        {
-            _logger = logger;
-        }
-
-        /// <summary>
-        /// Numeric type check
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public bool IsNumeric(string value) => value.All(char.IsNumber);
-
         /// <summary>
         /// 西暦を和暦に変換する(年のみ)
         /// </summary>
@@ -32,7 +13,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <returns></returns>
         public string GetWareki(string year)
         {
-            if (!IsNumeric(year.Trim()))
+            if (!Information.IsNumeric(year.Trim()))
             {
                 return "";
             }
@@ -55,57 +36,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
 
             return retNengo;
-        }
-
-        /// <summary>
-        /// フォーマット処理
-        /// </summary>
-        /// <param name="text2"></param>
-        /// <param name="unit"></param>
-        /// <param name="formatText"></param>
-        /// <returns></returns>
-        public string SetFormat(long text2, string unit, string formatText)
-        {
-            formatText = Convert.ToString(Strings.Format(text2, "#,##") + unit);
-            return formatText;
-        }
-
-        /// <summary>
-        /// セッション変数を数値で返す
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="sessionName"></param>
-        /// <param name="defValue"></param>
-        /// <returns></returns>
-        public int GetSessionNum(HttpContext context, string sessionName, int defValue)
-        {
-            var session = context.Session.Keys.Where(element => element == sessionName).FirstOrDefault();
-
-            if (session == null || Convert.IsDBNull(session))
-            {
-                return defValue;
-            }
-
-            return Convert.ToInt32(Conversion.Val(session)); ;
-        }
-
-        /// <summary>
-        /// セッション変数を文字列で返す
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="sessionName"></param>
-        /// <param name="defValue"></param>
-        /// <returns></returns>
-        public string GetSessionStr(HttpContext context, string sessionName, string defValue)
-        {
-            var session = context.Session.Keys.Where(element => element == sessionName).FirstOrDefault();
-
-            if (session == null || Convert.IsDBNull(session))
-            {
-                return defValue;
-            }
-
-            return Convert.ToString(session);
         }
 
         /// <summary>
@@ -152,7 +82,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="mDDate"></param>
         /// <returns></returns>
-        public string DateFormatZero(string mDDate)
+        public static string DateFormatZero(string mDDate)
         {
             if (Left(mDDate, 1) == "0")
             {
@@ -171,7 +101,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="strDay"></param>
         /// <param name="year"></param>
         /// <param name="month"></param>
-        public void FormatDay(string strDay, string year, string month)
+        public static void FormatDay(string strDay, ref string year, ref string month)
         {
             int leday = strDay.Replace("/", "").Length;
             switch (leday)
@@ -260,9 +190,9 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="dValue"></param>
         /// <param name="iDigits"></param>
         /// <returns></returns>
-        public double ToRoundDown(double dValue, int iDigits)
+        public static decimal ToRoundDown(decimal dValue, int iDigits)
         {
-            double dCoef = Math.Pow(10, iDigits);
+            decimal dCoef = (decimal)Math.Pow(10, iDigits);
 
             if (dValue > 0)
             {
@@ -275,65 +205,13 @@ namespace KantanMitsumori.Helper.CommonFuncs
         }
 
         /// <summary>
-        /// 会員番号デコード vEncNo:エンコードされた会員番号
-        /// </summary>
-        /// <param name="vEncNo"></param>
-        /// <param name="vDecNo"></param>
-        /// <returns></returns>
-        public bool DecUserNo(string vEncNo, string vDecNo)
-        {
-            string wOne = "";
-            string wStr = "";
-            string wInt = "";
-            int i = 0;
-
-            try
-            {
-                // 文字数分ループ
-                for (i = 1; i < vEncNo.Length; i++)
-                {
-                    wOne = Mid(vEncNo, i, 1);
-                    // 取り出した文字が英小文字(a～z)の場合
-                    if (Strings.Asc(wOne) >= 97 && Strings.Asc(wOne) <= 122)
-                    {
-                        // 英小文字と数字がすでに格納されていれば1文字分デコード
-                        if (wStr.Length == 1 && wInt.Length > 0)
-                        {
-                            vDecNo += Strings.Chr(Strings.Asc(wStr) - Convert.ToInt32(wInt));
-                            // ワーククリア
-                            wStr = "";
-                            wInt = "";
-                        }
-
-                        //英小文字を格納
-                        wStr = wOne;
-                    }
-                    else
-                    {
-                        // 数字を格納（'－'マイナスもありえる）
-                        wInt += wOne;
-                    }
-                }
-
-                // 最後の文字分のデコード
-                vDecNo += Strings.Chr(Strings.Asc(wStr) - Convert.ToInt32(wInt));
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "CommonFuncs - DecUserNo - GCMF-010C ◆会員認証エラー◆ 復号化前会員番号：{0}", vEncNo);
-                return false;
-            }
-        }
-
-        /// <summary>
         /// 見積書データ項目 税抜／税込切替時の再計算
         /// </summary>
         /// <param name="oldVal"></param>
         /// <param name="conTaxInputKb"></param>
         /// <param name="vTax"></param>
         /// <returns></returns>
-        public long reCalcItem(long oldVal, string conTaxInputKb, double vTax)
+        public static int reCalcItem(long oldVal, bool conTaxInputKb, decimal vTax)
         {
             if (oldVal == 0)
             {
@@ -341,17 +219,17 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
 
             decimal wkVal;      // 浮動小数点の計算誤差回避のため
-            if (conTaxInputKb == "False")
+            if (conTaxInputKb == false)
             {
                 // 税込 → 税抜
                 wkVal = oldVal / (1 + Convert.ToDecimal(vTax));
-                return Convert.ToInt64(Math.Ceiling(wkVal));
+                return Convert.ToInt32(Math.Ceiling(wkVal));
             }
             else
             {
                 // 抜 → 税込
                 wkVal = oldVal * (1 + Convert.ToDecimal(vTax));
-                return Convert.ToInt64(Math.Floor(wkVal)); ;
+                return Convert.ToInt32(Math.Floor(wkVal)); ;
             }
         }
 
@@ -407,7 +285,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return value.ToString()!;
             }
         }
-
         public static string IsNullString(string? value)
         {
             if (String.IsNullOrEmpty(value))
@@ -419,7 +296,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return value.ToString()!;
             }
         }
-
         /// <summary>
         /// 車検有効期限 判定・編集
         /// </summary>
@@ -439,7 +315,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
 
             // 入力なし
-            if (inYM == "" || IsNumeric(inYM))
+            if (inYM == "" || Information.IsNumeric(inYM))
             {
                 return "";
             }
@@ -574,7 +450,100 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return NONE;
         }
 
+        public static string chkImgFile(string imgPath, string strSesName, string strDefImg)
+        {
+            if (Strings.Trim(imgPath) == "" || File.Exists(imgPath) == false)
+            {
+                strSesName = strDefImg;
+            }
+            else
+            {
+                int maxIndx = imgPath.Split(@"\").GetUpperBound(0);   // 切り分けて格納した配列の最後尾を取得
+                                                                      // 上で取得したファイル部分を置換してpathのみを取り出し、ファイルをgetする(最終確認の為)
+                foreach (string nFileName in Directory.GetFiles(Strings.Replace(imgPath, (string?)imgPath.Split(@"\").GetValue(maxIndx), "")))
+                    strSesName = imgPath;
+            }
 
+            return strSesName;
+        }
 
+        // **************************************************************************
+        // * フォーマット処理
+        // **************************************************************************
+        //public static string setFormat(long param, string formatParm = "")
+        //{
+        //    formatParm = Convert.ToString(Strings.Format(param, "#,##0") + " 円");
+        //    return formatParm;
+        //}
+
+        // **************************************************************************
+        // * フォーマット処理
+        // **************************************************************************
+        public static string setFormatCurrency(object value, string unit = " 円")
+        {
+            var formatParm = "";
+            if (Convert.ToInt32(value) == 0)
+            {
+                return formatParm;
+            }
+            else
+            {
+                formatParm = Convert.ToString(Strings.Format(value, "#,##0") + unit);
+            }
+
+            return formatParm;
+        }
+        /// <summary>
+        /// 西暦を和暦に変換する(年のみ)
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public static string getWareki(string year)
+        {
+            if (!Information.IsNumeric(Strings.Trim(year)))
+            {
+                return "";
+            }
+
+            int intYear = int.Parse(year);
+
+            string retNengo = "";
+
+            if (1926 <= intYear & intYear <= 1988)
+                retNengo = "S" + Convert.ToString(intYear - 1925);
+            else if (intYear <= 2018)
+                retNengo = "H" + Convert.ToString(intYear - 1988);
+            else if (2019 <= intYear)
+                retNengo = "R" + Convert.ToString(intYear - 2018);
+
+            return retNengo;
+        }
+
+        public static string japaneseFormat(DateTime date)
+        {
+            return date.ToString("yyyy") + '年' + date.ToString("MM") + '月' + date.ToString("dd") + '日';
+        }
+
+        public static string getFormatDayYMD(string strDay)
+        {
+            int leDay = Strings.Len(Strings.Replace(strDay, "/", ""));
+            string rtstrDay = "";
+            switch (leDay)
+            {
+                case 8:
+                    {
+                        rtstrDay = Strings.Trim(Strings.Left(strDay, 4)) + "年" + Strings.Trim(DateFormatZero(Strings.Mid(strDay, 5, 2))) + "月" + Strings.Trim(DateFormatZero(Strings.Right(strDay, 2))) + "日";
+                        break;
+                    }
+                case 6:
+                    {
+                        rtstrDay = Strings.Trim(Strings.Left(strDay, 4)) + "年" + Strings.Trim(DateFormatZero(Strings.Mid(strDay, 5, 2))) + "月";
+                        break;
+                    }
+            }
+
+            return rtstrDay;
+
+        }
     }
 }

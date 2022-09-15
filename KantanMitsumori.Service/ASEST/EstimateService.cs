@@ -22,14 +22,17 @@ namespace KantanMitsumori.Service
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly HelperMapper _helperMapper;
 
-        public EstimateService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork, HelperMapper helperMapper)
+        private readonly HelperMapper _helperMapper;
+        private readonly CommonFuncHelper _commonFuncHelper;
+
+        public EstimateService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork, HelperMapper helperMapper, CommonFuncHelper commonFuncHelper)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _helperMapper = helperMapper;
+            _commonFuncHelper = commonFuncHelper;
 
         }
 
@@ -93,6 +96,7 @@ namespace KantanMitsumori.Service
                         data.Rate = getDetail.Rate;
                     }
                 }
+                data.TaxRatio = _commonFuncHelper.getTax((DateTime)data.Udate!, requestInputCar.TaxRatio, requestInputCar.UserNo!);         
                 return ResponseHelper.Ok<ResponseInp>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
             }
             catch (Exception ex)
@@ -101,7 +105,7 @@ namespace KantanMitsumori.Service
                 return ResponseHelper.Error<ResponseInp>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
-            throw new NotImplementedException();
+           
         }
 
         public async Task<ResponseBase<int>> UpdateInputCar(RequestUpdateInputCar model)

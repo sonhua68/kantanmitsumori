@@ -11,5 +11,7 @@ namespace KantanMitsumori.Model.Request
         public string? EstNo { get; set; }
         public string? EstSubNo { get; set; }
         public string? UserNo { get; set; }
+
+        public decimal TaxRatio { get; set; }
     }
 }
