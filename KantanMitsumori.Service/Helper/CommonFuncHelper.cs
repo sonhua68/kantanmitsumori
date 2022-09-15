@@ -484,8 +484,9 @@ namespace KantanMitsumori.Service.Helper
 
                 outSelfIns = getSelfInsurance != null ? Convert.ToInt32(getSelfInsurance.SelfInsurance) : 0;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "getSelfInsurance error ");
                 return false;
             }
 
