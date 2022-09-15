@@ -674,6 +674,7 @@ namespace KantanMitsumori.Service
                 if (!_commonFuncHelper.getSelfInsurance(intHaiki, inYYYY, inMM, userDefDamageInsMonth, ref intSelfIns, ref intRemIns))
                 {
                     valToken.sesErrMsg = CommonConst.def_ErrMsg1_Maker + CommonConst.def_ErrCodeL + "SMAI-028D" + CommonConst.def_ErrCodeR;
+                    return ResponseHelper.Error<EstModel>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, valToken.sesErrMsg));
                 }
                 else if (intSelfIns > 0)
                 {

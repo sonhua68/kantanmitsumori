@@ -483,6 +483,9 @@ namespace KantanMitsumori.Service.Helper
                 // Get m_SelfInsurance
                 var getSelfInsurance = _unitOfWork.SelfInsurances.GetSingle(x => x.CarType == intCarType && x.RemainInspection == intRemIns && x.Dflag == false);
 
+                if (getSelfInsurance == null)
+                    return false;
+
                 outSelfIns = getSelfInsurance != null ? Convert.ToInt32(getSelfInsurance.SelfInsurance) : 0;
             }
             catch (Exception ex)
@@ -492,6 +495,36 @@ namespace KantanMitsumori.Service.Helper
             }
 
             return true;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="intExaust"></param>
+        /// <param name="inRemIns"></param>
+        /// <returns></returns>
+        public int? getSelfInsurance(int intExaust, int inRemIns)
+        {
+            try
+            {
+                int carType = 0;
+                if (intExaust > 600)
+                {
+                    carType = 1;
+                }
+                else
+                {
+                    carType = 2;
+                }
+
+                var dt = _unitOfWork.SelfInsurances.GetSingle(x => x.CarType == carType && x.RemainInspection == inRemIns && x.Dflag == false);
+                return dt.SelfInsurance;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "getSelfInsurance");
+                return 0;
+            }
         }
 
         #endregion
