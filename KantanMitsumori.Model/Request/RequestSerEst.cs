@@ -10,6 +10,9 @@ namespace KantanMitsumori.Model.Request
     {       
         public string? EstNo { get; set; }
         public string? EstSubNo { get; set; }
+        public string? EstUserNo { get; set; }
+        public string? sesMode { get; set; }
+
         public string? ddlFromSelectY { get; set; }
         public string? ddlFromSelectM { get; set; }
         public string? ddlFromSelectD { get; set; }
