@@ -433,7 +433,7 @@ namespace KantanMitsumori.Service.Helper
 
             int intYEAR_AMOUNT = getYearAmount(intExaust);
             // 自動車税年額を取得
-            if (intYEAR_AMOUNT != -1)
+            if (intYEAR_AMOUNT == -1)
                 return -1;
             // 課税月数を求める
             int intPassedMonth = getCarTaxPassedMonth(intRegistMonth);
