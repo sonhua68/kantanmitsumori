@@ -314,6 +314,7 @@ namespace KantanMitsumori.Service.Helper
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CommonFuncs - DownloadImg - GCMF-030F 取得失敗 " + url);
+                return;
             }
         }
 
@@ -376,7 +377,7 @@ namespace KantanMitsumori.Service.Helper
             {
                 // エラーログ書出し
                 _logger.LogError(ex, "CommonFuncs - GetRecDeposit - GCMF-100D");
-                return 0;
+                return -1;
             }
 
         }
