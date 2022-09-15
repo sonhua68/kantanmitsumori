@@ -234,7 +234,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpZeiHoken/UpdateInpZeiHoken");
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPage();
+                Framework.GoBackReloadPageUrl('/');
             } else {
                 let Items = result.data;
                 console.log(Items)

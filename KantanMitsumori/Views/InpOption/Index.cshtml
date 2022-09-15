@@ -106,7 +106,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpOption/UpdateInpOption");
             if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
+             Framework.GoBackReloadPageUrl('/');
             } else {
                 let Items = result.data;
                 console.log(Items)

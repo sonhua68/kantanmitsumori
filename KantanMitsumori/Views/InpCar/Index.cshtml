@@ -235,7 +235,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCar/UpdateInputCar");
             if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
+               Framework.GoBackReloadPageUrl('/');
             } else {
                 let Items = result.data;
                 console.log(Items)

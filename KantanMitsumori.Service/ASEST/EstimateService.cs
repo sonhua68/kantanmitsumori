@@ -65,7 +65,7 @@ namespace KantanMitsumori.Service
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "UpdateInputCar");
+                _logger.LogError(ex, "GetList");
                 return ResponseHelper.Error<List<TEstimate>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
@@ -349,6 +349,29 @@ namespace KantanMitsumori.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "DeleteEstimate");
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+
+        public async Task<ResponseBase<int>> UpdateInpNebiki(RequestUpdateInpNebiki model)
+        {
+            try
+            {
+                TEstimate dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
+                if (dtEstimates == null)
+                {
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
+                dtEstimates.CarPrice = model.Price;
+                dtEstimates.Discount = model.Discount;               
+        
+                _unitOfWork.Estimates.Update(dtEstimates);
+                await _unitOfWork.CommitAsync();
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateInpHanbaiten");
                 return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
