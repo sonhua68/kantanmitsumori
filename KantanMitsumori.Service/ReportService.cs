@@ -2,9 +2,13 @@
 using GrapeCity.ActiveReports;
 using GrapeCity.ActiveReports.Export.Pdf.Section;
 using GrapeCity.ActiveReports.Rendering.IO;
+using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
+using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response.Report;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
@@ -30,6 +34,34 @@ namespace KantanMitsumori.Service
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
+        }
+        
+        public ResponseBase<ReportFileModel> GenerateEstimateReport(RequestReport model)
+        {
+            try
+            {
+                // Load report
+                var report = LoadReport("EstimateWithMemo.rpx");
+                // Load data
+                var data = LoadReportData(model);
+                if (data == null || data.Length == 0)
+                    return ResponseHelper.Error<ReportFileModel>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                // Bind data
+                report.DataSource = data;
+                // Generate report
+                report.Run();
+                // Generate pdf in binary data
+                PdfExport pdf = new PdfExport();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    pdf.Export(report.Document, ms);
+                    return ResponseHelper.Ok("", "", new ReportFileModel(ms.ToArray()));
+                }
+            }
+            catch
+            {
+                return ResponseHelper.Error<ReportFileModel>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(HelperMessage.CEST050S));
+            }
         }
 
         public ResponseBase<ReportFileModel> GetArticleSubReport()
@@ -151,7 +183,6 @@ namespace KantanMitsumori.Service
                 }
             }
         }
-
 
         private EstimateReportModel[] LoadSampleData()
         {
@@ -297,21 +328,52 @@ namespace KantanMitsumori.Service
             };
         }
 
+
+        #region Helper Functions
+
         /// <summary>
         /// Load image as based 64 string
         /// </summary>
         /// <param name="embededResource"></param>
         /// <returns></returns>
-        private string LoadImage(string reportResource)
+        private string LoadImage(string resourceName)
         {
             var assembly = Assembly.GetEntryAssembly();
-            var resourceName = $"KantanMitsumori.Reports.{reportResource}";
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            var resourcePath = $"KantanMitsumori.Reports.{resourceName}";
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
             using (MemoryStream ms = new MemoryStream())
             {
                 stream.CopyTo(ms);
                 return Convert.ToBase64String(ms.ToArray());
             }
         }
+
+        private SectionReport LoadReport(string reportFilename)
+        {
+            var assembly = Assembly.GetEntryAssembly();
+            var resourceName = $"KantanMitsumori.Reports.{reportFilename}";
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (XmlReader reader = XmlReader.Create(stream))
+            {
+                SectionReport report = new SectionReport();
+                report.LoadLayout(reader);
+                return report;
+            }            
+        }
+
+
+        #endregion
+
+        #region Private function
+
+        /// <summary>
+        /// Load and convert report data from database
+        /// </summary>        
+        private EstimateReportModel[] LoadReportData(RequestReport input)
+        {
+            return null;
+        }
+
+        #endregion
     }
 }
