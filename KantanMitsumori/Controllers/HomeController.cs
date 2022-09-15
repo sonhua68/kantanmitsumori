@@ -1,5 +1,4 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
-using KantanMitsumori.Helper.Enum;
+﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
@@ -52,29 +51,7 @@ namespace KantanMitsumori.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> TestSummitFormAjax(string token, MakerModel requestData)
-        {
-            var response = await _appService.CreateMaker(requestData);
-            var logToken = HelperToken.EncodingToken(token);
-            return Json(response);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Test(string token, MakerModel requestData)
-        {
-            var response = await _appService.CreateMaker(requestData);
-            var logToken = HelperToken.EncodingToken(token);
-
-
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
-            return Ok(response);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Estmain([FromQuery] string sel, [FromForm] RequestHeaderModel request)
+        public async Task<IActionResult> Estmain([FromQuery] RequestActionModel requestAction, [FromForm] RequestHeaderModel request)
         {
             Uri pageUrl;
 
@@ -91,7 +68,7 @@ namespace KantanMitsumori.Controllers
 
             if (Strings.InStr(pageUrl.AbsolutePath, "/asest2/") == 0 || Strings.InStr(pageUrl.AbsolutePath, "/test.htm/") > 0)
             {
-                var response = await _appService.getEstMain(sel, request);
+                var response = await _appService.getEstMain(requestAction, request);
 
                 if (response.ResultStatus == (int)enResponse.isError)
                 {

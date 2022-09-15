@@ -101,7 +101,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// <param name="strDay"></param>
         /// <param name="year"></param>
         /// <param name="month"></param>
-        public static void FormatDay(string strDay, string year, string month)
+        public static void FormatDay(string strDay, ref string year, ref string month)
         {
             int leday = strDay.Replace("/", "").Length;
             switch (leday)
@@ -440,7 +440,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return NONE;
         }
 
-        public static void chkImgFile(string imgPath, string strSesName, string strDefImg)
+        public static string chkImgFile(string imgPath, string strSesName, string strDefImg)
         {
             if (Strings.Trim(imgPath) == "" || File.Exists(imgPath) == false)
             {
@@ -453,6 +453,8 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 foreach (string nFileName in Directory.GetFiles(Strings.Replace(imgPath, (string?)imgPath.Split(@"\").GetValue(maxIndx), "")))
                     strSesName = imgPath;
             }
+
+            return strSesName;
         }
 
         // **************************************************************************

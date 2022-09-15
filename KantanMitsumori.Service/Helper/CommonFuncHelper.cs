@@ -201,7 +201,7 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="inCor"></param>
         /// <param name="intCornerType"></param>
         /// <returns></returns>
-        public bool GetCornerType(string inCor, int intCornerType)
+        public int GetCornerType(string inCor)
         {
             try
             {
@@ -209,18 +209,17 @@ namespace KantanMitsumori.Service.Helper
 
                 if (!Information.IsDBNull(getTbSys.Corner))
                 {
-                    intCornerType = getTbSys.CornerType;
+                    return getTbSys.CornerType;
                 }
                 else
-                    return false;
+                    return 0;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CommonFuncs - GetCornerType - GCMF-090D");
-                return false;
+                return -1;
             }
 
-            return true;
         }
 
 
@@ -231,7 +230,7 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="inCor"></param>
         /// <param name="intAACount"></param>
         /// <returns></returns>
-        public bool GetAACount(string inCor, ref int intAACount)
+        public int GetAACount(string inCor)
         {
             try
             {
@@ -239,17 +238,16 @@ namespace KantanMitsumori.Service.Helper
 
                 if (getSys != null)
                 {
-                    intAACount = (int)getSys.Aacount;
+                    return (int)getSys.Aacount;
                 }
                 else
-                    return false;
+                    return 0;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CommonFuncs - GetAACount - GCMF-090D");
-                return false;
+                return -1;
             }
-            return true;
         }
 
         // ***************************************************************************
@@ -356,11 +354,11 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="inFullExhNum"></param>
         /// <param name="intTaxFreeRecycle"></param>
         /// <returns></returns>
-        public bool GetRecDeposit(string inCor, string inFullExhNum, ref int intTaxFreeRecycle)
+        public int GetRecDeposit(string inCor, string inFullExhNum)
         {
             if (inFullExhNum.Length != 8)
             {
-                return false;
+                return 0;
             }
 
             try
@@ -369,19 +367,18 @@ namespace KantanMitsumori.Service.Helper
 
                 if (getPsinfos != null)
                 {
-                    intTaxFreeRecycle = getPsinfos.RecycleFlag == 1 ? Convert.ToInt32(getPsinfos.RecyclingCharge) : 0;
+                    return getPsinfos.RecycleFlag == 1 ? Convert.ToInt32(getPsinfos.RecyclingCharge) : 0;
                 }
                 else
-                    return false;
+                    return 0;
             }
             catch (Exception ex)
             {
                 // エラーログ書出し
                 _logger.LogError(ex, "CommonFuncs - GetRecDeposit - GCMF-100D");
-                return false;
+                return 0;
             }
 
-            return true;
         }
 
         /// <summary>
@@ -425,28 +422,25 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="intExaust"></param>
         /// <param name="outCarTax"></param>
         /// <returns></returns>
-        public bool getCarTax(int intRegistMonth, int intExaust, ref string outCarTax)
+        public decimal getCarTax(int intRegistMonth, int intExaust)
         {
             // 軽の場合は対象外
             if (intExaust <= 660)
             {
-                outCarTax = "";
-                return true;
+                return 0;
             }
 
-            int intYEAR_AMOUNT = 0;
+            int intYEAR_AMOUNT = getYearAmount(intExaust);
             // 自動車税年額を取得
-            if (!getYearAmount(intExaust, ref intYEAR_AMOUNT))
-                return false;
+            if (intYEAR_AMOUNT != -1)
+                return -1;
             // 課税月数を求める
             int intPassedMonth = getCarTaxPassedMonth(intRegistMonth);
             // 自動車税計算
             decimal dblCarTax = intYEAR_AMOUNT * Convert.ToDecimal(intPassedMonth / (double)12);
 
             // 100円未満端数切捨て
-            outCarTax = Convert.ToString(CommonFunction.ToRoundDown(dblCarTax, -2));
-
-            return true;
+            return CommonFunction.ToRoundDown(dblCarTax, -2);
         }
 
         /// <summary>
@@ -504,7 +498,7 @@ namespace KantanMitsumori.Service.Helper
 
         // DBアクセスを行い
         // 排気量から年額を取得する
-        private bool getYearAmount(int intTargetExault, ref int outYEAR_AMOUNT)
+        private int getYearAmount(int intTargetExault)
         {
             try
             {
@@ -512,18 +506,17 @@ namespace KantanMitsumori.Service.Helper
 
                 if (getCarTax != null)
                 {
-                    outYEAR_AMOUNT = Convert.ToInt32(getCarTax.YearAmount);
+                    return Convert.ToInt32(getCarTax.YearAmount);
                 }
                 else
-                    return false;
+                    return -1;
             }
             catch (Exception)
             {
                 // エラーログ書出し
-                return false;
+                return -1;
             }
 
-            return true;
         }
 
         // 登録月を受け取り課税対象月数を返却

@@ -1,4 +1,4 @@
-﻿namespace KantanMitsumori.Model
+﻿namespace KantanMitsumori.Model.Response
 {
     public class EstimateIdeModel
     {
@@ -13,8 +13,10 @@
         public int LeasePeriod { get; set; }
         public string LeaseExpirationDate { get; set; } = null!;
         public int ContractPlanId { get; set; }
+        public string ContractPlanName { get; set; }
         public byte IsExtendedGuarantee { get; set; }
         public int InsuranceCompanyId { get; set; }
+        public string InsuranceCompanyName { get; set; }
         public int InsuranceFee { get; set; }
         public int DownPayment { get; set; }
         public int TradeInPrice { get; set; }
