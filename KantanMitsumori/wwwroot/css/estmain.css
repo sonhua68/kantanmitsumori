@@ -182,6 +182,12 @@ tr > td.txtprice {
     text-align: right;
 }
 
+td.estTitleLeaseTotal-color-text {
+    border-bottom: solid 2px crimson;
+    width: 230px;
+    font-size: 20pt;
+}
+
 /*End Hoai Phong custom header*/
 
 .spanTxtSubject {

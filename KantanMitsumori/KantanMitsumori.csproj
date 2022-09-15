@@ -5,39 +5,39 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
-	
-  <ItemGroup>	  
-	  <None Remove="Reports\Estimate.rpx" />	  
-	  <None Remove="Reports\EstimateWithMemo.rpx" />	  
-	  <None Remove="Reports\EstSubArticle.rpx" />	  
-	  <None Remove="Reports\EstSubMemo.rpx" />	  
-	  <None Remove="Reports\img_1.jpg" />	  
-	  <None Remove="Reports\img_2.jpg" />	  
-	  <None Remove="Reports\img_3.jpg" />	  
-	  <None Remove="Reports\img_4.jpg" />	  
-	  <None Remove="Reports\img_5.jpg" />	  
-	  <None Remove="Reports\img_6.jpg" />	  
-	  <None Remove="Reports\img_7.jpg" />	  
-	  <None Remove="Reports\img_8.jpg" />	  
-	  <None Remove="Reports\img_9.jpg" />	  
-	  <None Remove="Reports\Order.rpx" />	  
-	  <None Remove="Reports\OrderWithArticle.rpx" />	  
-	  <EmbeddedResource Include="Reports\OrderWithArticle.rpx" />
-	  <EmbeddedResource Include="Reports\EstimateWithMemo.rpx" />	  	  
-	  <EmbeddedResource Include="Reports\Estimate.rpx" />	  
-	  <EmbeddedResource Include="Reports\EstSubMemo.rpx" />
-    <EmbeddedResource Include="Reports\EstSubArticle.rpx" />
-    <EmbeddedResource Include="Reports\img_1.jpg" />
-    <EmbeddedResource Include="Reports\img_2.jpg" />
-    <EmbeddedResource Include="Reports\img_3.jpg" />
-    <EmbeddedResource Include="Reports\img_4.jpg" />
-    <EmbeddedResource Include="Reports\img_5.jpg" />
-    <EmbeddedResource Include="Reports\img_6.jpg" />
-    <EmbeddedResource Include="Reports\img_7.jpg" />
-    <EmbeddedResource Include="Reports\img_8.jpg" />
-    <EmbeddedResource Include="Reports\img_9.jpg" />
-    <EmbeddedResource Include="Reports\Order.rpx" />
-  </ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Reports\Estimate.rpx" />
+		<None Remove="Reports\EstimateWithMemo.rpx" />
+		<None Remove="Reports\EstSubArticle.rpx" />
+		<None Remove="Reports\EstSubMemo.rpx" />
+		<None Remove="Reports\img_1.jpg" />
+		<None Remove="Reports\img_2.jpg" />
+		<None Remove="Reports\img_3.jpg" />
+		<None Remove="Reports\img_4.jpg" />
+		<None Remove="Reports\img_5.jpg" />
+		<None Remove="Reports\img_6.jpg" />
+		<None Remove="Reports\img_7.jpg" />
+		<None Remove="Reports\img_8.jpg" />
+		<None Remove="Reports\img_9.jpg" />
+		<None Remove="Reports\Order.rpx" />
+		<None Remove="Reports\OrderWithArticle.rpx" />
+		<EmbeddedResource Include="Reports\OrderWithArticle.rpx" />
+		<EmbeddedResource Include="Reports\EstimateWithMemo.rpx" />
+		<EmbeddedResource Include="Reports\Estimate.rpx" />
+		<EmbeddedResource Include="Reports\EstSubMemo.rpx" />
+		<EmbeddedResource Include="Reports\EstSubArticle.rpx" />
+		<EmbeddedResource Include="Reports\img_1.jpg" />
+		<EmbeddedResource Include="Reports\img_2.jpg" />
+		<EmbeddedResource Include="Reports\img_3.jpg" />
+		<EmbeddedResource Include="Reports\img_4.jpg" />
+		<EmbeddedResource Include="Reports\img_5.jpg" />
+		<EmbeddedResource Include="Reports\img_6.jpg" />
+		<EmbeddedResource Include="Reports\img_7.jpg" />
+		<EmbeddedResource Include="Reports\img_8.jpg" />
+		<EmbeddedResource Include="Reports\img_9.jpg" />
+		<EmbeddedResource Include="Reports\Order.rpx" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="..\.editorconfig" Link=".editorconfig" />
@@ -45,6 +45,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.3.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -60,7 +61,6 @@
 		<PackageReference Include="GrapeCity.ActiveReports.Export.Pdf" Version="16.2.0" />
 		<!--Start: Conflict library with ActiveReport - Solved by use higher version of library  -->
 		<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.3.0" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.3.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" />
 		<!--End: Conflict library with ActiveReport - Solved by use higher version of library  -->
 	</ItemGroup>
