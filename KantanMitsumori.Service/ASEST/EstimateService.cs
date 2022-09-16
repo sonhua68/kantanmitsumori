@@ -68,8 +68,7 @@ namespace KantanMitsumori.Service
                 _logger.LogError(ex, "GetList");
                 return ResponseHelper.Error<List<TEstimate>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
-            }
-            throw new NotImplementedException();
+            }          
         }
 
         public ResponseBase<ResponseInp> GetDetail(RequestInp requestInputCar)
@@ -95,7 +94,7 @@ namespace KantanMitsumori.Service
                         data.Rate = getDetail.Rate;
                     }
                 }
-                data.TaxRatio = _commonFuncHelper.getTax((DateTime)data.Udate!, requestInputCar.TaxRatio, requestInputCar.UserNo!);
+                data.TaxRatioID = _commonFuncHelper.getTaxRatioID(requestInputCar.UserNo!);
                 return ResponseHelper.Ok<ResponseInp>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
             }
             catch (Exception ex)

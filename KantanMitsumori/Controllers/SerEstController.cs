@@ -13,7 +13,6 @@ namespace KantanMitsumori.Controllers
     public class SerEstController : BaseController
     {
         private readonly IAppService _appService;
-
         private readonly ILogger<SerEstController> _logger;
         private readonly ISelCarService _selCarService;
         private readonly IEstimateService _estimateService;
@@ -25,8 +24,7 @@ namespace KantanMitsumori.Controllers
             _estimateService = estimateService;
         }
 
-        #region SerEstController 
-     
+        #region SerEstController      
         public  IActionResult Index()
         {
         
@@ -70,8 +68,6 @@ namespace KantanMitsumori.Controllers
             }
             return Ok(response);
         }
-
-
         #endregion SerEstController
     }
 }

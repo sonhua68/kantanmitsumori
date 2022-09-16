@@ -1,5 +1,6 @@
 ﻿using KantanMitsumori.Helper.Constant;
 using Microsoft.VisualBasic;
+using System.Security.Policy;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
@@ -544,6 +545,10 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return rtstrDay;
         }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop
         public static string checkwSyakenNew(int? syakenNew, int? syakenZok)
         {
             if (syakenNew > 0 && syakenZok == 0)
@@ -555,6 +560,48 @@ namespace KantanMitsumori.Helper.CommonFuncs
             {
 
                 return syakenZok.ToString()!;
+            }
+            return "";
+
+        }
+        public static string checkwSyakenValue(int? syakenNew, int? syakenZok, string inYM)
+        {
+            if (syakenNew > 0 && syakenZok == 0)
+            {
+                return "new";
+
+            }
+            else if (syakenNew == 0 && syakenZok > 0)
+            {
+
+                return "zok";
+            }
+            else
+            {
+                if (Strings.Len(inYM) == 4)
+                {
+                    if (Information.IsDate(inYM + "/01"))
+                    {
+                        var ret = DateAndTime.DateDiff(DateInterval.Year, System.DateTime.Today, DateTime.Parse(inYM + "/01"));
+                        if (ret > 0)
+                        {
+                            return "zok";
+                        }
+
+                    }
+                }
+                else if (Strings.Len(inYM) == 6)
+                {
+                    if (Information.IsDate(Strings.Left(inYM, 4) + "/" + Strings.Right(inYM, 2) + "/01"))
+                    {
+                        var ret = DateAndTime.DateDiff(DateInterval.Month, System.DateTime.Today, DateTime.Parse(Strings.Left(inYM, 4) + "/" + Strings.Right(inYM, 2) + "/01"));
+                        if (ret > 0)
+                        {
+                            return "zok";
+                        }
+
+                    }
+                }
             }
             return "";
 
