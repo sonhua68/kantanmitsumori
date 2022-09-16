@@ -2,6 +2,7 @@
 using KantanMitsumori.IService;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
+using KantanMitsumori.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -50,6 +51,16 @@ namespace KantanMitsumori.Controllers
             return Ok(response);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateInpInitVal([FromForm] RequestUpdateInpInitVal requestData)
+        {
+            var response = await _inpInitValService.UpdateInpInitVal(requestData);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
+        }
 
         #endregion InpInitVal
     }

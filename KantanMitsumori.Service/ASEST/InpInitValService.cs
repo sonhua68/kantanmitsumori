@@ -48,17 +48,22 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<int>> UpdateInpInitVal(RequestUpdateInpOption model)
+        public async Task<ResponseBase<int>> UpdateInpInitVal(RequestUpdateInpInitVal model)
         {
             try
             {
-                TEstimate dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
-                if (dtEstimates == null)
+                var mUserDef = _unitOfWork.UserDefs.GetSingle(n => n.UserNo == model.UserNo && n.Dflag == false);
+                if (mUserDef == null)
                 {
-                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                    var mUserDefnew = InsertMUserDef(model);
+                    _unitOfWork.UserDefs.Add(mUserDefnew);
                 }
-                
-                _unitOfWork.Estimates.Update(dtEstimates);
+                else
+                {
+                    mUserDef = UpdateMUserDef(model);
+                    _unitOfWork.UserDefs.Update(mUserDef);
+                }
+                InsertAndUpdateTaxRationDef(model);
                 await _unitOfWork.CommitAsync();
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
             }
@@ -68,14 +73,38 @@ namespace KantanMitsumori.Service
                 return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
+        #region Update
+
+        private MUserDef UpdateMUserDef(RequestUpdateInpInitVal model)
+        {
+            var mMUserDef = new MUserDef();
+            return mMUserDef;
+        }
+        private MUserDef InsertMUserDef(RequestUpdateInpInitVal model)
+        {
+            var mMUserDef = new MUserDef();
+            return mMUserDef;
+        }
+        private void InsertAndUpdateTaxRationDef(RequestUpdateInpInitVal model)
+        {
+            var taxRatioDef = new TTaxRatioDef();
+            var data = _unitOfWork.TaxRatioDefs.Query(n => n.UserNo == model.UserNo).ToList();
+            if (data == null)
+            {
+
+                taxRatioDef.UserNo = model.UserNo!;
+                taxRatioDef.TaxRatioId = 0;
+                _unitOfWork.TaxRatioDefs.Add(taxRatioDef);
+            }
+            else
+            {
+                taxRatioDef.TaxRatioId = 0;
+                _unitOfWork.TaxRatioDefs.Update(taxRatioDef);
+            }
+        }
+        #endregion Update
     }
 
-    #region Update
 
-    //private  UpdateInpInitVal()
-    //{
-
-    //}
-    #endregion Update
 
 }
