@@ -63,8 +63,11 @@ namespace KantanMitsumori.Model.Request
         public string? SekininName { get; set; }
         public string? Jibai { get; set; }
         public string? Article { get; set; }
-        public string? Szi { get; set; }
-        public string? hidConTaxInputKb { get; set; }
+        public string? Szi { get; set; }    
+        public string? ButtonSummit { get; set; }
+        public int? Haiki { get; set; }
+        public string? sesMode { get; set; }  
+        public string? SyakenNewZok { get; set; }
 
         //public decimal TaxRatio { get; set; }
         //public string? hidConTaxInputKb { get; set; }
