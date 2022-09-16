@@ -75,6 +75,9 @@ namespace KantanMitsumori.Controllers
                     return ErrorAction(response);
                 }
 
+                // set cookie access token 
+                setTokenCookie(response.Data!.AccessToken);
+
                 return View(response.Data);
             }
             else
@@ -85,6 +88,9 @@ namespace KantanMitsumori.Controllers
                 {
                     return ErrorAction(response);
                 }
+
+                // set cookie access token 
+                setTokenCookie(response.Data!.AccessToken);
 
                 return View(response.Data);
             }

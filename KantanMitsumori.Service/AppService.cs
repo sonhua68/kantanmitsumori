@@ -109,6 +109,8 @@ namespace KantanMitsumori.Service
                 // Set Estimate & EstimateSub
                 response.EstModel = getAsInfo.Data!;
 
+                SetvalueToken();
+
                 // Set AccessToken
                 response.AccessToken = valToken.Token;
 
@@ -721,8 +723,6 @@ namespace KantanMitsumori.Service
                 valToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-029D" + CommonConst.def_ErrCodeR;
                 return ResponseHelper.Error<EstModel>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI010D));
             }
-
-            SetvalueToken();
 
             return ResponseHelper.Ok<EstModel>("OK", "OK", estModel);
         }

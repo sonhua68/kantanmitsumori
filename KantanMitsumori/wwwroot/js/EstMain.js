@@ -27,28 +27,28 @@ function inputChk() {
     var flgErr = false;
 
     document.getElementById("txtMsg_CustNm").innerHTML = "";
-    outMsg = chkBytes("お名前", $get('txtCustNm_forPrint').value, 40);
+    outMsg = chkBytes("お名前", $get('CustNm_forPrint').value, 40);
     if (outMsg) {
         document.getElementById("txtMsg_CustNm").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
     document.getElementById("txtMsg_CustZip").innerHTML = "";
-    outMsg = chkBytes("郵便番号", $get('txtCustZip_forPrint').value, 8);
+    outMsg = chkBytes("郵便番号", $get('CustZip_forPrint').value, 8);
     if (outMsg) {
         document.getElementById("txtMsg_CustZip").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
     document.getElementById("txtMsg_CustAdr").innerHTML = "";
-    outMsg = chkBytes("住所", $get('txtCustAdr_forPrint').value, 60);
+    outMsg = chkBytes("住所", $get('CustAdr_forPrint').value, 60);
     if (outMsg) {
         document.getElementById("txtMsg_CustAdr").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
     document.getElementById("txtMsg_CustTel").innerHTML = "";
-    outMsg = chkBytes("", $get('txtCustTel_forPrint').value, 13);
+    outMsg = chkBytes("", $get('CustTel_forPrint').value, 13);
     if (outMsg) {
         document.getElementById("txtMsg_CustTel").innerHTML = '<br>' + outMsg;
         flgErr = true;
