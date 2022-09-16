@@ -425,7 +425,7 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="intExaust"></param>
         /// <param name="outCarTax"></param>
         /// <returns></returns>
-        public decimal getCarTax(int intRegistMonth, int intExaust)
+        public int getCarTax(int intRegistMonth, int intExaust)
         {
             // 軽の場合は対象外
             if (intExaust <= 660)
@@ -443,7 +443,7 @@ namespace KantanMitsumori.Service.Helper
             decimal dblCarTax = intYEAR_AMOUNT * Convert.ToDecimal(intPassedMonth / (double)12);
 
             // 100円未満端数切捨て
-            return CommonFunction.ToRoundDown(dblCarTax, -2);
+            return (int)CommonFunction.ToRoundDown(dblCarTax, -2);
         }
 
         /// <summary>

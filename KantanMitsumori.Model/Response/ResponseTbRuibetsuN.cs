@@ -58,7 +58,8 @@ namespace KantanMitsumori.Model.Response
         public string? TradeDate { get; set; }
         public string? CustKName { get; set; }
         public string? CarName { get; set; }
-        public RequestSerEst requestData { get; set; }
+        public int PageIndex { get;  set; }
+        public int TotalPages { get;  set; }
     }
 
 
