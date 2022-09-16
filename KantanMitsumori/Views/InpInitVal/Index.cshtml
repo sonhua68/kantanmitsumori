@@ -4,9 +4,8 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
-    var hidConTaxInputKb = Model.ConTaxInputKb == true ? "True" : "false";
-    var SyakenNewZok = CommonFunction.checkwSyakenValue(Model.SyakenNew, Model.SyakenZok, Model.CheckCarYm!);
 
+    var SyakenNewZok = CommonFunction.checkwSyakenValue(Model.SyakenNew, Model.SyakenZok, Model.CheckCarYm!);
 
 }
 <form id="formInpInitVal">
@@ -34,7 +33,7 @@
                                             <input id="radOutTax" type="radio" name="Szi" value="radOutTax" onclick="resetValue();" tabindex="2"><label for="radOutTax">税抜きで入力する</label>
                                         </span><br>
                                         <span id="Label5" class="inplabel" style="display:inline-block;height:21px;width:373px;">（車両価格、付属品、代行費用等の金額の入力方法です）</span>
-                                        <input name="hidConTaxInputKb" type="hidden" id="hidConTaxInputKb" value="@hidConTaxInputKb">
+                                        <input name="ConTaxInputKb" type="hidden" id="hidConTaxInputKb" >
                                     </td>
                                 </tr>
                                 <tr>
@@ -157,7 +156,7 @@
                                         <span id="Label18" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
                                     </td>
                                     <td class="inptd" style="" align="left">
-                                        <input name="TaxFreeSet1K" type="text" id="TaxFreeSet1K" language="javascript"  maxlength="8" class="inpbox_r" tabindex="17" onblur="//TaxCostSum();" style="WIDTH: 94px;" size="10">
+                                        <input name="TaxFreeSet1K" type="text" id="TaxFreeSet1K" language="javascript" maxlength="8" class="inpbox_r" tabindex="17" onblur="//TaxCostSum();" style="WIDTH: 94px;" size="10">
                                         <span id="Label24" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
                                     </td>
                                 </tr>
@@ -378,7 +377,7 @@
                                         <span id="Label30" class="inplabel" style="display:inline-block;width:150px;">責任者</span>
                                     </td>
                                     <td class="inptd" colspan="2" align="left">
-                                        <input name="Sekinin" type="text" id="Sekinin" language="javascript" class="inpbox" style="WIDTH: 220px;" tabindex="49" maxlength="20" value="@Model.SekininName">
+                                        <input name="SekininName" type="text" id="Sekinin" language="javascript" class="inpbox" style="WIDTH: 220px;" tabindex="49" maxlength="20" value="@Model.SekininName">
                                     </td>
                                 </tr>
 
@@ -440,14 +439,15 @@
 
                                 <tr>
                                     <td class="inpbtntd" colspan="2" style="text-align:left; width: 236px; height:120px" valign="top">
-                                        &nbsp;<input type="submit" name="btnHanei" value="入力中の見積に反映" onclick="return inputChk();" id="btnHanei" class="Btn1" style="height:32px;">
+                                        &nbsp;<input type="submit" name="btnHanei" value="入力中の見積に反映" form="formInpInitVal" id="btnHanei" class="Btn1" style="height:32px;">
                                         <span id="lblUwagaki1" class="inplabel" style="display:inline-block;width:520px;color:Red;">※現在入力中の見積に上書きされますのでご注意下さい。</span>
                                         <span id="lblUwagaki4" class="inplabel" style="display:inline-block;width:520px;color:Red;">※自賠責保険料の再計算は行われません。</span>
                                         <span id="lblUwagaki2" class="inplabel" style="display:inline-block;width:520px;color:Red;">※ローンの計算結果はクリアされます。</span>
                                         <span id="lblUwagaki3" class="inplabel" style="display:inline-block;width:520px;color:Red;">※フリー見積から作成した見積の場合、[入力中の見積に反映] ボタンを<br>&nbsp;&nbsp;&nbsp;&nbsp;押下しても予定利益は計上されませんのでご注意ください。</span>
                                     </td>
                                     <td class="inpbtntd" style=" " valign="top">
-                                        <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPageUrl('/');return false;"  class="Btn1" style="height:32px;width:100px;">&nbsp;<input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPageUrl('/');return false;" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                                        <input type="submit" name="btnOK" value="OK" form="formInpInitVal" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -462,8 +462,10 @@
                         <input name="UserNo" type="hidden" id="hidUserNo">
                         <input name="EstNo" type="hidden" id="hidEstNo" value="@Model.EstNo">
                         <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
-                        <input name="Haiki" type="hidden" id="hidHaiki" value="1500">
-                        <input name="SyakenNewZok" type="hidden" id="hidSyakenNewZok" value="@SyakenNewZok">
+                        <input name="Haiki" type="hidden" id="hidHaiki" value="@Model.DispVol">
+                        <input name="SyakenNewZok" type="hidden" id="hidSyakenNewZok" value="@SyakenNewZok">                 
+                        
+                        
                         @*<input name="hidCallName" type="hidden" id="hidCallName"><!-- 呼び元 -->*@
                     </div>
                 </td>
@@ -472,12 +474,16 @@
     </table>
 </form>
 <script>
-
     $('#formInpInitVal').validate({
-        submitHandler: function (form) {
+        submitHandler: function (form) {          
             if (inputChk() == false) { return; }
             var model = Framework.getFormData($("#formInpInitVal"));
             console.log(model)
+            model.AsArticle = model.Article == "radUse" ? 1 : 0;
+            model.DamageInsMonth = 25;
+            model.Rate = model.Rate == "" ? 0 : model.Rate;
+            model.ButtonSummit=event.submitter.name;
+            model.ConTaxInputKb = model.Szi == "radOutTax"?"False":"True";
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpInitVal/UpdateInpInitVal");
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
                 Framework.GoBackReloadPageUrl('/');

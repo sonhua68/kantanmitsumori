@@ -227,13 +227,16 @@ function getUserDefData() {
         Framework.resetForm();
     }
 }
-function SetInitData(data) {    
-    var ConTaxInputKb = $('#hidConTaxInputKb').val();
-    if (ConTaxInputKb.toLowerCase() == "false") {
-        $("#radOutTax").prop("checked", true);
-    } else {
+function SetInitData(data) {
+    console.log(data.conTaxInputKb);
+    var ConTaxInputKb = data.conTaxInputKb;
+    if (ConTaxInputKb) {
         $("#radInTax").prop("checked", true);
+
+    } else {
+        $("#radOutTax").prop("checked", true);
     }
+    $('#hidConTaxInputKb').val(StringNull(data.conTaxInputKb));
     $('#YtiRiekiH').val(StringNull(data.ytiRiekiH));
     $('#YtiRiekiK').val(StringNull(data.ytiRiekiK));
     $('#SyakenNewH').val(StringNull(data.syakenNewH));
