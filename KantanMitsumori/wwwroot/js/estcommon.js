@@ -350,3 +350,39 @@ String.prototype.compose = (function () {
         });
     }
 }());
+/*
+ * sortElements
+ *  Create By HoaiPhong
+ *  Date 2022/09/14
+ /*/
+jQuery.fn.sortElements = (function () {
+    var sort = [].sort;
+    return function (comparator, getSortable) {
+        getSortable = getSortable || function () { return this; };
+
+        var placements = this.map(function () {
+
+            var sortElement = getSortable.call(this),
+                parentNode = sortElement.parentNode,
+                nextSibling = parentNode.insertBefore(
+                    document.createTextNode(''),
+                    sortElement.nextSibling
+                );
+            return function () {
+
+                if (parentNode === this) {
+                    throw new Error(
+                        "Error :You can't sort elements "
+                    );
+                }
+                parentNode.insertBefore(this, nextSibling);               
+                parentNode.removeChild(nextSibling);
+            };
+        });
+        return sort.call(this, comparator).each(function (i) {
+            placements[i].call(getSortable.call(this));
+        });
+
+    };
+
+})();

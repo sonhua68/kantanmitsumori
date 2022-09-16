@@ -1,16 +1,7 @@
-﻿using AutoMapper.Execution;
-using KantanMitsumori.Entity.ASESTEntities;
-using KantanMitsumori.Entity.IDEEnitities;
-using KantanMitsumori.Infrastructure.Base;
+﻿using KantanMitsumori.Infrastructure.Base;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace KantanMitsumori.Service.Helper
 {

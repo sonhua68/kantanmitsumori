@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.Helper.Enum;
+﻿using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
@@ -30,13 +31,13 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Index()
         {
-            //var mode = new LogToken();
-            //mode.sesEstNo = "22071200085"; mode.sesEstSubNo = "01";
-            //mode.UserNo = "88888195";
-            //mode.UserNm = "testuser88888195";
-            //var token = HelperToken.GenerateJsonToken(mode);
-            //mode.Token = token;
-            //setTokenCookie(token);
+            var mode = new LogToken();
+            mode.sesEstNo = "22091600010"; mode.sesEstSubNo = "01";
+            mode.UserNo = "88888195";
+            mode.UserNm = "testuser88888195";
+            var token = HelperToken.GenerateJsonToken(mode);
+            mode.Token = token;
+            setTokenCookie(token);
             return View();
         }
 

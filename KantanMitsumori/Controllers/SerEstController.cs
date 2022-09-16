@@ -43,7 +43,11 @@ namespace KantanMitsumori.Controllers
                 return ErrorAction(response);
             }
             var dt = await PaginatedList<ResponseSerEst>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
-         
+            if (dt.Count > 0)
+            {
+                dt[0].TotalPages = dt.TotalPages;
+                dt[0].PageIndex = dt.PageIndex;
+            }           
             return Ok(dt);
         }
         [HttpGet]
