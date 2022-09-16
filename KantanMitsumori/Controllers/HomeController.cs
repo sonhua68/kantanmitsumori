@@ -2,6 +2,7 @@
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
+using KantanMitsumori.Model.Response;
 using Microsoft.AspNetCore.Mvc;
 
 using Microsoft.VisualBasic;
@@ -66,34 +67,21 @@ namespace KantanMitsumori.Controllers
                 pageUrl = new Uri("http://www.asnet2.com/asest2/test.html");
             }
 
+            ResponseBase<ResponseEstMainModel> response = new ResponseBase<ResponseEstMainModel>();
+
             if (Strings.InStr(pageUrl.AbsolutePath, "/asest2/") == 0 || Strings.InStr(pageUrl.AbsolutePath, "/test.htm/") > 0)
-            {
-                var response = await _appService.getEstMain(requestAction, request);
-
-                if (response.ResultStatus == (int)enResponse.isError)
-                {
-                    return ErrorAction(response);
-                }
-
-                // set cookie access token 
-                setTokenCookie(response.Data!.AccessToken);
-
-                return View(response.Data);
-            }
+                response = await _appService.getEstMain(requestAction, request);
             else
-            {
-                var response = await _appService.setFreeEst();
+                response = await _appService.setFreeEst();
 
-                if (response.ResultStatus == (int)enResponse.isError)
-                {
-                    return ErrorAction(response);
-                }
+            // check response result 
+            if (response.ResultStatus == (int)enResponse.isError)
+                return ErrorAction(response);
 
-                // set cookie access token 
-                setTokenCookie(response.Data!.AccessToken);
+            // set cookie access token 
+            setTokenCookie(response.Data!.AccessToken);
 
-                return View(response.Data);
-            }
+            return View(response.Data);
         }
 
         #region HoaiPhong
