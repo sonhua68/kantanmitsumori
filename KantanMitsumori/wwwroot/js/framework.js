@@ -673,19 +673,19 @@ var Framework =
             key: "GoBackReloadPage",
             value: function GoBackReloadPage() {
                 window.setTimeout(window.history.back(), 2000);
-                location.reload(true);             
+                location.reload(true);
 
             }
-            },
-            {
-                key: "GoBackPage",
-                value: function GoBackPage() {
-                    window.history.back();
-                }
-            },
+        },
+        {
+            key: "GoBackPage",
+            value: function GoBackPage() {
+                window.history.back();
+            }
+        },
         {
             key: "GoBackReloadPageUrl",
-            value: function GoBackReloadPageUrl(PageUrl) {                        
+            value: function GoBackReloadPageUrl(PageUrl) {
                 window.location.href = PageUrl;
 
             }
@@ -709,6 +709,42 @@ var Framework =
 
                 document.body.appendChild(form);
                 form.submit();
+            }
+        },
+        {
+            key: "SorDataTable",
+            value: function SorDataTable(tableId, sortName) {
+                var table = $("#" + tableId);
+                $('#' + sortName)                   
+                    .each(function () {
+
+                        var th = $(this),
+                            thIndex = th.index(),
+                            inverse = false;
+
+                        th.click(function () {
+
+                            table.find('td').filter(function () {
+
+                                return $(this).index() === thIndex;
+
+                            }).sortElements(function (a, b) {
+
+                                return $.text([a]) > $.text([b]) ?
+                                    inverse ? -1 : 1
+                                    : inverse ? 1 : -1;
+
+                            }, function () {
+
+                                // parentNode is the element we want to move
+                                return this.parentNode;
+
+                            });
+                            inverse = !inverse;
+
+                        });
+
+                    });
             }
         },
         ]);
