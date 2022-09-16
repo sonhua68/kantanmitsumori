@@ -8,13 +8,6 @@
         public string stateLoadWindow { get; set; }
         public string sesPriDisp { get; set; }
         public string sesMode { get; set; }
-        public string sesLeaseFlag { get; set; }
-        public string sesErrMsg { get; set; }
-        public string sesUserNo { get; set; }
-        public string sesUserNm { get; set; }
-        public string sesUserAdr { get; set; }
-        public string sesUserTel { get; set; }
-        public string sesdispUserInf { get; set; }
         public string sesPdfTitleKbn { get; set; }
         public string sesCustNm_forPrint { get; set; } = "";
         public string sesCustZip_forPrint { get; set; } = "";

@@ -39,153 +39,6 @@ namespace KantanMitsumori.Service.Helper
         }
 
         /// <summary>
-        /// 出品No等が同一の見積書が存在するか否かチェック
-        /// 存在 = True　無し = False
-        /// </summary>
-        /// <param name="userNo"></param>
-        /// <param name="AANo"></param>
-        /// <param name="AAPlace"></param>
-        /// <param name="CornerType"></param>
-        /// <param name="mode"></param>
-        /// <returns></returns>
-        public bool chkAANo(string? userNo, string AANo, string AAPlace, int CornerType, int mode)
-        {
-            try
-            {
-                var getMaxEstSub = (from sub in _unitOfWork.DbContext.TEstimateSubs
-                                    join sys in _unitOfWork.DbContext.TbSys
-                                    on new { sub.Corner, sub.Aacount } equals
-                                       new { sys.Corner, sys.Aacount }
-                                    into x
-                                    from joinGroup in x.DefaultIfEmpty()
-                                    where sub.EstUserNo == userNo &&
-                                           sub.Aano == AANo &&
-                                           sub.Aaplace == AAPlace &&
-                                           joinGroup.CornerType == CornerType &&
-                                           sub.Mode == mode &&
-                                           sub.Dflag == false
-                                    group sub by sub.EstNo into g
-                                    select new
-                                    {
-                                        maxEstNo = g.Max(x => x.EstNo),
-                                        maxEstSubNo = g.Max(x => x.EstSubNo),
-                                    }).FirstOrDefault();
-
-                if (getMaxEstSub != null)
-                {
-                    valToken.sesEstNo = getMaxEstSub!.maxEstNo;
-                    valToken.sesEstSubNo = getMaxEstSub.maxEstSubNo;
-                }
-                else
-                {
-                    return false;
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "chkAANo " + "GCMF-040D");
-                return false;
-                //return ResponseHelper.Error<bool>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "GCMF-040D" + CommonConst.def_ErrCodeR);
-            }
-        }
-
-        /// <summary>
-        /// 見積新枝番データ作成
-        /// </summary>
-        /// <param name="flgRecreate"></param>
-        /// <returns></returns>
-        public async Task<bool> addEstNextSubNo(LogToken logToken, bool flgRecreate = false)
-        {
-            try
-            {
-                valToken = logToken;
-
-                // 見積書番号を取得
-                string vEstNo = valToken.sesEstNo ?? "";
-                string vLeaseFlag = valToken.sesLeaseFlag ?? "";
-                string vEstSubNo = valToken.sesEstSubNo ?? "";
-
-                if (vEstNo == "" || vEstSubNo == "")
-                {
-                    valToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "CEST-050S" + CommonConst.def_ErrCodeR;
-                    return false;
-                }
-
-                // （諸費用設定の最新状態を反映しなければならない場合があるので必要）
-                if (!await calcSum(vEstNo, vEstSubNo, valToken))
-                {
-                    return false;
-                }
-
-                // 見積書データ取得
-                var estData = getEstData(vEstNo, vEstSubNo);
-
-                if (estData == null)
-                {
-                    valToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "CEST-051D" + CommonConst.def_ErrCodeR;
-                    return false;
-                }
-
-                // 再作成の場合
-                if (flgRecreate)
-                {
-                    // 新見積書番号取得
-                    vEstNo = "";
-                    if (!getEstNoFromDb(ref vEstNo))
-                    {
-                        return false;
-                    }
-                }
-
-                // 新枝番取得
-                string vNextSubNo = "";
-                if (!getEstSubNoFromDb(vEstNo, ref vNextSubNo))
-                {
-                    return false;
-                }
-                valToken.sesEstSubNo = vNextSubNo;
-
-                // 見積書登録SQL
-                TEstimate entityEst = new TEstimate();
-                entityEst = _mapper.Map<TEstimate>(estData);
-                entityEst.EstNo = vEstNo;
-                entityEst.EstSubNo = vNextSubNo;
-                entityEst.TradeDate = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd"));
-                entityEst.OptionInputKb = true;
-                entityEst.TaxInsInputKb = true;
-                entityEst.TaxFreeKb = true;
-                entityEst.TaxCostKb = true;
-                entityEst.Rdate = DateTime.Now;
-                entityEst.Udate = DateTime.Now;
-                entityEst.Dflag = false;
-
-                TEstimateSub entityEstSub = new TEstimateSub();
-                entityEstSub = _mapper.Map<TEstimateSub>(estData);
-                entityEstSub.EstNo = vEstNo;
-                entityEstSub.EstSubNo = vNextSubNo;
-                entityEstSub.Rdate = DateTime.Now;
-                entityEstSub.Udate = DateTime.Now;
-                entityEstSub.Dflag = false;
-
-                _unitOfWork.Estimates.Add(entityEst);
-                _unitOfWork.EstimateSubs.Add(entityEstSub);
-                await _unitOfWork.CommitAsync();
-
-                valToken.sesEstNo = vEstNo;
-                valToken.sesEstSubNo = vNextSubNo;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "addEstNextSubNo " + "CEST-052D");
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// * 見積書データ 小計・合計計算（税抜／税込切替時の調整、および小計・合計計算）
         /// </summary>
         /// <returns></returns>
@@ -211,11 +64,11 @@ namespace KantanMitsumori.Service.Helper
                 long oldSalesSum = (long)estModel.SalesSum;
 
                 // 消費税率取得
-                var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.sesUserNo);
+                var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.UserNo);
                 valToken.sesTaxRatio = vTax;
 
                 // 会員諸費用設定取得
-                var getUserDef = _commonFuncHelper.getUserDefData(logToken.sesUserNo);
+                var getUserDef = _commonFuncHelper.getUserDefData(logToken.UserNo);
 
                 if (getUserDef != null)
                 {
@@ -254,7 +107,6 @@ namespace KantanMitsumori.Service.Helper
                             string properties = propEstSub.Name;
                             // Do something with propValue
                             reCalEstSubModel.Add(propEstSub.Name);
-
 
                             int objValue = (int)propEstSub.GetValue(estModel);
 
@@ -367,17 +219,17 @@ namespace KantanMitsumori.Service.Helper
                         // ローンの自動再計算
                         CommonSimLon simLon = new CommonSimLon(_logger);
 
-                        simLon.SaleSumPrice = Convert.ToInt16(estModel.SalesSum);
-                        simLon.Deposit = Convert.ToInt16(estModel.Deposit);
-                        simLon.MoneyRate = Convert.ToInt16(estModel.Rate);
-                        simLon.PayTimes = Convert.ToInt16(estModel.PayTimes);
+                        simLon.SaleSumPrice = Convert.ToInt32(estModel.SalesSum);
+                        simLon.Deposit = Convert.ToInt32(estModel.Deposit);
+                        simLon.MoneyRate = Convert.ToInt32(estModel.Rate);
+                        simLon.PayTimes = Convert.ToInt32(estModel.PayTimes);
                         simLon.FirstMonth = Convert.ToInt32(Strings.Right(estModel.FirstPayMonth, 2));
 
                         if (estModel.BonusAmount > 0)
                         {
-                            simLon.Bonus = Convert.ToInt16(estModel.BonusAmount);
-                            simLon.BonusFirst = Convert.ToInt16(estModel.BonusFirst);
-                            simLon.BonusSecond = Convert.ToInt16(estModel.BonusSecond);
+                            simLon.Bonus = Convert.ToInt32(estModel.BonusAmount);
+                            simLon.BonusFirst = Convert.ToInt32(estModel.BonusFirst);
+                            simLon.BonusSecond = Convert.ToInt32(estModel.BonusSecond);
                         }
                         else
                         {
@@ -451,13 +303,11 @@ namespace KantanMitsumori.Service.Helper
                     estSubModel.LoanModifyFlag = false;
                     estSubModel.LoanRecalcSettingFlag = true;
                     estSubModel.LoanInfo = Convert.ToByte(strClearMsg);
-
                 }
 
                 _unitOfWork.Estimates.Update(estModel);
                 _unitOfWork.EstimateSubs.Update(estSubModel);
                 await _unitOfWork.CommitAsync();
-
             }
             catch (Exception ex)
             {
@@ -572,7 +422,7 @@ namespace KantanMitsumori.Service.Helper
                 if (getMaxEstNo == null || getMaxEstNo.MaxEstNo.ToString() == "0")
                     outEstNo = strNow + "00001";
                 else
-                    outEstNo = strNow + Strings.Format(Convert.ToInt16(Strings.Right(getMaxEstNo.MaxEstNo.ToString(), 5)) + 1, "00000");
+                    outEstNo = strNow + Strings.Format(Convert.ToInt32(Strings.Right(getMaxEstNo.MaxEstNo.ToString(), 5)) + 1, "00000");
             }
             catch (Exception ex)
             {
@@ -597,7 +447,7 @@ namespace KantanMitsumori.Service.Helper
                 if (getMaxEstSubNo == null || getMaxEstSubNo.MaxEstSubNo.ToString() == "0")
                     outEstSubNo = "01";
                 else
-                    outEstSubNo = Strings.Format(Convert.ToInt16(getMaxEstSubNo.MaxEstSubNo.ToString()) + 1, "00");
+                    outEstSubNo = Strings.Format(Convert.ToInt32(getMaxEstSubNo.MaxEstSubNo.ToString()) + 1, "00");
             }
             catch (Exception ex)
             {
@@ -609,26 +459,17 @@ namespace KantanMitsumori.Service.Helper
             return true;
         }
 
-
-        public EstModel setEstData(ref LogToken logToken)
+        public ResponseBase<EstModel> setEstData(string estNo, string estSubNo)
         {
-            // 見積書番号を取得
-            if (string.IsNullOrEmpty(logToken.sesEstNo) || string.IsNullOrEmpty(logToken.sesEstSubNo))
-            {
-                logToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-040S" + CommonConst.def_ErrCodeR;
-                return null;
-            }
-
             // 見積書データ取得
-            var estData = getEstData(logToken.sesEstNo, logToken.sesEstSubNo);
+            var estData = getEstData(estNo, estSubNo);
 
             if (estData == null)
             {
-                valToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "CEST-051D" + CommonConst.def_ErrCodeR;
-                return null;
+                return ResponseHelper.Error<EstModel>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-041D" + CommonConst.def_ErrCodeR);
             }
 
-            return estData;
+            return ResponseHelper.Ok<EstModel>("OK", "OK", estData);
         }
 
         // ******************************************
@@ -637,18 +478,10 @@ namespace KantanMitsumori.Service.Helper
         // ******************************************
         public EstimateIdeModel setEstIDEData(ref LogToken logToken)
         {
-            // 見積書番号を取得
-            if (string.IsNullOrEmpty(logToken.sesEstNo) || string.IsNullOrEmpty(logToken.sesEstSubNo))
-            {
-                logToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-040S" + CommonConst.def_ErrCodeR;
-                return null;
-            }
-
             // get [t_EstimateIde]
             var dataEstIDE = getEstIDEData(logToken.sesEstNo, logToken.sesEstSubNo);
             if (dataEstIDE == null)
             {
-                valToken.sesErrMsg = CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-041D" + CommonConst.def_ErrCodeR;
                 return null;
             }
 

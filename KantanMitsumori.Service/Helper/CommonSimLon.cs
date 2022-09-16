@@ -158,7 +158,7 @@ namespace KantanMitsumori.Service.Helper
                     return false;
                 }
                 // 分割支払金合計上限チェック
-                if (chgNullToZeroLng(Convert.ToString(PayTotal)) > 99999999)
+                if (PayTotal > 99999999)
                 {
                     CalcInfo = CommonConst.msgPayTotalOver;
                     return false;
@@ -175,15 +175,13 @@ namespace KantanMitsumori.Service.Helper
                 if (int.Parse(wNowMonth) >= 10 & FirstMonth <= 3)
                 {
                     wNowMonth = DateTime.Now.AddYears(1).Year + "/" + FirstMonth + "/01";
-                    wFirstDt = DateTime.Parse(wNowMonth);
-                    FirstPayMonth = Convert.ToInt32(Strings.Format(wFirstDt, "yyyyMM"));
                 }
                 else
                 {
                     wNowMonth = DateTime.Now.Year + "/" + FirstMonth + "/01";
-                    wFirstDt = DateTime.Parse(wNowMonth);
-                    FirstPayMonth = Convert.ToInt32(Strings.Format(wFirstDt, "yyyyMM"));
                 }
+                wFirstDt = DateTime.Parse(wNowMonth);
+                FirstPayMonth = Convert.ToInt32(Strings.Format(wFirstDt, "yyyyMM"));
 
                 // 最終回支払年月
                 LastPayMonth = Convert.ToInt32(Strings.Format(wFirstDt.AddMonths(PayTimes - 1), "yyyyMM"));
@@ -259,26 +257,10 @@ namespace KantanMitsumori.Service.Helper
             int intR = (int)(inSgl * 10000);
             decimal dValue = inint * intR / (decimal)10000;
 
-
             if (dValue > 0)
                 return Math.Floor(dValue * dCoef) / dCoef;
             else
                 return Math.Ceiling(dValue * dCoef) / dCoef;
-        }
-        // **************************************************************************
-        // * 金額項目　空白からゼロへ変換
-        // **************************************************************************
-        public int chgNullToZeroLng(string val)
-        {
-            // 前後の空白除去
-            val = Strings.Trim(val);
-
-            if (val == "")
-                return 0;
-            else
-
-                return Convert.ToInt32(val);
-
         }
     }
 }
