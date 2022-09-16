@@ -13,11 +13,8 @@ namespace KantanMitsumori.Controllers
     public class HomeController : BaseController
     {
         private readonly IAppService _appService;
-
         private readonly ILogger<HomeController> _logger;
-
         private readonly IEstimateService _estimateService;
-
 
         public HomeController(IAppService appService, IEstimateService estimateService, IConfiguration config, ILogger<HomeController> logger) : base(config)
         {

@@ -1,10 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using KantanMitsumori.IService.ASEST;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
 {
-    public class InpCustKanaController : Controller
+    public class InpCustKanaController : BaseController
     {
+        private readonly IInpCustKanaService _inpCustKanaService;
+        private readonly ILogger<InpCustKanaController> _logger;
+
+        public InpCustKanaController(IConfiguration config, IInpCustKanaService inpCustKanaService, ILogger<InpCustKanaController> logger) : base(config)
+        {
+            _inpCustKanaService = inpCustKanaService;
+            _logger = logger;
+        }
+
         // GET: InpCustKanaController
         public ActionResult Index()
         {
