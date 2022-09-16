@@ -80,7 +80,7 @@ function btnChkModel() {
     var model = {};
     model.CaseSet = caseSet;
     model.KbnSet = $("#KbnSet").val();
-    var result = Framework.submitAjaxGetList(model, "/SelCar/ChkModel");
+    var result = Framework.submitAjaxLoadData(model, "/SelCar/ChkModel");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
     } else {
         if (typeof (Items) != "undefined") {
@@ -96,7 +96,7 @@ function btnNextGrade() {
     model.sesMakID = $("#ddlMaker").val();
     model.sesMaker = $("#ddlMaker option:selected").text();
     model.sesCarNM = $("#ddlModel option:selected").text();
-    var result = Framework.submitAjaxGetList(model, "/SelCar/NextGrade");
+    var result = Framework.submitAjaxLoadData(model, "/SelCar/NextGrade");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
     } else {
         let Items = result.data;

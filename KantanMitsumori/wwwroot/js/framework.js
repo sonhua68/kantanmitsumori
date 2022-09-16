@@ -285,17 +285,16 @@ var Framework =
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
+                        console.log(_error)
                         location.reload();
-                        //result.success = false;
-                        //result.responseText = xhr.status + ' ' + thrownError;
                     }
                 });
                 return result;
             }
         },
         {
-            key: "submitAjaxGetList",
-            value: function submitAjaxGetList(data, url) {
+            key: "submitAjaxLoadData",
+            value: function submitAjaxLoadData(data, url) {
                 var result = {};
                 $.ajax({
                     type: "POST",
@@ -308,18 +307,16 @@ var Framework =
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
-
-                        //location.reload();
-                        //result.success = false;
-                        //result.responseText = xhr.status + ' ' + thrownError;
+                        console.log(_error)
+                        location.reload();
                     }
                 });
                 return result;
             }
         },
         {
-            key: "submitAjaxRedrict",
-            value: function submitAjaxRedrict(data, url) {
+            key: "submitAjaxRedirect",
+            value: function submitAjaxRedirect(data, url) {
                 $.ajax({
                     type: "POST",
                     url: url,
@@ -344,9 +341,8 @@ var Framework =
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
+                        console.log(_error)
                         location.reload();
-                        //result.success = false;
-                        //result.responseText = xhr.status + ' ' + thrownError;
                     }
                 });
                 return result;
@@ -367,9 +363,9 @@ var Framework =
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
+                        console.log(_error)
                         location.reload();
-                        //result.success = false;
-                        //result.responseText = xhr.status + ' ' + thrownError;
+
                     }
                 });
                 return result;
@@ -391,9 +387,9 @@ var Framework =
                         result = r;
                     },
                     error: function error(xhr, status, thrownError, _error) {
+                        console.log(_error)
                         location.reload();
-                        //result.success = false;
-                        //result.responseText = xhr.status + ' ' + thrownError;
+
                     }
                 });
                 return result;
@@ -415,7 +411,6 @@ var Framework =
                         form.appendChild(hiddenField);
                     }
                 }
-
                 document.body.appendChild(form);
                 form.submit();
             }
@@ -449,148 +444,6 @@ var Framework =
                 } else {
                     return mark + Framework.formatNumber(input_val);
                 }
-            }
-        },
-        {
-            key: "CreateDataOnRow",
-            value: function CreateDataOnRow(r, $row, $rowClone, $td, $table, columns) {
-                $.each(columns, function (i, item) {
-                    switch (item.typeInput) {
-                        case "status":
-                            if (r.data[item.field] === null || r.data[item.field] === "") {
-                                $row.find('.' + item.field).html('');
-                            }
-                            var find = item.options.filter(function (n) {
-                                return n.value === r.data[item.field];
-                            });
-                            if (find[0].style) {
-                                $row.find('.' + item.field).html('<span data-value="' + find[0].value + '" class="label ' + find[0].style + '">' + find[0].text + '</span>');
-                            }
-                            else {
-                                $row.find('.' + item.field).html('<span data-value="' + find[0].value + '">' + find[0].text + '</span>');
-                            }
-                            break;
-                        case "file":
-                            $row.find('.' + item.field).html('<a class="link-css" href="' + r.data[item.field] + '" >Download</a>');
-                            break;
-                        case "DownloadfileAll":
-                            $row.find('.' + item.field).html('<a class="link-css btnDownLoadAll"  href="javascript:void(0)" >DownloadFiles</a>');
-                            break;
-                        case "link":
-                            $row.find('.' + item.field).html('<a class="link-css btnViewDetail" href="javascript:void(0)" >' + r.data[item.field] + '</a>');
-                            break;
-                        case "date":
-                            var date = !r.data[item.field] ? "" : moment(r.data[item.field]).format(DATE_FORMAT_MOMENT);
-                            $row.find('.' + item.field).text(date);
-                            break;
-                        case "checkbox":
-                            var isCheck = r.data[item.field] ? "checked" : "";
-                            $row.find('.' + item.field).html('<input ' + isCheck + ' class="' + item.field + ' hidden"  type="checkbox"><i class="fa "></i>');
-                            break;
-                        default:
-                            $row.find('.' + item.field).text(r.data[item.field]);
-                            break;
-                    }
-                });
-                $row.removeClass("hidden");
-                $table.columns.adjust();
-            }
-        },
-        {
-            key: "getStringInput",
-            value: function getStringInput(name, formatCol, defaultValue) {
-                var value = defaultValue ? 'value="' + defaultValue + '"' : '';
-                var Str = '<div class="form-group ' + formatCol + '"><label class="control-label">' + name + ':</label>' +
-                    '<input type="text" ' + value + ' class="form-control" id="' + name + '" name="' + name + '" placeholder="' + name + '..." /></div>';
-                return Str;
-            }
-        }, {
-            key: "getStringNumber",
-            value: function getStringNumber(name, formatCol, defaultValue) {
-                var value = defaultValue ? 'value="' + defaultValue + '"' : '';
-                return '<div class="form-group ' + formatCol + '"><label class="control-label">' + name + ':</label>' +
-                    '<input data-type="currency" type="text" ' + value + ' class="form-control" id="' + name + '" name="' + name + '" placeholder="' + name + '..." /></div>';
-            }
-        }, {
-            key: "getStringTextarea",
-            value: function getStringTextarea(name, formatCol, defaultValue) {
-                var value = defaultValue ? 'value="' + defaultValue + '"' : '';
-                return '<div class="form-group ' + formatCol + '"><label class="control-label">' + name + ':</label>' +
-                    '<textarea class="form-control" ' + value + ' rows="4" id="' + name + '" name="' + name + '" placeholder="' + name + '..."></textarea></div>';
-            }
-        },
-        {
-            key: "getStringTextarea",
-            value: function getStringTextarea(name, formatCol, text, defaultValue) {
-                var value = defaultValue ? 'value="' + defaultValue + '"' : '';
-                var txt = text ? text : name;
-                return '<div class="form-group ' + formatCol + '"><label class="control-label">' + txt + ':</label>' +
-                    '<textarea class="form-control" ' + value + ' rows="4" id="' + name + '" name="' + name + '" placeholder="' + txt + '..."></textarea></div>';
-            }
-        },
-        {
-            key: "getStringDatetime",
-            value: function getStringDatetime(name, formatCol, defaultValue) {
-                var value = defaultValue ? 'value="' + defaultValue + '"' : '';
-                return '<div class="form-group ' + formatCol + '"><label class="control-label">' + name + ':</label>' +
-                    '<input type="text" ' + value + ' class="form-control flatpickr-input" id="' + name + '" name="' + name + '" placeholder="dd-MMM-yy" /></div>';
-            }
-        }, {
-            key: "getStringLookup",
-            value: function getStringLookup(name, formatCol, defaultValue, idLookup) {
-                var value = defaultValue ? 'value="' + defaultValue + '"' : '';
-                return '<div class="form-group ' + formatCol + '"><label class="control-label">' + name + ':</label>' +
-                    '<div class="input-group"><input readonly="readonly" ' + value + ' type="text" class="form-control" id="' + name + '" name="' + name + '" placeholder="' + name + '..." />' +
-                    '<span class="input-group-btn"><button id="btn' + name + '" type="button" class="btn btn-default" data-toggle="modal" data-target="#' + idLookup + '">...</button>' +
-                    '</span></div></div>';
-            }
-        },
-        {
-            key: "getStringLookup",
-            value: function getStringLookup(name, formatCol, defaultValue, idLookup, urlLookup) {
-                if (urlLookup) {
-                    return '<div class="form-group ' + formatCol + '"><label class="control-label">' + name + ':</label>' +
-                        '<div id="' + idLookup + '" class="input-group" data-id="' + name + '" data-value="' + defaultValue + '"></div>' +
-                        '</div>';
-                }
-                else {
-                    var value = defaultValue ? 'value="' + defaultValue + '"' : '';
-                    return '<div class="form-group ' + formatCol + '"><label class="control-label">' + name + ':</label>' +
-                        '<div class="input-group"><input readonly="readonly" ' + value + ' type="text" class="form-control" id="' + name + '" name="' + name + '" placeholder="' + name + '..." />' +
-                        '<span class="input-group-btn"><button id="btn' + name + '" type="button" class="btn btn-default" data-toggle="modal" data-target="#' + idLookup + '">...</button>' +
-                        '</span></div></div>';
-                }
-            }
-        },
-        {
-            key: "getStringCheckbox",
-            value: function getStringCheckbox(name, formatCol, defaultValue) {
-                var value = defaultValue ? 'checked' : '';
-                return '<div class="form-group ' + formatCol + '"><div class="checkbox"><label class="">' +
-                    '<input ' + value + ' class="hidden" id="' + name + '" name="' + name + '" type="checkbox">' +
-                    '<i class="fa fa-lg text-belize-hole"></i>' + name + '</label></div></div>';
-            }
-        },
-        {
-            key: "getStringCheckbox",
-            value: function getStringCheckbox(name, formatCol, text, defaultValue) {
-                var value = defaultValue ? 'checked' : '';
-                var txt = text ? text : name;
-                return '<div class="form-group ' + formatCol + '"><div class="checkbox"><label class="">' +
-                    '<input ' + value + ' class="hidden" id="' + name + '" name="' + name + '" type="checkbox">' +
-                    '<i class="fa fa-lg text-belize-hole"></i>' + txt + '</label></div></div>';
-            }
-        },
-        {
-            key: "getStringSelect",
-            value: function getStringSelect(name, formatCol, options, defaultValue) {
-                var op = "";
-                console.log(options);
-                for (var i = 0; i <= options.length - 1; i++) {
-                    op += '<option value="' + options[i].value + '">' + options[i].text + '</option>';
-                }
-                return '<div class="form-group ' + formatCol + '">' + '<label>' + name + ':</label>' +
-                    '<select class="form-control"  id="' + name + '" name="' + name + '">' + op + '</select></div>';
             }
         },
         {
@@ -712,39 +565,75 @@ var Framework =
             }
         },
         {
-            key: "SorDataTable",
-            value: function SorDataTable(tableId, sortName) {
+            key: "SortDataTable",
+            value: function SortDataTable(tableId, sortName) {
                 var table = $("#" + tableId);
-                $('#' + sortName)                   
+                $('#' + sortName)
                     .each(function () {
-
                         var th = $(this),
                             thIndex = th.index(),
                             inverse = false;
-
                         th.click(function () {
 
                             table.find('td').filter(function () {
-
                                 return $(this).index() === thIndex;
 
                             }).sortElements(function (a, b) {
-
                                 return $.text([a]) > $.text([b]) ?
                                     inverse ? -1 : 1
                                     : inverse ? 1 : -1;
 
                             }, function () {
-
-                                // parentNode is the element we want to move
                                 return this.parentNode;
-
                             });
                             inverse = !inverse;
 
                         });
 
                     });
+            }
+        },
+
+        {
+            key: "SorDataTable1",
+            value: function SorDataTable1(tableId, sortName) {
+                var $table = $("#" + tableId);
+                let sortOrder = 0;
+                $table.find('th').each(function (col) {
+                    $(this).hover(
+                        function () {
+                            $(this).addClass('focus');
+                        },
+                        function () {
+                            $(this).removeClass('focus');
+                        }
+                    );
+                    $(this).click(function () {
+                        if ($(this).is('.asc')) {
+                            $(this).removeClass('asc');
+                            $(this).addClass('desc selected');
+                            sortOrder = -1;
+                        } else {
+                            $(this).addClass('asc selected');
+                            $(this).removeClass('desc');
+                            sortOrder = 1;
+                        }
+                        $(this).siblings().removeClass('asc selected');
+                        $(this).siblings().removeClass('desc selected');
+                        var arrData = $table.find('tbody >tr:has(td)').get();
+                        arrData.sort(function (a, b) {
+                            var val1 = $(a).children('td').not("#tbremotepage").eq(col).text().toUpperCase();
+                            var val2 = $(b).children('td').not("#tbremotepage").eq(col).text().toUpperCase();
+                            if ($.isNumeric(val1) && $.isNumeric(val2))
+                                return sortOrder == 1 ? val1 - val2 : val2 - val1;
+                            else
+                                return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
+                        });
+                        $.each(arrData, function (index, row) {
+                            $table.find('tbody').not("#tbremotepage").append(row);
+                        });
+                    });
+                });
             }
         },
         ]);

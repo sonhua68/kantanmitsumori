@@ -120,7 +120,7 @@ function getCarTax() {
 	var model = {};
 	model.CarTaxMonth = CarTaxMonth;
 	model.DispVol = DispVol;
-	var result = Framework.submitAjaxGetList(model, "/InpZeiHoken/calcCarTax");
+	var result = Framework.submitAjaxLoadData(model, "/InpZeiHoken/calcCarTax");
 	console.log(result)
 	if (result.resultStatus == 0 && result.messageCode === 'I0002') {
 		setCarTax(result.data)
@@ -153,7 +153,7 @@ function getJibai() {
 	var model = {};
 	model.JibaiMonth = JibaiMonth;
 	model.DispVol = DispVol;
-	var result = Framework.submitAjaxGetList(model, "/InpZeiHoken/calcJibai");
+	var result = Framework.submitAjaxLoadData(model, "/InpZeiHoken/calcJibai");
 	console.log(result)
 	if (result.resultStatus == 0 && result.messageCode === 'I0002') {
 		setJibai(result.data)

@@ -84,11 +84,11 @@
                     <tbody>
                         <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
                             <th  scope="col">選択</th>
-                            <th id="GradeName" scope="col"><a href="#" onclick="return Framework.SorDataTable('gvGrade','GradeName')" style="color:White;">グレード</a></th>
-                            <th id="RegularCase" scope="col"><a href="#" onclick="return Framework.SorDataTable('gvGrade','RegularCase')" style="color:White;">型式</a></th>
-                            <th id="DispVol" scope="col"><a href="#" onclick="Framework.SorDataTable('gvGrade','DispVol')" style="color:White;">排気量</a></th>
+                            <th id="SortGradeName" scope="col"><a href="#" onclick="return Framework.SortDataTable('gvGrade','SortGradeName')" style="color:White;">グレード</a></th>
+                            <th id="SortRegularCase" scope="col"><a href="#" onclick="return Framework.SortDataTable('gvGrade','SortRegularCase')" style="color:White;">型式</a></th>
+                            <th id="SortDispVol" scope="col"><a href="#" onclick="Framework.SortDataTable('gvGrade','SortDispVol')" style="color:White;">排気量</a></th>
                             <th scope="col">シフト</th>
-                            <th id="DriveTypeCode" scope="col"><a href="#" onclick="Framework.SorDataTable('gvGrade','DriveTypeCode')" style="color:White;">駆動方式</a></th>
+                            <th id="SortDriveTypeCode" scope="col"><a href="#" onclick="Framework.SortDataTable('gvGrade','SortDriveTypeCode')" style="color:White;">駆動方式</a></th>
                         </tr>
                         @{
                             foreach (var item in Model)
