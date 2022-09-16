@@ -19,8 +19,8 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<TbRuibetsuEntity, ResponseTbRuibetsuNew>();         
             CreateMap<ResponseEstimate, TEstimate>();
             CreateMap<SerEstEntity, ResponseSerEst>();
+            CreateMap<MUserDef, ResponseUserDef>();
         }
-
 
     }
 }
