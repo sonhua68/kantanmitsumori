@@ -133,41 +133,44 @@
     var Balance = Model.EstModel.Balance == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstModel.Balance);
 
     // 税金・保険料明細
-    var AutoTaxMonth = Model.EstModel.TaxInsInputKb ? Model.EstModel.AutoTaxEquivalent > 0 ? CommonConst.def_TitleAutoTaxEquivalent : CommonConst.def_TitleAutoTax + (Model.EstModel.AutoTax == 0 ? "" : "（" + Model.EstModel.AutoTaxMonth + "月中登録）") : "";
-    var AutoTax = Model.EstModel.TaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AutoTax) : "";
-    var AutoTaxEquivalent = Model.EstModel.TaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AutoTaxEquivalent) : "";
-    var AcqTax = Model.EstModel.TaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AcqTax) : "";
-    var WeightTax = Model.EstModel.TaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.WeightTax) : "";
-    var DamageIns = Model.EstModel.TaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.DamageIns) : "";
-    var DamageInsEquivalent = Model.EstModel.TaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.DamageInsEquivalent) : "";
-    var DamageInsMonth = Model.EstModel.TaxInsInputKb ? Model.EstModel.DamageInsEquivalent > 0 ? CommonConst.def_TitleDamageInsEquivalent : CommonConst.def_TitleDamageIns + (Model.EstModel.DamageIns == 0 ? "" : "（" + Model.EstModel.DamageInsMonth + "ヶ月）") : "";
-    var OptionIns = Model.EstModel.TaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.OptionIns) : "";
+    var isTaxInsInputKb = Model.EstModel.TaxInsInputKb;
+    var AutoTaxMonth = isTaxInsInputKb ? Model.EstModel.AutoTaxEquivalent > 0 ? CommonConst.def_TitleAutoTaxEquivalent : CommonConst.def_TitleAutoTax + (Model.EstModel.AutoTax == 0 ? "" : "（" + Model.EstModel.AutoTaxMonth + "月中登録）") : "";
+    var AutoTax = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AutoTax) : "";
+    var AutoTaxEquivalent = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AutoTaxEquivalent) : "";
+    var AcqTax = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AcqTax) : "";
+    var WeightTax = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.WeightTax) : "";
+    var DamageIns = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.DamageIns) : "";
+    var DamageInsEquivalent = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.DamageInsEquivalent) : "";
+    var DamageInsMonth = isTaxInsInputKb ? Model.EstModel.DamageInsEquivalent > 0 ? CommonConst.def_TitleDamageInsEquivalent : CommonConst.def_TitleDamageIns + (Model.EstModel.DamageIns == 0 ? "" : "（" + Model.EstModel.DamageInsMonth + "ヶ月）") : "";
+    var OptionIns = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.OptionIns) : "";
 
     // 預り法定費明細
-    var TaxFreeGarage = Model.EstModel.TaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeGarage) : "";
-    var TaxFreeCheck = Model.EstModel.TaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeCheck) : "";
-    var TaxFreeTradeIn = Model.EstModel.TaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeTradeIn) : "";
-    var TaxFreeRecycle = Model.EstModel.TaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeRecycle) : "";
-    var TaxFreeOther = Model.EstModel.TaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeOther) : "";
-    var TaxFreeSet1Title = Model.EstModel.TaxFreeKb ? Model.EstModel.TaxFreeSet1Title : "";
-    var TaxFreeSet1 = Model.EstModel.TaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeSet1) : "";
-    var TaxFreeSet2Title = Model.EstModel.TaxFreeKb ? Model.EstModel.TaxFreeSet2Title : "";
-    var TaxFreeSet2 = Model.EstModel.TaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeSet2) : "";
+    var isTaxFreeKb = Model.EstModel.TaxFreeKb;
+    var TaxFreeGarage = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeGarage) : "";
+    var TaxFreeCheck = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeCheck) : "";
+    var TaxFreeTradeIn = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeTradeIn) : "";
+    var TaxFreeRecycle = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeRecycle) : "";
+    var TaxFreeOther = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeOther) : "";
+    var TaxFreeSet1Title = isTaxFreeKb ? Model.EstModel.TaxFreeSet1Title : "";
+    var TaxFreeSet1 = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeSet1) : "";
+    var TaxFreeSet2Title = isTaxFreeKb ? Model.EstModel.TaxFreeSet2Title : "";
+    var TaxFreeSet2 = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeSet2) : "";
 
     // 手続代行費明細
-    var TaxGarage = Model.EstModel.TaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxGarage) : "";
-    var TaxCheck = Model.EstModel.TaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxCheck) : "";
-    var TaxTradeIn = Model.EstModel.TaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxTradeIn) : "";
-    var TaxDelivery = Model.EstModel.TaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxDelivery) : "";
-    var TaxRecycle = Model.EstModel.TaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxRecycle) : "";
-    var TaxOther = Model.EstModel.TaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxOther) : "";
-    var TaxTradeInSatei = Model.EstModel.TaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxTradeInSatei) : "";
-    var TaxSet1Title = Model.EstModel.TaxCostKb ? Model.EstModel.TaxSet1Title : "";
-    var TaxSet1 = Model.EstModel.TaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet1) : "";
-    var TaxSet2Title = Model.EstModel.TaxCostKb ? Model.EstModel.TaxSet2Title : "";
-    var TaxSet2 = Model.EstModel.TaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet2) : "";
-    var TaxSet3Title = Model.EstModel.TaxCostKb ? Model.EstModel.TaxSet3Title : "";
-    var TaxSet3 = Model.EstModel.TaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet3) : "";
+    var isTaxCostKb = Model.EstModel.TaxCostKb;
+    var TaxGarage = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxGarage) : "";
+    var TaxCheck = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxCheck) : "";
+    var TaxTradeIn = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxTradeIn) : "";
+    var TaxDelivery = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxDelivery) : "";
+    var TaxRecycle = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxRecycle) : "";
+    var TaxOther = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxOther) : "";
+    var TaxTradeInSatei = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxTradeInSatei) : "";
+    var TaxSet1Title = isTaxCostKb ? Model.EstModel.TaxSet1Title : "";
+    var TaxSet1 = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet1) : "";
+    var TaxSet2Title = isTaxCostKb ? Model.EstModel.TaxSet2Title : "";
+    var TaxSet2 = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet2) : "";
+    var TaxSet3Title = isTaxCostKb ? Model.EstModel.TaxSet3Title : "";
+    var TaxSet3 = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet3) : "";
 
     // 頭金
     var Deposit = CommonFunction.setFormatCurrency(Model.EstModel.Deposit);
