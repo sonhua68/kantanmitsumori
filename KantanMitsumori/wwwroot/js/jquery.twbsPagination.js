@@ -138,7 +138,7 @@
             //    listItems.push(this.buildItem('first', 1));
             //}
 
-            if (this.options.prev) {
+            if (this.options.prev ) {
                 var prev = pages.currentPage > 1 ? pages.currentPage - 1 : this.options.loop ? this.options.totalPages : 1;
                 listItems.push(this.buildItem('prev', prev));
             }
@@ -147,7 +147,7 @@
                 listItems.push(this.buildItem('page', pages.numeric[i]));
             }
 
-            if (this.options.next) {
+            if (this.options.next && this.options.totalPages >= 10) {
                 var next = pages.currentPage < this.options.totalPages ? pages.currentPage + 1 : this.options.loop ? 1 : this.options.totalPages;
                 listItems.push(this.buildItem('next', next));
             }
@@ -160,6 +160,7 @@
         },
 
         buildItem: function (type, page) {
+            if (type)
             var $itemContainer = $('<li></li>'),
                 $itemContent = $('<a></a>'),
                 itemText = this.options[type] ? this.makeText(this.options[type], page) : page;

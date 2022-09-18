@@ -126,9 +126,13 @@ function LoadData(pageNumber) {
     console.log(model);
     model.pageNumber = pageNumber
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
-    AddRowTable(result);
-    let TotalPages = result[0].totalPages;
-    addPagination(TotalPages);
+    if (result.length > 0) {
+        AddRowTable(result);
+        let TotalPages = result[0].totalPages;
+        addPagination(TotalPages);
+    } else {
+        $("#TableSerEst").css("display", "none");
+    }
 
 }
 function DeleteEstimate(value) {
@@ -170,50 +174,47 @@ function Resetddl() {
 
 }
 function AddRowTable(data) {
-    if (data.length > 0) {
-        $("#TableSerEst").css("display", "inline-table");
-        $('#TablePage').remove();
-        var tbody = $('#TableSerEst').children('tbody');
-        var table = tbody.length ? tbody : $('#TableSerEst');
-        var row = '<tr id="tbremote">' +
-            '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"   type = "submit"  value = "選択"/>' + '</td>' +
-            '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"  type = "submit"  value = "再作成"' + '</td>' +
-            '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:120px;">{{estNo}}</td>' +
-            '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:90px;white-space:nowrap;">{{tradeDate}}</td>' +
-            '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{custKName}} </td>' +
-            '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{carName}}</td>' +
-            '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style ="font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;" type="submit" href="#" onclick="DeleteEstimate(`{{estNo}}`);return false"  value = "削除" ' + '</td>' +
-            '</tr>';
-        var pageTable = '<tr id="pagination" align="center"  style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">' +
-            '<td colspan  = "7">' +
-            '<table border="0" id=TablePage>' +
-            '<tbody>' +
-            '<tr id="trId"> ' +
-            '</tr> ' +
-            '</tbody>' +
-            '</table>' +
-            '</td>' +
-            '</tr> '
+    $("#TableSerEst").css("display", "inline-table");
+    $('#TablePage').remove();
+    var tbody = $('#TableSerEst').children('tbody');
+    var table = tbody.length ? tbody : $('#TableSerEst');
+    var row = '<tr id="tbremote">' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"   type = "submit"  value = "選択"/>' + '</td>' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"  type = "submit"  value = "再作成"' + '</td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:120px;">{{estNo}}</td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:90px;white-space:nowrap;">{{tradeDate}}</td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{custKName}} </td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{carName}}</td>' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style ="font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;" type="submit" href="#" onclick="DeleteEstimate(`{{estNo}}`);return false"  value = "削除" ' + '</td>' +
+        '</tr>';
+    var pageTable = '<tr id="pagination" align="center"  style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">' +
+        '<td colspan  = "7">' +
+        '<table border="0" id=TablePage>' +
+        '<tbody>' +
+        '<tr id="trId"> ' +
+        '</tr> ' +
+        '</tbody>' +
+        '</table>' +
+        '</td>' +
+        '</tr> '
 
-        $('tr#tbremote').remove();     
-        for (let i = 0; i < data.length; i++) {
-            table.append(row.compose(data[i]));
-        }
-        let TotalPages = data[0].totalPages;
-        if (TotalPages > 1) {
-            table.append(pageTable);
-        }
-    } else {
-        $("#TableSerEst").css("display", "none");
+    $('tr#tbremote').remove();
+    for (let i = 0; i < data.length; i++) {
+        table.append(row.compose(data[i]));
     }
+    let TotalPages = data[0].totalPages;
+    if (TotalPages > 1) {
+        table.append(pageTable);
+    }
+
 }
 
 function addPagination(totalPages) {
     $('#trId').twbsPagination({
         totalPages: totalPages,
         visiblePages: 10,
-        next: '...',
-        prev: '...',
+        next: '次',
+        prev: '前',
         onPageClick: function (event, page) {
             console.log(page);
             if (page > 1) {
@@ -239,11 +240,10 @@ function ReloadListData(data) {
         '</tr>';
     $('tr#tbremote').remove();
     for (let i = 0; i < data.length; i++) {
-        table.prepend(row.compose(data[i]));
+        table.append(row.compose(data[i]));
     };
+    SortPagination();
 }
-
-
 function addHeaderName() {
     $("#TableSerEst").css("display", "inline-table");
     var tbody = $('#TableSerEst').children('tbody');
@@ -265,4 +265,24 @@ function addHeaderName() {
         '<th scope="col">削除' + '</th>' +
         '</tr > ';
     table.prepend(header);
+}
+
+function SortPagination() {
+    let p = 0;
+    var tbody = $('#TableSerEst').children('tbody');
+    var items = $('#TableSerEst').children('tbody')[0].childNodes;
+    var itemsArr = [];
+    for (i = 0; i < items.length; ++i) {
+        if (i > 0 && (items[i].id) == "pagination") {
+            p = i; 
+        } else {
+            itemsArr.push(items[i]);                   
+        }
+        if (i == (items.length - 1)) {
+            itemsArr.push(items[p]);
+        }
+    }
+    for (i = 0; i < itemsArr.length; ++i) {
+        tbody.append(itemsArr[i]);
+    }
 }
