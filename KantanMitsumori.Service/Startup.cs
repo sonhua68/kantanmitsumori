@@ -1,5 +1,6 @@
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.IService;
+using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Service.ASEST;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +22,7 @@ namespace KantanMitsumori.Service
             services.AddTransient<IInpLoanService, InpLoanService>();
             services.AddTransient<ISelCarService, SelCarService>();
             services.AddTransient<IInpZeiHokenService, InpZeiHokenService>();
+            services.AddTransient<IInpCustKanaService, InpCustKanaService>();
 
             return services;
         }

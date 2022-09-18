@@ -1,4 +1,6 @@
-﻿using KantanMitsumori.IService.ASEST;
+﻿using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.IService.ASEST;
+using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -8,85 +10,30 @@ namespace KantanMitsumori.Controllers
         private readonly IInpCustKanaService _inpCustKanaService;
         private readonly ILogger<InpCustKanaController> _logger;
 
-        public InpCustKanaController(IConfiguration config, IInpCustKanaService inpCustKanaService, ILogger<InpCustKanaController> logger) : base(config)
+        private CommonEstimate _commonEst;
+
+        public InpCustKanaController(IConfiguration config, IInpCustKanaService inpCustKanaService, ILogger<InpCustKanaController> logger, CommonEstimate commonEst) : base(config)
         {
             _inpCustKanaService = inpCustKanaService;
             _logger = logger;
+            _commonEst = commonEst;
         }
 
         // GET: InpCustKanaController
-        public ActionResult Index()
+        public IActionResult Index()
         {
-            return View();
-        }
+            // 見積書番号を取得
+            string estNo = _logToken.sesEstNo;
+            string estSubNo = _logToken.sesEstSubNo;
 
-        // GET: InpCustKanaController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+            var response = _inpCustKanaService.getInfoCust(estNo, estSubNo);
 
-        // GET: InpCustKanaController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: InpCustKanaController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            if (response.ResultStatus == (int)enResponse.isError)
             {
-                return RedirectToAction(nameof(Index));
+                return ErrorAction(response);
             }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: InpCustKanaController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: InpCustKanaController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: InpCustKanaController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: InpCustKanaController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return View(response);
         }
     }
 }

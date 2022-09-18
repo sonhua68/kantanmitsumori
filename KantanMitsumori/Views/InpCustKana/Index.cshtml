@@ -1,0 +1,68 @@
+﻿@using KantanMitsumori.Model.Response
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+}
+@model ResponseInpCustKana
+
+<form id="formInputCustKana">
+    <div align="center">
+        <table class="inptable" id="Table3" cellpadding="2" cellspacing="0" style="border-color:#ffffff">
+            <tr>
+                <td class="inptd" style="background-color:White;" align="left">
+                    <span id="Label3" class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">お客様情報の編集</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" style="background-color:White;" align="left">
+                    <span id="Label4" class="inplabel">
+                        お客様カナ名と簡易メモを編集できます。
+                    </span><br>
+                    <span id="Label5" class="inplabel" style="color:Red;">
+                        ※本システムでは、個人情報を扱わないよう、<br>
+                        お客様名はカナ名のみの登録としております。
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tabletitle" align="left">
+                    <span id="lblOption" class="titlelabel" style="display:inline-block;width:302px;">お客様カナ名</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="txtCustKanaName" type="text" maxlength="20" value="@Model.CustKana" id="txtCustKanaName" class="inpbox" style="width:250px;">
+                </td>
+            </tr>
+            <tr>
+                <td class="tabletitle" align="left">
+                    <span id="Label1" class="titlelabel" style="display:inline-block;width:400px;">メモ</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="txtCustMemo" type="text" maxlength="60" value="@Model.CustMemo" id="txtCustMemo" class="inpbox" style="width:430px;">
+
+                </td>
+            </tr>
+
+            <tr>
+                <td class="InpTableTd" colspan="2" style=" background-color:White; text-align:right; border-bottom:none; padding-top:3px;">
+                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
+                    <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+
+                </td>
+            </tr>
+            <tr>
+                <td class="inpbtntd" colspan="2">
+                    <span id="txMsg" class="inpboxsum" style="display:inline-block;color:Red;width:450px;"></span>&nbsp;
+                </td>
+
+            </tr>
+        </table>
+        <input name="hidEstNo" type="hidden" id="hidEstNo" value="22091600024">
+        <input name="hidEstSubNo" type="hidden" id="hidEstSubNo" value="01">
+    </div>
+</form>
+
+
