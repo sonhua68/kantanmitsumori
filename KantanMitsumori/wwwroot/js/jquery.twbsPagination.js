@@ -147,7 +147,7 @@
                 listItems.push(this.buildItem('page', pages.numeric[i]));
             }
 
-            if (this.options.next && this.options.totalPages >= 10) {
+            if (this.options.next ) {
                 var next = pages.currentPage < this.options.totalPages ? pages.currentPage + 1 : this.options.loop ? 1 : this.options.totalPages;
                 listItems.push(this.buildItem('next', next));
             }
