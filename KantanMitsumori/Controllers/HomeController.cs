@@ -82,48 +82,6 @@ namespace KantanMitsumori.Controllers
             return View(response.Data);
         }
 
-        #region HoaiPhong
-
-        public IActionResult Inpcar()
-        {
-            RequestInp res = new RequestInp();
-            res.EstNo = "22082300011";
-            res.EstSubNo = "01";
-            var response = _estimateService.GetDetail(res);
-            return View(response.Data);
-        }
-
-        public IActionResult InpHanbaiten()
-        {
-            RequestInp res = new RequestInp();
-            res.EstNo = "22082300011";
-            res.EstSubNo = "01";
-            var response = _estimateService.GetDetail(res);
-            return View(response.Data);
-        }
-
-        public async Task<IActionResult> UpdateInputCar([FromForm] RequestUpdateInputCar requestData)
-        {
-            var response = await _estimateService.UpdateInputCar(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
-            return Ok(response);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UpdateInpHanbaiten([FromForm] RequestUpdateInpHanbaiten requestData)
-        {
-            var response = await _estimateService.UpdateInpHanbaiten(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
-            return Ok(response);
-        }
-
-        #endregion
     }
 }
 

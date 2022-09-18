@@ -47,21 +47,13 @@ namespace KantanMitsumori.Service.Helper
             try
             {
                 var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
-
-                if (estModel == null)
-                {
-                    return false;
-                }
-
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == estModel.EstNo && x.EstSubNo == estModel.EstSubNo && x.Dflag == false);
-
-                if (estSubModel == null)
+                if (estModel == null || estSubModel == null)
                 {
                     return false;
                 }
-
                 // 再計算前の総額
-                long oldSalesSum = (long)estModel.SalesSum;
+                int? oldSalesSum = estModel.SalesSum;
 
                 // 消費税率取得
                 var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.UserNo);
@@ -230,15 +222,8 @@ namespace KantanMitsumori.Service.Helper
                             simLon.Bonus = Convert.ToInt32(estModel.BonusAmount);
                             simLon.BonusFirst = Convert.ToInt32(estModel.BonusFirst);
                             simLon.BonusSecond = Convert.ToInt32(estModel.BonusSecond);
-                        }
-                        else
-                        {
-                            simLon.Bonus = 0;
-                            simLon.BonusFirst = 0;
-                            simLon.BonusSecond = 0;
-                        }
+                        }                     
                         simLon.ConTax = vTax;
-
                         // 計算実行
                         if (simLon.calcRegLoan() == false)
                         {
@@ -246,7 +231,6 @@ namespace KantanMitsumori.Service.Helper
                         }
                         else
                         {
-
                             estModel.Rate = (double)simLon.MoneyRate;
                             estModel.Deposit = simLon.Deposit;
                             estModel.Principal = simLon.Principal;
@@ -261,8 +245,6 @@ namespace KantanMitsumori.Service.Helper
                             estModel.BonusSecond = simLon.BonusSecond.ToString();
                             estModel.BonusTimes = simLon.BonusTimes;
                             estModel.PayTimes = simLon.PayTimes;
-
-
                             //TEstimateSub estimateSub = _mapper.Map<TEstimateSub>(estSubModel);
                             estSubModel.LoanModifyFlag = false;
                             estSubModel.LoanRecalcSettingFlag = true;
@@ -279,32 +261,14 @@ namespace KantanMitsumori.Service.Helper
                     // 総額変更なしの場合、ローン計算情報表示区分のクリア
                     estSubModel.LoanInfo = CommonConst.def_LoanInfo_Unexecuted;
                 }
-
-
                 if (strClearMsg != "")
                 {
-                    // ローンの再計算失敗、または総額変更に伴うローンの自動再計算を行わない場合、ローン情報クリア
-                    // update Estimates
-                    estModel.Rate = 0;
-                    estModel.Deposit = 0;
                     estModel.Principal = estModel.SalesSum;
-                    estModel.PartitionFee = 0;
-                    estModel.PartitionAmount = 0;
-                    estModel.FirstPayMonth = "NULL";
-                    estModel.LastPayMonth = "NULL";
-                    estModel.FirstPayAmount = 0;
-                    estModel.PayAmount = 0;
-                    estModel.BonusAmount = 0;
-                    estModel.BonusFirst = "NULL";
-                    estModel.BonusSecond = "NULL";
-                    estModel.BonusTimes = 0;
-                    estModel.PayTimes = 0;
                     // EstimateSubs
                     estSubModel.LoanModifyFlag = false;
                     estSubModel.LoanRecalcSettingFlag = true;
                     estSubModel.LoanInfo = Convert.ToByte(strClearMsg);
                 }
-
                 _unitOfWork.Estimates.Update(estModel);
                 _unitOfWork.EstimateSubs.Update(estSubModel);
                 await _unitOfWork.CommitAsync();
@@ -344,34 +308,32 @@ namespace KantanMitsumori.Service.Helper
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
 
                 // その他費用の対応前のデータの場合
-                if (estSubModel.Sonota == 0 && estSubModel.RakuSatu + estSubModel.Rikusou > 0)
+                if (estSubModel.Sonota == 0 && (estSubModel.RakuSatu + estSubModel.Rikusou) > 0)
                 {
                     estSubModel.Sonota = estSubModel.RakuSatu + estSubModel.Rikusou;
                     estModel.CarPrice = estModel.CarPrice - estSubModel.Sonota;
                 }
-                if (estSubModel.SonotaTitle == "")
+                if (string.IsNullOrEmpty(estSubModel.SonotaTitle))
+                {
                     estSubModel.SonotaTitle = CommonConst.def_TitleSonota;
-
+                }
                 responseEst = _helperMapper.MergeInto<EstModel>(estModel, estSubModel);
-
-                creDispData(responseEst);
+                responseEst = creDispData(responseEst);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "getEstData - CEST-040D");
-                return null;
+                return responseEst;
             }
-
             return responseEst;
         }
 
         /// <summary>
         /// 見積書データ表示用整形
         /// </summary>
-        public void creDispData(EstModel model)
+        public EstModel creDispData(EstModel model)
         {
             int intCornerType = 0;
-
             // AA情報
             if (model.Aano != "")
             {
@@ -392,6 +354,7 @@ namespace KantanMitsumori.Service.Helper
                 model.DamageInsEquivalent = 0;
                 model.DamageIns = 0;
             }
+            return model;
         }
 
         /// <summary>

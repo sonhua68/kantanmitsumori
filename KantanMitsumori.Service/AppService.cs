@@ -167,112 +167,26 @@ namespace KantanMitsumori.Service
             estModel.MakerName = valToken.sesMaker ?? "";  // メーカー
             estModel.ModelName = valToken.sesCarNM ?? "";  // 車名
             estModel.GradeName = valToken.sesGrade ?? "";  // グレード
-            estModel.Case = valToken.sesKata ?? ""; // 型式
-            estModel.ChassisNo = ""; // 車台番号
-            estModel.FirstRegYm = ""; // 年式
-            estModel.CheckCarYm = ""; // 車検
-            estModel.NowOdometer = 0; // 走行距離
+            estModel.Case = valToken.sesKata ?? ""; // 型式  
             estModel.MilUnit = CommonConst.def_MilUnitTKM; // 走行距離 単位（既定値）
             estModel.DispVol = valToken.sesHaiki ?? ""; // 排気量
             estModel.DispVolUnit = CommonConst.def_DispVolUnitCC; // 排気量 単位（既定値） ※ ロータリー車、EV車は、TB_RUIBETSU_N.DispVolが'0' なので既定値セットで OK とのこと
             estModel.Mission = valToken.sesSft ?? ""; // シフト
-            estModel.AccidentHis = 2; // 事故暦(未選択)
-            estModel.BusinessHis = ""; // 車歴
-            estModel.Equipment = ""; // オプション
-            estModel.BodyColor = ""; // 色
-            estModel.CarImgPath = CommonConst.def_DmyImg; // 車両画像
-            estModel.TotalCost = 0;
-            estModel.RakuSatu = 0; // 落札料
-            estModel.Rikusou = 0; // 陸送代
-
-            estModel.Discount = 0;
-            estModel.Sonota = 0;
+            estModel.AccidentHis = 2; // 事故暦(未選択)      
+            estModel.CarImgPath = CommonConst.def_DmyImg; // 車両画像     
             estModel.SonotaTitle = CommonConst.def_TitleSonota;
-            estModel.NouCost = 0;
-            estModel.SyakenNew = 0;
-            estModel.SyakenZok = 0;
-            estModel.CarSum = 0;
             estModel.OptionInputKb = true;
-            estModel.OptionName1 = "";
-            estModel.OptionPrice1 = 0;
-            estModel.OptionName2 = "";
-            estModel.OptionPrice2 = 0;
-            estModel.OptionName3 = "";
-            estModel.OptionPrice3 = 0;
-            estModel.OptionName4 = "";
-            estModel.OptionPrice4 = 0;
-            estModel.OptionName5 = "";
-            estModel.OptionPrice5 = 0;
-            estModel.OptionName6 = "";
-            estModel.OptionPrice6 = 0;
-            estModel.OptionPriceAll = 0;
             estModel.TaxInsInputKb = true;
-            estModel.AutoTax = 0;
-            estModel.AcqTax = 0;
-            estModel.WeightTax = 0;
-            estModel.DamageIns = 0;
-            estModel.OptionIns = 0;
-            estModel.TaxInsAll = 0;
             estModel.TaxFreeKb = true;
-            estModel.TaxFreeGarage = 0;
-            estModel.TaxFreeCheck = 0;
-            estModel.TaxFreeTradeIn = 0;
-            estModel.TaxFreeRecycle = 0;
-            estModel.TaxFreeOther = 0;
-            estModel.TaxFreeAll = 0;
             estModel.TaxCostKb = true;
-            estModel.TaxGarage = 0;
-            estModel.TaxCheck = 0;
-            estModel.TaxTradeIn = 0;
-            estModel.TaxDelivery = 0;
-            estModel.TaxRecycle = 0;
-            estModel.TaxOther = 0;
-            estModel.TaxCostAll = 0;
-            estModel.ConTax = 0;
-            estModel.CarSaleSum = 0;
-            estModel.TradeInCarName = "";
-            estModel.TradeInFirstRegYm = "";
-            estModel.TradeInCheckCarYm = "";
             estModel.TradeInNowOdometer = 0;
-            estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM; // 下取車 走行距離 単位（既定値）
-            estModel.TradeInRegNo = "";
-            estModel.TradeInChassisNo = "";
-            estModel.TradeInBodyColor = "";
-            estModel.TradeInPrice = 0;
-            estModel.Balance = 0;
-            estModel.SalesSum = 0;
-            estModel.CustKname = "";
-            estModel.Rate = 0;
-            estModel.Deposit = 0;
-            estModel.PartitionFee = 0;
-            estModel.PartitionAmount = 0;
-            estModel.PayTimes = 0;
-            estModel.FirstPayMonth = "";
-            estModel.LastPayMonth = "";
-            estModel.FirstPayAmount = 0;
-            estModel.PayAmount = 0;
-            estModel.BonusAmount = 0;
-            estModel.BonusFirst = "";
-            estModel.BonusSecond = "";
-            estModel.BonusTimes = 0;
-            estModel.EstTanName = "";
-            estModel.SekininName = "";
-            estModel.Aayear = "";
-            estModel.Aahyk = "0";
-            estModel.Aaprice = 0;
-            estModel.SirPrice = 0;
-            estModel.YtiRieki = 0;
-            estModel.Aaplace = "";
-            estModel.Aano = "";
-            estModel.Aatime = "";
-
+            estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM; // 下取車 走行距離 単位（既定値）    
 
             // ここから税金・保険料の自動計算 ==============================================
 
             // 排気量あれば採用（必ずあるはず）
             int intHaiki = Information.IsNumeric(estModel.DispVol) ? int.Parse(estModel.DispVol) : 0;
-
-            bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(valToken.sesMaker);
+            bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(valToken.sesMaker!);
 
             // 自動車税----------------------------------------------
             int intFirstMonth = Convert.ToInt32(Strings.Format(DateTime.Now, "MM"));
@@ -314,50 +228,25 @@ namespace KantanMitsumori.Service
                 estModel.SekininName = getUserDef.SekininName;
                 userDefDamageInsMonth = Convert.ToInt32(getUserDef.DamageInsMonth);
                 // 軽自動車の場合
-                if (intHaiki > 0 & intHaiki <= 660)
-                {
-                    // 車検整備費用or納車整備費用(車検継続)のどちらかセット。デフォルトは車検整備費用
-                    estModel.SyakenNew = getUserDef.SyakenNewK;
-                    estModel.SyakenZok = 0;
-                    estModel.TaxFreeCheck = getUserDef.TaxFreeCheckK;
-                    estModel.TaxFreeGarage = getUserDef.TaxFreeGarageK;
-                    estModel.TaxCheck = getUserDef.TaxCheckK;
-                    estModel.TaxGarage = getUserDef.TaxGarageK;
-                    estModel.TaxRecycle = getUserDef.TaxRecycleK;
-                    estModel.TaxDelivery = getUserDef.TaxDeliveryK;
-                    estModel.TaxSet1Title = getUserDef.TaxSet1Title;
-                    estModel.TaxSet1 = getUserDef.TaxSet1K;
-                    estModel.TaxSet2Title = getUserDef.TaxSet2Title;
-                    estModel.TaxSet2 = getUserDef.TaxSet2K;
-                    estModel.TaxSet3Title = getUserDef.TaxSet3Title;
-                    estModel.TaxSet3 = getUserDef.TaxSet3K;
-                    estModel.TaxFreeSet1Title = getUserDef.TaxFreeSet1Title;
-                    estModel.TaxFreeSet1 = int.Parse(getUserDef.TaxFreeSet1K);
-                    estModel.TaxFreeSet2Title = getUserDef.TaxFreeSet2Title;
-                    estModel.TaxFreeSet2 = getUserDef.TaxFreeSet2K;
-                }
-                else
-                {
-                    // 車検整備費用or納車整備費用(車検継続)のどちらかセット。デフォルトは車検整備費用
-                    estModel.SyakenNew = getUserDef.SyakenNewH;
-                    estModel.SyakenZok = 0;
-                    estModel.TaxFreeCheck = getUserDef.TaxFreeCheckH;
-                    estModel.TaxFreeGarage = getUserDef.TaxFreeGarageH;
-                    estModel.TaxCheck = getUserDef.TaxCheckH;
-                    estModel.TaxGarage = getUserDef.TaxGarageH;
-                    estModel.TaxRecycle = getUserDef.TaxRecycleH;
-                    estModel.TaxDelivery = getUserDef.TaxDeliveryH;
-                    estModel.TaxSet1Title = getUserDef.TaxSet1Title;
-                    estModel.TaxSet1 = getUserDef.TaxSet1H;
-                    estModel.TaxSet2Title = getUserDef.TaxSet2Title;
-                    estModel.TaxSet2 = getUserDef.TaxSet2H;
-                    estModel.TaxSet3Title = getUserDef.TaxSet3Title;
-                    estModel.TaxSet3 = getUserDef.TaxSet3H;
-                    estModel.TaxFreeSet1Title = getUserDef.TaxFreeSet1Title;
-                    estModel.TaxFreeSet1 = getUserDef.TaxFreeSet1H;
-                    estModel.TaxFreeSet2Title = getUserDef.TaxFreeSet2Title;
-                    estModel.TaxFreeSet2 = getUserDef.TaxFreeSet2H;
-                }
+                bool isIntHaiki = intHaiki > 0 & intHaiki <= 660;
+                estModel.SyakenZok = 0;
+                estModel.SyakenNew = isIntHaiki ? getUserDef.SyakenNewK : getUserDef.SyakenNewH;
+                estModel.TaxFreeCheck = isIntHaiki ? getUserDef.TaxFreeCheckK : getUserDef.TaxFreeCheckH;
+                estModel.TaxFreeGarage = isIntHaiki ? getUserDef.TaxFreeGarageK : getUserDef.TaxFreeGarageH;
+                estModel.TaxCheck = isIntHaiki ? getUserDef.TaxCheckK : getUserDef.TaxCheckH;
+                estModel.TaxGarage = isIntHaiki ? getUserDef.TaxGarageK : getUserDef.TaxGarageH;
+                estModel.TaxRecycle = isIntHaiki ? getUserDef.TaxRecycleK : getUserDef.TaxRecycleH;
+                estModel.TaxDelivery = isIntHaiki ? getUserDef.TaxDeliveryK : getUserDef.TaxDeliveryH;
+                estModel.TaxSet1Title = getUserDef.TaxSet1Title;
+                estModel.TaxSet1 = isIntHaiki ? getUserDef.TaxSet1K : getUserDef.TaxSet1H;
+                estModel.TaxSet2Title = getUserDef.TaxSet2Title;
+                estModel.TaxSet2 = isIntHaiki ? getUserDef.TaxSet2K : getUserDef.TaxSet2H;
+                estModel.TaxSet3Title = getUserDef.TaxSet3Title;
+                estModel.TaxSet3 = isIntHaiki ? getUserDef.TaxSet3K : getUserDef.TaxSet3H;
+                estModel.TaxFreeSet1Title = getUserDef.TaxFreeSet1Title;
+                estModel.TaxFreeSet1 = isIntHaiki ? int.Parse(getUserDef.TaxFreeSet1K) : getUserDef.TaxFreeSet1H;
+                estModel.TaxFreeSet2Title = getUserDef.TaxFreeSet2Title;
+                estModel.TaxFreeSet2 = isIntHaiki ? getUserDef.TaxFreeSet2K : getUserDef.TaxFreeSet2H;
             }
             else
                 // 諸費用設定のデータを取得できなかった場合のデフォルト
@@ -733,89 +622,22 @@ namespace KantanMitsumori.Service
 
             // 陸送代
             estModel.Rikusou = Information.IsNumeric(request.tra) ? int.Parse(request.tra) : 0;
-            estModel.Discount = 0;
-            estModel.NouCost = 0;
-            estModel.SyakenNew = 0;
-            estModel.SyakenZok = 0;
-            estModel.CarSum = 0;
             estModel.OptionInputKb = true;
-            estModel.OptionName1 = "";
-            estModel.OptionPrice1 = 0;
-            estModel.OptionName2 = "";
-            estModel.OptionPrice2 = 0;
-            estModel.OptionName3 = "";
-            estModel.OptionPrice3 = 0;
-            estModel.OptionName4 = "";
-            estModel.OptionPrice4 = 0;
-            estModel.OptionName5 = "";
-            estModel.OptionPrice5 = 0;
-            estModel.OptionName6 = "";
-            estModel.OptionPrice6 = 0;
-            estModel.OptionPriceAll = 0;
             estModel.TaxInsInputKb = true;
-            estModel.AutoTax = 0;
-            estModel.AcqTax = 0;
-            estModel.WeightTax = 0;
-            estModel.DamageIns = 0;
-            estModel.OptionIns = 0;
-            estModel.TaxInsAll = 0;
             estModel.TaxFreeKb = true;
-            estModel.TaxFreeGarage = 0;
-            estModel.TaxFreeCheck = 0;
-            estModel.TaxFreeTradeIn = 0;
-
             // request.fex") は、8桁出品番号
-            if (request.fex == "")
-            {
-                estModel.TaxFreeRecycle = 0;
-            }
-            else
+
+            if (!string.IsNullOrEmpty(request.fex))
             {
                 estModel.TaxFreeRecycle = _commonFuncHelper.GetRecDeposit(request.cor, request.fex);
             }
-
-            estModel.TaxFreeOther = 0;
-            estModel.TaxFreeAll = 0;
             estModel.TaxCostKb = true;
-            estModel.TaxGarage = 0;
-            estModel.TaxCheck = 0;
-            estModel.TaxTradeIn = 0;
-            estModel.TaxDelivery = 0;
-            estModel.TaxRecycle = 0;
-            estModel.TaxOther = 0;
-            estModel.TaxCostAll = 0;
-            estModel.ConTax = 0;
-            estModel.CarSaleSum = 0;
-            estModel.TradeInCarName = "";
-            estModel.TradeInFirstRegYm = "";
-            estModel.TradeInCheckCarYm = "";
-            estModel.TradeInNowOdometer = 0;
             estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM; // 下取車 走行距離 単位（既定値）
-            estModel.TradeInRegNo = "";
-            estModel.TradeInChassisNo = "";
-            estModel.TradeInBodyColor = "";
-            estModel.TradeInPrice = 0;
-            estModel.Balance = 0;
-            estModel.SalesSum = 0;
-            estModel.CustKname = "";
-            estModel.Rate = 0;
-            estModel.Deposit = 0;
-            estModel.PartitionFee = 0;
-            estModel.PartitionAmount = 0;
-            estModel.PayTimes = 0;
-            estModel.FirstPayMonth = "";
-            estModel.LastPayMonth = "";
-            estModel.FirstPayAmount = 0;
-            estModel.PayAmount = 0;
-            estModel.BonusAmount = 0;
-            estModel.BonusFirst = "";
-            estModel.BonusSecond = "";
-            estModel.BonusTimes = 0;
+
+
             estModel.ShopNm = userInfo.Data.UserNm;
             estModel.ShopAdr = userInfo.Data.UserAdr;
             estModel.ShopTel = userInfo.Data.UserTel;
-            estModel.EstTanName = "";
-            estModel.SekininName = "";
             // 開催数追加対応
             estModel.Corner = request.cor;
             estModel.Aacount = vAAcount;
@@ -831,19 +653,12 @@ namespace KantanMitsumori.Service
             estModel.Aaplace = request.aan == "" ? "" : request.aan; // AA会場
             estModel.Aano = request.exh == "" ? "" : request.exh; // 出品番号
             // 出品期間
-            if (request.lim == "")
-            {
-                estModel.Aatime = "";
-            }
-            else
+            if (!string.IsNullOrEmpty(request.lim))
             {
                 string vAATime = request.lim.Trim();
                 estModel.Aatime = request.lim.Trim().Length == 8 ? Strings.Left(vAATime, 4) + "/" + Strings.Mid(vAATime, 5, 2) + "/" + Strings.Right(vAATime, 2) : vAATime;
+
             }
-
-            // ここから税金・保険料の自動計算 ==============================================
-
-            // 排気量あれば採用（必ずあるはず）
             int intHaiki = 0;
             if (Information.IsNumeric(estModel.DispVol))
             {
@@ -851,8 +666,6 @@ namespace KantanMitsumori.Service
             }
 
             bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(request.mak);
-
-            // 自動車税----------------------------------------------
             int intFirstMonth = Convert.ToInt32(Strings.Format(DateTime.Now, "MM"));
             // 排気量が入力されている場合に限り、計算する。
             if (flgTaxAutoCalc & intHaiki > 0 && estModel.DispVolUnit == CommonConst.def_DispVolUnitCC)
@@ -863,11 +676,6 @@ namespace KantanMitsumori.Service
 
                 estModel.AutoTax = carTax;
                 estModel.AutoTaxMonth = intFirstMonth.ToString();
-            }
-            else
-            {
-                estModel.AutoTax = 0;
-                estModel.AutoTaxMonth = "";
             }
 
             // 自賠責保険基準月数の初期設定値
@@ -889,105 +697,48 @@ namespace KantanMitsumori.Service
                 estModel.EstTanName = getUserDef.EstTanName;
                 estModel.SekininName = getUserDef.SekininName;
                 userDefDamageInsMonth = Convert.ToInt32(getUserDef.DamageInsMonth);
-                // 軽自動車の場合
-                if (intHaiki > 0 & intHaiki <= 660)
+                bool isIntHaiki = intHaiki > 0 & intHaiki <= 660;
+                if ((string.IsNullOrEmpty(valToken.sesMode) ? int.Parse(valToken.sesMode) : 0) == 0)
                 {
-                    if ((string.IsNullOrEmpty(valToken.sesMode) ? int.Parse(valToken.sesMode) : 0) == 0)
-                    {
-                        estModel.YtiRieki = getUserDef.YtiRiekiK;
-                    }
-
-                    // 車検整備費用or納車整備費用(車検継続)の初期セット
-                    estModel.SyakenNew = getUserDef.SyakenNewK;
-                    estModel.SyakenZok = 0;
-                    if (strCheckCarYm.Length == 6
-                        && DateAndTime.DateDiff(DateInterval.Month, DateTime.Today, DateTime.Parse(Strings.Left(strCheckCarYm, 4) + "/" + Strings.Right(strCheckCarYm, 2) + "/01")) > 0L
-                        || (strCheckCarYm.Length == 4 && DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(strCheckCarYm + "/01")) > 0L))
-                    {
-                        estModel.SyakenNew = 0;
-                        estModel.SyakenZok = getUserDef.SyakenZokK;
-                    }
-                    estModel.TaxFreeCheck = getUserDef.TaxFreeCheckK;
-                    estModel.TaxFreeGarage = getUserDef.TaxFreeGarageK;
-                    estModel.TaxCheck = getUserDef.TaxCheckK;
-                    estModel.TaxGarage = getUserDef.TaxGarageK;
-                    estModel.TaxRecycle = getUserDef.TaxRecycleK;
-                    estModel.TaxDelivery = getUserDef.TaxDeliveryK;
-                    estModel.TaxSet1Title = getUserDef.TaxSet1Title;
-                    estModel.TaxSet1 = getUserDef.TaxSet1K;
-                    estModel.TaxSet2Title = getUserDef.TaxSet2Title;
-                    estModel.TaxSet2 = getUserDef.TaxSet2K;
-                    estModel.TaxSet3Title = getUserDef.TaxSet3Title;
-                    estModel.TaxSet3 = getUserDef.TaxSet3K;
-                    estModel.TaxFreeSet1Title = getUserDef.TaxFreeSet1Title;
-                    estModel.TaxFreeSet1 = int.Parse(getUserDef.TaxFreeSet1K);
-                    estModel.TaxFreeSet2Title = getUserDef.TaxFreeSet2Title;
-                    estModel.TaxFreeSet2 = getUserDef.TaxFreeSet2K;
+                    estModel.YtiRieki = isIntHaiki ? getUserDef.YtiRiekiK : getUserDef.YtiRiekiH;
                 }
-
-                else
+                // 車検整備費用or納車整備費用(車検継続)の初期セット
+                estModel.SyakenNew = isIntHaiki ? getUserDef.SyakenNewK : getUserDef.SyakenNewH;
+                estModel.SyakenZok = 0;
+                if (strCheckCarYm.Length == 6
+                    && DateAndTime.DateDiff(DateInterval.Month, DateTime.Today, DateTime.Parse(Strings.Left(strCheckCarYm, 4) + "/" + Strings.Right(strCheckCarYm, 2) + "/01")) > 0L
+                    || (strCheckCarYm.Length == 4 && DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(strCheckCarYm + "/01")) > 0L))
                 {
-                    if ((string.IsNullOrEmpty(valToken.sesMode) ? int.Parse(valToken.sesMode) : 0) == 0)
-                    {
-                        estModel.YtiRieki = getUserDef.YtiRiekiH;
-                    }
-
-                    // 車検整備費用or納車整備費用(車検継続)の初期セット
-                    estModel.SyakenNew = getUserDef.SyakenNewH;
-                    estModel.SyakenZok = 0;
-                    if (strCheckCarYm.Length == 6
-                        && DateAndTime.DateDiff(DateInterval.Month, DateTime.Today, DateTime.Parse(Strings.Left(strCheckCarYm, 4) + "/" + Strings.Right(strCheckCarYm, 2) + "/01")) > 0L
-                        || (strCheckCarYm.Length == 4 && DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(strCheckCarYm + "/01")) > 0L))
-                    {
-                        estModel.SyakenNew = 0;
-                        estModel.SyakenZok = getUserDef.SyakenZokH;
-                    }
-                    estModel.TaxFreeCheck = getUserDef.TaxFreeCheckH;
-                    estModel.TaxFreeGarage = getUserDef.TaxFreeGarageH;
-                    estModel.TaxCheck = getUserDef.TaxCheckH;
-                    estModel.TaxGarage = getUserDef.TaxGarageH;
-                    estModel.TaxRecycle = getUserDef.TaxRecycleH;
-                    estModel.TaxDelivery = getUserDef.TaxDeliveryH;
-                    estModel.TaxSet1Title = getUserDef.TaxSet1Title;
-                    estModel.TaxSet1 = getUserDef.TaxSet1H;
-                    estModel.TaxSet2Title = getUserDef.TaxSet2Title;
-                    estModel.TaxSet2 = getUserDef.TaxSet2H;
-                    estModel.TaxSet3Title = getUserDef.TaxSet3Title;
-                    estModel.TaxSet3 = getUserDef.TaxSet3H;
-                    estModel.TaxFreeSet1Title = getUserDef.TaxFreeSet1Title;
-                    estModel.TaxFreeSet1 = getUserDef.TaxFreeSet1H;
-                    estModel.TaxFreeSet2Title = getUserDef.TaxFreeSet2Title;
-                    estModel.TaxFreeSet2 = getUserDef.TaxFreeSet2H;
+                    estModel.SyakenNew = 0;
+                    estModel.SyakenZok = isIntHaiki ? getUserDef.SyakenZokK : getUserDef.SyakenZokH;
                 }
+                estModel.TaxFreeCheck = isIntHaiki ? getUserDef.TaxFreeCheckK : getUserDef.TaxFreeCheckH;
+                estModel.TaxFreeGarage = isIntHaiki ? getUserDef.TaxFreeGarageK : getUserDef.TaxFreeGarageH;
+                estModel.TaxCheck = isIntHaiki ? getUserDef.TaxCheckK : getUserDef.TaxCheckH;
+                estModel.TaxGarage = isIntHaiki ? getUserDef.TaxGarageK : getUserDef.TaxGarageH;
+                estModel.TaxRecycle = isIntHaiki ? getUserDef.TaxRecycleK : getUserDef.TaxRecycleH;
+                estModel.TaxDelivery = isIntHaiki ? getUserDef.TaxDeliveryK : getUserDef.TaxDeliveryH;
+                estModel.TaxSet1Title = getUserDef.TaxSet1Title;
+                estModel.TaxSet1 = isIntHaiki ? getUserDef.TaxSet1K : getUserDef.TaxSet1H;
+                estModel.TaxSet2Title = getUserDef.TaxSet2Title;
+                estModel.TaxSet2 = isIntHaiki ? getUserDef.TaxSet2K : getUserDef.TaxSet2H;
+                estModel.TaxSet3Title = getUserDef.TaxSet3Title;
+                estModel.TaxSet3 = isIntHaiki ? getUserDef.TaxSet3K : getUserDef.TaxSet3H;
+                estModel.TaxFreeSet1Title = getUserDef.TaxFreeSet1Title;
+                estModel.TaxFreeSet1 = isIntHaiki ? int.Parse(getUserDef.TaxFreeSet1K) : getUserDef.TaxFreeSet1H;
+                estModel.TaxFreeSet2Title = getUserDef.TaxFreeSet2Title;
+                estModel.TaxFreeSet2 = isIntHaiki ? getUserDef.TaxFreeSet2K : getUserDef.TaxFreeSet2H;
             }
             else
             {
-                // 諸費用設定のデータを取得できなかった場合のデフォルト
                 estModel.ConTaxInputKb = true;
             }
-
-            // 自賠責保険料------------------------------------------------
-            // 保険料取得の際、基準月数の会員初期設定値をパラメータとして渡すように修正
-
-            // 自賠責保険料取得
             int intSelfIns = 0; // 保険料
             int intRemIns = 0; // 月数
             string inYYYY = "";
             string inMM = "";
 
-            // 排気量が取得できている場合に自賠責保険料を取得
-            if (strCheckCarYm.Length == 4 && DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(strCheckCarYm + "/01")) > 0L)
-            {
-                // 車検有効期限が1年以上先の YYYY の時、自賠責保険料取得不能
-                // （新規取得とみなしての初期値セットは行わない）
-                estModel.DamageIns = 0;
-            }
-            else if (estModel.DispVolUnit != CommonConst.def_DispVolUnitCC)
-            {
-                // 排気量単位が "cc" ではないので、自賠責保険料取得不能
-                estModel.DamageIns = 0;
-            }
-            else if (flgTaxAutoCalc & intHaiki > 0)
+            if (flgTaxAutoCalc & intHaiki > 0)
             {
                 if (strCheckCarYm.Length == 6)
                 {
@@ -1002,12 +753,6 @@ namespace KantanMitsumori.Service
                     estModel.DamageInsMonth = intRemIns.ToString();
                 }
             }
-
-            // 消費税税率変更対応
-            // 税込入力モードの場合は車両価格・落札料・陸送代に消費税分を＋
-
-            // POST パラメータ（店頭商談NETからのみI/F）nonTax ="1" の時、価格には消費税と予定利益がすでに含まれている。
-            // そのため、諸費用設定で「税込」の場合→価格調整なし、「税抜」の場合→消費税分をマイナス
             var vTax = _commonFuncHelper.getTax(estModel.Udate, valToken.sesTaxRatio, valToken.UserNo);
             decimal wkVal; // 浮動小数点の計算誤差回避のため
             if (estModel.ConTaxInputKb == true)
@@ -1060,19 +805,16 @@ namespace KantanMitsumori.Service
                 string strEstNo = "";
                 string strEstSubNo = "";
                 //string vLeaseFlag = !string.IsNullOrWhiteSpace(valToken.sesLeaseFlag) ? valToken.sesLeaseFlag : "";
-
                 // 新見積書番号取得
                 if (!_commonEst.getEstNoFromDb(ref strEstNo))
                 {
                     return false;
                 }
-
                 // 枝番は常に取得
                 if (!_commonEst.getEstSubNoFromDb(strEstNo, ref strEstSubNo))
                 {
                     return false;
                 }
-
                 // 見積書登録SQL
                 TEstimate entityEst = new TEstimate();
                 entityEst = _mapper.Map<TEstimate>(model);
@@ -1084,45 +826,24 @@ namespace KantanMitsumori.Service
                 entityEst.OptionInputKb = true;
                 entityEst.TaxInsInputKb = true;
                 entityEst.TaxFreeKb = true;
-                entityEst.TaxCostKb = true;
-                entityEst.Rate = 0;
-                entityEst.Deposit = 0;
-                entityEst.Principal = 0;
-                entityEst.PartitionFee = 0;
-                entityEst.PartitionAmount = 0;
-                entityEst.PayTimes = 0;
-                entityEst.FirstPayMonth = "NULL";
-                entityEst.LastPayMonth = "NULL";
-                entityEst.FirstPayAmount = 0;
-                entityEst.PayAmount = 0;
-                entityEst.BonusAmount = 0;
-                entityEst.BonusFirst = "NULL";
-                entityEst.BonusSecond = "NULL";
-                entityEst.BonusTimes = 0;
+                entityEst.TaxCostKb = true;               
                 entityEst.Rdate = DateTime.Now;
                 entityEst.Udate = DateTime.Now;
                 entityEst.Dflag = false;
                 entityEst.LeaseFlag = "1";
-
                 TEstimateSub entityEstSub = new TEstimateSub();
                 entityEstSub = _mapper.Map<TEstimateSub>(model);
                 entityEstSub.EstNo = strEstNo;
                 entityEstSub.EstSubNo = strEstSubNo;
                 entityEstSub.Rdate = DateTime.Now;
                 entityEstSub.Udate = DateTime.Now;
-                entityEstSub.Dflag = false;
-                entityEstSub.AutoTaxEquivalent = 0;
-                entityEstSub.DamageInsEquivalent = 0;
-                entityEstSub.TaxInsEquivalentAll = 0;
+                entityEstSub.Dflag = false;          
                 entityEstSub.LoanModifyFlag = false;
                 entityEstSub.LoanRecalcSettingFlag = true;
                 entityEstSub.LoanInfo = CommonConst.def_LoanInfo_Unexecuted;
-
                 _unitOfWork.Estimates.Add(entityEst);
                 _unitOfWork.EstimateSubs.Add(entityEstSub);
-
                 await _unitOfWork.CommitAsync();
-
                 valToken.sesEstNo = strEstNo;
                 valToken.sesEstSubNo = strEstSubNo;
             }
