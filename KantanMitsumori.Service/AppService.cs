@@ -570,7 +570,7 @@ namespace KantanMitsumori.Service
             string strTempImagePath;
             string strSavePath = "";
 
-            estModel.LeaseFlag = string.IsNullOrEmpty(request.leaseFlag) && Information.IsNumeric(request.leaseFlag!) ? "0" : request.leaseFlag;
+            estModel.LeaseFlag = string.IsNullOrEmpty(request.leaseFlag) ? "0" : request.leaseFlag;
 
             // get user info
             var userInfo = getUserInfo(request.mem);

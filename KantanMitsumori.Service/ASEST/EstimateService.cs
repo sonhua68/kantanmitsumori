@@ -94,6 +94,7 @@ namespace KantanMitsumori.Service
                         data.Rate = getDetail.Rate;
                     }
                 }
+
                 data.TaxRatio = _commonFuncHelper.getTax((DateTime)data.Udate!, requestInputCar.TaxRatio, requestInputCar.UserNo!);
                 data.TaxRatioID = _commonFuncHelper.getTaxRatioID(requestInputCar.UserNo!);
                 return ResponseHelper.Ok<ResponseInp>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
