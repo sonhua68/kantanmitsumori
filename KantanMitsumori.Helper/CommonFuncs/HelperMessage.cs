@@ -24,7 +24,7 @@
         public const string SMAI002S = "SMAI-002S";
 
         public const string SMAI014D = "SMAI-014D";
-
+        public const string SICK010D = "SICK-010D";
 
 
         #endregion

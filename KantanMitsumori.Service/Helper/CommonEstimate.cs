@@ -564,5 +564,31 @@ namespace KantanMitsumori.Service.Helper
 
             return dataIDE;
         }
+
+        /// <summary>
+        /// 見積書データ取得
+        /// </summary>
+        /// <param name="inEstNo"></param>
+        /// <param name="inEstSubNo"></param>
+        /// <returns></returns>
+        public EstModel getEst_EstSubData(string inEstNo, string inEstSubNo)
+        {
+            try
+            {
+                // get [t_Estimate]
+                var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
+
+                // get [t_EstimateSub]
+                var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
+
+                return _helperMapper.MergeInto<EstModel>(estModel, estSubModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "getEstData - CEST-040D");
+                return null;
+            }
+
+        }
     }
 }

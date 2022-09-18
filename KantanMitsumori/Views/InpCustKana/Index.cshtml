@@ -1,10 +1,9 @@
 ﻿@using KantanMitsumori.Model.Response
+@model ResponseInpCustKana
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
 }
-@model ResponseInpCustKana
-
 <form id="formInputCustKana">
     <div align="center">
         <table class="inptable" id="Table3" cellpadding="2" cellspacing="0" style="border-color:#ffffff">
@@ -31,7 +30,7 @@
             </tr>
             <tr>
                 <td class="inptd" align="left">
-                    <input name="txtCustKanaName" type="text" maxlength="20" value="@Model.CustKana" id="txtCustKanaName" class="inpbox" style="width:250px;">
+                    <input name="CustKana" type="text" maxlength="20" value="@Model.CustKana" id="txtCustKanaName" class="inpbox" style="width:250px;">
                 </td>
             </tr>
             <tr>
@@ -41,16 +40,15 @@
             </tr>
             <tr>
                 <td class="inptd" align="left">
-                    <input name="txtCustMemo" type="text" maxlength="60" value="@Model.CustMemo" id="txtCustMemo" class="inpbox" style="width:430px;">
+                    <input name="CustMemo" type="text" maxlength="60" value="@Model.CustMemo" id="txtCustMemo" class="inpbox" style="width:430px;">
 
                 </td>
             </tr>
 
             <tr>
                 <td class="InpTableTd" colspan="2" style=" background-color:White; text-align:right; border-bottom:none; padding-top:3px;">
-                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
-                    <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">
-
+                    <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPageUrl('/');return false;" class="Btn1" style="height:32px;width:100px;">
+                    <input type="submit" name="btnOK" value="OK" form="formInputCustKana" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                 </td>
             </tr>
             <tr>
@@ -60,9 +58,29 @@
 
             </tr>
         </table>
-        <input name="hidEstNo" type="hidden" id="hidEstNo" value="22091600024">
-        <input name="hidEstSubNo" type="hidden" id="hidEstSubNo" value="01">
+        <input type="hidden" id="hidEstNo" name="EstNo" value="@Model.EstNo">
+        <input type="hidden" id="hidEstNo" name="EstSubNo" value="@Model.EstSubNo">
     </div>
 </form>
-
-
+<script>
+    $('#formInputCustKana').validate({
+        submitHandler: function(form) {
+            if (inputChk() == false) { return; }
+            var model = Framework.getFormData($("#formInputCustKana"));
+            console.log(model)
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCustKana/UpdateInpCustKana");
+            if (result.resultStatus == 0) {
+                Framework.GoBackReloadPageUrl('/');
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#Msg").html(Items)
+                } else {
+                    location.reload();
+                }
+            }
+        }
+    });
+</script>
+<script src="~/js/InpCustKana.js"></script>

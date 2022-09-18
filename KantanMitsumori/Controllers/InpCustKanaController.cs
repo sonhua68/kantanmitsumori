@@ -1,5 +1,6 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService.ASEST;
+using KantanMitsumori.Model.Request;
 using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ namespace KantanMitsumori.Controllers
             _commonEst = commonEst;
         }
 
-        // GET: InpCustKanaController
+        [HttpGet]
         public IActionResult Index()
         {
             // 見積書番号を取得
@@ -33,7 +34,23 @@ namespace KantanMitsumori.Controllers
                 return ErrorAction(response);
             }
 
-            return View(response);
+            return View(response.Data);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateInpCustKana([FromForm] RequestUpdateInpCustKana requestData)
+        {
+            var response = await _inpCustKanaService.UpdateInpCustKana(requestData);
+
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
+        }
+
+
+
+
     }
 }
