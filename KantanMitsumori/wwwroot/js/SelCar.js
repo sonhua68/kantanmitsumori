@@ -19,7 +19,7 @@ function GetListASOPMaker() {
             let text = result.data[i].makerCode;
             let value = result.data[i].makerName;
             $("#ddlMaker").append(new Option(value, text));
-        }       
+        }
 
     } else {
         let Items = result.data;
@@ -39,7 +39,7 @@ function setIntData() {
 
 }
 function GetListASOPCarName() {
-    let vMarkId = $("#ddlMaker").val();  
+    let vMarkId = $("#ddlMaker").val();
     var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPCarName?markId=" + vMarkId);
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         $("#ddlModel").empty();
@@ -70,7 +70,6 @@ function onchangeCarName() {
 
     }
 }
-
 function btnChkModel() {
     let caseSet = $("#CaseSet").val();
     if (caseSet == "") {
@@ -108,11 +107,3 @@ function btnNextGrade() {
     }
 }
 
-function GoNextPage(pageNumber) {
-    var model = {};
-    model.sesMakID = $("#sesMakID").val();
-    model.sesMaker = $("#sesMaker").val();
-    model.sesCarNM = $("#sesCarNM").val();
-    model.pageNumber = pageNumber
-    Framework.SummitForm("/SelGrd", model)
-}

@@ -35,7 +35,25 @@ namespace KantanMitsumori.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> LoadData([FromForm] RequestSelGrd requestData)
+        {
 
+            var response = _selCarService.GetListRuiBetSu(requestData);
+
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            var dt = await PaginatedList<ResponseTbRuibetsuNew>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
+
+            if (dt.Count > 0)
+            {
+                dt[0].TotalPages = dt.TotalPages;
+                dt[0].PageIndex = dt.PageIndex;
+            }
+            return Ok(dt);
+        }
 
         #endregion SelCar
     }

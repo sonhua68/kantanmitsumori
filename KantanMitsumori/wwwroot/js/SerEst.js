@@ -5,7 +5,7 @@ let month = parseInt(Tday.getMonth()) + 1;
 GetListMaker();
 GetDayOfMonth(1);
 GetDayOfMonth(2);
-setInitToDay();
+SetInitToDay();
 LoadData(1);
 function GetListMaker() {
     ; var result = Framework.GetObjectDataFromUrl("/SerEst/GetMakerNameAndModelName?makerName=");
@@ -25,7 +25,6 @@ function GetListMaker() {
     }
 
 }
-
 function setInitToDay() {
 
     let lastDay = parseInt(Tday.getDate());
@@ -112,7 +111,7 @@ function GoNextPage(pageNumber) {
     model.pageNumber = pageNumber
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
     console.log(result);
-    AddRowTable(result);
+    ReloadListData(result);
 }
 function GoNextPage_bk(pageNumber) {
     var model = Framework.getFormData($("#FormSerEst"));
@@ -120,13 +119,18 @@ function GoNextPage_bk(pageNumber) {
     model.pageNumber = pageNumber
     Framework.SummitForm("/SerEst", model)
 }
-
 function LoadData(pageNumber) {
     var model = Framework.getFormData($("#FormSerEst"));
     console.log(model);
     model.pageNumber = pageNumber
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
-    AddRowTable(result);
+    if (result.length > 0) {
+        AddRowTable(result);
+        let TotalPages = result[0].totalPages;
+        AddPagination(TotalPages);
+    } else {
+        $("#TableSerEst").css("display", "none");
+    }
 
 }
 function DeleteEstimate(value) {
@@ -157,6 +161,7 @@ function Cleanform() {
     GetDayOfMonth(1);
     GetDayOfMonth(2);
     setInitToDay();
+    LoadData(1);
 }
 function Resetddl() {
     let m = `${month}`;
@@ -167,87 +172,111 @@ function Resetddl() {
 
 }
 function AddRowTable(data) {
-    if (data.length > 0) {
-        $("#TableSerEst").css("display", "inline-table");
-        $('#TablePage').remove();
-        var tbody = $('#TableSerEst').children('tbody');
-        var table = tbody.length ? tbody : $('#TableSerEst');
-        var row = '<tr id="tbremote">' +
-            '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"   type = "submit"  value = "選択"/>' + '</td>' +
-            '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"  type = "submit"  value = "再作成"' + '</td>' +
-            '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:120px;">{{estNo}}</td>' +
-            '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:90px;white-space:nowrap;">{{tradeDate}}</td>' +
-            '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{custKName}} </td>' +
-            '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{carName}}</td>' +
-            '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style ="font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;" type="submit" href="#" onclick="DeleteEstimate(`{{estNo}}`);return false"  value = "削除" ' + '</td>' +
-            '</tr>';
-        var pageTable = '<tr  align="center" id="tbremote" style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">' +
-            '<td colspan  = "7">' +
-            '<table border="0" id=TablePage>' +
-            '<tbody>' +
-            '<tr id="trId"> ' +
-            '</tr> ' +
-            '</tbody>' +
-            '</table>' +
-            '</td>' +
-            '</tr> '
+    $("#TableSerEst").css("display", "inline-table");
+    $('#TablePage').remove();
+    var tbody = $('#TableSerEst').children('tbody');
+    var table = tbody.length ? tbody : $('#TableSerEst');
+    var row = '<tr id="tbremote">' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"   type = "submit"  value = "選択"/>' + '</td>' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"  type = "submit"  value = "再作成"' + '</td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:120px;">{{estNo}}</td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:90px;white-space:nowrap;">{{tradeDate}}</td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{custKName}} </td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{carName}}</td>' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style ="font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;" type="submit" href="#" onclick="DeleteEstimate(`{{estNo}}`);return false"  value = "削除" ' + '</td>' +
+        '</tr>';
+    var pageTable = '<tr id="pagination" align="center"  style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">' +
+        '<td colspan  = "7">' +
+        '<table border="0" id=TablePage>' +
+        '<tbody>' +
+        '<tr id="trId"> ' +
+        '</tr> ' +
+        '</tbody>' +
+        '</table>' +
+        '</td>' +
+        '</tr> '
 
-        $('tr#tbremote').remove();   
-        for (let i = 0; i < data.length; i++) {
-            table.append(row.compose(data[i]));
-        }
-        let TotalPages = data[0].totalPages;
-        if (TotalPages > 1) {
-            table.append(pageTable)
-            Addpagination(data);  
-        }
-    } else {
-        $("#TableSerEst").css("display", "none");
+    $('tr#tbremote').remove();
+    for (let i = 0; i < data.length; i++) {
+        table.append(row.compose(data[i]));
     }
-
-}
-function Addpagination(data) {
     let TotalPages = data[0].totalPages;
-    let PageIndex = data[0].pageIndex;
-    console.log(TotalPages);
-    console.log(PageIndex);
-    var pageding1 =
-        '<td id="tbremote">' +
-        '<span onclick="GoNextPage({{pageNumber}});return false" style="color:White;">{{vNumber}}</span>' +
-        '</td>'
-    var pageding =
-        '<td id="tbremote">' +
-        '<a href="#" onclick="GoNextPage({{pageNumber}});return false" style="color:White;">{{vNumber}}</a>' +
-        '</td>'
-    var tbodyPage = $('#TablePage').children('tbody');
-    var tablePage = tbodyPage.length ? tbodyPage : $('#TablePage');
-    let indexPage = PageIndex >= 10 ? PageIndex : 0;
-    let TotalPagesNew = TotalPages > 10 ? 10 : TotalPages;
+    if (TotalPages > 1) {
+        table.append(pageTable);
+    }
 
-    for (let i = 1; i <= TotalPagesNew; i++) {
-        if (PageIndex == i) {
-            tablePage.find("#trId").append(pageding1.compose({
-                'pageNumber': indexPage + i,
-                'vNumber': +indexPage + i
-            }));
-        } else if (i == 10) {
-            tablePage.find("#trId").append(pageding.compose({
-                'pageNumber': (indexPage + i),
-                'vNumber': '...'
-            }));
-
-            return;
-        } else {
-            if (TotalPages < indexPage + i) {
-                return;
-            } else {
-                tablePage.find("#trId").append(pageding.compose({
-                    'pageNumber': indexPage + i,
-                    'vNumber': indexPage + i
-                }));
+}
+function AddPagination(totalPages) {
+    $('#trId').twbsPagination({
+        totalPages: totalPages,
+        visiblePages: 10,
+        next: '次',
+        prev: '前',
+        onPageClick: function (event, page) {
+            console.log(page);
+            if (page > 1) {
+                GoNextPage(page)
             }
-
+        }
+    });
+}
+function ReloadListData(data) {
+    $("#TableSerEst").css("display", "inline-table");
+    var tbody = $('#TableSerEst').children('tbody');
+    var table = tbody.length ? tbody : $('#TableSerEst');
+    var row = '<tr id="tbremote">' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"   type = "submit"  value = "選択"/>' + '</td>' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"  type = "submit"  value = "再作成"' + '</td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:120px;">{{estNo}}</td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:90px;white-space:nowrap;">{{tradeDate}}</td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{custKName}} </td>' +
+        '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{carName}}</td>' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style ="font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;" type="submit" href="#" onclick="DeleteEstimate(`{{estNo}}`);return false"  value = "削除" ' + '</td>' +
+        '</tr>';
+    $('tr#tbremote').remove();
+    for (let i = 0; i < data.length; i++) {
+        table.append(row.compose(data[i]));
+    };
+    SortPagination();
+}
+function AddHeaderName() {
+    $("#TableSerEst").css("display", "inline-table");
+    var tbody = $('#TableSerEst').children('tbody');
+    var table = tbody.length ? tbody : $('#TableSerEst');
+    var header = '<tr id="tbremote" align="center" id="tbremote" valign="middle" style="position: static;color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">' +
+        '<th scope = "col"> 選択' + '</th >' +
+        '<th scope="col">再作成' + '</th>' +
+        '<th id="SortEstNo" scope="col">' +
+        '<a href = "#" onclick = "return Framework.SortDataTable("TableSerEst","SortEstNo")" style = "color:White;" > 見積書番号' +
+        '</a> ' + '</th> ' +
+        '<th id="SortTradeDate" scope="col">' +
+        '<a href = "#" onclick ="return Framework.SortDataTable("TableSerEst","SortTradeDate")" style = "color:White;" > 見積日' +
+        '</a>' + '</th> ' +
+        '<th id="SortCustKName" scope="col">' +
+        '<a href = "#" onclick ="return Framework.SortDataTable("TableSerEst","SortCustKName")" style = "color:White;" > カナ名' +
+        '</a>' + '</th> ' +
+        '<th id="SortCarName" scope="col">' +
+        '<a href = "#" onclick = "return Framework.SortDataTable("TableSerEst","SortCarName")" style="color: White; ">車両 ' + '</a>' + '</th>' +
+        '<th scope="col">削除' + '</th>' +
+        '</tr > ';
+    table.prepend(header);
+}
+function SortPagination() {
+    let p = 0;
+    var tbody = $('#TableSerEst').children('tbody');
+    var items = $('#TableSerEst').children('tbody')[0].childNodes;
+    var itemsArr = [];
+    for (i = 0; i < items.length; ++i) {
+        if (i > 0 && (items[i].id) == "pagination") {
+            p = i; 
+        } else {
+            itemsArr.push(items[i]);                   
+        }
+        if (i == (items.length - 1)) {
+            itemsArr.push(items[p]);
         }
     }
+    for (i = 0; i < itemsArr.length; ++i) {
+        tbody.append(itemsArr[i]);
+    }
 }
-
