@@ -25,8 +25,7 @@ function GetListMaker() {
     }
 
 }
-function setInitToDay() {
-
+function SetInitToDay() {
     let lastDay = parseInt(Tday.getDate());
     $("#ddlFromSelectD option[value='" + lastDay + "']").attr("selected", "selected");
     $("#ddlToSelectD option[value='" + lastDay + "']").attr("selected", "selected");
@@ -106,22 +105,18 @@ function GetDayOfMonth(type) {
     }
 }
 function GoNextPage(pageNumber) {
-    var model = Framework.getFormData($("#FormSerEst"));
-    console.log(model);
+    var model = Framework.getFormData($("#FormSerEst")); 
     model.pageNumber = pageNumber
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
-    console.log(result);
     ReloadListData(result);
 }
 function GoNextPage_bk(pageNumber) {
-    var model = Framework.getFormData($("#FormSerEst"));
-    console.log(model);
+    var model = Framework.getFormData($("#FormSerEst")); 
     model.pageNumber = pageNumber
     Framework.SummitForm("/SerEst", model)
 }
 function LoadData(pageNumber) {
     var model = Framework.getFormData($("#FormSerEst"));
-    console.log(model);
     model.pageNumber = pageNumber
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
     if (result.length > 0) {
@@ -160,7 +155,7 @@ function Cleanform() {
     GetListMaker();
     GetDayOfMonth(1);
     GetDayOfMonth(2);
-    setInitToDay();
+    SetInitToDay();
     LoadData(1);
 }
 function Resetddl() {
@@ -212,8 +207,7 @@ function AddPagination(totalPages) {
         visiblePages: 10,
         next: '次',
         prev: '前',
-        onPageClick: function (event, page) {
-            console.log(page);
+        onPageClick: function (event, page) {         
             if (page > 1) {
                 GoNextPage(page)
             }
@@ -222,8 +216,6 @@ function AddPagination(totalPages) {
 }
 function ReloadListData(data) {
     $("#TableSerEst").css("display", "inline-table");
-    var tbody = $('#TableSerEst').children('tbody');
-    var table = tbody.length ? tbody : $('#TableSerEst');
     var row = '<tr id="tbremote">' +
         '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"   type = "submit"  value = "選択"/>' + '</td>' +
         '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"  type = "submit"  value = "再作成"' + '</td>' +
@@ -234,10 +226,11 @@ function ReloadListData(data) {
         '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style ="font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;" type="submit" href="#" onclick="DeleteEstimate(`{{estNo}}`);return false"  value = "削除" ' + '</td>' +
         '</tr>';
     $('tr#tbremote').remove();
+    var itemsArr = [];
     for (let i = 0; i < data.length; i++) {
-        table.append(row.compose(data[i]));
+        itemsArr.push(row.compose(data[i]));
     };
-    SortPagination();
+    SortPagination(itemsArr);
 }
 function AddHeaderName() {
     $("#TableSerEst").css("display", "inline-table");
@@ -261,21 +254,16 @@ function AddHeaderName() {
         '</tr > ';
     table.prepend(header);
 }
-function SortPagination() {
+function SortPagination(itemsArr) {
     let p = 0;
     var tbody = $('#TableSerEst').children('tbody');
-    var items = $('#TableSerEst').children('tbody')[0].childNodes;
-    var itemsArr = [];
+    var items = $('#TableSerEst').children('tbody')[0].childNodes; 
     for (i = 0; i < items.length; ++i) {
         if (i > 0 && (items[i].id) == "pagination") {
             p = i; 
-        } else {
-            itemsArr.push(items[i]);                   
-        }
-        if (i == (items.length - 1)) {
-            itemsArr.push(items[p]);
-        }
+        } 
     }
+    itemsArr.push(items[p]);
     for (i = 0; i < itemsArr.length; ++i) {
         tbody.append(itemsArr[i]);
     }
