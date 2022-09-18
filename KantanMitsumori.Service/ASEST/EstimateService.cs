@@ -69,7 +69,6 @@ namespace KantanMitsumori.Service
                 return ResponseHelper.Error<List<TEstimate>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
-            throw new NotImplementedException();
         }
 
         public ResponseBase<ResponseInp> GetDetail(RequestInp requestInputCar)
@@ -96,6 +95,7 @@ namespace KantanMitsumori.Service
                     }
                 }
                 data.TaxRatio = _commonFuncHelper.getTax((DateTime)data.Udate!, requestInputCar.TaxRatio, requestInputCar.UserNo!);
+                data.TaxRatioID = _commonFuncHelper.getTaxRatioID(requestInputCar.UserNo!);
                 return ResponseHelper.Ok<ResponseInp>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
             }
             catch (Exception ex)
@@ -363,8 +363,8 @@ namespace KantanMitsumori.Service
                     return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
                 }
                 dtEstimates.CarPrice = model.Price;
-                dtEstimates.Discount = model.Discount;               
-        
+                dtEstimates.Discount = model.Discount;
+
                 _unitOfWork.Estimates.Update(dtEstimates);
                 await _unitOfWork.CommitAsync();
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));

@@ -54,25 +54,25 @@
                     <table class="inptable" id="Table3" cellpadding="2" cellspacing="0">
                         <tbody>
                             <tr>
-                                <td class="tabletitle" colspan="2">
+                                <td align="left" class="tabletitle" colspan="2">
                                     <span id="lblOption" class="titlelabel" style="display:inline-block;width:302px;">検索条件</span>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="inptd">
+                                <td align="left" class="inptd">
                                     <span id="Label2" class="inplabel" style="display:inline-block;height:17px;">見積書番号</span>
                                 </td>
-                                <td class="inptd">
+                                <td align="left" class="inptd">
                                     <input name="EstNo" type="text" maxlength="11" id="EstNo" tabindex="1" class="inpbox" style="width:111px;IME-MODE:disabled">
                                     <span id="Label3" class="inplabel" style="display:inline-block;height:20px;">－</span>
                                     <input name="EstSubNo" type="text" maxlength="2" id="EstSubNo" tabindex="2" class="inpbox" style="width:40px;IME-MODE:disabled">
                                 </td>
                             </tr>
                             <tr>
-                                <td class="inptd">
+                                <td align="left" class="inptd">
                                     <span id="Label1" class="inplabel">見積書作成日</span>
                                 </td>
-                                <td class="inptd">
+                                <td align="left" class="inptd">
                                     <select name="ddlFromSelectY" onchange="javascript:setTimeout('__doPostBack(\'ddlFromSelectY\',\'\')', 0)" id="ddlFromSelectY" tabindex="4" class="inpbox" style="width:70px;">
                                         <option selected="selected" value="@DateTime.Now.Year">@DateTime.Now.Year</option>
 
@@ -85,12 +85,12 @@
                                             {
                                                 if (i == Month)
                                                 {
-                                                                            <option selected="selected" value="@Month">@Month</option>
+                                                    <option selected="selected" value="@Month">@Month</option>
                                                 }
                                                 else
                                                 {
                                                     var value = @Month - i;
-                                                                            <option value="@value">@value</option>
+                                                    <option value="@value">@value</option>
                                                 }
                                             }
                                         }
@@ -114,12 +114,12 @@
                                             {
                                                 if (i == Month)
                                                 {
-                                                                            <option selected="selected" value="@Month">@Month</option>
+                                                    <option selected="selected" value="@Month">@Month</option>
                                                 }
                                                 else
                                                 {
                                                     var value = @Month - i;
-                                                                            <option value="@value">@value</option>
+                                                    <option value="@value">@value</option>
                                                 }
                                             }
                                         }
@@ -132,15 +132,15 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td class="inptd">
+                                <td align="left" class="inptd">
                                     <span id="Label4" class="inplabel">お客様カナ名</span>
                                 </td>
-                                <td class="inptd">
+                                <td class="inptd" align="left">
                                     <input name="CustKanaName" type="text" maxlength="40" id="CustKanaName" class="inpbox" style="width:216px;">
                                 </td>
                             </tr>
                             <tr>
-                                <td class="inptd">
+                                <td align="left" class="inptd">
                                     <span id="Label7" class="inplabel">見積車種</span>
                                 </td>
                                 <td class="inptd">
@@ -176,35 +176,23 @@
                     選択&nbsp;&nbsp;：作成当初の見積日のまま編集画面を起動します（上書き保存します）<br>
                     再作成：見積日を本日にして編集画面を起動します（別保存します）
                 </span>
+
                 <div style=" border:solid 1px #999999;left: 163px; top: 420px; width:800px;">
-                    <div>
-                      @*  <table id="TableSerEst" class="gvnomal" cellspacing="1" cellpadding="1" rules="all" border="1" id="gvEst" style="background-color:#D2E0FB;border-color:White;border-width:1px;border-style:Solid;height:156px;width:800px;">
-                            <tbody>
-                                <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
-                                    <th scope="col">選択</th>
-                                    <th scope="col">再作成</th>
-                                    <th scope="col"><a  style="color:White;">見積書番号</a></th>
-                                    <th scope="col"><a  style="color:White;">見積日</a></th>
-                                    <th scope="col"><a  style="color:White;">カナ名</a></th>
-                                    <th scope="col"><a  style="color:White;">車両</a></th>
-                                    <th scope="col">削除</th>
-                                </tr>  
-                            </tbody>
-                              </table>*@
-                          <table id="TableSerEst" class="gvnomal" cellspacing="1" cellpadding="1" rules="all" border="1" id="gvEst" style="background-color:#D2E0FB;border-color:White;border-width:1px;border-style:Solid;height:156px;width:800px;">
-                            <tbody>
-                                <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
-                                    <th scope="col">選択</th>
-                                    <th scope="col">再作成</th>
-                                    <th id="SortEstNo" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortEstNo')" style="color:White;">見積書番号</a></th>
-                                    <th id="SortTradeDate" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortTradeDate')" style="color:White;">見積日</a></th>
-                                    <th id="SortCustKName" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortCustKName')" style="color:White;">カナ名</a></th>
-                                    <th id="SortCarName" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortCarName')" style="color:White;">車両</a></th>
-                                    <th scope="col">削除</th>
-                                </tr>  
-                            </tbody>
-                        </table>
-                    </div>
+                    <table id="TableSerEst" class="gvnomal" cellspacing="1" cellpadding="1" rules="all" border="1" id="gvEst" style="background-color:#D2E0FB;border-color:White;border-width:1px;border-style:Solid;height:156px;width:800px;">
+                        <tbody>
+                            <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
+                                <th scope="col">選択</th>
+                                <th scope="col">再作成</th>
+                                <th id="SortEstNo" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortEstNo')" style="color:White;">見積書番号</a></th>
+                                <th id="SortTradeDate" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortTradeDate')" style="color:White;">見積日</a></th>
+                                <th id="SortCustKName" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortCustKName')" style="color:White;">カナ名</a></th>
+                                <th id="SortCarName" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortCarName')" style="color:White;">車両</a></th>
+                                <th scope="col">削除</th>
+                            </tr>
+                            <div id="reloadData"></div>
+                        </tbody>
+                    </table>
+
                 </div>
                 <div style=" position:absolute; top:1300px; left:0px; z-index: 109;">&nbsp;</div>
             </div>
@@ -212,3 +200,5 @@
     </div>
 </div>
 <script src="~/js/SerEst.js"></script>
+
+

@@ -55,7 +55,7 @@ function chgBonus() {
         $('#cbBonusFirst').val("");
         $('#cbBonusSecond').val("");
         $('#hidBonusSecond').val("");
-        $('#Bonus').attr("disabled", true);        
+        $('#Bonus').attr("disabled", true);
         $('#cbBonusSecond').attr("disabled", true);
         $('#Bonus').css('background-color', FALSE_COLOR);
         $('#cbBonusFirst').css('background-color', FALSE_COLOR);
@@ -158,10 +158,12 @@ function calcResultGankin() {
 function btPayTimesUp_onclick() {
     numval = 0;
     $("#Msg").text('');
-    var PayTimes = parseInt($("#PayTimes").val());
-    if (PayTimes < 0) {
+    var PayTimes = $("#PayTimes").val();
+    if (isNaN(PayTimes)) {
+        $("#Msg").text('お支払回数に数値以外は入力出来ません。');
+        return;
+    } else if (parseFloat(PayTimes) < 0) {
         $("#Msg").text('お支払回数にマイナス値は入力できません。');
-        CleanForm();
         return;
     }
     if ($("#PayTimes").val() == '') {
@@ -181,11 +183,15 @@ function btPayTimesUp_onclick() {
 function btPayTimesDown_onclick() {
     numval = 0;
     $("#Msg").text('');
-    var PayTimes = parseFloat($("#PayTimes").val());
-    if (PayTimes < 0) {
+    var PayTimes = $("#PayTimes").val();
+    if (isNaN(PayTimes)) {
+        $("#Msg").text('お支払回数に数値以外は入力出来ません。');
+        return;
+    } else if (parseFloat(PayTimes) < 0) {
         $("#Msg").text('お支払回数にマイナス値は入力できません。');
         return;
     }
+
     if ($("#PayTimes").val() == '') {
         $("#PayTimes").val(12)
     } else {
@@ -204,8 +210,11 @@ function btPayTimesDown_onclick() {
 function btMoneyRateUp_onclick() {
     numval = 0;
     $("#Msg").text('');
-    let MoneyRate = parseFloat($("#MoneyRate").val());
-    if (MoneyRate < 0) {
+    let MoneyRate = ($("#MoneyRate").val());
+    if (isNaN(MoneyRate)) {
+        $("#Msg").text('金利に数値以外は入力出来ません。');
+        return;
+    } else if (parseFloat(MoneyRate) < 0) {
         $("#Msg").text('金利にマイナス値は入力できません。');
         return;
     }
@@ -230,8 +239,11 @@ function btMoneyRateUp_onclick() {
 function btMoneyRateDown_onclick() {
     numval = 0;
     $("#Msg").text('');
-    let MoneyRate = parseFloat($("#MoneyRate").val());
-    if (MoneyRate < 0) {
+    let MoneyRate = ($("#MoneyRate").val());
+    if (isNaN(MoneyRate)) {
+        $("#Msg").text('金利に数値以外は入力出来ません。');
+        return;
+    } else if (parseFloat(MoneyRate) < 0) {
         $("#Msg").text('金利にマイナス値は入力できません。');
         return;
     }
@@ -374,6 +386,8 @@ function CalInpLoan() {
     }
 };
 function CleanForm() {
+    //var $form = $("#formInpLoan");
+    //Framework.resetForm($form)
     $("#Fee").val("");
     $("#PayTotal").val("");
     $("#PayTimesCl").val("");

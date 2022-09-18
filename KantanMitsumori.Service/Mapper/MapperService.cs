@@ -24,9 +24,11 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<AsopMaker, ResponseAsopMaker>();
             CreateMap<AsopCarname, ResponseAsopCarname>();
             CreateMap<TbRuibetsuN, ResponseTbRuibetsuN>();
-            CreateMap<TbRuibetsuEntity, ResponseTbRuibetsuNew>();         
+            CreateMap<TbRuibetsuEntity, ResponseTbRuibetsuNew>();
             CreateMap<ResponseEstimate, TEstimate>();
             CreateMap<SerEstEntity, ResponseSerEst>();
+            CreateMap<MUserDef, ResponseUserDef>();
+            CreateMap<RequestUpdateInpInitVal, MUserDef>();
         }
     }
 }
