@@ -232,11 +232,13 @@ function SetInitData(data) {
     var ConTaxInputKb = data.conTaxInputKb;
     if (ConTaxInputKb) {
         $("#radInTax").prop("checked", true);
+        $('#hidConTaxInputKb').val("True");
 
     } else {
         $("#radOutTax").prop("checked", true);
+        $('#hidConTaxInputKb').val("False");
     }
-    $('#hidConTaxInputKb').val(StringNull(data.conTaxInputKb));
+   
     $('#YtiRiekiH').val(StringNull(data.ytiRiekiH));
     $('#YtiRiekiK').val(StringNull(data.ytiRiekiK));
     $('#SyakenNewH').val(StringNull(data.syakenNewH));
@@ -273,7 +275,7 @@ function SetInitData(data) {
     $('#TaxFreeSet1Title').val(StringNull(data.taxFreeSet1Title));
     $('#TaxFreeSet2Title').val(StringNull(data.taxFreeSet2Title));
     $('#TaxFreeSet1H').val(StringNull(data.taxFreeSet1H));
-    $('#TaxFreeSet1K').val(StringNull(data.taxFreeSet1K));
+    $('#TaxFreeSet1K').val(StringNull($.trim(data.taxFreeSet1K)));
     $('#TaxFreeSet2H').val(StringNull(data.taxFreeSet2H));
     $('#TaxFreeSet2K').val(StringNull(data.taxFreeSet2K));
     $('#Rate').val(data.rate)
