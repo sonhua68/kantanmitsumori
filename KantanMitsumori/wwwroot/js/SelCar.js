@@ -70,7 +70,6 @@ function onchangeCarName() {
 
     }
 }
-
 function btnChkModel() {
     let caseSet = $("#CaseSet").val();
     if (caseSet == "") {

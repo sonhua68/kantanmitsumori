@@ -5,7 +5,7 @@ let month = parseInt(Tday.getMonth()) + 1;
 GetListMaker();
 GetDayOfMonth(1);
 GetDayOfMonth(2);
-setInitToDay();
+SetInitToDay();
 LoadData(1);
 function GetListMaker() {
     ; var result = Framework.GetObjectDataFromUrl("/SerEst/GetMakerNameAndModelName?makerName=");
@@ -25,7 +25,6 @@ function GetListMaker() {
     }
 
 }
-
 function setInitToDay() {
 
     let lastDay = parseInt(Tday.getDate());
@@ -120,7 +119,6 @@ function GoNextPage_bk(pageNumber) {
     model.pageNumber = pageNumber
     Framework.SummitForm("/SerEst", model)
 }
-
 function LoadData(pageNumber) {
     var model = Framework.getFormData($("#FormSerEst"));
     console.log(model);
@@ -129,7 +127,7 @@ function LoadData(pageNumber) {
     if (result.length > 0) {
         AddRowTable(result);
         let TotalPages = result[0].totalPages;
-        addPagination(TotalPages);
+        AddPagination(TotalPages);
     } else {
         $("#TableSerEst").css("display", "none");
     }
@@ -208,8 +206,7 @@ function AddRowTable(data) {
     }
 
 }
-
-function addPagination(totalPages) {
+function AddPagination(totalPages) {
     $('#trId').twbsPagination({
         totalPages: totalPages,
         visiblePages: 10,
@@ -223,8 +220,6 @@ function addPagination(totalPages) {
         }
     });
 }
-
-
 function ReloadListData(data) {
     $("#TableSerEst").css("display", "inline-table");
     var tbody = $('#TableSerEst').children('tbody');
@@ -244,7 +239,7 @@ function ReloadListData(data) {
     };
     SortPagination();
 }
-function addHeaderName() {
+function AddHeaderName() {
     $("#TableSerEst").css("display", "inline-table");
     var tbody = $('#TableSerEst').children('tbody');
     var table = tbody.length ? tbody : $('#TableSerEst');
@@ -266,7 +261,6 @@ function addHeaderName() {
         '</tr > ';
     table.prepend(header);
 }
-
 function SortPagination() {
     let p = 0;
     var tbody = $('#TableSerEst').children('tbody');
