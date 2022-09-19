@@ -588,7 +588,28 @@ namespace KantanMitsumori.Service.Helper
                 _logger.LogError(ex, "getEstData - CEST-040D");
                 return null;
             }
+        }
 
+        /// <summary>
+        /// Get table t_EstimateSub
+        /// </summary>
+        /// <param name="inEstNo"></param>
+        /// <param name="inEstSubNo"></param>
+        /// <returns></returns>
+        public TEstimateSub getEstSubData(string inEstNo, string inEstSubNo)
+        {
+            try
+            {
+                // get [t_EstimateSub]
+                var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
+
+                return estSubModel;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "getEstData - CEST-040D");
+                return null;
+            }
         }
     }
 }

@@ -4,7 +4,7 @@ function inputChk() {
     document.getElementById("txMsg").innerHTML = "";
     var outMsg;
 
-    var name = $get('txtCustKanaName').value;
+    var name = $('#txtCustKanaName').val();
 
     if (isZenKana(name) == false) {
         outMsg = "全角カナのみで入力して下さい。";
@@ -15,7 +15,7 @@ function inputChk() {
     if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
 
     //日本語バイト数チェック
-    outMsg = chkBytes("メモ欄", $get('txtCustMemo').value, 60)
+    outMsg = chkBytes("メモ欄", $('#txtCustMemo').val(), 60)
     // エラーメッセージ出力をHiddenからLabalに変更
     if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
 

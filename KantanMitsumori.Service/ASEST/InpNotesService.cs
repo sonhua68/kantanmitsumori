@@ -9,10 +9,11 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Service.ASEST
 {
-    public class InpCustKanaService : IInpCustKanaService
+    public class InpNotesService : IInpNotesService
     {
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
@@ -20,7 +21,7 @@ namespace KantanMitsumori.Service.ASEST
 
         private CommonEstimate _commonEst;
 
-        public InpCustKanaService(IMapper mapper, ILogger<InpCustKanaService> logger, IUnitOfWork unitOfWork, CommonEstimate commonEst)
+        public InpNotesService(IMapper mapper, ILogger<InpNotesService> logger, IUnitOfWork unitOfWork, CommonEstimate commonEst)
         {
             _mapper = mapper;
             _logger = logger;
@@ -28,48 +29,50 @@ namespace KantanMitsumori.Service.ASEST
             _commonEst = commonEst;
         }
 
-        public ResponseBase<ResponseInpCustKana> getInfoCust(string estNo, string estSubNo)
+        public ResponseBase<ResponseInpNotes> getInfoNotes(string estNo, string estSubNo)
         {
             try
             {
                 // 見積書データ取得
-                var estData = _commonEst.getEst_EstSubData(estNo, estSubNo);
+                var estSubData = _commonEst.getEstSubData(estNo, estSubNo);
 
-                if (estData == null)
+                if (estSubData == null)
                 {
-                    return ResponseHelper.Error<ResponseInpCustKana>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-041D" + CommonConst.def_ErrCodeR);
+                    return ResponseHelper.Error<ResponseInpNotes>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-041D" + CommonConst.def_ErrCodeR);
                 }
 
-                var model = new ResponseInpCustKana();
-                model.EstNo = estData.EstNo;
-                model.EstSubNo = estData.EstSubNo;
-                model.CustKana = estData.CustKname;
-                model.CustMemo = estData.CustMemo;
+                var model = new ResponseInpNotes();
+                model.EstNo = estSubData.EstNo;
+                model.EstSubNo = estSubData.EstSubNo;
+                string[] arrNotes = string.IsNullOrWhiteSpace(estSubData.Notes) ? new string[2] { "", "" } : estSubData.Notes.Split(Constants.vbCrLf);
+                model.Notes1 = arrNotes[0];
+                model.Notes2 = arrNotes[1];
 
-                return ResponseHelper.Ok<ResponseInpCustKana>("OK", "OK", model);
+                return ResponseHelper.Ok<ResponseInpNotes>("OK", "OK", model);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "");
-                return ResponseHelper.Error<ResponseInpCustKana>("Error", "Error");
+                return ResponseHelper.Error<ResponseInpNotes>("Error", "Error");
             }
         }
 
-        public async Task<ResponseBase<int>> UpdateInpCustKana(RequestUpdateInpCustKana model)
+        public async Task<ResponseBase<int>> UpdateInpNotes(RequestUpdateInpNotes model)
         {
             try
             {
-                // get [t_Estimate]
-                var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == model.EstNo && x.EstSubNo == model.EstSubNo && x.Dflag == false);
-                estModel.CustKname = model.CustKana;
-                estModel.Udate = DateTime.Now;
-
                 // get [t_EstimateSub]
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == model.EstNo && x.EstSubNo == model.EstSubNo && x.Dflag == false);
-                estSubModel.CustMemo = model.CustMemo;
+
+                var strNotes = model.Notes1 + Constants.vbCrLf + model.Notes2;
+                if (strNotes == Constants.vbCrLf)
+                {
+                    strNotes = "";
+                }
+
+                estSubModel.Notes = strNotes;
                 estSubModel.Udate = DateTime.Now;
 
-                _unitOfWork.Estimates.Update(estModel);
                 _unitOfWork.EstimateSubs.Update(estSubModel);
 
                 await _unitOfWork.CommitAsync();
@@ -78,7 +81,7 @@ namespace KantanMitsumori.Service.ASEST
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "UpdateInpCustKana");
+                _logger.LogError(ex, "UpdateInpNotes");
                 return ResponseHelper.Error<int>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));
             }
         }
