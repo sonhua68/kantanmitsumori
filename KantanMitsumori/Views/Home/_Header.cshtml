@@ -2,7 +2,16 @@
 @model LogToken
 <div class="row">
     <div class="col-md-6 col-sm-6">
-        <img src="~/img/AsLogo.png" />
+        @{
+            if (Model.sesMode == "1")
+            {
+                <img src="~/img/TentoLogo.png" />
+            }
+            else
+            {
+                <img src="~/img/AsLogo.png" />
+            }
+        }
         <img src="~/img/HeadTitle.gif" />
     </div>
     <div class="col-md-1 col-sm-1">
@@ -11,7 +20,6 @@
         <span id="lblUsr" style="display:inline-block;color:Black;font-size:12pt;font-weight:bold;height:12px;
           position: sticky; top: 11px; text-align: right">@Model.UserNo　@Model.UserNm　様</span>
     </div>
-   
+
 </div>
 <img class="rounded mx-auto d-block" src="~/img/HeadLine.gif" />
-

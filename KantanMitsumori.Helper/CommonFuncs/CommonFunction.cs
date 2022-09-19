@@ -1,7 +1,5 @@
-﻿
-using KantanMitsumori.Helper.Constant;
+﻿using KantanMitsumori.Helper.Constant;
 using Microsoft.VisualBasic;
-using System.Security.Policy;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
@@ -544,7 +542,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
 
             return rtstrDay;
-
         }
 
 
@@ -622,3 +619,4 @@ namespace KantanMitsumori.Helper.CommonFuncs
         }
     }
 }
+

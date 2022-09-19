@@ -126,20 +126,21 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="inUserNo"></param>
         /// <returns></returns>
-        //public UserDefModel getUserDefData(string inUserNo)
-        //{
-        //    try
-        //    {
-        //        var getUserDef = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.GetSingle(x => x.UserNo == inUserNo && x.Dflag == false));
 
-        //        return getUserDef;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "getUserDefData " + "CUSR-010D");
-        //        return null;
-        //    }
-        //}
+        public UserDefModel getUserDefData(string inUserNo)
+        {
+            try
+            {
+                var getUserDef = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.GetSingle(x => x.UserNo == inUserNo && x.Dflag == false));
+
+                return getUserDef;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "getUserDefData " + "CUSR-010D");
+                return null;
+            }
+        }
 
         /// <summary>
         /// 会員番号デコード vEncNo:エンコードされた会員番号
@@ -388,33 +389,34 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="inMakerName"></param>
         /// <returns></returns>
-        //public bool enableTaxCalc(string inMakerName)
-        //{
-        //    // メーカ名が "" の場合、自動計算対象とみなす
-        //    if (string.IsNullOrEmpty(inMakerName))
-        //        return true;
+        public bool enableTaxCalc(string inMakerName)
+        {
+            // メーカ名が "" の場合、自動計算対象とみなす
+            if (string.IsNullOrEmpty(inMakerName))
+                return true;
 
-        //    // 除外リスト読み込み
-        //    System.Text.Encoding enc = System.Text.Encoding.GetEncoding("shift_jis");
-        //    string strExclusionList = "";
-        //    string[] arrExclusionList;
-        //    try
-        //    {
-        //        strExclusionList = File.ReadAllText(CommonConst.def_ExclusionListOfAutoCalc, enc);
-        //        arrExclusionList = Strings.Split(strExclusionList, Constants.vbCrLf);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "CommonFuncs - enableTaxCalc - GCMF-110F");
-        //        return false;
-        //    }
+            // 除外リスト読み込み
+            System.Text.Encoding enc = System.Text.Encoding.GetEncoding("shift_jis");
+            string strExclusionList = "";
+            string[] arrExclusionList;
+            try
+            {
+                strExclusionList = File.ReadAllText(CommonConst.def_ExclusionListOfAutoCalc, enc);
+                arrExclusionList = Strings.Split(strExclusionList, Constants.vbCrLf);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CommonFuncs - enableTaxCalc - GCMF-110F");
+                return false;
+            }
 
-        //    if (0 <= Array.IndexOf(arrExclusionList, Strings.Trim(inMakerName)))
-        //        // 除外リストに存在する場合、自動計算不可
-        //        return false;
+            if (0 <= Array.IndexOf(arrExclusionList, Strings.Trim(inMakerName)))
+                // 除外リストに存在する場合、自動計算不可
+                return false;
 
-        //    return true;
-        //}
+            return true;
+        }
+
 
         /// <summary>
         /// 初年度登録年月と排気量を受け取り自動車税を返却する
@@ -423,7 +425,7 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="intExaust"></param>
         /// <param name="outCarTax"></param>
         /// <returns></returns>
-        public decimal getCarTax(int intRegistMonth, int intExaust)
+        public int getCarTax(int intRegistMonth, int intExaust)
         {
             // 軽の場合は対象外
             if (intExaust <= 660)
@@ -441,7 +443,7 @@ namespace KantanMitsumori.Service.Helper
             decimal dblCarTax = intYEAR_AMOUNT * Convert.ToDecimal(intPassedMonth / (double)12);
 
             // 100円未満端数切捨て
-            return CommonFunction.ToRoundDown(dblCarTax, -2);
+            return (int)CommonFunction.ToRoundDown(dblCarTax, -2);
         }
 
         /// <summary>
@@ -524,7 +526,6 @@ namespace KantanMitsumori.Service.Helper
             {
                 _logger.LogError(ex, "getSelfInsurance");
                 return 0;
-
             }
         }
 

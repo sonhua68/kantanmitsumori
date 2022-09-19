@@ -1,13 +1,9 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.IService;
+using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Service.ASEST;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service
 {
@@ -18,12 +14,19 @@ namespace KantanMitsumori.Service
             services.AddTransient<IAppService, AppService>();
             services.AddTransient<IEstimateIdeService, EstimateIdeService>();
             services.AddTransient<IEstimateService, EstimateService>();
-            services.AddTransient<IEstimateSubService, EstimateSubService>();    
+
+            services.AddTransient<IEstimateSubService, EstimateSubService>();
+
+            services.AddTransient<IEstimateSubService, EstimateSubService>();
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IInpLoanService, InpLoanService>();
             services.AddTransient<ISelCarService, SelCarService>();
             services.AddTransient<IInpZeiHokenService, InpZeiHokenService>();
+            services.AddTransient<IInpCustKanaService, InpCustKanaService>();
             services.AddTransient<IInpInitValService, InpInitValService>();
+            services.AddTransient<IInpNotesService, InpNotesService>();
+            services.AddTransient<IInpSitaCarService, InpSitaCarService>();
+
             return services;
         }
 
@@ -32,8 +35,11 @@ namespace KantanMitsumori.Service
             return services;
         }
 
+
         public static IServiceCollection AddHelperServices(this IServiceCollection services)
-        { 
+        {
+            services.AddScoped<CommonFuncHelper>();
+            services.AddScoped<CommonEstimate>();
             services.AddScoped<HelperMapper>();
             services.AddScoped<CommonFuncHelper>();
             return services;

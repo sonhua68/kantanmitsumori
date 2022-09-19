@@ -72,5 +72,6 @@ namespace KantanMitsumori.Infrastructure.Repositories
         {
             return dbSet.FirstOrDefault(x => x.EstNo.Equals(entity.EstNo) && x.EstSubNo.Equals(entity.EstSubNo));
         }
+
     }
 }

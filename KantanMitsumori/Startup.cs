@@ -1,10 +1,8 @@
-﻿using KantanMitsumori.Entity.ASESTEntities;
-using KantanMitsumori.Entity.IDEEnitities;
+﻿using KantanMitsumori.DataAccess;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Infrastructure;
 using KantanMitsumori.Service;
 using Microsoft.EntityFrameworkCore;
-using KantanMitsumori.DataAccess;
 namespace KantanMitsumori
 {
     public class Startup
@@ -20,7 +18,6 @@ namespace KantanMitsumori
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllersWithViews();
 
             services.AddDbContext<ASESTContext>(
@@ -44,13 +41,6 @@ namespace KantanMitsumori
             services.AddBusinessServices();
             services.AddHelperServices();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
         }
 
 
@@ -69,8 +59,8 @@ namespace KantanMitsumori
 
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-            //app.UseAuthentication();
-            app.UseSession();
+            app.UseAuthentication();
+            //app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

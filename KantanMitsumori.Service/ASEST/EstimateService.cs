@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GrapeCity.DataVisualization.TypeScript;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
@@ -11,7 +10,6 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Data;
 
 namespace KantanMitsumori.Service
@@ -27,6 +25,7 @@ namespace KantanMitsumori.Service
         private readonly CommonFuncHelper _commonFuncHelper;
 
         public EstimateService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork, HelperMapper helperMapper, CommonFuncHelper commonFuncHelper)
+
         {
             _mapper = mapper;
             _logger = logger;
@@ -69,7 +68,7 @@ namespace KantanMitsumori.Service
                 _logger.LogError(ex, "GetList");
                 return ResponseHelper.Error<List<TEstimate>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
-            }          
+            }
         }
 
         public ResponseBase<ResponseInp> GetDetail(RequestInp requestInputCar)
@@ -95,6 +94,7 @@ namespace KantanMitsumori.Service
                         data.Rate = getDetail.Rate;
                     }
                 }
+
                 data.TaxRatio = _commonFuncHelper.getTax((DateTime)data.Udate!, requestInputCar.TaxRatio, requestInputCar.UserNo!);
                 data.TaxRatioID = _commonFuncHelper.getTaxRatioID(requestInputCar.UserNo!);
                 return ResponseHelper.Ok<ResponseInp>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
@@ -105,7 +105,7 @@ namespace KantanMitsumori.Service
                 return ResponseHelper.Error<ResponseInp>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
-           
+
         }
 
         public async Task<ResponseBase<int>> UpdateInputCar(RequestUpdateInputCar model)
@@ -364,8 +364,8 @@ namespace KantanMitsumori.Service
                     return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
                 }
                 dtEstimates.CarPrice = model.Price;
-                dtEstimates.Discount = model.Discount;               
-        
+                dtEstimates.Discount = model.Discount;
+
                 _unitOfWork.Estimates.Update(dtEstimates);
                 await _unitOfWork.CommitAsync();
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));

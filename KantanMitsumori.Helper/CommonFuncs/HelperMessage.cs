@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KantanMitsumori.Helper.CommonFuncs
+﻿namespace KantanMitsumori.Helper.CommonFuncs
 {
     public class HelperMessage
     {
@@ -12,7 +6,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         public const string SMAL040S = "SMAL-040S";
         public const string CEST040D = "CEST-040D";
         public const string SMAL041D = "SMAL-041D";
- 
+
         //
         public const string SMAL020P = "SMAL-020P";
         public const string SMAL021C = "SMAL-021C";
@@ -28,7 +22,9 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
         public const string SMAI001P = "SMAI-001P";
         public const string SMAI002S = "SMAI-002S";
- 
+
+        public const string SMAI014D = "SMAI-014D";
+        public const string SICK010D = "SICK-010D";
 
 
         #endregion
@@ -38,7 +34,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         #region Information
         public const string I0001 = "I0001";
         public const string I0002 = "I0002";
-        public const string I0003 = "I0003"; 
+        public const string I0003 = "I0003";
 
         #endregion
     }

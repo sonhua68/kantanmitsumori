@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KantanMitsumori.DataAccess\KantanMitsumori.DataAccess.csproj" />
+    <ProjectReference Include="..\KantanMitsumori.Model\KantanMitsumori.Model.csproj" />
   </ItemGroup>
 
 </Project>
