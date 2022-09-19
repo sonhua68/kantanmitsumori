@@ -1,7 +1,6 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
-using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -9,15 +8,12 @@ namespace KantanMitsumori.Controllers
     public class InpNotesController : BaseController
     {
         private readonly IInpNotesService _inpNotesService;
-        private readonly ILogger<InpCustKanaController> _logger;
+        private readonly ILogger<InpNotesController> _logger;
 
-        private CommonEstimate _commonEst;
-
-        public InpNotesController(IConfiguration config, IInpNotesService inpNotesService, ILogger<InpCustKanaController> logger, CommonEstimate commonEst) : base(config)
+        public InpNotesController(IConfiguration config, IInpNotesService inpNotesService, ILogger<InpNotesController> logger) : base(config)
         {
             _inpNotesService = inpNotesService;
             _logger = logger;
-            _commonEst = commonEst;
         }
 
         [HttpGet]

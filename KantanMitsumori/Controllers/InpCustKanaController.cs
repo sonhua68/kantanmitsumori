@@ -1,7 +1,6 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
-using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -11,13 +10,10 @@ namespace KantanMitsumori.Controllers
         private readonly IInpCustKanaService _inpCustKanaService;
         private readonly ILogger<InpCustKanaController> _logger;
 
-        private CommonEstimate _commonEst;
-
-        public InpCustKanaController(IConfiguration config, IInpCustKanaService inpCustKanaService, ILogger<InpCustKanaController> logger, CommonEstimate commonEst) : base(config)
+        public InpCustKanaController(IConfiguration config, IInpCustKanaService inpCustKanaService, ILogger<InpCustKanaController> logger) : base(config)
         {
             _inpCustKanaService = inpCustKanaService;
             _logger = logger;
-            _commonEst = commonEst;
         }
 
         [HttpGet]

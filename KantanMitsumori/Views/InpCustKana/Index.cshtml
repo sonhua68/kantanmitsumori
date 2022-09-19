@@ -47,7 +47,7 @@
 
             <tr>
                 <td class="InpTableTd" colspan="2" style=" background-color:White; text-align:right; border-bottom:none; padding-top:3px;">
-                    <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPageUrl('/');return false;" class="Btn1" style="height:32px;width:100px;">
+                    <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPageUrl('/?IsInpBack=1');return false;" class="Btn1" style="height:32px;width:100px;">
                     <input type="submit" name="btnOK" value="OK" form="formInputCustKana" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                 </td>
             </tr>
@@ -70,7 +70,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCustKana/UpdateInpCustKana");
             if (result.resultStatus == 0) {
-                Framework.GoBackReloadPageUrl('/');
+                Framework.GoBackReloadPageUrl('/?IsInpBack=1');
             } else {
                 let Items = result.data;
                 console.log(Items)

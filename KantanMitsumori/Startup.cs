@@ -1,10 +1,8 @@
-﻿using KantanMitsumori.Entity.ASESTEntities;
-using KantanMitsumori.Entity.IDEEnitities;
+﻿using KantanMitsumori.DataAccess;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Infrastructure;
 using KantanMitsumori.Service;
 using Microsoft.EntityFrameworkCore;
-using KantanMitsumori.DataAccess;
 namespace KantanMitsumori
 {
     public class Startup
@@ -69,7 +67,7 @@ namespace KantanMitsumori
                 endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Test}/{id?}"
+                    pattern: "{controller=Home}/{action=Index}/{id?}"
                 );
             });
         }
