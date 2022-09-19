@@ -58,7 +58,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpNotes/UpdateInpNotes");
             if (result.resultStatus == 0) {
-                Framework.GoBackReloadPageUrl('/?IsInpBack=1'');
+                Framework.GoBackReloadPageUrl('/?IsInpBack=1');
             } else {
                 let Items = result.data;
                 console.log(Items)
