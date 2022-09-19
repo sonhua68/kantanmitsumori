@@ -3,6 +3,7 @@ using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
@@ -58,12 +59,8 @@ namespace KantanMitsumori.Service
             try
             {
                 valToken = new LogToken();
-
-                if (Strings.InStr(requestAction.IsInpBack, "1") == 0 && (string.IsNullOrEmpty(requestAction.Sel) ? "0" : requestAction.Sel) == "0")
-                {
-                    valToken.sesPriDisp = "0";
-                }
-
+                bool isSesPriDisp = requestAction.IsInpBack != 1 && requestAction.Sel == 0;
+                valToken.sesPriDisp = isSesPriDisp ? "0" : "";  
                 valToken.stateLoadWindow = "EstMain";
 
                 // ASNET、店頭商談NETの判定
@@ -106,52 +103,52 @@ namespace KantanMitsumori.Service
 
                 // 見積書番号を取得
                 if (string.IsNullOrEmpty(valToken.sesEstNo) || string.IsNullOrEmpty(valToken.sesEstSubNo))
-                    return ResponseHelper.Error<ResponseEstMainModel>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-040S" + CommonConst.def_ErrCodeR);
+                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL040S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL040S));
 
                 var estData = _commonEst.setEstData(valToken.sesEstNo, valToken.sesEstSubNo);
-
                 if (estData.ResultStatus == (int)enResponse.isSuccess)
                     response.EstModel = estData.Data!;
-
-                // セッションに保持していた会員ユーザーのお客様の情報を画面にセット
                 response.EstCustomerModel = new EstCustomerModel();
                 response.EstCustomerModel.CustNm = valToken.sesCustNm_forPrint ?? "";
                 response.EstCustomerModel.CustZip = valToken.sesCustZip_forPrint ?? "";
                 response.EstCustomerModel.CustAdr = valToken.sesCustAdr_forPrint ?? "";
                 response.EstCustomerModel.CustTel = valToken.sesCustTel_forPrint ?? "";
-
-                // set EstimateIDE
                 response.EstIDEModel = new EstimateIdeModel();
                 if (response.EstModel.LeaseFlag == "1")
                 {
                     response.EstIDEModel = _commonEst.setEstIDEData(ref valToken);
                     if (response.EstIDEModel == null)
-                        return ResponseHelper.Error<ResponseEstMainModel>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-041D" + CommonConst.def_ErrCodeR);
+                        return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
                 }
+                return ResponseHelper.Ok<ResponseEstMainModel>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
 
-                return ResponseHelper.Ok<ResponseEstMainModel>("OK", "OK", response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "");
-                return ResponseHelper.Error<ResponseEstMainModel>("Error", "Error");
+                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+
             }
         }
 
         public ResponseBase<UserModel> getUserInfo(string mem)
         {
-            // 会員番号取得
             string decUsrNo = "";
-
             if (!_commonFuncHelper.DecUserNo(mem.Trim(), ref decUsrNo))
-                return ResponseHelper.Error<UserModel>("Error", CommonConst.def_ErrMsg3 + CommonConst.def_ErrCodeL + "SMAI-021C" + CommonConst.def_ErrCodeR);
-
+            {
+                return ResponseHelper.Error<UserModel>(HelperMessage.SMAI002S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI002S));
+            }
             var responseUser = getUserName(decUsrNo);
-
             if (responseUser == null)
+            {
                 return ResponseHelper.Error<UserModel>("Error", CommonConst.def_ErrMsg3 + CommonConst.def_ErrCodeL + "SMAI-042D" + CommonConst.def_ErrCodeR);
+            }
+            else
+            {
+                return ResponseHelper.Ok<UserModel>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), responseUser);
 
-            return ResponseHelper.Ok<UserModel>("OK", "OK", responseUser);
+            }
+
         }
 
         /// <summary>
@@ -160,9 +157,8 @@ namespace KantanMitsumori.Service
         public async Task<ResponseBase<ResponseEstMainModel>> setFreeEst()
         {
             var estModel = new EstModel();
-            // 作成ユーザー
-            estModel.CallKbn = "3";   // フリー見積
-            estModel.EstInpKbn = "2"; // フリー見積
+            estModel.CallKbn = "3";
+            estModel.EstInpKbn = "2";
             estModel.TradeDate = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd")); // 見積日
             estModel.MakerName = valToken.sesMaker ?? "";  // メーカー
             estModel.ModelName = valToken.sesCarNM ?? "";  // 車名
@@ -180,17 +176,10 @@ namespace KantanMitsumori.Service
             estModel.TaxFreeKb = true;
             estModel.TaxCostKb = true;
             estModel.TradeInNowOdometer = 0;
-            estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM; // 下取車 走行距離 単位（既定値）    
-
-            // ここから税金・保険料の自動計算 ==============================================
-
-            // 排気量あれば採用（必ずあるはず）
+            estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM;
             int intHaiki = Information.IsNumeric(estModel.DispVol) ? int.Parse(estModel.DispVol) : 0;
             bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(valToken.sesMaker!);
-
-            // 自動車税----------------------------------------------
             int intFirstMonth = Convert.ToInt32(Strings.Format(DateTime.Now, "MM"));
-            // 排気量が入力されている場合に限り、計算する。
             if (flgTaxAutoCalc & intHaiki > 0 && estModel.DispVolUnit == CommonConst.def_DispVolUnitCC)
             {
                 var carTax = _commonFuncHelper.getCarTax(intFirstMonth, intHaiki);
@@ -205,21 +194,11 @@ namespace KantanMitsumori.Service
                 estModel.AutoTax = 0;
                 estModel.AutoTaxMonth = "";
             }
-
-            // 自賠責保険基準月数の初期設定値
             int userDefDamageInsMonth = 0;
-
-            // 会員ごとの初期設定値を取得 ==============================================
-            // 会員初期値クラス
             var getUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo);
-
-            // 設定レコードがあればその値を反映
             if (getUserDef != null)
             {
-
                 estModel.EstUserNo = getUserDef.UserNo;
-                // 消費税入力区分
-                // （これまでの変遷）デフォルトは税込入力→税抜をデフォルトに変更→2010/03/19:最終的に税込
                 estModel.ConTaxInputKb = getUserDef.ConTaxInputKb;
                 estModel.ShopNm = getUserDef.ShopNm;
                 estModel.ShopAdr = getUserDef.ShopAdr;
@@ -227,7 +206,6 @@ namespace KantanMitsumori.Service
                 estModel.EstTanName = getUserDef.EstTanName;
                 estModel.SekininName = getUserDef.SekininName;
                 userDefDamageInsMonth = Convert.ToInt32(getUserDef.DamageInsMonth);
-                // 軽自動車の場合
                 bool isIntHaiki = intHaiki > 0 & intHaiki <= 660;
                 estModel.SyakenZok = 0;
                 estModel.SyakenNew = isIntHaiki ? getUserDef.SyakenNewK : getUserDef.SyakenNewH;
@@ -249,47 +227,43 @@ namespace KantanMitsumori.Service
                 estModel.TaxFreeSet2 = isIntHaiki ? getUserDef.TaxFreeSet2K : getUserDef.TaxFreeSet2H;
             }
             else
-                // 諸費用設定のデータを取得できなかった場合のデフォルト
+            {
                 estModel.ConTaxInputKb = true;
-
-
-            // 自賠責保険料取得
-            int intSelfIns = 0; // 保険料
-            int intRemIns = 0; // 月数
-
-            // 排気量が取得できている場合に自賠責保険料を取得
+            }
+            int intSelfIns = 0; int intRemIns = 0;
             if (flgTaxAutoCalc & intHaiki > 0)
             {
                 if (!_commonFuncHelper.getSelfInsurance(intHaiki, "", "", userDefDamageInsMonth, ref intSelfIns, ref intRemIns))
-                    return ResponseHelper.Error<ResponseEstMainModel>("Error", CommonConst.def_ErrMsg1_Maker + CommonConst.def_ErrCodeL + "SMAI-013D" + CommonConst.def_ErrCodeR);
+                {
+                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI013D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI013D));
+
+                }
                 else if (intSelfIns > 0)
                 {
                     estModel.DamageIns = intSelfIns;
                     estModel.DamageInsMonth = intRemIns.ToString();
                 }
             }
-
             estModel.YtiRieki = intSelfIns;
             estModel.CarPrice = intSelfIns;
             estModel.Mode = (byte)(string.IsNullOrEmpty(valToken.sesMode) ? 0 : Convert.ToByte(valToken.sesMode));
-
-            // DB登録
             if (!await regEstData(estModel))
-                return ResponseHelper.Error<ResponseEstMainModel>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-029D" + CommonConst.def_ErrCodeR);
+            {
+                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
 
+            }
+     
             var response = new ResponseEstMainModel();
             response.EstModel = estModel;
 
             // 見積書データ取得・表示
             if (string.IsNullOrEmpty(valToken.sesEstNo) || string.IsNullOrEmpty(valToken.sesEstSubNo))
-                return ResponseHelper.Error<ResponseEstMainModel>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-040S" + CommonConst.def_ErrCodeR);
-
+            {
+                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
+            }
             var estData = _commonEst.setEstData(valToken.sesEstNo, valToken.sesEstSubNo);
-
             if (estData.ResultStatus == (int)enResponse.isSuccess)
                 response.EstModel = estData.Data!;
-
-            // セッションに保持していた会員ユーザーのお客様の情報を画面にセット
             response.EstCustomerModel = new EstCustomerModel();
             response.EstCustomerModel.CustNm = valToken.sesCustNm_forPrint ?? "";
             response.EstCustomerModel.CustZip = valToken.sesCustZip_forPrint ?? "";
@@ -387,18 +361,24 @@ namespace KantanMitsumori.Service
                 {
                     return false;
                 }
-                string vNextSubNo = "";
 
                 // 再作成の場合
                 if (flgRecreate)
                 {
                     // 新見積書番号取得
                     estNo = "";
-                    if (!_commonEst.getEstNoAndSubNoFromDb(ref estNo, ref vNextSubNo))
+                    if (!_commonEst.getEstNoFromDb(ref estNo))
                     {
                         return false;
                     }
-                }              
+                }
+
+                // 新枝番取得
+                string vNextSubNo = "";
+                if (!_commonEst.getEstSubNoFromDb(estNo, ref vNextSubNo))
+                {
+                    return false;
+                }
                 valToken.sesEstSubNo = vNextSubNo;
 
                 // 見積書登録SQL
@@ -414,6 +394,7 @@ namespace KantanMitsumori.Service
                 entityEst.Rdate = DateTime.Now;
                 entityEst.Udate = DateTime.Now;
                 entityEst.Dflag = false;
+
                 TEstimateSub entityEstSub = new TEstimateSub();
                 entityEstSub = _mapper.Map<TEstimateSub>(estData);
                 entityEstSub.EstNo = estNo;
@@ -498,11 +479,19 @@ namespace KantanMitsumori.Service
             // 走行距離
             estModel.NowOdometer = string.IsNullOrEmpty(request.mil) || !Information.IsNumeric(request.mil) ? 0 : int.Parse(request.mil);
             bool isCheckMilUnit = string.IsNullOrEmpty(request.milUnit);
-            estModel.MilUnit = isCheckMilUnit ? CommonConst.def_MilUnitTKM : request.milUnit;           
+            estModel.MilUnit = isCheckMilUnit ? CommonConst.def_MilUnitTKM : request.milUnit;
             // 排気量
             estModel.DispVol = string.IsNullOrEmpty(request.vol) ? "" : request.vol.Trim().Replace("cc", ")"); // 排気量（元データに "cc" が入っていた場合のガード）          
             bool isCheckDispVolUnit = string.IsNullOrEmpty(request.volUnit);
-            estModel.DispVolUnit = isCheckDispVolUnit ? CommonConst.def_DispVolUnitCC : request.volUnit;          
+            if (request.volUnit == "null")
+            {
+                estModel.DispVolUnit = CommonConst.def_DispVolUnitCC;
+            }
+            else
+            {
+                estModel.DispVolUnit = isCheckDispVolUnit ? CommonConst.def_DispVolUnitCC : request.volUnit;
+            }
+
             // シフト
             estModel.Mission = request.shi;
             estModel.AccidentHis = 2;
@@ -758,11 +747,16 @@ namespace KantanMitsumori.Service
             {
                 string strEstNo = "";
                 string strEstSubNo = "";
-                string vLeaseFlag = !string.IsNullOrWhiteSpace(valToken.sesLeaseFlag) ? valToken.sesLeaseFlag : "";         
-                if (!_commonEst.getEstNoAndSubNoFromDb(ref strEstNo, ref strEstSubNo))
+                // 新見積書番号取得
+                if (!_commonEst.getEstNoFromDb(ref strEstNo))
                 {
                     return false;
-                }     
+                }
+                // 枝番は常に取得
+                if (!_commonEst.getEstSubNoFromDb(strEstNo, ref strEstSubNo))
+                {
+                    return false;
+                }
                 // 見積書登録SQL
                 TEstimate entityEst = new TEstimate();
                 entityEst = _mapper.Map<TEstimate>(model);
@@ -777,8 +771,7 @@ namespace KantanMitsumori.Service
                 entityEst.TaxCostKb = true;
                 entityEst.Rdate = DateTime.Now;
                 entityEst.Udate = DateTime.Now;
-                entityEst.Dflag = false;
-                entityEst.LeaseFlag = "1";
+                entityEst.Dflag = false;             
                 TEstimateSub entityEstSub = new TEstimateSub();
                 entityEstSub = _mapper.Map<TEstimateSub>(model);
                 entityEstSub.EstNo = strEstNo;

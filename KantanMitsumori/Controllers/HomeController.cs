@@ -49,34 +49,7 @@ namespace KantanMitsumori.Controllers
             return PartialView("_Header", _logToken);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Estmain([FromQuery] RequestActionModel requestAction, [FromForm] RequestHeaderModel request)
-        {
-            Uri pageUrl;
-            try
-            {
-                string headRef = Request.Headers["Referer"];
-                pageUrl = new Uri(headRef);
-            }
-            catch (Exception)
-            {
-                pageUrl = new Uri("http://www.asnet2.com/asest2/test.html");
-            }
-
-            ResponseBase<ResponseEstMainModel> response = new ResponseBase<ResponseEstMainModel>();
-            if (Strings.InStr(pageUrl.AbsolutePath, "/asest2/") == 0 || Strings.InStr(pageUrl.AbsolutePath, "/test.htm/") > 0)
-                response = await _appService.getEstMain(requestAction, request);
-            else
-                response = await _appService.setFreeEst();
-
-            // check response result 
-            if (response.ResultStatus == (int)enResponse.isError)
-                return ErrorAction(response);
-            // set cookie access token 
-            setTokenCookie(response.Data!.AccessToken);
-            return View(response.Data);
-        }
-
+     
     }
 }
 

@@ -18,12 +18,15 @@
         public const string SMAI010D = "SMAI-010D";
         //
         public const string SMAI028D = "SMAI-028D";
+        public const string SMAI029D = "SMAI-029D";
         public const string SICR001S = "SICR-001S";
 
         public const string SMAI001P = "SMAI-001P";
         public const string SMAI002S = "SMAI-002S";
 
         public const string SMAI014D = "SMAI-014D";
+        public const string SMAI013D = "SMAI-013D";
+
 
 
 

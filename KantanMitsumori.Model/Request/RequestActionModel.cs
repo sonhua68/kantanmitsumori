@@ -3,11 +3,9 @@
 namespace KantanMitsumori.Model.Request
 {
     public class RequestActionModel
-    {
-        [FromQuery(Name = "IsInpBack")]
-        public string IsInpBack { get; set; }
-
-        [FromQuery(Name = "Sel")]
-        public string Sel { get; set; }
+    {      
+        public int IsInpBack { get; set; }    
+        public int Sel { get; set; } 
+        public int SumitFormTest { get; set; }
     }
 }
