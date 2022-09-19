@@ -3,6 +3,7 @@ using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using System.Net;
@@ -400,7 +401,7 @@ namespace KantanMitsumori.Service.Helper
             string strExclusionList = "";
             string[] arrExclusionList;
             try
-            {
+            {             
                 strExclusionList = File.ReadAllText(CommonConst.def_ExclusionListOfAutoCalc, enc);
                 arrExclusionList = Strings.Split(strExclusionList, Constants.vbCrLf);
             }

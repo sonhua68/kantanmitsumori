@@ -543,8 +543,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
             return rtstrDay;
         }
-
-
         public static string checkwSyakenNew(int? syakenNew, int? syakenZok)
         {
             if (syakenNew > 0 && syakenZok == 0)

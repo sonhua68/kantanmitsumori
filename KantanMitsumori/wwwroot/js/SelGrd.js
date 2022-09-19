@@ -11,7 +11,6 @@ function GoNextPage_bk(pageNumber) {
     model.pageNumber = pageNumber
     Framework.SummitForm("/SelGrd", model)
 }
-
 function GoNextPage(pageNumber) {
     var model = {};
     model.sesMakID = $("#sesMakID").val();
