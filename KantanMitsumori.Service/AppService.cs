@@ -387,24 +387,18 @@ namespace KantanMitsumori.Service
                 {
                     return false;
                 }
+                string vNextSubNo = "";
 
                 // 再作成の場合
                 if (flgRecreate)
                 {
                     // 新見積書番号取得
                     estNo = "";
-                    if (!_commonEst.getEstNoFromDb(ref estNo))
+                    if (!_commonEst.getEstNoAndSubNoFromDb(ref estNo, ref vNextSubNo))
                     {
                         return false;
                     }
-                }
-
-                // 新枝番取得
-                string vNextSubNo = "";
-                if (!_commonEst.getEstSubNoFromDb(estNo, ref vNextSubNo))
-                {
-                    return false;
-                }
+                }              
                 valToken.sesEstSubNo = vNextSubNo;
 
                 // 見積書登録SQL
@@ -420,7 +414,6 @@ namespace KantanMitsumori.Service
                 entityEst.Rdate = DateTime.Now;
                 entityEst.Udate = DateTime.Now;
                 entityEst.Dflag = false;
-
                 TEstimateSub entityEstSub = new TEstimateSub();
                 entityEstSub = _mapper.Map<TEstimateSub>(estData);
                 entityEstSub.EstNo = estNo;
@@ -467,21 +460,12 @@ namespace KantanMitsumori.Service
             // ラベルセット
             valToken.UserNo = userInfo.Data!.UserNo;
             valToken.UserNm = userInfo.Data!.UserNm;
-
-
-            //valToken.sesUserNo = userInfo.Data!.UserNo;
-            //valToken.sesUserNm = userInfo.Data!.UserNm;
-            //valToken.sesUserAdr = userInfo.Data!.UserAdr;
-            //valToken.sesUserTel = userInfo.Data!.UserTel;
-            //valToken.sesdispUserInf = userInfo.Data!.UserInfo;
-
-            if (request.exh != "")          // '出品番号
+            if (!string.IsNullOrEmpty(request.exh))
             {
                 string wAANo = request.exh!;
                 string wAAPlace = request.aan!;
                 string wConnerType = request.cot!;
                 string wMode = request.Mode!;
-
                 // 同じAA会場の出品車輌の見積書をすでに(何回か)作成していた場合は
                 // 最新の見積データを取得し、新しい見積枝番でデータ作成。
                 var checkAANo = chkAANo(userInfo.Data.UserNo, wAANo, wAAPlace, int.Parse(wConnerType), int.Parse(wMode));
@@ -494,13 +478,8 @@ namespace KantanMitsumori.Service
                     return ResponseHelper.Error<EstModel>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "GCMF-040D" + CommonConst.def_ErrCodeR);
 
             }
-
-            // 作成ユーザー
             estModel.EstUserNo = userInfo.Data.UserNo;
-            // ワンプラorワンプラ以外
-            // ワンプラ
             estModel.CallKbn = (request.cot == "2" || request.cot == "5") ? "1" : "2";
-
             int vAAcount = request.cot == "1" || request.cot == "2" ? _commonFuncHelper.GetAACount(request.cor) : 0;
             // ASNET車両見積もり
             estModel.EstInpKbn = "1";
@@ -518,37 +497,12 @@ namespace KantanMitsumori.Service
             estModel.CheckCarYm = strCheckCarYm;
             // 走行距離
             estModel.NowOdometer = string.IsNullOrEmpty(request.mil) || !Information.IsNumeric(request.mil) ? 0 : int.Parse(request.mil);
-            if (request.milUnit == default) // 走行距離 単位
-            {
-                // 過渡期には既定値セット
-                estModel.MilUnit = CommonConst.def_MilUnitTKM;
-            }
-            else if (request.milUnit.ToLower() == "null")
-            {
-                estModel.MilUnit = "";
-            }
-            else
-            {
-                estModel.MilUnit = request.milUnit;
-            }
+            bool isCheckMilUnit = string.IsNullOrEmpty(request.milUnit);
+            estModel.MilUnit = isCheckMilUnit ? CommonConst.def_MilUnitTKM : request.milUnit;           
             // 排気量
-            estModel.DispVol = String.IsNullOrEmpty(request.vol) ? "" : request.vol.Trim().Replace("cc", ")"); // 排気量（元データに "cc" が入っていた場合のガード）
-            if (request.volUnit == default) // 排気量 単位
-            {
-                // 過渡期には既定値セット
-                estModel.DispVolUnit = CommonConst.def_DispVolUnitCC;
-            }
-            else if (request.volUnit.ToLower() == "null")
-            {
-                // "null" の場合には既定値セット
-                // （ASNET/店頭商談NET 側は、コーナー15以外の連動先からも排気量単位が正しく取得できないうちは実装しないとのこと）
-                estModel.DispVolUnit = CommonConst.def_DispVolUnitCC;
-            }
-            else
-            {
-                estModel.DispVolUnit = request.volUnit;
-            }
-
+            estModel.DispVol = string.IsNullOrEmpty(request.vol) ? "" : request.vol.Trim().Replace("cc", ")"); // 排気量（元データに "cc" が入っていた場合のガード）          
+            bool isCheckDispVolUnit = string.IsNullOrEmpty(request.volUnit);
+            estModel.DispVolUnit = isCheckDispVolUnit ? CommonConst.def_DispVolUnitCC : request.volUnit;          
             // シフト
             estModel.Mission = request.shi;
             estModel.AccidentHis = 2;
@@ -804,17 +758,11 @@ namespace KantanMitsumori.Service
             {
                 string strEstNo = "";
                 string strEstSubNo = "";
-                //string vLeaseFlag = !string.IsNullOrWhiteSpace(valToken.sesLeaseFlag) ? valToken.sesLeaseFlag : "";
-                // 新見積書番号取得
-                if (!_commonEst.getEstNoFromDb(ref strEstNo))
+                string vLeaseFlag = !string.IsNullOrWhiteSpace(valToken.sesLeaseFlag) ? valToken.sesLeaseFlag : "";         
+                if (!_commonEst.getEstNoAndSubNoFromDb(ref strEstNo, ref strEstSubNo))
                 {
                     return false;
-                }
-                // 枝番は常に取得
-                if (!_commonEst.getEstSubNoFromDb(strEstNo, ref strEstSubNo))
-                {
-                    return false;
-                }
+                }     
                 // 見積書登録SQL
                 TEstimate entityEst = new TEstimate();
                 entityEst = _mapper.Map<TEstimate>(model);
@@ -826,7 +774,7 @@ namespace KantanMitsumori.Service
                 entityEst.OptionInputKb = true;
                 entityEst.TaxInsInputKb = true;
                 entityEst.TaxFreeKb = true;
-                entityEst.TaxCostKb = true;               
+                entityEst.TaxCostKb = true;
                 entityEst.Rdate = DateTime.Now;
                 entityEst.Udate = DateTime.Now;
                 entityEst.Dflag = false;
@@ -837,7 +785,7 @@ namespace KantanMitsumori.Service
                 entityEstSub.EstSubNo = strEstSubNo;
                 entityEstSub.Rdate = DateTime.Now;
                 entityEstSub.Udate = DateTime.Now;
-                entityEstSub.Dflag = false;          
+                entityEstSub.Dflag = false;
                 entityEstSub.LoanModifyFlag = false;
                 entityEstSub.LoanRecalcSettingFlag = true;
                 entityEstSub.LoanInfo = CommonConst.def_LoanInfo_Unexecuted;

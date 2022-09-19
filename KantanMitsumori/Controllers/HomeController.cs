@@ -53,11 +53,9 @@ namespace KantanMitsumori.Controllers
         public async Task<IActionResult> Estmain([FromQuery] RequestActionModel requestAction, [FromForm] RequestHeaderModel request)
         {
             Uri pageUrl;
-
             try
             {
                 string headRef = Request.Headers["Referer"];
-
                 pageUrl = new Uri(headRef);
             }
             catch (Exception)
@@ -66,7 +64,6 @@ namespace KantanMitsumori.Controllers
             }
 
             ResponseBase<ResponseEstMainModel> response = new ResponseBase<ResponseEstMainModel>();
-
             if (Strings.InStr(pageUrl.AbsolutePath, "/asest2/") == 0 || Strings.InStr(pageUrl.AbsolutePath, "/test.htm/") > 0)
                 response = await _appService.getEstMain(requestAction, request);
             else
@@ -75,10 +72,8 @@ namespace KantanMitsumori.Controllers
             // check response result 
             if (response.ResultStatus == (int)enResponse.isError)
                 return ErrorAction(response);
-
             // set cookie access token 
             setTokenCookie(response.Data!.AccessToken);
-
             return View(response.Data);
         }
 

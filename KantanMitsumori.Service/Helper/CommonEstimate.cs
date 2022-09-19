@@ -222,7 +222,7 @@ namespace KantanMitsumori.Service.Helper
                             simLon.Bonus = Convert.ToInt32(estModel.BonusAmount);
                             simLon.BonusFirst = Convert.ToInt32(estModel.BonusFirst);
                             simLon.BonusSecond = Convert.ToInt32(estModel.BonusSecond);
-                        }                     
+                        }
                         simLon.ConTax = vTax;
                         // 計算実行
                         if (simLon.calcRegLoan() == false)
@@ -362,7 +362,7 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="outEstNo"></param>
         /// <returns></returns>
-        public bool getEstNoFromDb(ref string outEstNo)
+        public bool getEstNoAndSubNoFromDb(ref string outEstNo, ref string outEstSubNo)
         {
             try
             {
@@ -374,18 +374,21 @@ namespace KantanMitsumori.Service.Helper
                 string iMonth = Strings.Format(dtNow.Month, "00");
                 // 日を取得する
                 string iDay = Strings.Format(dtNow.Day, "00");
-
                 string strNow = iYear + iMonth + iDay;
-
                 // 現在の最大Noを取得
-                var getMaxEstNo = (from est in _unitOfWork.DbContext.TEstimates
-                                   where est.EstNo.Substring(0, 7) == strNow
-                                   select new { MaxEstNo = string.IsNullOrEmpty(est.EstNo) ? est.EstNo.Max() : '0' }).FirstOrDefault();
-
-                if (getMaxEstNo == null || getMaxEstNo.MaxEstNo.ToString() == "0")
+                var estNo = _unitOfWork.Estimates.Query(n => n.EstNo.Substring(0, 6) == strNow).Max(n => n.EstNo);
+                
+                if (estNo == null)
+                {
                     outEstNo = strNow + "00001";
+                    outEstSubNo = "01";
+                }                
                 else
-                    outEstNo = strNow + Strings.Format(Convert.ToInt32(Strings.Right(getMaxEstNo.MaxEstNo.ToString(), 5)) + 1, "00000");
+                {
+                    outEstNo = strNow + Strings.Format(Convert.ToInt32(Strings.Right(estNo, 5)) + 1, "00000");
+                    outEstSubNo = Strings.Format(Convert.ToInt32(estNo) + 1, "00");
+                }                      
+
             }
             catch (Exception ex)
             {
@@ -393,7 +396,6 @@ namespace KantanMitsumori.Service.Helper
                 _logger.LogError(ex, "getEstNoFromDb - CEST-020D");
                 return false;
             }
-
             return true;
         }
 

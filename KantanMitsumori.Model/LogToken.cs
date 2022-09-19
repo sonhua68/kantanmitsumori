@@ -31,6 +31,7 @@
         public string sesKata { get; set; }
         public string sesHaiki { get; set; }
         public string sesSft { get; set; }
+        public string sesLeaseFlag { get; set; }
 
     }
 }
