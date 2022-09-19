@@ -276,12 +276,14 @@ namespace KantanMitsumori.Service
             }
         }
 
-     
+
         private string chkNumber(string strNumber, string itemName, bool isDec = false)
         {
             var ByteLength = System.Text.Encoding.GetEncoding("Shift_JIS").GetByteCount(strNumber);
             int n;
-            bool isNumeric = int.TryParse(strNumber, out n);
+            decimal m;
+            bool isNumeric = isDec ? decimal.TryParse(strNumber, out m) : int.TryParse(strNumber, out n);
+
             if ((strNumber.Length) != ByteLength)
                 return itemName + "に半角数字以外は入力できません。";
             else if (isNumeric == false)
