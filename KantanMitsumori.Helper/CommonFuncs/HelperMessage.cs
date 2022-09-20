@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KantanMitsumori.Helper.CommonFuncs
+﻿namespace KantanMitsumori.Helper.CommonFuncs
 {
     public class HelperMessage
     {
@@ -53,6 +47,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// SMAI-028D Applicable data for overtime work already existed. 
         /// </summary>
         public const string SMAI028D = "SMAI-028D";
+        public const string SMAI029D = "SMAI-029D";
         /// <summary>
         /// SICR-001S A page transition error has occurred.<br>Please start this service from the original screen of ASNET/Shopping Sales NET. 
         /// </summary>
@@ -65,6 +60,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// SMAI-002S A page transition error has occurred.<br>Please start this service from the original screen of ASNET/Shoten Shodan NET. 
         /// </summary>
         public const string SMAI002S = "SMAI-002S";
+        public const string SMAI014D = "SMAI-014D";
+        public const string SICK010D = "SICK-010D";
+        public const string SMAI013D = "SMAI-013D";
+
+
         #endregion
 
 

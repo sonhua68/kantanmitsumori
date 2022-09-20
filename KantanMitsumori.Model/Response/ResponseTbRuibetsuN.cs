@@ -51,6 +51,8 @@ namespace KantanMitsumori.Model.Response
         public string? DispVol { get; set; }
         public int DriveTypeCodeOrd { get; set; }
         public string? DriveTypeCode { get; set; }
+        public int PageIndex { get; set; }
+        public int TotalPages { get; set; }
     }
     public class ResponseSerEst
     {
@@ -58,7 +60,8 @@ namespace KantanMitsumori.Model.Response
         public string? TradeDate { get; set; }
         public string? CustKName { get; set; }
         public string? CarName { get; set; }
-        public RequestSerEst requestData { get; set; }
+        public int PageIndex { get;  set; }
+        public int TotalPages { get;  set; }
     }
 
 

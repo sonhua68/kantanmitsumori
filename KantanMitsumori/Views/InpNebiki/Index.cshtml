@@ -1,0 +1,306 @@
+﻿@using KantanMitsumori.Model.Response;
+@using KantanMitsumori.Helper.CommonFuncs;
+@model ResponseInp
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+    var CarPrice = CommonFunction.FormatString(Model.CarPrice);
+    var RakuSatu = CommonFunction.FormatString(Model.RakuSatu);
+    var Rikusou = CommonFunction.FormatString(Model.Rikusou);
+    var SyakenSeibi = CommonFunction.checkwSyakenNew(Model.SyakenNew, Model.SyakenZok);
+    var OptionPriceAll = CommonFunction.FormatString(Model.OptionPriceAll);
+    var TaxInsAll = CommonFunction.FormatString(Model.TaxInsAll);
+    var TaxInsEquivalentAll = CommonFunction.FormatString(Model.TaxInsEquivalentAll);
+    var TaxFreeAll = CommonFunction.FormatString(Model.TaxFreeAll);
+    var DaikoAll = CommonFunction.FormatString(Model.TaxCostAll);
+    var TaxAll = CommonFunction.FormatString(Model.ConTax);
+    var CarSaleKei = CommonFunction.FormatString(Model.CarSaleSum);
+    var ShitaPrice = CommonFunction.FormatString(Model.TradeInPrice);
+    var Zansai = CommonFunction.FormatString(Model.Balance);
+    var SalesSum = CommonFunction.FormatString(Model.SalesSum);
+    var Discount = CommonFunction.FormatString(Model.Discount);
+    var Price = Model.CarPrice - Model.Discount;
+    var PriceNew = CommonFunction.FormatString(Price);
+    var LblSyakenSeibi = CommonFunction.Syaken(Model.SyakenNew, Model.SyakenZok);
+    var hidConTaxInputKb = Model.ConTaxInputKb == true?"True":"false";
+
+}
+<form id="formInpNebiki">
+    <table border="0" width="100%">
+        <tbody>
+            <tr>
+                <td align="center">
+                    <div>
+
+                        <table border="0">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 361px">
+                                        <table class="inptable" id="Table3" cellpadding="2" cellspacing="0" bordercolor="#ffffff">
+                                            <tbody>
+                                                <tr>
+                                                    <td colspan="2" class="inptd" style="background-color:White;" align="left">
+                                                        <span id="Label2" class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">価格の調整</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="inptd" style="background-color:White;" align="left">
+                                                        <span id="Label1" class="inplabel">価格の調整ができます。</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="tabletitle" colspan="2" align="left">
+                                                        @{
+                                                            if (Model.ConTaxInputKb == false)
+                                                            {
+                                                                <span id="lblOption" class="titlelabel" style="display:inline-block;width:400px;">価格調整（税抜）</span>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <span id="lblOption" class="titlelabel" style="display:inline-block;width:400px;">価格調整（税込）</span>
+                                                            }
+
+                                                        }
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left" style="width: 180px">
+                                                        <span id="lbl_CarPriceT" class="inplabel" style="display:inline-block;width:150px;">車両本体</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="Price" type="text" id="Price" language="javascript" value="@CarPrice" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+                                                        <span id="Label55" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left" style="width: 180px">
+                                                        <span id="lbl_DisCountT" class="inplabel" style="display:inline-block;width:150px;">値引き</span>
+                                                        <span id="Label3" class="inplabel" style="display:inline-block;width:18px;">▲</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="Discount" type="text" id="Discount" value="@Discount" language="javascript" maxlength="8" class="inpbox_r" tabindex="31" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+                                                        <span id="Label8" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="sumtd" align="left" style="width: 180px">
+                                                        <span id="Labelaa6" class="inplabel">値引き後価格</span>
+                                                    </td>
+                                                    <td class="sumtd" align="left">
+                                                        <input name="lbl_PriceNew" type="text" id="lbl_PriceNew" language="javascript" value="@PriceNew" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Labela7" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left" style="width: 180px">
+                                                        <span id="lbl_RakuSatuT" class="inplabel" style="display:inline-block;width:150px;">落札料</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="RakuSatu" type="text" id="RakuSatu" language="javascript" value="@RakuSatu" maxlength="8" class="inpboxsum" tabindex="48" onblur="//EstSum();" style="WIDTH: 97px;" size="10">
+                                                        <span id="Label16" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left" style="width: 180px">
+                                                        <span id="lbl_RikusouT" class="inplabel" style="display:inline-block;width:150px;">陸送代</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="Rikusou" type="text" id="Rikusou" language="javascript" maxlength="8" value="@Rikusou" class="inpboxsum" tabindex="48" onblur="//EstSum();" style="WIDTH: 97px;" size="10">
+                                                        <span id="Label25" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" align="left" style="width: 180px">
+                                                        <span id="lbl_SyakenSeibiT" class="inplabel" style="display:inline-block;width:150px;">@LblSyakenSeibi</span>
+
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="SyakenSeibi" type="text" id="SyakenSeibi" language="javascript" value="@SyakenSeibi" maxlength="8" class="inpboxsum" tabindex="48" onblur="//EstSum();" style="WIDTH: 97px;" size="10">
+                                                        <span id="Label4" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" style="width:180px; " align="left">
+                                                        <span id="lbl_OpSpeCialPriceT" class="inplabel">付属品・特別仕様</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="lbl_OpSpeCialPrice" type="text" id="lbl_OpSpeCialPrice" value="@OptionPriceAll" language="javascript" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Label9" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" style="width:180px; " align="left">
+                                                        <span id="Label10" class="inplabel">税金・保険料（非課税）</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="lbl_TaxInsAll" type="text" id="lbl_TaxInsAll" language="javascript" value="@TaxInsAll" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Label11" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" style="width:180px; " align="left">
+                                                        <span id="lbl_TaxInsEquivalentAllT" class="inplabel">税金・保険料相当額</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="lbl_TaxInsEquivalentAll" type="text" id="lbl_TaxInsEquivalentAll" value="@TaxInsEquivalentAll" language="javascript" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Label5" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" style="width:180px; " align="left">
+                                                        <span id="Label12" class="inplabel">預り法定費用（非課税）</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="lbl_TaxFreeAll" type="text" id="lbl_TaxFreeAll" language="javascript" value="@TaxFreeAll" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Label13" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" style="width:180px; " align="left">
+                                                        <span id="lbl_DaikoAllT" class="inplabel">手続代行費用</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="lbl_DaikoAll" type="text" id="lbl_DaikoAll" language="javascript" value="@DaikoAll" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Label15" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" style="width:180px; " align="left">
+
+                                                        @{
+                                                            if (Model.ConTaxInputKb == false)
+                                                            {
+                                                                <span id="lbl_TaxAllT" class="inplabel">消費税合計</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span id="lbl_TaxAllT" class="inplabel">（内消費税合計）</span>
+                                                            }
+
+                                                        }
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="lbl_TaxAll" type="text" id="lbl_TaxAll" language="javascript" value="@TaxAll" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Label17" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="sumtd" align="left" style="width: 180px">
+                                                        <span id="Label18" class="inplabel">現金販売価格</span>
+                                                    </td>
+                                                    <td class="sumtd" align="left">
+                                                        <input name="lbl_CarSaleKei" type="text" id="lbl_CarSaleKei" language="javascript" value="@CarSaleKei" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Label19" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" style="width:180px; " align="left">
+                                                        <span id="Label20" class="inplabel">下取車価格</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="lbl_ShitaPrice" type="text" id="lbl_ShitaPrice" value="@ShitaPrice" language="javascript" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Label21" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" style="width:180px; " align="left">
+                                                        <span id="Label22" class="inplabel">下取車残債</span>
+                                                    </td>
+                                                    <td class="inptd" align="left">
+                                                        <input name="lbl_Zansai" type="text" id="lbl_Zansai" value="@Zansai" language="javascript" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Label23" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="sumtd" style="width:180px; " align="left">
+                                                        <span id="Label6" class="inplabel">お支払総額</span>
+                                                    </td>
+                                                    <td class="sumtd" align="left">
+                                                        <input name="lbl_SalesSum" type="text" id="lbl_SalesSum" language="javascript" value="@SalesSum" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                                        <span id="Label7" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inpbtntd" colspan="2" >
+                                                        <input type="button" name="btnCancel" value="キャンセル" onclick="Framework.GoBackReloadPageUrl('/');return false;" id="btnCancel" class="Btn1" style="height:34px;width:100px;">
+                                                        <input type="submit" name="btnOK" form="formInpNebiki" value="OK" id="btnOK" class="Btn1" style="height:34px;width:100px;">&nbsp;
+                                                    </td>
+
+                                                </tr>
+                                                <tr>
+                                                    <td class="inpbtntd" colspan="2">
+
+                                                        &nbsp;<span id="txMsg" class="inpboxsum" style="display:inline-block;color:Red;width:322px;"></span>
+                                                    </td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td style="width: 71px" align="center" valign="bottom">
+                                        <img id="ImageArrow" src="./img/arrow-l.gif" style="border-width:0px;">
+                                        <br>
+                                        <br>
+                                        <br>
+                                    </td>
+                                    <td style="width: 266px" align="left" valign="bottom">
+
+                                        <table id="Table1" bordercolor="#ffffff" cellpadding="2" cellspacing="0" class="inptable">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="tabletitle" style="background-color: mediumvioletred; height: 26px;" align="left">
+                                                        <span id="Label27" class="titlelabel" style="display:inline-block;width:218px;">ご予算（お支払総額）から逆算</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="inptd" style="background-color: #ffccff" align="left">
+                                                        <input name="SalesSumNew" type="text" maxlength="40" id="SalesSumNew" class="inpbox_r" style="width:96px;">&nbsp;&nbsp;
+                                                        <input class="Btn1" id="Button1" style="width: 100px; height: 30px; font-size:11pt; " type="button" value="計算" onclick="bkEstSum();">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="background-color: #ffffff">
+                                                        <span id="Label26" class="inplabel" style="display:inline-block;width:248px;z-index: 100;">お客様のご予算から値引き後価格を逆算します</span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input name="EstNo" type="hidden" id="hidEstNo" value="@Model.EstNo">
+                        <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
+                        <input name="hidTax" type="hidden" id="hidTax" value="@Model.TaxRatio">
+                        <input name="hidConTaxInputKb" type="hidden" id="hidConTaxInputKb" value="@hidConTaxInputKb">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script>
+   
+    $('#formInpNebiki').validate({
+        submitHandler: function (form) {
+          if (inputChk() == false) { return; }
+            var model = Framework.getFormData($("#formInpNebiki"));
+            console.log(model)
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpNebiki/UpdateInpNebiki");
+            if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+                Framework.GoBackReloadPageUrl('/');
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#txMsg").html(Items)
+                } else {
+                    location.reload();
+                }
+            }
+        }
+    });  
+
+</script>
+<script src="~/js/InpNebiki.js"></script>

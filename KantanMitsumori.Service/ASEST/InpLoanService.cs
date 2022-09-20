@@ -25,7 +25,7 @@ namespace KantanMitsumori.Service
 
 
 
-        public InpLoanService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork)
+        public InpLoanService(IMapper mapper, ILogger<InpLoanService> logger, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _logger = logger;
@@ -238,13 +238,13 @@ namespace KantanMitsumori.Service
             // ボーナス加算額、ボーナス第1回支払月、ボーナス第2回支払月、ボーナス加算回数
             if (model.rdBonus_Result!.Contains("rbBonusU_Result"))
             {
-    
-                if (model.BonusCl !=0)
+
+                if (model.BonusCl != 0)
                     errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.BonusCl.ToString(), "ボーナス加算額");
                 else
                     // アプリ上ボーナス加算有無の判定に使用されているため、ボーナス加算額は未入力不可
                     errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "ボーナス加算額が未入力です。";
-             
+
                 if (!string.IsNullOrEmpty(model.BonusFirstMonth))
                 {
                     if (chkNumber(model.BonusFirstMonth!, "ボーナス第1回支払月") != "")
@@ -253,7 +253,7 @@ namespace KantanMitsumori.Service
                         errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "ボーナス第1回支払月の値が不正です。";
                 }
 
-             
+
                 if (!string.IsNullOrEmpty(model.BonusSecondMonth))
                 {
                     if (chkNumber(model.BonusSecondMonth, "ボーナス第2回支払月") != "")
@@ -261,31 +261,34 @@ namespace KantanMitsumori.Service
                     else if (Convert.ToInt32(model.BonusSecondMonth) < 1 | Convert.ToInt32(model.BonusSecondMonth) > 12)
                         errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "ボーナス第2回支払月の値が不正です。";
                 }
-           
+
                 if (model.BonusTimes != 0)
                     errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.BonusTimes.ToString(), "ボーナス加算回数");
-            }          
+            }
 
             if (Strings.Right(errMsg, 6) == "<br />")
                 errMsg = errMsg.Substring(0, Strings.Len(errMsg) - 6);
             if (errMsg == "")
                 return "";
             else
-            {              
+            {
                 return errMsg;
             }
         }
 
 
-        public string chkNumber(string strNumber, string itemName, bool isDec = false)
+        private string chkNumber(string strNumber, string itemName, bool isDec = false)
         {
             var ByteLength = System.Text.Encoding.GetEncoding("Shift_JIS").GetByteCount(strNumber);
+            int n;
+            decimal m;
+            bool isNumeric = isDec ? decimal.TryParse(strNumber, out m) : int.TryParse(strNumber, out n);
 
             if ((strNumber.Length) != ByteLength)
                 return itemName + "に半角数字以外は入力できません。";
-            else if (Convert.ToDecimal(strNumber) == 0)
+            else if (isNumeric == false)
                 return itemName + "に半角数字以外は入力できません。";
-            else if (strNumber.Length < 0)
+            else if (Convert.ToDecimal(strNumber) < 0)
                 return itemName + "にマイナス値は入力できません。";
             else if (isDec)
             {

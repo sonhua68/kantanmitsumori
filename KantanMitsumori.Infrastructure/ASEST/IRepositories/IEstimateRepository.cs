@@ -5,6 +5,5 @@ namespace KantanMitsumori.Infrastructure.IRepositories
 {
     public interface IEstimateRepository : IGenericRepository<TEstimate>
     {
-
     }
 }

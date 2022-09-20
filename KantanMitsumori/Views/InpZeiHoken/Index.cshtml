@@ -75,7 +75,17 @@
                                         <span id="lblOption" class="titlelabel">税金・保険料（非課税）</span>
                                     </td>
                                     <td class="tabletitle" align="left" style="width: 180px">
-                                        <span id="lblTitle_TaxInsEquivalent" class="titlelabel">相当額（税抜）</span>
+                                        @{
+                                            if (Model.ConTaxInputKb ==true)
+                                            {
+                                                <span id="lblTitle_TaxInsEquivalent" class="titlelabel">相当額（税込）</span>
+                                            }
+                                            else
+                                            {
+                                                <span id="lblTitle_TaxInsEquivalent" class="titlelabel">相当額（税抜）</span>
+                                            }
+                                        }
+
                                     </td>
                                 </tr>
                                 <tr>
@@ -210,7 +220,7 @@
                         <input name="EstSubNo" type="hidden" id="EstSubNo" value="@Model.EstSubNo">
                         <input name="DispVol" type="hidden" id="DispVol" value="@Model.DispVol">
                         <input name="ConTaxInputKb" type="hidden" id="ConTaxInputKb" value="@Model.ConTaxInputKb">
-                        <input name="TaxPercent" type="hidden" id="TaxPercent" value="0.1">
+                        <input name="TaxPercent" type="hidden" id="TaxPercent" value="@Model.TaxRatio">
                         <input name="AutoCalcFlg" type="hidden" id="AutoCalcFlg" value="1">
                         <input type="hidden" id="DispVolUnit" value="@Model.DispVolUnit">
                         <input type="hidden" id="CheckCarYm" value="@Model.CheckCarYm">
@@ -234,7 +244,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpZeiHoken/UpdateInpZeiHoken");
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPage();
+                Framework.GoBackReloadPageUrl('/');
             } else {
                 let Items = result.data;
                 console.log(Items)

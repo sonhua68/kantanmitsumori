@@ -2,6 +2,11 @@
 {
     public class CommonConst
     {
+
+        public const string def_DmyImg = "~/img/CarImgDummy.png";
+        public const string def_ExclusionListOfAutoCalc = "F:\\KantanMitsumori\\KantanMitsumori\\wwwroot\\List\\ExclusionList_of_AutoCalc.sjis.txt";
+    
+
         /// <summary>
         /// タイトル
         /// ※プログラムで制御してセットする必要がある場合は定数を使用
@@ -64,7 +69,7 @@
         public const string sesErrMsg = "sesErrMsg";
 
         //-- エラーページリダイレクト先
-        public const string def_ErrPage = "ErrAs.aspx";
+        public const string def_ErrPage = "/Home/Error";
 
         //オプションDDL用
         public const string def_Option1 = "ＥＴＣ車載器";
@@ -112,8 +117,8 @@
         public const string sesRikusou = "sesRikusou";                      //陸送代
         public const string sesCarImgPath = "sesCarImgPath";                //車両画像格納場所
                                                                             //消費税税率追加
-        public const string sesTaxRatio = "sesTaxRatio";                   //消費税 税率
-                                                                           //商談メモ画像枚数追加
+        public const string sesTaxRatio = "sesTaxRatio";                    //消費税 税率
+                                                                            //商談メモ画像枚数追加
         public const string sesCarImgPath1 = "sesCarImgPath1";              //車両画像格納場所(サブ1枚目)
         public const string sesCarImgPath2 = "sesCarImgPath2";              //車両画像格納場所(サブ2枚目)
         public const string sesCarImgPath3 = "sesCarImgPath3";              //車両画像格納場所(サブ3枚目)
@@ -124,13 +129,13 @@
         public const string sesCarImgPath8 = "sesCarImgPath8";              //車両画像格納場所(サブ8枚目)
                                                                             //商談メモ画像枚数追加
         public const string sesASNETFLG = "sesASNETFLG";                    //見積検索画面の遷移元判定用
-        public const string sesLoadWindow = "sesLoadWindow";               //見積メイン／見積検索／フリー見積
-                                                                           //店頭商談NET対応
-        public const string sesMode = "sesMode";                           //モード "0":ASNET, "1":店頭商談NET, "":左記以外 ※判定は文字列として行う（数値の場合、Nothingが0扱いになってしまうため）
-        public const string sesPriDisp = "sesPriDisp";                   //価格表示　0:価格表示あり 1:価格表示なし
+        public const string sesLoadWindow = "sesLoadWindow";                //見積メイン／見積検索／フリー見積
+                                                                            //店頭商談NET対応
+        public const string sesMode = "sesMode";                            //モード "0":ASNET, "1":店頭商談NET, "":左記以外 ※判定は文字列として行う（数値の場合、Nothingが0扱いになってしまうため）
+        public const string sesPriDisp = "sesPriDisp";                      //価格表示　0:価格表示あり 1:価格表示なし
 
-        public const string sesEstNo = "sesEstNo";                      //見積書番号
-        public const string sesEstSubNo = "sesEstSubNo";                 //枝番
+        public const string sesEstNo = "sesEstNo";                          //見積書番号
+        public const string sesEstSubNo = "sesEstSubNo";                    //枝番
 
         //ローンシミュレーション関連
         //-- メッセージ
@@ -188,9 +193,16 @@
         public const string def_DataNotFoundMsg = "該当するデータがありませんでした<br>[車名を直接入力する >>] ボタンから作成してください";
 
 
+        public const string def_PleaseSelect = "選択してください";
+        public const string def_LeaseScreenOnlyMsg = "リース画面でのみ、下取りの設定が可能。";
+
         public const string language_JP = "jp";
         public const string language_EN = "En";
         public const string language_VN = "vn";
+
+        public const string LOAN_RECALC_CLEAR = "※ご確認ください<br />お支払い総合計が変更になりましたが、自動計算を行わない設定になっている為、ローン計算情報をクリアしました";
+        public const string LOAN_RECALC_NORMAL_END = "※ご確認ください<br />お支払い総合計が変更になりましたので、入力済の金利、支払い条件<br />ボーナス加算条件等のローン条件を元に、ローン再計算を行いました";
+        public const string LOAN_RECALC_ERROR = "※ご確認ください<br />お支払い総合計が変更になりましたが、ローン再計算でエラーが発生した為、ローン計算情報をクリアしました";
 
     }
 }

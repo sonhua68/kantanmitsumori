@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace KantanMitsumori.Entity.ASESTEntities
+﻿namespace KantanMitsumori.Entity.ASESTEntities
 {
     public partial class TEstimateIde
     {

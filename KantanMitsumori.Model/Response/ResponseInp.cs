@@ -127,6 +127,10 @@ namespace KantanMitsumori.Model.Response
         public int? CarDoors { get; set; }
         public string? BodyName { get; set; }
         public int? Capacity { get; set; }
+        public decimal? TaxRatio { get; set; }
+        public int? TaxRatioID { get; set; }
+        public decimal? TaxPercent { get; set; }
+        public int? AutoCalcFlg { get; set; }
         #endregion t_Estimate
 
         #region Sub

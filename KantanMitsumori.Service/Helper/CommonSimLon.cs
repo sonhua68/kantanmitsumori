@@ -10,25 +10,26 @@ namespace KantanMitsumori.Service.Helper
 
         #region Model
         // 販売価格計
-        public long SaleSumPrice { get; set; }
+        public int SaleSumPrice { get; set; }
         // 車両本体価格
-        public long CarPrice { get; set; }
+        public int CarPrice { get; set; }
         // 付属品
-        public long OptionPrice { get; set; }
+        public int OptionPrice { get; set; }
         // 値引き
-        public long Discount { get; set; }
+        public int Discount { get; set; }
         // 税金保険料
-        public long Tax { get; set; }
+        public int Tax { get; set; }
         // 課税対象諸費用
-        public long TaxCost { get; set; }
+        public int TaxCost { get; set; }
         // 非課税預り法定費用
-        public long TaxFree { get; set; }
+        public int TaxFree { get; set; }
         // 下取車充当額
-        public long TradeIn { get; set; }
+        public int TradeIn { get; set; }
         // 残債
-        public long Balance { get; set; }
+        public int Balance { get; set; }
         // 頭金
-        public long Deposit { get; set; }
+        public int Deposit { get; set; }
+
         // 金利
         public decimal MoneyRate { get; set; }
         // 支払回数
@@ -36,7 +37,7 @@ namespace KantanMitsumori.Service.Helper
         // 第1回支払月
         public int FirstMonth { get; set; }
         // ボーナス月加算額
-        public long Bonus { get; set; }
+        public int Bonus { get; set; }
         // 第1回ボーナス支払月
         public int BonusFirst { get; set; }
         // 第2回ボーナス支払月
@@ -44,41 +45,41 @@ namespace KantanMitsumori.Service.Helper
         // 消費税率
         public decimal ConTax { get; set; }
         // 現金価格計
-        public long CashTotal { get; set; }
+        public int CashTotal { get; set; }
         // 諸費用合計
-        public long TotalCost { get; set; }
+        public int TotalCost { get; set; }
         // 消費税合計
-        public long TotalTax { get; set; }
+        public int TotalTax { get; set; }
         // 現金価格合計
-        public long Total { get; set; }
+        public int Total { get; set; }
         // 頭金計
-        public long DepositTotal { get; set; }
+        public int DepositTotal { get; set; }
         // 残金
-        public long Principal { get; set; }
+        public int Principal { get; set; }
         // 表示用アドオン率
         public decimal AddonDisp { get; set; }
         // 分割払分手数料
-        public long Fee { get; set; }
+        public int Fee { get; set; }
         // 支払合計額
-        public long PayTotal { get; set; }
+        public int PayTotal { get; set; }
         // ボーナス回数
-        public long BonusTimes { get; set; }
+        public int BonusTimes { get; set; }
         // ボーナス支払額合計
-        public long BonusTotal { get; set; }
+        public int BonusTotal { get; set; }
         // 分割支払総額
-        public long PartitionPayTotal { get; set; }
+        public int PartitionPayTotal { get; set; }
         // 第1回目分割支払金
-        public long FirstPay { get; set; }
+        public int FirstPay { get; set; }
         // 第2回目以降分割支払金
-        public long PayMonth { get; set; }
+        public int PayMonth { get; set; }
         // 内分割払分vFirstPayMonth
-        public long UtiPrincipal { get; set; }
+        public int UtiPrincipal { get; set; }
         // 初回支払年月
-        public long FirstPayMonth { get; set; }
+        public int FirstPayMonth { get; set; }
         // 最終回支払年月
-        public long LastPayMonth { get; set; }
+        public int LastPayMonth { get; set; }
         // 手数料合計
-        public long FeeTotal { get; set; }
+        public int FeeTotal { get; set; }
         // 月々支払希望額
         public decimal hPayMonth { get; set; }
         // ボーナス月加算希望額
@@ -86,6 +87,7 @@ namespace KantanMitsumori.Service.Helper
 
         // 計算後メッセージ
         public string CalcInfo { get; set; }
+
         #endregion model
 
         public CommonSimLon(ILogger logger)
@@ -113,7 +115,8 @@ namespace KantanMitsumori.Service.Helper
                     // --表示用
                     AddonDisp = ToHalfAjust(vAddon * 100, 2);
                     // --分割払分手数料(小数点以下切捨て)
-                    Fee = (long)ToRoundDown(Principal, vAddon, 0);
+                    Fee = (int)ToRoundDown(Principal, vAddon, 0);
+
                 }
 
                 // 支払合計額        
@@ -128,7 +131,8 @@ namespace KantanMitsumori.Service.Helper
                 // 分割支払総額
                 PartitionPayTotal = PayTotal - BonusTotal;
                 // 第2回目以降分割支払金(100円未満切捨て)
-                PayMonth = (long)ToRoundDown(PartitionPayTotal / (decimal)PayTimes, -2);
+                PayMonth = (int)ToRoundDown(PartitionPayTotal / (decimal)PayTimes, -2);
+
                 // 第1回目分割支払金
                 FirstPay = PartitionPayTotal - PayMonth * (PayTimes - 1);
 
@@ -154,7 +158,7 @@ namespace KantanMitsumori.Service.Helper
                     return false;
                 }
                 // 分割支払金合計上限チェック
-                if (chgNullToZeroLng(Convert.ToString(PayTotal)) > 99999999)
+                if (PayTotal > 99999999)
                 {
                     CalcInfo = CommonConst.msgPayTotalOver;
                     return false;
@@ -171,15 +175,13 @@ namespace KantanMitsumori.Service.Helper
                 if (int.Parse(wNowMonth) >= 10 & FirstMonth <= 3)
                 {
                     wNowMonth = DateTime.Now.AddYears(1).Year + "/" + FirstMonth + "/01";
-                    wFirstDt = DateTime.Parse(wNowMonth);
-                    FirstPayMonth = Convert.ToInt32(Strings.Format(wFirstDt, "yyyyMM"));
                 }
                 else
                 {
                     wNowMonth = DateTime.Now.Year + "/" + FirstMonth + "/01";
-                    wFirstDt = DateTime.Parse(wNowMonth);
-                    FirstPayMonth = Convert.ToInt32(Strings.Format(wFirstDt, "yyyyMM"));
                 }
+                wFirstDt = DateTime.Parse(wNowMonth);
+                FirstPayMonth = Convert.ToInt32(Strings.Format(wFirstDt, "yyyyMM"));
 
                 // 最終回支払年月
                 LastPayMonth = Convert.ToInt32(Strings.Format(wFirstDt.AddMonths(PayTimes - 1), "yyyyMM"));
@@ -194,9 +196,6 @@ namespace KantanMitsumori.Service.Helper
 
             return true;
         }
-
-
-
 
         // **************************************************************************
         // * 小数点以下指定桁未満を四捨五入
@@ -252,29 +251,16 @@ namespace KantanMitsumori.Service.Helper
         // **************************************************************************
         // * 指定桁未満を切り捨て2
         // **************************************************************************
-        public decimal ToRoundDown(long inLong, decimal inSgl, int iDigits)
+        public decimal ToRoundDown(int inint, decimal inSgl, int iDigits)
         {
             decimal dCoef = (decimal)Math.Pow(10, iDigits);
             int intR = (int)(inSgl * 10000);
-            decimal dValue = inLong * intR / (decimal)10000;
+            decimal dValue = inint * intR / (decimal)10000;
+
             if (dValue > 0)
                 return Math.Floor(dValue * dCoef) / dCoef;
             else
                 return Math.Ceiling(dValue * dCoef) / dCoef;
-        }
-        // **************************************************************************
-        // * 金額項目　空白からゼロへ変換
-        // **************************************************************************
-        public long chgNullToZeroLng(string val)
-        {
-
-            // 前後の空白除去
-            val = Strings.Trim(val);
-
-            if (val == "")
-                return 0;
-            else
-                return Convert.ToInt64(val);
         }
     }
 }

@@ -1,25 +1,24 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
-using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
-using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.IService;
+using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
-using KantanMitsumori.Service;
+using KantanMitsumori.Model.Response;
 using Microsoft.AspNetCore.Mvc;
-using static Org.BouncyCastle.Math.EC.ECCurve;
-using KantanMitsumori.Models;
+
+using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Controllers
 {
-    
+
     public class HomeController : BaseController
     {
-        private readonly IAppService _appService;
-        private readonly IEstimateService _estimateService;
+        private readonly IEstMainService _appService;
         private readonly ILogger<HomeController> _logger;
+        private readonly IEstimateService _estimateService;
 
-        public HomeController(IAppService appService, IEstimateService estimateService, IConfiguration config, ILogger<HomeController> logger) : base(config)
+        public HomeController(IEstMainService appService, IEstimateService estimateService, IConfiguration config, ILogger<HomeController> logger) : base(config)
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -34,7 +33,7 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             var mode = new LogToken();
-            mode.sesEstNo = "22071200085"; mode.sesEstSubNo = "01";
+            mode.sesEstNo = "22091900091"; mode.sesEstSubNo = "01";
             mode.UserNo = "88888195";
             mode.UserNm = "testuser88888195";
             var token = HelperToken.GenerateJsonToken(mode);
@@ -42,35 +41,16 @@ namespace KantanMitsumori.Controllers
             setTokenCookie(token);
             return View();
         }
-      
+
         public IActionResult Header()
-        {       
-            return PartialView("_Header",_logToken);
+        {
+            _logToken = new LogToken();
+            _logToken.UserNo = "88888195";
+            _logToken.UserNm = "test";
+            return PartialView("_Header", _logToken);
         }
 
-        [HttpPost]
-        public async Task<JsonResult> TestSummitFormAjax(string token, MakerModel requestData)
-        {
-            var response = await _appService.CreateMaker(requestData);
-            var logToken = HelperToken.EncodingToken(token);
-            return Json(response);
-        }
-        public async Task<IActionResult> Test(string token, MakerModel requestData)
-        {
-            var response = await _appService.CreateMaker(requestData);
-            var logToken = HelperToken.EncodingToken(token);
-
-            if (response.ResultStatus == 0)
-            {
-                return ErrorAction(response);
-            }
-            return Ok(response);
-        }
-
-        public IActionResult EstMain()
-        {
-            return View();
-        }
-      
+     
     }
 }
+

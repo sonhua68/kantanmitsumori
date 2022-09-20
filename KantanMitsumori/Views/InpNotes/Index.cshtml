@@ -1,0 +1,74 @@
+﻿@using KantanMitsumori.Model.Response
+@model ResponseInpNotes
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+}
+<form id="formInputNotes">
+    <div align="center">
+        <table class="inptable" id="Table3" cellpadding="2" cellspacing="0" style="border-color:#ffffff">
+            <tr>
+                <td class="inptd" style="background-color:White; width: 800px;" align="left">
+                    <span id="Label3" class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">備考の編集</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" style="background-color:White; height: 70px; width: 800px;" align="left">
+                    <span id="Label4" class="inplabel" style="display:inline-block;width:550px;">
+                        見積書１ページ目下部の備考欄に印字する内容を編集できます。
+                    </span><br>
+                    <span id="Label5" class="inplabel" style="display:inline-block;width:508px;color:Red;">
+                        ※本システムでは個人情報を扱わない事を前提としておりますので<br>
+                        &nbsp;&nbsp;&nbsp;個人情報をご入力されます場合には、会員様責任にてお願いいたします。
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tabletitle" align="left" style="width: 800px">
+                    <span id="Label1" class="titlelabel" style="display:inline-block;width:302px;">備考</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" style="width: 800px">
+                    <input name="Notes1" type="text" maxlength="100" value="@Model.Notes1" class="inpbox" id="txtNotes1" style="width:790px;"><br>
+                    <input name="Notes2" type="text" maxlength="100" value="@Model.Notes2" class="inpbox" id="txtNotes2" style="width:790px;">
+                </td>
+            </tr>
+            <tr>
+                <td class="InpTableTd" colspan="2" style=" background-color:White; text-align:right; border-bottom:none; padding-top:3px;">
+                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPageUrl('/?IsInpBack=1');return false;" style="height:32px;width:100px;">
+                    <input type="submit" name="btnOK" value="OK" form="formInputNotes" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                </td>
+            </tr>
+            <tr>
+                <td class="inpbtntd" colspan="2">
+                    <span id="txMsg" class="inpboxsum" style="display:inline-block;color:Red;width:600px;"></span>&nbsp;
+                </td>
+            </tr>
+        </table>
+        <input type="hidden" id="hidEstNo" name="EstNo" value="@Model.EstNo">
+        <input type="hidden" id="hidEstNo" name="EstSubNo" value="@Model.EstSubNo">
+    </div>
+</form>
+<script>
+    $('#formInputNotes').validate({
+        submitHandler: function(form) {
+            if (inputChk() == false) { return; }
+            var model = Framework.getFormData($("#formInputNotes"));
+            console.log(model)
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpNotes/UpdateInpNotes");
+            if (result.resultStatus == 0) {
+                Framework.GoBackReloadPageUrl('/?IsInpBack=1');
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#Msg").html(Items)
+                } else {
+                    location.reload();
+                }
+            }
+        }
+    });
+</script>
+<script src="~/js/InpNotes.js"></script>

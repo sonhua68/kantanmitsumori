@@ -1,6 +1,7 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
+using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Models;
@@ -10,11 +11,11 @@ namespace KantanMitsumori.Controllers
 {
     public class SelGrdController : BaseController
     {
-        private readonly IAppService _appService;
+        private readonly IEstMainService _appService;
 
         private readonly ILogger<SelGrdController> _logger;
         private readonly ISelCarService _selCarService;
-        public SelGrdController(IAppService appService, ISelCarService selCarService, IConfiguration config, ILogger<SelGrdController> logger) : base(config)
+        public SelGrdController(IEstMainService appService, ISelCarService selCarService, IConfiguration config, ILogger<SelGrdController> logger) : base(config)
         {
             _appService = appService;
             _logger = logger;
@@ -35,7 +36,25 @@ namespace KantanMitsumori.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> LoadData([FromForm] RequestSelGrd requestData)
+        {
 
+            var response = _selCarService.GetListRuiBetSu(requestData);
+
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            var dt = await PaginatedList<ResponseTbRuibetsuNew>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
+
+            if (dt.Count > 0)
+            {
+                dt[0].TotalPages = dt.TotalPages;
+                dt[0].PageIndex = dt.PageIndex;
+            }
+            return Ok(dt);
+        }
 
         #endregion SelCar
     }

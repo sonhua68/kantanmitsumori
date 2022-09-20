@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GrapeCity.DataVisualization.TypeScript;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
@@ -11,7 +10,6 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System.Data;
 
 namespace KantanMitsumori.Service
@@ -22,14 +20,18 @@ namespace KantanMitsumori.Service
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        private readonly HelperMapper _helperMapper;
 
-        public EstimateService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork, HelperMapper helperMapper)
+        private readonly HelperMapper _helperMapper;
+        private readonly CommonFuncHelper _commonFuncHelper;
+
+        public EstimateService(IMapper mapper, ILogger<EstimateService> logger, IUnitOfWork unitOfWork, HelperMapper helperMapper, CommonFuncHelper commonFuncHelper)
+
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _helperMapper = helperMapper;
+            _commonFuncHelper = commonFuncHelper;
 
         }
 
@@ -63,11 +65,10 @@ namespace KantanMitsumori.Service
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "UpdateInputCar");
+                _logger.LogError(ex, "GetList");
                 return ResponseHelper.Error<List<TEstimate>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
-            throw new NotImplementedException();
         }
 
         public ResponseBase<ResponseInp> GetDetail(RequestInp requestInputCar)
@@ -93,6 +94,9 @@ namespace KantanMitsumori.Service
                         data.Rate = getDetail.Rate;
                     }
                 }
+
+                data.TaxRatio = _commonFuncHelper.getTax((DateTime)data.Udate!, requestInputCar.TaxRatio, requestInputCar.UserNo!);
+                data.TaxRatioID = _commonFuncHelper.getTaxRatioID(requestInputCar.UserNo!);
                 return ResponseHelper.Ok<ResponseInp>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data!);
             }
             catch (Exception ex)
@@ -101,7 +105,7 @@ namespace KantanMitsumori.Service
                 return ResponseHelper.Error<ResponseInp>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
-            throw new NotImplementedException();
+
         }
 
         public async Task<ResponseBase<int>> UpdateInputCar(RequestUpdateInputCar model)
@@ -346,6 +350,29 @@ namespace KantanMitsumori.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "DeleteEstimate");
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+
+        public async Task<ResponseBase<int>> UpdateInpNebiki(RequestUpdateInpNebiki model)
+        {
+            try
+            {
+                TEstimate dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
+                if (dtEstimates == null)
+                {
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
+                dtEstimates.CarPrice = model.Price;
+                dtEstimates.Discount = model.Discount;
+
+                _unitOfWork.Estimates.Update(dtEstimates);
+                await _unitOfWork.CommitAsync();
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateInpHanbaiten");
                 return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }

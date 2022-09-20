@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace KantanMitsumori.Entity.ASESTEntities
+﻿namespace KantanMitsumori.Entity.ASESTEntities
 {
     public partial class TbSy
     {
-        public string Corner { get; set; } = null!;
-        public short Aacount { get; set; }
+        public string? Corner { get; set; } = null!;
+        public short? Aacount { get; set; }
         public string Aadate { get; set; } = null!;
         public byte BidFlag { get; set; }
         public string AsmemberNum { get; set; } = null!;

@@ -84,17 +84,17 @@
                     <tbody>
                         <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
                             <th scope="col">選択</th>
-                            <th scope="col"><a href="javascript:__doPostBack('gvGrade','Sort$GradeName')" style="color:White;">グレード</a></th>
-                            <th scope="col"><a href="javascript:__doPostBack('gvGrade','Sort$RegularCase')" style="color:White;">型式</a></th>
-                            <th scope="col"><a href="javascript:__doPostBack('gvGrade','Sort$DispVol')" style="color:White;">排気量</a></th>
+                            <th id="SortGradeName" scope="col"><a href="#" onclick="return Framework.SortDataTable('gvGrade','SortGradeName')" style="color:White;">グレード</a></th>
+                            <th id="SortRegularCase" scope="col"><a href="#" onclick="return Framework.SortDataTable('gvGrade','SortRegularCase')" style="color:White;">型式</a></th>
+                            <th id="SortDispVol" scope="col"><a href="#" onclick="Framework.SortDataTable('gvGrade','SortDispVol')" style="color:White;">排気量</a></th>
                             <th scope="col">シフト</th>
-                            <th scope="col"><a href="javascript:__doPostBack('gvGrade','Sort$DriveTypeCode')" style="color:White;">駆動方式</a></th>
+                            <th id="SortDriveTypeCode" scope="col"><a href="#" onclick="Framework.SortDataTable('gvGrade','SortDriveTypeCode')" style="color:White;">駆動方式</a></th>
                         </tr>
                         @{
                             foreach (var item in Model)
                             {
                                 var DriveTypeCode = item.DriveTypeCode == "不明" ? "" : item.DriveTypeCode;
-                                <tr>
+                                <tr  id="tbremote">
                                     <td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">
                                         <input type="button" value="選択" onclick="Framework.GoBackReloadPageUrl('/');return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">
                                     </td>
@@ -106,33 +106,33 @@
                                 </tr>
                             }
                         }
+                        @* @{
+                        if (TotalPages > 1)
+                        {
+                        <tr align="center" style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">
+                        <td colspan="6">
+                        <table border="0">
+                        <tbody>
+                        <tr>
                         @{
-                            if (TotalPages > 1)
-                            {
-                                <tr align="center" style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">
-                                    <td colspan="6">
-                                        <table border="0">
-                                            <tbody>
-                                                <tr>
-                                                    @{
-                                                        for (int i = 1; i <= TotalPages; i++)
+                        for (int i = 1; i <= TotalPages; i++)
 
-                                                            if (i == PageIndex)
-                                                            {
-                                                                <td><span>@i</span></td>
-                                                            }
-                                                            else
-                                                            {
-                                                                <td><a href="#" onclick="GoNextPage(@i);return false" style="color:White;">@i</a></td>
-                                                            }
-                                                    }
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            }
+                        if (i == PageIndex)
+                        {
+                        <td><span>@i</span></td>
                         }
+                        else
+                        {
+                        <td><a href="#" onclick="GoNextPage(@i);return false" style="color:White;">@i</a></td>
+                        }
+                        }
+                        </tr>
+                        </tbody>
+                        </table>
+                        </td>
+                        </tr>
+                        }
+                        }*@
                     </tbody>
                 </table>
 
@@ -143,4 +143,7 @@
 <input type="hidden" id="sesMakID" value="@MakerId">
 <input type="hidden" id="sesMaker" value="@MakerName">
 <input type="hidden" id="sesCarNM" value="@ModelName">
-<script src="~/js/SelCar.js"></script>
+<input type="hidden" id="sesCarNM" value="@ModelName">
+<input type="hidden" id="TotalPages" value="@TotalPages">
+<input type="hidden" id="PageIndex" value="@PageIndex">
+<script src="~/js/SelGrd.js"></script>

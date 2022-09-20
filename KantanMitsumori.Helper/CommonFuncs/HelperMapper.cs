@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
@@ -142,7 +136,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return objT;
             }).ToList();
         }
-        
+
         #endregion
     }
 }

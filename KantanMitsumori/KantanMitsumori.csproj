@@ -1,86 +1,86 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>	  
-	  <None Remove="Reports\Estimate.rpx" />	  
-	  <None Remove="Reports\EstimateWithMemo.rpx" />	  
-	  <None Remove="Reports\EstSubArticle.rpx" />	  
-	  <None Remove="Reports\EstSubMemo.rpx" />	  
-	  <None Remove="Reports\img_1.jpg" />	  
-	  <None Remove="Reports\img_2.jpg" />	  
-	  <None Remove="Reports\img_3.jpg" />	  
-	  <None Remove="Reports\img_4.jpg" />	  
-	  <None Remove="Reports\img_5.jpg" />	  
-	  <None Remove="Reports\img_6.jpg" />	  
-	  <None Remove="Reports\img_7.jpg" />	  
-	  <None Remove="Reports\img_8.jpg" />	  
-	  <None Remove="Reports\img_9.jpg" />	  
-	  <None Remove="Reports\Order.rpx" />	  
-	  <None Remove="Reports\OrderWithArticle.rpx" />	  
-	  <EmbeddedResource Include="Reports\OrderWithArticle.rpx" />
-	  <EmbeddedResource Include="Reports\EstimateWithMemo.rpx" />	  	  
-	  <EmbeddedResource Include="Reports\Estimate.rpx" />	  
-	  <EmbeddedResource Include="Reports\EstSubMemo.rpx" />
-    <EmbeddedResource Include="Reports\EstSubArticle.rpx" />
-    <EmbeddedResource Include="Reports\img_1.jpg" />
-    <EmbeddedResource Include="Reports\img_2.jpg" />
-    <EmbeddedResource Include="Reports\img_3.jpg" />
-    <EmbeddedResource Include="Reports\img_4.jpg" />
-    <EmbeddedResource Include="Reports\img_5.jpg" />
-    <EmbeddedResource Include="Reports\img_6.jpg" />
-    <EmbeddedResource Include="Reports\img_7.jpg" />
-    <EmbeddedResource Include="Reports\img_8.jpg" />
-    <EmbeddedResource Include="Reports\img_9.jpg" />
-    <EmbeddedResource Include="Reports\Order.rpx" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Remove="Reports\Estimate.rpx" />
+		<None Remove="Reports\EstimateWithMemo.rpx" />
+		<None Remove="Reports\EstSubArticle.rpx" />
+		<None Remove="Reports\EstSubMemo.rpx" />
+		<None Remove="Reports\img_1.jpg" />
+		<None Remove="Reports\img_2.jpg" />
+		<None Remove="Reports\img_3.jpg" />
+		<None Remove="Reports\img_4.jpg" />
+		<None Remove="Reports\img_5.jpg" />
+		<None Remove="Reports\img_6.jpg" />
+		<None Remove="Reports\img_7.jpg" />
+		<None Remove="Reports\img_8.jpg" />
+		<None Remove="Reports\img_9.jpg" />
+		<None Remove="Reports\Order.rpx" />
+		<None Remove="Reports\OrderWithArticle.rpx" />
+		<EmbeddedResource Include="Reports\OrderWithArticle.rpx" />
+		<EmbeddedResource Include="Reports\EstimateWithMemo.rpx" />
+		<EmbeddedResource Include="Reports\Estimate.rpx" />
+		<EmbeddedResource Include="Reports\EstSubMemo.rpx" />
+		<EmbeddedResource Include="Reports\EstSubArticle.rpx" />
+		<EmbeddedResource Include="Reports\img_1.jpg" />
+		<EmbeddedResource Include="Reports\img_2.jpg" />
+		<EmbeddedResource Include="Reports\img_3.jpg" />
+		<EmbeddedResource Include="Reports\img_4.jpg" />
+		<EmbeddedResource Include="Reports\img_5.jpg" />
+		<EmbeddedResource Include="Reports\img_6.jpg" />
+		<EmbeddedResource Include="Reports\img_7.jpg" />
+		<EmbeddedResource Include="Reports\img_8.jpg" />
+		<EmbeddedResource Include="Reports\img_9.jpg" />
+		<EmbeddedResource Include="Reports\Order.rpx" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
-	<PackageReference Include="GrapeCity.ActiveReports" Version="16.2.0" />
-	<PackageReference Include="GrapeCity.ActiveReports.Chart" Version="16.1.2" />
-	<PackageReference Include="GrapeCity.ActiveReports.Core.DataProviders" Version="2.1.0" />
-	<PackageReference Include="GrapeCity.ActiveReports.Core.Rdl" Version="3.3.0" />
-	<PackageReference Include="GrapeCity.ActiveReports.Core.Rendering" Version="3.3.0" />
-	<PackageReference Include="GrapeCity.ActiveReports.Document" Version="16.2.0" />
-	<PackageReference Include="GrapeCity.ActiveReports.Export.Pdf" Version="16.2.0" />
-	<!--Start: Conflict library with ActiveReport - Solved by use higher version of library  -->
-	<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.3.0" />
-	<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.3.0" />
-	<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" />
-	<!--End: Conflict library with ActiveReport - Solved by use higher version of library  -->
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.3.0" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
+		<PackageReference Include="GrapeCity.ActiveReports" Version="16.2.0" />
+		<PackageReference Include="GrapeCity.ActiveReports.Chart" Version="16.1.2" />
+		<PackageReference Include="GrapeCity.ActiveReports.Core.DataProviders" Version="2.1.0" />
+		<PackageReference Include="GrapeCity.ActiveReports.Core.Rdl" Version="3.3.0" />
+		<PackageReference Include="GrapeCity.ActiveReports.Core.Rendering" Version="3.3.0" />
+		<PackageReference Include="GrapeCity.ActiveReports.Document" Version="16.2.0" />
+		<PackageReference Include="GrapeCity.ActiveReports.Export.Pdf" Version="16.2.0" />
+		<!--Start: Conflict library with ActiveReport - Solved by use higher version of library  -->
+		<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.3.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" />
+		<!--End: Conflict library with ActiveReport - Solved by use higher version of library  -->
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\KantanMitsumori.DataAccess\KantanMitsumori.DataAccess.csproj" />
-    <ProjectReference Include="..\KantanMitsumori.Helper\KantanMitsumori.Helper.csproj" />
-    <ProjectReference Include="..\KantanMitsumori.Infrastructure\KantanMitsumori.Infrastructure.csproj" />
-    <ProjectReference Include="..\KantanMitsumori.Service\KantanMitsumori.Service.csproj" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <Folder Include="wwwroot\img\" />
-  </ItemGroup>
-	
-  <ItemGroup>
-    <Content Update="Views\InpZeiHoken\Index.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\KantanMitsumori.DataAccess\KantanMitsumori.DataAccess.csproj" />
+		<ProjectReference Include="..\KantanMitsumori.Helper\KantanMitsumori.Helper.csproj" />
+		<ProjectReference Include="..\KantanMitsumori.Infrastructure\KantanMitsumori.Infrastructure.csproj" />
+		<ProjectReference Include="..\KantanMitsumori.Service\KantanMitsumori.Service.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="wwwroot\img\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Update="Views\InpZeiHoken\Index.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
 
 </Project>

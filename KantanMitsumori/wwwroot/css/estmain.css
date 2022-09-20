@@ -8,7 +8,6 @@
 }
 
 tr > td.data {
-    font-size: 12pt;
     background-color: #fff;
     padding: 5px 0px 5px 5px;
     vertical-align: middle;
@@ -27,6 +26,63 @@ tr > td.dataInfo {
 input.inpbox {
     width: 75%;
 }
+
+input.imgBtn {
+    margin-right: 2px;
+}
+
+tr > td.dataLbl {
+    background-color: #fff;
+    padding: 5px 0px 5px 5px;
+    vertical-align: middle;
+    text-align: left;
+    border: solid 1px #000;
+    width:34.5%;
+}
+
+tr > td.dataLblInfoCar {
+    background-color: #fff;
+    padding: 5px 0px 5px 5px;
+    vertical-align: middle;
+    text-align: left;
+    border: solid 1px #000;
+    width: 7%;
+}
+
+tr > td.titDataPrice {
+    background-color: #fff;
+    padding: 4px 0px 3px 3px;
+    vertical-align: middle;
+    text-align: left;
+    border: solid 1px #000;
+    border-right: none;
+}
+
+tr > td.dataPrice {
+    background-color: #fff;
+    padding: 4px 0px 0px 0px;
+    vertical-align: middle;
+    border: solid 1px #000;
+}
+
+tr > td.btnImgPrice {
+    background-color: #fff;
+    padding: 4px 0px 0px 0px;
+    vertical-align: middle;
+    text-align: right;
+    border: solid 1px #000;
+    border-left: none;
+}
+
+tr > td.txtprice {
+    background-color: #fff;
+    padding: 4px 2px 0px 0px;
+    vertical-align: middle;
+    text-align: right;
+    border: solid 1px #000;
+}
+
+
 /* Hoai Phong custom header*/
 .label-header {
     font-family: 'ＭＳ Ｐゴシック';
@@ -126,4 +182,26 @@ input.inpbox {
     text-align: right;
 }
 
+td.estTitleLeaseTotal-color-text {
+    border-bottom: solid 2px crimson;
+    width: 230px;
+    font-size: 20pt;
+}
+
 /*End Hoai Phong custom header*/
+
+.spanTxtSubject {
+    color: red;
+    font-size: 12px;
+    text-align:left;
+    margin: 0 auto;
+}
+
+.spanTxt {
+    color: red;
+    font-size: 12px;
+    text-align: left;
+    margin: 0 auto;
+    display: block;
+}
+

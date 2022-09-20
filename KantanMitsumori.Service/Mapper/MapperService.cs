@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Entity.ASESTSQL;
+using KantanMitsumori.Model;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
@@ -20,16 +21,24 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<DateTime?, string>().ConvertUsing(s => s.ToStringOrEmpty());
             CreateMap<byte?, string>().ConvertUsing(s => s.ToStringOrEmpty());
             
-            // Specified class mapping
-            CreateMap<TEstimate, TEstimateSub>();
+            // Specified class mapping            
             CreateMap<MMaker, MakerModel>();
             CreateMap<MMaker, MakerModel>();
+
+            CreateMap<TEstimate, EstModel>().ReverseMap();
+            CreateMap<TEstimateSub, EstModel>().ReverseMap();
+            CreateMap<MUserDef, UserDefModel>().ReverseMap();
+            CreateMap<MUser, UserModel>().ReverseMap();
+            CreateMap<TEstimateIde, EstimateIdeModel>().ReverseMap();
+
             CreateMap<AsopMaker, ResponseAsopMaker>();
             CreateMap<AsopCarname, ResponseAsopCarname>();
             CreateMap<TbRuibetsuN, ResponseTbRuibetsuN>();
-            CreateMap<TbRuibetsuEntity, ResponseTbRuibetsuNew>();         
+            CreateMap<TbRuibetsuEntity, ResponseTbRuibetsuNew>();
             CreateMap<ResponseEstimate, TEstimate>();
             CreateMap<SerEstEntity, ResponseSerEst>();
+            CreateMap<MUserDef, ResponseUserDef>();
+            CreateMap<RequestUpdateInpInitVal, MUserDef>();
 
             CreateMapForReport();
            

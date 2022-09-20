@@ -35,7 +35,7 @@ namespace KantanMitsumori.Service
         private readonly HelperMapper _helperMapper;
         private readonly CommonSettings _commonSettings;
 
-        public ReportService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper, CommonSettings commonSettings)
+        public ReportService(IMapper mapper, ILogger<ReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper, CommonSettings commonSettings)
         {
             _mapper = mapper;
             _logger = logger;

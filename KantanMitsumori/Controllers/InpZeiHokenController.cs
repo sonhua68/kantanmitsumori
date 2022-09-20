@@ -1,5 +1,6 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
+using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,14 +8,17 @@ namespace KantanMitsumori.Controllers
 {
     public class InpZeiHokenController : BaseController
     {
-        private readonly IAppService _appService;
+        private readonly IEstMainService _appService;
         private readonly IEstimateService _estimateService;
+        private readonly IInpZeiHokenService _inpZeiHokenService;
         private readonly ILogger<InpZeiHokenController> _logger;
-        public InpZeiHokenController(IAppService appService, IEstimateService estimateService, IConfiguration config, ILogger<InpZeiHokenController> logger) : base(config)
+    
+        public InpZeiHokenController(IEstMainService appService, IEstimateService estimateService, IConfiguration config, IInpZeiHokenService inpZeiHokenService, ILogger<InpZeiHokenController> logger) : base(config)
         {
             _appService = appService;
             _estimateService = estimateService;
             _logger = logger;
+            _inpZeiHokenService = inpZeiHokenService;
         }
 
         #region InpZeiHoken     
@@ -24,6 +28,7 @@ namespace KantanMitsumori.Controllers
             request.EstNo = _logToken.sesEstNo;
             request.EstSubNo = _logToken.sesEstSubNo;
             request.UserNo = _logToken.UserNo;
+            request.TaxRatio = _logToken.sesTaxRatio;
             var response = _estimateService.GetDetail(request);
             if (response.ResultStatus == (int)enResponse.isError)
             {
@@ -43,7 +48,26 @@ namespace KantanMitsumori.Controllers
             return Ok(response);
         }
 
-
+        [HttpPost]
+        public IActionResult calcCarTax(RequestInpZeiHoken requestData)
+        {
+            var response = _inpZeiHokenService.calcCarTax(requestData);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
+        }
+        [HttpPost]
+        public IActionResult calcJibai(RequestInpZeiHoken requestData)
+        {
+            var response = _inpZeiHokenService.calcJibai(requestData);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
+        }
         #endregion InpZeiHoken
     }
 }
