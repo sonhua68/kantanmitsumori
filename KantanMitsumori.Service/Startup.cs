@@ -1,6 +1,7 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.IService;
 using KantanMitsumori.Service.ASEST;
+using KantanMitsumori.Service.Mapper;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace KantanMitsumori.Service
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IInpLoanService, InpLoanService>();
             services.AddTransient<ISelCarService, SelCarService>();
+            services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();            
             return services;
         }
 
@@ -32,6 +34,7 @@ namespace KantanMitsumori.Service
         public static IServiceCollection AddHelperServices(this IServiceCollection services)
         { 
             services.AddScoped<HelperMapper>();
+            services.AddScoped<CommonSettings>();
             return services;
         }
     }
