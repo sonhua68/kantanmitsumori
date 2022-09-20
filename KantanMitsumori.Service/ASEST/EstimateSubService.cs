@@ -14,10 +14,7 @@ namespace KantanMitsumori.Service
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
-
-
-
-        public EstimateSubService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork)
+        public EstimateSubService(IMapper mapper, ILogger<EstimateSubService> logger, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _logger = logger;

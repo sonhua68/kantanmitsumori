@@ -604,13 +604,13 @@ namespace KantanMitsumori.Helper.CommonFuncs
         {
             if (syakenNew > 0 && syakenZok == 0)
             {
-                return "車検整備費用";
+                return CommonConst.def_TitleSyakenNew;
 
             }
             else if (syakenNew == 0 && syakenZok > 0)
             {
 
-                return "納車整備費用";
+                return CommonConst.def_TitleSyakenZok; ;
             }
             return "";
 

@@ -25,7 +25,7 @@ namespace KantanMitsumori.Service
 
 
 
-        public InpLoanService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork)
+        public InpLoanService(IMapper mapper, ILogger<InpLoanService> logger, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _logger = logger;

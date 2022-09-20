@@ -24,7 +24,7 @@ namespace KantanMitsumori.Service
         private readonly HelperMapper _helperMapper;
         private readonly CommonFuncHelper _commonFuncHelper;
 
-        public EstimateService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork, HelperMapper helperMapper, CommonFuncHelper commonFuncHelper)
+        public EstimateService(IMapper mapper, ILogger<EstimateService> logger, IUnitOfWork unitOfWork, HelperMapper helperMapper, CommonFuncHelper commonFuncHelper)
 
         {
             _mapper = mapper;

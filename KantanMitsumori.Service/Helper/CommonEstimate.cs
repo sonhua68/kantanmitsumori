@@ -85,7 +85,7 @@ namespace KantanMitsumori.Service.Helper
                             reCalEstModel.Add(propEst.Name);
 
 
-                            int objValue = (int)propEst.GetValue(estModel);
+                            int objValue = (int)propEst.GetValue(estModel)!;
 
                             if (reCalEstModel.Contains(propEst.Name))
                             {
@@ -102,7 +102,7 @@ namespace KantanMitsumori.Service.Helper
                             // Do something with propValue
                             reCalEstSubModel.Add(propEstSub.Name);
 
-                            int objValue = (int)propEstSub.GetValue(estModel);
+                            int objValue = (int)propEstSub.GetValue(estModel)!;
 
                             if (reCalEstSubModel.Contains(propEstSub.Name))
                             {

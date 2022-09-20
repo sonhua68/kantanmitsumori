@@ -1,5 +1,6 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
+using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,11 +8,11 @@ namespace KantanMitsumori.Controllers
 {
     public class InpLoanController : BaseController
     {
-        private readonly IAppService _appService;
+        private readonly IEstMainService _appService;
         private readonly IEstimateService _estimateService;
         private readonly IInpLoanService _inpLoanService;
         private readonly ILogger<InpLoanController> _logger;
-        public InpLoanController(IAppService appService, IEstimateService estimateService, IConfiguration config, IInpLoanService inpLoanService, ILogger<InpLoanController> logger) : base(config)
+        public InpLoanController(IEstMainService appService, IEstimateService estimateService, IConfiguration config, IInpLoanService inpLoanService, ILogger<InpLoanController> logger) : base(config)
         {
             _appService = appService;
             _estimateService = estimateService;

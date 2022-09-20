@@ -25,7 +25,7 @@ namespace KantanMitsumori.Service
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ReportService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork)
+        public ReportService(IMapper mapper, ILogger<ReportService> logger, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _logger = logger;

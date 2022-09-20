@@ -1,6 +1,7 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
+using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
@@ -13,11 +14,11 @@ namespace KantanMitsumori.Controllers
 
     public class EstmainController : BaseController
     {
-        private readonly IAppService _appService;
+        private readonly IEstMainService _appService;
         private readonly ILogger<HomeController> _logger;
         private readonly IEstimateService _estimateService;
 
-        public EstmainController(IAppService appService, IEstimateService estimateService, IConfiguration config, ILogger<HomeController> logger) : base(config)
+        public EstmainController(IEstMainService appService, IEstimateService estimateService, IConfiguration config, ILogger<HomeController> logger) : base(config)
         {
             _appService = appService;
             _estimateService = estimateService;

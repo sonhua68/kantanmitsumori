@@ -1,5 +1,6 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
+using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +9,10 @@ namespace KantanMitsumori.Controllers
 
     public class InpOptionController : BaseController
     {
-        private readonly IAppService _appService;
+        private readonly IEstMainService _appService;
         private readonly IEstimateService _estimateService;
         private readonly ILogger<InpCarController> _logger;
-        public InpOptionController(IAppService appService, IEstimateService estimateService, IConfiguration config, ILogger<InpCarController> logger) : base(config)
+        public InpOptionController(IEstMainService appService, IEstimateService estimateService, IConfiguration config, ILogger<InpCarController> logger) : base(config)
         {
             _appService = appService;
             _estimateService = estimateService;

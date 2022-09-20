@@ -2,14 +2,13 @@
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 
-namespace KantanMitsumori.IService
+namespace KantanMitsumori.IService.ASEST
 {
-    public interface IAppService
+    public interface IEstMainService
     {
         UserModel getUserName(string userNo);
         ResponseBase<UserModel> getUserInfo(string mem);
         Task<ResponseBase<ResponseEstMainModel>> getEstMain(RequestActionModel requestAction, RequestHeaderModel request);
-
         Task<ResponseBase<ResponseEstMainModel>> setFreeEst();
     }
 }
