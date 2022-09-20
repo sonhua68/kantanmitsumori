@@ -129,8 +129,7 @@ namespace KantanMitsumori.Model.Response.Report
         public string OpSpeCialTitle { get; set; } = "";
         public string TaxInsEquivalentTitle { get; set; } = "";
         public string DaikoTitle { get; set; } = "";
-        public string SalesSumTitle { get; set; } = "";
-        public string RevenueStampTitle { get; set; } = "";
+        public string SalesSumTitle { get; set; } = "";        
         public string CustNm_forPrint { get; set; } = "";
         public string CustZip_forPrint { get; set; } = "";
         public string CustAdr_forPrint { get; set; } = "";
