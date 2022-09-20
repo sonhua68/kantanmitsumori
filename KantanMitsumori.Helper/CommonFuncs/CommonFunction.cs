@@ -1,5 +1,7 @@
-﻿using KantanMitsumori.Helper.Constant;
+﻿using AutoMapper.Execution;
+using KantanMitsumori.Helper.Constant;
 using Microsoft.VisualBasic;
+using System.Globalization;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
@@ -465,20 +467,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
             return strSesName;
         }
-
-        // **************************************************************************
-        // * フォーマット処理
-        // **************************************************************************
-        //public static string setFormat(long param, string formatParm = "")
-        //{
-        //    formatParm = Convert.ToString(Strings.Format(param, "#,##0") + " 円");
-        //    return formatParm;
-        //}
-
-        // **************************************************************************
-        // * フォーマット処理
-        // **************************************************************************
-        public static string setFormatCurrency(object value, string unit = " 円")
+        public static string setFormatCurrency(object value)
         {
             var formatParm = "";
             if (Convert.ToInt32(value) == 0)
@@ -487,16 +476,25 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
             else
             {
-                formatParm = Convert.ToString(Strings.Format(value, "#,##0") + unit);
+                formatParm = Convert.ToString(Strings.Format(value, "#,##0") + " 円");
             }
-
             return formatParm;
         }
-        /// <summary>
-        /// 西暦を和暦に変換する(年のみ)
-        /// </summary>
-        /// <param name="year"></param>
-        /// <returns></returns>
+        public static string setFormatCurrency(object value, string unit)
+        {
+            var formatParm = "";
+            if (Convert.ToInt32(value) == 0)
+            {
+                return formatParm;
+            }
+            else
+            {
+                string format = "{0:#,##0.##}";
+                CultureInfo cul = new CultureInfo("en-Us");
+                formatParm = string.Format(cul, format, value) + " " + unit;
+            }
+            return formatParm;
+        }
         public static string getWareki(string year)
         {
             if (!Information.IsNumeric(Strings.Trim(year)))

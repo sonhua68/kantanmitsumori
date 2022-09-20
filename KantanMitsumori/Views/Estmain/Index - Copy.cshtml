@@ -1,4 +1,4 @@
-﻿@using KantanMitsumori.Helper.CommonFuncs
+﻿@*@using KantanMitsumori.Helper.CommonFuncs
 @using KantanMitsumori.Helper.Constant
 @using KantanMitsumori.Model.Response
 @using Microsoft.VisualBasic
@@ -6,8 +6,203 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "EstMain";
-    var estModelView = Model.EstModelView;
 
+    var TradeDate = CommonFunction.japaneseFormat(Model.EstModel.TradeDate);
+    var SalesSum = CommonFunction.setFormatCurrency(Model.EstModel.SalesSum);
+    var EstTanName = "";
+    var SekininName = "";
+    var ShopTel = "";
+    if (Strings.Trim(Model.EstModel.EstTanName) != "")
+        EstTanName += "担当 : " + Model.EstModel.EstTanName + "　　";
+    if (Strings.Trim(Model.EstModel.SekininName) != "")
+        SekininName += "責任者 : " + Model.EstModel.SekininName + "　　";
+    ShopTel += "TEL : " + Model.EstModel.ShopTel;
+
+    var AAInfo = Model.EstModel.Mode == 1 ? Model.EstModel.AAInfo : "";
+
+    var FirstRegYm = "";
+    // 初年度登録
+    if (Strings.Len(Strings.Trim(Model.EstModel.FirstRegYm)) == 4)
+    {
+        FirstRegYm = CommonFunction.getWareki(Strings.Mid(Model.EstModel.FirstRegYm, 1, 4)) + "年";
+    }
+    else if (Strings.Len(Strings.Trim(Model.EstModel.FirstRegYm)) == 6)
+    {
+        FirstRegYm = CommonFunction.getWareki(Strings.Mid(Model.EstModel.FirstRegYm, 1, 4)) + "年" + System.Convert.ToInt32(Strings.Mid(Model.EstModel.FirstRegYm, 5, 2)) + "月";
+    }
+    string Ysc = "";
+    string Msc = "";
+    CommonFunction.FormatDay(Model.EstModel.CheckCarYm ?? "0", ref Ysc, ref Msc);
+    var CheckCarYm = Model.EstModel.CheckCarYm == "無し" || string.IsNullOrEmpty(Model.EstModel.CheckCarYm) ? Model.EstModel.CheckCarYm : CommonFunction.getWareki(Ysc) + "年" + Msc + "月";
+    var NowRun = Information.IsNumeric(Model.EstModel.NowOdometer) ? CommonFunction.setFormatCurrency(Model.EstModel.NowOdometer, Model.EstModel.MilUnit) : "";
+
+    var Vol = CommonFunction.IsNullString(CommonFunction.setFormatCurrency(Model.EstModel.DispVol, Model.EstModel.DispVolUnit));
+    var CarPriceTitle = CommonConst.def_TitleCarPrice + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+    var DiscountT = Model.EstModel.Discount == 0 ? "" : CommonConst.def_TitleDisCount + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+    var Discount = Model.EstModel.Discount == 0 ? "" : "▲" + Convert.ToString(CommonFunction.setFormatCurrency(Model.EstModel.Discount));
+    var OpSpeCialTitle = CommonConst.def_TitleOpSpeCial + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+    var DaikoTitle = CommonConst.def_TitleDaiko + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+    var TaxInsEquivalentTitle = CommonConst.def_TitleDaiko + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+    var TaxName = Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleConTaxTotalInTax : CommonConst.def_TitleConTaxTotalOutTax;
+    var CarSaleSumTitle = Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleCarKeiInTax : CommonConst.def_TitleCarKeiOutTax;
+    var SalesSumTitle = Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleSalesSumInTax : CommonConst.def_TitleSalesSumOutTax;
+
+    long wSyakenNew;
+    var SyakenNewZokT = "";
+    if (Model.EstModel.SyakenNew > 0 & Model.EstModel.SyakenZok == 0)
+    {
+        wSyakenNew = Model.EstModel.SyakenNew;
+        SyakenNewZokT = CommonConst.def_TitleSyakenNew;
+    }
+    else if (Model.EstModel.SyakenNew == 0 && Model.EstModel.SyakenZok > 0)
+    {
+        wSyakenNew = Model.EstModel.SyakenZok;
+        SyakenNewZokT = CommonConst.def_TitleSyakenZok;
+    }
+    else
+    {
+        wSyakenNew = 0;
+        SyakenNewZokT = CommonConst.def_TitleSyakenNew;
+        if ((Strings.Len(Model.EstModel.CheckCarYm) == 6 &&
+            DateAndTime.DateDiff(DateInterval.Month, DateTime.Today, DateTime.Parse(Strings.Left(Model.EstModel.CheckCarYm, 4) + "/" + Strings.Right(Model.EstModel.CheckCarYm, 2) + "/01")) > 0)
+            || (Strings.Len(Model.EstModel.CheckCarYm) == 4 && DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(Model.EstModel.CheckCarYm + "/01")) > 0))
+            SyakenNewZokT = CommonConst.def_TitleSyakenZok;
+    }
+    SyakenNewZokT = SyakenNewZokT + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+    var SyakenNew = CommonFunction.setFormatCurrency(wSyakenNew);
+
+    var CarPrice = CommonFunction.setFormatCurrency(Model.EstModel.CarPrice);
+    // その他費用
+    var SonotaTitle = Model.EstModel.SonotaTitle + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+    var Sonota = CommonFunction.setFormatCurrency(Model.EstModel.Sonota);
+    // 付属品
+    var OptionPriceAll = CommonFunction.setFormatCurrency(Model.EstModel.OptionPriceAll);
+    // 車両計
+    var CarSum = CommonFunction.setFormatCurrency(Model.EstModel.CarSum);
+    // 税金・保険料
+    var TaxInsAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxInsAll);
+    // 税金・保険料相当額
+    var TaxInsEquivalentAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxInsEquivalentAll);
+    // 預り法定費
+    var TaxFreeAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeAll);
+    // 手続代行費用
+    var TaxCostAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxCostAll);
+    // 消費税
+    var ConTax = CommonFunction.setFormatCurrency(Model.EstModel.ConTax);
+    // 車両販売総額
+    var CarSaleSum = CommonFunction.setFormatCurrency(Model.EstModel.CarSaleSum);
+    // 下取車価格
+    var TradeInPrice = Model.EstModel.TradeInPrice == 0 ? "" : "▲" + Convert.ToString(CommonFunction.setFormatCurrency(Model.EstModel.TradeInPrice));
+    // 下取車残債
+    var Balance = Model.EstModel.Balance == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstModel.Balance);
+
+    // 税金・保険料明細
+    var isTaxInsInputKb = Model.EstModel.TaxInsInputKb;
+    var AutoTaxMonth = isTaxInsInputKb ? Model.EstModel.AutoTaxEquivalent > 0 ? CommonConst.def_TitleAutoTaxEquivalent : CommonConst.def_TitleAutoTax + (Model.EstModel.AutoTax == 0 ? "" : "（" + Model.EstModel.AutoTaxMonth + "月中登録）") : "";
+    var AutoTax = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AutoTax) : "";
+    var AutoTaxEquivalent = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AutoTaxEquivalent) : "";
+    var AcqTax = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AcqTax) : "";
+    var WeightTax = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.WeightTax) : "";
+    var DamageIns = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.DamageIns) : "";
+    var DamageInsEquivalent = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.DamageInsEquivalent) : "";
+    var DamageInsMonth = isTaxInsInputKb ? Model.EstModel.DamageInsEquivalent > 0 ? CommonConst.def_TitleDamageInsEquivalent : CommonConst.def_TitleDamageIns + (Model.EstModel.DamageIns == 0 ? "" : "（" + Model.EstModel.DamageInsMonth + "ヶ月）") : "";
+    var OptionIns = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.OptionIns) : "";
+
+    // 預り法定費明細
+    var isTaxFreeKb = Model.EstModel.TaxFreeKb;
+    var TaxFreeGarage = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeGarage) : "";
+    var TaxFreeCheck = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeCheck) : "";
+    var TaxFreeTradeIn = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeTradeIn) : "";
+    var TaxFreeRecycle = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeRecycle) : "";
+    var TaxFreeOther = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeOther) : "";
+    var TaxFreeSet1Title = isTaxFreeKb ? Model.EstModel.TaxFreeSet1Title : "";
+    var TaxFreeSet1 = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeSet1) : "";
+    var TaxFreeSet2Title = isTaxFreeKb ? Model.EstModel.TaxFreeSet2Title : "";
+    var TaxFreeSet2 = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeSet2) : "";
+
+    // 手続代行費明細
+    var isTaxCostKb = Model.EstModel.TaxCostKb;
+    var TaxGarage = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxGarage) : "";
+    var TaxCheck = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxCheck) : "";
+    var TaxTradeIn = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxTradeIn) : "";
+    var TaxDelivery = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxDelivery) : "";
+    var TaxRecycle = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxRecycle) : "";
+    var TaxOther = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxOther) : "";
+    var TaxTradeInSatei = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxTradeInSatei) : "";
+    var TaxSet1Title = isTaxCostKb ? Model.EstModel.TaxSet1Title : "";
+    var TaxSet1 = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet1) : "";
+    var TaxSet2Title = isTaxCostKb ? Model.EstModel.TaxSet2Title : "";
+    var TaxSet2 = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet2) : "";
+    var TaxSet3Title = isTaxCostKb ? Model.EstModel.TaxSet3Title : "";
+    var TaxSet3 = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet3) : "";
+
+    // 頭金
+    var Deposit = CommonFunction.setFormatCurrency(Model.EstModel.Deposit);
+    // 割賦元金
+    var Principal = Model.EstModel.Principal == 0 ? SalesSum : CommonFunction.setFormatCurrency(Model.EstModel.SalesSum - Model.EstModel.Deposit);
+    // -- 分割払手数料
+    var PartitionFee = Model.EstModel.PartitionFee > 0 ? CommonFunction.setFormatCurrency((long)Model.EstModel.PartitionFee) : "";
+    // -- 分割払金合計
+    var PartitionAmount = Model.EstModel.PartitionAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.PartitionAmount) : "";
+    // -- 支払回数
+    var PayTimes = Model.EstModel.PayTimes > 0 ? Model.EstModel.PayTimes + " 回" : "";
+
+    // -- 支払期間
+    string fromdt = "";
+    if (Model.EstModel.FirstPayMonth != "")
+        fromdt = Strings.Mid(Model.EstModel.FirstPayMonth, 1, 4) + "年" + System.Convert.ToString(Strings.Mid(Model.EstModel.FirstPayMonth, 5, 2)) + "月";
+    string todt = "";
+    if (Model.EstModel.LastPayMonth != "")
+        todt = Strings.Mid(Model.EstModel.LastPayMonth, 1, 4) + "年" + System.Convert.ToString(Strings.Mid(Model.EstModel.LastPayMonth, 5, 2)) + "月";
+    var Kikan = (fromdt != "" | todt != "") ? fromdt + " - " + todt : "";
+
+    // -- 初回支払額
+    var FirstPayAmount = Model.EstModel.FirstPayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.FirstPayAmount) : "";
+    // -- 2回目以降支払額
+    var PayAmount = Model.EstModel.PayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.PayAmount) : "";
+    var PayTimes2 = Model.EstModel.PayTimes > 0 ? "（×" + Convert.ToString(Model.EstModel.PayTimes - 1) + "回）" : "";
+    // -- ボーナス加算月
+    var BonusMonth = "";
+    if (Model.EstModel.BonusAmount > 0)
+    {
+        BonusMonth = Model.EstModel.BonusFirst != "" ? Model.EstModel.BonusFirst + "月" : "";
+        BonusMonth += Model.EstModel.BonusSecond != "" ? "・" + Model.EstModel.BonusSecond + "月" : "";
+    }
+    // -- ボーナス加算額
+    var BonusAmount = Model.EstModel.BonusAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.BonusAmount) : "";
+    // -- ボーナス加算回数
+    var BonusTimes = Model.EstModel.BonusAmount > 0 ? Model.EstModel.BonusTimes > 0 ? "（×" + Model.EstModel.BonusTimes + "回）" : "" : "";
+    // -- 実質年率
+    var Rate = Model.EstModel.Rate > 0 ? "分割払手数料は実質年率 " + Model.EstModel.Rate + "% で計算しています" : "";
+    var WarningRecalc = Model.EstModel.LoanInfo == CommonConst.def_LoanInfo_Clear ? CommonConst.LOAN_RECALC_CLEAR :
+                                     Model.EstModel.LoanInfo == CommonConst.def_LoanInfo_NormalEnd ? CommonConst.LOAN_RECALC_NORMAL_END :
+                                      Model.EstModel.LoanInfo == CommonConst.def_LoanInfo_Error ? CommonConst.LOAN_RECALC_ERROR : "";
+
+    // 見積書データ表示用整形
+    var FirstRegistration = CommonFunction.getFormatDayYMD(Model.EstIDEModel.FirstRegistration);
+    var InspectionExpirationDate = CommonFunction.getFormatDayYMD(Model.EstIDEModel.InspectionExpirationDate);
+    var LeaseStartMonth = CommonFunction.getFormatDayYMD(Model.EstIDEModel.LeaseStartMonth);
+    var LeasePeriod = Model.EstIDEModel.LeasePeriod == 0 ? "" : Model.EstIDEModel.LeasePeriod + "ヶ月";
+    var LeaseExpirationDate = CommonFunction.getFormatDayYMD(Model.EstIDEModel.LeaseExpirationDate);
+    var monthlyLeaseFee = Model.EstIDEModel.MonthlyLeaseFee == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.MonthlyLeaseFee);
+    var LeaseTotal = string.IsNullOrEmpty(LeasePeriod) ? "月額リース料(税込)" : "月額リース料(税込) " + monthlyLeaseFee + " (" + LeasePeriod + ")";
+    var ContractPlanName = Model.EstIDEModel.ContractPlanName;
+    var IsExtendedGuarantee = Model.EstIDEModel.IsExtendedGuarantee == unchecked((byte)(-1)) ? "" : Model.EstIDEModel.IsExtendedGuarantee == 0 ? "あり" : "なし";
+    var InsuranceCompanyName = Model.EstIDEModel.InsuranceCompanyName;
+    var InsuranceFee = Model.EstIDEModel.InsuranceFee == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.InsuranceFee);
+    var DownPayment = Model.EstIDEModel.DownPayment == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.DownPayment);
+    var IdeTradeInPrice = Model.EstIDEModel.TradeInPrice == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.TradeInPrice);
+
+    var TradeInFirstRegYm = !string.IsNullOrEmpty(Model.EstModel.TradeInFirstRegYm) ? (Model.EstModel.TradeInFirstRegYm.Trim().Length == 4) ? CommonFunction.getWareki(Strings.Mid(Model.EstModel.TradeInFirstRegYm, 1, 4)) + "年" :
+                              (Model.EstModel.TradeInFirstRegYm.Trim().Length == 6) ? CommonFunction.getWareki(Strings.Mid(Model.EstModel.TradeInFirstRegYm, 1, 4)) + "年" + Convert.ToInt32(Strings.Mid(Model.EstModel.TradeInFirstRegYm, 5, 2)) + "月" : "" : "";
+    // 車検
+    string Yfm = "";
+    string Mfm = "";
+    CommonFunction.FormatDay(Model.EstModel.TradeInCheckCarYm ?? "0", ref Yfm, ref Mfm);  // 年のみ("YYYY")のデータは、トップ画面および見積書/注文書上で、敢えて「xxxx年  月」のままとする（仕様確認済）
+    var TradeInCheckCarYm = Model.EstModel.TradeInCheckCarYm == "無し" || string.IsNullOrEmpty(Model.EstModel.TradeInCheckCarYm) ? Model.EstModel.TradeInCheckCarYm : CommonFunction.getWareki(Yfm) + "年" + Mfm + "月";
+    // 下取車走行距離
+    var SitaRun = Model.EstModel.TradeInNowOdometer > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.TradeInNowOdometer, Model.EstModel.TradeInMilUnit) : "";
+    var TradeInRegNo = string.IsNullOrEmpty(Model.EstModel.TradeInRegNo) ? "" : Model.EstModel.TradeInRegNo.Replace("/", "");
 }
 
 <form id="frm" method="post" action="/home/estmain">
@@ -36,18 +231,18 @@
                         </div>
                         <br />
                         <div class="col d-flex justify-content-between">
-                            <a href="#" onclick="Framework.GoBackReloadPageUrl('/SerEst');return false;" >
+                            <a href="">
                                 <img src="~/img/btn検索.png" />
                             </a>
                         </div>
                         <div class="col d-flex justify-content-between">
-                            <a href="#" onclick="Framework.GoBackReloadPageUrl('/SelCar');return false;">
+                            <a href="">
                                 <img src="~/img/btnフリー見積.png" />
                             </a>
                         </div>
                         <br />
                         <div class="col d-flex justify-content-between">
-                            <a href="#" onclick="Framework.GoBackReloadPageUrl('/InpInitVal');return false;">
+                            <a href="">
                                 <img src="~/img/btn諸費用設定.png" />
                             </a>
                         </div>
@@ -74,7 +269,7 @@
                                     見積日
                                 </td>
                                 <td class="data">
-                                    <span id="lbTradeDate" class="table-text">@estModelView.TradeDate</span>
+                                    <span id="lbTradeDate" class="table-text">@TradeDate</span>
                                 </td>
                             </tr>
                         </table>
@@ -86,7 +281,7 @@
                                         <span id="Label86" class="EstTitle">お支払総額</span>
                                     </td>
                                     <td class="estTitle-color-price">
-                                        <span id="lbl_SaleAll" class="EstTitle ">@estModelView.SalesSum</span>
+                                        <span id="lbl_SaleAll" class="EstTitle ">@SalesSum</span>
                                     </td>
                                 </tr>
                             </table>
@@ -95,7 +290,7 @@
                             <table cellpadding="1" class="nomal">
                                 <tr>
                                     <td class="estTitleLeaseTotal-color-text">
-                                        <span id="lblLeaseTotal" class="EstTitle">@estModelView.LeaseTotal</span>
+                                        <span id="lblLeaseTotal" class="EstTitle">@LeaseTotal</span>
                                     </td>
                                     <td class="estTitle-color-price">
                                         <span id="txt_LeaseTotal" class="EstTitle "></span>
@@ -167,7 +362,7 @@
                         <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
                             <tr>
                                 <td class="title" style="background-color: #d2e0fb; text-align: left;">
-                                    <input type="image" class="imgBtn" onclick="Framework.GoBackReloadPageUrl('/InpHanbaiten');return false;" src="~/img/sbtn販売店.png" style="width:140px;border-width:0px;vertical-align: middle;">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn販売店.png" style="width:140px;border-width:0px;vertical-align: middle;">
                                 </td>
                             </tr>
                             <tr>
@@ -194,7 +389,7 @@
                         <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
                             <tr>
                                 <td colspan="4" class="title" style="background-color: #d2e0fb; text-align: left; vertical-align: middle;">
-                                    <input type="image" name="ImageButton1" onclick="Framework.GoBackReloadPageUrl('/InpCustKana');return false;" class="imgBtn" src="~/img/sbtnお客様.png" style="width:140px;border-width:0px;vertical-align: middle;">
+                                    <input type="image" name="ImageButton1" class="imgBtn" src="~/img/sbtnお客様.png" style="width:140px;border-width:0px;vertical-align: middle;">
                                     &nbsp;<strong><span class="spanTxtSubject">※見積書/注文書には印字されません。メモとしてお使いください。個人情報の入力・管理は会員様責任でお願いします</span></strong>
                                 </td>
                             </tr>
@@ -222,7 +417,7 @@
                             <tr>
                                 <td colspan="9" class="title" style="background-color: #d2e0fb; text-align: left;
                                 vertical-align: middle;">
-                                    <input type="image" name="ImageButton4" onclick="Framework.GoBackReloadPageUrl('/inpcar');return false;" class="imgBtn" src="~/img/sbtn見積車両.png" style="width:140px;border-width:0px;vertical-align: middle;">
+                                    <input type="image" name="ImageButton4" class="imgBtn" src="~/img/sbtn見積車両.png" style="width:140px;border-width:0px;vertical-align: middle;">
                                     &nbsp; <strong><span class="spanTxtSubject">※修復歴は出品票にてご判断いただき、有・無を選択してください</span></strong>
                                 </td>
                             </tr>
@@ -235,7 +430,7 @@
                                 </td>
                                 <td class="dataLblInfoCar" rowspan="7" align="center">
                                     <img id="imgCar" src="~/img/CarImgDummy.png" style="height:180px;width:250px;border-width:0px;">
-                                    <span id="lbl_AAInfo"></span>@estModelView.AAInfo
+                                    <span id="lbl_AAInfo"></span>@AAInfo
                                 </td>
                             </tr>
                             <tr>
@@ -265,19 +460,19 @@
                                     初年度登録
                                 </td>
                                 <td class="dataLblInfoCar" colspan="3">
-                                    <span id="lbl_FirstYM">@estModelView.FirstRegYm</span>
+                                    <span id="lbl_FirstYM">@FirstRegYm</span>
                                 </td>
                                 <td class="title">
                                     車検
                                 </td>
                                 <td class="dataLblInfoCar">
-                                    <span id="lbl_InsYM">@estModelView.CheckCarYm</span>
+                                    <span id="lbl_InsYM">@CheckCarYm</span>
                                 </td>
                                 <td class="title">
                                     走行距離
                                 </td>
                                 <td class="dataLblInfoCar">
-                                    <span id="lbl_NowRun">@estModelView.NowRun</span>
+                                    <span id="lbl_NowRun">@NowRun</span>
                                 </td>
                             </tr>
                             <tr>
@@ -285,8 +480,8 @@
                                     修復歴
                                 </td>
                                 <td class="dataLblInfoCar">
-                                    <input id="raJikoHisMu" type="radio" name="Jrk" value="raJikoHisMu"><label for="raJikoHisMu">無</label>
-                                    <input id="raJikoHisU" type="radio" name="Jrk" value="raJikoHisU"><label for="raJikoHisU">有</label>
+                                    <input id="raJikoHisMu" type="radio" name="Jrk" value="raJikoHisMu" checked="@RaJikoHisMu"><label for="raJikoHisMu">無</label>
+                                    <input id="raJikoHisU" type="radio" name="Jrk" value="raJikoHisU" checked="@RaJikoHisU"><label for="raJikoHisU">有</label>
                                 </td>
                                 <td class="title">
                                     車歴
@@ -304,7 +499,7 @@
                                     排気量
                                 </td>
                                 <td class="dataLblInfoCar">
-                                    <span id="lbl_Vol">@estModelView.Vol</span>
+                                    <span id="lbl_Vol">@Vol</span>
                                 </td>
                             </tr>
                             <tr>
@@ -356,13 +551,13 @@
                                     1
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_CarPriceTitle">@estModelView.CarPriceTitle</span>
+                                    <span id="lbl_CarPriceTitle">@CarPriceTitle</span>
                                 </td>
                                 <td class="btnImgPrice">
-                                    <input type="image" class="imgBtn" onclick="Framework.GoBackReloadPageUrl('/InpCarPrice');return false;" src="~/img/sbtn編集.png">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_CarPrice">@estModelView.CarPrice</span>
+                                    <span id="lbl_CarPrice">@CarPrice</span>
                                 </td>
                             </tr>
                             <tr>
@@ -370,13 +565,13 @@
                                     2
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_DisCountT">@estModelView.DiscountT</span>
+                                    <span id="lbl_DisCountT">@DiscountT</span>
                                 </td>
                                 <td class="btnImgPrice">
-                                    <input type="image" class="imgBtn" onclick="Framework.GoBackReloadPageUrl('/InpNebiki');return false;" src="~/img/sbtn編集.png">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_DisCount">@estModelView.Discount</span>
+                                    <span id="lbl_DisCount">@Discount</span>
                                 </td>
                             </tr>
                             <tr>
@@ -384,13 +579,13 @@
                                     3
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lblSonotaTitle">@estModelView.SonotaTitle</span>
+                                    <span id="lblSonotaTitle">@SonotaTitle</span>
                                 </td>
                                 <td class="btnImgPrice">
-                                    <input type="image" class="imgBtn" onclick="Framework.GoBackReloadPageUrl('/InpCarPrice');return false;" src="~/img/sbtn編集.png">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_Sonota">@estModelView.Sonota</span>
+                                    <span id="lbl_Sonota">@Sonota</span>
                                 </td>
                             </tr>
                             <tr>
@@ -398,13 +593,13 @@
                                     4
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lblSyakenNewZok">@estModelView.SyakenNewZokT</span>
+                                    <span id="lblSyakenNewZok">@SyakenNewZokT</span>
                                 </td>
                                 <td class="btnImgPrice">
-                                    <input type="image" class="imgBtn" onclick="Framework.GoBackReloadPageUrl('/InpCarPrice');return false;" src="~/img/sbtn編集.png">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_SyakenNew">@estModelView.SyakenNew</span>
+                                    <span id="lbl_SyakenNew">@SyakenNew</span>
                                 </td>
                             </tr>
                             <tr>
@@ -412,13 +607,13 @@
                                     5
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_OpSpeCialPriceT">@estModelView.OpSpeCialTitle</span>
+                                    <span id="lbl_OpSpeCialPriceT">@OpSpeCialTitle</span>
                                 </td>
                                 <td class="btnImgPrice">
-                                    <input type="image" class="imgBtn"  onclick="Framework.GoBackReloadPageUrl('/InpOption');return false;" src="~/img/sbtn編集.png">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_OpSpeCialPrice">@estModelView.OptionPriceAll</span>
+                                    <span id="lbl_OpSpeCialPrice">@OptionPriceAll</span>
                                 </td>
                             </tr>
                             <tr>
@@ -429,7 +624,7 @@
                                     <span id="lbl_CarKeiTitle">車両販売価格（1～5）</span>
                                 </td>
                                 <td class="txtprice" style="background-color: #eee;">
-                                    <span id="lbl_CarKei">@estModelView.CarSum</span>
+                                    <span id="lbl_CarKei">@CarSum</span>
                                 </td>
                             </tr>
                             <tr>
@@ -440,10 +635,10 @@
                                     <span id="Label79">税金・保険料（非課税）</span>
                                 </td>
                                 <td class="btnImgPrice">
-                                    <input type="image" class="imgBtn" onclick="Framework.GoBackReloadPageUrl('/InpZeiHoken');return false;" src="~/img/sbtn編集.png">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxInsAll">@estModelView.TaxInsAll</span>
+                                    <span id="lbl_TaxInsAll">@TaxInsAll</span>
                                 </td>
                             </tr>
                             <tr>
@@ -451,13 +646,13 @@
                                     8
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxInsEquivalentAllT">@estModelView.TaxInsEquivalentTitle</span>
+                                    <span id="lbl_TaxInsEquivalentAllT">@TaxInsEquivalentTitle</span>
                                 </td>
                                 <td class="btnImgPrice">
-                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="Framework.GoBackReloadPageUrl('/InpZeiHoken');return false;">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxInsEquivalentAll">@estModelView.TaxInsEquivalentAll</span>
+                                    <span id="lbl_TaxInsEquivalentAll">@TaxInsEquivalentAll</span>
                                 </td>
                             </tr>
                             <tr>
@@ -468,10 +663,10 @@
                                     <span id="Label80">預り法定費用（非課税）</span>
                                 </td>
                                 <td class="btnImgPrice">
-                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxFreeAll">@estModelView.TaxFreeAll</span>
+                                    <span id="lbl_TaxFreeAll">@TaxFreeAll</span>
                                 </td>
                             </tr>
                             <tr>
@@ -479,13 +674,13 @@
                                     10
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_DaikoAllT">@estModelView.DaikoTitle</span>
+                                    <span id="lbl_DaikoAllT">@DaikoTitle</span>
                                 </td>
                                 <td class="btnImgPrice">
-                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;">
+                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_DaikoAll">@estModelView.TaxCostAll</span>
+                                    <span id="lbl_DaikoAll">@TaxCostAll</span>
                                 </td>
                             </tr>
                             <tr>
@@ -493,10 +688,10 @@
                                     11
                                 </td>
                                 <td class="titDataPrice" colspan="2">
-                                    <span id="lbl_TaxName">@estModelView.TaxName</span>
+                                    <span id="lbl_TaxName">@TaxName</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxAll">@estModelView.ConTax</span>
+                                    <span id="lbl_TaxAll">@ConTax</span>
                                 </td>
                             </tr>
                             <tr>
@@ -504,10 +699,10 @@
                                     12
                                 </td>
                                 <td class="titDataPrice" colspan="2" style="background-color: #eee;">
-                                    <span id="lbl_CarSaleKeiTitle" style="background-color: #eee;">@estModelView.CarSaleSumTitle</span>
+                                    <span id="lbl_CarSaleKeiTitle" style="background-color: #eee;">@CarSaleSumTitle</span>
                                 </td>
                                 <td class="txtprice" style="background-color: #eee;">
-                                    <span id="lbl_CarSaleKei">@estModelView.CarSaleSum</span>
+                                    <span id="lbl_CarSaleKei">@CarSaleSum</span>
                                 </td>
                             </tr>
                             <tr>
@@ -521,7 +716,7 @@
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="alert('リース画面でのみ、下取りの設定が可能。'); return false;">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_ShitaPrice">@estModelView.TradeInPrice</span>
+                                    <span id="lbl_ShitaPrice">@TradeInPrice</span>
                                 </td>
                             </tr>
                             <tr>
@@ -535,7 +730,7 @@
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png" onclick="alert('リース画面でのみ、下取りの設定が可能。'); return false;">
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_Zansai">@estModelView.Balance</span>
+                                    <span id="lbl_Zansai">@Balance</span>
                                 </td>
                             </tr>
                             <tr>
@@ -543,13 +738,13 @@
                                     15
                                 </td>
                                 <td class="titDataPrice" style="background-color: #eee;">
-                                    <span id="lbl_SalesSumTitle">@estModelView.SalesSumTitle</span>
+                                    <span id="lbl_SalesSumTitle">@SalesSumTitle</span>
                                 </td>
                                 <td class="btnImgPrice" style="background-color: #eee;">
                                     <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice" style="background-color: #eee;">
-                                    <span id="lbl_SalesSum">@estModelView.SalesSum</span>
+                                    <span id="lbl_SalesSum">@SalesSum</span>
                                 </td>
                             </tr>
                         </table>
@@ -557,7 +752,7 @@
                         <table cellpadding="2" class="table table-responsive">
                             <tr>
                                 <td colspan="2" class="title" style="background-color: #d2e0fb; text-align: left;">
-                                    <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpOption');return false;" src="~/img/sbtn付属品.png" style="border-width:0px;vertical-align: middle;">
+                                    <input type="image" src="~/img/sbtn付属品.png" style="border-width:0px;vertical-align: middle;">
                                 </td>
                             </tr>
                             <tr>
@@ -573,7 +768,7 @@
                                     <span id="lbl_OpName1">@Model.EstModel.OptionName1</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice1">@estModelView.OptionPrice1</span>
+                                    <span id="lbl_OpPrice1">@Model.EstModel.OptionPrice1</span>
                                 </td>
                             </tr>
                             <tr>
@@ -581,7 +776,7 @@
                                     <span id="lbl_OpName2">@Model.EstModel.OptionName2</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice2">@estModelView.OptionPrice2</span>
+                                    <span id="lbl_OpPrice2">@Model.EstModel.OptionPrice2</span>
                                 </td>
                             </tr>
                             <tr>
@@ -589,7 +784,7 @@
                                     <span id="lbl_OpName3">@Model.EstModel.OptionName3</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice3">@estModelView.OptionPrice3</span>
+                                    <span id="lbl_OpPrice3">@Model.EstModel.OptionPrice3</span>
                                 </td>
                             </tr>
                             <tr>
@@ -597,7 +792,7 @@
                                     <span id="lbl_OpName4">@Model.EstModel.OptionName4</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice4">@estModelView.OptionPrice4</span>
+                                    <span id="lbl_OpPrice4">@Model.EstModel.OptionPrice4</span>
                                 </td>
                             </tr>
                             <tr>
@@ -605,7 +800,7 @@
                                     <span id="lbl_OpName5">@Model.EstModel.OptionName5</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice5">@estModelView.OptionPrice5</span>
+                                    <span id="lbl_OpPrice5">@Model.EstModel.OptionPrice5</span>
                                 </td>
                             </tr>
                             <tr>
@@ -613,7 +808,7 @@
                                     <span id="lbl_OpName6">@Model.EstModel.OptionName6</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice6">@estModelView.OptionPrice6</span>
+                                    <span id="lbl_OpPrice6">@Model.EstModel.OptionPrice6</span>
                                 </td>
                             </tr>
                             <tr>
@@ -621,7 +816,7 @@
                                     <span id="lbl_OpName7">@Model.EstModel.OptionName7</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice7">@estModelView.OptionPrice7</span>
+                                    <span id="lbl_OpPrice7">@Model.EstModel.OptionPrice7</span>
                                 </td>
                             </tr>
                             <tr>
@@ -629,7 +824,7 @@
                                     <span id="lbl_OpName8">@Model.EstModel.OptionName8</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice8">@estModelView.OptionPrice8</span>
+                                    <span id="lbl_OpPrice8">@Model.EstModel.OptionPrice8</span>
                                 </td>
                             </tr>
                             <tr>
@@ -637,7 +832,7 @@
                                     <span id="lbl_OpName9">@Model.EstModel.OptionName9</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice9">@estModelView.OptionPrice9</span>
+                                    <span id="lbl_OpPrice9">@Model.EstModel.OptionPrice9</span>
                                 </td>
                             </tr>
                             <tr>
@@ -645,7 +840,7 @@
                                     <span id="lbl_OpName10">@Model.EstModel.OptionName10</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice10">@estModelView.OptionPrice10</span>
+                                    <span id="lbl_OpPrice10">@Model.EstModel.OptionPrice10</span>
                                 </td>
                             </tr>
                             <tr>
@@ -653,7 +848,7 @@
                                     <span id="lbl_OpName11">@Model.EstModel.OptionName11</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice11">@estModelView.OptionPrice11</span>
+                                    <span id="lbl_OpPrice11">@Model.EstModel.OptionPrice11</span>
                                 </td>
                             </tr>
                             <tr>
@@ -661,7 +856,7 @@
                                     <span id="lbl_OpName12">@Model.EstModel.OptionName12</span>
                                 </td>
                                 <td class="data">
-                                    <span id="lbl_OpPrice12">@estModelView.OptionPrice12</span>
+                                    <span id="lbl_OpPrice12">@Model.EstModel.OptionPrice12</span>
                                 </td>
                             </tr>
                         </table>
@@ -672,13 +867,13 @@
                         <table cellpadding="2" class="table table-responsive">
                             <tr>
                                 <td class="title" rowspan="9" style="background-color: #d2e0fb;">
-                                    <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpZeiHoken');return false;" src="~/img/sbtn税金保険料2.png" style="border-width:0px;">
+                                    <input type="image" src="~/img/sbtn税金保険料2.png" style="border-width:0px;">
                                 </td>
                                 <td class="titDataPrice">
-                                    <span id="lbl_CarTaxTitle">@estModelView.AutoTaxMonth</span>
+                                    <span id="lbl_CarTaxTitle">@AutoTaxMonth</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_CarTax">@(estModelView.AutoTaxEquivalent != "" ? estModelView.AutoTaxEquivalent : estModelView.AutoTax)</span>
+                                    <span id="lbl_CarTax">@(AutoTaxEquivalent != "" ? AutoTaxEquivalent : AutoTax)</span>
                                 </td>
                             </tr>
                             <tr>
@@ -691,7 +886,7 @@
                                     <span id="Label56">環境性能割</span>
                                 </td>
                                 <td id="idGetTax" class="txtprice" style="background-color: rgb(255, 255, 204);">
-                                    <span id="lbl_GetTax">@estModelView.AcqTax</span>
+                                    <span id="lbl_GetTax">@AcqTax</span>
                                 </td>
                             </tr>
                             <tr>
@@ -704,7 +899,7 @@
                                     <span id="Label59">重量税</span>
                                 </td>
                                 <td id="idWeightTax" class="txtprice" style="background-color: rgb(255, 255, 204);">
-                                    <span id="lbl_WeightTax">@estModelView.WeightTax</span>
+                                    <span id="lbl_WeightTax">@WeightTax</span>
                                 </td>
                             </tr>
                             <tr>
@@ -714,10 +909,10 @@
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_JibaiTitle">@estModelView.DamageInsMonth</span>
+                                    <span id="lbl_JibaiTitle">@DamageInsMonth</span>
                                 </td>
                                 <td id="idJibaiHoken" class="txtprice">
-                                    <span id="lbl_JibaiHoken">@(estModelView.DamageInsEquivalent != "" ? @estModelView.DamageInsEquivalent : @estModelView.DamageIns)</span>
+                                    <span id="lbl_JibaiHoken">@(DamageInsEquivalent != "" ? @DamageInsEquivalent : @DamageIns)</span>
                                 </td>
                             </tr>
                             <tr>
@@ -730,18 +925,18 @@
                                     <span>任意保険料</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_NiniHoken">@estModelView.OptionIns</span>
+                                    <span id="lbl_NiniHoken">@OptionIns</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="title" rowspan="7" style="background-color: #d2e0fb;">
-                                    <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" src="~/img/sbtn預り法定費用2.png" style="border-width:0px;">
+                                    <input type="image" src="~/img/sbtn預り法定費用2.png" style="border-width:0px;">
                                 </td>
                                 <td class="titDataPrice">
                                     <span>検査登録(印紙代)</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_ChkIns">@estModelView.TaxFreeCheck</span>
+                                    <span id="lbl_ChkIns">@TaxFreeCheck</span>
                                 </td>
                             </tr>
                             <tr>
@@ -749,7 +944,7 @@
                                     <span>車庫証明(印紙代)</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_SyakoSyomei">@estModelView.TaxFreeGarage</span>
+                                    <span id="lbl_SyakoSyomei">@TaxFreeGarage</span>
                                 </td>
                             </tr>
                             <tr>
@@ -757,7 +952,7 @@
                                     <span>下取車手続・処分(印紙代)</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_SitaTetuduki">@estModelView.TaxFreeTradeIn</span>
+                                    <span id="lbl_SitaTetuduki">@TaxFreeTradeIn</span>
                                 </td>
                             </tr>
                             <tr>
@@ -765,23 +960,23 @@
                                     <span>リサイクル預託金</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_RecyclePrice">@estModelView.TaxFreeRecycle</span>
+                                    <span id="lbl_RecyclePrice">@TaxFreeRecycle</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxFreeSet1Title">@estModelView.TaxFreeSet1Title</span>
+                                    <span id="lbl_TaxFreeSet1Title">@TaxFreeSet1Title</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxFreeSet1">@estModelView.TaxFreeSet1</span>
+                                    <span id="lbl_TaxFreeSet1">@TaxFreeSet1</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxFreeSet2Title">@estModelView.TaxFreeSet2Title</span>
+                                    <span id="lbl_TaxFreeSet2Title">@TaxFreeSet2Title</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxFreeSet2">@estModelView.TaxFreeSet2</span>
+                                    <span id="lbl_TaxFreeSet2">@TaxFreeSet2</span>
                                 </td>
                             </tr>
                             <tr>
@@ -789,18 +984,18 @@
                                     <span>その他非課税費用</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_OtherPrice">@estModelView.TaxFreeOther</span>
+                                    <span id="lbl_OtherPrice">@TaxFreeOther</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="title" rowspan="10" style="background-color: #d2e0fb;">
-                                    <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" src="~/img/sbtn手続代行費用2.png" style="border-width:0px;">
+                                    <input type="image" src="~/img/sbtn手続代行費用2.png" style="border-width:0px;">
                                 </td>
                                 <td class="titDataPrice">
                                     <span>検査登録手続代行</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_ChkDaikoHiyo">@estModelView.TaxCheck</span>
+                                    <span id="lbl_ChkDaikoHiyo">@TaxCheck</span>
                                 </td>
                             </tr>
                             <tr>
@@ -808,7 +1003,7 @@
                                     <span>車庫証明手続代行</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_SyakoDaiko">@estModelView.TaxGarage</span>
+                                    <span id="lbl_SyakoDaiko">@TaxGarage</span>
                                 </td>
                             </tr>
                             <tr>
@@ -816,7 +1011,7 @@
                                     <span>下取車手続・処分代行</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_SitaKaitaiHiyo">@estModelView.TaxTradeIn</span>
+                                    <span id="lbl_SitaKaitaiHiyo">@TaxTradeIn</span>
                                 </td>
                             </tr>
                             <tr>
@@ -824,7 +1019,7 @@
                                     <span>下取車査定料</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxTradeInSatei">@estModelView.TaxTradeInSatei</span>
+                                    <span id="lbl_TaxTradeInSatei">@TaxTradeInSatei</span>
                                 </td>
                             </tr>
                             <tr>
@@ -832,7 +1027,7 @@
                                     <span>資金管理料金</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_Recycle">@estModelView.TaxRecycle</span>
+                                    <span id="lbl_Recycle">@TaxRecycle</span>
                                 </td>
                             </tr>
                             <tr>
@@ -840,31 +1035,31 @@
                                     <span>納車費用</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_NosyaHiyo">@estModelView.TaxDelivery</span>
+                                    <span id="lbl_NosyaHiyo">@TaxDelivery</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxSet1Title">@estModelView.TaxSet1Title</span>
+                                    <span id="lbl_TaxSet1Title">@TaxSet1Title</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxSet1">@estModelView.TaxSet1</span>
+                                    <span id="lbl_TaxSet1">@TaxSet1</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxSet2Title">@estModelView.TaxSet2Title</span>
+                                    <span id="lbl_TaxSet2Title">@TaxSet2Title</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxSet2">@estModelView.TaxSet2</span>
+                                    <span id="lbl_TaxSet2">@TaxSet2</span>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="titDataPrice">
-                                    <span id="lbl_TaxSet3Title">@estModelView.TaxSet3Title</span>
+                                    <span id="lbl_TaxSet3Title">@TaxSet3Title</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_TaxSet3">@estModelView.TaxSet3</span>
+                                    <span id="lbl_TaxSet3">@TaxSet3</span>
                                 </td>
                             </tr>
                             <tr>
@@ -872,7 +1067,7 @@
                                     <span>その他費用</span>
                                 </td>
                                 <td class="txtprice">
-                                    <span id="lbl_Other">@estModelView.TaxOther</span>
+                                    <span id="lbl_Other">@TaxOther</span>
                                 </td>
                             </tr>
                             <tr>
@@ -897,7 +1092,7 @@
                                         <span id="Label160" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">頭金</span>
                                     </td>
                                     <td id="idDeposit" class="data" style="text-align: right; height: 22px;">
-                                        <span id="lbl_Deposit" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.Deposit</span>
+                                        <span id="lbl_Deposit" class="InpTitle2" style="display:inline-block;width:132px;">@Deposit</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -905,7 +1100,7 @@
                                         <span id="Label157" class="EstTitle1" style="display:inline-block;font-size:10pt;width:152px;">現金・割賦元金</span>
                                     </td>
                                     <td id="idPrincipal" class="title" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lbl_Principal" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.Principal</span>
+                                        <span id="lbl_Principal" class="InpTitle2" style="display:inline-block;width:132px;">@Principal</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -913,7 +1108,7 @@
                                         <span id="Label148" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">分割払手数料</span>
                                     </td>
                                     <td id="idPartitionFee" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lbl_PartitionFee" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PartitionFee</span>
+                                        <span id="lbl_PartitionFee" class="InpTitle2" style="display:inline-block;width:132px;">@PartitionFee</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -921,7 +1116,7 @@
                                         <span id="Label145" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">分割支払金合計</span>
                                     </td>
                                     <td id="idPartitionSum" class="title" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lbl_PartitionSum" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PartitionAmount</span>
+                                        <span id="lbl_PartitionSum" class="InpTitle2" style="display:inline-block;width:132px;">@PartitionAmount</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -929,7 +1124,7 @@
                                         <span id="Label142" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払回数</span>
                                     </td>
                                     <td id="idKaisu" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lbl_Kaisu" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PayTimes</span>
+                                        <span id="lbl_Kaisu" class="InpTitle2" style="display:inline-block;width:132px;">@PayTimes</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -937,7 +1132,7 @@
                                         <span id="Label139" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払期間</span>
                                     </td>
                                     <td id="idKikan" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lbl_Kikan" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;">@estModelView.Kikan</span>
+                                        <span id="lbl_Kikan" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;">@Kikan</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -945,16 +1140,16 @@
                                         <span id="Label136" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">初回支払額</span>
                                     </td>
                                     <td id="idFirstPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lbl_FirstPrice" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.FirstPayAmount</span>
+                                        <span id="lbl_FirstPrice" class="InpTitle2" style="display:inline-block;width:132px;">@FirstPayAmount</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="data" style="width: 610px; height: 22px;">
                                         <span id="Label137" class="EstTitle1" style="display:inline-block;font-size:10pt;width:109px;">2回目以降支払額</span>
-                                        <span id="lbl_SecoTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;">@estModelView.PayTimes2</span>
+                                        <span id="lbl_SecoTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;">@PayTimes2</span>
                                     </td>
                                     <td id="idSecoPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lbl_SecoPrice" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PayAmount</span>
+                                        <span id="lbl_SecoPrice" class="InpTitle2" style="display:inline-block;width:132px;">@PayAmount</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -962,27 +1157,27 @@
                                         <span id="Label133" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">ボーナス加算月</span>
                                     </td>
                                     <td id="idBonusMonth" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lbl_BonusMonth" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.BonusMonth</span>
+                                        <span id="lbl_BonusMonth" class="InpTitle2" style="display:inline-block;width:132px;">@BonusMonth</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="data" style="width: 610px; height: 22px;">
                                         <span id="Label123" class="EstTitle1" style="display:inline-block;font-size:10pt;width:102px;">ボーナス加算額</span>
-                                        <span id="lbl_BonusTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;">@estModelView.BonusTimes</span>
+                                        <span id="lbl_BonusTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;">@BonusTimes</span>
                                     </td>
                                     <td id="idBonusAdd" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lbl_BonusAdd" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.BonusAmount</span>
+                                        <span id="lbl_BonusAdd" class="InpTitle2" style="display:inline-block;width:132px;">@BonusAmount</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="data" colspan="2" style="border-style: none;">
-                                        <span id="lbl_Rate" class="EstTitle1"> @estModelView.Rate</span>
+                                        <span id="lbl_Rate" class="EstTitle1"> @Rate</span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td id="idWarningRecalc" class="data" colspan="2" style="border-style: none; padding: 3px;
                                                             text-align: right; vertical-align: middle;">
-                                        <strong><span id="lblWarningRecalc" class="spanTxtSubject">@estModelView.WarningRecalc</span></strong>
+                                        <strong><span id="lblWarningRecalc" class="spanTxtSubject">@WarningRecalc</span></strong>
                                     </td>
                                 </tr>
                             </table>
@@ -993,7 +1188,7 @@
                                 <tr>
                                     <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
                                                             vertical-align: middle;">
-                                        <input type="image" name="imgBtnLease" id="imgBtnLease" onclick="Framework.GoBackReloadPageUrl('/InpLeaseCalc');return false;" src="~/img/btb_リース計算情報.png" style="border-width:0px;">
+                                        <input type="image" name="imgBtnLease" id="imgBtnLease" src="~/img/btb_リース計算情報.png" style="border-width:0px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -1001,7 +1196,7 @@
                                         <span id="Label1" class="EstTitle1" style="font-size:10pt;">初年度登録</span>
                                     </td>
                                     <td id="Td2" class="data" style="text-align: right; height: 22px;">
-                                        <span id="lblFirstRegistration" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.FirstRegistration</span>
+                                        <span id="lblFirstRegistration" class="InpTitle2" style="display:inline-block;width:132px;">@FirstRegistration</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1009,7 +1204,7 @@
                                         <span id="Label6" class="EstTitle1" style="font-size:10pt;">車検満了日(予定日)</span>
                                     </td>
                                     <td id="Td3" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lblInspectionExpiration" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.InspectionExpirationDate</span>
+                                        <span id="lblInspectionExpiration" class="InpTitle2" style="display:inline-block;width:132px;">@InspectionExpirationDate</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1017,7 +1212,7 @@
                                         <span id="Label9" class="EstTitle1" style="font-size:10pt;">リース開始月</span>
                                     </td>
                                     <td id="Td4" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lblLeaseStart" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.LeaseStartMonth</span>
+                                        <span id="lblLeaseStart" class="InpTitle2" style="display:inline-block;width:132px;">@LeaseStartMonth</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1025,7 +1220,7 @@
                                         <span id="Label11" class="EstTitle1" style="font-size:10pt;">契約期間</span>
                                     </td>
                                     <td id="Td5" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lblLeasePeriod" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.LeasePeriod</span>
+                                        <span id="lblLeasePeriod" class="InpTitle2" style="display:inline-block;width:132px;">@LeasePeriod</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1033,7 +1228,7 @@
                                         <span id="Label13" class="EstTitle1" style="font-size:10pt;">リース満了日</span>
                                     </td>
                                     <td id="Td6" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lblLeaseExpirationDate" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.LeaseExpirationDate</span>
+                                        <span id="lblLeaseExpirationDate" class="InpTitle2" style="display:inline-block;width:132px;">@LeaseExpirationDate</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1041,7 +1236,7 @@
                                         <span id="Label19" class="EstTitle1" style="font-size:10pt;">契約プラン</span>
                                     </td>
                                     <td id="Td13" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lblContractPlanName" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.ContractPlanName</span>
+                                        <span id="lblContractPlanName" class="InpTitle2" style="display:inline-block;width:132px;">@ContractPlanName</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1049,7 +1244,7 @@
                                         <span id="Label15" class="EstTitle1" style="font-size:10pt;">延長保証(+1年)</span>
                                     </td>
                                     <td id="Td7" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lblExtendedGuarantee" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;">@estModelView.IsExtendedGuarantee</span>
+                                        <span id="lblExtendedGuarantee" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;">@IsExtendedGuarantee</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1057,7 +1252,7 @@
                                         <span id="Label17" class="EstTitle1" style="font-size:10pt;">任意保険</span>
                                     </td>
                                     <td id="Td8" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lblInsuranceCompanyName" class="InpTitle2">@estModelView.InsuranceCompanyName</span>
+                                        <span id="lblInsuranceCompanyName" class="InpTitle2">@InsuranceCompanyName</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1065,7 +1260,7 @@
                                         <span id="Label24" class="EstTitle1" style="font-size:10pt;">保険料)</span>
                                     </td>
                                     <td id="Td9" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lblInsuranceFee" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.InsuranceFee</span>
+                                        <span id="lblInsuranceFee" class="InpTitle2" style="display:inline-block;width:132px;">@InsuranceFee</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1073,7 +1268,7 @@
                                         <span id="Label22" class="EstTitle1" style="font-size:10pt;">頭金(税込)</span>
                                     </td>
                                     <td id="Td10" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lblDownPayment" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.DownPayment</span>
+                                        <span id="lblDownPayment" class="InpTitle2" style="display:inline-block;width:132px;">@DownPayment</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -1081,7 +1276,7 @@
                                         <span id="Label29" class="EstTitle1" style="font-size:10pt;">下取(税込)</span>
                                     </td>
                                     <td id="Td11" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                        <span id="lblTradeInPrice" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.IdeTradeInPrice</span>
+                                        <span id="lblTradeInPrice" class="InpTitle2" style="display:inline-block;width:132px;">@IdeTradeInPrice</span>
                                     </td>
                                 </tr>
                             </table>
@@ -1110,7 +1305,7 @@
                             初年度登録
                         </td>
                         <td class="data">
-                            <span id="lbl_SitaFirstYM" class="EstTitle1" style="display:inline-block;width:116px;">@estModelView.TradeInFirstRegYm</span>
+                            <span id="lbl_SitaFirstYM" class="EstTitle1" style="display:inline-block;width:116px;">@TradeInFirstRegYm</span>
                         </td>
                     </tr>
                     <tr>
@@ -1118,13 +1313,13 @@
                             車検
                         </td>
                         <td class="data">
-                            <span id="lbl_SitaIns" class="EstTitle1" style="display:inline-block;width:86px;">@estModelView.TradeInCheckCarYm</span>
+                            <span id="lbl_SitaIns" class="EstTitle1" style="display:inline-block;width:86px;">@TradeInCheckCarYm</span>
                         </td>
                         <td class="title" style="height: 25px;">
                             走行距離
                         </td>
                         <td class="data">
-                            <span id="lbl_SitaRun" class="EstTitle1" style="display:inline-block;width:87px;">@estModelView.SitaRun</span>
+                            <span id="lbl_SitaRun" class="EstTitle1" style="display:inline-block;width:87px;">@SitaRun</span>
                         </td>
                         <td class="title" style="height: 25px;">
                             車台番号
@@ -1136,7 +1331,7 @@
                             登録NO
                         </td>
                         <td class="data">
-                            <span id="lbl_IserNo" class="EstTitle1" style="display:inline-block;width:133px;">@estModelView.TradeInRegNo</span>
+                            <span id="lbl_IserNo" class="EstTitle1" style="display:inline-block;width:133px;">@TradeInRegNo</span>
                         </td>
                     </tr>
                     <tr>
@@ -1155,7 +1350,7 @@
                     <tr>
                         <td colspan="8" class="title" style="background-color: #d2e0fb; text-align: left;
                                 vertical-align: middle;">
-                            <input type="image" src="~/img/sbtn備考.png" onclick="Framework.GoBackReloadPageUrl('/InpNotes');return false;" style="border-width:0px;vertical-align: middle;">
+                            <input type="image" src="~/img/sbtn備考.png" style="border-width:0px;vertical-align: middle;">
                         </td>
                     </tr>
                     <tr>
@@ -1171,9 +1366,6 @@
     <input type="hidden" id="hidLeaseFlag" value="@Model.EstModel.LeaseFlag">
 </form>
 <!-- 固定表示 -->
-<script>
-    if (@Model.EstModel.IsError == 1) {
-        alert("最初に車両本体価格をご確認下さい")
-    }
-</script>
+
 <script src="~/js/EstMain.js"></script>
+*@

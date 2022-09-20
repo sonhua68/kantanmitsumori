@@ -525,8 +525,7 @@ var Framework =
         {
             key: "GoBackReloadPage",
             value: function GoBackReloadPage() {
-                window.setTimeout(window.history.back(), 2000);
-                location.reload(true);
+                window.location.href = "/Estmain?IsInpBack=1";
 
             }
         },

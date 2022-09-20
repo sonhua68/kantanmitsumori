@@ -279,13 +279,6 @@ namespace KantanMitsumori.Service.Helper
 
             return true;
         }
-
-        /// <summary>
-        /// 見積書データ取得
-        /// </summary>
-        /// <param name="inEstNo"></param>
-        /// <param name="inEstSubNo"></param>
-        /// <returns></returns>
         public EstModel getEstData(string inEstNo, string inEstSubNo)
         {
             var responseEst = new EstModel();
@@ -293,16 +286,15 @@ namespace KantanMitsumori.Service.Helper
             {
                 var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
-                valToken.sesCarImgPath = CommonFunction.chkImgFile(estModel.CarImgPath ?? "", valToken.sesCarImgPath, CommonConst.def_DmyImg);
-                valToken.sesCarImgPath1 = CommonFunction.chkImgFile(estModel.CarImgPath1 ?? "", valToken.sesCarImgPath1, "");
-                valToken.sesCarImgPath2 = CommonFunction.chkImgFile(estModel.CarImgPath2 ?? "", valToken.sesCarImgPath2, "");
-                valToken.sesCarImgPath3 = CommonFunction.chkImgFile(estModel.CarImgPath3 ?? "", valToken.sesCarImgPath3, "");
-                valToken.sesCarImgPath4 = CommonFunction.chkImgFile(estModel.CarImgPath4 ?? "", valToken.sesCarImgPath4, "");
-                valToken.sesCarImgPath5 = CommonFunction.chkImgFile(estModel.CarImgPath5 ?? "", valToken.sesCarImgPath5, "");
-                valToken.sesCarImgPath6 = CommonFunction.chkImgFile(estModel.CarImgPath6 ?? "", valToken.sesCarImgPath6, "");
-                valToken.sesCarImgPath7 = CommonFunction.chkImgFile(estModel.CarImgPath7 ?? "", valToken.sesCarImgPath7, "");
-                valToken.sesCarImgPath8 = CommonFunction.chkImgFile(estModel.CarImgPath8 ?? "", valToken.sesCarImgPath8, "");
-                // その他費用の対応前のデータの場合
+                //valToken.sesCarImgPath = CommonFunction.chkImgFile(estModel.CarImgPath ?? "", valToken.sesCarImgPath, CommonConst.def_DmyImg);
+                //valToken.sesCarImgPath1 = CommonFunction.chkImgFile(estModel.CarImgPath1 ?? "", valToken.sesCarImgPath1, "");
+                //valToken.sesCarImgPath2 = CommonFunction.chkImgFile(estModel.CarImgPath2 ?? "", valToken.sesCarImgPath2, "");
+                //valToken.sesCarImgPath3 = CommonFunction.chkImgFile(estModel.CarImgPath3 ?? "", valToken.sesCarImgPath3, "");
+                //valToken.sesCarImgPath4 = CommonFunction.chkImgFile(estModel.CarImgPath4 ?? "", valToken.sesCarImgPath4, "");
+                //valToken.sesCarImgPath5 = CommonFunction.chkImgFile(estModel.CarImgPath5 ?? "", valToken.sesCarImgPath5, "");
+                //valToken.sesCarImgPath6 = CommonFunction.chkImgFile(estModel.CarImgPath6 ?? "", valToken.sesCarImgPath6, "");
+                //valToken.sesCarImgPath7 = CommonFunction.chkImgFile(estModel.CarImgPath7 ?? "", valToken.sesCarImgPath7, "");
+                //valToken.sesCarImgPath8 = CommonFunction.chkImgFile(estModel.CarImgPath8 ?? "", valToken.sesCarImgPath8, "");        
                 if (estSubModel.Sonota == 0 && (estSubModel.RakuSatu + estSubModel.Rikusou) > 0)
                 {
                     estSubModel.Sonota = estSubModel.RakuSatu + estSubModel.Rikusou;
@@ -323,13 +315,10 @@ namespace KantanMitsumori.Service.Helper
             return responseEst;
         }
 
-        /// <summary>
-        /// 見積書データ表示用整形
-        /// </summary>
+       
         public EstModel creDispData(EstModel model)
         {
-            int intCornerType = 0;
-            // AA情報
+            int intCornerType = 0;          
             if (model.Aano != "")
             {
                 if (model.Mode == 1)
@@ -351,12 +340,6 @@ namespace KantanMitsumori.Service.Helper
             }
             return model;
         }
-
-        /// <summary>
-        /// 新見積書番号取得
-        /// </summary>
-        /// <param name="outEstNo"></param>
-        /// <returns></returns>
         public bool getEstNoFromDb(ref string outEstNo)
         {
             try
@@ -367,10 +350,10 @@ namespace KantanMitsumori.Service.Helper
                 string iDay = Strings.Format(dtNow.Day, "00");
                 string strNow = iYear + iMonth + iDay;
                 var estNo = _unitOfWork.Estimates.Query(n => n.EstNo.Substring(0, 6) == strNow).Max(n => n.EstNo);
-                outEstNo = estNo == null ? strNow + "00001" : strNow + Strings.Format(Convert.ToInt32(Strings.Right(estNo, 5)) + 1, "00000");            }
+                outEstNo = estNo == null ? strNow + "00001" : strNow + Strings.Format(Convert.ToInt32(Strings.Right(estNo, 5)) + 1, "00000");
+            }
             catch (Exception ex)
             {
-                // エラーログ書出し
                 _logger.LogError(ex, "getEstNoFromDb - CEST-020D");
                 return false;
             }
@@ -385,7 +368,6 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                // エラーログ書出し
                 _logger.LogError(ex, "getEstSubNoFromDb - CEST-030D");
                 return false;
             }
@@ -394,36 +376,26 @@ namespace KantanMitsumori.Service.Helper
         }
 
         public ResponseBase<EstModel> setEstData(string estNo, string estSubNo)
-        {
-            // 見積書データ取得
+        {           
             var estData = getEstData(estNo, estSubNo);
             if (estData == null)
-            {           
+            {
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL041D));
             }
             return ResponseHelper.Ok<EstModel>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estData);
         }
 
-        // ******************************************
-        // 会員ユーザーのお客様の情報をセッションにセット
-        // または、セッションに保持していた会員ユーザーのお客様の情報をクリア
-        // ******************************************
         public EstimateIdeModel setEstIDEData(ref LogToken logToken)
-        {
-            // get [t_EstimateIde]
+        {          
             var dataEstIDE = getEstIDEData(logToken.sesEstNo, logToken.sesEstSubNo);
-            if (dataEstIDE == null)
-            {
-                return null;
+            if (dataEstIDE != null)
+            {  
+                var getContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);
+                dataEstIDE.ContractPlanName = getContractPlan == null ? "" : getContractPlan.PlanName;         
+                var getVoluntaryInsurance = _unitOfWorkIDE.VoluntaryInsurances.GetSingleOrDefault(x => x.Id == dataEstIDE.InsuranceCompanyId);
+                dataEstIDE.InsuranceCompanyName = getVoluntaryInsurance == null ? "" : getVoluntaryInsurance.CompanyName;
             }
-            // get [MT_IDE_CONTRACT_PLAN]
-            var getContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);
-            dataEstIDE.ContractPlanName = getContractPlan == null ? "" : getContractPlan.PlanName;
-            // get [MT_IDE_VOLUNTARY_INSURANCE]
-            var getVoluntaryInsurance = _unitOfWorkIDE.VoluntaryInsurances.GetSingleOrDefault(x => x.Id == dataEstIDE.InsuranceCompanyId);
-            dataEstIDE.InsuranceCompanyName = getVoluntaryInsurance == null ? "" : getVoluntaryInsurance.CompanyName;
-
-            return dataEstIDE;
+            return dataEstIDE!;
         }
         public EstimateIdeModel getEstIDEData(string inEstNo, string inEstSubNo)
         {
@@ -433,24 +405,20 @@ namespace KantanMitsumori.Service.Helper
                 var estIdeModel = _unitOfWork.EstimateIdes.GetSingleOrDefault(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo);
                 if (estIdeModel == null)
                 {
-                    estIdeModel = new TEstimateIde();                    
+                    estIdeModel = new TEstimateIde();
                 }
                 estIdeModel.IsExtendedGuarantee = unchecked((byte)(-1));
-                dataIDE = _mapper.Map<EstimateIdeModel>(estIdeModel);            }
+                dataIDE = _mapper.Map<EstimateIdeModel>(estIdeModel);
+            }
             catch (Exception ex)
-            {             
+            {
                 _logger.LogError(ex, "getEstIDEData - CEST-040D");
                 return null;
             }
             return dataIDE;
         }
 
-        /// <summary>
-        /// 見積書データ取得
-        /// </summary>
-        /// <param name="inEstNo"></param>
-        /// <param name="inEstSubNo"></param>
-        /// <returns></returns>
+     
         public EstModel getEst_EstSubData(string inEstNo, string inEstSubNo)
         {
             try

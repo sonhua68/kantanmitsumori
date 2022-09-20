@@ -58,50 +58,47 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 valToken = new LogToken();
+                var response = new ResponseEstMainModel();
+                response.EstCustomerModel = new EstCustomerModel();
                 bool isSesPriDisp = requestAction.IsInpBack != 1 && requestAction.Sel == 0;
                 valToken.sesPriDisp = isSesPriDisp ? "0" : "";
                 valToken.stateLoadWindow = "EstMain";
-                if (request.Mode != "" && Information.IsNumeric(request.Mode!))
+                var isMode = request.Mode != "" && Information.IsNumeric(request.Mode!);
+                if (isMode)
                 {
                     valToken.sesMode = request.Mode;
                 }
                 else
                 {
-                    valToken.sesMode = "";
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI001P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P));
                 }
                 if (!string.IsNullOrEmpty(request.PriDisp) && Information.IsNumeric(request.PriDisp!))
                 {
                     valToken.sesPriDisp = request.PriDisp;
                 }
-                var response = new ResponseEstMainModel();
+
                 var getAsInfo = await getAsnetInfo(request);
                 if (getAsInfo.ResultStatus == (int)enResponse.isError)
                     return ResponseHelper.Error<ResponseEstMainModel>("Error", getAsInfo.MessageContent);
-
                 getAsInfo.Data!.EstNo = valToken.sesEstNo;
-                getAsInfo.Data.EstSubNo = valToken.sesEstSubNo;
-                response.EstModel = getAsInfo.Data!;
+                getAsInfo.Data.EstSubNo = valToken.sesEstSubNo;     
                 SetvalueToken();
                 response.AccessToken = valToken.Token;
-                if (string.IsNullOrEmpty(valToken.sesEstNo) || string.IsNullOrEmpty(valToken.sesEstSubNo))
-                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL040S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL040S));
-
-                //var estData = _commonEst.setEstData(valToken.sesEstNo, valToken.sesEstSubNo);
-                //if (estData.ResultStatus == (int)enResponse.isSuccess)
-                //    response.EstModel = estData.Data!;
-                response.EstCustomerModel = new EstCustomerModel();
                 response.EstCustomerModel.CustNm = valToken.sesCustNm_forPrint ?? "";
                 response.EstCustomerModel.CustZip = valToken.sesCustZip_forPrint ?? "";
                 response.EstCustomerModel.CustAdr = valToken.sesCustAdr_forPrint ?? "";
                 response.EstCustomerModel.CustTel = valToken.sesCustTel_forPrint ?? "";
-                response.EstIDEModel = new EstimateIdeModel();
+                var estData = _commonEst.setEstData(valToken.sesEstNo, valToken.sesEstSubNo);
+                if (estData.ResultStatus == (int)enResponse.isSuccess)
+                    response.EstModel = estData.Data!;
                 if (response.EstModel.LeaseFlag == "1")
                 {
                     response.EstIDEModel = _commonEst.setEstIDEData(ref valToken);
                     if (response.EstIDEModel == null)
                         return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
                 }
+           
+                response = BindingDataEsmain(response);
                 return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
 
             }
@@ -112,7 +109,24 @@ namespace KantanMitsumori.Service.ASEST
 
             }
         }
+        public async Task<ResponseBase<ResponseEstMainModel>> ReloadGetEstMain(LogToken logtoken)
+        {
+            try
+            {               
+                var response = new ResponseEstMainModel();              
+                var estData = _commonEst.setEstData(logtoken.sesEstNo, logtoken.sesEstSubNo);
+                if (estData.ResultStatus == (int)enResponse.isSuccess)
+                    response.EstModel = estData.Data!;  
+                response = BindingDataEsmain(response);
+                return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "ReloadGetEstMain");
+                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
+            }
+        }
         public ResponseBase<UserModel> getUserInfo(string mem)
         {
             string decUsrNo = "";
@@ -249,8 +263,8 @@ namespace KantanMitsumori.Service.ASEST
             }
             SetvalueToken();
             return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
-
         }
+
         #region fuc private     
         private int chkAANo(string? userNo, string AANo, string AAPlace, int CornerType, int mode)
         {
@@ -365,13 +379,8 @@ namespace KantanMitsumori.Service.ASEST
 
             string strTempImagePath;
             string strSavePath = "";
-
             estModel.LeaseFlag = string.IsNullOrEmpty(request.leaseFlag) ? "0" : request.leaseFlag;
-
-            // get user info
             var userInfo = getUserInfo(request.mem);
-
-            // ラベルセット
             valToken.UserNo = userInfo.Data!.UserNo;
             valToken.UserNm = userInfo.Data!.UserNm;
             if (!string.IsNullOrEmpty(request.exh))
@@ -384,10 +393,12 @@ namespace KantanMitsumori.Service.ASEST
                 if (checkAANo == 1)
                 {
                     if (!await addEstNextSubNo(valToken.sesEstNo, valToken.sesEstSubNo))
-                        return ResponseHelper.Error<EstModel>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "GCMF-051D" + CommonConst.def_ErrCodeR);
+                        return ResponseHelper.Error<EstModel>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
+
                 }
                 else if (checkAANo == -1)
-                    return ResponseHelper.Error<EstModel>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "GCMF-040D" + CommonConst.def_ErrCodeR);
+                    return ResponseHelper.Error<EstModel>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
+
 
             }
             estModel.EstUserNo = userInfo.Data.UserNo;
@@ -514,8 +525,7 @@ namespace KantanMitsumori.Service.ASEST
             {
                 var carTax = _commonFuncHelper.getCarTax(intFirstMonth, intHaiki);
                 if (carTax == -1)
-                    return ResponseHelper.Error<EstModel>("Error", CommonConst.def_ErrMsg1_Maker + CommonConst.def_ErrCodeL + "SMAI-023D" + CommonConst.def_ErrCodeR);
-
+                    return ResponseHelper.Error<EstModel>(HelperMessage.SMAI023D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI023D));
                 estModel.AutoTax = carTax;
                 estModel.AutoTaxMonth = intFirstMonth.ToString();
             }
@@ -578,7 +588,8 @@ namespace KantanMitsumori.Service.ASEST
                     inMM = Strings.Right(estModel.CheckCarYm, 2);
                 }
                 if (!_commonFuncHelper.getSelfInsurance(intHaiki, inYYYY, inMM, userDefDamageInsMonth, ref intSelfIns, ref intRemIns))
-                    return ResponseHelper.Error<EstModel>("Error", CommonConst.def_ErrMsg1_Maker + CommonConst.def_ErrCodeL + "SMAI-028D" + CommonConst.def_ErrCodeR);
+                    return ResponseHelper.Error<EstModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
+
                 else if (intSelfIns > 0)
                 {
                     estModel.DamageIns = intSelfIns;
@@ -611,10 +622,22 @@ namespace KantanMitsumori.Service.ASEST
             estModel.SonotaTitle = CommonConst.def_TitleSonota;
             if (!await regEstData(estModel))
             {
-                return ResponseHelper.Error<EstModel>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-029D" + CommonConst.def_ErrCodeR);
+                return ResponseHelper.Error<EstModel>(HelperMessage.SMAI029D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI029D));
+
+            }
+            //show Mess error 
+            if (estModel.CallKbn == "2")
+            {
+                estModel.IsError = 1;
+
+            } //show Mess error 
+            else if (request.mod == "1" && request.PriDisp == "1")
+            {
+                estModel.IsError = 1;
             }
 
-            return ResponseHelper.Ok("OK", "OK", estModel);
+            return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estModel);
+
         }
         private void SetvalueToken()
         {
@@ -678,7 +701,197 @@ namespace KantanMitsumori.Service.ASEST
 
             return true;
         }
+        private ResponseEstMainModel BindingDataEsmain(ResponseEstMainModel Model)
+        {
+            var estModelView = Model.EstModelView;
+            estModelView = new EstModelView();
+            estModelView.TradeDate = CommonFunction.japaneseFormat(Model.EstModel.TradeDate);
+            estModelView.SalesSum = CommonFunction.setFormatCurrency(Model.EstModel.SalesSum);
 
+            if (Strings.Len(Strings.Trim(Model.EstModel.FirstRegYm)) == 4)
+            {
+                estModelView.FirstRegYm = CommonFunction.getWareki(Strings.Mid(Model.EstModel.FirstRegYm, 1, 4)) + "年";
+            }
+            else if (Strings.Len(Strings.Trim(Model.EstModel.FirstRegYm)) == 6)
+            {
+                estModelView.FirstRegYm = CommonFunction.getWareki(Strings.Mid(Model.EstModel.FirstRegYm, 1, 4)) + "年" + System.Convert.ToInt32(Strings.Mid(Model.EstModel.FirstRegYm, 5, 2)) + "月";
+            }
+            string Ysc = "";
+            string Msc = "";
+            CommonFunction.FormatDay(Model.EstModel.CheckCarYm ?? "0", ref Ysc, ref Msc);
+            estModelView.CheckCarYm = Model.EstModel.CheckCarYm == "無し" || string.IsNullOrEmpty(Model.EstModel.CheckCarYm) ? Model.EstModel.CheckCarYm : CommonFunction.getWareki(Ysc) + "年" + Msc + "月";
+            estModelView.NowRun = Information.IsNumeric(Model.EstModel.NowOdometer) ? CommonFunction.setFormatCurrency(Model.EstModel.NowOdometer, Model.EstModel.MilUnit) : "";
+            estModelView.Vol = CommonFunction.setFormatCurrency(Model.EstModel.DispVol, Model.EstModel.DispVolUnit);
+
+
+            if (Strings.Trim(Model.EstModel.EstTanName) != "")
+                estModelView.EstTanName += "担当 : " + Model.EstModel.EstTanName + "　　";
+            if (Strings.Trim(Model.EstModel.SekininName) != "")
+                estModelView.SekininName += "責任者 : " + Model.EstModel.SekininName + "　　";
+            estModelView.ShopTel += "TEL : " + Model.EstModel.ShopTel;
+            estModelView.AAInfo = Model.EstModel.Mode == 1 ? Model.EstModel.AAInfo : "";
+
+            estModelView.CarPriceTitle = CommonConst.def_TitleCarPrice + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.CarPrice = CommonFunction.setFormatCurrency(Model.EstModel.CarPrice);
+            estModelView.DiscountT = Model.EstModel.Discount == 0 ? "" : CommonConst.def_TitleDisCount + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.Discount = Model.EstModel.Discount == 0 ? "" : "▲" + Convert.ToString(CommonFunction.setFormatCurrency(Model.EstModel.Discount));
+            estModelView.SonotaTitle = Model.EstModel.SonotaTitle + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.Sonota = CommonFunction.setFormatCurrency(Model.EstModel.Sonota);
+            long wSyakenNew;
+            if (Model.EstModel.SyakenNew > 0 & Model.EstModel.SyakenZok == 0)
+            {
+                wSyakenNew = Model.EstModel.SyakenNew;
+                estModelView.SyakenNewZokT = CommonConst.def_TitleSyakenNew;
+            }
+            else if (Model.EstModel.SyakenNew == 0 && Model.EstModel.SyakenZok > 0)
+            {
+                wSyakenNew = Model.EstModel.SyakenZok;
+                estModelView.SyakenNewZokT = CommonConst.def_TitleSyakenZok;
+            }
+            else
+            {
+                wSyakenNew = 0;
+                estModelView.SyakenNewZokT = CommonConst.def_TitleSyakenNew;
+                if ((Strings.Len(Model.EstModel.CheckCarYm) == 6 &&
+                    DateAndTime.DateDiff(DateInterval.Month, DateTime.Today, DateTime.Parse(Strings.Left(Model.EstModel.CheckCarYm, 4) + "/" + Strings.Right(Model.EstModel.CheckCarYm, 2) + "/01")) > 0)
+                    || (Strings.Len(Model.EstModel.CheckCarYm) == 4 && DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(Model.EstModel.CheckCarYm + "/01")) > 0))
+                    estModelView.SyakenNewZokT = CommonConst.def_TitleSyakenZok;
+            }
+            estModelView.SyakenNewZokT = estModelView.SyakenNewZokT + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.SyakenNew = CommonFunction.setFormatCurrency(wSyakenNew);
+            estModelView.OpSpeCialTitle = CommonConst.def_TitleOpSpeCial + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.OptionPriceAll = CommonFunction.setFormatCurrency(Model.EstModel.OptionPriceAll);
+            estModelView.CarSum = CommonFunction.setFormatCurrency(Model.EstModel.CarSum);
+            estModelView.TaxInsAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxInsAll);
+            estModelView.TaxInsEquivalentAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxInsEquivalentAll);
+            estModelView.TaxFreeAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeAll);
+
+
+            estModelView.DaikoTitle = CommonConst.def_TitleDaiko + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.TaxInsEquivalentTitle = CommonConst.def_TitleDaiko + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.TaxName = Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleConTaxTotalInTax : CommonConst.def_TitleConTaxTotalOutTax;
+            estModelView.CarSaleSumTitle = Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleCarKeiInTax : CommonConst.def_TitleCarKeiOutTax;
+            estModelView.SalesSumTitle = Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleSalesSumInTax : CommonConst.def_TitleSalesSumOutTax;
+
+            estModelView.TaxCostAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxCostAll);
+            estModelView.ConTax = CommonFunction.setFormatCurrency(Model.EstModel.ConTax);
+            estModelView.CarSaleSum = CommonFunction.setFormatCurrency(Model.EstModel.CarSaleSum);
+            estModelView.TradeInPrice = Model.EstModel.TradeInPrice == 0 ? "" : "▲" + Convert.ToString(CommonFunction.setFormatCurrency(Model.EstModel.TradeInPrice));
+            estModelView.Balance = Model.EstModel.Balance == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstModel.Balance);
+            var isTaxInsInputKb = Model.EstModel.TaxInsInputKb;
+            estModelView.AutoTaxMonth = isTaxInsInputKb ? Model.EstModel.AutoTaxEquivalent > 0 ? CommonConst.def_TitleAutoTaxEquivalent : CommonConst.def_TitleAutoTax + (Model.EstModel.AutoTax == 0 ? "" : "（" + Model.EstModel.AutoTaxMonth + "月中登録）") : "";
+            estModelView.AutoTax = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AutoTax) : "";
+            estModelView.AutoTaxEquivalent = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AutoTaxEquivalent) : "";
+            estModelView.AcqTax = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.AcqTax) : "";
+            estModelView.WeightTax = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.WeightTax) : "";
+            estModelView.DamageIns = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.DamageIns) : "";
+            estModelView.DamageInsEquivalent = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.DamageInsEquivalent) : "";
+            estModelView.DamageInsMonth = isTaxInsInputKb ? Model.EstModel.DamageInsEquivalent > 0 ? CommonConst.def_TitleDamageInsEquivalent : CommonConst.def_TitleDamageIns + (Model.EstModel.DamageIns == 0 ? "" : "（" + Model.EstModel.DamageInsMonth + "ヶ月）") : "";
+            estModelView.OptionIns = isTaxInsInputKb ? CommonFunction.setFormatCurrency(Model.EstModel.OptionIns) : "";
+            var isTaxFreeKb = Model.EstModel.TaxFreeKb;
+            estModelView.TaxFreeGarage = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeGarage) : "";
+            estModelView.TaxFreeCheck = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeCheck) : "";
+            estModelView.TaxFreeTradeIn = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeTradeIn) : "";
+            estModelView.TaxFreeRecycle = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeRecycle) : "";
+            estModelView.TaxFreeOther = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeOther) : "";
+            estModelView.TaxFreeSet1Title = isTaxFreeKb ? Model.EstModel.TaxFreeSet1Title : "";
+            estModelView.TaxFreeSet1 = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeSet1) : "";
+            estModelView.TaxFreeSet2Title = isTaxFreeKb ? Model.EstModel.TaxFreeSet2Title : "";
+            estModelView.TaxFreeSet2 = isTaxFreeKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeSet2) : "";
+            var isTaxCostKb = Model.EstModel.TaxCostKb;
+            estModelView.TaxGarage = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxGarage) : "";
+            estModelView.TaxCheck = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxCheck) : "";
+            estModelView.TaxTradeIn = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxTradeIn) : "";
+            estModelView.TaxDelivery = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxDelivery) : "";
+            estModelView.TaxRecycle = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxRecycle) : "";
+            estModelView.TaxOther = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxOther) : "";
+            estModelView.TaxTradeInSatei = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxTradeInSatei) : "";
+            estModelView.TaxSet1Title = isTaxCostKb ? Model.EstModel.TaxSet1Title : "";
+            estModelView.TaxSet1 = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet1) : "";
+            estModelView.TaxSet2Title = isTaxCostKb ? Model.EstModel.TaxSet2Title : "";
+            estModelView.TaxSet2 = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet2) : "";
+            estModelView.TaxSet3Title = isTaxCostKb ? Model.EstModel.TaxSet3Title : "";
+            estModelView.TaxSet3 = isTaxCostKb ? CommonFunction.setFormatCurrency(Model.EstModel.TaxSet3) : "";
+            estModelView.Deposit = CommonFunction.setFormatCurrency(Model.EstModel.Deposit);
+            estModelView.Principal = Model.EstModel.Principal == 0 ? estModelView.SalesSum : CommonFunction.setFormatCurrency(Model.EstModel.SalesSum - Model.EstModel.Deposit);
+            estModelView.PartitionFee = Model.EstModel.PartitionFee > 0 ? CommonFunction.setFormatCurrency((long)Model.EstModel.PartitionFee) : "";
+            estModelView.PartitionAmount = Model.EstModel.PartitionAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.PartitionAmount) : "";
+            estModelView.PayTimes = Model.EstModel.PayTimes > 0 ? Model.EstModel.PayTimes + " 回" : "";
+
+            string fromdt = "";
+            if (Model.EstModel.FirstPayMonth != "")
+                fromdt = Strings.Mid(Model.EstModel.FirstPayMonth, 1, 4) + "年" + System.Convert.ToString(Strings.Mid(Model.EstModel.FirstPayMonth, 5, 2)) + "月";
+            string todt = "";
+            if (Model.EstModel.LastPayMonth != "")
+                todt = Strings.Mid(Model.EstModel.LastPayMonth, 1, 4) + "年" + System.Convert.ToString(Strings.Mid(Model.EstModel.LastPayMonth, 5, 2)) + "月";
+            estModelView.Kikan = (fromdt != "" | todt != "") ? fromdt + " - " + todt : "";
+            estModelView.FirstPayAmount = Model.EstModel.FirstPayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.FirstPayAmount) : "";
+            estModelView.PayAmount = Model.EstModel.PayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.PayAmount) : "";
+            estModelView.PayTimes2 = Model.EstModel.PayTimes > 0 ? "（×" + Convert.ToString(Model.EstModel.PayTimes - 1) + "回）" : "";
+            if (Model.EstModel.BonusAmount > 0)
+            {
+                estModelView.BonusMonth = Model.EstModel.BonusFirst != "" ? Model.EstModel.BonusFirst + "月" : "";
+                estModelView.BonusMonth += Model.EstModel.BonusSecond != "" ? "・" + Model.EstModel.BonusSecond + "月" : "";
+            }
+            estModelView.BonusAmount = Model.EstModel.BonusAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.BonusAmount) : "";
+            estModelView.BonusTimes = Model.EstModel.BonusAmount > 0 ? Model.EstModel.BonusTimes > 0 ? "（×" + Model.EstModel.BonusTimes + "回）" : "" : "";
+            estModelView.Rate = Model.EstModel.Rate > 0 ? "分割払手数料は実質年率 " + Model.EstModel.Rate + "% で計算しています" : "";
+            estModelView.WarningRecalc = Model.EstModel.LoanInfo == CommonConst.def_LoanInfo_Clear ? CommonConst.LOAN_RECALC_CLEAR :
+                                             Model.EstModel.LoanInfo == CommonConst.def_LoanInfo_NormalEnd ? CommonConst.LOAN_RECALC_NORMAL_END :
+                                              Model.EstModel.LoanInfo == CommonConst.def_LoanInfo_Error ? CommonConst.LOAN_RECALC_ERROR : "";
+
+            estModelView.FirstRegistration = CommonFunction.getFormatDayYMD(Model.EstIDEModel.FirstRegistration);
+            estModelView.InspectionExpirationDate = CommonFunction.getFormatDayYMD(Model.EstIDEModel.InspectionExpirationDate);
+            estModelView.LeaseStartMonth = CommonFunction.getFormatDayYMD(Model.EstIDEModel.LeaseStartMonth);
+            estModelView.LeasePeriod = Model.EstIDEModel.LeasePeriod == 0 ? "" : Model.EstIDEModel.LeasePeriod + "ヶ月";
+            estModelView.LeaseExpirationDate = CommonFunction.getFormatDayYMD(Model.EstIDEModel.LeaseExpirationDate);
+            estModelView.MonthlyLeaseFee = Model.EstIDEModel.MonthlyLeaseFee == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.MonthlyLeaseFee);
+            estModelView.LeaseTotal = string.IsNullOrEmpty(estModelView.LeasePeriod) ? "月額リース料(税込)" : "月額リース料(税込) " + estModelView.MonthlyLeaseFee + " (" + estModelView.LeasePeriod + ")";
+            estModelView.ContractPlanName = Model.EstIDEModel.ContractPlanName;
+            estModelView.IsExtendedGuarantee = Model.EstIDEModel.IsExtendedGuarantee == unchecked((byte)(-1)) ? "" : Model.EstIDEModel.IsExtendedGuarantee == 0 ? "あり" : "なし";
+            estModelView.InsuranceCompanyName = Model.EstIDEModel.InsuranceCompanyName;
+            estModelView.InsuranceFee = Model.EstIDEModel.InsuranceFee == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.InsuranceFee);
+            estModelView.DownPayment = Model.EstIDEModel.DownPayment == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.DownPayment);
+            estModelView.IdeTradeInPrice = Model.EstIDEModel.TradeInPrice == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.TradeInPrice);
+            estModelView.TradeInFirstRegYm = !string.IsNullOrEmpty(Model.EstModel.TradeInFirstRegYm) ? (Model.EstModel.TradeInFirstRegYm.Trim().Length == 4) ? CommonFunction.getWareki(Strings.Mid(Model.EstModel.TradeInFirstRegYm, 1, 4)) + "年" :
+                          (Model.EstModel.TradeInFirstRegYm.Trim().Length == 6) ? CommonFunction.getWareki(Strings.Mid(Model.EstModel.TradeInFirstRegYm, 1, 4)) + "年" + Convert.ToInt32(Strings.Mid(Model.EstModel.TradeInFirstRegYm, 5, 2)) + "月" : "" : "";
+
+            string Yfm = "";
+            string Mfm = "";
+            CommonFunction.FormatDay(Model.EstModel.TradeInCheckCarYm ?? "0", ref Yfm, ref Mfm);
+            estModelView.TradeInCheckCarYm = Model.EstModel.TradeInCheckCarYm == "無し" || string.IsNullOrEmpty(Model.EstModel.TradeInCheckCarYm) ? Model.EstModel.TradeInCheckCarYm : CommonFunction.getWareki(Yfm) + "年" + Mfm + "月";
+            estModelView.SitaRun = Model.EstModel.TradeInNowOdometer > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.TradeInNowOdometer, Model.EstModel.TradeInMilUnit) : "";
+            estModelView.TradeInRegNo = string.IsNullOrEmpty(Model.EstModel.TradeInRegNo) ? "" : Model.EstModel.TradeInRegNo.Replace("/", "");
+           
+            estModelView.OptionPrice1 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice1);
+            estModelView.OptionPrice2 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice2);
+            estModelView.OptionPrice3 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice3);
+            estModelView.OptionPrice4 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice4);
+            estModelView.OptionPrice5 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice5);
+            estModelView.OptionPrice6 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice6);
+            estModelView.OptionPrice7 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice7);
+            estModelView.OptionPrice8 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice8);
+            estModelView.OptionPrice9 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice8);
+            estModelView.OptionPrice10 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice10);
+            estModelView.OptionPrice11 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice11);
+            estModelView.OptionPrice12 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice12);
+            Model.EstModelView = estModelView;
+            return Model;
+        }
+
+      
         #endregion fuc private
     }
 }
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
