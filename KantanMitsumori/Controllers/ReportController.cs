@@ -21,19 +21,21 @@ namespace KantanMitsumori.Controllers
         /// <summary>
         /// Demo download article sub report
         /// </summary>        
-        public IActionResult DownloadEstimateReport()
+        public IActionResult DownloadEstimateReport(RequestReport? model)
         {
-            // Validate parameters
-            var requestModel = new RequestReport() {
-                EstNo = "22090900044",
+            // Sample data            
+            model = new RequestReport()
+            {
+                EstNo = "22092000032",
                 EstSubNo = "01",
+                ReportType = ReportType.Estimate,
                 CustNm_forPrint = "DANG PHAM",
                 CustZip_forPrint = "702201",
                 CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
                 CustTel_forPrint = "028-3801-5151"
             };
             // Generate report
-            var result = _reportService.GenerateEstimateReport(requestModel);
+            var result = _reportService.GenerateEstimateReport(model);
             
             // Process result
             if (result.ResultStatus != 0)
@@ -46,106 +48,37 @@ namespace KantanMitsumori.Controllers
             return File(responseModel.Data, responseModel.ContentType, responseModel.Name);
         }
 
+
         /// <summary>
         /// Demo download article sub report
         /// </summary>        
-        public IActionResult DownloadArticleReport()
-        {                        
-            var result = _reportService.GetArticleSubReport();
-            if (result == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000","Result is null."));
-            if (result.ResultStatus != 0)
-                return ErrorAction(result);
-            var model = result.Data;
-            if (model == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
-            return File(model.Data, model.ContentType, model.Name);
-        }
-
-        /// <summary>
-        /// Demo download memo sub report
-        /// </summary>        
-        public IActionResult DownloadMemoReport()
+        public IActionResult DownloadOrderReport(RequestReport? model)
         {
-            var result = _reportService.GetMemoSubReport();
-            if (result == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
+            // Sample data            
+            model = new RequestReport()
+            {
+                EstNo = "22092000032",
+                EstSubNo = "01",
+                ReportType = ReportType.Order,
+                CustNm_forPrint = "DANG PHAM",
+                CustZip_forPrint = "702201",
+                CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
+                CustTel_forPrint = "028-3801-5151"
+            };
+            // Generate report
+            var result = _reportService.GenerateOrderReport(model);
+
+            // Process result
             if (result.ResultStatus != 0)
                 return ErrorAction(result);
-            var model = result.Data;
-            if (model == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
-            return File(model.Data, model.ContentType, model.Name);
+
+            var responseModel = result.Data;
+            if (responseModel == null)
+                return ErrorAction(ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S)));
+
+            return File(responseModel.Data, responseModel.ContentType, responseModel.Name);
         }
 
-        /// <summary>
-        /// Demo download Est sub report
-        /// </summary>        
-        public IActionResult DownloadEstReport()
-        {
-
-            var result = _reportService.GetEstReport();
-            if (result == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
-            if (result.ResultStatus != 0)
-                return ErrorAction(result);
-            var model = result.Data;
-            if (model == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
-            return File(model.Data, model.ContentType, model.Name);
-        }
-
-
-        /// <summary>
-        /// Demo download Order sub report
-        /// </summary>        
-        public IActionResult DownloadOrderReport()
-        {
-
-            var result = _reportService.GetOrderReport();
-            if (result == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
-            if (result.ResultStatus != 0)
-                return ErrorAction(result);
-            var model = result.Data;
-            if (model == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
-            return File(model.Data, model.ContentType, model.Name);
-        }
-
-        /// <summary>
-        /// Demo download Estimate with memo report
-        /// </summary>    
-        public IActionResult DownloadEstimateWithMemoReport()
-        {
-
-            var result = _reportService.GetEstimateWithMemoReport();
-            if (result == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
-            if (result.ResultStatus != 0)
-                return ErrorAction(result);
-            var model = result.Data;
-            if (model == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
-            return File(model.Data, model.ContentType, model.Name);
-        }
-
-        /// <summary>
-        /// Demo download Estimate with memo report
-        /// </summary>    
-        public IActionResult DownloadOrderWithArticleReport()
-        {
-
-            var result = _reportService.GetOrderWithArticleReport();
-            if (result == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
-            if (result.ResultStatus != 0)
-                return ErrorAction(result);
-            var model = result.Data;
-            if (model == null)
-                return ErrorAction(ResponseHelper.Error<int>("00000", "Result data is null."));
-            return File(model.Data, model.ContentType, model.Name);
-        }
 
     }
 }
