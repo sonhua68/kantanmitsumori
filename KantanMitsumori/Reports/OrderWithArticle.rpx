@@ -8,7 +8,7 @@
   </StyleSheet>
   <Sections>
     <Section Type="Detail" Name="Detail" Height="2880" BackColor="16777215">
-      <Control Type="AR.Subreport" Name="subOrder" Left="0" Top="0" Width="11338.56" Height="1440" ReportName="subOrder" />      
+      <Control Type="AR.Subreport" Name="subOrder" Left="0" Top="0" Width="11338.56" Height="1440" ReportName="subOrder" />
       <Control Type="AR.Subreport" Name="subArticle" Left="0" Top="1455.84" Width="11338.56" Height="1440" ReportName="subArticle" />
     </Section>
   </Sections>
@@ -27,7 +27,7 @@ public void ActiveReport_ReportStart()
 		_subOrder.LoadLayout(reader);		
 	}
 	
-	var articleResName = "KantanMitsumori.Reports.EstSubArticle.rpx";	
+	var articleResName = "KantanMitsumori.Reports.Article.rpx";	
 	using (System.IO.Stream stream = assembly.GetManifestResourceStream(articleResName))
 	using (System.Xml.XmlReader reader = System.Xml.XmlReader.Create(stream))
 	{
@@ -52,6 +52,6 @@ public void ActiveReport_ReportEnd()
 	_subOrder.Dispose();
 	_subArticle.Dispose();
 }]]></Script>
-	<PageSettings LeftMargin="562" RightMargin="0" TopMargin="281" BottomMargin="0" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="1" />
+  <PageSettings LeftMargin="562" RightMargin="0" TopMargin="281" BottomMargin="0" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="1" />
   <Parameters />
 </ActiveReportsLayout>
