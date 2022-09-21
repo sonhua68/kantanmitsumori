@@ -3,6 +3,7 @@ using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualBasic;
 using System.Net;
@@ -418,76 +419,39 @@ namespace KantanMitsumori.Service.Helper
         }
 
 
-        /// <summary>
-        /// 初年度登録年月と排気量を受け取り自動車税を返却する
-        /// </summary>
-        /// <param name="intRegistMonth"></param>
-        /// <param name="intExaust"></param>
-        /// <param name="outCarTax"></param>
-        /// <returns></returns>
+   
         public int getCarTax(int intRegistMonth, int intExaust)
-        {
-            // 軽の場合は対象外
+        {           
             if (intExaust <= 660)
             {
                 return 0;
             }
-
-            int intYEAR_AMOUNT = getYearAmount(intExaust);
-            // 自動車税年額を取得
+            int intYEAR_AMOUNT = getYearAmount(intExaust);          
             if (intYEAR_AMOUNT == -1)
-                return -1;
-            // 課税月数を求める
-            int intPassedMonth = getCarTaxPassedMonth(intRegistMonth);
-            // 自動車税計算
+                return -1;        
+            int intPassedMonth = getCarTaxPassedMonth(intRegistMonth);        
             decimal dblCarTax = intYEAR_AMOUNT * Convert.ToDecimal(intPassedMonth / (double)12);
-
-            // 100円未満端数切捨て
             return (int)CommonFunction.ToRoundDown(dblCarTax, -2);
         }
-
-        /// <summary>
-        /// 自賠責保険料の取得
-        /// </summary>
-        /// <param name="intExaust"></param>
-        /// <param name="inYear"></param>
-        /// <param name="inMonth"></param>
-        /// <param name="inUserDefMonth"></param>
-        /// <param name="outSelfIns"></param>
-        /// <param name="outRemIns"></param>
-        /// <returns></returns>
         public bool getSelfInsurance(int intExaust, string inYear, string inMonth, int inUserDefMonth, ref int outSelfIns, ref int outRemIns)
         {
             try
-            {
-                // 車検判定
+            {      
                 DateTime vSyaken;
-
                 int SyakenDiff = 0;
-
-                // 基準月数の既定値セット
-                outRemIns = inUserDefMonth > 0 ? inUserDefMonth : CommonConst.def_DamegeInsMonth25;
-
-                // 基準月数のセット（既定値上書き）
+                outRemIns = inUserDefMonth > 0 ? inUserDefMonth : CommonConst.def_DamegeInsMonth25;             
                 if ((inYear != "" & inMonth != "") && Information.IsDate(inYear + "/" + inMonth + "/01"))
                 {
-                    // 車検期限
                     vSyaken = DateTime.Parse(inYear + "/" + inMonth + "/01");
                     SyakenDiff = (int)DateAndTime.DateDiff(DateInterval.Month, DateTime.Now, vSyaken);
                     if (SyakenDiff > 0)
-                        outRemIns = SyakenDiff + 1;// カバー月数の補正（１ヶ月分プラス）
+                        outRemIns = SyakenDiff + 1;
                 }
-
-                // 軽or乗用車(1:乗用車　2:軽)
                 int intCarType = intExaust > 660 ? 1 : 2;
                 int intRemIns = outRemIns;
-
-                // Get m_SelfInsurance
                 var getSelfInsurance = _unitOfWork.SelfInsurances.GetSingle(x => x.CarType == intCarType && x.RemainInspection == intRemIns && x.Dflag == false);
-
                 if (getSelfInsurance == null)
                     return false;
-
                 outSelfIns = getSelfInsurance != null ? Convert.ToInt32(getSelfInsurance.SelfInsurance) : 0;
             }
             catch (Exception ex)
@@ -498,13 +462,6 @@ namespace KantanMitsumori.Service.Helper
 
             return true;
         }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="intExaust"></param>
-        /// <param name="inRemIns"></param>
-        /// <returns></returns>
         public int? getSelfInsurance(int intExaust, int inRemIns)
         {
             try
@@ -533,14 +490,11 @@ namespace KantanMitsumori.Service.Helper
 
         #region Private Function 
 
-        // DBアクセスを行い
-        // 排気量から年額を取得する
         private int getYearAmount(int intTargetExault)
         {
             try
             {
                 var getCarTax = _unitOfWork.CarTaxs.GetSingle(x => x.ExaustFrom <= intTargetExault && x.ExaustTo >= intTargetExault && x.Dflag == false);
-
                 if (getCarTax != null)
                 {
                     return Convert.ToInt32(getCarTax.YearAmount);
@@ -548,15 +502,12 @@ namespace KantanMitsumori.Service.Helper
                 else
                     return -1;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // エラーログ書出し
+                _logger.LogError(ex, "getYearAmount");
                 return -1;
             }
-
         }
-
-        // 登録月を受け取り課税対象月数を返却
         private int getCarTaxPassedMonth(int intRegistMonth)
         {
             int intCloseMonth = 3;

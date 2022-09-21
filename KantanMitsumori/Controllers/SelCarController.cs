@@ -1,5 +1,6 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
+using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +9,11 @@ namespace KantanMitsumori.Controllers
 {
     public class SelCarController : BaseController
     {
-        private readonly IAppService _appService;
+        private readonly IEstMainService _appService;
 
         private readonly ILogger<SelCarController> _logger;
         private readonly ISelCarService _selCarService;
-        public SelCarController(IAppService appService, ISelCarService selCarService, IConfiguration config, ILogger<SelCarController> logger) : base(config)
+        public SelCarController(IEstMainService appService, ISelCarService selCarService, IConfiguration config, ILogger<SelCarController> logger) : base(config)
         {
             _appService = appService;
 

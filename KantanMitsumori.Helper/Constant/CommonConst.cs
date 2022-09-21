@@ -4,7 +4,8 @@
     {
 
         public const string def_DmyImg = "~/img/CarImgDummy.png";
-        public const string def_ExclusionListOfAutoCalc = "~/List/ExclusionList_of_AutoCalc.sjis.txt";
+        public const string def_ExclusionListOfAutoCalc = "F:\\KantanMitsumori\\KantanMitsumori\\wwwroot\\List\\ExclusionList_of_AutoCalc.sjis.txt";
+    
 
         /// <summary>
         /// タイトル

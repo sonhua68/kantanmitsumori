@@ -1,6 +1,7 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
+using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Models;
@@ -12,11 +13,11 @@ namespace KantanMitsumori.Controllers
 {
     public class SerEstController : BaseController
     {
-        private readonly IAppService _appService;
+        private readonly IEstMainService _appService;
         private readonly ILogger<SerEstController> _logger;
         private readonly ISelCarService _selCarService;
         private readonly IEstimateService _estimateService;
-        public SerEstController(IAppService appService, ISelCarService selCarService, IEstimateService estimateService, IConfiguration config, ILogger<SerEstController> logger) : base(config)
+        public SerEstController(IEstMainService appService, ISelCarService selCarService, IEstimateService estimateService, IConfiguration config, ILogger<SerEstController> logger) : base(config)
         {
             _appService = appService;
             _logger = logger;

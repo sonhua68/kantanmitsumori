@@ -2,6 +2,8 @@
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Response;
@@ -47,21 +49,13 @@ namespace KantanMitsumori.Service.Helper
             try
             {
                 var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
-
-                if (estModel == null)
-                {
-                    return false;
-                }
-
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == estModel.EstNo && x.EstSubNo == estModel.EstSubNo && x.Dflag == false);
-
-                if (estSubModel == null)
+                if (estModel == null || estSubModel == null)
                 {
                     return false;
                 }
-
                 // 再計算前の総額
-                long oldSalesSum = (long)estModel.SalesSum;
+                int? oldSalesSum = estModel.SalesSum;
 
                 // 消費税率取得
                 var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.UserNo);
@@ -91,7 +85,7 @@ namespace KantanMitsumori.Service.Helper
                             reCalEstModel.Add(propEst.Name);
 
 
-                            int objValue = (int)propEst.GetValue(estModel);
+                            int objValue = (int)propEst.GetValue(estModel)!;
 
                             if (reCalEstModel.Contains(propEst.Name))
                             {
@@ -108,7 +102,7 @@ namespace KantanMitsumori.Service.Helper
                             // Do something with propValue
                             reCalEstSubModel.Add(propEstSub.Name);
 
-                            int objValue = (int)propEstSub.GetValue(estModel);
+                            int objValue = (int)propEstSub.GetValue(estModel)!;
 
                             if (reCalEstSubModel.Contains(propEstSub.Name))
                             {
@@ -179,18 +173,16 @@ namespace KantanMitsumori.Service.Helper
                                     + estSubModel.TaxSet3;
 
                 // 消費税合計
-                decimal wkContax; // 浮動小数点の計算誤差回避のため
+                decimal? wkContax; // 浮動小数点の計算誤差回避のため
                 if (estModel.ConTaxInputKb == false)
-                    wkContax = (decimal)((estModel.CarSum + estSubModel.TaxInsEquivalentAll + estModel.TaxCostAll) * vTax);
+                    wkContax = (decimal?)((estModel.CarSum + estSubModel.TaxInsEquivalentAll + estModel.TaxCostAll) * vTax);
                 else
                 {
-                    wkContax = (decimal)((estModel.CarSum + estSubModel.TaxInsEquivalentAll + estModel.TaxCostAll) / (decimal)(1 + vTax));
-                    wkContax = Math.Ceiling(wkContax);
+                    wkContax = (decimal?)((estModel.CarSum + estSubModel.TaxInsEquivalentAll + estModel.TaxCostAll) / (1 + vTax));
+                    wkContax = Math.Ceiling((decimal)wkContax!);
                     wkContax = wkContax * vTax;
                 }
-
-                estModel.ConTax = Convert.ToInt32(Math.Floor(wkContax));
-
+                estModel.ConTax = Convert.ToInt32(Math.Floor((decimal)wkContax!));
                 // 現金販売価格
                 estModel.CarSaleSum = estModel.CarSum
                                     + estModel.TaxInsAll
@@ -224,21 +216,13 @@ namespace KantanMitsumori.Service.Helper
                         simLon.MoneyRate = Convert.ToInt32(estModel.Rate);
                         simLon.PayTimes = Convert.ToInt32(estModel.PayTimes);
                         simLon.FirstMonth = Convert.ToInt32(Strings.Right(estModel.FirstPayMonth, 2));
-
                         if (estModel.BonusAmount > 0)
                         {
                             simLon.Bonus = Convert.ToInt32(estModel.BonusAmount);
                             simLon.BonusFirst = Convert.ToInt32(estModel.BonusFirst);
                             simLon.BonusSecond = Convert.ToInt32(estModel.BonusSecond);
                         }
-                        else
-                        {
-                            simLon.Bonus = 0;
-                            simLon.BonusFirst = 0;
-                            simLon.BonusSecond = 0;
-                        }
                         simLon.ConTax = vTax;
-
                         // 計算実行
                         if (simLon.calcRegLoan() == false)
                         {
@@ -246,7 +230,6 @@ namespace KantanMitsumori.Service.Helper
                         }
                         else
                         {
-
                             estModel.Rate = (double)simLon.MoneyRate;
                             estModel.Deposit = simLon.Deposit;
                             estModel.Principal = simLon.Principal;
@@ -261,9 +244,6 @@ namespace KantanMitsumori.Service.Helper
                             estModel.BonusSecond = simLon.BonusSecond.ToString();
                             estModel.BonusTimes = simLon.BonusTimes;
                             estModel.PayTimes = simLon.PayTimes;
-
-
-                            //TEstimateSub estimateSub = _mapper.Map<TEstimateSub>(estSubModel);
                             estSubModel.LoanModifyFlag = false;
                             estSubModel.LoanRecalcSettingFlag = true;
                             estSubModel.LoanInfo = CommonConst.def_LoanInfo_NormalEnd;
@@ -279,32 +259,14 @@ namespace KantanMitsumori.Service.Helper
                     // 総額変更なしの場合、ローン計算情報表示区分のクリア
                     estSubModel.LoanInfo = CommonConst.def_LoanInfo_Unexecuted;
                 }
-
-
                 if (strClearMsg != "")
                 {
-                    // ローンの再計算失敗、または総額変更に伴うローンの自動再計算を行わない場合、ローン情報クリア
-                    // update Estimates
-                    estModel.Rate = 0;
-                    estModel.Deposit = 0;
                     estModel.Principal = estModel.SalesSum;
-                    estModel.PartitionFee = 0;
-                    estModel.PartitionAmount = 0;
-                    estModel.FirstPayMonth = "NULL";
-                    estModel.LastPayMonth = "NULL";
-                    estModel.FirstPayAmount = 0;
-                    estModel.PayAmount = 0;
-                    estModel.BonusAmount = 0;
-                    estModel.BonusFirst = "NULL";
-                    estModel.BonusSecond = "NULL";
-                    estModel.BonusTimes = 0;
-                    estModel.PayTimes = 0;
                     // EstimateSubs
                     estSubModel.LoanModifyFlag = false;
                     estSubModel.LoanRecalcSettingFlag = true;
                     estSubModel.LoanInfo = Convert.ToByte(strClearMsg);
                 }
-
                 _unitOfWork.Estimates.Update(estModel);
                 _unitOfWork.EstimateSubs.Update(estSubModel);
                 await _unitOfWork.CommitAsync();
@@ -330,7 +292,7 @@ namespace KantanMitsumori.Service.Helper
             try
             {
                 var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
-
+                var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
                 valToken.sesCarImgPath = CommonFunction.chkImgFile(estModel.CarImgPath ?? "", valToken.sesCarImgPath, CommonConst.def_DmyImg);
                 valToken.sesCarImgPath1 = CommonFunction.chkImgFile(estModel.CarImgPath1 ?? "", valToken.sesCarImgPath1, "");
                 valToken.sesCarImgPath2 = CommonFunction.chkImgFile(estModel.CarImgPath2 ?? "", valToken.sesCarImgPath2, "");
@@ -340,38 +302,33 @@ namespace KantanMitsumori.Service.Helper
                 valToken.sesCarImgPath6 = CommonFunction.chkImgFile(estModel.CarImgPath6 ?? "", valToken.sesCarImgPath6, "");
                 valToken.sesCarImgPath7 = CommonFunction.chkImgFile(estModel.CarImgPath7 ?? "", valToken.sesCarImgPath7, "");
                 valToken.sesCarImgPath8 = CommonFunction.chkImgFile(estModel.CarImgPath8 ?? "", valToken.sesCarImgPath8, "");
-
-                var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
-
                 // その他費用の対応前のデータの場合
-                if (estSubModel.Sonota == 0 && estSubModel.RakuSatu + estSubModel.Rikusou > 0)
+                if (estSubModel.Sonota == 0 && (estSubModel.RakuSatu + estSubModel.Rikusou) > 0)
                 {
                     estSubModel.Sonota = estSubModel.RakuSatu + estSubModel.Rikusou;
                     estModel.CarPrice = estModel.CarPrice - estSubModel.Sonota;
                 }
-                if (estSubModel.SonotaTitle == "")
+                if (string.IsNullOrEmpty(estSubModel.SonotaTitle))
+                {
                     estSubModel.SonotaTitle = CommonConst.def_TitleSonota;
-
+                }
                 responseEst = _helperMapper.MergeInto<EstModel>(estModel, estSubModel);
-
-                creDispData(responseEst);
+                responseEst = creDispData(responseEst);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "getEstData - CEST-040D");
-                return null;
+                return responseEst;
             }
-
             return responseEst;
         }
 
         /// <summary>
         /// 見積書データ表示用整形
         /// </summary>
-        public void creDispData(EstModel model)
+        public EstModel creDispData(EstModel model)
         {
             int intCornerType = 0;
-
             // AA情報
             if (model.Aano != "")
             {
@@ -392,6 +349,7 @@ namespace KantanMitsumori.Service.Helper
                 model.DamageInsEquivalent = 0;
                 model.DamageIns = 0;
             }
+            return model;
         }
 
         /// <summary>
@@ -403,51 +361,27 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                // 現在日付YYMMDDを設定
                 var dtNow = DateTime.Now;
-                // 年を取得する
                 string iYear = Strings.Right(dtNow.Year.ToString(), 2);
-                // 月を取得する
                 string iMonth = Strings.Format(dtNow.Month, "00");
-                // 日を取得する
                 string iDay = Strings.Format(dtNow.Day, "00");
-
                 string strNow = iYear + iMonth + iDay;
-
-                // 現在の最大Noを取得
-                var getMaxEstNo = (from est in _unitOfWork.DbContext.TEstimates
-                                   where est.EstNo.Substring(0, 7) == strNow
-                                   select new { MaxEstNo = string.IsNullOrEmpty(est.EstNo) ? est.EstNo.Max() : '0' }).FirstOrDefault();
-
-                if (getMaxEstNo == null || getMaxEstNo.MaxEstNo.ToString() == "0")
-                    outEstNo = strNow + "00001";
-                else
-                    outEstNo = strNow + Strings.Format(Convert.ToInt32(Strings.Right(getMaxEstNo.MaxEstNo.ToString(), 5)) + 1, "00000");
-            }
+                var estNo = _unitOfWork.Estimates.Query(n => n.EstNo.Substring(0, 6) == strNow).Max(n => n.EstNo);
+                outEstNo = estNo == null ? strNow + "00001" : strNow + Strings.Format(Convert.ToInt32(Strings.Right(estNo, 5)) + 1, "00000");            }
             catch (Exception ex)
             {
                 // エラーログ書出し
                 _logger.LogError(ex, "getEstNoFromDb - CEST-020D");
                 return false;
             }
-
             return true;
         }
-
         public bool getEstSubNoFromDb(string inEstNo, ref string outEstSubNo)
         {
             try
             {
-                // 現在の最大SubNoを取得
-                var getMaxEstSubNo = (from est in _unitOfWork.DbContext.TEstimates
-                                      where est.EstNo == inEstNo
-                                      select new { MaxEstSubNo = string.IsNullOrEmpty(est.EstSubNo) ? est.EstSubNo.Max() : '0' }).FirstOrDefault();
-
-                // 当番号が1件もない場合
-                if (getMaxEstSubNo == null || getMaxEstSubNo.MaxEstSubNo.ToString() == "0")
-                    outEstSubNo = "01";
-                else
-                    outEstSubNo = Strings.Format(Convert.ToInt32(getMaxEstSubNo.MaxEstSubNo.ToString()) + 1, "00");
+                var estSubNo = _unitOfWork.Estimates.Query(n => n.EstNo == inEstNo).Max(n => n.EstSubNo);
+                outEstSubNo = estSubNo == null ? "01" : Strings.Format(Convert.ToInt32(estSubNo) + 1, "00");
             }
             catch (Exception ex)
             {
@@ -463,13 +397,11 @@ namespace KantanMitsumori.Service.Helper
         {
             // 見積書データ取得
             var estData = getEstData(estNo, estSubNo);
-
             if (estData == null)
-            {
-                return ResponseHelper.Error<EstModel>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-041D" + CommonConst.def_ErrCodeR);
+            {           
+                return ResponseHelper.Error<EstModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL041D));
             }
-
-            return ResponseHelper.Ok<EstModel>("OK", "OK", estData);
+            return ResponseHelper.Ok<EstModel>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estData);
         }
 
         // ******************************************
@@ -484,84 +416,32 @@ namespace KantanMitsumori.Service.Helper
             {
                 return null;
             }
-
             // get [MT_IDE_CONTRACT_PLAN]
             var getContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);
             dataEstIDE.ContractPlanName = getContractPlan == null ? "" : getContractPlan.PlanName;
-
             // get [MT_IDE_VOLUNTARY_INSURANCE]
             var getVoluntaryInsurance = _unitOfWorkIDE.VoluntaryInsurances.GetSingleOrDefault(x => x.Id == dataEstIDE.InsuranceCompanyId);
             dataEstIDE.InsuranceCompanyName = getVoluntaryInsurance == null ? "" : getVoluntaryInsurance.CompanyName;
 
             return dataEstIDE;
         }
-
-        /// <summary>
-        /// 見積書データ取得
-        /// </summary>
-        /// <param name="inEstNo"></param>
-        /// <param name="inEstSubNo"></param>
-        /// <returns></returns>
         public EstimateIdeModel getEstIDEData(string inEstNo, string inEstSubNo)
         {
             var dataIDE = new EstimateIdeModel();
             try
             {
                 var estIdeModel = _unitOfWork.EstimateIdes.GetSingleOrDefault(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo);
-
                 if (estIdeModel == null)
                 {
-                    estIdeModel = new TEstimateIde
-                    {
-                        EstNo = "",
-                        EstSubNo = "",
-                        EstUserNo = "",
-                        CarType = 0,
-                        IsElectricCar = 0,
-                        FirstRegistration = "",
-                        InspectionExpirationDate = "",
-                        LeaseStartMonth = "",
-                        LeasePeriod = 0,
-                        LeaseExpirationDate = "",
-                        ContractPlanId = 0,
-                        //IsExtendedGuarantee = Convert.ToByte("-1"),
-                        InsuranceCompanyId = 0,
-                        InsuranceFee = 0,
-                        DownPayment = 0,
-                        TradeInPrice = 0,
-                        FeeAdjustment = 0,
-                        MonthlyLeaseFee = 0,
-                        IdemitsuKosanFee = 0,
-                        SalesStoreFee = 0,
-                        Smasfee = 0,
-                        IdemitsuCreditFee = 0,
-                        Promotion = 0,
-                        PromotionFee = 0,
-                        ConsumptionTax = 0,
-                        NameChange = 0,
-                        FeeAdjustmentMax = 0,
-                        FeeAdjustmentMin = 0,
-                        Interest = 0,
-                        GuaranteeCharge = 0,
-                        MyMaintenancePrice = 0,
-                        CarTax = 0,
-                        LiabilityInsurance = 0,
-                        WeightTax = 0,
-                        LeaseProgress = 0,
-                        IsApplyLease = 0,
-                    };
+                    estIdeModel = new TEstimateIde();                    
                 }
                 estIdeModel.IsExtendedGuarantee = unchecked((byte)(-1));
-
-                dataIDE = _mapper.Map<EstimateIdeModel>(estIdeModel);
-            }
+                dataIDE = _mapper.Map<EstimateIdeModel>(estIdeModel);            }
             catch (Exception ex)
-            {
-                // エラーログ書出し
+            {             
                 _logger.LogError(ex, "getEstIDEData - CEST-040D");
                 return null;
             }
-
             return dataIDE;
         }
 

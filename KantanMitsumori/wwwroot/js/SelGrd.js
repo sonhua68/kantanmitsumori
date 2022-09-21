@@ -11,7 +11,6 @@ function GoNextPage_bk(pageNumber) {
     model.pageNumber = pageNumber
     Framework.SummitForm("/SelGrd", model)
 }
-
 function GoNextPage(pageNumber) {
     var model = {};
     model.sesMakID = $("#sesMakID").val();
@@ -53,9 +52,7 @@ function AddPagination(totalPages) {
         next: '次',
         prev: '前',
         onPageClick: function (event, page) {           
-            if (page > 1) {
-                GoNextPage(page)
-            }
+            GoNextPage(page)
         }
     });
 }

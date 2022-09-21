@@ -17,7 +17,7 @@ namespace KantanMitsumori.Service
 
 
 
-        public EstimateIdeService(IMapper mapper, ILogger<AppService> logger, IUnitOfWork unitOfWork)
+        public EstimateIdeService(IMapper mapper, ILogger<EstimateIdeService> logger, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _logger = logger;
