@@ -19,19 +19,19 @@
             <div class="border-button container text-center">
                 <br>
                 <div class="col d-flex justify-content-between">
-                    <a href="#" onclick="Framework.GoBackPage();return false">
+                     <a href="#" onclick="Framework.GoBackReloadPage();return false">
                         <img src="./img/btn%E6%88%BB%E3%82%8B.png">
                     </a>
                 </div>
                 <br>
                 <div class="col d-flex justify-content-between">
-                    <a href="">
+                    <a href="#" onclick="Framework.GoBackReloadPageUrl('/SerEst');return false">
                         <img src="img/btn%E6%A4%9C%E7%B4%A2.png">
                     </a>
                 </div>
                 <br>
                 <div class="col d-flex justify-content-between">
-                    <a href="">
+                        <a href="#" onclick="Framework.GoBackReloadPageUrl('/InpInitVal');return false">
                         <img src="img/btn%E8%AB%B8%E8%B2%BB%E7%94%A8%E8%A8%AD%E5%AE%9A.png">
                     </a>
                 </div>
@@ -58,12 +58,12 @@
                 <table id="Table4" bordercolor="#ffffff" cellpadding="2" cellspacing="0" class="inptable" style="z-index: 109; left: 167px; top: 92px;">
                     <tbody>
                         <tr>
-                            <td class="tabletitle" colspan="2">
+                            <td class="tabletitle" colspan="2" align="left">
                                 <span id="Label1" class="titlelabel" style="display:inline-block;width:283px;">車種</span>
                             </td>
                         </tr>
                         <tr>
-                            <td class="inptd" nowrap="nowrap">
+                            <td class="inptd" nowrap="nowrap" align="left">
                                 <span id="Label2" class="inplabel" style="display:inline-block;font-family:ＭＳ Ｐゴシック;font-size:12pt;width:84px;">メーカー名</span>
                             </td>
                             <td class="inptd">
@@ -71,7 +71,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td class="inptd" nowrap="nowrap">
+                            <td class="inptd" nowrap="nowrap" align="left">
                                 <span id="Label3" class="inplabel" style="display:inline-block;font-family:ＭＳ Ｐゴシック;font-size:12pt;width:84px;">車種</span>
                             </td>
                             <td class="inptd">
@@ -105,34 +105,7 @@
                                     <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@DriveTypeCode</td>
                                 </tr>
                             }
-                        }
-                        @* @{
-                        if (TotalPages > 1)
-                        {
-                        <tr align="center" style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">
-                        <td colspan="6">
-                        <table border="0">
-                        <tbody>
-                        <tr>
-                        @{
-                        for (int i = 1; i <= TotalPages; i++)
-
-                        if (i == PageIndex)
-                        {
-                        <td><span>@i</span></td>
-                        }
-                        else
-                        {
-                        <td><a href="#" onclick="GoNextPage(@i);return false" style="color:White;">@i</a></td>
-                        }
-                        }
-                        </tr>
-                        </tbody>
-                        </table>
-                        </td>
-                        </tr>
-                        }
-                        }*@
+                        }                       
                     </tbody>
                 </table>
 
