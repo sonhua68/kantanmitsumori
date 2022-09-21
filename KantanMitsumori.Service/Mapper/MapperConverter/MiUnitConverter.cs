@@ -18,11 +18,12 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                 // No value or zero
                 if (!source.HasValue || source.Value == 0)
                     return "";
+                
                 // No value of unit
                 if (estSubEntity == null || estSubEntity.MilUnit == null)
                     return $"{source.Value}";
                 // value + unit
-                return $"{source.Value} {estSubEntity.MilUnit}";
+                return $"{source.Value:N0} {estSubEntity.MilUnit}";
             }
             catch
             {

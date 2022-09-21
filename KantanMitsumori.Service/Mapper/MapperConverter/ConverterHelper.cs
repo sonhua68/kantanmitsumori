@@ -16,11 +16,11 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
             if (year >= 2099)
                 return "";
             if (year >= 2019)
-                return $"R{year - 2018:00}";
+                return $"R{year - 2018}";
             if (year >= 1989)
-                return $"H{year - 1988:00}";
+                return $"H{year - 1988}";
             if (year >= 1926)
-                return $"S{year - 1925:00}";
+                return $"S{year - 1925}";
             return "";
         }
         /// <summary>

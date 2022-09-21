@@ -60,7 +60,7 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         /// <summary>
         /// #,##0 円
         /// </summary>        
-        public static string ToYenCurrency(this int? number, string unit= " 円") => number.HasValue && number.Value > 0 ? $"{number.Value:N0}{unit}" : "";
+        public static string ToYenCurrency(this int? number, string unit= " 円") => number.HasValue && number.Value != 0 ? $"{number.Value:N0}{unit}" : "";
 
        
     }

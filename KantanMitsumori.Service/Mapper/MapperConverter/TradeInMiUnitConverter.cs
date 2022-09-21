@@ -22,7 +22,7 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                 if (estSubEntity == null || estSubEntity.TradeInMilUnit == null)
                     return $"{source.Value}";
                 // value + unit
-                return $"{source.Value} {estSubEntity.MilUnit}";
+                return $"{source.Value} {estSubEntity.TradeInMilUnit}";
             }
             catch
             {
