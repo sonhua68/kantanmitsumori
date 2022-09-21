@@ -101,9 +101,18 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         /// </summary>        
         public static string GetJpDate(string? date)
         {
-            if (string.IsNullOrEmpty(date))
+            try
+            {                
+                if (string.IsNullOrEmpty(date))
+                    return "";
+                int year = int.Parse(date.Substring(0, 4));
+                int month = int.Parse(date.Substring(4, 2));
+                return $"{year}年{month}月";
+            }
+            catch
+            {
                 return "";
-            return $"{date.Substring(0, 4)}年{date.Substring(4, 2)}月";
+            }
         }
 
         /// <summary>
