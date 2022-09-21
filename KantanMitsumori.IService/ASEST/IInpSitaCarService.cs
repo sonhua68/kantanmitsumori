@@ -5,7 +5,8 @@ namespace KantanMitsumori.IService.ASEST
 {
     public interface IInpSitaCarService
     {
-        ResponseBase<ResponseInpSitaCar> getInfoSitaCar(string estNo, string estSubNo);
+        ResponseBase<ResponseInpSitaCar> GetInfoSitaCar(string estNo, string estSubNo, string userNo);
+        ResponseBase<List<string>> GetListOffice();
 
         //Task<ResponseBase<int>> UpdateInpCustKana(RequestUpdateInpCustKana model);
     }

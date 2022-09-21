@@ -20,8 +20,9 @@ namespace KantanMitsumori.Controllers
             // 見積書番号を取得
             string estNo = _logToken.sesEstNo;
             string estSubNo = _logToken.sesEstSubNo;
+            string userNo = _logToken.UserNo;
 
-            var response = _inpSitaCarService.getInfoSitaCar(estNo, estSubNo);
+            var response = _inpSitaCarService.GetInfoSitaCar(estNo, estSubNo, userNo);
 
             if (response.ResultStatus == (int)enResponse.isError)
             {
@@ -30,6 +31,18 @@ namespace KantanMitsumori.Controllers
 
             return View(response.Data);
         }
+
+        [HttpGet]
+        public IActionResult GetListRikuji()
+        {
+            var response = _inpSitaCarService.GetListOffice();
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
+        }
+
 
         //[HttpPost]
         //public async Task<IActionResult> UpdateInpCustKana([FromForm] RequestUpdateInpCustKana requestData)
