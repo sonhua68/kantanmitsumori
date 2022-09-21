@@ -35,7 +35,7 @@ namespace KantanMitsumori.Service
         private readonly HelperMapper _helperMapper;
         private readonly CommonSettings _commonSettings;
 
-        public ReportService(IMapper mapper, ILogger<ReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper, CommonSettings commonSettings)
+        public ReportService(IMapper mapper, ILogger<IReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper, CommonSettings commonSettings)
         {
             _mapper = mapper;
             _logger = logger;
@@ -45,7 +45,7 @@ namespace KantanMitsumori.Service
             _commonSettings = commonSettings;
         }
         
-        public ResponseBase<ReportFileModel> GenerateEstimateReport(RequestReport model)
+        public ResponseBase<ReportFileModel> GenerateReport(RequestReport model)
         {
             try
             {
@@ -73,53 +73,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public ResponseBase<ReportFileModel> GenerateOrderReport(RequestReport model)
-        {
-            try
-            {
-                // Load report
-                var report = LoadReport("OrderWithArticle.rpx");
-                // Load data
-                var data = LoadReportData(model);
-                if (data == null || data.Length == 0)
-                    return ResponseHelper.Error<ReportFileModel>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
-                // Bind data
-                report.DataSource = data;
-                // Generate report
-                report.Run();
-                // Generate pdf in binary data
-                PdfExport pdf = new PdfExport();
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    pdf.Export(report.Document, ms);
-                    return ResponseHelper.Ok("", "", new ReportFileModel(ms.ToArray()));
-                }
-            }
-            catch
-            {
-                return ResponseHelper.Error<ReportFileModel>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(HelperMessage.CEST050S));
-            }
-        }
-
-       
         #region Helper Functions
-
-        /// <summary>
-        /// Load image as based 64 string
-        /// </summary>
-        /// <param name="embededResource"></param>
-        /// <returns></returns>
-        private string LoadImage(string resourceName)
-        {
-            var assembly = Assembly.GetEntryAssembly();
-            var resourcePath = $"KantanMitsumori.Reports.{resourceName}";
-            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
-            using (MemoryStream ms = new MemoryStream())
-            {
-                stream.CopyTo(ms);
-                return Convert.ToBase64String(ms.ToArray());
-            }
-        }
 
         private SectionReport LoadReport(string reportFilename)
         {
@@ -133,7 +87,6 @@ namespace KantanMitsumori.Service
                 return report;
             }            
         }
-
 
         #endregion
 
