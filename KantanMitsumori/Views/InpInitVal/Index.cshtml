@@ -486,7 +486,7 @@
             model.ConTaxInputKb = model.Szi == "radOutTax"?"False":"True";
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpInitVal/UpdateInpInitVal");
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPageUrl('/');
+                Framework.GoBackReloadPage();
             } else {
                 let Items = result.data;
                 console.log(Items)

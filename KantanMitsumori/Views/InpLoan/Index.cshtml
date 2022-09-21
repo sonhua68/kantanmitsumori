@@ -389,7 +389,7 @@
             var model = Framework.getFormData($("#formInpLoan"));  
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLoan/UpdateInpLoan");
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPageUrl('/');
+                Framework.GoBackReloadPage();
             } else {
                 let Items = result.data;
                 console.log(Items)

@@ -24,7 +24,7 @@ function ReloadListData(data) {
     $("#gvGrade").css("display", "inline-table");
     var row = '<tr  id="tbremote">' +
         '<td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">' +
-        '<input type="button" value="選択" onclick="Framework.GoBackReloadPageUrl("/");return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">' +
+        '<input type="submit" href="#" value="選択" onclick="SetFreeEst({{gradeName}},{{regularCase}},{{dispVol});return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">' +
         '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{gradeName}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{regularCase}}' + '</td>' +
@@ -87,5 +87,18 @@ function SortPagination(itemsArr) {
     itemsArr.push(items[p]);
     for (i = 0; i < itemsArr.length; ++i) {
         tbody.append(itemsArr[i]);
+    }
+}
+
+function SetFreeEst(gradeName, carCase, dispVol) {
+    var model = {};
+    model.MakerName = $("#sesMaker").val();
+    model.ModelName = $("#sesCarNM").val();
+    model.GradeName = gradeName;
+    model.CarCase = carCase;
+    model.DispVol = dispVol;
+    var result = Framework.submitAjaxFormUpdateAsync(model, "/SelGrd/SetFreeEst");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        Framework.GoBackReloadPage();
     }
 }

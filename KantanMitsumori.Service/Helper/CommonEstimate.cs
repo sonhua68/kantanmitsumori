@@ -39,11 +39,6 @@ namespace KantanMitsumori.Service.Helper
             reCalEstModel = new List<string>();
             reCalEstSubModel = new List<string>();
         }
-
-        /// <summary>
-        /// * 見積書データ 小計・合計計算（税抜／税込切替時の調整、および小計・合計計算）
-        /// </summary>
-        /// <returns></returns>
         public async Task<bool> calcSum(string inEstNo, string inEstSubNo, LogToken logToken)
         {
             try
@@ -314,11 +309,9 @@ namespace KantanMitsumori.Service.Helper
             }
             return responseEst;
         }
-
-       
         public EstModel creDispData(EstModel model)
         {
-            int intCornerType = 0;          
+            int intCornerType = 0;
             if (model.Aano != "")
             {
                 if (model.Mode == 1)
@@ -376,7 +369,7 @@ namespace KantanMitsumori.Service.Helper
         }
 
         public ResponseBase<EstModel> setEstData(string estNo, string estSubNo)
-        {           
+        {
             var estData = getEstData(estNo, estSubNo);
             if (estData == null)
             {
@@ -386,12 +379,12 @@ namespace KantanMitsumori.Service.Helper
         }
 
         public EstimateIdeModel setEstIDEData(ref LogToken logToken)
-        {          
+        {
             var dataEstIDE = getEstIDEData(logToken.sesEstNo, logToken.sesEstSubNo);
             if (dataEstIDE != null)
-            {  
+            {
                 var getContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);
-                dataEstIDE.ContractPlanName = getContractPlan == null ? "" : getContractPlan.PlanName;         
+                dataEstIDE.ContractPlanName = getContractPlan == null ? "" : getContractPlan.PlanName;
                 var getVoluntaryInsurance = _unitOfWorkIDE.VoluntaryInsurances.GetSingleOrDefault(x => x.Id == dataEstIDE.InsuranceCompanyId);
                 dataEstIDE.InsuranceCompanyName = getVoluntaryInsurance == null ? "" : getVoluntaryInsurance.CompanyName;
             }
@@ -418,7 +411,7 @@ namespace KantanMitsumori.Service.Helper
             return dataIDE;
         }
 
-     
+
         public EstModel getEst_EstSubData(string inEstNo, string inEstSubNo)
         {
             try
@@ -436,21 +429,12 @@ namespace KantanMitsumori.Service.Helper
                 _logger.LogError(ex, "getEstData - CEST-040D");
                 return null;
             }
-        }
-
-        /// <summary>
-        /// Get table t_EstimateSub
-        /// </summary>
-        /// <param name="inEstNo"></param>
-        /// <param name="inEstSubNo"></param>
-        /// <returns></returns>
+        }     
         public TEstimateSub getEstSubData(string inEstNo, string inEstSubNo)
         {
             try
-            {
-                // get [t_EstimateSub]
+            {              
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
-
                 return estSubModel;
             }
             catch (Exception ex)

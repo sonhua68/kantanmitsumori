@@ -93,10 +93,11 @@
                         @{
                             foreach (var item in Model)
                             {
+                               
                                 var DriveTypeCode = item.DriveTypeCode == "不明" ? "" : item.DriveTypeCode;
                                 <tr  id="tbremote">
                                     <td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">
-                                        <input type="button" value="選択" onclick="Framework.GoBackReloadPageUrl('/');return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">
+                                        <input type="submit" href="#" value="選択" onclick="SetFreeEst("@item.GradeName","@item.RegularCase","@item.DispVol") ;return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">
                                     </td>
                                     <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">@item.GradeName</td>
                                     <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.RegularCase</td>
@@ -115,7 +116,6 @@
 </div>
 <input type="hidden" id="sesMakID" value="@MakerId">
 <input type="hidden" id="sesMaker" value="@MakerName">
-<input type="hidden" id="sesCarNM" value="@ModelName">
 <input type="hidden" id="sesCarNM" value="@ModelName">
 <input type="hidden" id="TotalPages" value="@TotalPages">
 <input type="hidden" id="PageIndex" value="@PageIndex">

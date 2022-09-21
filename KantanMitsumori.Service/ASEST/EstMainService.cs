@@ -51,8 +51,6 @@ namespace KantanMitsumori.Service.ASEST
                 return null;
             }
         }
-
-
         public async Task<ResponseBase<ResponseEstMainModel>> getEstMain(RequestActionModel requestAction, RequestHeaderModel request)
         {
             try
@@ -81,7 +79,7 @@ namespace KantanMitsumori.Service.ASEST
                 if (getAsInfo.ResultStatus == (int)enResponse.isError)
                     return ResponseHelper.Error<ResponseEstMainModel>("Error", getAsInfo.MessageContent);
                 getAsInfo.Data!.EstNo = valToken.sesEstNo;
-                getAsInfo.Data.EstSubNo = valToken.sesEstSubNo;     
+                getAsInfo.Data.EstSubNo = valToken.sesEstSubNo;
                 SetvalueToken();
                 response.AccessToken = valToken.Token;
                 response.EstCustomerModel.CustNm = valToken.sesCustNm_forPrint ?? "";
@@ -91,13 +89,13 @@ namespace KantanMitsumori.Service.ASEST
                 var estData = _commonEst.setEstData(valToken.sesEstNo, valToken.sesEstSubNo);
                 if (estData.ResultStatus == (int)enResponse.isSuccess)
                     response.EstModel = estData.Data!;
+                response.EstIDEModel = new EstimateIdeModel();
                 if (response.EstModel.LeaseFlag == "1")
                 {
                     response.EstIDEModel = _commonEst.setEstIDEData(ref valToken);
                     if (response.EstIDEModel == null)
                         return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
                 }
-           
                 response = BindingDataEsmain(response);
                 return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
 
@@ -112,11 +110,24 @@ namespace KantanMitsumori.Service.ASEST
         public async Task<ResponseBase<ResponseEstMainModel>> ReloadGetEstMain(LogToken logtoken)
         {
             try
-            {               
-                var response = new ResponseEstMainModel();              
+            {
+                var response = new ResponseEstMainModel();
+                response.EstCustomerModel = new EstCustomerModel();
+                response.EstIDEModel = new EstimateIdeModel();
+                response.EstModel = new EstModel();
                 var estData = _commonEst.setEstData(logtoken.sesEstNo, logtoken.sesEstSubNo);
                 if (estData.ResultStatus == (int)enResponse.isSuccess)
-                    response.EstModel = estData.Data!;  
+                    response.EstModel = estData.Data!;
+                response.EstCustomerModel.CustNm = logtoken.sesCustNm_forPrint ?? "";
+                response.EstCustomerModel.CustZip = logtoken.sesCustZip_forPrint ?? "";
+                response.EstCustomerModel.CustAdr = logtoken.sesCustAdr_forPrint ?? "";
+                response.EstCustomerModel.CustTel = logtoken.sesCustTel_forPrint ?? "";
+                if (response.EstModel.LeaseFlag == "1")
+                {
+                    response.EstIDEModel = _commonEst.setEstIDEData(ref logtoken);
+                    if (response.EstIDEModel == null)
+                        return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                }
                 response = BindingDataEsmain(response);
                 return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
             }
@@ -146,20 +157,20 @@ namespace KantanMitsumori.Service.ASEST
             }
 
         }
-        public async Task<ResponseBase<ResponseEstMainModel>> setFreeEst()
+        public async Task<ResponseBase<ResponseEstMainModel>> setFreeEst(RequestSelGrdFreeEst model, LogToken logtoken)
         {
+            valToken = logtoken;
             var estModel = new EstModel();
             estModel.CallKbn = "3";
             estModel.EstInpKbn = "2";
             estModel.TradeDate = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd"));
-            estModel.MakerName = valToken.sesMaker ?? "";
-            estModel.ModelName = valToken.sesCarNM ?? "";
-            estModel.GradeName = valToken.sesGrade ?? "";
-            estModel.Case = valToken.sesKata ?? "";
+            estModel.MakerName = model.MakerName!;
+            estModel.ModelName = model.ModelName!;
+            estModel.GradeName = model.GradeName!;
+            estModel.Case = model.CarCase!;
             estModel.MilUnit = CommonConst.def_MilUnitTKM;
-            estModel.DispVol = valToken.sesHaiki ?? "";
+            estModel.DispVol = model.DispVol!;
             estModel.DispVolUnit = CommonConst.def_DispVolUnitCC;
-            estModel.Mission = valToken.sesSft ?? "";
             estModel.AccidentHis = 2;
             estModel.CarImgPath = CommonConst.def_DmyImg;
             estModel.SonotaTitle = CommonConst.def_TitleSonota;
@@ -167,7 +178,6 @@ namespace KantanMitsumori.Service.ASEST
             estModel.TaxInsInputKb = true;
             estModel.TaxFreeKb = true;
             estModel.TaxCostKb = true;
-            estModel.TradeInNowOdometer = 0;
             estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM;
             int intHaiki = Information.IsNumeric(estModel.DispVol) ? int.Parse(estModel.DispVol) : 0;
             bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(valToken.sesMaker!);
@@ -264,7 +274,50 @@ namespace KantanMitsumori.Service.ASEST
             SetvalueToken();
             return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
         }
-
+        public async Task<ResponseBase<string>> AddEstimate(RequestSerEst model, LogToken logToken)
+        {
+            try
+            {
+                valToken = logToken;
+                var res = await addEstNextSubNo(model.EstNo!, model.EstSubNo!, true);
+                if (res)
+                {
+                    SetvalueToken();
+                    string AccessToken = valToken.Token;
+                    return ResponseHelper.Ok<string>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), AccessToken);
+                }
+                else
+                {
+                    return ResponseHelper.Error<string>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AddEstimate");
+                return ResponseHelper.Error<string>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+        public async Task<ResponseBase<int>> CalcSum(RequestSerEst model, LogToken logToken)
+        {
+            try
+            {
+                valToken = logToken;
+                var res = await _commonEst.calcSum(model.EstNo!, model.EstSubNo!, valToken);
+                if (res)
+                {
+                    return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+                }
+                else
+                {
+                    return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "CalcSum");
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
         #region fuc private     
         private int chkAANo(string? userNo, string AANo, string AAPlace, int CornerType, int mode)
         {
@@ -333,7 +386,6 @@ namespace KantanMitsumori.Service.ASEST
                 {
                     return false;
                 }
-                valToken.sesEstSubNo = vNextSubNo;
                 TEstimate entityEst = new TEstimate();
                 entityEst = _mapper.Map<TEstimate>(estData);
                 entityEst.EstNo = estNo;
@@ -374,8 +426,7 @@ namespace KantanMitsumori.Service.ASEST
 
             bool isCheck = string.IsNullOrEmpty(request.cot) || string.IsNullOrEmpty(request.cna) || string.IsNullOrEmpty(request.mem);
             if (isCheck)
-                return ResponseHelper.Error<EstModel>("Error", CommonConst.def_ErrMsg3 + CommonConst.def_ErrCodeL + "SMAI-020P" + CommonConst.def_ErrCodeR);
-
+                return ResponseHelper.Error<EstModel>(HelperMessage.SMAI020P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI020P));
 
             string strTempImagePath;
             string strSavePath = "";
@@ -862,7 +913,7 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.TradeInCheckCarYm = Model.EstModel.TradeInCheckCarYm == "無し" || string.IsNullOrEmpty(Model.EstModel.TradeInCheckCarYm) ? Model.EstModel.TradeInCheckCarYm : CommonFunction.getWareki(Yfm) + "年" + Mfm + "月";
             estModelView.SitaRun = Model.EstModel.TradeInNowOdometer > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.TradeInNowOdometer, Model.EstModel.TradeInMilUnit) : "";
             estModelView.TradeInRegNo = string.IsNullOrEmpty(Model.EstModel.TradeInRegNo) ? "" : Model.EstModel.TradeInRegNo.Replace("/", "");
-           
+
             estModelView.OptionPrice1 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice1);
             estModelView.OptionPrice2 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice2);
             estModelView.OptionPrice3 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice3);
@@ -879,19 +930,19 @@ namespace KantanMitsumori.Service.ASEST
             return Model;
         }
 
-      
+
         #endregion fuc private
     }
 }
 
 
- 
- 
- 
- 
- 
- 
- 
- 
+
+
+
+
+
+
+
+
 
 

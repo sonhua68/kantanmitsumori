@@ -5,6 +5,7 @@ using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Models;
+using KantanMitsumori.Service.ASEST;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -15,11 +16,13 @@ namespace KantanMitsumori.Controllers
 
         private readonly ILogger<SelGrdController> _logger;
         private readonly ISelCarService _selCarService;
-        public SelGrdController(IEstMainService appService, ISelCarService selCarService, IConfiguration config, ILogger<SelGrdController> logger) : base(config)
+        private readonly IEstMainService _estMainService;
+        public SelGrdController(IEstMainService appService, ISelCarService selCarService, IEstMainService estMainService ,IConfiguration config, ILogger<SelGrdController> logger) : base(config)
         {
             _appService = appService;
             _logger = logger;
             _selCarService = selCarService;
+            _estMainService = estMainService;
         }
 
         #region SelCar 
@@ -55,7 +58,17 @@ namespace KantanMitsumori.Controllers
             }
             return Ok(dt);
         }
-
+        [HttpPost]
+        public async Task<IActionResult> SetFreeEst(RequestSelGrdFreeEst requestData)
+        {
+            var response = await _estMainService.setFreeEst(requestData, _logToken);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            setTokenCookie(response.Data!.AccessToken);
+            return Ok(response);
+        }
         #endregion SelCar
     }
 }

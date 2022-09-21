@@ -18,4 +18,15 @@ namespace KantanMitsumori.Model.Request
         public int pageSize { get; set; } = 10;
 
     }
+
+    public class RequestSelGrdFreeEst
+    {       
+        public string? MakerName { get; set; }
+        public string? ModelName { get; set; }
+        public string? GradeName { get; set; }
+        public string? CarCase { get; set; }
+        public string? DispVol { get; set; }
+       
+
+    }
 }
