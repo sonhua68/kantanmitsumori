@@ -52,9 +52,7 @@ function AddPagination(totalPages) {
         next: '次',
         prev: '前',
         onPageClick: function (event, page) {           
-            if (page > 1) {
-                GoNextPage(page)
-            }
+            GoNextPage(page)
         }
     });
 }
