@@ -104,7 +104,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.Kikan, o => o.MapFrom(s => ConverterHelper.GetKikan(s.FirstPayMonth, s.LastPayMonth)))
                 .ForMember(t => t.FirstPayAmount, o => o.ConvertUsing(new YenCurrencyConverter()))
                 .ForMember(t => t.PayAmount, o => o.ConvertUsing(new YenCurrencyConverter()))
-                .ForMember(t => t.PayTimes, o => o.ConvertUsing(new YenCurrencyConverter(unit: "回")))
+                .ForMember(t => t.PayTimes, o => o.ConvertUsing(new YenCurrencyConverter(unit: " 回")))
                 .ForMember(t => t.PayTimes2, o => o.ConvertUsing(new YenCurrencyConverter(prefix: "（×", unit: "回）"), s => s.PayTimes == null || s.PayTimes.Value == 0 ? 0 : s.PayTimes.Value - 1))
                 .ForMember(t => t.BonusMonth, o => { o.PreCondition(s => s.BonusAmount.HasValue && s.BonusAmount > 0); o.MapFrom(s => ConverterHelper.GetBonusMonth(s.BonusFirst, s.BonusSecond)); })
                 .ForMember(t => t.BonusAmount, o => o.ConvertUsing(new YenCurrencyConverter()))
