@@ -52,7 +52,6 @@ namespace KantanMitsumori.Service.ASEST
                     (model.TaxFreeTradeIn > 0 || model.TaxTradeIn > 0 || model.TaxTradeInSatei > 0 || !string.IsNullOrEmpty(model.TradeInCarName))));
 
                 if (!hasTradeIn)
-
                 {
                     // 隠しフィールドには、設定レコードがあればその値を反映
                     var getUserDef = _commonFuncHelper.getUserDefData(userNo);

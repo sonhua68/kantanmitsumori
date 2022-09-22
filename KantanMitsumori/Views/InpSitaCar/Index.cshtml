@@ -319,12 +319,10 @@
 
     function GetListKana() {
         $("#ddlTorokuNo2").append(new Option(" ", " "));
-        $("#ddlTorokuNo2 option[value='']").attr("selected", "selected");
-        for (let i = 0; i < listKana.length; i++) {
-            let text = listKana[i];
-            let value = listKana[i];
-            $("#ddlTorokuNo2").append(new Option(value, text));
-        }
+        $("#ddlTorokuNo2 option[value=' ']").attr("selected", "selected");
+        listKana.forEach((kana) => {
+            $("#ddlTorokuNo2").append(new Option(kana, kana));
+        });
     }
 
     function SetInitData() {
