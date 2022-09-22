@@ -217,6 +217,7 @@ function AddRowTable(data) {
         '</tr> '
 
     $('tr#tbremote').remove();
+    $('tr#pagination').remove();
     for (let i = 0; i < data.length; i++) {
         table.append(row.compose(data[i]));
     }

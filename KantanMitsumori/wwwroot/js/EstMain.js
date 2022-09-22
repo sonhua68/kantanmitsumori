@@ -1,5 +1,5 @@
 ﻿setInitialValue();
-setInitValueCookie();
+//setInitValueCookie();
 function setInitialValue() {
     var leaseFlag = $("#hidLeaseFlag").val();
 
@@ -59,17 +59,21 @@ function inputChk() {
 
     return true;
 }
-
+/*
+ * setInitValueCookie
+ *  Create By HoaiPhong
+ *  Date 2022/09/22
+ /*/
 function setInitValueCookie() {
-    //var custNm_forPrint = getCookie("CustNm_forPrint")
-    //var custZip_forPrint = getCookie("CustZip_forPrint")
-    //var custAdr_forPrint = getCookie("CustAdr_forPrint")
-    //var custTel_forPrint = getCookie("CustTel_forPrint")
-    //console.log(custNm_forPrint);
-    //$("#CustNm_forPrint").val(custNm_forPrint);
-    //$("#CustZip_forPrint").val(custZip_forPrint);
-    //$("#CustAdr_forPrint").val(custAdr_forPrint);
-    //$("#CustTel_forPrint").val(custTel_forPrint);
+    var custNm_forPrint = getCookie("CustNm_forPrint")
+    var custZip_forPrint = getCookie("CustZip_forPrint")
+    var custAdr_forPrint = getCookie("CustAdr_forPrint")
+    var custTel_forPrint = getCookie("CustTel_forPrint")
+    console.log(custNm_forPrint);
+    $("#CustNm_forPrint").val(custNm_forPrint);
+    $("#CustZip_forPrint").val(custZip_forPrint);
+    $("#CustAdr_forPrint").val(custAdr_forPrint);
+    $("#CustTel_forPrint").val(custTel_forPrint);
 }
 /*
  * setCookiePageMain

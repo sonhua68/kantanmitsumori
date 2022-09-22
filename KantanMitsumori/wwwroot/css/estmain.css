@@ -105,13 +105,17 @@ tr > td.txtprice {
     border-top: #3c82ed 1px solid;
     z-index: 118;
     border-left: #3c82ed 1px solid;
-    width: 165px;
+    width: 170px;
     border-bottom: #3c82ed 1px solid;
-    position: absolute;
-    /*top: 68px;*/
+    position: absolute;  
     background-color: transparent;
 }
-
+.border-button-print {
+    z-index: 118;
+    width: 170px;  
+    position: absolute;
+    background-color: transparent;
+}
 .label-note-left {
     vertical-align: top;
     direction: ltr;

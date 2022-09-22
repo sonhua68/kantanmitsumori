@@ -18,7 +18,6 @@ var Framework =
         function Framework() {
             _classCallCheck(this, Framework);
         }
-
         _createClass(Framework, null, [{
             key: "getFormData",
             value: function getFormData($form) {
@@ -485,7 +484,7 @@ var Framework =
             key: "SetSelectedNumber",
             value: function SetSelectedNumber(nameId, defaultValue) {
                 let idOption = $("#" + nameId + " option");
-                if (defaultValue === null || defaultValue === "" || defaultValue === " ") {
+                if (isNaN(defaultValue) || defaultValue === 0) {
                     idOption[0].selected == true;
                 }
                 else {
@@ -505,13 +504,7 @@ var Framework =
             key: "SetCheckValueById",
             value: function SetCheckValueById(nameId, defaultValue) {
                 console.log(nameId);
-                $("#" + nameId + "").attr('checked', true);
-                //var value = $("#" + nameId + "").val();
-                //if (value.includes(defaultValue)) {
-                //    $("#" + nameId + "").attr('checked', true);
-                //} else {
-
-                //}
+                $("#" + nameId + "").attr('checked', true);            
                 return;
             }
         },

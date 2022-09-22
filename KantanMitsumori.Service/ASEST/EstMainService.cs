@@ -14,6 +14,7 @@ using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace KantanMitsumori.Service.ASEST
 {
@@ -86,6 +87,16 @@ namespace KantanMitsumori.Service.ASEST
                         return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
                 }
                 response = BindingDataEsmain(response);
+                //show Mess error 
+                if (response.EstModel.CallKbn == "2")
+                {
+                    response.EstModel.IsError = 1;
+
+                } //show Mess error 
+                else if (request.mod == "1" && request.PriDisp == "1")
+                {
+                    response.EstModel.IsError = 1;
+                }
                 return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
 
             }
@@ -116,6 +127,11 @@ namespace KantanMitsumori.Service.ASEST
                     response.EstIDEModel = _commonEst.setEstIDEData(ref logtoken);
                     if (response.EstIDEModel == null)
                         return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                }
+                //show Mess error 
+                if (response.EstModel.CallKbn == "2")
+                {
+                    response.EstModel.IsError = 1;
                 }
                 response = BindingDataEsmain(response);
                 return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
@@ -261,6 +277,7 @@ namespace KantanMitsumori.Service.ASEST
 
             }
             SetvalueToken();
+            response.AccessToken = valToken.Token!;
             return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
         }
         public async Task<ResponseBase<string>> AddEstimate(RequestSerEst model, LogToken logToken)
@@ -272,7 +289,7 @@ namespace KantanMitsumori.Service.ASEST
                 if (res)
                 {
                     SetvalueToken();
-                    string AccessToken = valToken.Token;
+                    string AccessToken = valToken.Token!;
                     return ResponseHelper.Ok<string>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), AccessToken);
                 }
                 else
@@ -664,17 +681,7 @@ namespace KantanMitsumori.Service.ASEST
             {
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAI029D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI029D));
 
-            }
-            //show Mess error 
-            if (estModel.CallKbn == "2")
-            {
-                estModel.IsError = 1;
-
-            } //show Mess error 
-            else if (request.mod == "1" && request.PriDisp == "1")
-            {
-                estModel.IsError = 1;
-            }
+            }         
 
             return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estModel);
 
@@ -703,7 +710,7 @@ namespace KantanMitsumori.Service.ASEST
                 entityEst = _mapper.Map<TEstimate>(model);
                 entityEst.EstNo = strEstNo;
                 entityEst.EstSubNo = strEstSubNo;
-                entityEst.ModelName = Strings.StrConv(model.ModelName, VbStrConv.Narrow, LocaleID);
+                entityEst.ModelName = Strings.StrConv(model.ModelName!, VbStrConv.Narrow, LocaleID);
                 entityEst.DispVol = model.DispVol.Trim().Replace("cc", "");
                 entityEst.CarSum = model.CarPrice + model.Sonota + model.NouCost + model.SyakenNew - model.Discount;
                 entityEst.OptionInputKb = true;

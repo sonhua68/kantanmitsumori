@@ -37,21 +37,7 @@ namespace KantanMitsumori.Controllers
             var cookies = Request.Cookies[COOKIES]!;
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
-            if (!controllerName.Contains("Home"))
-            {
-                if (string.IsNullOrEmpty(cookies))
-                {
-                    var ErrorViewModel = new ErrorViewModel()
-                    {
-                        MessageCode = HelperMessage.SMAL020P,
-                        MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL020P)
-                    };
-                    filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
-                    return;
-
-                }
-            }
-            _logToken = HelperToken.EncodingToken(cookies!)!;         
+            _logToken = HelperToken.EncodingToken(cookies!)!;
             if (_logToken == null && !controllerName.Contains("Home"))
             {
                 var ErrorViewModel = new ErrorViewModel()
@@ -62,10 +48,14 @@ namespace KantanMitsumori.Controllers
                 filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
                 return;
             }
-            _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
-            _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
-            _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
-            _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
+            else if (_logToken != null)
+            {
+                _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
+                _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
+                _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
+                _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
+            }
+
             var resultContext = await next();
         }
 

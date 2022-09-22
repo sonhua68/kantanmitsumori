@@ -23,30 +23,13 @@ namespace KantanMitsumori.Controllers
             _appService = appService;
             _estimateService = estimateService;
             _logger = logger;
-        }
-
-        public IActionResult Test()
-        {
-            return View();
-        }
-
+        }    
         public IActionResult Index()
-        {
-            var mode = new LogToken();
-            mode.sesEstNo = "22091900091"; mode.sesEstSubNo = "01";
-            mode.UserNo = "88888195";
-            mode.UserNm = "testuser88888195";
-            var token = HelperToken.GenerateJsonToken(mode);
-            mode.Token = token;
-            setTokenCookie(token);
+        {  
             return View();
         }
-
         public IActionResult Header()
-        {
-            _logToken = new LogToken();
-            _logToken.UserNo = "88888195";
-            _logToken.UserNm = "test";
+        {       
             return PartialView("_Header", _logToken);
         }
 

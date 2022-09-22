@@ -32,11 +32,7 @@ namespace KantanMitsumori.Controllers
                 response = await _appService.ReloadGetEstMain(_logToken);
             }
             else
-            {
-                //if(request != null)
-                //{
-                //    request.
-                //}
+            {               
                 response = await _appService.getEstMain(requestAction, request);
                 if (response.ResultStatus == (int)enResponse.isSuccess)
                 {

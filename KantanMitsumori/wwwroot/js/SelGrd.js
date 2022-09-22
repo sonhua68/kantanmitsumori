@@ -3,14 +3,6 @@
 
 
 InitPage();
-function GoNextPage_bk(pageNumber) {
-    var model = {};
-    model.sesMakID = $("#sesMakID").val();
-    model.sesMaker = $("#sesMaker").val();
-    model.sesCarNM = $("#sesCarNM").val();
-    model.pageNumber = pageNumber
-    Framework.SummitForm("/SelGrd", model)
-}
 function GoNextPage(pageNumber) {
     var model = {};
     model.sesMakID = $("#sesMakID").val();
@@ -22,10 +14,9 @@ function GoNextPage(pageNumber) {
 }
 function ReloadListData(data) {
     $("#gvGrade").css("display", "inline-table");
-    var row = '<tr  id="tbremote">' +
-        '<td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">' +
-        '<input type="submit" href="#" value="選択" onclick="SetFreeEst({{gradeName}},{{regularCase}},{{dispVol});return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">' +
-        '</td>' +
+    var row = '<tr id="tbremote">' +
+        '<td align="left" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">' +
+        '<input type="submit" value="選択" onclick="SetFreeEst(`{{gradeName}}`,`{{regularCase}}`,`{{dispVol}}`);return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">' +  '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{gradeName}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{regularCase}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;white-space:nowrap;">{{dispVol}' + '</td>' +
@@ -62,7 +53,7 @@ function UiPagination(totalPages) {
         $('#TablePage').remove();
         var tbody = $('#gvGrade').children('tbody');
         var table = tbody.length ? tbody : $('#gvGrade');
-        var pageTable = '<tr id="pagination" align="center"  style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">' +
+        var pageTable = '<tr id="pagination" align="center" style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">' +
             '<td colspan  = "7">' +
             '<table border="0" id=TablePage>' +
             '<tbody>' +

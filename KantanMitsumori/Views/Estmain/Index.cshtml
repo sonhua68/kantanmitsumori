@@ -1,19 +1,13 @@
-﻿@using KantanMitsumori.Helper.CommonFuncs
-@using KantanMitsumori.Helper.Constant
-@using KantanMitsumori.Model.Response
-@using Microsoft.VisualBasic
+﻿@using KantanMitsumori.Model.Response
 @model ResponseEstMainModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "EstMain";
     var estModelView = Model.EstModelView;
-
 }
-
 <form id="frm" method="post" action="/home/estmain">
     <div class="container text-center">
         <div class="row">
-            <!--button-->
             <div class="col-sm-2">
                 <div class="col d-flex justify-content-between">
                     <div class="border-button container text-center">
@@ -57,8 +51,6 @@
                     </div>
                 </div>
             </div>
-            <!--end button-->
-            <!--Container-->
             <div class="col-sm-10">
                 <div class="row">
                     <div class="col-6 col-sm-6 ">
@@ -134,7 +126,7 @@
                                     お名前
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="40" class="inpbox" id="CustNm_forPrint" name="CustNm_forPrint" />@Model.EstCustomerModel.CustNm
+                                    <input type="text" maxlength="40" class="inpbox" id="CustNm_forPrint" name="CustNm_forPrint" value="@Model.EstCustomerModel.CustNm" />
                                 </td>
                             </tr>
                             <tr>
@@ -142,15 +134,15 @@
                                     郵便番号
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="8" class="inpbox" id="CustZip_forPrint" name="CustZip_forPrint" />@Model.EstCustomerModel.CustZip
+                                    <input type="text" maxlength="8" class="inpbox" id="CustZip_forPrint" name="CustZip_forPrint" value="@Model.EstCustomerModel.CustZip" />
                                 </td>
                             </tr>
                             <tr>
                                 <td class="title">
-                                    住所
+                                    住所k
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="60" class="inpbox" id="CustAdr_forPrint" name="CustAdr_forPrint" />@Model.EstCustomerModel.CustAdr
+                                    <input type="text" maxlength="60" class="inpbox" id="CustAdr_forPrint" name="CustAdr_forPrint" value="@Model.EstCustomerModel.CustAdr" />
                                 </td>
                             </tr>
                             <tr>
@@ -158,7 +150,7 @@
                                     電話番号
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="13" class="inpbox" id="CustTel_forPrint" name="CustTel_forPrint" />@Model.EstCustomerModel.CustTel
+                                    <input type="text" maxlength="13" class="inpbox" id="CustTel_forPrint" name="CustTel_forPrint" value="@Model.EstCustomerModel.CustTel" />
                                 </td>
                             </tr>
                         </table>
@@ -191,10 +183,8 @@
 
 
             </div>
-            <!--end Container-->
         </div>
         <div class="row">
-            <!--button-->
             <div class="col-sm-2">
                 <div class="col d-flex justify-content-between">
                     <div class="border-button container text-center">
@@ -208,7 +198,7 @@
                                 <tr class="col d-flex justify-content-between">
                                     <td style="height: 22px;">
                                         <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpCar');return false;" name="ImageButton7" id="ImageButton7" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton1"  onclick="Framework.GoBackReloadPageUrl('/InpCar');return false;" class="TxtLink" href="#">見積車両</a>
+                                        <a id="LinkButton1" onclick="Framework.GoBackReloadPageUrl('/InpCar');return false;" class="TxtLink" href="#">見積車両</a>
                                     </td>
                                 </tr>
                                 <tr class="col d-flex justify-content-between">
@@ -232,12 +222,12 @@
                                 <tr class="col d-flex justify-content-between">
                                     <td style="height: 22px;">
                                         <input type="image" name="ImageButton26" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" id="ImageButton26" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton4" class="TxtLink"onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" href="#">預り法定費用</a>
+                                        <a id="LinkButton4" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" href="#">預り法定費用</a>
                                     </td>
                                 </tr>
                                 <tr class="col d-flex justify-content-between">
                                     <td style="height: 22px;">
-                                        <input type="image" name="ImageButton26" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;"  id="ImageButton26" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                                        <input type="image" name="ImageButton26" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" id="ImageButton26" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
                                         <a id="LinkButton5" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" href="#">手続代行費用</a>
                                     </td>
                                 </tr>
@@ -249,26 +239,26 @@
                                 </tr>
                                 <tr class="col d-flex justify-content-between">
                                     <td style="height: 22px;">
-                                        <input type="image"  onclick="Framework.GoBackReloadPageUrl('/InpNebiki');return false;"  name="ImageButton29" id="ImageButton29" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpNebiki');return false;" name="ImageButton29" id="ImageButton29" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
                                         <a id="LinkButton7" onclick="Framework.GoBackReloadPageUrl('/InpNebiki');return false;" class="TxtLink" href="#">価格調整</a>
                                     </td>
                                 </tr>
                                 <tr class="col d-flex justify-content-between">
                                     <td style="height: 22px;">
-                                        <input type="image"  onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;"  name="ImageButton30" id="ImageButton30" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton8"  onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;"  class="TxtLink" href="#">ローン計算</a>
+                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;" name="ImageButton30" id="ImageButton30" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                                        <a id="LinkButton8" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;" class="TxtLink" href="#">ローン計算</a>
                                     </td>
                                 </tr>
                                 <tr class="col d-flex justify-content-between">
                                     <td style="height: 22px;">
-                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpCustKana');return false;"name="ImageButton31" id="ImageButton31" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpCustKana');return false;" name="ImageButton31" id="ImageButton31" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
                                         <a id="LinkButton9" onclick="Framework.GoBackReloadPageUrl('/InpCustKana');return false;" class="TxtLink" href="#">お客様カナ</a>
                                     </td>
                                 </tr>
                                 <tr class="col d-flex justify-content-between">
                                     <td style="height: 22px;">
-                                        <input type="image"  onclick="Framework.GoBackReloadPageUrl('/InpHanbaiten');return false;" name="ImageButton32" id="ImageButton32" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton10"  onclick="Framework.GoBackReloadPageUrl('/InpHanbaiten');return false;" class="TxtLink" href="#">販売店</a>
+                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpHanbaiten');return false;" name="ImageButton32" id="ImageButton32" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                                        <a id="LinkButton10" onclick="Framework.GoBackReloadPageUrl('/InpHanbaiten');return false;" class="TxtLink" href="#">販売店</a>
                                     </td>
                                 </tr>
                                 <tr class="col d-flex justify-content-between">
@@ -282,10 +272,7 @@
                     </div>
                 </div>
             </div>
-            <!--end button-->
-            <!--Container-->
             <div class="col-sm-10">
-                <!-- お客様情報（保存用） -->
                 <div class="row">
                     <div class="col-12">
                         <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
@@ -312,7 +299,6 @@
                         </table>
                     </div>
                 </div>
-                <!-- 詳細情報：見積車両 -->
                 <div class="row">
                     <div class="col-12">
                         <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
@@ -424,8 +410,6 @@
                         </table>
                     </div>
                 </div>
-
-                <!-- Msg Notice  -->
                 <div class="row">
                     <div class="col-12">
                         <strong>
@@ -438,7 +422,46 @@
                 </div>
                 &nbsp;
                 &nbsp;
-                <!--  Div Price  -->
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2">
+                @{
+                    if (Model.EstModel.LeaseFlag == "0")
+                    {
+                        <div class="col d-flex justify-content-between">
+                            <div class="border-button container text-center">
+                                <br />
+                                <div class="col d-flex justify-content-between">
+                                    <a href="javascript:window.close();">
+                                        <img src="~/img/btnCSV.png" />
+                                    </a>
+                                </div>
+                                <br />
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col d-flex justify-content-between">
+                            <div class="border-button-print  container text-center">
+                                <table>
+                                    <tbody>
+                                        <tr class="col d-flex justify-content-between">
+                                            <td style="height: 22px;">
+                                                <input type="image" onclick="" name="print" id="print" class="imgBtn" src="~/img/print.png" style="border-width:0px;">
+                                                <a id="LinkButton1" onclick="" class="TxtLink" href="#">法人申込書印刷</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="col-sm-10">
                 <div class="row">
                     <!-- table Price Left -->
                     <div class="col-6 col-sm-6">
@@ -1189,7 +1212,6 @@
                 </div>
                 &nbsp;
                 &nbsp;
-                <!-- 詳細情報：下取車 -->
                 <table cellpadding="1" class="table table-responsive">
                     <tr>
                         <td colspan="8" class="title" style="background-color: #d2e0fb; text-align: left;
@@ -1248,7 +1270,6 @@
                 </table>
                 &nbsp;
                 &nbsp;
-                <!-- 詳細情報：商談メモ -->
                 <table cellpadding="1" class="table table-responsive">
                     <tr>
                         <td colspan="8" class="title" style="background-color: #d2e0fb; text-align: left;
@@ -1263,12 +1284,11 @@
                     </tr>
                 </table>
             </div>
-            <!--end Container-->
         </div>
     </div>
     <input type="hidden" id="hidLeaseFlag" value="@Model.EstModel.LeaseFlag">
 </form>
-<!-- 固定表示 -->
+
 <script>
     SetInitValue();
     function SetInitValue() {
