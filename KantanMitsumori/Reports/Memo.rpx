@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ActiveReportsLayout Version="3.4" PrintWidth="11499.84" DocumentName="EstSubMemo" ScriptLang="C#" MasterReport="0">
+<ActiveReportsLayout Version="3.4" PrintWidth="11499.84" DocumentName="Memo" ScriptLang="C#" MasterReport="0">
   <StyleSheet>
     <Style Name="Normal" Value="font-family: Arial; font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; color: Black; text-align: left; vertical-align: top; ddo-char-set: 1" />
     <Style Name="Heading1" Value="font-family: Arial; font-size: 16pt; font-style: normal; font-weight: bold" />
@@ -19,7 +19,7 @@
       <Control Type="AR.Field" Name="txtSName" DataField="SName" Left="7480" Top="7220" Width="3629.6" Height="440" Text="SName" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="txtAddress" DataField="Address" Left="7480" Top="7720" Width="3629.6" Height="440" Text="Address" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="txtTanto" DataField="Tanto" Left="7480" Top="8200" Width="1800" Height="223.2" Text="Tanto" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
-      <Control Type="AR.Field" Name="txtCarPrice" DataField="CarPrice" Left="2180.16" Top="6020.64" Width="1365" Height="293" Text="CarPrice" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 12pt; text-align: right" />
+      <Control Type="AR.Field" Name="txtCarPrice" DataField="CarPrice" Left="2180.16" Top="6020.64" Width="1365" Height="293" Text="CarPrice" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 12pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="txtCarName" DataField="CarName" Left="1392.48" Top="6379.2" Width="5581.44" Height="210.24" Text="CarName" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="txtGradeName" DataField="GradeName" Left="1392.48" Top="6668.64" Width="5582.88" Height="210.24" Text="GradeName" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="txtCaseName" DataField="CaseName" Left="1392.48" Top="6939.36" Width="1890.72" Height="210.24" Text="CaseName" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
@@ -31,8 +31,8 @@
       <Control Type="AR.Field" Name="txtMission" DataField="Mission" Left="4171.68" Top="7521.12" Width="1059.84" Height="210.24" Text="Mission" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="txtVol" DataField="Vol" Left="6130.08" Top="7521.12" Width="852.48" Height="210.24" Text="Vol" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="txtColor" DataField="Color" Left="1392.48" Top="7794.72" Width="5591.52" Height="213.12" Text="Color" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
-      <Control Type="AR.Field" Name="txtEquipment" DataField="Equipment" Left="1392.48" Top="8079.84" Width="5591.52" Height="362.88" Text="Equipment" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
-      <Control Type="AR.Field" Name="txtConTaxInputKb" DataField="ConTaxInputKb" Left="3569.76" Top="6020.64" Width="1290.24" Height="292.32" Text="ConTaxInputKb" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 10.5pt; text-align: left" />
+      <Control Type="AR.Field" Name="txtEquipment" DataField="Equipment" Left="1392.48" Top="8079.84" Width="5591.52" Height="406.08" Text="Equipment" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
+      <Control Type="AR.Field" Name="txtConTaxInputKb" DataField="ConTaxInputKb" Left="3569.76" Top="6020.64" Width="1290.24" Height="292.32" Text="ConTaxInputKb" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 10.5pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Label" Name="Text57" Left="360" Top="6020" Width="1770" Height="293" Caption="車両本体価格" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 12pt; text-align: left" />
       <Control Type="AR.Label" Name="Text2" Left="360" Top="8620" Width="1019.52" Height="239.04" Caption="MEMO" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 11pt; text-align: left" />
       <Control Type="AR.Label" Name="Text11" Left="275.04" Top="6393.6" Width="1019.52" Height="210.24" Caption="車名" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />

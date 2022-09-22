@@ -1,4 +1,5 @@
 ﻿swichUnit('SitaMilUnit');
+resetValue();
 
 //入力チェック
 function inputChk() {

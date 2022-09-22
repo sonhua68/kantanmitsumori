@@ -297,82 +297,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return value.ToString()!;
             }
         }
-        /// <summary>
-        /// 車検有効期限 判定・編集
-        /// </summary>
-        /// <param name="inYM"></param>
-        /// <param name="inFlagNone"></param>
-        /// <returns></returns>
-        public string SetCheckCarYm(string inYM, bool inFlgNone = false)
-        {
-            string none = "無し";
 
-            long ret;
-
-            // 「無し」フラグ On
-            if (inFlgNone)
-            {
-                return none;
-            }
-
-            // 入力なし
-            if (inYM == "" || Information.IsNumeric(inYM))
-            {
-                return "";
-            }
-
-            if (inYM.Length == 6 && Mid(inYM, 5) == "00")
-            {
-                //MM が "00" の場合、YYYY 部分のみ生かす
-                inYM = Left(inYM, 4);
-            }
-
-            if (inYM.Length == 4)
-            {
-                if (IsDate(inYM + "/01/01"))
-                {
-                    ret = DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(inYM + "/01/01"));
-                    if (ret > 3)
-                    {
-                        // 未来過ぎて不正なので、入力なし扱い
-                        return "";
-                    }
-                    else if (ret < 0)
-                    {
-                        // 過去なので、「無し」扱い
-                        return none;
-                    }
-                    else
-                    {
-                        return inYM;
-                    }
-                }
-            }
-            else if (inYM.Length == 6)      // 年月の場合
-            {
-                if (IsDate(Left(inYM, 4) + "/" + Right(inYM, 2) + "/01"))
-                {
-                    ret = DateAndTime.DateDiff(DateInterval.Month, DateTime.Today, DateTime.Parse(Left(inYM, 4) + "/" + Right(inYM, 2)));
-                    if (ret > 36)
-                    {
-                        // 未来過ぎて不正なので、入力なし扱い
-                        return "";
-                    }
-                    else if (ret < 0)
-                    {
-                        // 過去なので、「無し」扱い
-                        return none;
-                    }
-                    else
-                    {
-                        return inYM;
-                    }
-                }
-            }
-
-            // 年月形式不正の場合、「無し」となす
-            return none;
-        }
         public static decimal ConvertDecimal(object value)
         {
             if (value == null) return 0;
@@ -398,6 +323,12 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return Convert.ToInt64(value);
         }
 
+        /// <summary>
+        /// 車検有効期限 判定・編集
+        /// </summary>
+        /// <param name="inYM"></param>
+        /// <param name="inFlagNone"></param>
+        /// <returns></returns>
         public static string setCheckCarYm(string inYM, bool inFlgNone = false)
         {
             var NONE = "無し";
