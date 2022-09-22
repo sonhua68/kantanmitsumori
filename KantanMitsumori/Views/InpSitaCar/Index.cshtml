@@ -38,8 +38,8 @@
                     &nbsp;<span id="Label10" class="inplabel" style="display:inline-block;color:White;width:180px;">下取車有無</span>
                 </td>
                 <td class="inptdmst" align="left" style="width: 430px">
-                    &nbsp;<span class="inplabel" style="display:inline-block;height:21px;width:70px;"><input id="radSitaM" type="radio" name="SSita" value="radSitaM" checked="checked" onclick="resetValue();" tabindex="110"><label for="radSitaM">無し</label></span>
-                    <span class="inplabel" style="display:inline-block;height:21px;width:70px;"><input id="radSitaU" type="radio" name="SSita" value="radSitaU" onclick="resetValue();" tabindex="120"><label for="radSitaU">有り</label></span>
+                    &nbsp;<span class="inplabel" style="display:inline-block;height:21px;width:70px;"><input id="radSitaM" type="radio" name="SSita" value="0" checked="checked" onclick="resetValue();" tabindex="110"><label for="radSitaM">無し</label></span>
+                    <span class="inplabel" style="display:inline-block;height:21px;width:70px;"><input id="radSitaU" type="radio" name="SSita" value="1" onclick="resetValue();" tabindex="120"><label for="radSitaU">有り</label></span>
                 </td>
             </tr>
             <tr>
@@ -62,7 +62,7 @@
                     <span id="Label73" class="inplabel" style="display:inline-block;width:112px;">車名</span>
                 </td>
                 <td id="detail_2" class="inptd" align="left" style="width: 430px; background-color: rgb(210, 224, 251);">
-                    <input name="txtSitaCarName" type="text" maxlength="100" id="txtSitaCarName" value="@Model.TradeInCarName" tabindex="210" class="inpbox" style="width:330px;">
+                    <input name="SitaCarName" type="text" maxlength="100" id="txtSitaCarName" value="@Model.TradeInCarName" tabindex="210" class="inpbox" style="width:330px;">
                 </td>
             </tr>
             <tr>
@@ -81,7 +81,7 @@
                     <span id="Label88" class="inplabel" style="display:inline-block;width:112px;">車台番号</span>
                 </td>
                 <td id="detail_6" class="inptd" align="left" style="width: 430px; background-color: rgb(210, 224, 251);">
-                    <input name="txtSitaCarNO" type="text" maxlength="30" id="txtSitaCarNO" value="@Model.TradeInChassisNo" tabindex="230" class="inpbox" style="width:206px;">
+                    <input name="SitaCarNO" type="text" maxlength="30" id="txtSitaCarNO" value="@Model.TradeInChassisNo" tabindex="230" class="inpbox" style="width:206px;">
                 </td>
             </tr>
             <tr>
@@ -93,7 +93,7 @@
                         @{
                             foreach (var item in ListDropDownFirstYM)
                             {
-                                <option value="@item.Value">@item.Text</option>
+                                                                        <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -102,7 +102,7 @@
                         @{
                             foreach (var item in ListMonth)
                             {
-                                <option value="@item.Value">@item.Text</option>
+                                                                        <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -118,7 +118,7 @@
                         @{
                             foreach (var item in ListDropDownSyakenYM)
                             {
-                                <option value="@item.Value">@item.Text</option>
+                                                                        <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -127,7 +127,7 @@
                         @{
                             foreach (var item in ListMonth)
                             {
-                                <option value="@item.Value">@item.Text</option>
+                                                                        <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -140,10 +140,10 @@
                     <span id="Label90" class="inplabel" style="display:inline-block;width:112px;">走行距離</span>
                 </td>
                 <td id="detail_12" class="inptd" align="left" style="width: 430px; background-color: rgb(210, 224, 251);">
-                    <input name="txtSitaNowRun" type="text" maxlength="7" id="txtSitaNowRun" value="@TradeInNowOdometer" tabindex="260" class="inpbox_r" style="width:88px;IME-MODE: disabled">
-                    &nbsp;&nbsp;<span class="inplabel"><input id="radSitaMilUnitKM" type="radio" name="milUnit" value="radSitaMilUnitKM" checked="checked" onclick="swichUnit('SitaMilUnit');" tabindex="261"><label for="radSitaMilUnitKM">km</label></span>
-                    &nbsp;&nbsp;<span class="inplabel"><input id="radSitaMilUnitOther" type="radio" name="milUnit" value="radSitaMilUnitOther" onclick="swichUnit('SitaMilUnit');" tabindex="262"><label for="radSitaMilUnitOther">その他</label></span>
-                    <input name="txtSitaMilUnit" type="text" maxlength="10" id="txtSitaMilUnit" value="@Model.TradeInMilUnit" tabindex="263" class="inpbox" style="width: 80px; visibility: hidden;">
+                    <input name="SitaNowRun" type="text" maxlength="7" id="txtSitaNowRun" value="@TradeInNowOdometer" tabindex="260" class="inpbox_r" style="width:88px;IME-MODE: disabled">
+                    &nbsp;&nbsp;<span class="inplabel"><input id="radSitaMilUnitKM" type="radio" name="milUnit" value="km" checked="checked" onclick="swichUnit('SitaMilUnit');" tabindex="261"><label for="radSitaMilUnitKM">km</label></span>
+                    &nbsp;&nbsp;<span class="inplabel"><input id="radSitaMilUnitOther" type="radio" name="milUnit" value="その他" onclick="swichUnit('SitaMilUnit');" tabindex="262"><label for="radSitaMilUnitOther">その他</label></span>
+                    <input name="SitaMilUnit" type="text" maxlength="10" id="txtSitaMilUnit" value="@Model.TradeInMilUnit" tabindex="263" class="inpbox" style="width: 80px; visibility: hidden;">
                 </td>
             </tr>
             <tr>
@@ -151,7 +151,7 @@
                     <span id="Label91" class="inplabel" style="display:inline-block;width:112px;">色</span>
                 </td>
                 <td id="detail_14" class="inptd" align="left" style="width: 430px; background-color: rgb(210, 224, 251);">
-                    <input name="txtSitaColor" type="text" maxlength="40" id="txtSitaColor" value="@Model.TradeInBodyColor" tabindex="270" class="inpbox" style="width:335px;IME-MODE: active">
+                    <input name="SitaColor" type="text" maxlength="40" id="txtSitaColor" value="@Model.TradeInBodyColor" tabindex="270" class="inpbox" style="width:335px;IME-MODE: active">
                 </td>
             </tr>
             <tr>
@@ -174,7 +174,7 @@
                     <span id="Label86" class="inplabel" style="display:inline-block;width:180px;">下取車価格</span>
                 </td>
                 <td class="inptd" align="left" style="width: 430px">
-                    <input name="txtSitaPri" type="text" maxlength="8" id="txtSitaPri" value="@TradeInPrice" tabindex="310" class="inpbox" style="width:94px; text-align: right;">
+                    <input name="SitaPri" type="text" maxlength="8" id="txtSitaPri" value="@TradeInPrice" tabindex="310" class="inpbox" style="width:94px; text-align: right;">
                     <span id="Label14" class="inplabel" style="display:inline-block;width:27px;">&nbsp;円</span>
                 </td>
 
@@ -184,7 +184,7 @@
                     <span id="Label79" class="inplabel" style="display:inline-block;width:180px;">下取車残債</span>
                 </td>
                 <td class="inptd" align="left" style="width: 430px">
-                    <input name="txtSitaZan" type="text" maxlength="8" id="txtSitaZan" value="@Balance" tabindex="320" class="inpbox" style="width:94px; text-align: right;">
+                    <input name="SitaZan" type="text" maxlength="8" id="txtSitaZan" value="@Balance" tabindex="320" class="inpbox" style="width:94px; text-align: right;">
                     &nbsp;<span id="Label15" class="inplabel" style="display:inline-block;width:27px;">&nbsp;円</span>
                 </td>
             </tr>
@@ -237,7 +237,8 @@
             </tr>
             <tr>
                 <td class="inpbtntd" colspan="2">
-                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">&nbsp;<input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPageUrl('/');return false;" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                    <input type="submit" name="btnOK" value="OK" id="btnOK" form="formInputSitaCar" class="Btn1" style="height:32px;width:100px;">&nbsp;
                 </td>
             </tr>
             <tr>
@@ -247,21 +248,35 @@
             </tr>
 
         </table>
-        <input name="EstNo" type="hidden" id="hidEstNo" value="22091900082">
-        <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="01">
-        <input name="TradeInRegNo" type="hidden" id="hidTradeInRegNo" value="函館/501/あ/1222">
+        <input name="EstNo" type="hidden" id="hidEstNo" value="@Model.EstNo">
+        <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
+        <input name="TradeInRegNo" type="hidden" id="hidTradeInRegNo" value="@Model.TradeInRegNo">
         <input name="TradeInFirstRegYm" type="hidden" id="hidTradeInFirstRegYm" value="@Model.TradeInFirstRegYm">
         <input name="TradeInMilUnit" type="hidden" id="hidTradeInMilUnit" value="@Model.TradeInMilUnit">
         <input name="TradeInCheckCarYm" type="hidden" id="hidTradeInCheckCarYm" value="@Model.TradeInCheckCarYm">
         <input name="TaxFreeTradeIn" type="hidden" id="hidTaxFreeTradeIn" value="@Model.TaxFreeTradeIn">
         <input name="TaxTradeIn" type="hidden" id="hidTaxTradeIn" value="@Model.TaxTradeIn">
         <input name="TaxTradeInSatei" type="hidden" id="hidTaxTradeInSatei" value="@Model.TaxTradeInSatei">
+        <input name="TradeInUM" type="hidden" id="hidTradeInUM" value="@Model.TradeInUM">
         @*        <input type="hidden" id="hidEstNo" name="EstNo" value="@Model.EstNo">
         <input type="hidden" id="hidEstNo" name="EstSubNo" value="@Model.EstSubNo">*@
     </div>
 </form>
-<script src="~/js/InpSitaCar.js"></script>
+
 <script>
+    const listKana = ["あ", "い", "う", "え",
+                "か", "き", "く", "け", "こ",
+                "さ", "す", "せ", "そ",
+                "た", "ち", "つ", "て", "と",
+                "な", "に", "ぬ", "ね", "の",
+                "は", "ひ", "ふ", "ほ",
+                "ま", "み", "む", "め", "も",
+                "や", "ゆ", "よ",
+                "ら", "り", "る", "れ", "ろ",
+                "わ", "を"];
+    GetListRikuji();
+    GetListKana();
+    // list string characters kana
     SetInitData();
     $('#formInputSitaCar').validate({
         submitHandler: function(form) {
@@ -282,9 +297,41 @@
             }
         }
     });
+    function GetListRikuji() {
+        var result = Framework.GetObjectDataFromUrl("/InpSitaCar/GetListRikuji");
+        if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+            let length = result.data.length;
+            $("#ddlTorokuNo1").append(new Option(" ", " "));
+            $("#ddlTorokuNo1 option[value=' ']").attr("selected", "selected");
+            for (let i = 0; i < length; i++) {
+                let text = result.data[i];
+                let value = result.data[i];
+                $("#ddlTorokuNo1").append(new Option(value, text));
+            }
+
+        } else {
+            let Items = result.data;
+            if (typeof (Items) != "undefined") {
+                $("#txMsg").html(Items)
+            } else {
+                location.reload();
+            }
+        }
+    }
+
+    function GetListKana() {
+        $("#ddlTorokuNo2").append(new Option(" ", " "));
+        $("#ddlTorokuNo2 option[value='']").attr("selected", "selected");
+        for (let i = 0; i < listKana.length; i++) {
+            let text = listKana[i];
+            let value = listKana[i];
+            $("#ddlTorokuNo2").append(new Option(value, text));
+        }
+    }
+
     function SetInitData() {
         // 下取車有無
-        if (@Model.TradeInUM == 1) {
+        if ($("#hidTradeInUM").val() == "1") {
             $("#radSitaU").attr("checked", "checked");
         } else {
             $("#radSitaU").removeAttr('checked');
@@ -336,3 +383,4 @@
         }
     }
 </script>
+<script src="~/js/InpSitaCar.js"></script>

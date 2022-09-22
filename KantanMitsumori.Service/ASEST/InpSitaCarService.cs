@@ -5,6 +5,7 @@ using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model;
+using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
@@ -95,33 +96,85 @@ namespace KantanMitsumori.Service.ASEST
             }
         }
 
-        //public async Task<ResponseBase<int>> UpdateInpCustKana(RequestUpdateInpCustKana model)
-        //{
-        //    try
-        //    {
-        //        // get [t_Estimate]
-        //        var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == model.EstNo && x.EstSubNo == model.EstSubNo && x.Dflag == false);
-        //        estModel.CustKname = model.CustKana;
-        //        estModel.Udate = DateTime.Now;
+        public async Task<ResponseBase<int>> UpdateInpSitaCar(RequestUpdateInpSitaCar request)
+        {
+            try
+            {
+                // get [t_Estimate]
+                var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == request.EstNo && x.EstSubNo == request.EstSubNo && x.Dflag == false);
 
-        //        // get [t_EstimateSub]
-        //        var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == model.EstNo && x.EstSubNo == model.EstSubNo && x.Dflag == false);
-        //        estSubModel.CustMemo = model.CustMemo;
-        //        estSubModel.Udate = DateTime.Now;
+                // set request into model Estimate
+                string firstRegYM = ""; string firstRegM = ""; string checkCarYm = "";
+                if (!string.IsNullOrEmpty(request.ddlSitaFirstY))
+                {
+                    var firstMonth = 0;
+                    if (!string.IsNullOrEmpty(request.ddlSitaFirstM))
+                    {
+                        firstMonth = Convert.ToInt32(request.ddlSitaFirstM!);
+                        firstRegM = firstMonth < 10 ? "0" + firstMonth : firstMonth.ToString();
+                    }
+                    firstRegYM = CommonFunction.Right(request.ddlSitaFirstY, 5).Replace(")", firstRegM);
+                }
+                if (!string.IsNullOrEmpty(request.ddlSitaSyakenY) || !string.IsNullOrEmpty(request.ddlSitaSyakenM))
+                {
+                    var syakenMonth = Convert.ToInt32(request.ddlSitaSyakenM);
+                    string syakenMonthFormat = syakenMonth < 10 ? "0" + syakenMonth : syakenMonth.ToString();
+                    checkCarYm = CommonFunction.Right(request.ddlSitaSyakenY!, 5).Replace(")", syakenMonthFormat);
+                }
+                int SitaUM = 0;
+                if (request.SSita == 1)
+                {
+                    SitaUM = 1;
+                }
+                else
+                {
+                    SitaUM = 0;
+                    request.TaxFreeTradeIn = 0;
+                    request.TaxTradeIn = 0;
+                    request.TaxTradeInSatei = 0;
+                }
+                string ddlTorokuNo1 = string.IsNullOrEmpty(request.ddlTorokuNo1) ? "" : request.ddlTorokuNo1.Trim();
+                string txtTorokuNo1 = string.IsNullOrEmpty(request.txtToroku1) ? "" : request.txtToroku1.Trim();
+                string ddlTorokuNo2 = string.IsNullOrEmpty(request.ddlTorokuNo2) ? "" : request.ddlTorokuNo2.Trim();
+                string txtTorokuNo2 = string.IsNullOrEmpty(request.txtToroku2) ? "" : request.txtToroku2.Trim();
 
-        //        _unitOfWork.Estimates.Update(estModel);
-        //        _unitOfWork.EstimateSubs.Update(estSubModel);
 
-        //        await _unitOfWork.CommitAsync();
+                estModel.TradeInCarName = string.IsNullOrEmpty(request.SitaCarName) ? "" : request.SitaCarName.Trim();
+                estModel.TradeInFirstRegYm = firstRegYM;
+                estModel.TradeInNowOdometer = request.SitaNowRun;
+                estModel.TradeInRegNo = ddlTorokuNo1 + "/" + txtTorokuNo1 + "/" + ddlTorokuNo2 + "/" + txtTorokuNo2;
+                estModel.TradeInChassisNo = string.IsNullOrEmpty(request.SitaCarNO) ? "" : request.SitaCarNO.Trim();
+                estModel.TradeInCheckCarYm = CommonFunction.setCheckCarYm(checkCarYm, Convert.ToBoolean(request.chkSyakenUM));
+                estModel.TaxFreeTradeIn = request.TaxFreeTradeIn;
+                estModel.TaxTradeIn = request.TaxTradeIn;
+                estModel.TradeInBodyColor = request.SitaColor;
+                estModel.TradeInPrice = request.SitaPri;
+                estModel.Balance = request.SitaZan;
+                estModel.Udate = DateTime.Now;
 
-        //        return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "UpdateInpCustKana");
-        //        return ResponseHelper.Error<int>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));
-        //    }
-        //}
+                // get [t_EstimateSub]
+                var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == request.EstNo && x.EstSubNo == request.EstSubNo && x.Dflag == false);
+
+                // set request into model EstimateSub
+                estSubModel.TradeInUm = SitaUM;
+                estSubModel.TaxTradeInSatei = request.TaxTradeInSatei;
+                string tradeInMilUnit = request.milUnit! == "その他" ? request.SitaMilUnit! : request.milUnit!;
+                estSubModel.TradeInMilUnit = tradeInMilUnit;
+                estSubModel.Udate = DateTime.Now;
+
+                _unitOfWork.Estimates.Update(estModel);
+                _unitOfWork.EstimateSubs.Update(estSubModel);
+
+                await _unitOfWork.CommitAsync();
+
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateInpCustKana");
+                return ResponseHelper.Error<int>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));
+            }
+        }
 
     }
 }

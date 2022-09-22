@@ -1,20 +1,5 @@
-﻿// list string characters kana
-const listKana = ["あ", "い", "う", "え",
-    "か", "き", "く", "け", "こ",
-    "さ", "す", "せ", "そ",
-    "た", "ち", "つ", "て", "と",
-    "な", "に", "ぬ", "ね", "の",
-    "は", "ひ", "ふ", "ほ",
-    "ま", "み", "む", "め", "も",
-    "や", "ゆ", "よ",
-    "ら", "り", "る", "れ", "ろ",
-    "わ", "を"];
-
-swichUnit('SitaMilUnit');
+﻿swichUnit('SitaMilUnit');
 resetValue();
-GetListRikuji();
-GetListKana();
-
 
 //入力チェック
 function inputChk() {
@@ -91,40 +76,6 @@ function resetProp() {
     for (var i = 1; i <= 14; i++) {
         document.getElementById("detail_" + i).style.backgroundColor = bkColor;
     }
-}
-
-
-function GetListRikuji() {
-    var result = Framework.GetObjectDataFromUrl("/InpSitaCar/GetListRikuji");
-    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-        let length = result.data.length;
-        $("#ddlTorokuNo1").append(new Option(" ", " "));
-        $("#ddlTorokuNo1 option[value=' ']").attr("selected", "selected");
-        for (let i = 0; i < length; i++) {
-            let text = result.data[i];
-            let value = result.data[i];
-            $("#ddlTorokuNo1").append(new Option(value, text));
-        }
-
-    } else {
-        let Items = result.data;
-        if (typeof (Items) != "undefined") {
-            $("#txMsg").html(Items)
-        } else {
-            location.reload();
-        }
-    }
-}
-
-function GetListKana() {
-    $("#ddlTorokuNo2").append(new Option(" ", " "));
-    $("#ddlTorokuNo2 option[value='']").attr("selected", "selected");
-    for (let i = 0; i < listKana.length; i++) {
-        let text = listKana[i];
-        let value = listKana[i];
-        $("#ddlTorokuNo2").append(new Option(value, text));
-    }
-
 }
 
 

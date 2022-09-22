@@ -1,5 +1,6 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService.ASEST;
+using KantanMitsumori.Model.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -44,16 +45,16 @@ namespace KantanMitsumori.Controllers
         }
 
 
-        //[HttpPost]
-        //public async Task<IActionResult> UpdateInpCustKana([FromForm] RequestUpdateInpCustKana requestData)
-        //{
-        //    var response = await _inpCustKanaService.UpdateInpCustKana(requestData);
+        [HttpPost]
+        public async Task<IActionResult> UpdateInpSitaCar([FromForm] RequestUpdateInpSitaCar requestData)
+        {
+            var response = await _inpSitaCarService.UpdateInpSitaCar(requestData);
 
-        //    if (response.ResultStatus == (int)enResponse.isError)
-        //    {
-        //        return ErrorAction(response);
-        //    }
-        //    return Ok(response);
-        //}
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
+        }
     }
 }
