@@ -21,6 +21,7 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<MUser, UserModel>().ReverseMap();
             CreateMap<TEstimateIde, EstimateIdeModel>().ReverseMap();
             CreateMap<ResponseInpSitaCar, EstModel>().ReverseMap();
+            CreateMap<ResponseInpSyohiyo, EstModel>().ReverseMap();
 
             CreateMap<AsopMaker, ResponseAsopMaker>();
             CreateMap<AsopCarname, ResponseAsopCarname>();

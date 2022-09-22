@@ -1,0 +1,205 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+}
+<form id="formInputSitaCar">
+    <div align="center">
+        <table class="inptable" id="Table3" cellpadding="2" cellspacing="0" bordercolor="#ffffff">
+            <tr>
+                <td colspan="3" class="inptd" style="background-color:White;" align="left">
+                    <span id="Label3" class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">手続代行費用と預り法定費用の編集</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="inptd" style="background-color:White;" align="left">
+                    <span id="Label5" class="inplabel">各種諸費用の編集ができます。</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tabletitle" align="left">&nbsp;</td>
+                <td class="tabletitle" align="left" style="width: 170px">
+                    <span id="lblZei" class="titlelabel" style="display:inline-block;width:168px;">手続代行費用（税抜）</span>
+                </td>
+                <td class="tabletitle" align="left" style="width: 170px">
+                    <span id="Label21" class="titlelabel" style="display:inline-block;width:168px;text-align:center;  ">預り法定費用（非課税）<br>（主に印紙代）</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label38" class="inplabel" style="display:inline-block;width:150px;">検査登録</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxCheck" type="text" id="txtTaxCheck" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label55" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxFreeCheck" type="text" id="txtTaxFreeCheck" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label19" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label6" class="inplabel" style="display:inline-block;width:150px;">車庫証明</span>
+                </td>
+                <td class="inptd" style="border-right:solid 2px white; width: 170px;" align="left">
+                    <input name="txtTaxGarage" type="text" id="txtTaxGarage" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label7" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxFreeGarage" type="text" id="txtTaxFreeGarage" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label22" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label8" class="inplabel" style="display:inline-block;width:150px;">下取車手続・処分</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxTradeIn" type="text" id="txtTaxTradeIn" language="javascript" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label9" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxFreeTradeIn" type="text" id="txtTaxFreeTradeIn" language="javascript" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label23" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label10" class="inplabel" style="display:inline-block;width:150px;">下取車査定料</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxTradeInSatei" type="text" id="txtTaxTradeInSatei" language="javascript" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label11" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label12" class="inplabel" style="display:inline-block;width:150px;">リサイクル預託金</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    &nbsp;
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxFreeRecycle" type="text" id="txtTaxFreeRecycle" language="javascript" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label13" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label15" class="inplabel" style="display:inline-block;width:150px;">資金管理料金</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxRecycle" type="text" id="txtTaxRecycle" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label24" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label1" class="inplabel" style="display:inline-block;width:150px;">納車費用</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxDelivery" type="text" id="txtTaxDelivery" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label2" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="txtTaxSet1Title" type="text" id="txtTaxSet1Title" class="inpbox" style="WIDTH: 144px;" tabindex="30" maxlength="20" value="その他手続代行費用●">
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxSet1" type="text" id="txtTaxSet1" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label4" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="txtTaxSet2Title" type="text" id="txtTaxSet2Title" class="inpbox" style="WIDTH: 144px;" tabindex="30" maxlength="20" value="納車費用2">
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxSet2" type="text" id="txtTaxSet2" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label14" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="txtTaxSet3Title" type="text" id="txtTaxSet3Title" class="inpbox" style="WIDTH: 144px;" tabindex="30" maxlength="20" value="納車費用3">
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxSet3" type="text" id="txtTaxSet3" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label16" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="txtTaxFreeSet1Title" type="text" id="txtTaxFreeSet1Title" class="inpbox" style="WIDTH: 144px;" tabindex="30" maxlength="20" value="その他預かり法定費用">
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxFreeSet1" type="text" id="txtTaxFreeSet1" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label27" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="txtTaxFreeSet2Title" type="text" id="txtTaxFreeSet2Title" class="inpbox" style="WIDTH: 144px;" tabindex="30" maxlength="20" value="下取車手続・処分2">
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxFreeSet2" type="text" id="txtTaxFreeSet2" language="javascript" value="10000" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label28" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label17" class="inplabel" style="display:inline-block;width:150px;">その他費用</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxOther" type="text" id="txtTaxOther" language="javascript" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label18" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="txtTaxFreeOther" type="text" id="txtTaxFreeOther" language="javascript" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label25" class="inplabel" style="display:inline-block;width:40px;">&nbsp;円</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="sumtd" style="height: 27px" align="left">
+                    <span id="Labelaa6" class="inplabel" style="display:inline-block;width:59px;">小計</span>
+                </td>
+                <td class="sumtd" style="background-color:#B1CAF8;border-right:solid 2px white; height: 27px; width: 170px;" align="left">
+                    <input name="txtTaxCostAll" type="text" id="txtTaxCostAll" language="javascript" value="70000" maxlength="8" class="inpboxsum" tabindex="48" onblur="//EstSum()" style="WIDTH: 97px;" size="10" readonly="readOnly">
+                    <span id="Labela7" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="sumtd" style="height: 27px; width: 170px;" align="left">
+                    <input name="txtTaxFreeAll" type="text" id="txtTaxFreeAll" language="javascript" value="40000" maxlength="8" class="inpboxsum" tabindex="48" onblur="//EstSum()" style="WIDTH: 97px;" size="10" readonly="readOnly">
+                    <span id="Label26" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inpbtntd" colspan="3" style=" ">
+
+                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
+                    <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td class="inpbtntd" colspan="3">
+
+                    <span id="txMsg" class="inpboxsum" style="display:inline-block;color:Red;width:462px;"></span>&nbsp;
+                </td>
+            </tr>
+        </table>
+        <input name="hidEstNo" type="hidden" id="hidEstNo" value="23092200011">
+        <input name="hidEstSubNo" type="hidden" id="hidEstSubNo" value="01">
+    </div>
+</form>
