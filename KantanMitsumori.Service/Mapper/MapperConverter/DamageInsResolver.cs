@@ -18,6 +18,8 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                 var estSubEntity = context.Items["estSubEntity"] as TEstimateSub;
                 if (estSubEntity == null)
                     return "";
+                if (!string.IsNullOrEmpty(source.CheckCarYm) && source.CheckCarYm != "無し")
+                    return "";
                 if (estSubEntity.DamageInsEquivalent.HasValue && estSubEntity.DamageInsEquivalent.Value > 0)
                     return estSubEntity.DamageInsEquivalent.Value.ToYenCurrency();
                 return source.DamageIns.ToYenCurrency();

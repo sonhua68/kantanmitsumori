@@ -138,6 +138,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.AutoTaxMonth, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.MapFrom(new AutoTaxMonthResolver()); })
                 .ForMember(t => t.AcqTax, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.WeightTax, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
+                .ForMember(t => t.DamageInsMonth, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.MapFrom(new DamageInsMonthResolver()); })
                 .ForMember(t => t.DamageIns, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.MapFrom(new DamageInsResolver()); })
                 .ForMember(t => t.OptionIns, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxFreeGarage, o => { o.Condition(s => s.TaxFreeKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
@@ -173,7 +174,9 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.TaxSet3Title, o => { o.PreCondition(s => s.IsTaxCostKb()); })
                 .ForMember(t => t.TaxSet1, o => { o.PreCondition(s => s.IsTaxCostKb()); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxSet2, o => { o.PreCondition(s => s.IsTaxCostKb()); o.ConvertUsing(new YenCurrencyConverter()); })
-                .ForMember(t => t.TaxSet3, o => { o.PreCondition(s => s.IsTaxCostKb()); o.ConvertUsing(new YenCurrencyConverter()); });
+                .ForMember(t => t.TaxSet3, o => { o.PreCondition(s => s.IsTaxCostKb()); o.ConvertUsing(new YenCurrencyConverter()); })
+                .ForMember(t => t.AutoTaxMonth, o => { o.Ignore(); })
+                .ForMember(t => t.DamageInsMonth, o => { o.Ignore(); });
 
             CreateMap<RequestReport, EstimateReportModel>()
                 .ForMember(t => t.EstNo, o => o.Ignore())
