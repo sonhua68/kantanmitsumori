@@ -159,16 +159,16 @@
       <Control Type="AR.Field" Name="BalanceTitle1" DataField="BalanceTitle" Left="635" Top="9490" Width="2280" Height="279.36" Text="BalanceTitle" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Field" Name="Balance1" DataField="Balance" Left="3375.36" Top="9490" Width="1845" Height="279.36" Text="Balance" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="SaleAll1" DataField="SaleAll" Left="3375.36" Top="9770" Width="1845" Height="279.36" Text="SaleAll" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="Deposit1" DataField="Deposit" Left="8310.24" Top="12660" Width="2280" Height="260.64" Text="Deposit" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="Principal1" DataField="Principal" Left="8310.24" Top="12915.36" Width="2280" Height="260.64" Text="Principal" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="PartitionFee1" DataField="PartitionFee" Left="8310.24" Top="13176" Width="2280" Height="260.64" Text="PartitionFee" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="PartitionAmount1" DataField="PartitionAmount" Left="8310.24" Top="13436.64" Width="2280" Height="260.64" Text="PartitionAmount" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="PayTimes1" DataField="PayTimes" Left="8310.24" Top="13696" Width="2280" Height="260.64" Text="PayTimes" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="Kikan1" DataField="Kikan" Left="8310.24" Top="13956" Width="2280" Height="260.64" Text="Kikan" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="FirstPayAmount1" DataField="FirstPayAmount" Left="8310.24" Top="14216" Width="2280" Height="260.64" Text="FirstPayAmount" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="PayAmount1" DataField="PayAmount" Left="8310.24" Top="14476" Width="2280" Height="260.64" Text="PayAmount" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="BonusMonth1" DataField="BonusMonth" Left="8310.24" Top="14736" Width="2280" Height="260.64" Text="BonusMonth" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="BonusAmount1" DataField="BonusAmount" Left="8310.24" Top="14996" Width="2280" Height="260.64" Text="BonusAmount" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="Deposit1" DataField="Deposit" Left="8310.24" Top="12660" Width="2280" Height="260.64" Text="Deposit" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="Principal1" DataField="Principal" Left="8310.24" Top="12915.36" Width="2280" Height="260.64" Text="Principal" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="PartitionFee1" DataField="PartitionFee" Left="8310.24" Top="13176" Width="2280" Height="260.64" Text="PartitionFee" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="PartitionAmount1" DataField="PartitionAmount" Left="8310.24" Top="13436.64" Width="2280" Height="260.64" Text="PartitionAmount" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="PayTimes1" DataField="PayTimes" Left="8310.24" Top="13696" Width="2280" Height="260.64" Text="PayTimes" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="Kikan1" DataField="Kikan" Left="8310.24" Top="13956" Width="2280" Height="260.64" Text="Kikan" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="FirstPayAmount1" DataField="FirstPayAmount" Left="8310.24" Top="14216" Width="2280" Height="260.64" Text="FirstPayAmount" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="PayAmount1" DataField="PayAmount" Left="8310.24" Top="14476" Width="2280" Height="260.64" Text="PayAmount" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="BonusMonth1" DataField="BonusMonth" Left="8310.24" Top="14736" Width="2280" Height="260.64" Text="BonusMonth" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Field" Name="BonusAmount1" DataField="BonusAmount" Left="8310.24" Top="14996" Width="2280" Height="260.64" Text="BonusAmount" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="OptionName21" DataField="OptionName2" Left="335" Top="10919" Width="2860" Height="240.48" Text="OptionName2" Style="color: Black; font-family: MS PGothic; font-size: 8pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Field" Name="OptionName31" DataField="OptionName3" Left="335" Top="11149" Width="2860" Height="240.48" Text="OptionName3" Style="color: Black; font-family: MS PGothic; font-size: 8pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Field" Name="OptionName41" DataField="OptionName4" Left="335" Top="11389" Width="2860" Height="240.48" Text="OptionName4" Style="color: Black; font-family: MS PGothic; font-size: 8pt; text-align: left; vertical-align: middle" />
@@ -341,8 +341,8 @@
       <Control Type="AR.Shape" Name="Box14" Left="5642" Top="7179" Width="5029.92" Height="1864.8" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box16" Left="5641.92" Top="9208.8" Width="5029.92" Height="2790.72" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Line" Name="Line76" X1="5648" Y1="12660" X2="10663" Y2="12660" />
-      <Control Type="AR.Shape" Name="Box10" Left="5641.92" Top="12389.76" Width="5029.92" Height="2880" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box9" Left="260" Top="5600" Width="5010" Height="4450" BackColor="16777215" RoundingRadius="10" />
+      <Control Type="AR.Shape" Name="Box10" Left="5641.92" Top="12389.76" Width="5029.92" Height="2880" BackColor="16777215" RoundingRadius="10" />
     </Section>
   </Sections>
   <ReportComponentTray />
