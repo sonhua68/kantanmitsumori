@@ -12,6 +12,7 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Service.ASEST
@@ -21,13 +22,10 @@ namespace KantanMitsumori.Service.ASEST
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
-
         private readonly int LocaleID = new System.Globalization.CultureInfo("ja-JP", true).LCID;
-
         private LogToken valToken;
         private CommonFuncHelper _commonFuncHelper;
         private CommonEstimate _commonEst;
-
         public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst)
         {
             _mapper = mapper;
@@ -74,19 +72,18 @@ namespace KantanMitsumori.Service.ASEST
                 {
                     valToken.sesPriDisp = request.PriDisp;
                 }
-
                 var getAsInfo = await getAsnetInfo(request);
                 if (getAsInfo.ResultStatus == (int)enResponse.isError)
                     return ResponseHelper.Error<ResponseEstMainModel>("Error", getAsInfo.MessageContent);
-                getAsInfo.Data!.EstNo = valToken.sesEstNo;
-                getAsInfo.Data.EstSubNo = valToken.sesEstSubNo;
+                getAsInfo.Data!.EstNo = valToken.sesEstNo!;
+                getAsInfo.Data.EstSubNo = valToken.sesEstSubNo!;
                 SetvalueToken();
-                response.AccessToken = valToken.Token;
+                response.AccessToken = valToken.Token!;
                 response.EstCustomerModel.CustNm = valToken.sesCustNm_forPrint ?? "";
                 response.EstCustomerModel.CustZip = valToken.sesCustZip_forPrint ?? "";
                 response.EstCustomerModel.CustAdr = valToken.sesCustAdr_forPrint ?? "";
                 response.EstCustomerModel.CustTel = valToken.sesCustTel_forPrint ?? "";
-                var estData = _commonEst.setEstData(valToken.sesEstNo, valToken.sesEstSubNo);
+                var estData = _commonEst.setEstData(valToken.sesEstNo!, valToken.sesEstSubNo!);
                 if (estData.ResultStatus == (int)enResponse.isSuccess)
                     response.EstModel = estData.Data!;
                 response.EstIDEModel = new EstimateIdeModel();
@@ -115,7 +112,7 @@ namespace KantanMitsumori.Service.ASEST
                 response.EstCustomerModel = new EstCustomerModel();
                 response.EstIDEModel = new EstimateIdeModel();
                 response.EstModel = new EstModel();
-                var estData = _commonEst.setEstData(logtoken.sesEstNo, logtoken.sesEstSubNo);
+                var estData = _commonEst.setEstData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
                 if (estData.ResultStatus == (int)enResponse.isSuccess)
                     response.EstModel = estData.Data!;
                 response.EstCustomerModel.CustNm = logtoken.sesCustNm_forPrint ?? "";
@@ -180,7 +177,7 @@ namespace KantanMitsumori.Service.ASEST
             estModel.TaxCostKb = true;
             estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM;
             int intHaiki = Information.IsNumeric(estModel.DispVol) ? int.Parse(estModel.DispVol) : 0;
-            bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(valToken.sesMaker!);
+            bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(model.MakerName!);
             int intFirstMonth = Convert.ToInt32(Strings.Format(DateTime.Now, "MM"));
             if (flgTaxAutoCalc & intHaiki > 0 && estModel.DispVolUnit == CommonConst.def_DispVolUnitCC)
             {
@@ -192,7 +189,7 @@ namespace KantanMitsumori.Service.ASEST
                 estModel.AutoTaxMonth = intFirstMonth.ToString();
             }
             int userDefDamageInsMonth = 0;
-            var getUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo);
+            var getUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo!);
             if (getUserDef != null)
             {
                 estModel.EstUserNo = getUserDef.UserNo;
@@ -870,12 +867,12 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.PayTimes = Model.EstModel.PayTimes > 0 ? Model.EstModel.PayTimes + " 回" : "";
 
             string fromdt = "";
-            if (Model.EstModel.FirstPayMonth != "")
+            if (!string.IsNullOrEmpty(Model.EstModel.FirstPayMonth))
                 fromdt = Strings.Mid(Model.EstModel.FirstPayMonth, 1, 4) + "年" + System.Convert.ToString(Strings.Mid(Model.EstModel.FirstPayMonth, 5, 2)) + "月";
             string todt = "";
-            if (Model.EstModel.LastPayMonth != "")
+            if (!string.IsNullOrEmpty(Model.EstModel.LastPayMonth))
                 todt = Strings.Mid(Model.EstModel.LastPayMonth, 1, 4) + "年" + System.Convert.ToString(Strings.Mid(Model.EstModel.LastPayMonth, 5, 2)) + "月";
-            estModelView.Kikan = (fromdt != "" | todt != "") ? fromdt + " - " + todt : "";
+            estModelView.Kikan = (!string.IsNullOrEmpty(fromdt) | !string.IsNullOrEmpty(todt)) ? fromdt + " - " + todt : "";
             estModelView.FirstPayAmount = Model.EstModel.FirstPayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.FirstPayAmount) : "";
             estModelView.PayAmount = Model.EstModel.PayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.PayAmount) : "";
             estModelView.PayTimes2 = Model.EstModel.PayTimes > 0 ? "（×" + Convert.ToString(Model.EstModel.PayTimes - 1) + "回）" : "";
@@ -929,8 +926,6 @@ namespace KantanMitsumori.Service.ASEST
             Model.EstModelView = estModelView;
             return Model;
         }
-
-
         #endregion fuc private
     }
 }

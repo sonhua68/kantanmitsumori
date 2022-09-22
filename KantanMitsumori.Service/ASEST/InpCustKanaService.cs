@@ -34,24 +34,25 @@ namespace KantanMitsumori.Service.ASEST
             {
                 // 見積書データ取得
                 var estData = _commonEst.getEst_EstSubData(estNo, estSubNo);
-
                 if (estData == null)
                 {
-                    return ResponseHelper.Error<ResponseInpCustKana>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "SMAI-041D" + CommonConst.def_ErrCodeR);
-                }
+                    return ResponseHelper.Error<ResponseInpCustKana>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
 
+
+                }
                 var model = new ResponseInpCustKana();
                 model.EstNo = estData.EstNo;
                 model.EstSubNo = estData.EstSubNo;
                 model.CustKana = estData.CustKname;
                 model.CustMemo = estData.CustMemo;
+                return ResponseHelper.Ok<ResponseInpCustKana>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), model);
 
-                return ResponseHelper.Ok<ResponseInpCustKana>("OK", "OK", model);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "");
-                return ResponseHelper.Error<ResponseInpCustKana>("Error", "Error");
+                _logger.LogError(ex, "getInfoCust");
+                return ResponseHelper.Error<ResponseInpCustKana>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));
+
             }
         }
 

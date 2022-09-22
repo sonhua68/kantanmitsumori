@@ -89,10 +89,10 @@
         public const string sesUserAdr = "sesUserAdr";                      //ユーザー住所
         public const string sesUserTel = "sesUserTel";                      //ユーザー電話
         public const string sesdispUserInf = "sesdispUserInf";              //ユーザー情報整形済み
-        public const string sesCustNm_forPrint = "sesCustNm_forPrint";      //ユーザーのお客様の名前
-        public const string sesCustZip_forPrint = "sesCustZip_forPrint";    //ユーザーのお客様の郵便番号
-        public const string sesCustAdr_forPrint = "sesCustAdr_forPrint";    //ユーザーのお客様の住所
-        public const string sesCustTel_forPrint = "sesCustTel_forPrint";    //ユーザーのお客様の電話番号
+        public const string sesCustNm_forPrint = "CustNm_forPrint";      //ユーザーのお客様の名前
+        public const string sesCustZip_forPrint = "CustZip_forPrint";    //ユーザーのお客様の郵便番号
+        public const string sesCustAdr_forPrint = "CustAdr_forPrint";    //ユーザーのお客様の住所
+        public const string sesCustTel_forPrint = "CustTel_forPrint";    //ユーザーのお客様の電話番号
         public const string sesOneFlg = "sesOneFlg";                        //ワンプラorワンプラ以外フラグ
         public const string sesAAPlace = "sesAAPlace";                      //AA会場
         public const string sesAANo = "sesAANo";                            //出品No

@@ -51,69 +51,44 @@ namespace KantanMitsumori.Service.Helper
                 }
                 // 再計算前の総額
                 int? oldSalesSum = estModel.SalesSum;
-
-                // 消費税率取得
-                var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.UserNo);
+                var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.UserNo!);
                 valToken.sesTaxRatio = vTax;
-
-                // 会員諸費用設定取得
-                var getUserDef = _commonFuncHelper.getUserDefData(logToken.UserNo);
-
+                var getUserDef = _commonFuncHelper.getUserDefData(logToken.UserNo!);
                 if (getUserDef != null)
                 {
                     if (estModel.ConTaxInputKb != getUserDef.ConTaxInputKb)
                     {
-                        // 消費税区分（税込／税抜）がデータと設定値で不一致の場合、データの各項目を再設定
                         estModel.ConTaxInputKb = getUserDef.ConTaxInputKb;
-
                         Type typeEst = estModel.GetType();
                         Type typeEstSub = estSubModel.GetType();
-
                         IList<PropertyInfo> propsEst = new List<PropertyInfo>(typeEst.GetProperties().Where(x => x.PropertyType.Name == "Int32"));
                         IList<PropertyInfo> propsEstSub = new List<PropertyInfo>(typeEstSub.GetProperties().Where(x => x.PropertyType.Name == "Int32"));
-
-                        // cal [Estmate]
                         foreach (PropertyInfo propEst in propsEst)
                         {
                             string properties = propEst.Name;
-                            // Do something with propValue
                             reCalEstModel.Add(propEst.Name);
-
-
                             int objValue = (int)propEst.GetValue(estModel)!;
-
                             if (reCalEstModel.Contains(propEst.Name))
                             {
                                 objValue = CommonFunction.reCalcItem(objValue, (bool)estModel.ConTaxInputKb, vTax);
                             }
-
                             propEst.SetValue(estModel, objValue);
                         }
-
-                        // cal [EstmateSub]
                         foreach (PropertyInfo propEstSub in propsEstSub)
                         {
                             string properties = propEstSub.Name;
-                            // Do something with propValue
                             reCalEstSubModel.Add(propEstSub.Name);
-
                             int objValue = (int)propEstSub.GetValue(estModel)!;
-
                             if (reCalEstSubModel.Contains(propEstSub.Name))
                             {
                                 objValue = CommonFunction.reCalcItem(objValue, (bool)estModel.ConTaxInputKb, vTax);
                             }
-
                             propEstSub.SetValue(estSubModel, objValue);
                         }
                     }
                 }
-
-                // その他費用
                 estSubModel.Sonota = estSubModel.RakuSatu
                                    + estSubModel.Rikusou;
-
-                // 付属品・特別仕様
                 estModel.OptionPriceAll = estModel.OptionPrice1
                                         + estModel.OptionPrice2
                                         + estModel.OptionPrice3
@@ -126,27 +101,19 @@ namespace KantanMitsumori.Service.Helper
                                         + estModel.OptionPrice10
                                         + estModel.OptionPrice11
                                         + estModel.OptionPrice12;
-
-                // 車両販売価格
                 estModel.CarSum = estModel.CarPrice
                                 - estModel.Discount
                                 + estSubModel.Sonota
                                 + estModel.SyakenNew
                                 + estModel.SyakenZok
                                 + estModel.OptionPriceAll;
-
-                // 税金・保険料
                 estModel.TaxInsAll = estModel.AutoTax
                             + estModel.AcqTax
                             + estModel.WeightTax
                             + estModel.DamageIns
                             + estModel.OptionIns;
-
-                // 税金・保険料相当額
                 estSubModel.TaxInsEquivalentAll = estSubModel.AutoTaxEquivalent
                                                 + estSubModel.DamageInsEquivalent;
-
-                // 預り法定費用
                 estModel.TaxFreeAll = estModel.TaxFreeCheck
                                     + estModel.TaxFreeGarage
                                     + estModel.TaxFreeTradeIn
@@ -154,8 +121,6 @@ namespace KantanMitsumori.Service.Helper
                                     + estModel.TaxFreeOther
                                     + estSubModel.TaxFreeSet1
                                     + estSubModel.TaxFreeSet2;
-
-                // 手続代行費用
                 estModel.TaxCostAll = estModel.TaxCheck
                                     + estModel.TaxGarage
                                     + estModel.TaxTradeIn
@@ -166,11 +131,11 @@ namespace KantanMitsumori.Service.Helper
                                     + estSubModel.TaxSet1
                                     + estSubModel.TaxSet2
                                     + estSubModel.TaxSet3;
-
-                // 消費税合計
-                decimal? wkContax; // 浮動小数点の計算誤差回避のため
+                decimal? wkContax;
                 if (estModel.ConTaxInputKb == false)
+                {
                     wkContax = (decimal?)((estModel.CarSum + estSubModel.TaxInsEquivalentAll + estModel.TaxCostAll) * vTax);
+                }
                 else
                 {
                     wkContax = (decimal?)((estModel.CarSum + estSubModel.TaxInsEquivalentAll + estModel.TaxCostAll) / (1 + vTax));
@@ -178,14 +143,11 @@ namespace KantanMitsumori.Service.Helper
                     wkContax = wkContax * vTax;
                 }
                 estModel.ConTax = Convert.ToInt32(Math.Floor((decimal)wkContax!));
-                // 現金販売価格
                 estModel.CarSaleSum = estModel.CarSum
                                     + estModel.TaxInsAll
                                     + estSubModel.TaxInsEquivalentAll
                                     + estModel.TaxFreeAll
                                     + estModel.TaxCostAll;
-
-                // お支払総額
                 if (estModel.ConTaxInputKb == false)
                     estModel.SalesSum = estModel.CarSaleSum
                                         + estModel.ConTax
@@ -200,12 +162,9 @@ namespace KantanMitsumori.Service.Helper
 
                 if ((oldSalesSum > 0) && (estModel.SalesSum != oldSalesSum) && (estModel.PayTimes > 0))
                 {
-                    // 総額変更ありの場合
                     if (Convert.ToBoolean(estSubModel.LoanRecalcSettingFlag))
                     {
-                        // ローンの自動再計算
                         CommonSimLon simLon = new CommonSimLon(_logger);
-
                         simLon.SaleSumPrice = Convert.ToInt32(estModel.SalesSum);
                         simLon.Deposit = Convert.ToInt32(estModel.Deposit);
                         simLon.MoneyRate = Convert.ToInt32(estModel.Rate);
@@ -218,7 +177,6 @@ namespace KantanMitsumori.Service.Helper
                             simLon.BonusSecond = Convert.ToInt32(estModel.BonusSecond);
                         }
                         simLon.ConTax = vTax;
-                        // 計算実行
                         if (simLon.calcRegLoan() == false)
                         {
                             strClearMsg = CommonConst.def_LoanInfo_Error.ToString();
@@ -251,13 +209,11 @@ namespace KantanMitsumori.Service.Helper
                 }
                 else
                 {
-                    // 総額変更なしの場合、ローン計算情報表示区分のクリア
                     estSubModel.LoanInfo = CommonConst.def_LoanInfo_Unexecuted;
                 }
                 if (strClearMsg != "")
                 {
                     estModel.Principal = estModel.SalesSum;
-                    // EstimateSubs
                     estSubModel.LoanModifyFlag = false;
                     estSubModel.LoanRecalcSettingFlag = true;
                     estSubModel.LoanInfo = Convert.ToByte(strClearMsg);
@@ -271,9 +227,9 @@ namespace KantanMitsumori.Service.Helper
                 _logger.LogError(ex, "calcSum " + "GCMF-060D");
                 return false;
             }
-
             return true;
         }
+
         public EstModel getEstData(string inEstNo, string inEstSubNo)
         {
             var responseEst = new EstModel();
@@ -380,7 +336,7 @@ namespace KantanMitsumori.Service.Helper
 
         public EstimateIdeModel setEstIDEData(ref LogToken logToken)
         {
-            var dataEstIDE = getEstIDEData(logToken.sesEstNo, logToken.sesEstSubNo);
+            var dataEstIDE = getEstIDEData(logToken.sesEstNo!, logToken.sesEstSubNo!);
             if (dataEstIDE != null)
             {
                 var getContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);
@@ -429,11 +385,11 @@ namespace KantanMitsumori.Service.Helper
                 _logger.LogError(ex, "getEstData - CEST-040D");
                 return null;
             }
-        }     
+        }
         public TEstimateSub getEstSubData(string inEstNo, string inEstSubNo)
         {
             try
-            {              
+            {
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
                 return estSubModel;
             }

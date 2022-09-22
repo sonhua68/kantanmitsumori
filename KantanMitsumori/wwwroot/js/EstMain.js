@@ -1,4 +1,5 @@
 ﻿setInitialValue();
+setInitValueCookie();
 function setInitialValue() {
     var leaseFlag = $("#hidLeaseFlag").val();
 
@@ -58,3 +59,64 @@ function inputChk() {
 
     return true;
 }
+
+function setInitValueCookie() {
+    //var custNm_forPrint = getCookie("CustNm_forPrint")
+    //var custZip_forPrint = getCookie("CustZip_forPrint")
+    //var custAdr_forPrint = getCookie("CustAdr_forPrint")
+    //var custTel_forPrint = getCookie("CustTel_forPrint")
+    //console.log(custNm_forPrint);
+    //$("#CustNm_forPrint").val(custNm_forPrint);
+    //$("#CustZip_forPrint").val(custZip_forPrint);
+    //$("#CustAdr_forPrint").val(custAdr_forPrint);
+    //$("#CustTel_forPrint").val(custTel_forPrint);
+}
+/*
+ * setCookiePageMain
+ *  Create By HoaiPhong
+ *  Date 2022/09/22
+ /*/
+(function () {
+    var oldVal;
+    var idName = "CustNm_forPrint";
+    $('#' + idName).on('change textInput input', function () {
+        var val = this.value;
+        if (val !== oldVal) {
+            oldVal = val;
+            setCookie(idName, val, 1);
+        }
+    });
+}());
+(function () {
+    var oldVal;
+    var idName = "CustZip_forPrint";
+    $('#' + idName).on('change textInput input', function () {
+        var val = this.value;
+        if (val !== oldVal) {
+            oldVal = val;
+            setCookie(idName, val, 1);
+        }
+    });
+}());
+(function () {
+    var oldVal;
+    var idName = "CustAdr_forPrint";
+    $('#' + idName).on('change textInput input', function () {
+        var val = this.value;
+        if (val !== oldVal) {
+            oldVal = val;
+            setCookie(idName, val, 1);
+        }
+    });
+}());
+(function () {
+    var oldVal;
+    var idName = "CustTel_forPrint";
+    $('#' + idName).on('change textInput input', function () {
+        var val = this.value;
+        if (val !== oldVal) {
+            oldVal = val;
+            setCookie(idName, val, 1);
+        }
+    });
+}());
