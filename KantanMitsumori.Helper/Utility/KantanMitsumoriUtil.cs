@@ -177,7 +177,12 @@ namespace KantanMitsumori.Helper.Utility
                     return GetJapanMessage(code);
             }
         }
-    
+
+        public static string GetMessage(string code)
+        {
+            return GetMessage(CommonConst.language_JP, code);
+        }
+
 
         //public static string GetEnglishMessage(string code)
         //{
