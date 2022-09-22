@@ -35,6 +35,7 @@ namespace KantanMitsumori.Controllers
         /// </summary>        
         public IActionResult DownloadMemoReport()
         {
+           
             var result = _reportService.GetMemoSubReport();
             if (result == null)
                 return ErrorAction(ResponseHelper.Error<int>("00000", "Result is null."));
