@@ -62,10 +62,10 @@ namespace KantanMitsumori.Controllers
                 filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
                 return;
             }
-            _logToken.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
-            _logToken.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
-            _logToken.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
-            _logToken.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
+            _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
+            _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
+            _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
+            _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
             var resultContext = await next();
         }
 

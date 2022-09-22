@@ -59,15 +59,7 @@ namespace KantanMitsumori.Service.ASEST
                 bool isSesPriDisp = requestAction.IsInpBack != 1 && requestAction.Sel == 0;
                 valToken.sesPriDisp = isSesPriDisp ? "0" : "";
                 valToken.stateLoadWindow = "EstMain";
-                var isMode = request.Mode != "" && Information.IsNumeric(request.Mode!);
-                if (isMode)
-                {
-                    valToken.sesMode = request.Mode;
-                }
-                else
-                {
-                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI001P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P));
-                }
+                valToken.sesMode = request.Mode ?? "2016";
                 if (!string.IsNullOrEmpty(request.PriDisp) && Information.IsNumeric(request.PriDisp!))
                 {
                     valToken.sesPriDisp = request.PriDisp;
@@ -440,7 +432,7 @@ namespace KantanMitsumori.Service.ASEST
                 var checkAANo = chkAANo(userInfo.Data.UserNo, wAANo, wAAPlace, int.Parse(wConnerType), int.Parse(wMode));
                 if (checkAANo == 1)
                 {
-                    if (!await addEstNextSubNo(valToken.sesEstNo, valToken.sesEstSubNo))
+                    if (!await addEstNextSubNo(valToken.sesEstNo!, valToken.sesEstSubNo!))
                         return ResponseHelper.Error<EstModel>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
 
                 }
@@ -509,16 +501,16 @@ namespace KantanMitsumori.Service.ASEST
                 {
                     strSavePath = request.cor + request.fex + "001.jpg";
                 }
-                _commonFuncHelper.DownloadImg(wCarImgPath, valToken.sesCarImgPath, CommonConst.def_DmyImg, ref outImg, strSavePath);
+                _commonFuncHelper.DownloadImg(wCarImgPath, valToken.sesCarImgPath!, CommonConst.def_DmyImg, ref outImg, strSavePath);
                 estModel.CarImgPath = outImg;
-                _commonFuncHelper.CheckImgPath(request.img1, valToken.sesCarImgPath1, "", ref outImg1, "201.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img2, valToken.sesCarImgPath2, "", ref outImg2, "202.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img3, valToken.sesCarImgPath3, "", ref outImg3, "203.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img4, valToken.sesCarImgPath4, "", ref outImg4, "204.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img5, valToken.sesCarImgPath5, "", ref outImg5, "205.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img6, valToken.sesCarImgPath6, "", ref outImg6, "206.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img7, valToken.sesCarImgPath7, "", ref outImg7, "207.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img8, valToken.sesCarImgPath8, "", ref outImg8, "208.jpg", request.cor, request.fex);
+                _commonFuncHelper.CheckImgPath(request.img1, valToken.sesCarImgPath1!, "", ref outImg1, "201.jpg", request.cor, request.fex);
+                _commonFuncHelper.CheckImgPath(request.img2, valToken.sesCarImgPath2!, "", ref outImg2, "202.jpg", request.cor, request.fex);
+                _commonFuncHelper.CheckImgPath(request.img3, valToken.sesCarImgPath3!, "", ref outImg3, "203.jpg", request.cor, request.fex);
+                _commonFuncHelper.CheckImgPath(request.img4, valToken.sesCarImgPath4!, "", ref outImg4, "204.jpg", request.cor, request.fex);
+                _commonFuncHelper.CheckImgPath(request.img5, valToken.sesCarImgPath5!, "", ref outImg5, "205.jpg", request.cor, request.fex);
+                _commonFuncHelper.CheckImgPath(request.img6, valToken.sesCarImgPath6!, "", ref outImg6, "206.jpg", request.cor, request.fex);
+                _commonFuncHelper.CheckImgPath(request.img7, valToken.sesCarImgPath7!, "", ref outImg7, "207.jpg", request.cor, request.fex);
+                _commonFuncHelper.CheckImgPath(request.img8, valToken.sesCarImgPath8!, "", ref outImg8, "208.jpg", request.cor, request.fex);
                 estModel.CarImgPath1 = outImg1;
                 estModel.CarImgPath2 = outImg2;
                 estModel.CarImgPath3 = outImg3;
@@ -589,7 +581,7 @@ namespace KantanMitsumori.Service.ASEST
                 estModel.SekininName = getUserDef.SekininName;
                 userDefDamageInsMonth = Convert.ToInt32(getUserDef.DamageInsMonth);
                 bool isIntHaiki = intHaiki > 0 & intHaiki <= 660;
-                if ((string.IsNullOrEmpty(valToken.sesMode) ? int.Parse(valToken.sesMode) : 0) == 0)
+                if ((string.IsNullOrEmpty(valToken.sesMode) ? int.Parse(valToken.sesMode!) : 0) == 0)
                 {
                     estModel.YtiRieki = isIntHaiki ? getUserDef.YtiRiekiK : getUserDef.YtiRiekiH;
                 }

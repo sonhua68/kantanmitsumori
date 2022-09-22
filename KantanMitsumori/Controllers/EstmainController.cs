@@ -33,8 +33,15 @@ namespace KantanMitsumori.Controllers
             }
             else
             {
+                //if(request != null)
+                //{
+                //    request.
+                //}
                 response = await _appService.getEstMain(requestAction, request);
-                setTokenCookie(response.Data!.AccessToken);
+                if (response.ResultStatus == (int)enResponse.isSuccess)
+                {
+                    setTokenCookie(response.Data!.AccessToken);
+                }              
             }
             if (response.ResultStatus == (int)enResponse.isError)
             {
