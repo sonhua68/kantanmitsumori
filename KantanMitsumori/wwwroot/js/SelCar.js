@@ -6,12 +6,12 @@ const def_SelMakerMsg = "メーカーを選択して下さい"
 const def_SelModelMsg = "車種を選択して下さい"
 const def_SelTypeMsg = "型式指定は必ず入力して下さい"
 const def_GradeNotFoundMsg = "該当するグレードが見つかりません"
-setIntData();
+
 GetListASOPMaker();
+setIntData();
 function GetListASOPMaker() {
-    ; var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPMaker");
+    var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPMaker");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-        console.log(result.data)
         let length = result.data.length;
         $("#ddlMaker").append(new Option(selectDefMaker, '-1'));
         $("#ddlMaker option[value='" + selectDefMaker + "']").attr("selected", "selected");
@@ -32,18 +32,21 @@ function GetListASOPMaker() {
 
 }
 function setIntData() {
-    $("#ddlModel").append(new Option(selectDefCarName, "-1"));
-    $("#ddlModel option[value='-1']").attr("selected", "selected");
-    $('#ddlModel').attr("disabled", true);
-    $('#btnNextGrade').attr("disabled", true);
+    let vMarkId = $("#ddlMaker").val();
+    if (vMarkId == '-1') {
+        $("#ddlModel").append(new Option(selectDefCarName, "-1"));
+        $("#ddlModel option[value='-1']").attr("selected", "selected");
+        $('#ddlModel').attr("disabled", true);
+        $('#btnNextGrade').attr("disabled", true);
+    } else {
+        GetListASOPCarName();
+    }
 
 }
 function GetListASOPCarName() {
     let vMarkId = $("#ddlMaker").val();
     var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPCarName?markId=" + vMarkId);
-    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-        $("#ddlModel").empty();
-        setIntData()
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {          
         let length = result.data.length;
         for (let i = 0; i < length; i++) {
             let text = result.data[i].carmodelCode;
@@ -81,7 +84,10 @@ function btnChkModel() {
     model.KbnSet = $("#KbnSet").val();
     var result = Framework.submitAjaxLoadData(model, "/SelCar/ChkModel");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+    } else if (result.resultStatus == 0 && result.messageCode != 'I0003') {
+
     } else {
+        let Items = result.data;
         if (typeof (Items) != "undefined") {
             $("#lblErrMsg2").html(def_GradeNotFoundMsg)
         } else {
@@ -97,6 +103,8 @@ function btnNextGrade() {
     model.sesCarNM = $("#ddlModel option:selected").text();
     var result = Framework.submitAjaxLoadData(model, "/SelCar/NextGrade");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+    } else if (result.resultStatus == 0 && result.messageCode != 'I0003') {
+
     } else {
         let Items = result.data;
         if (typeof (Items) != "undefined") {

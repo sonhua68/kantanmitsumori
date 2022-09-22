@@ -142,6 +142,31 @@ function DeleteEstimate(value) {
         LoadData(1)
     }
 }
+function AddEstimate(value) {
+    var data = value.toString().split("-");
+    let EstNo = data[0];
+    let EstSubNo = data[1];
+    var model = {};
+    model.EstNo = EstNo;
+    model.EstSubNo = EstSubNo;
+    var result = Framework.submitAjaxFormUpdateAsync(model, "/SerEst/AddEstimate");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        Framework.GoBackReloadPage();
+    }
+}
+function CalcSum(value) {
+    var data = value.toString().split("-");
+    let EstNo = data[0];
+    let EstSubNo = data[1];
+    var model = {};
+    model.EstNo = EstNo;
+    model.EstSubNo = EstSubNo;
+    var result = Framework.submitAjaxFormUpdateAsync(model, "/SerEst/CalcSum");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        Framework.GoBackReloadPage();
+    }
+}
+
 function Cleanform() {
     Resetddl();
     $("#EstNo").val("");
@@ -172,8 +197,8 @@ function AddRowTable(data) {
     var tbody = $('#TableSerEst').children('tbody');
     var table = tbody.length ? tbody : $('#TableSerEst');
     var row = '<tr id="tbremote">' +
-        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"   type = "submit"  value = "選択"/>' + '</td>' +
-        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"  type = "submit"  value = "再作成"' + '</td>' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"  href="#" onclick="CalcSum(`{{estNo}}`);return false"  type = "submit"  value = "選択"/>' + '</td>' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;" href="#" onclick="AddEstimate(`{{estNo}}`);return false" type = "submit"  value = "再作成"' + '</td>' +
         '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:120px;">{{estNo}}</td>' +
         '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:90px;white-space:nowrap;">{{tradeDate}}</td>' +
         '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{custKName}} </td>' +
@@ -192,6 +217,7 @@ function AddRowTable(data) {
         '</tr> '
 
     $('tr#tbremote').remove();
+    $('tr#pagination').remove();
     for (let i = 0; i < data.length; i++) {
         table.append(row.compose(data[i]));
     }
@@ -215,8 +241,8 @@ function AddPagination(totalPages) {
 function ReloadListData(data) {
     $("#TableSerEst").css("display", "inline-table");
     var row = '<tr id="tbremote">' +
-        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"   type = "submit"  value = "選択"/>' + '</td>' +
-        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"  type = "submit"  value = "再作成"' + '</td>' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;" href="#" onclick="CalcSum(`{{estNo}}`);return false"   type = "submit"  value = "選択"/>' + '</td>' +
+        '<td  align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:normal;width:70px;white-space:nowrap;">' + '<input style = "font-family:ＭＳ Ｐゴシック;font-size:10.5pt;font-weight:bold;height:25px;width:65px;"  type = "submit"  href="#" onclick="AddEstimate(`{{estNo}}`);return false"  value = "再作成"' + '</td>' +
         '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:120px;">{{estNo}}</td>' +
         '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;width:90px;white-space:nowrap;">{{tradeDate}}</td>' +
         '<td  align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{custKName}} </td>' +
