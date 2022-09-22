@@ -98,13 +98,13 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.SalesSumTitle, o => o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.SaleSumTitleDict), s => s.ConTaxInputKb ?? false))
                 .ForMember(t => t.SaleAll, o => o.ConvertUsing(new YenCurrencyConverter(), s => s.SalesSum))
                 .ForMember(t => t.Deposit, o => o.ConvertUsing(new YenCurrencyConverter()))
-                .ForMember(t => t.Principal, o => o.ConvertUsing(new YenCurrencyConverter(), s => s.SalesSum ?? 0 - s.Deposit ?? 0))
+                .ForMember(t => t.Principal, o => o.ConvertUsing(new YenCurrencyConverter(), s => (s.SalesSum ?? 0) - (s.Deposit ?? 0)))
                 .ForMember(t => t.PartitionFee, o => o.ConvertUsing(new YenCurrencyConverter()))
-                .ForMember(t => t.PartitionAmount, o => o.ConvertUsing(new YenCurrencyConverter(unit: " 回")))
+                .ForMember(t => t.PartitionAmount, o => o.ConvertUsing(new YenCurrencyConverter()))
                 .ForMember(t => t.Kikan, o => o.MapFrom(s => ConverterHelper.GetKikan(s.FirstPayMonth, s.LastPayMonth)))
                 .ForMember(t => t.FirstPayAmount, o => o.ConvertUsing(new YenCurrencyConverter()))
                 .ForMember(t => t.PayAmount, o => o.ConvertUsing(new YenCurrencyConverter()))
-                .ForMember(t => t.PayTimes, o => o.ConvertUsing(new YenCurrencyConverter(prefix: "（×", unit: "回）")))
+                .ForMember(t => t.PayTimes, o => o.ConvertUsing(new YenCurrencyConverter(unit: " 回")))
                 .ForMember(t => t.PayTimes2, o => o.ConvertUsing(new YenCurrencyConverter(prefix: "（×", unit: "回）"), s => s.PayTimes == null || s.PayTimes.Value == 0 ? 0 : s.PayTimes.Value - 1))
                 .ForMember(t => t.BonusMonth, o => { o.PreCondition(s => s.BonusAmount.HasValue && s.BonusAmount > 0); o.MapFrom(s => ConverterHelper.GetBonusMonth(s.BonusFirst, s.BonusSecond)); })
                 .ForMember(t => t.BonusAmount, o => o.ConvertUsing(new YenCurrencyConverter()))
@@ -138,6 +138,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.AutoTaxMonth, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.MapFrom(new AutoTaxMonthResolver()); })
                 .ForMember(t => t.AcqTax, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.WeightTax, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
+                .ForMember(t => t.DamageInsMonth, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.MapFrom(new DamageInsMonthResolver()); })
                 .ForMember(t => t.DamageIns, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.MapFrom(new DamageInsResolver()); })
                 .ForMember(t => t.OptionIns, o => { o.Condition(s => s.TaxInsInputKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxFreeGarage, o => { o.Condition(s => s.TaxFreeKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
@@ -153,8 +154,8 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.TaxOther, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.SName, o => { o.MapFrom(s => s.ShopNm); })
                 .ForMember(t => t.Address, o => { o.MapFrom(s => s.ShopAdr); })
-                .ForMember(t => t.Tanto, o => { o.MapFrom(s => $"担当 : {s.EstTanName}"); })
-                .ForMember(t => t.SekininName, o => { o.MapFrom(s => $"責任者 : {s.SekininName}"); })
+                .ForMember(t => t.Tanto, o => { o.MapFrom(new TantoResolver()); })
+                .ForMember(t => t.SekininName, o => { o.MapFrom(new SekininNameResolver()); })
                 .ForMember(t => t.Tel, o => { o.MapFrom(s => $"TEL : {s.ShopTel}"); })
                 .ForMember(t => t.ConTaxInputKb, o => { o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.ContaxInputKbDict), s => s.ConTaxInputKb ?? false); });
 
@@ -173,7 +174,9 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.TaxSet3Title, o => { o.PreCondition(s => s.IsTaxCostKb()); })
                 .ForMember(t => t.TaxSet1, o => { o.PreCondition(s => s.IsTaxCostKb()); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxSet2, o => { o.PreCondition(s => s.IsTaxCostKb()); o.ConvertUsing(new YenCurrencyConverter()); })
-                .ForMember(t => t.TaxSet3, o => { o.PreCondition(s => s.IsTaxCostKb()); o.ConvertUsing(new YenCurrencyConverter()); });
+                .ForMember(t => t.TaxSet3, o => { o.PreCondition(s => s.IsTaxCostKb()); o.ConvertUsing(new YenCurrencyConverter()); })
+                .ForMember(t => t.AutoTaxMonth, o => { o.Ignore(); })
+                .ForMember(t => t.DamageInsMonth, o => { o.Ignore(); });
 
             CreateMap<RequestReport, EstimateReportModel>()
                 .ForMember(t => t.EstNo, o => o.Ignore())

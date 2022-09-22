@@ -17,8 +17,10 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
             try
             {
                 var estSubEntity = context.Items["estSubEntity"] as TEstimateSub;
-                if (estSubEntity == null)
+                if (estSubEntity == null)                    
                     return "";
+                if (!string.IsNullOrEmpty(source.CheckCarYm) && source.CheckCarYm != "無し")
+                    return CommonConst.def_TitleDamageIns;
                 if (estSubEntity.DamageInsEquivalent.HasValue && estSubEntity.DamageInsEquivalent.Value > 0)
                     return CommonConst.def_TitleDamageInsEquivalent;
                 if (!source.DamageIns.HasValue || source.DamageIns.Value == 0)

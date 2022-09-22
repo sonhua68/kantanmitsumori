@@ -20,9 +20,9 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                     return "";
                 // No value of unit
                 if (estSubEntity == null || estSubEntity.TradeInMilUnit == null)
-                    return $"{source.Value}";
-                // value + unit
-                return $"{source.Value} {estSubEntity.MilUnit}";
+                    return $"{source.Value:N0}";
+                // value + unit                
+                return $"{source.Value:N0} {estSubEntity.TradeInMilUnit}";
             }
             catch
             {

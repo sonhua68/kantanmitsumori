@@ -22,10 +22,10 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                 if (vol == 0)
                     return "";
                 // No value of unit
-                if (estSubEntity.DispVolUnit == null)
-                    return $"{vol}";
+                if (estSubEntity == null || estSubEntity.DispVolUnit == null)
+                    return $"{vol:N0}";
                 else // value + unit
-                    return $"{vol} {estSubEntity.DispVolUnit}";
+                    return $"{vol:N0} {estSubEntity.DispVolUnit}";
             }
             catch
             {

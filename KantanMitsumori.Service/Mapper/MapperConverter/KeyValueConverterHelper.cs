@@ -32,13 +32,13 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         };
         public static Dictionary<bool, string> TaxInsEquivalentTitleDict => new Dictionary<bool, string>
         {
-            {true, $"[4]{CommonConst.def_TitleTaxInsEquivalent}{CommonConst.def_TitleInTax}" },
-            {false, $"[4]{CommonConst.def_TitleTaxInsEquivalent}{CommonConst.def_TitleOutTax}" }
+            {true, $"[2]{CommonConst.def_TitleTaxInsEquivalent}{CommonConst.def_TitleInTax}" },
+            {false, $"[2]{CommonConst.def_TitleTaxInsEquivalent}{CommonConst.def_TitleOutTax}" }
         };
         public static Dictionary<bool, string> DaikoTitleDict => new Dictionary<bool, string>
         {
-            {true, $"{CommonConst.def_TitleDaiko}{CommonConst.def_TitleInTax}" },
-            {false, $"{CommonConst.def_TitleDaiko}{CommonConst.def_TitleOutTax}" }
+            {true, $"[4]{CommonConst.def_TitleDaiko}{CommonConst.def_TitleInTax}" },
+            {false, $"[4]{CommonConst.def_TitleDaiko}{CommonConst.def_TitleOutTax}" }
         };
         public static Dictionary<bool, string> TaxTitleDict => new Dictionary<bool, string>
         {

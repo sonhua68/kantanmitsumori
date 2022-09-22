@@ -16,11 +16,11 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
             if (year >= 2099)
                 return "";
             if (year >= 2019)
-                return $"R{year - 2018:00}";
+                return $"R{year - 2018}";
             if (year >= 1989)
-                return $"H{year - 1988:00}";
+                return $"H{year - 1988}";
             if (year >= 1926)
-                return $"S{year - 1925:00}";
+                return $"S{year - 1925}";
             return "";
         }
         /// <summary>
@@ -101,9 +101,18 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         /// </summary>        
         public static string GetJpDate(string? date)
         {
-            if (string.IsNullOrEmpty(date))
+            try
+            {                
+                if (string.IsNullOrEmpty(date))
+                    return "";
+                int year = int.Parse(date.Substring(0, 4));
+                int month = int.Parse(date.Substring(4, 2));
+                return $"{year}年{month}月";
+            }
+            catch
+            {
                 return "";
-            return $"{date.Substring(0, 4)}年{date.Substring(4, 2)}月";
+            }
         }
 
         /// <summary>

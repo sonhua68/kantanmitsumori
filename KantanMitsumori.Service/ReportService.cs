@@ -110,12 +110,14 @@ namespace KantanMitsumori.Service
                     o.Items["estSubEntity"] = estSubEntity;
                     o.Items["sysEntity"] = sysEntity;
                     o.Items["commonSettings"] = _commonSettings;
+                    o.Items["requestReport"] = input;
                 });
             _mapper.Map(estSubEntity, reportModel
                 , o => {
                     o.Items["estEntity"] = estEntity;
                     o.Items["sysEntity"] = sysEntity;
                     o.Items["commonSettings"] = _commonSettings;
+                    o.Items["requestReport"] = input;
                 });
             _mapper.Map(input, reportModel);
 
