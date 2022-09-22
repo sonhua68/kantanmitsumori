@@ -347,9 +347,9 @@
         // 初年度登録
         var valFirstRegYm = $("#hidTradeInFirstRegYm").val();
         var firstYear = parseInt(valFirstRegYm.toString().substring(0, 4));
-        var firstMonth = valFirstRegYm.length > 4 ? parseInt(valFirstRegYm.toString().substring(4, 6)) : 0;
-        Framework.SetSelectedString("ddlSitaFirstY", firstYear)
-        Framework.SetSelectedNumber("ddlSitaFirstM", firstMonth)
+        var firstMonth = valFirstRegYm.length > 4 ? parseInt(valFirstRegYm.toString().substring(4, 6)).toString() : " ";
+        Framework.SetSelectedString("ddlSitaFirstY", firstYear);
+        Framework.SetSelectedNumber("ddlSitaFirstM", firstMonth);
         // 車検有効期限
         var valTradeInCheckCarYm = $("#hidTradeInCheckCarYm").val();
         if (valTradeInCheckCarYm.includes("無し")) {
@@ -358,12 +358,9 @@
             Framework.SetSelectedString("ddlSitaSyakenM", "")
         } else {
             var syakenYear = valTradeInCheckCarYm.toString().substring(0, 4);
-            var syakenMonth = valTradeInCheckCarYm.toString().substring(4, 6);
-            if (parseInt(syakenMonth) < 10) {
-                syakenMonth = syakenMonth.substring(1, 2)
-            }
-            Framework.SetSelectedString("ddlSitaSyakenY", syakenYear)
-            Framework.SetSelectedNumber("ddlSitaSyakenM", syakenMonth)
+            var syakenMonth =  valTradeInCheckCarYm.length > 4 ? parseInt(valTradeInCheckCarYm.toString().substring(4, 6)).toString() : " ";
+            Framework.SetSelectedString("ddlSitaSyakenY", syakenYear);
+            Framework.SetSelectedNumber("ddlSitaSyakenM", syakenMonth);
         }
         // 走行距離
         if ($("#hidTradeInMilUnit").val() == "km") {
