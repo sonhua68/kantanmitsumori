@@ -1,8 +1,16 @@
-﻿@*@using KantanMitsumori.Model.Response
-@model ResponseInpCustKana*@
+﻿@using KantanMitsumori.Helper.CommonFuncs
+@using KantanMitsumori.Model.Response
+@model ResponseInpSitaCar
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
+
+    var ListDropDownFirstYM = DropDownList.ListDropDownFirstYM(true);
+    var ListDropDownSyakenYM = DropDownList.ListDropDownSyakenYM(true);
+    var ListMonth = DropDownList.ListMonth(true);
+    var TradeInNowOdometer = CommonFunction.FormatString(Model.TradeInNowOdometer);
+    var TradeInPrice = CommonFunction.FormatString(Model.TradeInPrice);
+    var Balance = CommonFunction.FormatString(Model.Balance);
 }
 <form id="formInputSitaCar">
     <div align="center">
@@ -28,8 +36,8 @@
                     &nbsp;<span id="Label10" class="inplabel" style="display:inline-block;color:White;width:180px;">下取車有無</span>
                 </td>
                 <td class="inptdmst" align="left" style="width: 430px">
-                    &nbsp;<span class="inplabel" style="display:inline-block;height:21px;width:70px;"><input id="radSitaM" type="radio" name="SSita" value="radSitaM" checked="checked" onclick="resetValue();" tabindex="110"><label for="radSitaM">無し</label></span>
-                    <span class="inplabel" style="display:inline-block;height:21px;width:70px;"><input id="radSitaU" type="radio" name="SSita" value="radSitaU" onclick="resetValue();" tabindex="120"><label for="radSitaU">有り</label></span>
+                    &nbsp;<span class="inplabel" style="display:inline-block;height:21px;width:70px;"><input id="radSitaM" type="radio" name="SSita" value="0" checked="checked" onclick="resetValue();" tabindex="110"><label for="radSitaM">無し</label></span>
+                    <span class="inplabel" style="display:inline-block;height:21px;width:70px;"><input id="radSitaU" type="radio" name="SSita" value="1" onclick="resetValue();" tabindex="120"><label for="radSitaU">有り</label></span>
                 </td>
             </tr>
             <tr>
@@ -52,7 +60,7 @@
                     <span id="Label73" class="inplabel" style="display:inline-block;width:112px;">車名</span>
                 </td>
                 <td id="detail_2" class="inptd" align="left" style="width: 430px; background-color: rgb(210, 224, 251);">
-                    <input name="txtSitaCarName" type="text" maxlength="100" id="txtSitaCarName" tabindex="210" class="inpbox" style="width:330px;">
+                    <input name="SitaCarName" type="text" maxlength="100" id="txtSitaCarName" value="@Model.TradeInCarName" tabindex="210" class="inpbox" style="width:330px;">
                 </td>
             </tr>
             <tr>
@@ -60,175 +68,10 @@
                     <span id="Label111" class="inplabel" style="display:inline-block;width:112px;">登録NO</span>
                 </td>
                 <td id="detail_4" class="inptd" align="left" style="width: 430px; background-color: rgb(210, 224, 251);">
-                    <select name="ddlTorokuNo1" id="ddlTorokuNo1" tabindex="220" class="inpbox" style="width:92px;height:22px;">
-                        <option selected="selected" value="    ">    </option>
-                        <option value="札幌">札幌</option>
-                        <option value="函館">函館</option>
-                        <option value="旭川">旭川</option>
-                        <option value="室蘭">室蘭</option>
-                        <option value="釧路">釧路</option>
-                        <option value="帯広">帯広</option>
-                        <option value="北見">北見</option>
-                        <option value="青森">青森</option>
-                        <option value="八戸">八戸</option>
-                        <option value="岩手">岩手</option>
-                        <option value="盛岡">盛岡</option>
-                        <option value="平泉">平泉</option>
-                        <option value="宮城">宮城</option>
-                        <option value="仙台">仙台</option>
-                        <option value="秋田">秋田</option>
-                        <option value="山形">山形</option>
-                        <option value="庄内">庄内</option>
-                        <option value="福島">福島</option>
-                        <option value="会津">会津</option>
-                        <option value="郡山">郡山</option>
-                        <option value="いわき">いわき</option>
-                        <option value="水戸">水戸</option>
-                        <option value="土浦">土浦</option>
-                        <option value="つくば">つくば</option>
-                        <option value="宇都宮">宇都宮</option>
-                        <option value="那須">那須</option>
-                        <option value="とちぎ">とちぎ</option>
-                        <option value="群馬">群馬</option>
-                        <option value="前橋">前橋</option>
-                        <option value="高崎">高崎</option>
-                        <option value="大宮">大宮</option>
-                        <option value="川口">川口</option>
-                        <option value="所沢">所沢</option>
-                        <option value="川越">川越</option>
-                        <option value="熊谷">熊谷</option>
-                        <option value="春日部">春日部</option>
-                        <option value="越谷">越谷</option>
-                        <option value="千葉">千葉</option>
-                        <option value="成田">成田</option>
-                        <option value="習志野">習志野</option>
-                        <option value="袖ヶ浦">袖ヶ浦</option>
-                        <option value="野田">野田</option>
-                        <option value="柏">柏</option>
-                        <option value="品川">品川</option>
-                        <option value="世田谷">世田谷</option>
-                        <option value="練馬">練馬</option>
-                        <option value="杉並">杉並</option>
-                        <option value="足立">足立</option>
-                        <option value="八王子">八王子</option>
-                        <option value="多摩">多摩</option>
-                        <option value="横浜">横浜</option>
-                        <option value="川崎">川崎</option>
-                        <option value="湘南">湘南</option>
-                        <option value="相模">相模</option>
-                        <option value="山梨">山梨</option>
-                        <option value="富士山">富士山</option>
-                        <option value="新潟">新潟</option>
-                        <option value="長岡">長岡</option>
-                        <option value="長野">長野</option>
-                        <option value="松本">松本</option>
-                        <option value="諏訪">諏訪</option>
-                        <option value="富山">富山</option>
-                        <option value="石川">石川</option>
-                        <option value="金沢">金沢</option>
-                        <option value="福井">福井</option>
-                        <option value="岐阜">岐阜</option>
-                        <option value="飛騨">飛騨</option>
-                        <option value="静岡">静岡</option>
-                        <option value="浜松">浜松</option>
-                        <option value="沼津">沼津</option>
-                        <option value="伊豆">伊豆</option>
-                        <option value="名古屋">名古屋</option>
-                        <option value="豊橋">豊橋</option>
-                        <option value="三河">三河</option>
-                        <option value="岡崎">岡崎</option>
-                        <option value="豊田">豊田</option>
-                        <option value="尾張小牧">尾張小牧</option>
-                        <option value="一宮">一宮</option>
-                        <option value="春日井">春日井</option>
-                        <option value="三重">三重</option>
-                        <option value="鈴鹿">鈴鹿</option>
-                        <option value="滋賀">滋賀</option>
-                        <option value="京都">京都</option>
-                        <option value="大阪">大阪</option>
-                        <option value="なにわ">なにわ</option>
-                        <option value="和泉">和泉</option>
-                        <option value="堺">堺</option>
-                        <option value="奈良">奈良</option>
-                        <option value="和歌山">和歌山</option>
-                        <option value="神戸">神戸</option>
-                        <option value="姫路">姫路</option>
-                        <option value="鳥取">鳥取</option>
-                        <option value="島根">島根</option>
-                        <option value="岡山">岡山</option>
-                        <option value="倉敷">倉敷</option>
-                        <option value="広島">広島</option>
-                        <option value="福山">福山</option>
-                        <option value="山口">山口</option>
-                        <option value="下関">下関</option>
-                        <option value="徳島">徳島</option>
-                        <option value="香川">香川</option>
-                        <option value="愛媛">愛媛</option>
-                        <option value="高知">高知</option>
-                        <option value="福岡">福岡</option>
-                        <option value="北九州">北九州</option>
-                        <option value="久留米">久留米</option>
-                        <option value="筑豊">筑豊</option>
-                        <option value="佐賀">佐賀</option>
-                        <option value="長崎">長崎</option>
-                        <option value="佐世保">佐世保</option>
-                        <option value="熊本">熊本</option>
-                        <option value="大分">大分</option>
-                        <option value="宮崎">宮崎</option>
-                        <option value="鹿児島">鹿児島</option>
-                        <option value="奄美">奄美</option>
-                        <option value="沖縄">沖縄</option>
-
-                    </select>
+                    <select name="ddlTorokuNo1" id="ddlTorokuNo1" tabindex="220" class="inpbox" style="width:92px;height:22px;" />
                     <input name="txtToroku1" type="text" maxlength="3" id="txtToroku1" tabindex="221" class="inpbox" style="height:22px;width:36px;">
-                    <select name="ddlTorokuNo2" id="ddlTorokuNo2" tabindex="222" class="inpbox" style="width:49px;height:22px;">
-                        <option selected="selected" value="    ">    </option>
-                        <option value="あ">あ</option>
-                        <option value="い">い</option>
-                        <option value="う">う</option>
-                        <option value="え">え</option>
-                        <option value="か">か</option>
-                        <option value="き">き</option>
-                        <option value="く">く</option>
-                        <option value="け">け</option>
-                        <option value="こ">こ</option>
-                        <option value="さ">さ</option>
-                        <option value="す">す</option>
-                        <option value="せ">せ</option>
-                        <option value="そ">そ</option>
-                        <option value="た">た</option>
-                        <option value="ち">ち</option>
-                        <option value="つ">つ</option>
-                        <option value="て">て</option>
-                        <option value="と">と</option>
-                        <option value="は">は</option>
-                        <option value="ひ">ひ</option>
-                        <option value="ふ">ふ</option>
-                        <option value="ほ">ほ</option>
-                        <option value="も">も</option>
-                        <option value="や">や</option>
-                        <option value="ゆ">ゆ</option>
-                        <option value="ろ">ろ</option>
-                        <option value="わ">わ</option>
-                        <option value="を">を</option>
-                        <option value="れ">れ</option>
-                        <option value="る">る</option>
-                        <option value="り">り</option>
-                        <option value="ら">ら</option>
-                        <option value="よ">よ</option>
-                        <option value="め">め</option>
-                        <option value="む">む</option>
-                        <option value="み">み</option>
-                        <option value="ま">ま</option>
-                        <option value="の">の</option>
-                        <option value="ね">ね</option>
-                        <option value="ぬ">ぬ</option>
-                        <option value="に">に</option>
-                        <option value="な">な</option>
-                        <option value="た">た</option>
-
-                    </select>
-                    <input name="txtToroku2" type="text" maxlength="4" id="txtToroku2" tabindex="223" class="inpbox" disabled="disabled"  style="height:22px;width:52px;">
+                    <select name="ddlTorokuNo2" id="ddlTorokuNo2" tabindex="222" class="inpbox" style="width:49px;height:22px;" />
+                    <input name="txtToroku2" type="text" maxlength="4" id="txtToroku2" tabindex="223" class="inpbox" style="height:22px;width:52px;">
                 </td>
             </tr>
             <tr>
@@ -236,7 +79,7 @@
                     <span id="Label88" class="inplabel" style="display:inline-block;width:112px;">車台番号</span>
                 </td>
                 <td id="detail_6" class="inptd" align="left" style="width: 430px; background-color: rgb(210, 224, 251);">
-                    <input name="txtSitaCarNO" type="text" maxlength="30" id="txtSitaCarNO" tabindex="230" disabled="disabled" class="inpbox" style="width:206px;">
+                    <input name="SitaCarNO" type="text" maxlength="30" id="txtSitaCarNO" value="@Model.TradeInChassisNo" tabindex="230" class="inpbox" style="width:206px;">
                 </td>
             </tr>
             <tr>
@@ -245,56 +88,21 @@
                 </td>
                 <td id="detail_8" class="inptd" align="left" style="width: 430px; height: 28px; background-color: rgb(210, 224, 251);">
                     <select name="ddlSitaFirstY" id="ddlSitaFirstY" tabindex="240" class="inpbox" style="height:22px;width:120px;">
-                        <option value="    ">    </option>
-                        <option value="R4 (2022)">R4 (2022)</option>
-                        <option value="R3 (2021)">R3 (2021)</option>
-                        <option value="R2 (2020)">R2 (2020)</option>
-                        <option value="R1 (2019)">R1 (2019)</option>
-                        <option value="H30 (2018)">H30 (2018)</option>
-                        <option value="H29 (2017)">H29 (2017)</option>
-                        <option value="H28 (2016)">H28 (2016)</option>
-                        <option value="H27 (2015)">H27 (2015)</option>
-                        <option value="H26 (2014)">H26 (2014)</option>
-                        <option value="H25 (2013)">H25 (2013)</option>
-                        <option value="H24 (2012)">H24 (2012)</option>
-                        <option value="H23 (2011)">H23 (2011)</option>
-                        <option value="H22 (2010)">H22 (2010)</option>
-                        <option value="H21 (2009)">H21 (2009)</option>
-                        <option value="H20 (2008)">H20 (2008)</option>
-                        <option value="H19 (2007)">H19 (2007)</option>
-                        <option value="H18 (2006)">H18 (2006)</option>
-                        <option value="H17 (2005)">H17 (2005)</option>
-                        <option value="H16 (2004)">H16 (2004)</option>
-                        <option value="H15 (2003)">H15 (2003)</option>
-                        <option value="H14 (2002)">H14 (2002)</option>
-                        <option value="H13 (2001)">H13 (2001)</option>
-                        <option value="H12 (2000)">H12 (2000)</option>
-                        <option value="H11 (1999)">H11 (1999)</option>
-                        <option value="H10 (1998)">H10 (1998)</option>
-                        <option value="H9 (1997)">H9 (1997)</option>
-                        <option value="H8 (1996)">H8 (1996)</option>
-                        <option value="H7 (1995)">H7 (1995)</option>
-                        <option value="H6 (1994)">H6 (1994)</option>
-                        <option value="H5 (1993)">H5 (1993)</option>
-                        <option value="H4 (1992)">H4 (1992)</option>
-
+                        @{
+                            foreach (var item in ListDropDownFirstYM)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
                     </select>
                     <span id="Label9" class="inplabel" style="display:inline-block;width:13px;">年</span>
                     <select name="ddlSitaFirstM" id="ddlSitaFirstM" tabindex="241" class="inpbox" style="height:22px;width:48px;">
-                        <option selected="selected" value="    ">    </option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-
+                        @{
+                            foreach (var item in ListMonth)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
                     </select>
                     <span id="Label17" class="inplabel" style="display:inline-block;width:13px;">月</span>
                 </td>
@@ -305,30 +113,21 @@
                 </td>
                 <td id="detail_10" class="inptd" align="left" style="width: 430px; background-color: rgb(210, 224, 251);">
                     <select name="ddlSitaSyakenY" id="ddlSitaSyakenY" tabindex="250" class="inpbox" style="width:120px;height: 22px">
-                        <option value="    ">    </option>
-                        <option value="R4 (2022)">R4 (2022)</option>
-                        <option value="R5 (2023)">R5 (2023)</option>
-                        <option value="R6 (2024)">R6 (2024)</option>
-                        <option value="R7 (2025)">R7 (2025)</option>
-                        <option value="R8 (2026)">R8 (2026)</option>
-
+                        @{
+                            foreach (var item in ListDropDownSyakenYM)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
                     </select>
                     <span id="Label94" class="inplabel" style="display:inline-block;width:13px;">年</span>
-                    <select name="ddlSitaSyakenM" id="ddlSitaSyakenM" tabindex="251" class="inpbox" style="width:48px;height: 22px">
-                        <option selected="selected" value="    ">    </option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-
+                    <select op name="ddlSitaSyakenM" id="ddlSitaSyakenM" tabindex="251" class="inpbox" style="width:48px;height: 22px">
+                        @{
+                            foreach (var item in ListMonth)
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
                     </select>
                     <span id="Label93" class="inplabel" style="display:inline-block;width:23px;">月</span>
                     <span class="inplabel" style="display:inline-block;width:56px;"><input id="chkSyakenUM" type="checkbox" name="chkSyakenUM" tabindex="252"><label for="chkSyakenUM">無し</label></span>
@@ -339,10 +138,10 @@
                     <span id="Label90" class="inplabel" style="display:inline-block;width:112px;">走行距離</span>
                 </td>
                 <td id="detail_12" class="inptd" align="left" style="width: 430px; background-color: rgb(210, 224, 251);">
-                    <input name="txtSitaNowRun" type="text" maxlength="7" id="txtSitaNowRun" tabindex="260" class="inpbox_r" style="width:88px;IME-MODE: disabled">
-                    &nbsp;&nbsp;<span class="inplabel"><input id="radSitaMilUnitKM" type="radio" name="milUnit" value="radSitaMilUnitKM" checked="checked" onclick="swichUnit('SitaMilUnit');" tabindex="261"><label for="radSitaMilUnitKM">km</label></span>
-                    &nbsp;&nbsp;<span class="inplabel"><input id="radSitaMilUnitOther" type="radio" name="milUnit" value="radSitaMilUnitOther" onclick="swichUnit('SitaMilUnit');" tabindex="262"><label for="radSitaMilUnitOther">その他</label></span>
-                    <input name="txtSitaMilUnit" type="text" maxlength="10" id="txtSitaMilUnit" tabindex="263" class="inpbox" style="width: 80px; visibility: hidden;">
+                    <input name="SitaNowRun" type="text" maxlength="7" id="txtSitaNowRun" value="@TradeInNowOdometer" tabindex="260" class="inpbox_r" style="width:88px;IME-MODE: disabled">
+                    &nbsp;&nbsp;<span class="inplabel"><input id="radSitaMilUnitKM" type="radio" name="milUnit" value="km" checked="checked" onclick="swichUnit('SitaMilUnit');" tabindex="261"><label for="radSitaMilUnitKM">km</label></span>
+                    &nbsp;&nbsp;<span class="inplabel"><input id="radSitaMilUnitOther" type="radio" name="milUnit" value="その他" onclick="swichUnit('SitaMilUnit');" tabindex="262"><label for="radSitaMilUnitOther">その他</label></span>
+                    <input name="SitaMilUnit" type="text" maxlength="10" id="txtSitaMilUnit" value="@Model.TradeInMilUnit" tabindex="263" class="inpbox" style="width: 80px; visibility: hidden;">
                 </td>
             </tr>
             <tr>
@@ -350,7 +149,7 @@
                     <span id="Label91" class="inplabel" style="display:inline-block;width:112px;">色</span>
                 </td>
                 <td id="detail_14" class="inptd" align="left" style="width: 430px; background-color: rgb(210, 224, 251);">
-                    <input name="txtSitaColor" type="text" maxlength="40" id="txtSitaColor" tabindex="270" class="inpbox" style="width:335px;IME-MODE: active">
+                    <input name="SitaColor" type="text" maxlength="40" id="txtSitaColor" value="@Model.TradeInBodyColor" tabindex="270" class="inpbox" style="width:335px;IME-MODE: active">
                 </td>
             </tr>
             <tr>
@@ -373,7 +172,7 @@
                     <span id="Label86" class="inplabel" style="display:inline-block;width:180px;">下取車価格</span>
                 </td>
                 <td class="inptd" align="left" style="width: 430px">
-                    <input name="txtSitaPri" type="text" maxlength="8" id="txtSitaPri" tabindex="310" class="inpbox" disabled="disabled" style="width:94px; text-align: right;">
+                    <input name="SitaPri" type="text" maxlength="8" id="txtSitaPri" value="@TradeInPrice" tabindex="310" class="inpbox" style="width:94px; text-align: right;">
                     <span id="Label14" class="inplabel" style="display:inline-block;width:27px;">&nbsp;円</span>
                 </td>
 
@@ -383,7 +182,7 @@
                     <span id="Label79" class="inplabel" style="display:inline-block;width:180px;">下取車残債</span>
                 </td>
                 <td class="inptd" align="left" style="width: 430px">
-                    <input name="txtSitaZan" type="text" maxlength="8" id="txtSitaZan" tabindex="320" class="inpbox" disabled="disabled" style="width:94px; text-align: right;">
+                    <input name="SitaZan" type="text" maxlength="8" id="txtSitaZan" value="@Balance" tabindex="320" class="inpbox" style="width:94px; text-align: right;">
                     &nbsp;<span id="Label15" class="inplabel" style="display:inline-block;width:27px;">&nbsp;円</span>
                 </td>
             </tr>
@@ -407,7 +206,7 @@
                     <span id="Label2" class="inplabel" style="display:inline-block;width:180px;">下取車手続・処分（印紙代）</span>
                 </td>
                 <td class="inptd" align="left" style="width: 430px">
-                    <input name="txtTaxFreeTradeIn" type="text" id="txtTaxFreeTradeIn" class="inpbox_r" style="WIDTH: 94px;" size="10" value="0" disabled="disabled">
+                    <input name="txtTaxFreeTradeIn" type="text" id="txtTaxFreeTradeIn" class="inpbox_r" style="WIDTH: 94px;" size="10" disabled="disabled" value="@Model.TaxFreeTradeIn">
                     <span id="Label16" class="inplabel" style="display:inline-block;width:27px;">&nbsp;円</span>
                 </td>
             </tr>
@@ -421,7 +220,7 @@
                     <span id="Label4" class="inplabel" style="display:inline-block;width:180px;">下取車手続・処分代行</span>
                 </td>
                 <td class="inptd" align="left" style="width: 430px">
-                    <input name="txtTaxTradeIn" type="text" id="txtTaxTradeIn" class="inpbox_r" style="WIDTH: 94px;" size="10" value="0" disabled="disabled">
+                    <input name="txtTaxTradeIn" type="text" id="txtTaxTradeIn" class="inpbox_r" style="WIDTH: 94px;" size="10" disabled="disabled" value="@Model.TaxTradeIn">
                     <span id="Label12" class="inplabel" style="display:inline-block;width:27px;">&nbsp;円</span>
                 </td>
             </tr>
@@ -430,13 +229,14 @@
                     <span id="Label8" class="inplabel" style="display:inline-block;width:180px;">下取車査定料</span>
                 </td>
                 <td class="inptd" align="left" style="width: 430px">
-                    <input name="txtTaxTradeInSatei" type="text" id="txtTaxTradeInSatei" class="inpbox_r" style="WIDTH: 94px;" size="10" value="0" disabled="disabled">
+                    <input name="txtTaxTradeInSatei" type="text" id="txtTaxTradeInSatei" class="inpbox_r" style="WIDTH: 94px;" disabled="disabled" size="10" value="@Model.TaxTradeInSatei">
                     <span id="Label5" class="inplabel" style="display:inline-block;width:27px;">&nbsp;円</span>
                 </td>
             </tr>
             <tr>
                 <td class="inpbtntd" colspan="2">
-                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">&nbsp;<input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                    <input type="submit" name="btnOK" value="OK" id="btnOK" form="formInputSitaCar" class="Btn1" style="height:32px;width:100px;">&nbsp;
                 </td>
             </tr>
             <tr>
@@ -446,19 +246,34 @@
             </tr>
 
         </table>
-        <input name="EstNo" type="hidden" id="hidEstNo" value="22091900082">
-        <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="01">
-        <input name="TaxFreeTradeIn" type="hidden" id="hidTaxFreeTradeIn" value="7">
-        <input name="TaxTradeIn" type="hidden" id="hidTaxTradeIn" value="12">
-        <input name="TaxTradeInSatei" type="hidden" id="hidTaxTradeInSatei" value="13">
-        <input name="InitTaxFreeTradeIn" type="hidden" id="hidInitTaxFreeTradeIn">
-        <input name="InitTradeIn" type="hidden" id="hidInitTradeIn">
-        <input name="InitTradeInSatei" type="hidden" id="hidInitTradeInSatei">
-        @*        <input type="hidden" id="hidEstNo" name="EstNo" value="@Model.EstNo">
-        <input type="hidden" id="hidEstNo" name="EstSubNo" value="@Model.EstSubNo">*@
+        <input name="EstNo" type="hidden" id="hidEstNo" value="@Model.EstNo">
+        <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
+        <input name="TradeInRegNo" type="hidden" id="hidTradeInRegNo" value="@Model.TradeInRegNo">
+        <input name="TradeInFirstRegYm" type="hidden" id="hidTradeInFirstRegYm" value="@Model.TradeInFirstRegYm">
+        <input name="TradeInMilUnit" type="hidden" id="hidTradeInMilUnit" value="@Model.TradeInMilUnit">
+        <input name="TradeInCheckCarYm" type="hidden" id="hidTradeInCheckCarYm" value="@Model.TradeInCheckCarYm">
+        <input name="TaxFreeTradeIn" type="hidden" id="hidTaxFreeTradeIn" value="@Model.TaxFreeTradeIn">
+        <input name="TaxTradeIn" type="hidden" id="hidTaxTradeIn" value="@Model.TaxTradeIn">
+        <input name="TaxTradeInSatei" type="hidden" id="hidTaxTradeInSatei" value="@Model.TaxTradeInSatei">
+        <input name="TradeInUM" type="hidden" id="hidTradeInUM" value="@Model.TradeInUM">
     </div>
 </form>
+
 <script>
+    const listKana = ["あ", "い", "う", "え",
+                "か", "き", "く", "け", "こ",
+                "さ", "す", "せ", "そ",
+                "た", "ち", "つ", "て", "と",
+                "な", "に", "ぬ", "ね", "の",
+                "は", "ひ", "ふ", "ほ",
+                "ま", "み", "む", "め", "も",
+                "や", "ゆ", "よ",
+                "ら", "り", "る", "れ", "ろ",
+                "わ", "を"];
+    GetListRikuji();
+    GetListKana();
+    // list string characters kana
+    SetInitData();
     $('#formInputSitaCar').validate({
         submitHandler: function(form) {
             if (inputChk() == false) { return; }
@@ -466,17 +281,94 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpSitaCar/UpdateInpSitaCar");
             if (result.resultStatus == 0) {
-                Framework.GoBackReloadPageUrl('/');
+                Framework.GoBackReloadPage();
             } else {
                 let Items = result.data;
                 console.log(Items)
                 if (typeof (Items) != "undefined") {
-                    $("#Msg").html(Items)
+                    $("#txMsg").html(Items)
                 } else {
                     location.reload();
                 }
             }
         }
     });
+    function GetListRikuji() {
+        var result = Framework.GetObjectDataFromUrl("/InpSitaCar/GetListRikuji");
+        if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+            let length = result.data.length;
+            $("#ddlTorokuNo1").append(new Option(" ", " "));
+            $("#ddlTorokuNo1 option[value=' ']").attr("selected", "selected");
+            for (let i = 0; i < length; i++) {
+                let text = result.data[i];
+                let value = result.data[i];
+                $("#ddlTorokuNo1").append(new Option(value, text));
+            }
+
+        } else {
+            let Items = result.data;
+            if (typeof (Items) != "undefined") {
+                $("#txMsg").html(Items)
+            } else {
+                location.reload();
+            }
+        }
+    }
+
+    function GetListKana() {
+        $("#ddlTorokuNo2").append(new Option(" ", " "));
+        $("#ddlTorokuNo2 option[value=' ']").attr("selected", "selected");
+        listKana.forEach((kana) => {
+            $("#ddlTorokuNo2").append(new Option(kana, kana));
+        });
+    }
+
+    function SetInitData() {
+        // 下取車有無
+        if ($("#hidTradeInUM").val() == "1") {
+            $("#radSitaU").attr("checked", "checked");
+        } else {
+            $("#radSitaU").removeAttr('checked');
+        }
+        // 登録NO
+        var valTradeInRegNo = $("#hidTradeInRegNo").val() == "" ? "" : $("#hidTradeInRegNo").val().split("/");
+        if (valTradeInRegNo == "") {
+            Framework.SetSelectedString("ddlTorokuNo1");
+            document.getElementById("txtToroku1").value = "";
+            Framework.SetSelectedString("ddlTorokuNo2");
+            document.getElementById("txtToroku2").value = "";
+        }
+        else {
+            Framework.SetSelectedString("ddlTorokuNo1", valTradeInRegNo[0]);
+            document.getElementById("txtToroku1").value = valTradeInRegNo[1];
+            Framework.SetSelectedString("ddlTorokuNo2", valTradeInRegNo[2]);
+            document.getElementById("txtToroku2").value = valTradeInRegNo[3];
+        }
+        // 初年度登録
+        var valFirstRegYm = $("#hidTradeInFirstRegYm").val();
+        var firstYear = parseInt(valFirstRegYm.toString().substring(0, 4));
+        var firstMonth = valFirstRegYm.length > 4 ? parseInt(valFirstRegYm.toString().substring(4, 6)).toString() : " ";
+        Framework.SetSelectedString("ddlSitaFirstY", firstYear);
+        Framework.SetSelectedNumber("ddlSitaFirstM", firstMonth);
+        // 車検有効期限
+        var valTradeInCheckCarYm = $("#hidTradeInCheckCarYm").val();
+        if (valTradeInCheckCarYm.includes("無し")) {
+            $("#chkSyakenUM").attr('checked', true);
+            Framework.SetSelectedString("ddlSitaSyakenY", "")
+            Framework.SetSelectedString("ddlSitaSyakenM", "")
+        } else {
+            var syakenYear = valTradeInCheckCarYm.toString().substring(0, 4);
+            var syakenMonth =  valTradeInCheckCarYm.length > 4 ? parseInt(valTradeInCheckCarYm.toString().substring(4, 6)).toString() : " ";
+            Framework.SetSelectedString("ddlSitaSyakenY", syakenYear);
+            Framework.SetSelectedNumber("ddlSitaSyakenM", syakenMonth);
+        }
+        // 走行距離
+        if ($("#hidTradeInMilUnit").val() == "km") {
+            $("#radSitaMilUnitKM").attr("checked", "checked");
+        }
+        else {
+            $("#radSitaMilUnitOther").attr("checked", "checked");
+        }
+    }
 </script>
 <script src="~/js/InpSitaCar.js"></script>
