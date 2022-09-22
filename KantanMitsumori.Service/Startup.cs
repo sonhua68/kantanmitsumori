@@ -3,6 +3,7 @@ using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Service.ASEST;
 using KantanMitsumori.Service.Helper;
+using KantanMitsumori.Service.Mapper;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace KantanMitsumori.Service
@@ -27,6 +28,7 @@ namespace KantanMitsumori.Service
             services.AddTransient<IInpNotesService, InpNotesService>();
             services.AddTransient<IInpSitaCarService, InpSitaCarService>();
 
+            services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();            
             return services;
         }
 
@@ -41,6 +43,7 @@ namespace KantanMitsumori.Service
             services.AddScoped<CommonFuncHelper>();
             services.AddScoped<CommonEstimate>();
             services.AddScoped<HelperMapper>();
+            services.AddScoped<CommonSettings>();
             services.AddScoped<CommonFuncHelper>();
             return services;
         }

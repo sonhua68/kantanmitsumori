@@ -7,35 +7,21 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="Reports\Article.rpx" />
 		<None Remove="Reports\Estimate.rpx" />
 		<None Remove="Reports\EstimateWithMemo.rpx" />
-		<None Remove="Reports\EstSubArticle.rpx" />
-		<None Remove="Reports\EstSubMemo.rpx" />
-		<None Remove="Reports\img_1.jpg" />
-		<None Remove="Reports\img_2.jpg" />
-		<None Remove="Reports\img_3.jpg" />
-		<None Remove="Reports\img_4.jpg" />
-		<None Remove="Reports\img_5.jpg" />
-		<None Remove="Reports\img_6.jpg" />
-		<None Remove="Reports\img_7.jpg" />
-		<None Remove="Reports\img_8.jpg" />
-		<None Remove="Reports\img_9.jpg" />
+		<None Remove="Reports\LeaseEstimate.rpx" />
+		<None Remove="Reports\LeaseOrder.rpx" />
+		<None Remove="Reports\Memo.rpx" />
 		<None Remove="Reports\Order.rpx" />
 		<None Remove="Reports\OrderWithArticle.rpx" />
+		<EmbeddedResource Include="Reports\LeaseEstimate.rpx" />
+		<EmbeddedResource Include="Reports\LeaseOrder.rpx" />
 		<EmbeddedResource Include="Reports\OrderWithArticle.rpx" />
 		<EmbeddedResource Include="Reports\EstimateWithMemo.rpx" />
 		<EmbeddedResource Include="Reports\Estimate.rpx" />
-		<EmbeddedResource Include="Reports\EstSubMemo.rpx" />
-		<EmbeddedResource Include="Reports\EstSubArticle.rpx" />
-		<EmbeddedResource Include="Reports\img_1.jpg" />
-		<EmbeddedResource Include="Reports\img_2.jpg" />
-		<EmbeddedResource Include="Reports\img_3.jpg" />
-		<EmbeddedResource Include="Reports\img_4.jpg" />
-		<EmbeddedResource Include="Reports\img_5.jpg" />
-		<EmbeddedResource Include="Reports\img_6.jpg" />
-		<EmbeddedResource Include="Reports\img_7.jpg" />
-		<EmbeddedResource Include="Reports\img_8.jpg" />
-		<EmbeddedResource Include="Reports\img_9.jpg" />
+		<EmbeddedResource Include="Reports\Memo.rpx" />
+		<EmbeddedResource Include="Reports\Article.rpx" />
 		<EmbeddedResource Include="Reports\Order.rpx" />
 	</ItemGroup>
 
