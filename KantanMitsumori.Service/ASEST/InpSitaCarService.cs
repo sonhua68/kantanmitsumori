@@ -114,14 +114,14 @@ namespace KantanMitsumori.Service.ASEST
                     if (!string.IsNullOrEmpty(request.ddlSitaFirstM))
                     {
                         firstMonth = Convert.ToInt32(request.ddlSitaFirstM!);
-                        firstRegM = firstMonth < 10 ? "0" + firstMonth : firstMonth.ToString();
+                        firstRegM = firstMonth.ToString().PadLeft(2, '0');
                     }
                     firstRegYM = CommonFunction.Right(request.ddlSitaFirstY, 5).Replace(")", firstRegM);
                 }
                 if (!string.IsNullOrEmpty(request.ddlSitaSyakenY) || !string.IsNullOrEmpty(request.ddlSitaSyakenM))
                 {
                     var syakenMonth = Convert.ToInt32(request.ddlSitaSyakenM);
-                    string syakenMonthFormat = syakenMonth < 10 ? "0" + syakenMonth : syakenMonth.ToString();
+                    string syakenMonthFormat = syakenMonth.ToString().PadLeft(2, '0'); ;
                     checkCarYm = CommonFunction.Right(request.ddlSitaSyakenY!, 5).Replace(")", syakenMonthFormat);
                 }
                 int SitaUM = 0;

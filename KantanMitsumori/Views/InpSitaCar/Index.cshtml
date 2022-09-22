@@ -93,7 +93,7 @@
                         @{
                             foreach (var item in ListDropDownFirstYM)
                             {
-                                                                        <option value="@item.Value">@item.Text</option>
+                                <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -102,7 +102,7 @@
                         @{
                             foreach (var item in ListMonth)
                             {
-                                                                        <option value="@item.Value">@item.Text</option>
+                                <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -118,7 +118,7 @@
                         @{
                             foreach (var item in ListDropDownSyakenYM)
                             {
-                                                                        <option value="@item.Value">@item.Text</option>
+                                <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -127,7 +127,7 @@
                         @{
                             foreach (var item in ListMonth)
                             {
-                                                                        <option value="@item.Value">@item.Text</option>
+                                <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -237,7 +237,7 @@
             </tr>
             <tr>
                 <td class="inpbtntd" colspan="2">
-                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPageUrl('/');return false;" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">&nbsp;
                     <input type="submit" name="btnOK" value="OK" id="btnOK" form="formInputSitaCar" class="Btn1" style="height:32px;width:100px;">&nbsp;
                 </td>
             </tr>
@@ -258,8 +258,6 @@
         <input name="TaxTradeIn" type="hidden" id="hidTaxTradeIn" value="@Model.TaxTradeIn">
         <input name="TaxTradeInSatei" type="hidden" id="hidTaxTradeInSatei" value="@Model.TaxTradeInSatei">
         <input name="TradeInUM" type="hidden" id="hidTradeInUM" value="@Model.TradeInUM">
-        @*        <input type="hidden" id="hidEstNo" name="EstNo" value="@Model.EstNo">
-        <input type="hidden" id="hidEstNo" name="EstSubNo" value="@Model.EstSubNo">*@
     </div>
 </form>
 
@@ -285,7 +283,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpSitaCar/UpdateInpSitaCar");
             if (result.resultStatus == 0) {
-                Framework.GoBackReloadPageUrl('/');
+                Framework.GoBackReloadPage();
             } else {
                 let Items = result.data;
                 console.log(Items)
@@ -352,11 +350,8 @@
         }
         // 初年度登録
         var valFirstRegYm = $("#hidTradeInFirstRegYm").val();
-        var firstYear = valFirstRegYm.toString().substring(0, 4);
-        var firstMonth = valFirstRegYm.toString().substring(4, 6);
-        if (parseInt(firstMonth) < 10) {
-            firstMonth = firstMonth.substring(1, 2)
-        }
+        var firstYear = parseInt(valFirstRegYm.toString().substring(0, 4));
+        var firstMonth = valFirstRegYm.length > 4 ? parseInt(valFirstRegYm.toString().substring(4, 6)) : 0;
         Framework.SetSelectedString("ddlSitaFirstY", firstYear)
         Framework.SetSelectedNumber("ddlSitaFirstM", firstMonth)
         // 車検有効期限
