@@ -154,8 +154,8 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.TaxOther, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.SName, o => { o.MapFrom(s => s.ShopNm); })
                 .ForMember(t => t.Address, o => { o.MapFrom(s => s.ShopAdr); })
-                .ForMember(t => t.Tanto, o => { o.MapFrom(s => $"担当 : {s.EstTanName}"); })
-                .ForMember(t => t.SekininName, o => { o.MapFrom(s => $"責任者 : {s.SekininName}"); })
+                .ForMember(t => t.Tanto, o => { o.MapFrom(new TantoResolver()); })
+                .ForMember(t => t.SekininName, o => { o.MapFrom(new SekininNameResolver()); })
                 .ForMember(t => t.Tel, o => { o.MapFrom(s => $"TEL : {s.ShopTel}"); })
                 .ForMember(t => t.ConTaxInputKb, o => { o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.ContaxInputKbDict), s => s.ConTaxInputKb ?? false); });
 
