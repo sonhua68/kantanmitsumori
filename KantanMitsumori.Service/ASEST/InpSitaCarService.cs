@@ -48,15 +48,11 @@ namespace KantanMitsumori.Service.ASEST
                 model = _mapper.Map<ResponseInpSitaCar>(estData);
 
                 // 預り法定費用、手続代行費用のセット
-                if (model.TradeInUM == 1 || (model.TradeInUM == 0 &&
-                    (model.TaxFreeTradeIn > 0 || model.TaxTradeIn > 0 || model.TaxTradeInSatei > 0 || !string.IsNullOrEmpty(model.TradeInCarName))))
+                var hasTradeIn = (model.TradeInUM == 1 || (model.TradeInUM == 0 &&
+                    (model.TaxFreeTradeIn > 0 || model.TaxTradeIn > 0 || model.TaxTradeInSatei > 0 || !string.IsNullOrEmpty(model.TradeInCarName))));
 
-                {
-                    model.TaxFreeTradeIn = estData.TaxFreeTradeIn;
-                    model.TaxTradeIn = estData.TaxTradeIn;
-                    model.TaxTradeInSatei = estData.TaxTradeInSatei;
-                }
-                else
+                if (!hasTradeIn)
+
                 {
                     // 隠しフィールドには、設定レコードがあればその値を反映
                     var getUserDef = _commonFuncHelper.getUserDefData(userNo);
