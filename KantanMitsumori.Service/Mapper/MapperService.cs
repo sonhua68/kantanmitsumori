@@ -21,7 +21,9 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<bool?, string>().ConvertUsing(s => s.ToStringOrEmpty());
             CreateMap<DateTime?, string>().ConvertUsing(s => s.ToStringOrEmpty());
             CreateMap<byte?, string>().ConvertUsing(s => s.ToStringOrEmpty());
-            
+            // Source name as sesPropertyName
+            RecognizePrefixes("ses");
+
             // Specified class mapping            
             CreateMap<MMaker, MakerModel>();
             CreateMap<MMaker, MakerModel>();
@@ -46,8 +48,11 @@ namespace KantanMitsumori.Service.Mapper
         }
 
         private void CreateMapForReport()
-        {
-            // Report mapping
+        {            
+            // Request mapping
+            CreateMap<LogToken, RequestReport>()                
+
+            // Response mapping
             CreateMap<TEstimate, EstimateReportModel>()
                 .ForMember(t => t.EstNo, o => o.MapFrom(s => $"{s.EstNo}-{s.EstSubNo}"))
                 .ForMember(t => t.BusiDate, o => o.MapFrom(s => s.TradeDate.ToString("yyyy年M月d日")))

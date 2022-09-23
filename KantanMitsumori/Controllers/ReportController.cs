@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
+﻿using AutoMapper;
+using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.IService;
@@ -9,26 +10,31 @@ using Microsoft.AspNetCore.Mvc;
 namespace KantanMitsumori.Controllers
 {
     public class ReportController : BaseController
-    {
+    {        
         private readonly IReportService _reportService;
         private readonly ILogger<ReportController> _logger;
-        public ReportController(IReportService reportService, IConfiguration config, ILogger<ReportController> logger):base(config)
+        private readonly IMapper _mapper;
+        public ReportController(IReportService reportService, IConfiguration config, ILogger<ReportController> logger, IMapper mapper) : base(config)
         {
             _reportService = reportService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         /// <summary>
         /// Download estimate report
         /// </summary>        
-        public IActionResult DownloadEstimateReport(RequestReport? model)
+        public IActionResult DownloadEstimateReport()
         {
+            // Get request model
+            var model = new RequestReport();
+            _mapper.Map(_logToken, model);
+
             // Sample data            
             model = new RequestReport()
             {
                 EstNo = "22092300054",
-                EstSubNo = "01",
-                ReportType = ReportType.Estimate,
+                EstSubNo = "01",                
                 CustNm_forPrint = "DANG PHAM",
                 CustZip_forPrint = "702201",
                 CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
@@ -56,8 +62,12 @@ namespace KantanMitsumori.Controllers
         /// <summary>
         /// Download order report
         /// </summary>        
-        public IActionResult DownloadOrderReport(RequestReport? model)
+        public IActionResult DownloadOrderReport()
         {
+            // Get request model
+            var model = new RequestReport();
+            _mapper.Map(_logToken, model);
+
             // Sample data            
             model = new RequestReport()
             {
