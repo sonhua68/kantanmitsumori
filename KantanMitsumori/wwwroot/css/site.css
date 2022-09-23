@@ -294,6 +294,8 @@ td.info {
 }
 
 .inpbtntd {
+    border-bottom: solid 2px white;
+    border-right: solid 2px white;
     background-color: White;
     text-align: right;
     border-bottom: none;
