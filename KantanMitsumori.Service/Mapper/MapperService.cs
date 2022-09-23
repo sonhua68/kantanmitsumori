@@ -7,6 +7,7 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Model.Response.Report;
 using KantanMitsumori.Service.Mapper.MapperConverter;
+using KantanMitsumori.Entity.IDEEnitities;
 
 namespace KantanMitsumori.Service.Mapper
 {
@@ -53,8 +54,8 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.CarName, o => o.MapFrom(s => $"{s.MakerName}{s.ModelName}"))
                 .ForMember(t => t.CaseName, o => o.MapFrom(s => s.Case ?? ""))
                 .ForMember(t => t.Color, o => o.MapFrom(s => s.BodyColor ?? ""))
-                .ForMember(t => t.FirstRegYm, o => o.ConvertUsing(new JpYMConverter()))
-                .ForMember(t => t.CheckCarYm, o => o.ConvertUsing(new JpYMConverter()))
+                .ForMember(t => t.FirstRegYm, o => o.ConvertUsing(new JpEraYMConverter()))
+                .ForMember(t => t.CheckCarYm, o => o.ConvertUsing(new JpEraYMConverter()))
                 .ForMember(t => t.NowOdometer, o => o.ConvertUsing(new MiUnitConverter()))
                 .ForMember(t => t.AccidentHis, o => o.ConvertUsing(new KeyValueConverter<int>(KeyValueConverterHelper.AccidentHisDict)))
                 .ForMember(t => t.Vol, o => o.ConvertUsing(new VolUnitConverter(), s => s.DispVol))
@@ -69,8 +70,8 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.CarImg8, o => o.ConvertUsing(new ImageConverter(), s => s.CarImgPath8))
                 .ForMember(t => t.AAInfo, o => o.MapFrom(new AAInfoResolver()))
                 .ForMember(t => t.TradeInCarName, o => { o.PreCondition(c => c.IsTradeIn()); })
-                .ForMember(t => t.TradeInFirstRegYm, o => { o.PreCondition(c => c.IsTradeIn()); o.ConvertUsing(new JpYMConverter()); })
-                .ForMember(t => t.TradeInCheckCarYm, o => { o.PreCondition(c => c.IsTradeIn()); o.ConvertUsing(new JpYMConverter()); })
+                .ForMember(t => t.TradeInFirstRegYm, o => { o.PreCondition(c => c.IsTradeIn()); o.ConvertUsing(new JpEraYMConverter()); })
+                .ForMember(t => t.TradeInCheckCarYm, o => { o.PreCondition(c => c.IsTradeIn()); o.ConvertUsing(new JpEraYMConverter()); })
                 .ForMember(t => t.TradeInNowOdometer, o => { o.PreCondition(c => c.IsTradeIn()); o.ConvertUsing(new TradeInMiUnitConverter()); })
                 .ForMember(t => t.TradeInChassisNo, o => o.PreCondition(c => c.IsTradeIn()))
                 .ForMember(t => t.TradeInRegNo, o => { o.PreCondition(c => c.IsTradeIn()); o.MapFrom(s => s.TradeInRegNo != null ? s.TradeInRegNo.Replace("/", "") : ""); })
@@ -148,7 +149,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.TaxFreeOther, o => { o.Condition(s => s.TaxFreeKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxGarage, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxCheck, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
-                .ForMember(t => t.TaxTradeIn, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })                
+                .ForMember(t => t.TaxTradeIn, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxDelivery, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxRecycle, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxOther, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
@@ -178,6 +179,22 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.AutoTaxMonth, o => { o.Ignore(); })
                 .ForMember(t => t.DamageInsMonth, o => { o.Ignore(); });
 
+            CreateMap<TEstimateIde, EstimateReportModel>()
+                .ForMember(t => t.MonthlyLeaseFeeName, o => { o.MapFrom(s => $"月額リース料（税込）{s.MonthlyLeaseFee:N0}円（{s.LeasePeriod}ヶ月）"); })
+                .ForMember(t => t.InspectionExpirationDate, o => { o.ConvertUsing(new JpYMDConverter()); })
+                .ForMember(t => t.LeaseStartMonth, o => { o.ConvertUsing(new JpYMDConverter()); })
+                .ForMember(t => t.LeasePeriodName, o => { o.ConvertUsing(new YenCurrencyConverter(unit: "ヶ月"), s => s.LeasePeriod); })
+                .ForMember(t => t.LeaseExpirationDate, o => { o.ConvertUsing(new JpYMDConverter()); })
+                .ForMember(t => t.ExtendedGuarantee, o => { o.ConvertUsing(new ExtendedGuaranteeConverter(), s => s.IsExtendedGuarantee); })
+                .ForMember(t => t.HasInsurance, o => { o.ConvertUsing(new HasInsuranceConverter(), s => s.InsuranceCompanyId); })                
+                .ForMember(t => t.InsuranceFee, o => { o.ConvertUsing(new YenCurrencyConverter()); })
+                .ForMember(t => t.DownPayment, o => { o.ConvertUsing(new YenCurrencyConverter()); })
+                .ForMember(t => t.TradeInPrice1, o => { o.ConvertUsing(new YenCurrencyConverter(), s => s.TradeInPrice); });
+                
+            CreateMap<MtIdeContractPlan, EstimateReportModel>()
+                .ForMember(t => t.ContractPlanName, o => { o.MapFrom(s => s.PlanName); });
+            CreateMap<MtIdeVoluntaryInsurance, EstimateReportModel>()                
+                .ForMember(t => t.InsuranceCompanyName, o => { o.MapFrom(s => s.CompanyName); });
             CreateMap<RequestReport, EstimateReportModel>()
                 .ForMember(t => t.EstNo, o => o.Ignore())
                 .ForMember(t => t.CustNm_forPrint, o => { o.MapFrom(new CustNmResolver()); })
