@@ -13,6 +13,7 @@
     var MeiCarTaxEquivalent = CommonFunction.FormatString(Model.AutoTaxEquivalent);
     var MeiJibaiHokenEquivalent = CommonFunction.FormatString(Model.DamageInsEquivalent);
     var TaxInsEquivalentAll = CommonFunction.FormatString(Model.TaxInsEquivalentAll);
+    var hidConTaxInputKb = Model.ConTaxInputKb == true ? "True" : "false";
 
 }
 <form id="formInpZeiHoken">
@@ -219,7 +220,7 @@
                         <input name="EstNo" type="hidden" id="EstNo" value="@Model.EstNo">
                         <input name="EstSubNo" type="hidden" id="EstSubNo" value="@Model.EstSubNo">
                         <input name="DispVol" type="hidden" id="DispVol" value="@Model.DispVol">
-                        <input name="ConTaxInputKb" type="hidden" id="ConTaxInputKb" value="@Model.ConTaxInputKb">
+                        <input name="ConTaxInputKb" type="hidden" id="ConTaxInputKb" value="@hidConTaxInputKb">
                         <input name="TaxPercent" type="hidden" id="TaxPercent" value="@Model.TaxRatio">
                         <input name="AutoCalcFlg" type="hidden" id="AutoCalcFlg" value="1">
                         <input type="hidden" id="DispVolUnit" value="@Model.DispVolUnit">
