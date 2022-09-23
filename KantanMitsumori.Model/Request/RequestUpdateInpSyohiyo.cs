@@ -1,10 +1,9 @@
-﻿namespace KantanMitsumori.Model.Response
+﻿namespace KantanMitsumori.Model.Request
 {
-    public class ResponseInpSyohiyo
+    public class RequestUpdateInpSyohiyo
     {
-        public string EstNo { get; set; } = "";
-        public string EstSubNo { get; set; } = "";
-        public bool ConTaxInputKb { get; set; }
+        public string EstNo { get; set; }
+        public string EstSubNo { get; set; }
         public int TaxCheck { get; set; }
         public int TaxGarage { get; set; }
         public int TaxTradeIn { get; set; }
