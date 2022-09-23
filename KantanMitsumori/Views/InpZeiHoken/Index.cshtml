@@ -13,6 +13,7 @@
     var MeiCarTaxEquivalent = CommonFunction.FormatString(Model.AutoTaxEquivalent);
     var MeiJibaiHokenEquivalent = CommonFunction.FormatString(Model.DamageInsEquivalent);
     var TaxInsEquivalentAll = CommonFunction.FormatString(Model.TaxInsEquivalentAll);
+    var hidConTaxInputKb = Model.ConTaxInputKb == true ? "True" : "false";
 
 }
 <form id="formInpZeiHoken">
@@ -76,7 +77,7 @@
                                     </td>
                                     <td class="tabletitle" align="left" style="width: 180px">
                                         @{
-                                            if (Model.ConTaxInputKb ==true)
+                                            if (Model.ConTaxInputKb == true)
                                             {
                                                 <span id="lblTitle_TaxInsEquivalent" class="titlelabel">相当額（税込）</span>
                                             }
@@ -205,7 +206,7 @@
 
                                 <tr>
                                     <td colspan="3" class="inpbtntd">
-                                        <input type="button" name="btnCancel" onclick="Framework.GoBackReloadPageUrl('/');return false;" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="button" name="btnCancel" onclick="Framework.GoBackReloadPage();return false;" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
                                         <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
                                     </td>
                                 </tr>
@@ -219,7 +220,7 @@
                         <input name="EstNo" type="hidden" id="EstNo" value="@Model.EstNo">
                         <input name="EstSubNo" type="hidden" id="EstSubNo" value="@Model.EstSubNo">
                         <input name="DispVol" type="hidden" id="DispVol" value="@Model.DispVol">
-                        <input name="ConTaxInputKb" type="hidden" id="ConTaxInputKb" value="@Model.ConTaxInputKb">
+                        <input name="ConTaxInputKb" type="hidden" id="ConTaxInputKb" value="@hidConTaxInputKb">
                         <input name="TaxPercent" type="hidden" id="TaxPercent" value="@Model.TaxRatio">
                         <input name="AutoCalcFlg" type="hidden" id="AutoCalcFlg" value="1">
                         <input type="hidden" id="DispVolUnit" value="@Model.DispVolUnit">
@@ -244,7 +245,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpZeiHoken/UpdateInpZeiHoken");
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPageUrl('/');
+                Framework.GoBackReloadPage();
             } else {
                 let Items = result.data;
                 console.log(Items)
@@ -273,13 +274,14 @@
         } else {
             let year = FormatDayGetYear(CheckCarYm);
             let month = parseInt(FormatDayGetMonth(CheckCarYm));
+            month = (isNaN(month) ? " " : month);
             let vWareki = getWareki(year) + "年" + month + "月";
             $("#lblCheckCarYm").text(vWareki);
         }
         if (isNaN(@Model.DispVol)) {
             $("#lblDispVol").text("不明");
-            $("#lblMsgDispVol").Text(WARNING_DISP_VOL)
-            $("#AutoCalcFlg").Val("0");
+            $("#lblMsgDispVol").text(WARNING_DISP_VOL)
+            $("#AutoCalcFlg").val("0");
         } else if (DispVolUnit != def_DispVolUnitCC) {
             let disp = @Model.DispVol +" " + DispVolUnit;
             $("#lblDispVol").text(disp);
