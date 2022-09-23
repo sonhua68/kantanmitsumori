@@ -430,7 +430,7 @@ namespace KantanMitsumori.Service.Helper
             if (intYEAR_AMOUNT == -1)
                 return -1;        
             int intPassedMonth = getCarTaxPassedMonth(intRegistMonth);        
-            decimal dblCarTax = intYEAR_AMOUNT * Convert.ToDecimal(intPassedMonth / (double)12);
+            decimal dblCarTax = Math.Round(intYEAR_AMOUNT * (intPassedMonth /12.0m), 2);
             return (int)CommonFunction.ToRoundDown(dblCarTax, -2);
         }
         public bool getSelfInsurance(int intExaust, string inYear, string inMonth, int inUserDefMonth, ref int outSelfIns, ref int outRemIns)
