@@ -82,14 +82,21 @@ function GetListModel() {
 
 }
 function GetDayOfMonth(type) {
+    let d = 1;
+    let Tday = new Date();
+    let lastDay = parseInt(Tday.getDate());
     if (type == 1) {
+      
         let fromY = $('#ddlFromSelectY').val();
         let fromM = $('#ddlFromSelectM').val();
         var $this = $("#ddlFromSelectD");
+        if (parseInt(fromM) == 6) {
+            d = lastDay + 1;
+        }
         $this.empty();
         let day = new Date(fromY, fromM, 0);
         let lastDayOfMonth = parseInt(day.getDate());
-        for (let i = 1; i <= lastDayOfMonth; i++) {
+        for (let i = d; i <= lastDayOfMonth; i++) {
             $this.append(new Option(i, i));
         }
         setToDayChangeMonth(type);
@@ -97,10 +104,13 @@ function GetDayOfMonth(type) {
         let fromY = $('#ddlToSelectY').val();
         let fromM = $('#ddlToSelectM').val();
         var $this = $("#ddlToSelectD");
+        if (parseInt(fromM) == 6) {
+            d = lastDay + 1;
+        }
         $this.empty();
         let day = new Date(fromY, fromM, 0);
         let lastDayOfMonth = parseInt(day.getDate());
-        for (let i = 1; i <= lastDayOfMonth; i++) {
+        for (let i = d; i <= lastDayOfMonth; i++) {
             $this.append(new Option(i, i));
         }
         setToDayChangeMonth(type);
