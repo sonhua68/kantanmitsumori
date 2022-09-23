@@ -181,7 +181,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="inpbtntd" colspan="2" style=" height: 21px; text-align:right;">
-                                                        <input type="button" name="btnClear" value="クリア" id="btnClear" class="Btn1" onclick="return location.reload();" style="height:32px;width:100px;">
+                                                        <input type="button" name="btnClear" value="クリア" id="btnClear" class="Btn1" onclick="return RestPage();" style="height:32px;width:100px;">
                                                         <input type="button" name="btnCalc" value="計算" id="btnCalc" onclick="return CalInpLoan()" class="Btn1" style="height:32px;width:100px;">
                                                     </td>
 
@@ -359,8 +359,8 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="inpbtntd" colspan="2" style=" height: 21px; text-align:right;">
-                                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick=" Framework.GoBackReloadPage();;return false;" class="Btn1" style="height:32px;width:100px;">
-                                                        <input type="submit" name="btnOK" value="OK"  @*onclick="clickOK();"*@ form="formInpLoan" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
+                                                        <input type="submit" name="btnOK" value="OK" @*onclick="clickOK();"*@ form="formInpLoan" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -410,7 +410,6 @@
             $("#rbBonusM").prop("checked", true);
             $("#rbBonusM_Result").prop("checked", true);
         }
-        //
         if (@LoanRecalcSettingFlag== 1) {
             $("#chkProhibitAutoCalc").attr('checked', true);
         } else {
