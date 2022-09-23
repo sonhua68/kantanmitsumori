@@ -1,25 +1,56 @@
 ﻿// JScript File
 // Create Date 2022/09/09 by HoaiPhong
 
-
+let _conNumberSort = true;
+let _conNumber = 0;
 InitPage();
 function GoNextPage(pageNumber) {
     var model = {};
     model.sesMakID = $("#sesMakID").val();
     model.sesMaker = $("#sesMaker").val();
     model.sesCarNM = $("#sesCarNM").val();
+    model.colSort = _conNumber;
     model.pageNumber = pageNumber
-    var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");   
+    var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
     ReloadListData(result);
+}
+
+function SortData(colNumber) {
+    var model = {};
+    model.sesMakID = $("#sesMakID").val();
+    model.sesMaker = $("#sesMaker").val();
+    model.sesCarNM = $("#sesCarNM").val();
+    model.pageNumber = 1;
+    let number = !_conNumberSort ? getNumberSort(colNumber) : colNumber;
+    model.colSort = number;
+    var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
+    $('tr#pagination').remove();
+    $('#trId').twbsPagination('destroy');
+    UiPagination(result[0].totalPages)
+    AddPagination(result[0].totalPages);
+    ReloadListData(result);
+    _conNumberSort = !_conNumberSort;
+    _conNumber = number;
+
+
+}
+function getNumberSort(number) {
+    if (number == 3) {
+        return 5;
+    } else if (number == 4) {
+        return 6;
+    } else {
+        return 0;
+    }
 }
 function ReloadListData(data) {
     $("#gvGrade").css("display", "inline-table");
     var row = '<tr id="tbremote">' +
         '<td align="left" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">' +
-        '<input type="submit" value="選択" onclick="SetFreeEst(`{{gradeName}}`,`{{regularCase}}`,`{{dispVol}}`);return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">' +  '</td>' +
+        '<input type="submit" value="選択" onclick="SetFreeEst(`{{gradeName}}`,`{{regularCase}}`,`{{dispVol}}`);return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{gradeName}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{regularCase}}' + '</td>' +
-        '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;white-space:nowrap;">{{dispVol}' + '</td>' +
+        '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;white-space:nowrap;">{{dispVol}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{shift}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{driveTypeCode}}' + '</td>' +
         '</tr>';
@@ -42,7 +73,7 @@ function AddPagination(totalPages) {
         visiblePages: 10,
         next: '次',
         prev: '前',
-        onPageClick: function (event, page) {           
+        onPageClick: function (event, page) {
             GoNextPage(page)
         }
     });

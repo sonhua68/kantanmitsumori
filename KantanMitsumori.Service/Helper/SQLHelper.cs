@@ -59,10 +59,11 @@ namespace KantanMitsumori.Service.Helper
 
         public static string GetListSerEst(RequestSerEst requestSerEst)
         {
+            string sesMode = string.IsNullOrEmpty(requestSerEst.sesMode) ? "0" : requestSerEst.sesMode;
             string SQL = "SELECT est.EstNo + '-' + est.EstSubNo as EstNo,convert(char,TradeDate,111) as TradeDate,ISNULL(CustKName, '') AS CustKName," +
                 "isnull(MakerName,'') + ' ' + isnull(ModelName,'')  + ' ' + isnull(GradeName,'') + '<br />' + isnull(ChassisNo,'') AS CarName " +
                 "from t_Estimate est left join t_EstimateSub sub on est.EstNo = sub.EstNo AND est.EstSubNo = sub.EstSubNo " +
-                " where est.EstUserNo ='" + requestSerEst.EstUserNo + "' and sub.Mode = '" + requestSerEst.sesMode + "'";
+                " where est.EstUserNo ='" + requestSerEst.EstUserNo + "' and sub.Mode = '" + sesMode + "'";
             if (!string.IsNullOrEmpty(requestSerEst.EstNo))
             {
                 SQL += " and est.EstNo like '" + requestSerEst.EstNo + "%'";
@@ -88,11 +89,11 @@ namespace KantanMitsumori.Service.Helper
             }
             if (!string.IsNullOrEmpty(requestSerEst.ddlMaker))
             {
-                SQL += " and MakerName like= '" + requestSerEst.ddlMaker + "'";
+                SQL += " and MakerName = '" + requestSerEst.ddlMaker + "'";
             }
             if (!string.IsNullOrEmpty(requestSerEst.ddlModel))
             {
-                SQL += " and ModelName like= '" + requestSerEst.ddlModel + "'";
+                SQL += " and ModelName = '" + requestSerEst.ddlModel + "'";
             }
             if (!string.IsNullOrEmpty(requestSerEst.ChassisNo))
             {

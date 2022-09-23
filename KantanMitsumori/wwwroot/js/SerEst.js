@@ -2,6 +2,8 @@
 // Create Date 2022/09/13 by HoaiPhong
 let Tday = new Date();
 let month = parseInt(Tday.getMonth()) + 1;
+let _conNumberSort = true;
+let _conNumber = 0;
 GetListMaker();
 GetDayOfMonth(1);
 GetDayOfMonth(2);
@@ -105,16 +107,13 @@ function GetDayOfMonth(type) {
     }
 }
 function GoNextPage(pageNumber) {
-    var model = Framework.getFormData($("#FormSerEst")); 
+    var model = Framework.getFormData($("#FormSerEst"));
     model.pageNumber = pageNumber
+    model.colSort = _conNumber;
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
     ReloadListData(result);
 }
-function GoNextPage_bk(pageNumber) {
-    var model = Framework.getFormData($("#FormSerEst")); 
-    model.pageNumber = pageNumber
-    Framework.SummitForm("/SerEst", model)
-}
+
 function LoadData(pageNumber) {
     var model = Framework.getFormData($("#FormSerEst"));
     model.pageNumber = pageNumber
@@ -127,6 +126,30 @@ function LoadData(pageNumber) {
         $("#TableSerEst").css("display", "none");
     }
 
+}
+function SortData(colNumber) {
+    var model = Framework.getFormData($("#FormSerEst"));
+    model.pageNumber = 1;
+    let number = !_conNumberSort ? getNumberSort(colNumber) : colNumber;
+    model.colSort = number;
+    var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
+    $('tr#pagination').remove();
+    $('#trId').twbsPagination('destroy');
+    UiPagination(result[0].totalPages)
+    AddPagination(result[0].totalPages);
+    ReloadListData(result);
+    _conNumberSort = !_conNumberSort;
+    _conNumber = number;
+    return false;
+}
+function getNumberSort(number) {
+    if (number == 3) {
+        return 5;
+    } else if (number == 4) {
+        return 6;
+    } else {
+        return 0;
+    }
 }
 function DeleteEstimate(value) {
     var data = value.toString().split("-");
@@ -222,9 +245,7 @@ function AddRowTable(data) {
         table.append(row.compose(data[i]));
     }
     let TotalPages = data[0].totalPages;
-    if (TotalPages > 1) {
-        table.append(pageTable);
-    }
+    UiPagination(TotalPages);
 
 }
 function AddPagination(totalPages) {
@@ -233,10 +254,29 @@ function AddPagination(totalPages) {
         visiblePages: 10,
         next: '次',
         prev: '前',
-        onPageClick: function (event, page) {         
+        onPageClick: function (event, page) {
             GoNextPage(page)
         }
     });
+}
+function UiPagination(totalPages) {
+    if (totalPages > 1) {
+        $("#TableSerEst").css("display", "inline-table");
+        $('#TablePage').remove();
+        var tbody = $('#TableSerEst').children('tbody');
+        var table = tbody.length ? tbody : $('#TableSerEst');
+        var pageTable = '<tr id="pagination" align="center"  style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">' +
+            '<td colspan  = "7">' +
+            '<table border="0" id=TablePage>' +
+            '<tbody>' +
+            '<tr id="trId"> ' +
+            '</tr> ' +
+            '</tbody>' +
+            '</table>' +
+            '</td>' +
+            '</tr> '
+        table.append(pageTable);
+    }
 }
 function ReloadListData(data) {
     $("#TableSerEst").css("display", "inline-table");
@@ -256,36 +296,15 @@ function ReloadListData(data) {
     };
     SortPagination(itemsArr);
 }
-function AddHeaderName() {
-    $("#TableSerEst").css("display", "inline-table");
-    var tbody = $('#TableSerEst').children('tbody');
-    var table = tbody.length ? tbody : $('#TableSerEst');
-    var header = '<tr id="tbremote" align="center" id="tbremote" valign="middle" style="position: static;color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">' +
-        '<th scope = "col"> 選択' + '</th >' +
-        '<th scope="col">再作成' + '</th>' +
-        '<th id="SortEstNo" scope="col">' +
-        '<a href = "#" onclick = "return Framework.SortDataTable("TableSerEst","SortEstNo")" style = "color:White;" > 見積書番号' +
-        '</a> ' + '</th> ' +
-        '<th id="SortTradeDate" scope="col">' +
-        '<a href = "#" onclick ="return Framework.SortDataTable("TableSerEst","SortTradeDate")" style = "color:White;" > 見積日' +
-        '</a>' + '</th> ' +
-        '<th id="SortCustKName" scope="col">' +
-        '<a href = "#" onclick ="return Framework.SortDataTable("TableSerEst","SortCustKName")" style = "color:White;" > カナ名' +
-        '</a>' + '</th> ' +
-        '<th id="SortCarName" scope="col">' +
-        '<a href = "#" onclick = "return Framework.SortDataTable("TableSerEst","SortCarName")" style="color: White; ">車両 ' + '</a>' + '</th>' +
-        '<th scope="col">削除' + '</th>' +
-        '</tr > ';
-    table.prepend(header);
-}
+
 function SortPagination(itemsArr) {
     let p = 0;
     var tbody = $('#TableSerEst').children('tbody');
-    var items = $('#TableSerEst').children('tbody')[0].childNodes; 
+    var items = $('#TableSerEst').children('tbody')[0].childNodes;
     for (i = 0; i < items.length; ++i) {
         if (i > 0 && (items[i].id) == "pagination") {
-            p = i; 
-        } 
+            p = i;
+        }
     }
     itemsArr.push(items[p]);
     for (i = 0; i < itemsArr.length; ++i) {

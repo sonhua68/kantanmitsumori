@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
     <div class="col-sm-2">
         <div class="row">
             <div class="col-2 col-sm-2 ">
@@ -182,13 +182,12 @@
                             <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
                                 <th scope="col">選択</th>
                                 <th scope="col">再作成</th>
-                                <th id="SortEstNo" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortEstNo')" style="color:White;">見積書番号</a></th>
-                                <th id="SortTradeDate" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortTradeDate')" style="color:White;">見積日</a></th>
-                                <th id="SortCustKName" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortCustKName')" style="color:White;">カナ名</a></th>
-                                <th id="SortCarName" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortCarName')" style="color:White;">車両</a></th>
+                                <th scope="col"><a href="#" onclick="return SortData(1)" style="color:White;">見積書番号</a></th>
+                                <th scope="col"><a href="#" onclick="return SortData(2)" style="color:White;">見積日</a></th>
+                                <th scope="col"><a href="#" onclick="return SortData(3)" style="color:White;">カナ名</a></th>
+                                <th scope="col"><a href="#" onclick="return SortData(4)" style="color:White;">車両</a></th>
                                 <th scope="col">削除</th>
                             </tr>
-                            <div id="reloadData"></div>
                         </tbody>
                     </table>
 
