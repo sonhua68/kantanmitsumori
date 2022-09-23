@@ -274,7 +274,7 @@
         } else {
             let year = FormatDayGetYear(CheckCarYm);
             let month = parseInt(FormatDayGetMonth(CheckCarYm));
-            month = (isNaN(month) ? "" : month);
+            month = (isNaN(month) ? " " : month);
             let vWareki = getWareki(year) + "年" + month + "月";
             $("#lblCheckCarYm").text(vWareki);
         }
