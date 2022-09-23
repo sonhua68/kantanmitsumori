@@ -2,8 +2,7 @@
 // Create Date 2022/09/15 by HoaiPhong
 // JScript File
 
-
-
+EstSum();
 function inputChk() {
     
     document.getElementById("txMsg").innerHTML = "";
