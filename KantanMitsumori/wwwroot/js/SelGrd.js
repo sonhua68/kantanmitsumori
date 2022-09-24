@@ -109,7 +109,9 @@ function SortPagination(itemsArr) {
             p = i;
         }
     }
-    itemsArr.push(items[p]);
+    if (p != 0) {
+        itemsArr.push(items[p]);
+    }
     for (i = 0; i < itemsArr.length; ++i) {
         tbody.append(itemsArr[i]);
     }
