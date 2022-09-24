@@ -38,7 +38,7 @@ namespace KantanMitsumori.Controllers
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
             _logToken = HelperToken.EncodingToken(cookies!)!;
-            if (_logToken == null && !controllerName.Contains("Home"))
+            if (_logToken == null && !controllerName.Contains("Estmain"))
             {
                 var ErrorViewModel = new ErrorViewModel()
                 {
