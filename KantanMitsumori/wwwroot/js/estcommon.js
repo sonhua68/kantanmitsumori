@@ -264,7 +264,7 @@ function getWareki(str) {
             return "R" + (intYear - 2018);
         }
     }
-   
+
 }
 const def_Space = "    "
 /*
@@ -275,18 +275,18 @@ const def_Space = "    "
 function FormatDayGetYear(str) {
     let vlength = str.length;
     var year = "";
-    switch (vlength) {     
+    switch (vlength) {
         case 2:
-            year = def_Space; 
+            year = def_Space;
             break;
         case 1:
-            year = def_Space; 
+            year = def_Space;
             break;
         case 0:
-            year = def_Space;  
+            year = def_Space;
             break;
         default:
-            year = str.toString().substring(0, 4);  
+            year = str.toString().substring(0, 4);
             return year
     }
 }
@@ -312,7 +312,7 @@ function FormatDayGetMonth(str) {
         case 0:
             month = def_Space;
             break;
-       
+
         default:
             month = str.toString().substring(4, 6);
             return month
@@ -375,7 +375,7 @@ jQuery.fn.sortElements = (function () {
                         "Error :You can't sort elements "
                     );
                 }
-                parentNode.insertBefore(this, nextSibling);               
+                parentNode.insertBefore(this, nextSibling);
                 parentNode.removeChild(nextSibling);
             };
         });
@@ -386,3 +386,50 @@ jQuery.fn.sortElements = (function () {
     };
 
 })();
+/*
+ * setCookie
+ *  Create By HoaiPhong
+ *  Date 2022/09/22
+ /*/
+const TimeOutCooKieExdays = 30;
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (TimeOutCooKieExdays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+/*
+ * getCookie
+ *  Create By HoaiPhong
+ *  Date 2022/09/22
+ /*/
+function getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+/*
+ * checkCookie
+ *  Create By HoaiPhong
+ *  Date 2022/09/22
+ /*/
+function checkCookie() {
+    let user = getCookie("username");
+    if (user != "") {
+        console.log("Welcome again " + user);
+    } else {
+        user = prompt("Please enter your name:", "");
+        if (user != "" && user != null) {
+            setCookie("username", user, 365);
+        }
+    }
+}

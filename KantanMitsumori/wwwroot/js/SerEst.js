@@ -85,12 +85,13 @@ function GetDayOfMonth(type) {
     let d = 1;
     let Tday = new Date();
     let lastDay = parseInt(Tday.getDate());
+    let lastMonth = parseInt(Tday.getMonth()) + 1;
     if (type == 1) {
-      
+
         let fromY = $('#ddlFromSelectY').val();
         let fromM = $('#ddlFromSelectM').val();
         var $this = $("#ddlFromSelectD");
-        if (parseInt(fromM) == 6) {
+        if (parseInt(fromM) == (lastMonth - 3)) {
             d = lastDay + 1;
         }
         $this.empty();
@@ -104,7 +105,7 @@ function GetDayOfMonth(type) {
         let fromY = $('#ddlToSelectY').val();
         let fromM = $('#ddlToSelectM').val();
         var $this = $("#ddlToSelectD");
-        if (parseInt(fromM) == 6) {
+        if (parseInt(fromM) == (lastMonth - 3)) {
             d = lastDay + 1;
         }
         $this.empty();

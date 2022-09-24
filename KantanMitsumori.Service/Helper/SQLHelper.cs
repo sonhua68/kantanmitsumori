@@ -37,6 +37,19 @@ namespace KantanMitsumori.Service.Helper
 
         public static string GetListTB_RUIBETSU_NEW(RequestSelGrd requestSel)
         {
+            string SQL = "";
+            if (string.IsNullOrEmpty(requestSel.CaseSet) && string.IsNullOrEmpty(requestSel.KbnSet))
+            {
+                SQL += "MakerId = '" + requestSel.sesMakID + "' AND ModelName = '" + requestSel.sesCarNM + "'  ";
+            }
+            if (!string.IsNullOrEmpty(requestSel.CaseSet))
+            {
+                SQL += "SetNumber= '" + requestSel.CaseSet + "' ";
+            }
+            if (!string.IsNullOrEmpty(requestSel.KbnSet))
+            {
+                SQL += "And ClassNumber= '" + requestSel.KbnSet + "' ";
+            }
             return @"SELECT DISTINCT 
                     MakerId,
                     ModelName,
@@ -54,7 +67,7 @@ namespace KantanMitsumori.Service.Helper
                     DispVol = CASE DispVol WHEN '不明' THEN '' ELSE DispVol END, Shift = '',
                     DriveTypeCodeOrd = CASE upper(DriveTypeCode) WHEN '' THEN 0 WHEN '不明' THEN 0 WHEN '4WD' THEN 1 ELSE 0 END,
                     DriveTypeCode = CASE upper(DriveTypeCode) WHEN '不明' THEN '' WHEN '4WD' THEN '4WD' ELSE ''
-                    END FROM TB_RUIBETSU_N WHERE 1 = 1 AND MakerId = '" + requestSel.sesMakID + "' AND ModelName = '" + requestSel.sesCarNM + "'  ";
+                    END FROM TB_RUIBETSU_N WHERE 1 = 1 AND " + SQL;
         }
 
         public static string GetListSerEst(RequestSerEst requestSerEst)
@@ -72,7 +85,7 @@ namespace KantanMitsumori.Service.Helper
             {
                 SQL += " and est.EstSubNo= '" + requestSerEst.EstSubNo + "'";
             }
-            string date = requestSerEst.ddlToSelectY + "/" + CommonFunction.DateFormat(requestSerEst.ddlToSelectM!)+ "/" + requestSerEst.ddlToSelectD;
+            string date = requestSerEst.ddlToSelectY + "/" + CommonFunction.DateFormat(requestSerEst.ddlToSelectM!) + "/" + requestSerEst.ddlToSelectD;
             var newDate = DateTime.Parse(date);
             newDate = newDate.AddDays(1);
             string toY = newDate.Year.ToString();
@@ -82,7 +95,7 @@ namespace KantanMitsumori.Service.Helper
             string formDate = requestSerEst.ddlFromSelectY + "/" + CommonFunction.DateFormat(requestSerEst.ddlFromSelectM!) + "/" + requestSerEst.ddlFromSelectD;
             //
             SQL += " and est.RDate >= '" + formDate + "'";
-            SQL += " and est.RDate < '" + toDate + "'"; 
+            SQL += " and est.RDate < '" + toDate + "'";
             if (!string.IsNullOrEmpty(requestSerEst.CustKanaName))
             {
                 SQL += " and CustKName like '%" + requestSerEst.CustKanaName + "%'";

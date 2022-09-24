@@ -31,8 +31,6 @@ function SortData(colNumber) {
     ReloadListData(result);
     _conNumberSort = !_conNumberSort;
     _conNumber = number;
-
-
 }
 function getNumberSort(number) {
     if (number == 3) {
