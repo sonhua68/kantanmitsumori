@@ -36,6 +36,7 @@ namespace KantanMitsumori
 
             );
             HelperToken.Configure(Configuration);
+            CommonSettings.Configure(Configuration);
             services.AddUnitOfWork();
             services.AddHttpClient();
             services.AddBusinessServices();

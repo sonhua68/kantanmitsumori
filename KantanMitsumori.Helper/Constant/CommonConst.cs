@@ -4,9 +4,6 @@
     {
 
         public const string def_DmyImg = "~/img/CarImgDummy.png";
-        public const string def_ExclusionListOfAutoCalc = "F:\\KantanMitsumori\\KantanMitsumori\\wwwroot\\List\\ExclusionList_of_AutoCalc.sjis.txt";
-    
-
         /// <summary>
         /// タイトル
         /// ※プログラムで制御してセットする必要がある場合は定数を使用

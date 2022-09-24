@@ -266,7 +266,7 @@ namespace KantanMitsumori.Service.Helper
 
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
-                strCarImgPlace = "~/img/CarImg";  //"~/img/CarImg"
+                strCarImgPlace = CommonSettings.def_CarImgPlace;  
                 strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMM") + "/";
                 if (!Directory.Exists(strCarImgPlace))
                 {
@@ -321,14 +321,12 @@ namespace KantanMitsumori.Service.Helper
         }
 
 
-        // 商談メモ画像枚数追加
+   
         public void CheckImgPath(string strImagePath, string strSesName, string strDefImage, ref string strOutImagePath, string strImgSuffix, string cor, string fex)
         {
             string strOutImg = "";
             string strSaveName = "";
             string strTempImagePath = "";
-
-            // 画像が未設定の場合画像パスはなし
             if (string.IsNullOrEmpty(strImagePath))
             {
                 strOutImagePath = "";
@@ -337,13 +335,9 @@ namespace KantanMitsumori.Service.Helper
             {
                 strTempImagePath = strImagePath.ToUpper();
                 if (!strTempImagePath.EndsWith(".JPG") & !strTempImagePath.EndsWith(".GIF") & !strTempImagePath.EndsWith(".PNG") & strImgSuffix is not null)
-                {
-                    // URLの末尾が画像の拡張子ではなく、サフィックスが設定されている場合は
-                    // コーナー区分、出品番号より画像ファイル名を生成する。
+                {                   
                     strSaveName = cor + fex + strImgSuffix;
                 }
-
-                // 画像をダウンロードし、ファイル名を取得する
                 DownloadImg(strImagePath, strSesName, strDefImage, ref strOutImg, strSaveName);
                 strOutImagePath = strOutImg;
             }
@@ -363,7 +357,6 @@ namespace KantanMitsumori.Service.Helper
             {
                 return 0;
             }
-
             try
             {
                 var getPsinfos = _unitOfWork.Psinfos.GetSingle(x => x.Corner == inCor && x.ExhNum == inFullExhNum);
@@ -402,7 +395,7 @@ namespace KantanMitsumori.Service.Helper
             string[] arrExclusionList;
             try
             {
-                strExclusionList = File.ReadAllText(CommonConst.def_ExclusionListOfAutoCalc, enc);
+                strExclusionList = File.ReadAllText(CommonSettings.def_ExclusionListOfAutoCalc, enc);
                 arrExclusionList = Strings.Split(strExclusionList, Constants.vbCrLf);
             }
             catch (Exception ex)
