@@ -82,7 +82,7 @@ namespace KantanMitsumori.Service.ASEST
                 response.EstIDEModel = new EstimateIdeModel();
                 if (response.EstModel.LeaseFlag == "1")
                 {
-                    response.EstIDEModel = _commonEst.setEstIDEData(ref valToken);
+                    response.EstIDEModel = _commonEst.setEstIDEData(valToken);
                     if (response.EstIDEModel == null)
                         return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
                 }
@@ -124,7 +124,7 @@ namespace KantanMitsumori.Service.ASEST
                 response.EstCustomerModel.CustTel = logtoken.sesCustTel_forPrint ?? "";
                 if (response.EstModel.LeaseFlag == "1")
                 {
-                    response.EstIDEModel = _commonEst.setEstIDEData(ref logtoken);
+                    response.EstIDEModel = _commonEst.setEstIDEData(logtoken);
                     if (response.EstIDEModel == null)
                         return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
                 }
@@ -271,7 +271,7 @@ namespace KantanMitsumori.Service.ASEST
             response.EstIDEModel = new EstimateIdeModel();
             if (response.EstModel.LeaseFlag == "1")
             {
-                response.EstIDEModel = _commonEst.setEstIDEData(ref valToken);
+                response.EstIDEModel = _commonEst.setEstIDEData(valToken);
                 if (response.EstIDEModel == null)
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
 

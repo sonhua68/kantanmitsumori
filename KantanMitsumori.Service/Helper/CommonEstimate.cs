@@ -334,9 +334,9 @@ namespace KantanMitsumori.Service.Helper
             return ResponseHelper.Ok<EstModel>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estData);
         }
 
-        public EstimateIdeModel setEstIDEData(ref LogToken logToken)
+        public EstimateIdeModel setEstIDEData(LogToken logtoken )
         {
-            var dataEstIDE = getEstIDEData(logToken.sesEstNo!, logToken.sesEstSubNo!);
+            var dataEstIDE = getEstIDEData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
             if (dataEstIDE != null)
             {
                 var getContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);
