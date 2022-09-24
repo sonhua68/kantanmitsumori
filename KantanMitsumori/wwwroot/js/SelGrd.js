@@ -1,6 +1,7 @@
 ﻿// JScript File
 // Create Date 2022/09/09 by HoaiPhong
-
+let vCaseSet = getCookie("CaseSet");
+let vKbnSet = getCookie("KbnSet");
 let _conNumberSort = true;
 let _conNumber = 0;
 InitPage();
@@ -9,6 +10,8 @@ function GoNextPage(pageNumber) {
     model.sesMakID = $("#sesMakID").val();
     model.sesMaker = $("#sesMaker").val();
     model.sesCarNM = $("#sesCarNM").val();
+    model.CaseSet = vCaseSet;
+    model.KbnSet = vKbnSet;
     model.colSort = _conNumber;
     model.pageNumber = pageNumber
     var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
@@ -20,6 +23,8 @@ function SortData(colNumber) {
     model.sesMakID = $("#sesMakID").val();
     model.sesMaker = $("#sesMaker").val();
     model.sesCarNM = $("#sesCarNM").val();
+    model.CaseSet = vCaseSet;
+    model.KbnSet = vKbnSet;
     model.pageNumber = 1;
     let number = !_conNumberSort ? getNumberSort(colNumber) : colNumber;
     model.colSort = number;

@@ -6,9 +6,9 @@ const def_SelMakerMsg = "メーカーを選択して下さい"
 const def_SelModelMsg = "車種を選択して下さい"
 const def_SelTypeMsg = "型式指定は必ず入力して下さい"
 const def_GradeNotFoundMsg = "該当するグレードが見つかりません"
-
 GetListASOPMaker();
-setIntData();
+SetIntData();
+SetInitCarSet();
 function GetListASOPMaker() {
     var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPMaker");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
@@ -29,24 +29,36 @@ function GetListASOPMaker() {
             location.reload();
         }
     }
-
 }
-function setIntData() {
-    let vMarkId = $("#ddlMaker").val();
-    if (vMarkId == '-1') {
+function SetIntData() {
+    let vMarkId = getCookie("sesMaker");
+    if (vMarkId != "") {
+        $("#ddlMaker").val(vMarkId)
+        GetListASOPCarName();
+        let sesCarNM = $('#ddlModel').find(":selected").val();
+        Framework.SetSelectedNumber("ddlModel", parseInt(sesCarNM))
+        $('#btnNextGrade').attr("disabled", false);
+    } else {
         $("#ddlModel").append(new Option(selectDefCarName, "-1"));
         $("#ddlModel option[value='-1']").attr("selected", "selected");
         $('#ddlModel').attr("disabled", true);
         $('#btnNextGrade').attr("disabled", true);
-    } else {
-        GetListASOPCarName();
     }
 
 }
+function ReSetddlMaker() {
+    $("#ddlModel").append(new Option(selectDefCarName, "-1"));
+    $("#ddlModel option[value='-1']").attr("selected", "selected");
+    $('#ddlModel').attr("disabled", true);
+    $('#btnNextGrade').attr("disabled", true);
+}
 function GetListASOPCarName() {
+    DeleteValue();
     let vMarkId = $("#ddlMaker").val();
     var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPCarName?markId=" + vMarkId);
-    if (result.resultStatus == 0 && result.messageCode === 'I0002') {          
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        $("#ddlModel").empty();
+        ReSetddlMaker();
         let length = result.data.length;
         for (let i = 0; i < length; i++) {
             let text = result.data[i].carmodelCode;
@@ -70,7 +82,7 @@ function onchangeCarName() {
         $('#btnNextGrade').attr("disabled", true);
     } else {
         $('#btnNextGrade').attr("disabled", false);
-
+        CleanCarSet();
     }
 }
 function btnChkModel() {
@@ -91,7 +103,10 @@ function btnChkModel() {
         if (typeof (Items) != "undefined") {
             $("#lblErrMsg2").html(def_GradeNotFoundMsg)
         } else {
+            DeleteValue();
             Framework.SummitForm("/SelGrd", result)
+            setCookie("CaseSet", model.CaseSet, 1);
+            setCookie("KbnSet", model.KbnSet, 1);
         }
     }
 
@@ -111,7 +126,37 @@ function btnNextGrade() {
             $("#lblErrMsg1").html(def_GradeNotFoundMsg)
         } else {
             Framework.SummitForm("/SelGrd", result)
+            setValue(2)
+
         }
     }
 }
 
+function setValue() {
+    let sesMaker = $('#ddlMaker').find(":selected").val();
+    let sesCarNM = $('#ddlModel').find(":selected").val();
+    setCookie("sesMaker", sesMaker, 1);
+    setCookie("sesCarNM", sesCarNM, 1);
+}
+function DeleteValue() {
+    document.cookie = "ddlMaker" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = "ddlModel" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+function SetInitCarSet() {
+    let vCaseSet = getCookie("CaseSet");
+    let vKbnSet = getCookie("KbnSet");
+    if (vCaseSet != "") {
+        ReSetddlMaker()
+    }
+    $("#CaseSet").val(vCaseSet);
+    $("#KbnSet").val(vKbnSet);
+}
+function CleanCarSet() {
+    $("#CaseSet").val("");
+    $("#KbnSet").val("");
+    DeleteValueCarSet();
+}
+function DeleteValueCarSet() {
+    document.cookie = "KbnSet" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = "CaseSet" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
