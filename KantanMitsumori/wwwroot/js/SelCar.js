@@ -35,8 +35,8 @@ function SetIntData() {
     if (vMarkId != "") {
         $("#ddlMaker").val(vMarkId)
         GetListASOPCarName();
-        let sesCarNM = $('#ddlModel').find(":selected").val();
-        Framework.SetSelectedNumber("ddlModel", parseInt(sesCarNM))
+        let sesCarNM = getCookie("sesCarNM");
+        Framework.SetSelectedNumber("ddlModel", sesCarNM)
         $('#btnNextGrade').attr("disabled", false);
     } else {
         $("#ddlModel").append(new Option(selectDefCarName, "-1"));
@@ -126,7 +126,7 @@ function btnNextGrade() {
             $("#lblErrMsg1").html(def_GradeNotFoundMsg)
         } else {
             Framework.SummitForm("/SelGrd", result)
-            setValue(2)
+            setValue()
 
         }
     }
@@ -146,10 +146,12 @@ function SetInitCarSet() {
     let vCaseSet = getCookie("CaseSet");
     let vKbnSet = getCookie("KbnSet");
     if (vCaseSet != "") {
-        ReSetddlMaker()
+        $("#ddlMaker option[value='-1']").attr("selected", "selected");
+        ReSetddlMaker();
+        $("#CaseSet").val(vCaseSet);
+        $("#KbnSet").val(vKbnSet);
     }
-    $("#CaseSet").val(vCaseSet);
-    $("#KbnSet").val(vKbnSet);
+  
 }
 function CleanCarSet() {
     $("#CaseSet").val("");
