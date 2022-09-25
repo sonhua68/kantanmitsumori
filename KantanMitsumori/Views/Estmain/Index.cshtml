@@ -455,7 +455,7 @@
                         <table cellpadding="2" class="table table-responsive">
                             <tr>
                                 <td colspan="4" class="title" style="background-color: #d2e0fb; text-align: left; vertical-align: middle;">
-                                    <input type="image" src="~/img/sbtn販売価格.png" style="border-width:0px;vertical-align: middle;">
+                                    <input type="image" src="~/img/sbtn販売価格.png" onclick="Framework.GoBackReloadPageUrl('/InpCarPrice');return false;" style="border-width:0px;vertical-align: middle;">
                                 </td>
                             </tr>
                             <tr>
@@ -653,7 +653,7 @@
                                     <span id="lbl_SalesSumTitle">@estModelView.SalesSumTitle</span>
                                 </td>
                                 <td class="btnImgPrice" style="background-color: #eee;">
-                                    <input type="image" class="imgBtn" src="~/img/sbtn編集.png">
+                                    <input type="image" class="imgBtn" onclick="Framework.GoBackReloadPageUrl('/InpNebiki');return false;" src="~/img/sbtn編集.png">
                                 </td>
                                 <td class="txtprice" style="background-color: #eee;">
                                     <span id="lbl_SalesSum">@estModelView.SalesSum</span>

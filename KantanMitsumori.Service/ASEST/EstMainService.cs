@@ -501,15 +501,7 @@ namespace KantanMitsumori.Service.ASEST
             string outImg2 = ""; string outImg3 = ""; string outImg4 = ""; string outImg5 = ""; string outImg6 = ""; string outImg7 = ""; string outImg8 = "";
             if (string.IsNullOrEmpty(wCarImgPath))
             {
-                estModel.CarImgPath = CommonConst.def_DmyImg;
-                estModel.CarImgPath1 = "";
-                estModel.CarImgPath2 = "";
-                estModel.CarImgPath3 = "";
-                estModel.CarImgPath4 = "";
-                estModel.CarImgPath5 = "";
-                estModel.CarImgPath6 = "";
-                estModel.CarImgPath7 = "";
-                estModel.CarImgPath8 = "";
+                estModel.CarImgPath = CommonConst.def_DmyImg;               
             }
             else
             {
@@ -556,15 +548,14 @@ namespace KantanMitsumori.Service.ASEST
             estModel.ShopTel = userInfo.Data.UserTel;
             estModel.Corner = request.cor;
             estModel.Aacount = vAAcount;
-            estModel.Mode = Convert.ToByte(request.Mode);
-            estModel.Notes = "";
+            estModel.Mode = Convert.ToByte(request.Mode);          
             estModel.Aayear = vNensiki;
             estModel.Aahyk = string.IsNullOrEmpty(request.poi) || !Information.IsNumeric(request.poi) ? "0" : request.poi;
             estModel.Aaprice = (int)intCarPrice;
             estModel.SirPrice = estModel.CarPrice;
             estModel.YtiRieki = 0;
-            estModel.Aaplace = request.aan == "" ? "" : request.aan;
-            estModel.Aano = request.exh == "" ? "" : request.exh;
+            estModel.Aaplace = request.aan;
+            estModel.Aano = request.exh;
             if (!string.IsNullOrEmpty(request.lim))
             {
                 string vAATime = request.lim.Trim();
@@ -681,7 +672,7 @@ namespace KantanMitsumori.Service.ASEST
             {
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAI029D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI029D));
 
-            }         
+            }
 
             return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estModel);
 
@@ -768,7 +759,8 @@ namespace KantanMitsumori.Service.ASEST
             CommonFunction.FormatDay(Model.EstModel.CheckCarYm ?? "0", ref Ysc, ref Msc);
             estModelView.CheckCarYm = Model.EstModel.CheckCarYm == "無し" || string.IsNullOrEmpty(Model.EstModel.CheckCarYm) ? Model.EstModel.CheckCarYm : CommonFunction.getWareki(Ysc) + "年" + Msc + "月";
             estModelView.NowRun = Information.IsNumeric(Model.EstModel.NowOdometer) ? CommonFunction.setFormatCurrency(Model.EstModel.NowOdometer, Model.EstModel.MilUnit) : "";
-            estModelView.Vol = CommonFunction.setFormatCurrency(Model.EstModel.DispVol, Model.EstModel.DispVolUnit);
+            var DispVol = string.IsNullOrEmpty(Model.EstModel.DispVol) ? 0 : Convert.ToInt32(Model.EstModel.DispVol);
+            estModelView.Vol = CommonFunction.setFormatCurrency(DispVol, Model.EstModel.DispVolUnit);
 
 
             if (Strings.Trim(Model.EstModel.EstTanName) != "")
