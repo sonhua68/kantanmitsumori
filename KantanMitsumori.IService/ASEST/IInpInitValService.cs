@@ -8,6 +8,6 @@ namespace KantanMitsumori.IService
     public interface IInpInitValService
     {   
         ResponseBase<ResponseUserDef> GetUserDefData(string userNo);
-        Task<ResponseBase<int>> UpdateInpInitVal(RequestUpdateInpInitVal model);
+        Task<ResponseBase<int>> UpdateInpInitVal(RequestUpdateInpInitVal model, LogToken logToken);
     }
 }
