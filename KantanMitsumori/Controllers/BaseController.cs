@@ -37,6 +37,7 @@ namespace KantanMitsumori.Controllers
             var cookies = Request.Cookies[COOKIES]!;
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
+            if(controllerName.Contains("Home")) await next();
             _logToken = HelperToken.EncodingToken(cookies!)!;
             if (_logToken == null && !controllerName.Contains("Estmain"))
             {
@@ -56,7 +57,7 @@ namespace KantanMitsumori.Controllers
                 _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
             }
 
-            var resultContext = await next();
+            await next();
         }
 
         public IActionResult ErrorAction<T>(ResponseBase<T> response)

@@ -245,7 +245,7 @@
                                     お名前
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="40" class="inpbox" id="CustNm_forPrint" name="CustNm_forPrint" value="@Model.EstCustomerModel.CustNm" />
+                                    <input type="text" maxlength="40" class="inpbox" id="CustNm_forPrint" name="CustNm_forPrint" value="@Model.EstCustomerModel.CustNm" style="width:220px" />
                                 </td>
                             </tr>
                             <tr>
@@ -253,7 +253,7 @@
                                     郵便番号
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="8" class="inpbox" id="CustZip_forPrint" name="CustZip_forPrint" value="@Model.EstCustomerModel.CustZip" />
+                                    <input type="text" maxlength="8" class="inpbox" id="CustZip_forPrint" name="CustZip_forPrint" value="@Model.EstCustomerModel.CustZip" style="width:160px"/>
                                 </td>
                             </tr>
                             <tr>
@@ -269,7 +269,7 @@
                                     電話番号
                                 </td>
                                 <td class="data">
-                                    <input type="text" maxlength="13" class="inpbox" id="CustTel_forPrint" name="CustTel_forPrint" value="@Model.EstCustomerModel.CustTel" />
+                                    <input type="text" maxlength="13" class="inpbox" id="CustTel_forPrint" name="CustTel_forPrint" value="@Model.EstCustomerModel.CustTel" style="width:200px"/>
                                 </td>
                             </tr>
                         </table>
@@ -1284,7 +1284,7 @@
         if (@Model.EstModel.AccidentHis == 0) {
             $("#raJikoHisMu").attr("checked", "checked");
 
-        } else {
+        } else if(@Model.EstModel.AccidentHis == 1) {
             $("#raJikoHisU").attr("checked", "checked");
         }
     }

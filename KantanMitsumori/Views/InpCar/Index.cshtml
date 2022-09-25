@@ -260,7 +260,7 @@
         if (@Model.AccidentHis == 0) {
             $("#raSyuhukuM").attr("checked", "checked");
 
-        } else {
+        } else if (@Model.AccidentHis == 1) {
             $("#raSyuhukuU").attr("checked", "checked");
         }
         var businessHis = $("#hidBusinessHis").val() == "" ? "自家用" : $("#hidBusinessHis").val();

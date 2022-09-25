@@ -1,25 +1,18 @@
 ﻿@using KantanMitsumori.Model;
 @model LogToken
 <div class="row">
-    <div class="col-md-6 col-sm-6">
-        @{
-            if (Model.sesMode == "1")
-            {
-                <img src="~/img/TentoLogo.png" />
-            }
-            else
-            {
-                <img src="~/img/AsLogo.png" />
-            }
+    @{
+        if (Model.sesMode == "1")
+        {
+            <img src="~/img/TentoLogo.png" class="imgHeader" />
         }
-        <img src="~/img/HeadTitle.gif" />
-    </div>
-    <div class="col-md-1 col-sm-1">
-    </div>
-    <div class="col-md-4 col-sm-4">
-        <span id="lblUsr" style="display:inline-block;color:Black;font-size:12pt;font-weight:bold;height:12px;
-          position: sticky; top: 11px; text-align: right">@Model.UserNo　@Model.UserNm　様</span>
-    </div>
+        else
+        {
+            <img src="~/img/AsLogo.png" class="imgHeader" />
+        }
+    }
+    <img src="~/img/HeadTitle.gif" class="imgHeader" />
+    <span id="lblUsr" class="headerTitle">@Model.UserNo　@Model.UserNm　様</span>
 
 </div>
-<img class="rounded mx-auto d-block" src="~/img/HeadLine.gif" />
+<img class="rounded mx-auto d-block" src="~/img/HeadLine.gif" style="width:100%" />
