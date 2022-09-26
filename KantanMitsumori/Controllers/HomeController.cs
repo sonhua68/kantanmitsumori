@@ -33,7 +33,7 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             var mode = new LogToken();
-            mode.sesEstNo = "22091900091"; mode.sesEstSubNo = "01";
+            mode.sesEstNo = "22092300049"; mode.sesEstSubNo = "01";
             mode.UserNo = "88888195";
             mode.UserNm = "testuser88888195";
             var token = HelperToken.GenerateJsonToken(mode);
