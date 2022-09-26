@@ -14,7 +14,7 @@
             <div class="border-button container text-center">
                 <br>
                 <div class="col d-flex justify-content-between">
-                    <a href="#" onclick="Framework.GoBackReloadPage();return false">
+                    <a href="#" onclick="Framework.GoBackPage();return false">
                         <img src="./img/btn%e8%a6%8b%e7%a9%8dTOP.png">
                     </a>
                 </div>
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
     <div class="col-sm-2">
         <div class="row">
             <div class="col-2 col-sm-2 ">
@@ -62,9 +62,9 @@
                                     <span id="Label2" class="inplabel" style="display:inline-block;height:17px;">見積書番号</span>
                                 </td>
                                 <td align="left" class="inptd">
-                                    <input name="EstNo" type="text" maxlength="11" id="EstNo" tabindex="1" class="inpbox" style="width:111px;IME-MODE:disabled">
+                                    <input name="EstNo" type="text" maxlength="11" id="EstNo" tabindex="1" class="inpbox" style="width:111px;">
                                     <span id="Label3" class="inplabel" style="display:inline-block;height:20px;">－</span>
-                                    <input name="EstSubNo" type="text" maxlength="2" id="EstSubNo" tabindex="2" class="inpbox" style="width:40px;IME-MODE:disabled">
+                                    <input name="EstSubNo" type="text" maxlength="2" id="EstSubNo" tabindex="2" class="inpbox" style="width:40px;">
                                 </td>
                             </tr>
                             <tr>
@@ -72,7 +72,7 @@
                                     <span id="Label1" class="inplabel">見積書作成日</span>
                                 </td>
                                 <td align="left" class="inptd">
-                                    <select name="ddlFromSelectY" onchange="javascript:setTimeout('__doPostBack(\'ddlFromSelectY\',\'\')', 0)" id="ddlFromSelectY" tabindex="4" class="inpbox" style="width:70px;">
+                                    <select name="ddlFromSelectY"  id="ddlFromSelectY" tabindex="4" class="inpbox" style="width:70px;">
                                         <option selected="selected" value="@DateTime.Now.Year">@DateTime.Now.Year</option>
 
                                     </select>
@@ -101,7 +101,7 @@
                                     </select>
                                     <span id="Label5" class="inplabel" style="display:inline-block;width:13px;">日</span>
                                     <span id="Label9" class="inplabel" style="display:inline-block;font-size:14pt;font-weight:bold;width:29px;text-align:center;">～</span>&nbsp;
-                                    <select name="ddlToSelectY" onchange="javascript:setTimeout('__doPostBack(\'ddlToSelectY\',\'\')', 0)" id="ddlToSelectY" tabindex="7" class="inpbox" style="width:70px;">
+                                    <select name="ddlToSelectY"  id="ddlToSelectY" tabindex="7" class="inpbox" style="width:70px;">
                                         <option selected="selected" value="@DateTime.Now.Year">@DateTime.Now.Year</option>
 
                                     </select>
@@ -182,13 +182,12 @@
                             <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
                                 <th scope="col">選択</th>
                                 <th scope="col">再作成</th>
-                                <th id="SortEstNo" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortEstNo')" style="color:White;">見積書番号</a></th>
-                                <th id="SortTradeDate" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortTradeDate')" style="color:White;">見積日</a></th>
-                                <th id="SortCustKName" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortCustKName')" style="color:White;">カナ名</a></th>
-                                <th id="SortCarName" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortCarName')" style="color:White;">車両</a></th>
+                                <th scope="col"><a href="#" onclick="return SortData(1)" style="color:White;">見積書番号</a></th>
+                                <th scope="col"><a href="#" onclick="return SortData(2)" style="color:White;">見積日</a></th>
+                                <th scope="col"><a href="#" onclick="return SortData(3)" style="color:White;">カナ名</a></th>
+                                <th scope="col"><a href="#" onclick="return SortData(4)" style="color:White;">車両</a></th>
                                 <th scope="col">削除</th>
                             </tr>
-                            <div id="reloadData"></div>
                         </tbody>
                     </table>
 

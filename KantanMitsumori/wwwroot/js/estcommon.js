@@ -4,6 +4,16 @@ function closeWin() {
     window.close();
 }
 
+// function input only number
+function onlyNumbers(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
 /* 数値桁揃え関数 */
 function format(val, digit, flg) {//val:数値;digit:桁;flg:(0:四捨五入;1:切り捨て;2:切り上げ)
     val *= Math.pow(10.0, digit);
@@ -312,12 +322,10 @@ function FormatDayGetMonth(str) {
         case 0:
             month = def_Space;
             break;
-
         default:
             month = str.toString().substring(4, 6);
             return month
     }
-
 }
 /*
  * groupBy
@@ -351,10 +359,24 @@ String.prototype.compose = (function () {
     }
 }());
 /*
+ *  
+ *  Create By HoaiPhong
+ *  Date 2022/09/23
+ /*/
+$(document).ready(function () {
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+});
+/*
  * sortElements
  *  Create By HoaiPhong
  *  Date 2022/09/14
  /*/
+
 jQuery.fn.sortElements = (function () {
     var sort = [].sort;
     return function (comparator, getSortable) {
@@ -432,9 +454,13 @@ function checkCookie() {
             setCookie("username", user, 365);
         }
     }
+
 }
 // constant
 var DATE_FORMAT_MOMENT = "DD-MMM-YY";
 var DATE_FORMAT_MOMENT_NEW = "DD-MM-YYYY";
 var DATE_FORMAT_MOMENT_WITH_TIME = "DD-MMM-YY hh:mm A";
 var DATE_FORMAT_MOMENT_WITH_TIME_NEW = "DD-MM-YYYY HH:mm:ss";
+
+
+

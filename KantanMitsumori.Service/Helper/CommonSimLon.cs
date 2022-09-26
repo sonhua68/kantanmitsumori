@@ -217,12 +217,11 @@ namespace KantanMitsumori.Service.Helper
         // **************************************************************************
         // * 指定桁未満を切り捨て2
         // **************************************************************************
-        public decimal ToRoundDown(int inint, decimal inSgl, int iDigits)
+        public decimal ToRoundDown(long inint, decimal inSgl, int iDigits)
         {
             decimal dCoef = (decimal)Math.Pow(10, iDigits);
-            int intR = (int)(inSgl * 10000);
-            decimal dValue = inint * intR / (decimal)10000;
-
+            long intR = (int)(inSgl * 10000);
+            decimal dValue = (inint * intR * 1.0m) / 10000.0m;
             if (dValue > 0)
                 return Math.Floor(dValue * dCoef) / dCoef;
             else

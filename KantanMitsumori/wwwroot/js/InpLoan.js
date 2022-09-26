@@ -86,7 +86,7 @@ function chgBonus_Result() {
         $('#BonusSecondMonth').css('background-color', TRUE_COLOR);
         $('#BonusTimes').css('background-color', TRUE_COLOR);
 
-    } else {
+    } else if ($("#hidLoanModifyFlag").val() != "1") {
         $('#BonusCl').val("");
         $('#BonusFirstMonth').val("");
         $('#BonusSecondMonth').val("");
@@ -99,13 +99,12 @@ function chgBonus_Result() {
         $('#BonusFirstMonth').css('background-color', FALSE_COLOR_RES);
         $('#BonusSecondMonth').css('background-color', FALSE_COLOR_RES);
         $('#BonusTimes').css('background-color', FALSE_COLOR_RES);
+    } else {
+        $("#rbBonusU_Result").prop("checked", true);
     }
 }
 function chgBonusMonth(mode) {
     let value = $("#cbBonusSecond").val();
-    //for (let i = 0; i <= 12; i++) {
-    //    $("#cbBonusSecond option[value='"+i+"']").remove();
-    //}
     $("#cbBonusSecond").empty();
     let bf = $('#cbBonusFirst').val();
     if (bf == "6" || bf == "7" || bf == "8" || bf == "9") {
@@ -264,36 +263,12 @@ function btMoneyRateDown_onclick() {
         }
     }
 }
-//val:数値;digit:桁;flg:(0:四捨五入;1:切り捨て;2:切り上げ)
-function format(val, digit, flg) {
-    val *= Math.pow(10.0, digit);
-    if (flg == 0)
-        val = Math.round(val)
-    else if (flg == 1)
-        val = Math.floor(val)
-    else if (flg == 2)
-        val = Math.ceil(val);
-
-    val += "";
-    //０埋め処理
-    var tmp = digit - val.length;
-    if (0 < tmp) for (i = 0; i < tmp; i++) val = "0" + val;
-
-    //.挿入処理
-    if (digit) {
-        var pat = "";
-        for (i = 0; i < digit; i++) pat += ".";
-        val = val.replace(eval("/(" + pat + "$)/"), ".$1");
-        val = val.replace(/^\./, "0\.");
-    }
-    return (val);
-}
-
 function CalInpLoan() {
     $("#Msg").text("");
+    $("#hidLoanModifyFlag").val("0");
     $("#chkProhibitAutoCalc").attr('checked', false);
+    $('#chkProhibitAutoCalc').attr("disabled", false);
     let rdBonus = $("input[type='radio'][name='rdBonus']:checked").val() == "rbBonusU" ? true : false;
-    console.log(rbBonusU)
     var model = {};
     model.SaleSumPrice = $("#lbl_SalesSum").val();
     model.Deposit = $("#Deposit").val();
@@ -314,10 +289,8 @@ function CalInpLoan() {
         model.BonusFirst = "0";
         model.BonusSecond = "0";
     }
-    console.log(model);
     var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLoan/CalInpLoan");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-        console.log(result.data)
         let Items = result.data;
         $("#Fee").val(Items.fee);
         $("#PayTotal").val(Items.payTotal);
@@ -386,8 +359,6 @@ function CalInpLoan() {
     }
 };
 function CleanForm() {
-    //var $form = $("#formInpLoan");
-    //Framework.resetForm($form)
     $("#Fee").val("");
     $("#PayTotal").val("");
     $("#PayTimesCl").val("");
@@ -408,4 +379,21 @@ function CleanForm() {
     $("#BonusFirstMonth_old").val("");
     $("#BonusSecondMonth_old").val("");
     $("#MoneyRateCl_old").val("");
+}
+
+function RestPage() {
+    $("#Deposit").val("");
+    $("#PayTimes").val("");
+    $("#rbBonusM").prop("checked", true);
+    $('#Bonus').attr("disabled", false);
+    $('#cbBonusFirst').attr("disabled", false);
+    $('#cbBonusSecond').attr("disabled", false);
+    $('#Bonus').css('background-color', TRUE_COLOR);
+    $('#cbBonusFirst').css('background-color', TRUE_COLOR);
+    $('#cbBonusSecond').css('background-color', TRUE_COLOR);
+    CleanForm();
+    chgBonus();
+    chgBonus_Result()
+    $("#chkProhibitAutoCalc").attr('checked', false);
+    $('#chkProhibitAutoCalc').attr("disabled", false);
 }

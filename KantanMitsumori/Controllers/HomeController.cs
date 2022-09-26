@@ -23,17 +23,17 @@ namespace KantanMitsumori.Controllers
             _appService = appService;
             _estimateService = estimateService;
             _logger = logger;
-        }    
+        }
         public IActionResult Index()
-        {  
+        {
             return View();
         }
         public IActionResult Header()
-        {       
+        {
             return PartialView("_Header", _logToken);
         }
 
-     
+
     }
 }
 
