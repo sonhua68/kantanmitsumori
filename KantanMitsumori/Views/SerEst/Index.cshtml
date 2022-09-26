@@ -14,7 +14,7 @@
             <div class="border-button container text-center">
                 <br>
                 <div class="col d-flex justify-content-between">
-                    <a href="#" onclick="Framework.GoBackReloadPage();return false">
+                    <a href="#" onclick="Framework.GoBackPage();return false">
                         <img src="./img/btn%e8%a6%8b%e7%a9%8dTOP.png">
                     </a>
                 </div>
@@ -62,9 +62,9 @@
                                     <span id="Label2" class="inplabel" style="display:inline-block;height:17px;">見積書番号</span>
                                 </td>
                                 <td align="left" class="inptd">
-                                    <input name="EstNo" type="text" maxlength="11" id="EstNo" tabindex="1" class="inpbox" style="width:111px;IME-MODE:disabled">
+                                    <input name="EstNo" type="text" maxlength="11" id="EstNo" tabindex="1" class="inpbox" style="width:111px;">
                                     <span id="Label3" class="inplabel" style="display:inline-block;height:20px;">－</span>
-                                    <input name="EstSubNo" type="text" maxlength="2" id="EstSubNo" tabindex="2" class="inpbox" style="width:40px;IME-MODE:disabled">
+                                    <input name="EstSubNo" type="text" maxlength="2" id="EstSubNo" tabindex="2" class="inpbox" style="width:40px;">
                                 </td>
                             </tr>
                             <tr>
@@ -72,7 +72,7 @@
                                     <span id="Label1" class="inplabel">見積書作成日</span>
                                 </td>
                                 <td align="left" class="inptd">
-                                    <select name="ddlFromSelectY" onchange="javascript:setTimeout('__doPostBack(\'ddlFromSelectY\',\'\')', 0)" id="ddlFromSelectY" tabindex="4" class="inpbox" style="width:70px;">
+                                    <select name="ddlFromSelectY"  id="ddlFromSelectY" tabindex="4" class="inpbox" style="width:70px;">
                                         <option selected="selected" value="@DateTime.Now.Year">@DateTime.Now.Year</option>
 
                                     </select>
@@ -101,7 +101,7 @@
                                     </select>
                                     <span id="Label5" class="inplabel" style="display:inline-block;width:13px;">日</span>
                                     <span id="Label9" class="inplabel" style="display:inline-block;font-size:14pt;font-weight:bold;width:29px;text-align:center;">～</span>&nbsp;
-                                    <select name="ddlToSelectY" onchange="javascript:setTimeout('__doPostBack(\'ddlToSelectY\',\'\')', 0)" id="ddlToSelectY" tabindex="7" class="inpbox" style="width:70px;">
+                                    <select name="ddlToSelectY"  id="ddlToSelectY" tabindex="7" class="inpbox" style="width:70px;">
                                         <option selected="selected" value="@DateTime.Now.Year">@DateTime.Now.Year</option>
 
                                     </select>

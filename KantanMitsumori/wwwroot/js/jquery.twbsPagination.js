@@ -134,11 +134,11 @@
         buildListItems: function (pages) {
             var listItems = [];
 
-            //if (this.options.first) {
-            //    listItems.push(this.buildItem('first', 1));
-            //}
+            if (this.options.first) {
+                listItems.push(this.buildItem('first', 1));
+            }
 
-            if (this.options.prev ) {
+            if (this.options.prev) {
                 var prev = pages.currentPage > 1 ? pages.currentPage - 1 : this.options.loop ? this.options.totalPages : 1;
                 listItems.push(this.buildItem('prev', prev));
             }
@@ -147,23 +147,23 @@
                 listItems.push(this.buildItem('page', pages.numeric[i]));
             }
 
-            if (this.options.next ) {
+            if (this.options.next) {
                 var next = pages.currentPage < this.options.totalPages ? pages.currentPage + 1 : this.options.loop ? 1 : this.options.totalPages;
                 listItems.push(this.buildItem('next', next));
             }
 
-            //if (this.options.last) {
-            //    listItems.push(this.buildItem('last', this.options.totalPages));
-            //}
+            if (this.options.last) {
+                listItems.push(this.buildItem('last', this.options.totalPages));
+            }
 
             return listItems;
         },
 
         buildItem: function (type, page) {
             if (type)
-            var $itemContainer = $('<li></li>'),
-                $itemContent = $('<a></a>'),
-                itemText = this.options[type] ? this.makeText(this.options[type], page) : page;
+                var $itemContainer = $('<li></li>'),
+                    $itemContent = $('<a></a>'),
+                    itemText = this.options[type] ? this.makeText(this.options[type], page) : page;
 
             $itemContainer.addClass(this.options[type + 'Class']);
             $itemContainer.data('page', page);
@@ -325,7 +325,7 @@
         return (methodReturn === undefined) ? $this : methodReturn;
     };
 
-    $.fn.twbsPagination.defaults = {     
+    $.fn.twbsPagination.defaults = {
         totalPages: 1,
         startPage: 1,
         visiblePages: 5,
@@ -335,10 +335,10 @@
         pageVariable: '{{page}}',
         totalPagesVariable: '{{total_pages}}',
         page: null,
-        first: 'First',
+        first: '先頭',
         prev: 'Previous',
         next: 'Next',
-        last: 'Last',
+        last: '最終',
         loop: false,
         beforePageClick: null,
         onPageClick: null,

@@ -75,7 +75,7 @@ function AddPagination(totalPages) {
         totalPages: totalPages,
         visiblePages: 10,
         next: '次',
-        prev: '前',
+        prev: '前',      
         onPageClick: function (event, page) {
             GoNextPage(page)
         }

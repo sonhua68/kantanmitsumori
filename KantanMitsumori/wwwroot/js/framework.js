@@ -525,7 +525,7 @@ var Framework =
         {
             key: "GoBackPage",
             value: function GoBackPage() {
-                window.history.back();
+                window.history.back();              
             }
         },
         {
