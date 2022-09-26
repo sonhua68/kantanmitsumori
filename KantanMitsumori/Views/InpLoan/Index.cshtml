@@ -104,7 +104,7 @@
                                                             @{
                                                                 foreach (var item in DropDownList.DropDownFirstMonth(false))
                                                                 {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                        <option value="@item.Value">@item.Text</option>
                                                                 }
                                                             }
 
@@ -142,11 +142,11 @@
                                                                 {
                                                                     if (@item.Text == Model.BonusFirst!)
                                                                     {
-                                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                                            <option selected="selected" value="@item.Value">@item.Text</option>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <option value="@item.Value">@item.Text</option>
+                                                                            <option value="@item.Value">@item.Text</option>
                                                                     }
                                                                 }
                                                             }
@@ -165,11 +165,11 @@
                                                                 {
                                                                     if (@item.Text == Model.BonusSecond!)
                                                                     {
-                                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                                            <option selected="selected" value="@item.Value">@item.Text</option>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <option value="@item.Value">@item.Text</option>
+                                                                            <option value="@item.Value">@item.Text</option>
                                                                     }
 
                                                                 }
@@ -311,7 +311,7 @@
                                                     </td>
                                                     <td class="inptd" style="width: 239px" align="left">
                                                         <input id="rbBonusU_Result" type="radio" name="rdBonus_Result" value="rbBonusU_Result" onclick="resetBonus_Result();"><label for="rbBonusU_Result">有</label>&nbsp;&nbsp;&nbsp;
-                                                        <input id="rbBonusM_Result" type="radio" name="rdBonus_Result" value="rbBonusM_Result"  onclick="resetBonus_Result();"><label for="rbBonusM_Result">無</label>
+                                                        <input id="rbBonusM_Result" type="radio" name="rdBonus_Result" value="rbBonusM_Result" onclick="resetBonus_Result();"><label for="rbBonusM_Result">無</label>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -386,7 +386,7 @@
     SetInitData();
     $('#formInpLoan').validate({
         submitHandler: function (form) {
-            var model = Framework.getFormData($("#formInpLoan"));  
+            var model = Framework.getFormData($("#formInpLoan"));
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLoan/UpdateInpLoan");
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
                 Framework.GoBackReloadPage();
@@ -401,20 +401,29 @@
             }
         }
     });
-    function SetInitData() {   
-        var isCheck = parseInt(@isRbBonus);
-        if (isCheck > 0) {
-            $("#rbBonusU").prop("checked", true);
-            $("#rbBonusU_Result").prop("checked", true);
+    function SetInitData() {
+        if (@LoanModifyFlag == "0") {
+            var isCheck = parseInt(@isRbBonus);
+            if (isCheck > 0) {
+                $("#rbBonusU").prop("checked", true);
+                $("#rbBonusU_Result").prop("checked", true);
+            } else {
+                $("#rbBonusM").prop("checked", true);
+                $("#rbBonusM_Result").prop("checked", true);
+            }
+            if (@LoanRecalcSettingFlag== 1) {
+                $("#chkProhibitAutoCalc").attr('checked', true);
+            } else {
+                $("#chkProhibitAutoCalc").attr('checked', false);
+            }
         } else {
+            $("#hidLoanModifyFlag").val("1");
+            $("#lbl_SalesSum").val(@SalesSum);
+            $("#PayTimes").val("");
+            $("#rbBonusU").prop("checked", false);
             $("#rbBonusM").prop("checked", true);
-            $("#rbBonusM_Result").prop("checked", true);
         }
-        if (@LoanRecalcSettingFlag== 1) {
-            $("#chkProhibitAutoCalc").attr('checked', true);
-        } else {
-            $("#chkProhibitAutoCalc").attr('checked', false);
-        }
+
     }
 
 </script>
