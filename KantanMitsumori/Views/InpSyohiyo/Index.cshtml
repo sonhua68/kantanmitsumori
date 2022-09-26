@@ -1,0 +1,257 @@
+﻿@using KantanMitsumori.Helper.CommonFuncs
+@using KantanMitsumori.Helper.Constant
+@using KantanMitsumori.Model.Response
+@model ResponseInpSyohiyo
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+
+    // 手続代行費用
+    var TaxCheck = CommonFunction.FormatString(Model.TaxCheck);
+    var TaxGarage = CommonFunction.FormatString(Model.TaxGarage);
+    var TaxTradeIn = CommonFunction.FormatString(Model.TaxTradeIn);
+    var TaxTradeInSatei = CommonFunction.FormatString(Model.TaxTradeInSatei);
+    var TaxRecycle = CommonFunction.FormatString(Model.TaxRecycle);
+    var TaxDelivery = CommonFunction.FormatString(Model.TaxDelivery);
+    var TaxSet1 = CommonFunction.FormatString(Model.TaxSet1);
+    var TaxSet2 = CommonFunction.FormatString(Model.TaxSet2);
+    var TaxSet3 = CommonFunction.FormatString(Model.TaxSet3);
+    var TaxOther = CommonFunction.FormatString(Model.TaxOther);
+    var TaxCostAll = CommonFunction.FormatString(Model.TaxCostAll);
+
+    // タイトル部 項目名（税抜／税込）
+    var ZeiTitle = "手続代行費用";
+    ZeiTitle += Model.ConTaxInputKb == false ? CommonConst.def_TitleOutTax : CommonConst.def_TitleInTax;
+
+    // 預り法定費用
+    var TaxFreeCheck = CommonFunction.FormatString(Model.TaxFreeCheck);
+    var TaxFreeGarage = CommonFunction.FormatString(Model.TaxFreeGarage);
+    var TaxFreeTradeIn = CommonFunction.FormatString(Model.TaxFreeTradeIn);
+    var TaxFreeRecycle = CommonFunction.FormatString(Model.TaxFreeRecycle);
+    var TaxFreeOther = CommonFunction.FormatString(Model.TaxFreeOther);
+    var TaxFreeAll = CommonFunction.FormatString(Model.TaxFreeAll);
+    var TaxFreeSet1 = CommonFunction.FormatString(Model.TaxFreeSet1);
+    var TaxFreeSet2 = CommonFunction.FormatString(Model.TaxFreeSet2);
+}
+<form id="formInputSyohiyo">
+    <div align="center">
+        <table class="inptable" id="Table3" cellpadding="2" cellspacing="0" bordercolor="#ffffff">
+            <tr>
+                <td colspan="3" class="inptd" style="background-color:White;" align="left">
+                    <span id="Label3" class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">手続代行費用と預り法定費用の編集</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3" class="inptd" style="background-color:White;" align="left">
+                    <span id="Label5" class="inplabel">各種諸費用の編集ができます。</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tabletitle" align="left">&nbsp;</td>
+                <td class="tabletitle" align="left" style="width: 170px">
+                    <span id="lblZei" class="titlelabel" style="display:inline-block;width:168px;">@ZeiTitle</span>
+                </td>
+                <td class="tabletitle" align="left" style="width: 170px">
+                    <span id="Label21" class="titlelabel" style="display:inline-block;width:168px;text-align:center;  ">預り法定費用（非課税）<br>（主に印紙代）</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label38" class="inplabel" style="display:inline-block;width:150px;">検査登録</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxCheck" type="text" id="txtTaxCheck" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxCheck" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label55" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxFreeCheck" type="text" id="txtTaxFreeCheck" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxFreeCheck" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label19" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label6" class="inplabel" style="display:inline-block;width:150px;">車庫証明</span>
+                </td>
+                <td class="inptd" style="border-right:solid 2px white; width: 170px;" align="left">
+                    <input name="TaxGarage" type="text" id="txtTaxGarage" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxGarage" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label7" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxFreeGarage" type="text" id="txtTaxFreeGarage" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxFreeGarage" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label22" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label8" class="inplabel" style="display:inline-block;width:150px;">下取車手続・処分</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxTradeIn" type="text" id="txtTaxTradeIn" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxTradeIn" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label9" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxFreeTradeIn" type="text" id="txtTaxFreeTradeIn" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxFreeTradeIn" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label23" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label10" class="inplabel" style="display:inline-block;width:150px;">下取車査定料</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxTradeInSatei" type="text" id="txtTaxTradeInSatei" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxTradeInSatei" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label11" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label12" class="inplabel" style="display:inline-block;width:150px;">リサイクル預託金</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    &nbsp;
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxFreeRecycle" type="text" id="txtTaxFreeRecycle" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxFreeRecycle" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label13" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label15" class="inplabel" style="display:inline-block;width:150px;">資金管理料金</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxRecycle" type="text" id="txtTaxRecycle" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxRecycle" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label24" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    &nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label1" class="inplabel" style="display:inline-block;width:150px;">納車費用</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxDelivery" type="text" id="txtTaxDelivery" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxDelivery" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label2" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="TaxSet1Title" type="text" id="txtTaxSet1Title" class="inpbox" style="WIDTH: 165px;" tabindex="30" maxlength="20" value="@Model.TaxSet1Title">
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxSet1" type="text" id="txtTaxSet1" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxSet1" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label4" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="TaxSet2Title" type="text" id="txtTaxSet2Title" class="inpbox" style="WIDTH: 165px;" tabindex="30" maxlength="20" value="@Model.TaxSet2Title">
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxSet2" type="text" id="txtTaxSet2" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxSet2" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label14" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="TaxSet3Title" type="text" id="txtTaxSet3Title" class="inpbox" style="WIDTH: 165px;" tabindex="30" maxlength="20" value="@Model.TaxSet3Title">
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxSet3" type="text" id="txtTaxSet3" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxSet3" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label16" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="TaxFreeSet1Title" type="text" id="txtTaxFreeSet1Title" class="inpbox" style="WIDTH: 165px;" tabindex="30" maxlength="20" value="@Model.TaxFreeSet1Title">
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxFreeSet1" type="text" id="txtTaxFreeSet1" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxFreeSet1" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label27" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <input name="TaxFreeSet2Title" type="text" id="txtTaxFreeSet2Title" class="inpbox" style="WIDTH: 165px;" tabindex="30" maxlength="20" value="@Model.TaxFreeSet2Title">
+                </td>
+                <td class="inptd" style="WIDTH: 170px" align="left">&nbsp;</td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxFreeSet2" type="text" id="txtTaxFreeSet2" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxFreeSet2" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label28" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inptd" align="left">
+                    <span id="Label17" class="inplabel" style="display:inline-block;width:150px;">その他費用</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxOther" type="text" id="txtTaxOther" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxOther" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxCostSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label18" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="inptd" align="left" style="width: 170px">
+                    <input name="TaxFreeOther" type="text" id="txtTaxFreeOther" onkeypress="return onlyNumbers(event);" language="javascript" value="@TaxFreeOther" maxlength="8" class="inpbox_r" tabindex="48" onblur="TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                    <span id="Label25" class="inplabel" style="display:inline-block;width:40px;">&nbsp;円</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="sumtd" style="height: 27px" align="left">
+                    <span id="Labelaa6" class="inplabel" style="display:inline-block;width:59px;">小計</span>
+                </td>
+                <td class="sumtd" style="background-color:#B1CAF8;border-right:solid 2px white; height: 27px; width: 170px;" align="left">
+                    <input name="TaxCostAll" type="text" id="txtTaxCostAll" language="javascript" value="@TaxCostAll" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px;" size="10" readonly="readOnly">
+                    <span id="Labela7" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+                <td class="sumtd" style="height: 27px; width: 170px;" align="left">
+                    <input name="TaxFreeAll" type="text" id="txtTaxFreeAll" language="javascript" value="@TaxFreeAll" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px;" size="10" readonly="readOnly">
+                    <span id="Label26" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="inpbtntd" colspan="3" style=" ">
+                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
+                    <input type="submit" name="btnOK" value="OK" form="formInputSyohiyo" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td class="inpbtntd" colspan="3">
+
+                    <span id="txMsg" class="inpboxsum" style="display:inline-block;color:Red;width:462px;"></span>&nbsp;
+                </td>
+            </tr>
+        </table>
+        <input name="EstNo" type="hidden" id="hidEstNo" value="@Model.EstNo">
+        <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
+    </div>
+</form>
+<script>
+    $('#formInputSyohiyo').validate({
+        submitHandler: function(form) {
+            if (inputChk() == false) { return; }
+            var model = Framework.getFormData($("#formInputSyohiyo"));
+            console.log(model)
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpSyohiyo/UpdateInpSyohiyo");
+            if (result.resultStatus == 0) {
+                Framework.GoBackReloadPage();
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#txMsg").html(Items)
+                } else {
+                    location.reload();
+                }
+            }
+        }
+    });
+</script>
+<script src="~/js/InpSyohiyo.js"></script>

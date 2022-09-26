@@ -4,6 +4,16 @@ function closeWin() {
     window.close();
 }
 
+// function input only number
+function onlyNumbers(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
 /* 数値桁揃え関数 */
 function format(val, digit, flg) {//val:数値;digit:桁;flg:(0:四捨五入;1:切り捨て;2:切り上げ)
     val *= Math.pow(10.0, digit);
@@ -264,7 +274,7 @@ function getWareki(str) {
             return "R" + (intYear - 2018);
         }
     }
-
+   
 }
 const def_Space = "    "
 /*
@@ -312,12 +322,10 @@ function FormatDayGetMonth(str) {
         case 0:
             month = def_Space;
             break;
-
         default:
             month = str.toString().substring(4, 6);
             return month
     }
-
 }
 /*
  * groupBy
