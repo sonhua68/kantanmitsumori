@@ -48,9 +48,9 @@ namespace KantanMitsumori.Service.Mapper
         }
 
         private void CreateMapForReport()
-        {            
+        {
             // Request mapping
-            CreateMap<LogToken, RequestReport>()                
+            CreateMap<LogToken, RequestReport>();      
 
             // Response mapping
             CreateMap<TEstimate, EstimateReportModel>()
