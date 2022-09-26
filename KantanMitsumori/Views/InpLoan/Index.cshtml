@@ -20,7 +20,7 @@
     string BonusFirst = string.IsNullOrEmpty(Model.BonusFirst) == true ? "" : Model.BonusFirst;
     string BonusSecond = string.IsNullOrEmpty(Model.BonusSecond) == true ? "" : Model.BonusSecond;
     var LoanModifyFlag = Model.LoanModifyFlag == true ? "1" : "0";
-    var LoanRecalcSettingFlag = Model.LoanRecalcSettingFlag == true ? "1" : "0";
+    var LoanRecalcSettingFlag = Model.LoanRecalcSettingFlag;
 }
 <form id="formInpLoan">
     <table border="0" width="100%">
@@ -412,11 +412,7 @@
                 $("#rbBonusM").prop("checked", true);
                 $("#rbBonusM_Result").prop("checked", true);
             }
-            if (@LoanRecalcSettingFlag== 1) {
-                $("#chkProhibitAutoCalc").attr('checked', false);
-            } else {
-                $("#chkProhibitAutoCalc").attr('checked', true);
-            }
+            $("#chkProhibitAutoCalc").attr('checked', @LoanRecalcSettingFlag);
         } else {
             $("#hidLoanModifyFlag").val("1");
             $("#lbl_SalesSum").val(@SalesSum);
