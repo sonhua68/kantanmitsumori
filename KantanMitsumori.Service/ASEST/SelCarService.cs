@@ -83,9 +83,9 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 var carNamesList = _unitOfWork.ASOPCarNames.GetList(n => n.MekerCode == makId).Select(i => _mapper.Map<ResponseAsopCarname>(i)).OrderBy(n => n.CarmodelName).ToList();
-                if (carNamesList == null)
+                if (carNamesList.Count == 0)
                 {
-                    return ResponseHelper.Error<List<ResponseAsopCarname>>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                    return ResponseHelper.Ok<List<ResponseAsopCarname>>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003));
                 }
                 return ResponseHelper.Ok<List<ResponseAsopCarname>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), carNamesList);
             }
@@ -103,9 +103,9 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 var makerList = _unitOfWork.ASOPMakers.GetAll().Select(i => _mapper.Map<ResponseAsopMaker>(i)).OrderBy(n => n.MakerCode).ToList();
-                if (makerList == null)
+                if (makerList.Count == 0)
                 {
-                    return ResponseHelper.Error<List<ResponseAsopMaker>>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                    return ResponseHelper.Ok<List<ResponseAsopMaker>>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003));
                 }
                 return ResponseHelper.Ok<List<ResponseAsopMaker>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), makerList);
             }
