@@ -10,6 +10,7 @@ const def_DataNotFoundMsg_NULL = "該当するデータがありませんでし�
 GetListASOPMaker();
 SetIntData();
 SetInitCarSet();
+setCookie("btnHanei", "1", 1);
 function GetListASOPMaker() {
     var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPMaker");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {

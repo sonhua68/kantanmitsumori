@@ -2,6 +2,7 @@
 // Create Date 2022/09/09 by HoaiPhong
 let vCaseSet = getCookie("CaseSet");
 let vKbnSet = getCookie("KbnSet");
+setCookie("btnHanei", "1", 1);
 let _conNumberSort = true;
 let _conNumber = 0;
 InitPage();

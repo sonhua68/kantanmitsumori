@@ -1,4 +1,5 @@
 ﻿setInitialValue();
+DeleteBtnHanei()
 //setInitValueCookie();
 function setInitialValue() {
     var leaseFlag = $("#hidLeaseFlag").val();
@@ -124,3 +125,7 @@ function setInitValueCookie() {
         }
     });
 }());
+
+function DeleteBtnHanei() {
+    document.cookie = "btnHanei" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}

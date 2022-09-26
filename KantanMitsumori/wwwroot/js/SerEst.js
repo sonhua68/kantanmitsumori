@@ -9,6 +9,7 @@ GetDayOfMonth(1);
 GetDayOfMonth(2);
 SetInitToDay();
 LoadData(1);
+setCookie("btnHanei", "1", 1);
 function GetListMaker() {
     ; var result = Framework.GetObjectDataFromUrl("/SerEst/GetMakerNameAndModelName?makerName=");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
