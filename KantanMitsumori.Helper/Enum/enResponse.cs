@@ -17,4 +17,24 @@ namespace KantanMitsumori.Helper.Enum
         isNextGrade = 1,
         isChkModel = 2,
     }
+    public enum enSortCar
+    {
+        isDefault = 0,
+        isGradeName = 1,
+        isRegularCase = 2,
+        isDispVol = 3,
+        isDriveTypeCode = 4,
+        isDispVolAsc = 5,
+        isDriveTypeCodeAsc = 6,
+    }
+    public enum enSortCarEst
+    {
+        isDefault = 0,
+        isEstNo = 1,
+        isTradeDate = 2,
+        isCustKName = 3,     
+        isCarName = 4,
+        isCustKNameAsc = 5,
+        isCarNameAsc = 6,
+    }
 }
