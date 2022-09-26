@@ -26,6 +26,7 @@ namespace KantanMitsumori.Helper.Enum
         isDriveTypeCode = 4,
         isDispVolAsc = 5,
         isDriveTypeCodeAsc = 6,
+        isRegularCaseAsc = 7,
     }
     public enum enSortCarEst
     {
@@ -36,5 +37,6 @@ namespace KantanMitsumori.Helper.Enum
         isCarName = 4,
         isCustKNameAsc = 5,
         isCarNameAsc = 6,
+        isTradeDateAsc = 7,
     }
 }
