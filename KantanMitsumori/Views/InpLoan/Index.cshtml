@@ -104,7 +104,7 @@
                                                             @{
                                                                 foreach (var item in DropDownList.DropDownFirstMonth(false))
                                                                 {
-                                                                        <option value="@item.Value">@item.Text</option>
+                                                                    <option value="@item.Value">@item.Text</option>
                                                                 }
                                                             }
 
@@ -142,11 +142,11 @@
                                                                 {
                                                                     if (@item.Text == Model.BonusFirst!)
                                                                     {
-                                                                            <option selected="selected" value="@item.Value">@item.Text</option>
+                                                                        <option selected="selected" value="@item.Value">@item.Text</option>
                                                                     }
                                                                     else
                                                                     {
-                                                                            <option value="@item.Value">@item.Text</option>
+                                                                        <option value="@item.Value">@item.Text</option>
                                                                     }
                                                                 }
                                                             }
@@ -165,11 +165,11 @@
                                                                 {
                                                                     if (@item.Text == Model.BonusSecond!)
                                                                     {
-                                                                            <option selected="selected" value="@item.Value">@item.Text</option>
+                                                                        <option selected="selected" value="@item.Value">@item.Text</option>
                                                                     }
                                                                     else
                                                                     {
-                                                                            <option value="@item.Value">@item.Text</option>
+                                                                        <option value="@item.Value">@item.Text</option>
                                                                     }
 
                                                                 }
@@ -403,6 +403,7 @@
     });
     function SetInitData() {
         if (@LoanModifyFlag == "0") {
+            $("#hidLoanModifyFlag").val("0");
             var isCheck = parseInt(@isRbBonus);
             if (isCheck > 0) {
                 $("#rbBonusU").prop("checked", true);
@@ -412,8 +413,7 @@
                 $("#rbBonusM_Result").prop("checked", true);
             }
             if (@LoanRecalcSettingFlag== 1) {
-                        $("#chkProhibitAutoCalc").attr('checked', false);
-               
+                $("#chkProhibitAutoCalc").attr('checked', false);
             } else {
                 $("#chkProhibitAutoCalc").attr('checked', true);
             }
