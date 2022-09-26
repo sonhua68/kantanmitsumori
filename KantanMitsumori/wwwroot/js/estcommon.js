@@ -351,10 +351,24 @@ String.prototype.compose = (function () {
     }
 }());
 /*
+ *  
+ *  Create By HoaiPhong
+ *  Date 2022/09/23
+ /*/
+$(document).ready(function () {
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+});
+/*
  * sortElements
  *  Create By HoaiPhong
  *  Date 2022/09/14
  /*/
+
 jQuery.fn.sortElements = (function () {
     var sort = [].sort;
     return function (comparator, getSortable) {

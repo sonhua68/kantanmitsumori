@@ -20,7 +20,7 @@
     string BonusFirst = string.IsNullOrEmpty(Model.BonusFirst) == true ? "" : Model.BonusFirst;
     string BonusSecond = string.IsNullOrEmpty(Model.BonusSecond) == true ? "" : Model.BonusSecond;
     var LoanModifyFlag = Model.LoanModifyFlag == true ? "1" : "0";
-    var LoanRecalcSettingFlag = Model.LoanRecalcSettingFlag == true ? "1" : "0";
+    var LoanRecalcSettingFlag = Model.LoanRecalcSettingFlag;
 }
 <form id="formInpLoan">
     <table border="0" width="100%">
@@ -181,7 +181,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td class="inpbtntd" colspan="2" style=" height: 21px; text-align:right;">
-                                                        <input type="button" name="btnClear" value="クリア" id="btnClear" class="Btn1" onclick="return location.reload();" style="height:32px;width:100px;">
+                                                        <input type="button" name="btnClear" value="クリア" id="btnClear" class="Btn1" onclick="return RestPage();" style="height:32px;width:100px;">
                                                         <input type="button" name="btnCalc" value="計算" id="btnCalc" onclick="return CalInpLoan()" class="Btn1" style="height:32px;width:100px;">
                                                     </td>
 
@@ -311,7 +311,7 @@
                                                     </td>
                                                     <td class="inptd" style="width: 239px" align="left">
                                                         <input id="rbBonusU_Result" type="radio" name="rdBonus_Result" value="rbBonusU_Result" onclick="resetBonus_Result();"><label for="rbBonusU_Result">有</label>&nbsp;&nbsp;&nbsp;
-                                                        <input id="rbBonusM_Result" type="radio" name="rdBonus_Result" value="rbBonusM_Result"  onclick="resetBonus_Result();"><label for="rbBonusM_Result">無</label>
+                                                        <input id="rbBonusM_Result" type="radio" name="rdBonus_Result" value="rbBonusM_Result" onclick="resetBonus_Result();"><label for="rbBonusM_Result">無</label>
                                                     </td>
                                                 </tr>
                                                 <tr>
@@ -352,15 +352,15 @@
                                                         <div style="text-align:left;">
                                                             <span id="lblWarning" class="inplabel" style="color:Red;font-size:9pt;font-weight:bold;">ローン条件を入力して計算したローン計算情報を、[OK]押下で保存した場合<br>お支払い総合計に変更があると、ローン条件に入力した金利等の条件を使用し<br>ローン計算情報を自動的に再計算します</span>
                                                             <br><br><span class="inplabel" style="color:Red;font-size:9pt;font-weight:bold;">自動再計算をしたくない場合は、以下のチェックボックスをオンにしてください</span>
-                                                            <br><input name="LoanModifyFlag" type="hidden" id="hidLoanModifyFlag" value="0">
+                                                            <br><input name="LoanModifyFlag" type="hidden" id="hidLoanModifyFlag" value="@LoanModifyFlag">
                                                             <input id="chkProhibitAutoCalc" type="checkbox" name="chkProhibitAutoCalc"><label for="chkProhibitAutoCalc">支払総額変更後の自動再計算を行わない</label>
                                                         </div>
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td class="inpbtntd" colspan="2" style=" height: 21px; text-align:right;">
-                                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPageUrl('/');return false;" class="Btn1" style="height:32px;width:100px;">
-                                                        <input type="submit" name="btnOK" value="OK"  @*onclick="clickOK();"*@ form="formInpLoan" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
+                                                        <input type="submit" name="btnOK" value="OK" @*onclick="clickOK();"*@ form="formInpLoan" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -386,10 +386,10 @@
     SetInitData();
     $('#formInpLoan').validate({
         submitHandler: function (form) {
-            var model = Framework.getFormData($("#formInpLoan"));  
+            var model = Framework.getFormData($("#formInpLoan"));
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLoan/UpdateInpLoan");
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPageUrl('/');
+                Framework.GoBackReloadPage();
             } else {
                 let Items = result.data;
                 console.log(Items)
@@ -401,21 +401,26 @@
             }
         }
     });
-    function SetInitData() {   
-        var isCheck = parseInt(@isRbBonus);
-        if (isCheck > 0) {
-            $("#rbBonusU").prop("checked", true);
-            $("#rbBonusU_Result").prop("checked", true);
+    function SetInitData() {
+        if (@LoanModifyFlag == "0") {
+            $("#hidLoanModifyFlag").val("0");
+            var isCheck = parseInt(@isRbBonus);
+            if (isCheck > 0) {
+                $("#rbBonusU").prop("checked", true);
+                $("#rbBonusU_Result").prop("checked", true);
+            } else {
+                $("#rbBonusM").prop("checked", true);
+                $("#rbBonusM_Result").prop("checked", true);
+            }
+            $("#chkProhibitAutoCalc").attr('checked', @LoanRecalcSettingFlag);
         } else {
+            $("#hidLoanModifyFlag").val("1");
+            $("#lbl_SalesSum").val(@SalesSum);
+            $("#PayTimes").val("");
+            $("#rbBonusU").prop("checked", false);
             $("#rbBonusM").prop("checked", true);
-            $("#rbBonusM_Result").prop("checked", true);
         }
-        //
-        if (@LoanRecalcSettingFlag== 1) {
-            $("#chkProhibitAutoCalc").attr('checked', true);
-        } else {
-            $("#chkProhibitAutoCalc").attr('checked', false);
-        }
+
     }
 
 </script>
