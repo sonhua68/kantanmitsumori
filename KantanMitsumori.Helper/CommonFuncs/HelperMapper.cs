@@ -8,7 +8,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
 {
     public class HelperMapper
     {
-        public static IMapper _mapper;
+        public readonly IMapper _mapper;
 
 
         public HelperMapper(IMapper mapper)
