@@ -56,7 +56,7 @@ namespace KantanMitsumori.Controllers
         public async Task<IActionResult> UpdateInpInitVal([FromForm] RequestUpdateInpInitVal requestData)
         {
             requestData.sesMode = _logToken.sesMode;
-            var response = await _inpInitValService.UpdateInpInitVal(requestData);
+            var response = await _inpInitValService.UpdateInpInitVal(requestData, _logToken);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
