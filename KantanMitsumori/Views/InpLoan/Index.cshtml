@@ -412,9 +412,10 @@
                 $("#rbBonusM_Result").prop("checked", true);
             }
             if (@LoanRecalcSettingFlag== 1) {
-                $("#chkProhibitAutoCalc").attr('checked', true);
+                        $("#chkProhibitAutoCalc").attr('checked', false);
+               
             } else {
-                $("#chkProhibitAutoCalc").attr('checked', false);
+                $("#chkProhibitAutoCalc").attr('checked', true);
             }
         } else {
             $("#hidLoanModifyFlag").val("1");

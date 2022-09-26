@@ -86,7 +86,7 @@ function chgBonus_Result() {
         $('#BonusSecondMonth').css('background-color', TRUE_COLOR);
         $('#BonusTimes').css('background-color', TRUE_COLOR);
 
-    } else {
+    } else if ($("#hidLoanModifyFlag").val() != "1") {
         $('#BonusCl').val("");
         $('#BonusFirstMonth').val("");
         $('#BonusSecondMonth').val("");
@@ -99,6 +99,8 @@ function chgBonus_Result() {
         $('#BonusFirstMonth').css('background-color', FALSE_COLOR_RES);
         $('#BonusSecondMonth').css('background-color', FALSE_COLOR_RES);
         $('#BonusTimes').css('background-color', FALSE_COLOR_RES);
+    } else {
+        $("#rbBonusU_Result").prop("checked", true);
     }
 }
 function chgBonusMonth(mode) {
