@@ -213,12 +213,20 @@
     let custNm_forPrint = "CustNm_forPrint";
     let custAdr_forPrint = "CustAdr_forPrint";
     let custTel_forPrint = "CustTel_forPrint";
+    let kbnSet = "KbnSet";
+    let caseSet = "CaseSet";
+    let sesMaker = "sesMaker";
+    let sesCarNM = "sesCarNM";
     let cookiesASEST = "CookiesASEST";
     RemoteCookies(custZip_forPrint);
     RemoteCookies(custNm_forPrint);
     RemoteCookies(custAdr_forPrint);
     RemoteCookies(custTel_forPrint);
     RemoteCookies(cookiesASEST);
+    RemoteCookies(kbnSet);
+    RemoteCookies(caseSet);
+    RemoteCookies(sesMaker);
+    RemoteCookies(sesCarNM);
     function RemoteCookies(name) {
         document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }

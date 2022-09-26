@@ -172,3 +172,10 @@ function OnclickSelCar() {
     CleanCarSet();
     Framework.GoBackReloadPageUrl('/SerEst');
 }
+function AddEstimate() {    
+    var model = {};   
+    var result = Framework.submitAjaxFormUpdateAsync(model, "/SelCar/SetFreeEst");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        Framework.GoBackReloadPage();
+    }
+}

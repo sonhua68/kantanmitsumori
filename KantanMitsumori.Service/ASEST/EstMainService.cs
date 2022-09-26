@@ -501,7 +501,7 @@ namespace KantanMitsumori.Service.ASEST
             string outImg2 = ""; string outImg3 = ""; string outImg4 = ""; string outImg5 = ""; string outImg6 = ""; string outImg7 = ""; string outImg8 = "";
             if (string.IsNullOrEmpty(wCarImgPath))
             {
-                estModel.CarImgPath = CommonConst.def_DmyImg;               
+                estModel.CarImgPath = CommonConst.def_DmyImg;
             }
             else
             {
@@ -548,7 +548,7 @@ namespace KantanMitsumori.Service.ASEST
             estModel.ShopTel = userInfo.Data.UserTel;
             estModel.Corner = request.cor;
             estModel.Aacount = vAAcount;
-            estModel.Mode = Convert.ToByte(request.Mode);          
+            estModel.Mode = Convert.ToByte(request.Mode);
             estModel.Aayear = vNensiki;
             estModel.Aahyk = string.IsNullOrEmpty(request.poi) || !Information.IsNumeric(request.poi) ? "0" : request.poi;
             estModel.Aaprice = (int)intCarPrice;
@@ -702,7 +702,7 @@ namespace KantanMitsumori.Service.ASEST
                 entityEst.EstNo = strEstNo;
                 entityEst.EstSubNo = strEstSubNo;
                 entityEst.ModelName = Strings.StrConv(model.ModelName!, VbStrConv.Narrow, LocaleID);
-                entityEst.DispVol = model.DispVol.Trim().Replace("cc", "");
+                entityEst.DispVol = String.IsNullOrEmpty(model.DispVol) ? "" : model.DispVol.Trim().Replace("cc", "");
                 entityEst.CarSum = model.CarPrice + model.Sonota + model.NouCost + model.SyakenNew - model.Discount;
                 entityEst.OptionInputKb = true;
                 entityEst.TaxInsInputKb = true;
