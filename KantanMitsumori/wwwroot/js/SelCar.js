@@ -6,6 +6,7 @@ const def_SelMakerMsg = "メーカーを選択して下さい"
 const def_SelModelMsg = "車種を選択して下さい"
 const def_SelTypeMsg = "型式指定は必ず入力して下さい"
 const def_GradeNotFoundMsg = "該当するグレードが見つかりません"
+const def_DataNotFoundMsg_NULL = "該当するデータがありませんでした<br>[車名を直接入力する >>] ボタンから作成してください"
 GetListASOPMaker();
 SetIntData();
 SetInitCarSet();
@@ -53,6 +54,7 @@ function ReSetddlMaker() {
     $('#btnNextGrade').attr("disabled", true);
 }
 function GetListASOPCarName() {
+    $("#lblErrMsg1").html("");
     DeleteValue();
     let vMarkId = $("#ddlMaker").val();
     var result = Framework.GetObjectDataFromUrl("/SelCar/GetListASOPCarName?markId=" + vMarkId);
@@ -66,6 +68,9 @@ function GetListASOPCarName() {
             $("#ddlModel").append(new Option(value, text));
             $('#ddlModel').attr("disabled", false);
         }
+    } else if (result.resultStatus == 0 && result.messageCode == 'I0003') {
+        $("#lblErrMsg1").html(def_DataNotFoundMsg_NULL);
+        ReSetddlMaker();
     } else {
         let Items = result.data;
         if (typeof (Items) != "undefined") {
@@ -139,8 +144,8 @@ function setValue() {
     setCookie("sesCarNM", sesCarNM, 1);
 }
 function DeleteValue() {
-    document.cookie = "ddlMaker" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    document.cookie = "ddlModel" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = "sesMaker" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = "sesCarNM" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 function SetInitCarSet() {
     let vCaseSet = getCookie("CaseSet");
@@ -161,4 +166,9 @@ function CleanCarSet() {
 function DeleteValueCarSet() {
     document.cookie = "KbnSet" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     document.cookie = "CaseSet" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+function OnclickSelCar() {
+    DeleteValue();
+    CleanCarSet();
+    Framework.GoBackReloadPageUrl('/SerEst');
 }
