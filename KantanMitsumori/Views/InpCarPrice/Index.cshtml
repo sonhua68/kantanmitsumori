@@ -1,0 +1,157 @@
+﻿@using KantanMitsumori.Model.Response;
+@model ResponseInp
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+}
+<form id="formInpCarPrice">
+    <table border="0" width="100%">
+    <tbody>
+    <tr>
+    </tr>    
+    <tr>
+    <td align="center">
+    <div>
+        <table class="inptable" id="Table3" cellpadding="2" cellspacing="0" bordercolor="#ffffff">
+            <tbody><tr>
+                <td colspan="2" class="inptd" style="background-color:White;" align="left">
+                    <span id="Label6" class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">販売価格情報の編集</span>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" class="inptd" style="background-color:White;" align="left">
+                    <span id="Label7" class="inplabel">
+                        車両販売価格、その他費用、整備費用が編集できます。</span><br>
+                    <span id="Label11" class="inplabel" style="color:Red;">
+                        ※車両本体（販売価格）を確認してください。</span><br>
+                    <span id="Label13" class="inplabel" style="color:Red;">
+                        ※陸送代を確認してください。</span>
+                </td>
+            </tr>
+			<tr>
+				<td class="tabletitle" colspan="2">
+				<span id="lblZei1" class="titlelabel" style="display:inline-block;width:338px;">車両販売価格（税込）</span></td>
+			</tr>
+	        <tr>
+				<td class="inptd" style="width: 150px" align="left">
+				    <span id="Label38" class="inplabel" style="display:inline-block;width:150px;">車両本体</span>
+				</td>
+				<td class="inptd" align="left">
+				    <input name="txtPrice" type="text" id="txtPrice" language="javascript" value="1130000" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+			        <span id="Label55" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+			    </td>
+	        </tr>
+            <tr>
+                <td colspan="2" class="inptd" style="background-color:White; font-size:4pt; ">&nbsp;
+                </td>
+            </tr>
+			<tr>
+				<td class="tabletitle" colspan="2">
+				<input name="txtSonotaTitle" type="text" id="txtSonotaTitle" language="javascript" class="inpbox_l" onblur="chgSonotaSumTitle();" style="WIDTH: 129px;" tabindex="48" maxlength="10" value="その他費用">
+				<span id="lblZei3" class="titlelabel">（税込）</span>&nbsp;&nbsp;<span id="Label1" class="titlelabel">←タイトルを変える場合は直接編集して下さい</span></td>
+			</tr>
+	        <tr>
+				<td class="inptd" style="width: auto" align="left">
+				<span id="Label2" class="inplabel" style="display:inline-block;width:150px;">落札料</span>
+				</td>
+				<td class="inptd" align="left">
+				<input name="txtRakuSatu" type="text" id="txtRakuSatu" language="javascript" value="22000" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+			    <span id="Label3" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+			    </td>
+	        </tr>
+	        <tr>
+				<td class="inptd" style="width: auto" align="left">
+				<span id="Label4" class="inplabel" style="display:inline-block;width:150px;">陸送代</span>
+				</td>
+				<td class="inptd" align="left">
+				<input name="txtRikusou" type="text" id="txtRikusou" language="javascript" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+			    <span id="Label5" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+			    </td>
+	        </tr>
+	        <tr>
+				<td class="sumtd" style="width: auto" align="left">
+                    <input name="txtSonotaSumTitle" type="text" id="txtSonotaSumTitle" language="javascript" class="InpTitle1" style="WIDTH: 197px; " readonly="readonly" tabindex="48" maxlength="8" value="その他費用計">
+				</td>
+				<td class="sumtd" align="left">
+				<input name="txtSonota" type="text" id="txtSonota" language="javascript" value="22000" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readonly">
+			    <span id="Label9" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+			    </td>
+	        </tr>
+            <tr>
+                <td colspan="2" class="inptd" style="background-color:White; font-size:4pt; ">&nbsp;
+                </td>
+            </tr>
+			<tr>
+				<td class="tabletitle" colspan="2">
+				<span id="lblZei2" class="titlelabel" style="display:inline-block;width:338px;">整備費用（税込）</span></td>
+			</tr>
+	        <tr>
+				<td class="inptd" style="width: auto" align="left">
+                    <input id="radSyakenY" type="radio" name="Syaken" value="radSyakenY" checked="checked" onclick="chgSeibi();"><label for="radSyakenY">車検整備（車検する） </label><br>
+                    <input id="radSyakenN" type="radio" name="Syaken" value="radSyakenN" checked="checked" onclick="chgSeibi();"><label for="radSyakenN">納車整備（車検しない）</label>
+				</td>
+				<td class="inptd" style="" align="left">
+				    <input name="txtSyakenSeibi" type="text" id="txtSyakenSeibi" language="javascript" value="11000" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px; " size="10">
+			        <span id="Label12" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+			    </td>
+	        </tr>
+            <tr>
+                <td colspan="2" class="inptd" style="background-color:White; font-size:4pt; ">&nbsp;
+                </td>
+            </tr>
+	        <tr>
+				<td class="sumtd" style="width: auto" align="left">
+                    <span id="Labelaa6" class="InpTitle1" style="display:inline-block;width:150px;">車両計</span>
+				</td>
+				<td class="sumtd" align="left">
+				<input name="txtCarSum" type="text" id="txtCarSum" language="javascript" class="inpboxsum" readonly="readonly" tabindex="48" maxlength="8" value="1163000" style="width: 97px">
+			    <span id="Labela7" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+			    </td>
+	        </tr>
+            <tr>
+                <td class="inpbtntd" colspan="2">
+
+                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
+                    <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;</td>
+
+            </tr>
+            <tr>
+                <td class="inpbtntd" colspan="2">
+
+                    <span id="txMsg" class="inpboxsum" style="display:inline-block;color:Red;width:462px;"></span>&nbsp;</td>
+
+            </tr>
+        </tbody></table> 
+        <input name="hidUserNo" type="hidden" id="hidUserNo" value="88888195">
+        <input name="hidEstNo" type="hidden" id="hidEstNo" value="22092300072">
+        <input name="hidEstSubNo" type="hidden" id="hidEstSubNo" value="01">
+        <input name="hidDispVol" type="hidden" id="hidDispVol" value="1500">
+        <input name="hidSyakenNewZok" type="hidden" id="hidSyakenNewZok" value="Syaken">
+    </div>
+    </td>
+    </tr>
+    </tbody>
+    </table>
+</form>
+<script>
+    $('#formInpCarPrice').validate({
+        submitHandler: function (form) {
+            var model = Framework.getFormData($("#formInpCarPrice"));
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpHanbaiten/UpdateInpHanbaiten");
+            if (result.resultStatus == 0) {
+                Framework.GoBackReloadPageUrl('/');
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#txMsg").html(Items)
+                } else {
+                    location.reload();
+                }
+            }
+        }
+    });
+
+</script>
+<script src="~/js/InpHanbaiten.js"></script>
