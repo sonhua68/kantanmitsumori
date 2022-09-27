@@ -36,8 +36,7 @@ function SortData(colNumber) {
     AddPagination(result[0].totalPages);
     ReloadListData(result);
     _conNumberSort = !_conNumberSort;
-    _conNumber = number;
-    return;
+    _conNumber = number;    
 }
 function getNumberSort(number) {
     if (number == 3) {
