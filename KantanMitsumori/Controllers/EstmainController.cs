@@ -1,13 +1,10 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
-using KantanMitsumori.Helper.Enum;
+﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Controllers
 {
@@ -32,17 +29,17 @@ namespace KantanMitsumori.Controllers
                 response = await _appService.ReloadGetEstMain(_logToken);
             }
             else
-            {               
+            {
                 response = await _appService.getEstMain(requestAction, request);
                 if (response.ResultStatus == (int)enResponse.isSuccess)
                 {
                     setTokenCookie(response.Data!.AccessToken);
-                }              
+                }
             }
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
-            }   
+            }
             return View(response.Data);
         }
     }

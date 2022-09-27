@@ -9,7 +9,6 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Service.ASEST
 {
@@ -57,7 +56,7 @@ namespace KantanMitsumori.Service.ASEST
                     var getUserDef = _commonFuncHelper.getUserDefData(userNo);
                     if (getUserDef != null)
                     {
-                        int intHaiki = Information.IsNumeric(model.DispVol) ? Convert.ToInt32(model.DispVol) : 0;
+                        int intHaiki = CommonFunction.IsNumeric(model.DispVol ?? "") ? Convert.ToInt32(model.DispVol) : 0;
 
                         if (intHaiki > 660)
                         {

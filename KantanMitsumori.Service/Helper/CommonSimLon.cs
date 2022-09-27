@@ -1,6 +1,5 @@
 ﻿using KantanMitsumori.Helper.Constant;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -93,54 +92,54 @@ namespace KantanMitsumori.Service.Helper
         public CommonSimLon(ILogger logger)
         {
             _logger = logger;
-        }   
+        }
         public bool calcRegLoan()
         {
             try
-            {               
-                Principal = SaleSumPrice - Deposit;             
+            {
+                Principal = SaleSumPrice - Deposit;
                 if (MoneyRate > 0)
-                {                  
-                    decimal vCalcRate = MoneyRate / (decimal)100;                  
+                {
+                    decimal vCalcRate = MoneyRate / (decimal)100;
                     decimal vAddon = ToHalfAjust(PayTimes * (vCalcRate / 12) / (1 - (decimal)Math.Pow((double)(1 + (vCalcRate / 12)), (PayTimes * -1))) - 1, 4);
-              
+
                     AddonDisp = ToHalfAjust(vAddon * 100, 2);
                     Fee = (int)ToRoundDown(Principal, vAddon, 0);
-                }                  
+                }
                 PayTotal = Principal + Fee;
                 if (Bonus > 0)
                     BonusTimes = countBonusTimes(FirstMonth, PayTimes, BonusFirst, BonusSecond);
                 else
-                    BonusTimes = 0;           
-                BonusTotal = Bonus * BonusTimes;             
-                PartitionPayTotal = PayTotal - BonusTotal;              
-                PayMonth = (int)ToRoundDown(PartitionPayTotal / (decimal)PayTimes, -2);             
+                    BonusTimes = 0;
+                BonusTotal = Bonus * BonusTimes;
+                PartitionPayTotal = PayTotal - BonusTotal;
+                PayMonth = (int)ToRoundDown(PartitionPayTotal / (decimal)PayTimes, -2);
                 FirstPay = PartitionPayTotal - PayMonth * (PayTimes - 1);
                 if (FirstPay < 3000 | PayMonth < 3000)
                 {
                     CalcInfo = CommonConst.msgPayMonthShort;
                     return false;
-                }              
+                }
                 if (PayTotal * 0.7 < BonusTotal)
                 {
                     CalcInfo = CommonConst.msgBonusSevenOver;
                     return false;
-                }             
+                }
                 if (BonusTimes == 0 & Bonus > 0)
                 {
                     CalcInfo = CommonConst.msgBonusMonthErr;
                     return false;
-                }             
+                }
                 if (PayTotal > 99999999)
                 {
                     CalcInfo = CommonConst.msgPayTotalOver;
                     return false;
-                }               
+                }
                 if (BonusTimes == 1 & BonusSecond != 0)
                     CalcInfo = CommonConst.msgBonusTimesErr;
-           
+
                 DateTime wFirstDt;
-                string wNowMonth = DateTime.Now.ToString("MM");              
+                string wNowMonth = DateTime.Now.ToString("MM");
                 if (int.Parse(wNowMonth) >= 10 & FirstMonth <= 3)
                 {
                     wNowMonth = DateTime.Now.AddYears(1).Year + "/" + FirstMonth + "/01";
@@ -150,11 +149,11 @@ namespace KantanMitsumori.Service.Helper
                     wNowMonth = DateTime.Now.Year + "/" + FirstMonth + "/01";
                 }
                 wFirstDt = DateTime.Parse(wNowMonth);
-                FirstPayMonth = Convert.ToInt32(Strings.Format(wFirstDt, "yyyyMM"));
-                LastPayMonth = Convert.ToInt32(Strings.Format(wFirstDt.AddMonths(PayTimes - 1), "yyyyMM"));
+                FirstPayMonth = Convert.ToInt32(wFirstDt.ToString("yyyyMM"));
+                LastPayMonth = Convert.ToInt32(wFirstDt.AddMonths(PayTimes - 1).ToString("yyyyMM"));
             }
             catch (Exception ex)
-            {              
+            {
                 CalcInfo = CommonConst.msgCalcException;
                 _logger.LogInformation(ex, "CalcRegLoan", "CSIM-010C");
                 return false;

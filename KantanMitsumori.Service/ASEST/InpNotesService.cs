@@ -9,7 +9,6 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Service.ASEST
 {
@@ -44,7 +43,7 @@ namespace KantanMitsumori.Service.ASEST
                 var model = new ResponseInpNotes();
                 model.EstNo = estSubData.EstNo;
                 model.EstSubNo = estSubData.EstSubNo;
-                string[] arrNotes = string.IsNullOrWhiteSpace(estSubData.Notes) ? new string[2] { "", "" } : estSubData.Notes.Split(Constants.vbCrLf);
+                string[] arrNotes = string.IsNullOrWhiteSpace(estSubData.Notes) ? new string[2] { "", "" } : estSubData.Notes.Split("\r\n");
                 model.Notes1 = arrNotes[0];
                 model.Notes2 = arrNotes[1];
 
@@ -64,8 +63,8 @@ namespace KantanMitsumori.Service.ASEST
                 // get [t_EstimateSub]
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == model.EstNo && x.EstSubNo == model.EstSubNo && x.Dflag == false);
 
-                var strNotes = model.Notes1 + Constants.vbCrLf + model.Notes2;
-                if (strNotes == Constants.vbCrLf)
+                var strNotes = model.Notes1 + "\r\n" + model.Notes2;
+                if (strNotes == "\r\n")
                 {
                     strNotes = "";
                 }

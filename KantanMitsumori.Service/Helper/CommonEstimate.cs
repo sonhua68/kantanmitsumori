@@ -2,13 +2,11 @@
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
-using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Response;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using System.Reflection;
 
 namespace KantanMitsumori.Service.Helper
@@ -169,7 +167,7 @@ namespace KantanMitsumori.Service.Helper
                         simLon.Deposit = Convert.ToInt32(estModel.Deposit);
                         simLon.MoneyRate = Convert.ToInt32(estModel.Rate);
                         simLon.PayTimes = Convert.ToInt32(estModel.PayTimes);
-                        simLon.FirstMonth = Convert.ToInt32(Strings.Right(estModel.FirstPayMonth, 2));
+                        simLon.FirstMonth = Convert.ToInt32(CommonFunction.Right(estModel.FirstPayMonth ?? "", 2));
                         if (estModel.BonusAmount > 0)
                         {
                             simLon.Bonus = Convert.ToInt32(estModel.BonusAmount);
@@ -294,12 +292,12 @@ namespace KantanMitsumori.Service.Helper
             try
             {
                 var dtNow = DateTime.Now;
-                string iYear = Strings.Right(dtNow.Year.ToString(), 2);
-                string iMonth = Strings.Format(dtNow.Month, "00");
-                string iDay = Strings.Format(dtNow.Day, "00");
+                string iYear = CommonFunction.Right(dtNow.Year.ToString(), 2);
+                string iMonth = string.Format("{0:D2}", dtNow.Month);
+                string iDay = string.Format("{0:D2}", dtNow.Day);
                 string strNow = iYear + iMonth + iDay;
                 var estNo = _unitOfWork.Estimates.Query(n => n.EstNo.Substring(0, 6) == strNow).Max(n => n.EstNo);
-                outEstNo = estNo == null ? strNow + "00001" : strNow + Strings.Format(Convert.ToInt32(Strings.Right(estNo, 5)) + 1, "00000");
+                outEstNo = estNo == null ? strNow + "00001" : strNow + string.Format("{0:D5}", Convert.ToInt32(CommonFunction.Right(estNo, 5)) + 1);
             }
             catch (Exception ex)
             {
@@ -313,7 +311,7 @@ namespace KantanMitsumori.Service.Helper
             try
             {
                 var estSubNo = _unitOfWork.Estimates.Query(n => n.EstNo == inEstNo).Max(n => n.EstSubNo);
-                outEstSubNo = estSubNo == null ? "01" : Strings.Format(Convert.ToInt32(estSubNo) + 1, "00");
+                outEstSubNo = estSubNo == null ? "01" : string.Format("{0:D2}", Convert.ToInt32(estSubNo) + 1);
             }
             catch (Exception ex)
             {
@@ -334,7 +332,7 @@ namespace KantanMitsumori.Service.Helper
             return ResponseHelper.Ok<EstModel>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estData);
         }
 
-        public EstimateIdeModel setEstIDEData(LogToken logtoken )
+        public EstimateIdeModel setEstIDEData(LogToken logtoken)
         {
             var dataEstIDE = getEstIDEData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
             if (dataEstIDE != null)

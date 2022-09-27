@@ -1,44 +1,11 @@
-﻿using AutoMapper.Execution;
-using KantanMitsumori.Helper.Constant;
-using Microsoft.VisualBasic;
+﻿using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Enum;
 using System.Globalization;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
     public class CommonFunction
     {
-        /// <summary>
-        /// 西暦を和暦に変換する(年のみ)
-        /// </summary>
-        /// <param name="year"></param>
-        /// <returns></returns>
-        public string GetWareki(string year)
-        {
-            if (!Information.IsNumeric(year.Trim()))
-            {
-                return "";
-            }
-
-            int intYear = int.Parse(year.Trim());
-
-            string retNengo = "";
-
-            if (1926 <= intYear && intYear <= 1988)
-            {
-                retNengo = "S" + Convert.ToString(intYear - 1925);
-            }
-            else if (intYear <= 2018)
-            {
-                retNengo = "H" + Convert.ToString(intYear - 1988);
-            }
-            else if (2019 <= intYear)
-            {
-                retNengo = "R" + Convert.ToString(intYear - 2018);
-            }
-
-            return retNengo;
-        }
-
         /// <summary>
         /// Returns the left part of this string instance.
         /// </summary>
@@ -143,7 +110,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         {
             strYM = strYM.Trim();
 
-            if (Strings.InStr(strYM, "/") > 0)
+            if (strYM.IndexOf("/") > 0)
             {
                 return strYM;
             }
@@ -235,29 +202,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
         }
 
         /// <summary>
-        /// 日付の"/"を外す
-        /// </summary>
-        /// <param name="date"></param>
-        /// <returns></returns>
-        public string DateFormatReplace(string date)
-        {
-            if (Strings.InStr(1, date, "/") > 0)
-            {
-                date = date.Replace("/", "");
-                return date;
-            }
-            else
-            {
-                return date;
-            }
-        }
-
-        /// <summary>
         /// Check date format
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public bool IsDate(string input)
+        public static bool IsDate(string input)
         {
             if (!string.IsNullOrEmpty(input))
             {
@@ -286,42 +235,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return value.ToString()!;
             }
         }
-        public static string IsNullString(string? value)
-        {
-            if (String.IsNullOrEmpty(value))
-            {
-                return "";
-            }
-            else
-            {
-                return value.ToString()!;
-            }
-        }
-
-        public static decimal ConvertDecimal(object value)
-        {
-            if (value == null) return 0;
-            if (value is DBNull) return 0;
-            return Convert.ToDecimal(value);
-        }
-        public static double ConvertToDouble(object value)
-        {
-            if (value == null) return 0;
-            if (value is DBNull) return 0;
-            return Convert.ToDouble(value);
-        }
-        public static int ConvertToInt32(object value)
-        {
-            if (value == null) return 0;
-            if (value is DBNull) return 0;
-            return Convert.ToInt32(value);
-        }
-        public static long ConvertToInt64(object value)
-        {
-            if (value == null) return 0;
-            if (value is DBNull) return 0;
-            return Convert.ToInt64(value);
-        }
 
         /// <summary>
         /// 車検有効期限 判定・編集
@@ -333,25 +246,27 @@ namespace KantanMitsumori.Helper.CommonFuncs
         {
             var NONE = "無し";
 
-            long ret;
+            int ret;
 
             // 「無し」フラグ On
             if (inFlgNone)
                 return NONE;
 
             // 入力なし
-            if (inYM == "" | Information.IsNumeric(inYM) == false)
+            if (IsNumeric(inYM) == false)
                 return "";
 
-            if (Strings.Len(inYM) == 6 && Strings.Mid(inYM, 5) == "00")
-                // MM が "00" の場合、YYYY 部分のみ生かす
-                inYM = Strings.Left(inYM, 4);
-
-            if (Strings.Len(inYM) == 4)
+            if (inYM.Length == 6 && Mid(inYM, 5) == "00")
             {
-                if (Information.IsDate(inYM + "/01/01"))
+                // MM が "00" の場合、YYYY 部分のみ生かす
+                inYM = Left(inYM, 4);
+            }
+
+            if (inYM.Length == 4)
+            {
+                if (IsDate(inYM + "/01/01"))
                 {
-                    ret = DateAndTime.DateDiff(DateInterval.Year, System.DateTime.Today, DateTime.Parse(inYM + "/01/01"));
+                    ret = DateDiff(IntervalEnum.Years, DateTime.Today, DateTime.Parse(inYM + "/01/01"));
                     if (ret > 3)
                         // 未来過ぎて不正なので、入力なし扱い
                         return "";
@@ -362,11 +277,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
                         return inYM;
                 }
             }
-            else if (Strings.Len(inYM) == 6)
+            else if (inYM.Length == 6)
             {
-                if (Information.IsDate(Strings.Left(inYM, 4) + "/" + Strings.Right(inYM, 2) + "/01"))
+                if (IsDate(Left(inYM, 4) + "/" + Right(inYM, 2) + "/01"))
                 {
-                    ret = DateAndTime.DateDiff(DateInterval.Month, System.DateTime.Today, DateTime.Parse(Strings.Left(inYM, 4) + "/" + Strings.Right(inYM, 2) + "/01"));
+                    ret = DateDiff(IntervalEnum.Months, DateTime.Today, DateTime.Parse(Left(inYM, 4) + "/" + Right(inYM, 2) + "/01"));
                     if (ret > 36)
                         // 未来過ぎて不正なので、入力なし扱い
                         return "";
@@ -384,7 +299,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
         public static string chkImgFile(string imgPath, string strSesName, string strDefImg)
         {
-            if (Strings.Trim(imgPath) == "" || File.Exists(imgPath) == false)
+            if (imgPath.Trim() == "" || File.Exists(imgPath) == false)
             {
                 strSesName = strDefImg;
             }
@@ -392,7 +307,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
             {
                 int maxIndx = imgPath.Split(@"\").GetUpperBound(0);   // 切り分けて格納した配列の最後尾を取得
                                                                       // 上で取得したファイル部分を置換してpathのみを取り出し、ファイルをgetする(最終確認の為)
-                foreach (string nFileName in Directory.GetFiles(Strings.Replace(imgPath, (string?)imgPath.Split(@"\").GetValue(maxIndx), "")))
+                foreach (string nFileName in Directory.GetFiles(imgPath.Replace((string?)imgPath.Split(@"\").GetValue(maxIndx), "")))
                     strSesName = imgPath;
             }
 
@@ -407,7 +322,9 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
             else
             {
-                formatParm = Convert.ToString(Strings.Format(value, "#,##0") + " 円");
+                string format = "{0:#,##0.##}";
+                CultureInfo cul = new CultureInfo("en-Us");
+                formatParm = string.Format(cul, format, value) + " 円";
             }
             return formatParm;
         }
@@ -426,9 +343,15 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
             return formatParm;
         }
+
+        /// <summary>
+        /// 西暦を和暦に変換する(年のみ)
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
         public static string getWareki(string year)
         {
-            if (!Information.IsNumeric(Strings.Trim(year)))
+            if (IsNumeric(year.Trim()) == false)
             {
                 return "";
             }
@@ -454,18 +377,18 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
         public static string getFormatDayYMD(string strDay)
         {
-            int leDay = Strings.Len(Strings.Replace(strDay, "/", ""));
+            int leDay = strDay.Replace("/", "").Length;
             string rtstrDay = "";
             switch (leDay)
             {
                 case 8:
                     {
-                        rtstrDay = Strings.Trim(Strings.Left(strDay, 4)) + "年" + Strings.Trim(DateFormatZero(Strings.Mid(strDay, 5, 2))) + "月" + Strings.Trim(DateFormatZero(Strings.Right(strDay, 2))) + "日";
+                        rtstrDay = Left(strDay.Trim(), 4) + "年" + DateFormatZero(Mid(strDay.Trim(), 5, 2)) + "月" + DateFormatZero(Right(strDay.Trim(), 2)) + "日";
                         break;
                     }
                 case 6:
                     {
-                        rtstrDay = Strings.Trim(Strings.Left(strDay, 4)) + "年" + Strings.Trim(DateFormatZero(Strings.Mid(strDay, 5, 2))) + "月";
+                        rtstrDay = Left(strDay.Trim(), 4) + "年" + DateFormatZero(Mid(strDay.Trim(), 5, 2)) + "月";
                         break;
                     }
             }
@@ -501,11 +424,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
             else
             {
-                if (Strings.Len(inYM) == 4)
+                if (inYM.Length == 4)
                 {
-                    if (Information.IsDate(inYM + "/01"))
+                    if (IsDate(inYM + "/01"))
                     {
-                        var ret = DateAndTime.DateDiff(DateInterval.Year, System.DateTime.Today, DateTime.Parse(inYM + "/01"));
+                        var ret = DateDiff(IntervalEnum.Years, DateTime.Today, DateTime.Parse(inYM + "/01"));
                         if (ret > 0)
                         {
                             return "zok";
@@ -513,11 +436,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
                     }
                 }
-                else if (Strings.Len(inYM) == 6)
+                else if (inYM.Length == 6)
                 {
-                    if (Information.IsDate(Strings.Left(inYM, 4) + "/" + Strings.Right(inYM, 2) + "/01"))
+                    if (IsDate(Left(inYM, 4) + "/" + Right(inYM, 2) + "/01"))
                     {
-                        var ret = DateAndTime.DateDiff(DateInterval.Month, System.DateTime.Today, DateTime.Parse(Strings.Left(inYM, 4) + "/" + Strings.Right(inYM, 2) + "/01"));
+                        var ret = DateDiff(IntervalEnum.Months, DateTime.Today, DateTime.Parse(Left(inYM, 4) + "/" + Right(inYM, 2) + "/01"));
                         if (ret > 0)
                         {
                             return "zok";
@@ -544,6 +467,41 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return "";
 
         }
+
+        public static int DateDiff(IntervalEnum eInterval, DateTime dtInit, DateTime dtEnd)
+        {
+            if (dtEnd < dtInit)
+                throw new ArithmeticException("Init date should be previous to End date.");
+
+            switch (eInterval)
+            {
+                case IntervalEnum.Days:
+                    return (int)(dtEnd - dtInit).TotalDays;
+                case IntervalEnum.Months:
+                    return ((dtEnd.Year - dtInit.Year) * 12) + dtEnd.Month - dtInit.Month;
+                case IntervalEnum.Years:
+                    return dtEnd.Year - dtInit.Year;
+                default:
+                    throw new ArgumentException("Incorrect interval code.");
+            }
+        }
+
+        public static bool IsNumeric(string s)
+        {
+            bool value = true;
+            if (string.IsNullOrEmpty(s))
+            {
+                value = false;
+            }
+            else
+            {
+                foreach (char c in s.ToCharArray())
+                {
+                    value = value && char.IsDigit(c);
+                }
+            }
+            return value;
+        }
+
     }
 }
-

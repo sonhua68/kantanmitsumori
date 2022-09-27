@@ -1,13 +1,6 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
-using KantanMitsumori.Helper.Enum;
-using KantanMitsumori.IService;
+﻿using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
-using KantanMitsumori.Model;
-using KantanMitsumori.Model.Request;
-using KantanMitsumori.Model.Response;
 using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Controllers
 {

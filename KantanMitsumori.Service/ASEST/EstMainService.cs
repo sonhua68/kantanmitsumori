@@ -5,16 +5,12 @@ using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
-using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace KantanMitsumori.Service.ASEST
 {
@@ -61,7 +57,7 @@ namespace KantanMitsumori.Service.ASEST
                 valToken.sesPriDisp = isSesPriDisp ? "0" : "";
                 valToken.stateLoadWindow = "EstMain";
 
-                if (!string.IsNullOrEmpty(request.Mode) && Information.IsNumeric(request.Mode))
+                if (CommonFunction.IsNumeric(request.Mode))
                 {
                     valToken.sesMode = request.Mode;
                 }
@@ -70,7 +66,7 @@ namespace KantanMitsumori.Service.ASEST
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI001P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P));
 
                 }
-                if (!string.IsNullOrEmpty(request.PriDisp) && Information.IsNumeric(request.PriDisp!))
+                if (CommonFunction.IsNumeric(request.PriDisp))
                 {
                     valToken.sesPriDisp = request.PriDisp;
                 }
@@ -193,9 +189,9 @@ namespace KantanMitsumori.Service.ASEST
             estModel.TaxFreeKb = true;
             estModel.TaxCostKb = true;
             estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM;
-            int intHaiki = Information.IsNumeric(estModel.DispVol) ? int.Parse(estModel.DispVol) : 0;
+            int intHaiki = CommonFunction.IsNumeric(estModel.DispVol) ? int.Parse(estModel.DispVol) : 0;
             bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(model.MakerName!);
-            int intFirstMonth = Convert.ToInt32(Strings.Format(DateTime.Now, "MM"));
+            int intFirstMonth = Convert.ToInt32(string.Format("{0:D2}", DateTime.Now.Month));
             if (flgTaxAutoCalc & intHaiki > 0 && estModel.DispVolUnit == CommonConst.def_DispVolUnitCC)
             {
                 var carTax = _commonFuncHelper.getCarTax(intFirstMonth, intHaiki);
@@ -478,10 +474,10 @@ namespace KantanMitsumori.Service.ASEST
             estModel.Case = request.carCase;
             estModel.ChassisNo = request.pla;
             string vNensiki = request.mod.Trim();
-            estModel.FirstRegYm = string.IsNullOrEmpty(vNensiki) || !Information.IsNumeric(vNensiki) ? "" : vNensiki;
+            estModel.FirstRegYm = CommonFunction.IsNumeric(vNensiki) ? vNensiki : "";
             string strCheckCarYm = CommonFunction.setCheckCarYm(request.ins);
             estModel.CheckCarYm = strCheckCarYm;
-            estModel.NowOdometer = string.IsNullOrEmpty(request.mil) || !Information.IsNumeric(request.mil) ? 0 : int.Parse(request.mil);
+            estModel.NowOdometer = CommonFunction.IsNumeric(request.mil) ? int.Parse(request.mil) : 0;
             bool isCheckMilUnit = string.IsNullOrEmpty(request.milUnit);
             estModel.MilUnit = isCheckMilUnit ? CommonConst.def_MilUnitTKM : request.milUnit;
             estModel.DispVol = string.IsNullOrEmpty(request.vol) ? "" : request.vol.Trim().Replace("cc", ")");
@@ -499,9 +495,9 @@ namespace KantanMitsumori.Service.ASEST
             estModel.BusinessHis = request.his;
             estModel.FuelName = request.FuelName;
             estModel.DriveName = request.DriveName;
-            estModel.CarDoors = Information.IsNumeric(request.CarDoors) ? int.Parse(request.CarDoors) : 0;
+            estModel.CarDoors = CommonFunction.IsNumeric(request.CarDoors) ? int.Parse(request.CarDoors) : 0;
             estModel.BodyName = request.BodyName;
-            estModel.Capacity = Information.IsNumeric(request.Capacity) ? int.Parse(request.Capacity) : 0;
+            estModel.Capacity = CommonFunction.IsNumeric(request.Capacity) ? int.Parse(request.Capacity) : 0;
             estModel.Equipment = request.equ;
             estModel.BodyColor = request.col;
             string wCarImgPath = request.img;
@@ -540,9 +536,9 @@ namespace KantanMitsumori.Service.ASEST
             }
 
             estModel.TotalCost = 0;
-            decimal intCarPrice = Information.IsNumeric(request.pri) ? Convert.ToDecimal(request.pri) : 0m;
-            estModel.RakuSatu = Information.IsNumeric(request.fee) ? request.cor == "F6" ? 25000 : int.Parse(request.fee) : 0;
-            estModel.Rikusou = Information.IsNumeric(request.tra) ? int.Parse(request.tra) : 0;
+            decimal intCarPrice = CommonFunction.IsNumeric(request.pri) ? Convert.ToDecimal(request.pri) : 0m;
+            estModel.RakuSatu = CommonFunction.IsNumeric(request.fee) ? request.cor == "F6" ? 25000 : int.Parse(request.fee) : 0;
+            estModel.Rikusou = CommonFunction.IsNumeric(request.tra) ? int.Parse(request.tra) : 0;
             estModel.OptionInputKb = true;
             estModel.TaxInsInputKb = true;
             estModel.TaxFreeKb = true;
@@ -559,7 +555,7 @@ namespace KantanMitsumori.Service.ASEST
             estModel.Aacount = vAAcount;
             estModel.Mode = Convert.ToByte(request.Mode);
             estModel.Aayear = vNensiki;
-            estModel.Aahyk = string.IsNullOrEmpty(request.poi) || !Information.IsNumeric(request.poi) ? "0" : request.poi;
+            estModel.Aahyk = CommonFunction.IsNumeric(request.poi) ? request.poi : "0";
             estModel.Aaprice = (int)intCarPrice;
             estModel.SirPrice = estModel.CarPrice;
             estModel.YtiRieki = 0;
@@ -568,16 +564,16 @@ namespace KantanMitsumori.Service.ASEST
             if (!string.IsNullOrEmpty(request.lim))
             {
                 string vAATime = request.lim.Trim();
-                estModel.Aatime = request.lim.Trim().Length == 8 ? Strings.Left(vAATime, 4) + "/" + Strings.Mid(vAATime, 5, 2) + "/" + Strings.Right(vAATime, 2) : vAATime;
+                estModel.Aatime = request.lim.Trim().Length == 8 ? CommonFunction.Left(vAATime, 4) + "/" + CommonFunction.Mid(vAATime, 5, 2) + "/" + CommonFunction.Right(vAATime, 2) : vAATime;
 
             }
             int intHaiki = 0;
-            if (Information.IsNumeric(estModel.DispVol))
+            if (CommonFunction.IsNumeric(estModel.DispVol))
             {
                 intHaiki = int.Parse(estModel.DispVol);
             }
             bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(request.mak);
-            int intFirstMonth = Convert.ToInt32(Strings.Format(DateTime.Now, "MM"));
+            int intFirstMonth = Convert.ToInt32(string.Format("{0:D2}", DateTime.Now.Month));
             if (flgTaxAutoCalc & intHaiki > 0 && estModel.DispVolUnit == CommonConst.def_DispVolUnitCC)
             {
                 var carTax = _commonFuncHelper.getCarTax(intFirstMonth, intHaiki);
@@ -605,8 +601,8 @@ namespace KantanMitsumori.Service.ASEST
                 estModel.SyakenNew = isIntHaiki ? getUserDef.SyakenNewK : getUserDef.SyakenNewH;
                 estModel.SyakenZok = 0;
                 if (strCheckCarYm.Length == 6
-                    && DateAndTime.DateDiff(DateInterval.Month, DateTime.Today, DateTime.Parse(Strings.Left(strCheckCarYm, 4) + "/" + Strings.Right(strCheckCarYm, 2) + "/01")) > 0L
-                    || strCheckCarYm.Length == 4 && DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(strCheckCarYm + "/01")) > 0L)
+                    && CommonFunction.DateDiff(IntervalEnum.Months, DateTime.Today, DateTime.Parse(CommonFunction.Left(strCheckCarYm, 4) + "/" + CommonFunction.Right(strCheckCarYm, 2) + "/01")) > 0
+                    || strCheckCarYm.Length == 4 && CommonFunction.DateDiff(IntervalEnum.Years, DateTime.Today, DateTime.Parse(strCheckCarYm + "/01")) > 0)
                 {
                     estModel.SyakenNew = 0;
                     estModel.SyakenZok = isIntHaiki ? getUserDef.SyakenZokK : getUserDef.SyakenZokH;
@@ -641,8 +637,8 @@ namespace KantanMitsumori.Service.ASEST
             {
                 if (strCheckCarYm.Length == 6)
                 {
-                    inYYYY = Strings.Left(estModel.CheckCarYm, 4);
-                    inMM = Strings.Right(estModel.CheckCarYm, 2);
+                    inYYYY = CommonFunction.Left(estModel.CheckCarYm, 4);
+                    inMM = CommonFunction.Right(estModel.CheckCarYm, 2);
                 }
                 if (!_commonFuncHelper.getSelfInsurance(intHaiki, inYYYY, inMM, userDefDamageInsMonth, ref intSelfIns, ref intRemIns))
                     return ResponseHelper.Error<EstModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
@@ -710,8 +706,8 @@ namespace KantanMitsumori.Service.ASEST
                 entityEst = _mapper.Map<TEstimate>(model);
                 entityEst.EstNo = strEstNo;
                 entityEst.EstSubNo = strEstSubNo;
-                entityEst.ModelName = Strings.StrConv(model.ModelName!, VbStrConv.Narrow, LocaleID);
-                entityEst.DispVol = String.IsNullOrEmpty(model.DispVol) ? "" : model.DispVol.Trim().Replace("cc", "");
+                entityEst.ModelName = StringWidthHelper.ToHalfWidth(model.ModelName);
+                entityEst.DispVol = string.IsNullOrEmpty(model.DispVol) ? "" : model.DispVol.Trim().Replace("cc", "");
                 entityEst.CarSum = model.CarPrice + model.Sonota + model.NouCost + model.SyakenNew - model.Discount;
                 entityEst.OptionInputKb = true;
                 entityEst.TaxInsInputKb = true;
@@ -755,26 +751,26 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.TradeDate = CommonFunction.japaneseFormat(Model.EstModel.TradeDate);
             estModelView.SalesSum = CommonFunction.setFormatCurrency(Model.EstModel.SalesSum);
 
-            if (Strings.Len(Strings.Trim(Model.EstModel.FirstRegYm)) == 4)
+            if (Model.EstModel.FirstRegYm.Trim().Length == 4)
             {
-                estModelView.FirstRegYm = CommonFunction.getWareki(Strings.Mid(Model.EstModel.FirstRegYm, 1, 4)) + "年";
+                estModelView.FirstRegYm = CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.FirstRegYm, 1, 4)) + "年";
             }
-            else if (Strings.Len(Strings.Trim(Model.EstModel.FirstRegYm)) == 6)
+            else if (Model.EstModel.FirstRegYm.Trim().Length == 6)
             {
-                estModelView.FirstRegYm = CommonFunction.getWareki(Strings.Mid(Model.EstModel.FirstRegYm, 1, 4)) + "年" + System.Convert.ToInt32(Strings.Mid(Model.EstModel.FirstRegYm, 5, 2)) + "月";
+                estModelView.FirstRegYm = CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.FirstRegYm, 1, 4)) + "年" + Convert.ToInt32(CommonFunction.Mid(Model.EstModel.FirstRegYm, 5, 2)) + "月";
             }
             string Ysc = "";
             string Msc = "";
             CommonFunction.FormatDay(Model.EstModel.CheckCarYm ?? "0", ref Ysc, ref Msc);
             estModelView.CheckCarYm = Model.EstModel.CheckCarYm == "無し" || string.IsNullOrEmpty(Model.EstModel.CheckCarYm) ? Model.EstModel.CheckCarYm : CommonFunction.getWareki(Ysc) + "年" + Msc + "月";
-            estModelView.NowRun = Information.IsNumeric(Model.EstModel.NowOdometer) ? CommonFunction.setFormatCurrency(Model.EstModel.NowOdometer, Model.EstModel.MilUnit) : "";
+            estModelView.NowRun = CommonFunction.IsNumeric(Model.EstModel.NowOdometer.ToString()) ? CommonFunction.setFormatCurrency(Model.EstModel.NowOdometer, Model.EstModel.MilUnit) : "";
             var DispVol = string.IsNullOrEmpty(Model.EstModel.DispVol) ? 0 : Convert.ToInt32(Model.EstModel.DispVol);
             estModelView.Vol = CommonFunction.setFormatCurrency(DispVol, Model.EstModel.DispVolUnit);
 
 
-            if (Strings.Trim(Model.EstModel.EstTanName) != "")
+            if (!string.IsNullOrEmpty(Model.EstModel.EstTanName.Trim()))
                 estModelView.EstTanName += "担当 : " + Model.EstModel.EstTanName + "　　";
-            if (Strings.Trim(Model.EstModel.SekininName) != "")
+            if (!string.IsNullOrEmpty(Model.EstModel.SekininName.Trim()))
                 estModelView.SekininName += "責任者 : " + Model.EstModel.SekininName + "　　";
             estModelView.ShopTel += "TEL : " + Model.EstModel.ShopTel;
             estModelView.AAInfo = Model.EstModel.Mode == 1 ? Model.EstModel.AAInfo : "";
@@ -800,10 +796,12 @@ namespace KantanMitsumori.Service.ASEST
             {
                 wSyakenNew = 0;
                 estModelView.SyakenNewZokT = CommonConst.def_TitleSyakenNew;
-                if ((Strings.Len(Model.EstModel.CheckCarYm) == 6 &&
-                    DateAndTime.DateDiff(DateInterval.Month, DateTime.Today, DateTime.Parse(Strings.Left(Model.EstModel.CheckCarYm, 4) + "/" + Strings.Right(Model.EstModel.CheckCarYm, 2) + "/01")) > 0)
-                    || (Strings.Len(Model.EstModel.CheckCarYm) == 4 && DateAndTime.DateDiff(DateInterval.Year, DateTime.Today, DateTime.Parse(Model.EstModel.CheckCarYm + "/01")) > 0))
+                if ((Model.EstModel.CheckCarYm!.Length == 6 &&
+                    CommonFunction.DateDiff(IntervalEnum.Months, DateTime.Today, DateTime.Parse(CommonFunction.Left(Model.EstModel.CheckCarYm, 4) + "/" + CommonFunction.Right(Model.EstModel.CheckCarYm, 2) + "/01")) > 0)
+                    || (Model.EstModel.CheckCarYm.Length == 4 && CommonFunction.DateDiff(IntervalEnum.Years, DateTime.Today, DateTime.Parse(Model.EstModel.CheckCarYm + "/01")) > 0))
+                {
                     estModelView.SyakenNewZokT = CommonConst.def_TitleSyakenZok;
+                }
             }
             estModelView.SyakenNewZokT = estModelView.SyakenNewZokT + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
             estModelView.SyakenNew = CommonFunction.setFormatCurrency(wSyakenNew);
@@ -868,10 +866,10 @@ namespace KantanMitsumori.Service.ASEST
 
             string fromdt = "";
             if (!string.IsNullOrEmpty(Model.EstModel.FirstPayMonth))
-                fromdt = Strings.Mid(Model.EstModel.FirstPayMonth, 1, 4) + "年" + System.Convert.ToString(Strings.Mid(Model.EstModel.FirstPayMonth, 5, 2)) + "月";
+                fromdt = CommonFunction.Mid(Model.EstModel.FirstPayMonth, 1, 4) + "年" + System.Convert.ToString(CommonFunction.Mid(Model.EstModel.FirstPayMonth, 5, 2)) + "月";
             string todt = "";
             if (!string.IsNullOrEmpty(Model.EstModel.LastPayMonth))
-                todt = Strings.Mid(Model.EstModel.LastPayMonth, 1, 4) + "年" + System.Convert.ToString(Strings.Mid(Model.EstModel.LastPayMonth, 5, 2)) + "月";
+                todt = CommonFunction.Mid(Model.EstModel.LastPayMonth, 1, 4) + "年" + System.Convert.ToString(CommonFunction.Mid(Model.EstModel.LastPayMonth, 5, 2)) + "月";
             estModelView.Kikan = (!string.IsNullOrEmpty(fromdt) | !string.IsNullOrEmpty(todt)) ? fromdt + " - " + todt : "";
             estModelView.FirstPayAmount = Model.EstModel.FirstPayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.FirstPayAmount) : "";
             estModelView.PayAmount = Model.EstModel.PayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.PayAmount) : "";
@@ -901,8 +899,8 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.InsuranceFee = Model.EstIDEModel.InsuranceFee == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.InsuranceFee);
             estModelView.DownPayment = Model.EstIDEModel.DownPayment == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.DownPayment);
             estModelView.IdeTradeInPrice = Model.EstIDEModel.TradeInPrice == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.TradeInPrice);
-            estModelView.TradeInFirstRegYm = !string.IsNullOrEmpty(Model.EstModel.TradeInFirstRegYm) ? (Model.EstModel.TradeInFirstRegYm.Trim().Length == 4) ? CommonFunction.getWareki(Strings.Mid(Model.EstModel.TradeInFirstRegYm, 1, 4)) + "年" :
-                          (Model.EstModel.TradeInFirstRegYm.Trim().Length == 6) ? CommonFunction.getWareki(Strings.Mid(Model.EstModel.TradeInFirstRegYm, 1, 4)) + "年" + Convert.ToInt32(Strings.Mid(Model.EstModel.TradeInFirstRegYm, 5, 2)) + "月" : "" : "";
+            estModelView.TradeInFirstRegYm = !string.IsNullOrEmpty(Model.EstModel.TradeInFirstRegYm) ? (Model.EstModel.TradeInFirstRegYm.Trim().Length == 4) ? CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.TradeInFirstRegYm, 1, 4)) + "年" :
+                          (Model.EstModel.TradeInFirstRegYm.Trim().Length == 6) ? CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.TradeInFirstRegYm, 1, 4)) + "年" + Convert.ToInt32(CommonFunction.Mid(Model.EstModel.TradeInFirstRegYm, 5, 2)) + "月" : "" : "";
 
             string Yfm = "";
             string Mfm = "";
