@@ -497,7 +497,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
             {
                 foreach (char c in s.ToCharArray())
                 {
-                    value = value && char.IsDigit(c);
+                    if (!char.IsDigit(c)) return false;
                 }
             }
             return value;
