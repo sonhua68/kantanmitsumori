@@ -504,7 +504,7 @@ var Framework =
             key: "SetCheckValueById",
             value: function SetCheckValueById(nameId, defaultValue) {
                 console.log(nameId);
-                $("#" + nameId + "").attr('checked', true);            
+                $("#" + nameId + "").attr('checked', true);
                 return;
             }
         },
@@ -525,7 +525,12 @@ var Framework =
         {
             key: "GoBackPage",
             value: function GoBackPage() {
-                window.history.back();              
+                let url = window.location.href;
+                if (url.includes("#")) {
+                    window.history.go(-2);
+                } else {
+                    window.history.back();
+                }
             }
         },
         {
