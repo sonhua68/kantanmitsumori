@@ -37,15 +37,15 @@ function SortData(colNumber) {
     ReloadListData(result);
     _conNumberSort = !_conNumberSort;
     _conNumber = number;
+    return;
 }
 function getNumberSort(number) {
     if (number == 3) {
-        return 5;
-        _conNumberSort = true;
+        return 5;     
     } else if (number == 2) {
         return 7;
     } else if (number == 4) {
-        return 6;
+        return 6;   
     } else {
         return 0;
     }

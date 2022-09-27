@@ -24,9 +24,9 @@ namespace KantanMitsumori.Helper.Enum
         isRegularCase = 2,
         isDispVol = 3,
         isDriveTypeCode = 4,
-        isDispVolAsc = 5,
-        isDriveTypeCodeAsc = 6,
-        isRegularCaseAsc = 7,
+        isDispVolDesc = 5,
+        isDriveTypeCodeDesc = 6,
+        isRegularCaseDesc = 7,
     }
     public enum enSortCarEst
     {
@@ -35,8 +35,8 @@ namespace KantanMitsumori.Helper.Enum
         isTradeDate = 2,
         isCustKName = 3,     
         isCarName = 4,
-        isCustKNameAsc = 5,
-        isCarNameAsc = 6,
-        isTradeDateAsc = 7,
+        isCustKNameDesc = 5,
+        isCarNameDesc = 6,
+        isTradeDateDesc = 7,
     }
 }

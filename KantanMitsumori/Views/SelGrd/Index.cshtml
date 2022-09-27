@@ -84,9 +84,9 @@
                     <tbody>
                         <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
                             <th scope="col">選択</th>
-                            <th scope="col"><a href="#" onclick="return SortData(1)" style="color:White;">グレード</a></th>
-                            <th scope="col"><a href="#" onclick="return SortData(2)" style="color:White;">型式</a></th>
-                            <th scope="col"><a href="#" onclick="return SortData(3)" style="color:White;">排気量</a></th>
+                            <th scope="col"><a href="#" onclick="return SortData(1);return false;" style="color:White;">グレード</a></th>
+                            <th scope="col"><a href="#" onclick="return SortData(2);return false;" style="color:White;">型式</a></th>
+                            <th scope="col"><a href="#" onclick="return SortData(3);return false;" style="color:White;">排気量</a></th>
                             <th scope="col">シフト</th>
                             <th scope="col"><a href="#" onclick="return SortData(4)" style="color:White;">駆動方式</a></th>
                         </tr>
@@ -97,16 +97,16 @@
                                 var GradeName = item.GradeName;
                                 var RegularCase = @item.RegularCase;
                                 var DispVol = @item.DispVol;
-                                <tr id="tbremote">
-                                    <td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">
-                                        <input type="submit" href="#" value="選択" onclick="SetFreeEst(`@GradeName` ,`@RegularCase`,`@DispVol`) ;return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">
-                                    </td>
-                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">@item.GradeName</td>
-                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.RegularCase</td>
-                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;white-space:nowrap;">@item.DispVol</td>
-                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.Shift</td>
-                                    <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@DriveTypeCode</td>
-                                </tr>
+                                            <tr id="tbremote">
+                                                <td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">
+                                                    <input type="submit" href="#" value="選択" onclick="SetFreeEst(`@GradeName` ,`@RegularCase`,`@DispVol`) ;return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">
+                                                </td>
+                                                <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">@item.GradeName</td>
+                                                <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.RegularCase</td>
+                                                <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;white-space:nowrap;">@item.DispVol</td>
+                                                <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@item.Shift</td>
+                                                <td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">@DriveTypeCode</td>
+                                            </tr>
                             }
                         }
                     </tbody>
