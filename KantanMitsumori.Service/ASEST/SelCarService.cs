@@ -143,13 +143,13 @@ namespace KantanMitsumori.Service.ASEST
                         break;
                     case (int)enSortCar.isRegularCase:
                         tbRuibetsuList = _unitOfWork.DbContext.Set<TbRuibetsuEntity>().FromSqlRaw(sql)
-                                                                  .OrderBy(n => n.RegularCase).ThenBy(n => n.RegularCaseOrd)
+                                                                  .OrderBy(n => n.RegularCaseOrd).ThenBy(n => n.RegularCase)
                                                                   .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
                                                                   .ToList();
                         break;
                     case (int)enSortCar.isRegularCaseDesc:
                         tbRuibetsuList = _unitOfWork.DbContext.Set<TbRuibetsuEntity>().FromSqlRaw(sql)
-                                                                  .OrderByDescending(n => n.RegularCase).ThenBy(n => n.RegularCaseOrd)
+                                                                  .OrderByDescending(n => n.RegularCaseOrd ).ThenBy(n => n.RegularCase)
                                                                   .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
                                                                   .ToList();
 
