@@ -377,6 +377,8 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
         public static string getFormatDayYMD(string strDay)
         {
+            if (string.IsNullOrEmpty(strDay)) return "";
+
             int leDay = strDay.Replace("/", "").Length;
             string rtstrDay = "";
             switch (leDay)
