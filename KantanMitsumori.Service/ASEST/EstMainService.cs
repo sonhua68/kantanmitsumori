@@ -564,7 +564,7 @@ namespace KantanMitsumori.Service.ASEST
             if (!string.IsNullOrEmpty(request.lim))
             {
                 string vAATime = request.lim.Trim();
-                estModel.Aatime = request.lim.Trim().Length == 8 ? CommonFunction.Left(vAATime, 4) + "/" + CommonFunction.Mid(vAATime, 5, 2) + "/" + CommonFunction.Right(vAATime, 2) : vAATime;
+                estModel.Aatime = request.lim.Trim().Length == 8 ? CommonFunction.Left(vAATime, 4) + "/" + CommonFunction.Mid(vAATime, 4, 2) + "/" + CommonFunction.Right(vAATime, 2) : vAATime;
 
             }
             int intHaiki = 0;
@@ -753,11 +753,11 @@ namespace KantanMitsumori.Service.ASEST
 
             if (Model.EstModel.FirstRegYm.Trim().Length == 4)
             {
-                estModelView.FirstRegYm = CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.FirstRegYm, 1, 4)) + "年";
+                estModelView.FirstRegYm = CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.FirstRegYm, 0, 4)) + "年";
             }
             else if (Model.EstModel.FirstRegYm.Trim().Length == 6)
             {
-                estModelView.FirstRegYm = CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.FirstRegYm, 1, 4)) + "年" + Convert.ToInt32(CommonFunction.Mid(Model.EstModel.FirstRegYm, 5, 2)) + "月";
+                estModelView.FirstRegYm = CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.FirstRegYm, 0, 4)) + "年" + Convert.ToInt32(CommonFunction.Mid(Model.EstModel.FirstRegYm, 4, 2)) + "月";
             }
             string Ysc = "";
             string Msc = "";
@@ -866,10 +866,10 @@ namespace KantanMitsumori.Service.ASEST
 
             string fromdt = "";
             if (!string.IsNullOrEmpty(Model.EstModel.FirstPayMonth))
-                fromdt = CommonFunction.Mid(Model.EstModel.FirstPayMonth, 1, 4) + "年" + System.Convert.ToString(CommonFunction.Mid(Model.EstModel.FirstPayMonth, 5, 2)) + "月";
+                fromdt = CommonFunction.Mid(Model.EstModel.FirstPayMonth, 0, 4) + "年" + Convert.ToString(CommonFunction.Mid(Model.EstModel.FirstPayMonth, 4, 2)) + "月";
             string todt = "";
             if (!string.IsNullOrEmpty(Model.EstModel.LastPayMonth))
-                todt = CommonFunction.Mid(Model.EstModel.LastPayMonth, 1, 4) + "年" + System.Convert.ToString(CommonFunction.Mid(Model.EstModel.LastPayMonth, 5, 2)) + "月";
+                todt = CommonFunction.Mid(Model.EstModel.LastPayMonth, 0, 4) + "年" + Convert.ToString(CommonFunction.Mid(Model.EstModel.LastPayMonth, 4, 2)) + "月";
             estModelView.Kikan = (!string.IsNullOrEmpty(fromdt) | !string.IsNullOrEmpty(todt)) ? fromdt + " - " + todt : "";
             estModelView.FirstPayAmount = Model.EstModel.FirstPayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.FirstPayAmount) : "";
             estModelView.PayAmount = Model.EstModel.PayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.PayAmount) : "";
@@ -900,7 +900,7 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.DownPayment = Model.EstIDEModel.DownPayment == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.DownPayment);
             estModelView.IdeTradeInPrice = Model.EstIDEModel.TradeInPrice == 0 ? "" : CommonFunction.setFormatCurrency(Model.EstIDEModel.TradeInPrice);
             estModelView.TradeInFirstRegYm = !string.IsNullOrEmpty(Model.EstModel.TradeInFirstRegYm) ? (Model.EstModel.TradeInFirstRegYm.Trim().Length == 4) ? CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.TradeInFirstRegYm, 1, 4)) + "年" :
-                          (Model.EstModel.TradeInFirstRegYm.Trim().Length == 6) ? CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.TradeInFirstRegYm, 1, 4)) + "年" + Convert.ToInt32(CommonFunction.Mid(Model.EstModel.TradeInFirstRegYm, 5, 2)) + "月" : "" : "";
+                          (Model.EstModel.TradeInFirstRegYm.Trim().Length == 6) ? CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.TradeInFirstRegYm, 0, 4)) + "年" + Convert.ToInt32(CommonFunction.Mid(Model.EstModel.TradeInFirstRegYm, 4, 2)) + "月" : "" : "";
 
             string Yfm = "";
             string Mfm = "";

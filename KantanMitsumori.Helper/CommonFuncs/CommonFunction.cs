@@ -125,7 +125,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
                     retDay = Left(strYM, 4) + "/" + Right(strYM, 2);
                     break;
                 case 8:
-                    retDay = Left(strYM, 4) + "/" + Mid(strYM, 5, 2);
+                    retDay = Left(strYM, 4) + "/" + Mid(strYM, 4, 2);
                     break;
                 default:
                     retDay = strYM;
@@ -385,12 +385,12 @@ namespace KantanMitsumori.Helper.CommonFuncs
             {
                 case 8:
                     {
-                        rtstrDay = Left(strDay.Trim(), 4) + "年" + DateFormatZero(Mid(strDay.Trim(), 5, 2)) + "月" + DateFormatZero(Right(strDay.Trim(), 2)) + "日";
+                        rtstrDay = Left(strDay.Trim(), 4) + "年" + DateFormatZero(Mid(strDay.Trim(), 4, 2)) + "月" + DateFormatZero(Right(strDay.Trim(), 2)) + "日";
                         break;
                     }
                 case 6:
                     {
-                        rtstrDay = Left(strDay.Trim(), 4) + "年" + DateFormatZero(Mid(strDay.Trim(), 5, 2)) + "月";
+                        rtstrDay = Left(strDay.Trim(), 4) + "年" + DateFormatZero(Mid(strDay.Trim(), 4, 2)) + "月";
                         break;
                     }
             }
