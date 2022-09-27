@@ -129,6 +129,7 @@ function GoNextPage(pageNumber) {
 function LoadData(pageNumber) {
     var model = Framework.getFormData($("#FormSerEst"));
     model.pageNumber = pageNumber
+    model.colSort = 11;
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
     if (result.length > 0) {
         AddRowTable(result);
@@ -154,16 +155,22 @@ function SortData(colNumber) {
     _conNumber = number;
     return false;
 }
-function getNumberSort(number) {
-    if (number == 3) {
-        return 5;
-    } else if (number == 2) {
-        return 7;
-    } else if (number == 4) {
-        return 6;
+function SortData(colNumber) {
+    let sort = parseInt($("#SortPage").val());
+    if (sort == 0) {
+        let val = colNumber + sort;
+        $("#SortPage").val(val)
+        _conNumber = val;
+    } else if (sort == colNumber) {
+        let val = colNumber + 1;
+        $("#SortPage").val(val);
+        _conNumber = val;
     } else {
-        return 0;
+        $("#SortPage").val(colNumber);
+        _conNumber = colNumber;
     }
+    console.log(_conNumber);
+    GoNextPage(1)   
 }
 function DeleteEstimate(value) {
     var data = value.toString().split("-");
@@ -328,3 +335,4 @@ function SortPagination(itemsArr) {
     }
 
 }
+

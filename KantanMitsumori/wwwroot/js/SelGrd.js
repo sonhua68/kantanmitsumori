@@ -20,34 +20,27 @@ function GoNextPage(pageNumber) {
 }
 
 function SortData(colNumber) {
-    var model = {};
-    model.sesMakID = $("#sesMakID").val();
-    model.sesMaker = $("#sesMaker").val();
-    model.sesCarNM = $("#sesCarNM").val();
-    model.CaseSet = vCaseSet;
-    model.KbnSet = vKbnSet;
-    model.pageNumber = 1;
-    let number = !_conNumberSort ? getNumberSort(colNumber) : colNumber;
-    model.colSort = number;
-    var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
-    $('tr#pagination').remove();
-    $('#trId').twbsPagination('destroy');
-    UiPagination(result[0].totalPages)
-    AddPagination(result[0].totalPages);
-    ReloadListData(result);
-    _conNumberSort = !_conNumberSort;
-    _conNumber = number;    
-}
-function getNumberSort(number) {
-    if (number == 3) {
-        return 5;     
-    } else if (number == 2) {
-        return 7;
-    } else if (number == 4) {
-        return 6;   
+    let sort = parseInt($("#SortPage").val());
+    if (sort == 0) {
+        let val = colNumber + sort;
+        $("#SortPage").val(val)
+        _conNumber = val;
+    } else if (sort == colNumber) {
+        let val = colNumber + 1;
+        $("#SortPage").val(val);
+        _conNumber = val;
     } else {
-        return 0;
+        $("#SortPage").val(colNumber);
+        _conNumber = colNumber;
     }
+    console.log(_conNumber);
+    GoNextPage(1)
+    //var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
+    //$('tr#pagination').remove();
+    //$('#trId').twbsPagination('destroy');
+    //UiPagination(result[0].totalPages)
+    //AddPagination(result[0].totalPages);
+    //ReloadListData(result);
 }
 function ReloadListData(data) {
     $("#gvGrade").css("display", "inline-table");
@@ -78,7 +71,7 @@ function AddPagination(totalPages) {
         totalPages: totalPages,
         visiblePages: 10,
         next: '次',
-        prev: '前',      
+        prev: '前',
         onPageClick: function (event, page) {
             GoNextPage(page)
         }
