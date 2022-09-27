@@ -84,12 +84,12 @@
                                             {
                                                 if (i == Month)
                                                 {
-                                                    <option selected="selected" value="@Month">@Month</option>
+                                                                    <option selected="selected" value="@Month">@Month</option>
                                                 }
                                                 else
                                                 {
                                                     var value = @Month - i;
-                                                    <option value="@value">@value</option>
+                                                                    <option value="@value">@value</option>
                                                 }
                                             }
                                         }
@@ -113,12 +113,12 @@
                                             {
                                                 if (i == Month)
                                                 {
-                                                    <option selected="selected" value="@Month">@Month</option>
+                                                                    <option selected="selected" value="@Month">@Month</option>
                                                 }
                                                 else
                                                 {
                                                     var value = @Month - i;
-                                                    <option value="@value">@value</option>
+                                                                    <option value="@value">@value</option>
                                                 }
                                             }
                                         }
@@ -182,10 +182,10 @@
                             <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
                                 <th scope="col">選択</th>
                                 <th scope="col">再作成</th>
-                                <th scope="col"><a href="#" onclick="return SortData(1)" style="color:White;">見積書番号</a></th>
-                                <th scope="col"><a href="#" onclick="return SortData(2)" style="color:White;">見積日</a></th>
-                                <th scope="col"><a href="#" onclick="return SortData(3)" style="color:White;">カナ名</a></th>
-                                <th scope="col"><a href="#" onclick="return SortData(4)" style="color:White;">車両</a></th>
+                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(10);return false;" style="color:White;">見積書番号</a></th>
+                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(20);return false;" style="color:White;">見積日</a></th>
+                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(30);return false;" style="color:White;">カナ名</a></th>
+                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(40);return false;" style="color:White;">車両</a></th>
                                 <th scope="col">削除</th>
                             </tr>
                         </tbody>
@@ -196,6 +196,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="SortPage" value="10">
 </div>
 <script src="~/js/SerEst.js"></script>
 

@@ -137,6 +137,12 @@ namespace KantanMitsumori.Service.ASEST
                         break;
                     case (int)enSortCar.isGradeName:
                         tbRuibetsuList = _unitOfWork.DbContext.Set<TbRuibetsuEntity>().FromSqlRaw(sql)
+                                                                 .OrderBy(n => n.GradeName).ThenBy(n => n.GradeNameOrd)
+                                                                 .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
+                                                                 .ToList();
+                        break;
+                    case (int)enSortCar.isGradeNameDesc:
+                        tbRuibetsuList = _unitOfWork.DbContext.Set<TbRuibetsuEntity>().FromSqlRaw(sql)
                                                                  .OrderByDescending(n => n.GradeName).ThenBy(n => n.GradeNameOrd)
                                                                  .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
                                                                  .ToList();
@@ -147,7 +153,7 @@ namespace KantanMitsumori.Service.ASEST
                                                                   .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
                                                                   .ToList();
                         break;
-                    case (int)enSortCar.isRegularCaseAsc:
+                    case (int)enSortCar.isRegularCaseDesc:
                         tbRuibetsuList = _unitOfWork.DbContext.Set<TbRuibetsuEntity>().FromSqlRaw(sql)
                                                                   .OrderByDescending(n => n.RegularCase).ThenBy(n => n.RegularCaseOrd)
                                                                   .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
@@ -156,31 +162,32 @@ namespace KantanMitsumori.Service.ASEST
                         break;
                     case (int)enSortCar.isDispVol:
                         tbRuibetsuList = _unitOfWork.DbContext.Set<TbRuibetsuEntity>().FromSqlRaw(sql)
-                                                                 .OrderBy(n => n.DispVol).ThenBy(n => n.DispVolOrd)                                                              
+                                                                 .OrderBy(n => n.DispVolOrd).ThenBy(n => n.DispVol)
                                                               .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
                                                               .ToList();
 
 
                         break;
-                    case (int)enSortCar.isDispVolAsc:
+                    case (int)enSortCar.isDispVolDesc:
                         tbRuibetsuList = _unitOfWork.DbContext.Set<TbRuibetsuEntity>().FromSqlRaw(sql)
-                                                                 .OrderByDescending(n => n.DispVol).ThenBy(n => n.DispVolOrd)                                                                  
+                                                                 .OrderByDescending(n => n.DispVol).ThenBy(n => n.DispVolOrd)
                                                               .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
                                                               .ToList();
                         break;
                     case (int)enSortCar.isDriveTypeCode:
                         tbRuibetsuList = _unitOfWork.DbContext.Set<TbRuibetsuEntity>().FromSqlRaw(sql)
-                                                                   .OrderBy(n => n.DriveTypeCodeOrd ).ThenBy(n => n.DriveTypeCode)
+                                                                   .OrderBy(n => n.DriveTypeCodeOrd).ThenBy(n => n.DriveTypeCode)
                                                                 .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
                                                                 .ToList();
 
                         break;
 
-                    case (int)enSortCar.isDriveTypeCodeAsc:
+                    case (int)enSortCar.isDriveTypeCodeDesc:
                         tbRuibetsuList = _unitOfWork.DbContext.Set<TbRuibetsuEntity>().FromSqlRaw(sql)
-                                                                            .OrderByDescending(n => n.DriveTypeCodeOrd).ThenBy(n => n.DriveTypeCode)
-                                                                         .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
-                                                                         .ToList();
+                                                                   .OrderByDescending(n => n.DriveTypeCodeOrd).ThenBy(n => n.DriveTypeCode)
+                                                                .Select(i => _mapper.Map<ResponseTbRuibetsuNew>(i))
+                                                                .ToList();
+
                         break;
 
                 }
@@ -202,14 +209,13 @@ namespace KantanMitsumori.Service.ASEST
             }
 
         }
+ 
         public ResponseBase<List<ResponseSerEst>> GetListSerEst(RequestSerEst requestSerEst)
         {
             try
             {
                 var data = new List<ResponseSerEst>();
                 var sql = SQLHelper.GetListSerEst(requestSerEst);
-
-
                 switch (requestSerEst.colSort)
                 {
 
@@ -227,6 +233,13 @@ namespace KantanMitsumori.Service.ASEST
                                                                     _mapper.Map<ResponseSerEst>(i))
                                                                     .ToList();
                         break;
+                    case (int)enSortCarEst.isEstNoDesc:
+                        data = _unitOfWork.DbContext.Set<SerEstEntity>().FromSqlRaw(sql)
+                                                                    .OrderByDescending(n => n.EstNo)
+                                                                    .Select(i =>
+                                                                    _mapper.Map<ResponseSerEst>(i))
+                                                                    .ToList();
+                        break;
                     case (int)enSortCarEst.isTradeDate:
                         data = _unitOfWork.DbContext.Set<SerEstEntity>().FromSqlRaw(sql)
                                                                   .OrderBy(n => n.TradeDate).ThenByDescending(n => n.EstNo)
@@ -235,7 +248,7 @@ namespace KantanMitsumori.Service.ASEST
                                                                   .ToList();
 
                         break;
-                    case (int)enSortCarEst.isTradeDateAsc:
+                    case (int)enSortCarEst.isTradeDateDesc:
                         data = _unitOfWork.DbContext.Set<SerEstEntity>().FromSqlRaw(sql)
                                                                   .OrderByDescending(n => n.TradeDate).ThenByDescending(n => n.EstNo)
                                                                   .Select(i =>
@@ -252,7 +265,7 @@ namespace KantanMitsumori.Service.ASEST
 
                         break;
 
-                    case (int)enSortCarEst.isCustKNameAsc:
+                    case (int)enSortCarEst.isCustKNameDesc:
                         data = _unitOfWork.DbContext.Set<SerEstEntity>().FromSqlRaw(sql)
                                                                   .OrderByDescending(n => n.CustKName).ThenBy(n => n.EstNo)
                                                                   .Select(i =>
@@ -270,13 +283,12 @@ namespace KantanMitsumori.Service.ASEST
                                                                        .ToList();
 
                         break;
-                    case (int)enSortCarEst.isCarNameAsc:
+                    case (int)enSortCarEst.isCarNameDesc:
                         data = _unitOfWork.DbContext.Set<SerEstEntity>().FromSqlRaw(sql)
                                                                .OrderByDescending(n => n.CarName).ThenByDescending(n => n.EstNo)
                                                                .Select(i =>
                                                                _mapper.Map<ResponseSerEst>(i))
                                                                .ToList();
-
                         break;
                 }
                 if (data.Count == 0)
