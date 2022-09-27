@@ -155,7 +155,9 @@ function SortData(colNumber) {
     _conNumber = number;
     return false;
 }
+
 function SortData(colNumber) {
+    var model = Framework.getFormData($("#FormSerEst"));
     let sort = parseInt($("#SortPage").val());
     if (sort == 0) {
         let val = colNumber + sort;
@@ -169,8 +171,14 @@ function SortData(colNumber) {
         $("#SortPage").val(colNumber);
         _conNumber = colNumber;
     }
-    console.log(_conNumber);
-    GoNextPage(1)   
+    model.pageNumber = 1; 
+    model.colSort = _conNumber;
+    var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
+    $('tr#pagination').remove();
+    $('#trId').twbsPagination('destroy');
+    UiPagination(result[0].totalPages)
+    AddPagination(result[0].totalPages);
+    ReloadListData(result);  
 }
 function DeleteEstimate(value) {
     var data = value.toString().split("-");

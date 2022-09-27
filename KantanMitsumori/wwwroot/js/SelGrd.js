@@ -18,8 +18,14 @@ function GoNextPage(pageNumber) {
     var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
     ReloadListData(result);
 }
-
 function SortData(colNumber) {
+    var model = {};
+    model.sesMakID = $("#sesMakID").val();
+    model.sesMaker = $("#sesMaker").val();
+    model.sesCarNM = $("#sesCarNM").val();
+    model.CaseSet = vCaseSet;
+    model.KbnSet = vKbnSet;
+    model.pageNumber = 1;
     let sort = parseInt($("#SortPage").val());
     if (sort == 0) {
         let val = colNumber + sort;
@@ -33,14 +39,13 @@ function SortData(colNumber) {
         $("#SortPage").val(colNumber);
         _conNumber = colNumber;
     }
-    console.log(_conNumber);
-    GoNextPage(1)
-    //var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
-    //$('tr#pagination').remove();
-    //$('#trId').twbsPagination('destroy');
-    //UiPagination(result[0].totalPages)
-    //AddPagination(result[0].totalPages);
-    //ReloadListData(result);
+    model.colSort = _conNumber;
+    var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
+    $('tr#pagination').remove();
+    $('#trId').twbsPagination('destroy');
+    UiPagination(result[0].totalPages)
+    AddPagination(result[0].totalPages);
+    ReloadListData(result);
 }
 function ReloadListData(data) {
     $("#gvGrade").css("display", "inline-table");
