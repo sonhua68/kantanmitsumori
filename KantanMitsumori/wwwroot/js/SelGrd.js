@@ -51,7 +51,7 @@ function ReloadListData(data) {
     $("#gvGrade").css("display", "inline-table");
     var row = '<tr id="tbremote">' +
         '<td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">' +
-        '<input type="submit" value="選択" onclick="SetFreeEst(`{{gradeName}}`,`{{regularCase}}`,`{{dispVol}}`);return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">' + '</td>' +
+        '<input type="submit" value="選択" onclick="SetFreeEst(`{{gradeName}}`,`{{regularCase}}`,`{{dispVol}}`,`{{driveTypeCode}}`);return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{gradeName}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{regularCase}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;white-space:nowrap;">{{dispVol}}' + '</td>' +
@@ -118,11 +118,11 @@ function SortPagination(itemsArr) {
     }
 }
 
-function SetFreeEst(gradeName, carCase, dispVol) {
+function SetFreeEst(gradeName, carCase, dispVol, driveTypeCode) {
     var model = {};
     model.MakerName = $("#sesMaker").val();
     model.ModelName = $("#sesCarNM").val();
-    model.GradeName = gradeName;
+    model.GradeName = gradeName + " " + driveTypeCode;
     model.CarCase = carCase;
     model.DispVol = dispVol;
     var result = Framework.submitAjaxFormUpdateAsync(model, "/SelGrd/SetFreeEst");
