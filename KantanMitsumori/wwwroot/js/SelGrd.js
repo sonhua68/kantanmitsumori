@@ -41,6 +41,7 @@ function SortData(colNumber) {
 function getNumberSort(number) {
     if (number == 3) {
         return 5;
+        _conNumberSort = true;
     } else if (number == 2) {
         return 7;
     } else if (number == 4) {

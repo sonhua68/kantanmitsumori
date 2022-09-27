@@ -60,7 +60,16 @@ namespace KantanMitsumori.Service.ASEST
                 bool isSesPriDisp = requestAction.IsInpBack != 1 && requestAction.Sel == 0;
                 valToken.sesPriDisp = isSesPriDisp ? "0" : "";
                 valToken.stateLoadWindow = "EstMain";
-                valToken.sesMode = request.Mode ?? "2016";
+
+                if (!string.IsNullOrEmpty(request.Mode) && Information.IsNumeric(request.Mode))
+                {
+                    valToken.sesMode = request.Mode;
+                }
+                else
+                {
+                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI001P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P));
+
+                }
                 if (!string.IsNullOrEmpty(request.PriDisp) && Information.IsNumeric(request.PriDisp!))
                 {
                     valToken.sesPriDisp = request.PriDisp;
