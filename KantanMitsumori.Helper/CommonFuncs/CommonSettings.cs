@@ -28,6 +28,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
         public static string def_MakerName => Configuration["CommonSettings:def_MakerName"];
         public static string IsShowLogUI => Configuration["CommonSettings:IsShowLogUI"];
         public static string AutoFlagLogoUrl => Configuration["CommonSettings:AutoFlagLogoUrl"];
+     
 
     }
 }

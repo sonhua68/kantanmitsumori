@@ -21,18 +21,18 @@ namespace KantanMitsumori.Controllers
         /// <summary>
         /// Demo download article sub report
         /// </summary>        
-        public IActionResult DownloadEstimateReport(RequestReport? model)
+        public IActionResult DownloadEstimateReport()
         {          
-            model = new RequestReport()
+          var   model = new RequestReport()
             {
-                EstNo = "22092000032",
-                EstSubNo = "01",
+                EstNo = _logToken.sesEstNo!,
+                EstSubNo = _logToken.sesEstSubNo!,
                 ReportType = ReportType.Estimate,
-                CustNm_forPrint = "DANG PHAM",
-                CustZip_forPrint = "702201",
-                CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
-                CustTel_forPrint = "028-3801-5151"
-            };
+                CustNm_forPrint = _logToken.sesCustNm_forPrint!,
+                CustZip_forPrint = _logToken.sesCustZip_forPrint!,
+                CustAdr_forPrint = _logToken.sesCustAdr_forPrint!,
+                CustTel_forPrint = _logToken.sesCustTel_forPrint!
+          };
             // Generate report
             var result = _reportService.GenerateEstimateReport(model);
             
@@ -52,19 +52,19 @@ namespace KantanMitsumori.Controllers
         /// <summary>
         /// Demo download article sub report
         /// </summary>        
-        public IActionResult DownloadOrderReport(RequestReport? model)
+        public IActionResult DownloadOrderReport()
         {
             // Sample data            
-            model = new RequestReport()
+           var  model = new RequestReport()
             {
-                EstNo = "22092000032",
-                EstSubNo = "01",
-                ReportType = ReportType.Order,
-                CustNm_forPrint = "DANG PHAM",
-                CustZip_forPrint = "702201",
-                CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
-                CustTel_forPrint = "028-3801-5151"
-            };
+               EstNo = _logToken.sesEstNo!,
+               EstSubNo = _logToken.sesEstSubNo!,
+               ReportType = ReportType.Order,
+               CustNm_forPrint = _logToken.sesCustNm_forPrint!,
+               CustZip_forPrint = _logToken.sesCustZip_forPrint!,
+               CustAdr_forPrint = _logToken.sesCustAdr_forPrint!,
+               CustTel_forPrint = _logToken.sesCustTel_forPrint!
+           };
             // Generate report
             var result = _reportService.GenerateOrderReport(model);
 

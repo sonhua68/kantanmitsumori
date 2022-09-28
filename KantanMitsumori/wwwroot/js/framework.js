@@ -521,7 +521,7 @@ var Framework =
                 window.location.href = "/Estmain?IsInpBack=1";
 
             }
-        },
+        },       
         {
             key: "GoBackPage",
             value: function GoBackPage() {
@@ -536,8 +536,13 @@ var Framework =
         {
             key: "GoBackReloadPageUrl",
             value: function GoBackReloadPageUrl(PageUrl) {
-                window.location.href = PageUrl;
-
+                var ListUrl = ["/InpSitaCar","/"];
+                let LeaseFlag = parseInt($("#hidLeaseFlag").val());
+                if (LeaseFlag == 1 && ListUrl.includes(PageUrl)) {
+                    alert("リース画面でのみ、下取りの設定が可能。");
+                } else {
+                    window.location.href = PageUrl;
+                }               
             }
         },
         {

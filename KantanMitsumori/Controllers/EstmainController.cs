@@ -42,6 +42,16 @@ namespace KantanMitsumori.Controllers
             }
             return View(response.Data);
         }
+        [HttpGet]
+        public async Task<IActionResult> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer)
+        {
+            var response = await _appService.CheckGoPageLease(firstRegYm, makerName, nowOdometer);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
+        }
     }
 }
 

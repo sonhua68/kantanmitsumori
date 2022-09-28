@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using GrapeCity.ActiveReports.PageReportModel.DV;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
@@ -19,17 +20,19 @@ namespace KantanMitsumori.Service.ASEST
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWorkIDE _unitOfWorkIDE;
         private readonly int LocaleID = new System.Globalization.CultureInfo("ja-JP", true).LCID;
         private LogToken valToken;
         private CommonFuncHelper _commonFuncHelper;
         private CommonEstimate _commonEst;
-        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst)
+        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _commonFuncHelper = commonFuncHelper;
             _commonEst = commonEst;
+            _unitOfWorkIDE = unitOfWorkIDE;
         }
 
         public UserModel getUserName(string userNo)
@@ -283,14 +286,15 @@ namespace KantanMitsumori.Service.ASEST
             }
             SetvalueToken();
             response.AccessToken = valToken.Token!;
+            response.EstModel.IsError = 1;// alert("最初に車両本体価格をご確認下さい")
             return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
         }
         public async Task<ResponseBase<string>> AddEstimate(RequestSerEst model, LogToken logToken)
         {
             try
             {
-                valToken = logToken;              
-                       var res = await addEstNextSubNo(model.EstNo!, model.EstSubNo!, true);
+                valToken = logToken;
+                var res = await addEstNextSubNo(model.EstNo!, model.EstSubNo!, true);
                 if (res)
                 {
                     SetvalueToken();
@@ -928,6 +932,25 @@ namespace KantanMitsumori.Service.ASEST
             Model.EstModelView = estModelView;
             return Model;
         }
+
+        public async Task<ResponseBase<int>> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer)
+        {
+            var LeaseTargetsID2 = _unitOfWorkIDE.LeaseTargets.Query(n => n.Id == 2).FirstOrDefault();
+            var LeaseTargetsID1 = _unitOfWorkIDE.LeaseTargets.Query(n => n.Id == 1).FirstOrDefault();
+            var year = DateTime.Now.Year;
+            var regYear = int.Parse(CommonFunction.Left(firstRegYm, 4));
+            var firstYear = regYear + LeaseTargetsID1!.Restriction;
+            var zenkaku = StringWidthHelper.ToFullWidth(makerName);
+            var arrayMakerName = CommonSettings.def_MakerName;
+            var cmakerName = arrayMakerName.Contains(zenkaku);
+            if (nowOdometer > LeaseTargetsID2!.Restriction || firstYear < year || cmakerName == false)
+            {
+                return ResponseHelper.Ok<int>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003));
+            }
+            return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+        }
+
+
         #endregion fuc private
     }
 }
