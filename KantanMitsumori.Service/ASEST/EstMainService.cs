@@ -254,8 +254,8 @@ namespace KantanMitsumori.Service.ASEST
                     estModel.DamageInsMonth = intRemIns.ToString();
                 }
             }
-            estModel.YtiRieki = intSelfIns;
-            estModel.CarPrice = intSelfIns;
+            estModel.YtiRieki = 0;
+            estModel.CarPrice = 0;
             estModel.Mode = (byte)(string.IsNullOrEmpty(valToken.sesMode) ? 0 : Convert.ToByte(valToken.sesMode));
             if (!await regEstData(estModel))
             {
