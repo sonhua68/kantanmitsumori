@@ -56,7 +56,6 @@ namespace KantanMitsumori.Service.ASEST
                 bool isSesPriDisp = requestAction.IsInpBack != 1 && requestAction.Sel == 0;
                 valToken.sesPriDisp = isSesPriDisp ? "0" : "";
                 valToken.stateLoadWindow = "EstMain";
-
                 if (CommonFunction.IsNumeric(request.Mode))
                 {
                     valToken.sesMode = request.Mode;
@@ -189,10 +188,11 @@ namespace KantanMitsumori.Service.ASEST
             estModel.TaxFreeKb = true;
             estModel.TaxCostKb = true;
             estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM;
+            estModel.LeaseFlag = logtoken.sesLeaseFlag!;
             int intHaiki = CommonFunction.IsNumeric(estModel.DispVol) ? int.Parse(estModel.DispVol) : 0;
             bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(model.MakerName!);
             int intFirstMonth = Convert.ToInt32(string.Format("{0:D2}", DateTime.Now.Month));
-            if (flgTaxAutoCalc & intHaiki > 0 && estModel.DispVolUnit == CommonConst.def_DispVolUnitCC)
+            if (flgTaxAutoCalc && intHaiki > 0)
             {
                 var carTax = _commonFuncHelper.getCarTax(intFirstMonth, intHaiki);
                 if (carTax == -1)
@@ -213,7 +213,7 @@ namespace KantanMitsumori.Service.ASEST
                 estModel.EstTanName = getUserDef.EstTanName;
                 estModel.SekininName = getUserDef.SekininName;
                 userDefDamageInsMonth = Convert.ToInt32(getUserDef.DamageInsMonth);
-                bool isIntHaiki = intHaiki > 0 & intHaiki <= 660;
+                bool isIntHaiki = intHaiki > 0 && intHaiki <= 660;
                 estModel.SyakenZok = 0;
                 estModel.SyakenNew = isIntHaiki ? getUserDef.SyakenNewK : getUserDef.SyakenNewH;
                 estModel.TaxFreeCheck = isIntHaiki ? getUserDef.TaxFreeCheckK : getUserDef.TaxFreeCheckH;
@@ -238,7 +238,7 @@ namespace KantanMitsumori.Service.ASEST
                 estModel.ConTaxInputKb = true;
             }
             int intSelfIns = 0; int intRemIns = 0;
-            if (flgTaxAutoCalc & intHaiki > 0)
+            if (flgTaxAutoCalc && intHaiki > 0)
             {
                 if (!_commonFuncHelper.getSelfInsurance(intHaiki, "", "", userDefDamageInsMonth, ref intSelfIns, ref intRemIns))
                 {
@@ -289,8 +289,8 @@ namespace KantanMitsumori.Service.ASEST
         {
             try
             {
-                valToken = logToken;
-                var res = await addEstNextSubNo(model.EstNo!, model.EstSubNo!, true);
+                valToken = logToken;              
+                       var res = await addEstNextSubNo(model.EstNo!, model.EstSubNo!, true);
                 if (res)
                 {
                     SetvalueToken();
@@ -308,25 +308,28 @@ namespace KantanMitsumori.Service.ASEST
                 return ResponseHelper.Error<string>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
-        public async Task<ResponseBase<int>> CalcSum(RequestSerEst model, LogToken logToken)
+        public async Task<ResponseBase<string>> CalcSum(RequestSerEst model, LogToken logToken)
         {
             try
             {
                 valToken = logToken;
+                valToken.sesEstNo = model.EstNo!;
+                valToken.sesEstSubNo = model.EstSubNo!;
                 var res = await _commonEst.calcSum(model.EstNo!, model.EstSubNo!, valToken);
                 if (res)
                 {
-                    return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+                    SetvalueToken();
+                    return ResponseHelper.Ok<string>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), valToken.Token!);
                 }
                 else
                 {
-                    return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                    return ResponseHelper.Error<string>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CalcSum");
-                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                return ResponseHelper.Error<string>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
         #region fuc private     
@@ -434,17 +437,18 @@ namespace KantanMitsumori.Service.ASEST
         private async Task<ResponseBase<EstModel>> getAsnetInfo(RequestHeaderModel request)
         {
             var estModel = new EstModel();
-
+            string leaseFlag = string.IsNullOrEmpty(request.leaseFlag) ? "0" : request.leaseFlag;
             bool isCheck = string.IsNullOrEmpty(request.cot) || string.IsNullOrEmpty(request.cna) || string.IsNullOrEmpty(request.mem);
             if (isCheck)
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAI020P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI020P));
 
             string strTempImagePath;
             string strSavePath = "";
-            estModel.LeaseFlag = string.IsNullOrEmpty(request.leaseFlag) ? "0" : request.leaseFlag;
+            estModel.LeaseFlag = leaseFlag;
             var userInfo = getUserInfo(request.mem);
             valToken.UserNo = userInfo.Data!.UserNo;
             valToken.UserNm = userInfo.Data!.UserNm;
+            valToken.sesLeaseFlag = leaseFlag;
             if (!string.IsNullOrEmpty(request.exh))
             {
                 string wAANo = request.exh!;
@@ -511,7 +515,7 @@ namespace KantanMitsumori.Service.ASEST
             else
             {
                 strTempImagePath = wCarImgPath.ToUpper();
-                if (!strTempImagePath.EndsWith(".JPG") & !strTempImagePath.EndsWith(".GIF") & !strTempImagePath.EndsWith(".PNG"))
+                if (!strTempImagePath.EndsWith(".JPG") && !strTempImagePath.EndsWith(".GIF") && !strTempImagePath.EndsWith(".PNG"))
                 {
                     strSavePath = request.cor + request.fex + "001.jpg";
                 }
@@ -574,7 +578,7 @@ namespace KantanMitsumori.Service.ASEST
             }
             bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(request.mak);
             int intFirstMonth = Convert.ToInt32(string.Format("{0:D2}", DateTime.Now.Month));
-            if (flgTaxAutoCalc & intHaiki > 0 && estModel.DispVolUnit == CommonConst.def_DispVolUnitCC)
+            if (flgTaxAutoCalc && intHaiki > 0 && estModel.DispVolUnit == CommonConst.def_DispVolUnitCC)
             {
                 var carTax = _commonFuncHelper.getCarTax(intFirstMonth, intHaiki);
                 if (carTax == -1)
@@ -593,7 +597,7 @@ namespace KantanMitsumori.Service.ASEST
                 estModel.EstTanName = getUserDef.EstTanName;
                 estModel.SekininName = getUserDef.SekininName;
                 userDefDamageInsMonth = Convert.ToInt32(getUserDef.DamageInsMonth);
-                bool isIntHaiki = intHaiki > 0 & intHaiki <= 660;
+                bool isIntHaiki = intHaiki > 0 && intHaiki <= 660;
                 if ((string.IsNullOrEmpty(valToken.sesMode) ? int.Parse(valToken.sesMode!) : 0) == 0)
                 {
                     estModel.YtiRieki = isIntHaiki ? getUserDef.YtiRiekiK : getUserDef.YtiRiekiH;
@@ -633,7 +637,7 @@ namespace KantanMitsumori.Service.ASEST
             string inYYYY = "";
             string inMM = "";
 
-            if (flgTaxAutoCalc & intHaiki > 0)
+            if (flgTaxAutoCalc && intHaiki > 0)
             {
                 if (strCheckCarYm.Length == 6)
                 {
@@ -782,7 +786,7 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.SonotaTitle = Model.EstModel.SonotaTitle + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
             estModelView.Sonota = CommonFunction.setFormatCurrency(Model.EstModel.Sonota);
             long wSyakenNew;
-            if (Model.EstModel.SyakenNew > 0 & Model.EstModel.SyakenZok == 0)
+            if (Model.EstModel.SyakenNew > 0 && Model.EstModel.SyakenZok == 0)
             {
                 wSyakenNew = Model.EstModel.SyakenNew;
                 estModelView.SyakenNewZokT = CommonConst.def_TitleSyakenNew;
@@ -870,7 +874,7 @@ namespace KantanMitsumori.Service.ASEST
             string todt = "";
             if (!string.IsNullOrEmpty(Model.EstModel.LastPayMonth))
                 todt = CommonFunction.Mid(Model.EstModel.LastPayMonth, 0, 4) + "年" + Convert.ToString(CommonFunction.Mid(Model.EstModel.LastPayMonth, 4, 2)) + "月";
-            estModelView.Kikan = (!string.IsNullOrEmpty(fromdt) | !string.IsNullOrEmpty(todt)) ? fromdt + " - " + todt : "";
+            estModelView.Kikan = (!string.IsNullOrEmpty(fromdt) || !string.IsNullOrEmpty(todt)) ? fromdt + " - " + todt : "";
             estModelView.FirstPayAmount = Model.EstModel.FirstPayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.FirstPayAmount) : "";
             estModelView.PayAmount = Model.EstModel.PayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.PayAmount) : "";
             estModelView.PayTimes2 = Model.EstModel.PayTimes > 0 ? "（×" + Convert.ToString(Model.EstModel.PayTimes - 1) + "回）" : "";

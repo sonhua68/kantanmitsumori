@@ -824,7 +824,7 @@
                                     <span id="lbl_JibaiTitle">@estModelView.DamageInsMonth</span>
                                 </td>
                                 <td id="idJibaiHoken" class="txtprice">
-                                    <span id="lbl_JibaiHoken">@(estModelView.DamageInsEquivalent != "" ? @estModelView.DamageInsEquivalent : @estModelView.DamageIns)</span>
+                                    <span id="lbl_JibaiHoken">@(!string.IsNullOrEmpty(estModelView.DamageInsEquivalent) ? @estModelView.DamageInsEquivalent : @estModelView.DamageIns)</span>
                                 </td>
                             </tr>
                             <tr>

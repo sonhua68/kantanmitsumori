@@ -20,8 +20,8 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             // 見積書番号を取得
-            string estNo = _logToken.sesEstNo;
-            string estSubNo = _logToken.sesEstSubNo;
+            string estNo = _logToken.sesEstNo!;
+            string estSubNo = _logToken.sesEstSubNo!;
 
             var response = _inpCustKanaService.getInfoCust(estNo, estSubNo);
 
