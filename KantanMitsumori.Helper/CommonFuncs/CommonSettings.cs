@@ -1,9 +1,4 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
@@ -13,7 +8,8 @@ namespace KantanMitsumori.Helper.CommonFuncs
         public static IConfiguration Configuration;
         public static void Configure(IConfiguration config)
         {
-            Configuration = config;        }
+            Configuration = config;
+        }
 
         public static string def_DmyImg => Configuration["CommonSettings:def_DmyImg"];
         public static string DB_TYPE => Configuration["CommonSettings:DB_TYPE"];
@@ -28,7 +24,6 @@ namespace KantanMitsumori.Helper.CommonFuncs
         public static string def_MakerName => Configuration["CommonSettings:def_MakerName"];
         public static string IsShowLogUI => Configuration["CommonSettings:IsShowLogUI"];
         public static string AutoFlagLogoUrl => Configuration["CommonSettings:AutoFlagLogoUrl"];
-     
-
+        public static string PointReQuestPreExamination => Configuration["CommonSettings:PointReQuestPreExamination"];
     }
 }

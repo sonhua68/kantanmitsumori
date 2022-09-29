@@ -46,6 +46,7 @@ namespace KantanMitsumori.Service
             services.AddScoped<HelperMapper>();
             services.AddScoped<CommonSettings>();
             services.AddScoped<CommonFuncHelper>();
+            services.AddScoped<CommonIDE>();
             return services;
         }
     }

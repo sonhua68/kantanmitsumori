@@ -18,6 +18,7 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             // 見積書データ取得
+
             string estNo = _logToken.sesEstNo ?? "";
             string estSubNo = _logToken.sesEstSubNo ?? "";
 
@@ -29,20 +30,6 @@ namespace KantanMitsumori.Controllers
             }
 
             return View(response.Data);
-
-            //return View();
         }
-
-        //[HttpPost]
-        //public async Task<IActionResult> UpdateInpSyohiyo([FromForm] RequestUpdateInpSyohiyo requestData)
-        //{
-        //    var response = await _inpSyohiyoService.UpdateInpSyohiyo(requestData);
-
-        //    if (response.ResultStatus == (int)enResponse.isError)
-        //    {
-        //        return ErrorAction(response);
-        //    }
-        //    return Ok(response);
-        //}
     }
 }

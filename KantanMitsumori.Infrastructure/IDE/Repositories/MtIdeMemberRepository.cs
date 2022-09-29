@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 namespace KantanMitsumori.Infrastructure.Repositories
 {
-    public class MtIdeMemberRepository : GenericRepositoryIDE<MtIdeCarTax>, IMtIdeCarTaxRepository
+    public class MtIdeMemberRepository : GenericRepositoryIDE<MtIdeMember>, IMtIdeMemberRepository
     {
         public MtIdeMemberRepository(IDEContext context, ILogger logger) : base(context, logger) { }
-        public override bool Add(MtIdeCarTax entity)
+        public override bool Add(MtIdeMember entity)
         {
             try
             {
@@ -26,12 +26,12 @@ namespace KantanMitsumori.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MtIdeCarTax insert error", typeof(MtIdeMemberRepository));
+                _logger.LogError(ex, "MtIdeMember insert error", typeof(MtIdeMemberRepository));
                 return false;
             }
         }
 
-        public override bool Update(MtIdeCarTax entity)
+        public override bool Update(MtIdeMember entity)
         {
             try
             {
@@ -45,12 +45,12 @@ namespace KantanMitsumori.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MtIdeCarTax update error", typeof(MtIdeMemberRepository));
+                _logger.LogError(ex, "MtIdeMember update error", typeof(MtIdeMemberRepository));
                 return false;
             }
         }
 
-        public override bool Delete(MtIdeCarTax entity)
+        public override bool Delete(MtIdeMember entity)
         {
             try
             {
@@ -61,14 +61,14 @@ namespace KantanMitsumori.Infrastructure.Repositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "MtIdeCarTax delete error", typeof(MtIdeMemberRepository));
+                _logger.LogError(ex, "MtIdeMember delete error", typeof(MtIdeMemberRepository));
                 return false;
             }
         }
 
-        private MtIdeCarTax? isExists(MtIdeCarTax entity)
+        private MtIdeMember? isExists(MtIdeMember entity)
         {
-            return dbSet.FirstOrDefault(x => x.CarType == entity.CarType);
+            return dbSet.FirstOrDefault(x => x.AsmemberNum == entity.AsmemberNum);
         }
     }
 }
