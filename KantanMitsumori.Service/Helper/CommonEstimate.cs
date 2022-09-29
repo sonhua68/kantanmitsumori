@@ -279,8 +279,8 @@ namespace KantanMitsumori.Service.Helper
                 else
                     model.AAInfo = model.Aaplace + "　No：" + model.Aano;
             }
-
-            if (model.CheckCarYm != "無し" || !string.IsNullOrEmpty(model.CheckCarYm))
+            bool isCheckCarYm = model.CheckCarYm == "無し" || string.IsNullOrEmpty(model.CheckCarYm);
+            if (!isCheckCarYm)
             {
                 model.DamageInsEquivalent = 0;
                 model.DamageIns = 0;

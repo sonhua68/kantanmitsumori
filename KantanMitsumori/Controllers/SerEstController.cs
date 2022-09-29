@@ -90,7 +90,8 @@ namespace KantanMitsumori.Controllers
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
-            }           
+            }          
+            setTokenCookie(response.Data!);
             return Ok(response);
         }
         #endregion SerEstController

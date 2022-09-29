@@ -30,6 +30,7 @@ namespace KantanMitsumori.DataAccess
         public virtual DbSet<MtIdeLeaseTarget> MtIdeLeaseTargets { get; set; } = null!;
         public virtual DbSet<MtIdeLiabilityInsurance> MtIdeLiabilityInsurances { get; set; } = null!;
         public virtual DbSet<MtIdeMaintenance> MtIdeMaintenances { get; set; } = null!;
+        public virtual DbSet<MtIdeMember> MtIdeMembers { get; set; } = null!;
         public virtual DbSet<MtIdeNameChange> MtIdeNameChanges { get; set; } = null!;
         public virtual DbSet<MtIdePromotion> MtIdePromotions { get; set; } = null!;
         public virtual DbSet<MtIdeUnitPrice> MtIdeUnitPrices { get; set; } = null!;
@@ -37,7 +38,10 @@ namespace KantanMitsumori.DataAccess
         public virtual DbSet<MtIdeWeightTax> MtIdeWeightTaxes { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {           
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -234,6 +238,37 @@ namespace KantanMitsumori.DataAccess
                 entity.ToTable("MT_IDE_MAINTENANCE");
 
                 entity.Property(e => e.CreateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdateUser).HasMaxLength(20);
+            });
+
+            modelBuilder.Entity<MtIdeMember>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("MT_IDE_MEMBER");
+
+                entity.Property(e => e.AsmemberNum)
+                    .HasMaxLength(8)
+                    .IsUnicode(false)
+                    .HasColumnName("ASMemberNum")
+                    .IsFixedLength();
+
+                entity.Property(e => e.CreateDate).HasColumnType("datetime");
+
+                entity.Property(e => e.Ssmail)
+                    .HasMaxLength(100)
+                    .HasColumnName("SSMail");
+
+                entity.Property(e => e.Ssname)
+                    .HasMaxLength(100)
+                    .HasColumnName("SSName");
+
+                entity.Property(e => e.Ssnumber).HasColumnName("SSNumber");
+
+                entity.Property(e => e.StoreName).HasMaxLength(100);
 
                 entity.Property(e => e.UpdateDate).HasColumnType("datetime");
 

@@ -19,16 +19,13 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             // 見積書番号を取得
-            string estNo = _logToken.sesEstNo;
-            string estSubNo = _logToken.sesEstSubNo;
-
+            string estNo = _logToken.sesEstNo!;
+            string estSubNo = _logToken.sesEstSubNo!;
             var response = _inpSyohiyoService.GetInfoSyohiyo(estNo, estSubNo);
-
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
             }
-
             return View(response.Data);
         }
 
