@@ -1,0 +1,121 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* モーダル初期リセット */
+
+#cboxContent { margin: 0; }
+#cboxLoadedContent { border:  0; }
+#cboxClose {
+  top: 20px;
+  right: 20px;
+  width: 34px;
+  height: 34px;
+  background: #fff;
+}
+#cboxClose::before {
+  display: block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 34px;
+  height: 34px;
+  transition-duration: .5s;
+  background: url(~/img/ico_close.png) no-repeat left top / cover;
+  content: "";
+}
+    #cboxClose:hover::before {
+        transform: scale(-1, 1);
+        background: url(~/img/images/ico_close.png) no-repeat left top / cover;
+    }
+
+/* 動画モーダル */
+.movieWrap {
+  width: 560px;
+  height: 315px;
+  padding: 60px;
+}
+
+/* 説明モーダル起動 */
+.supportLink {
+  position: relative;
+  font-size: .875rem;
+  font-weight: 500;
+}
+.supportLink::before {
+  display: inline-block;
+  width: 20px;
+  height: 12px;
+  margin-right: 5px;
+  padding: 4px 0;
+  transition-duration: .2s;
+  border-radius: 50%;
+  background: #b5b4af;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1.1;
+  text-align: center;
+  vertical-align: .1rem;
+  content: "？"
+}
+.supportLink a {
+  color: #777;
+  font-family: "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+.modalText {
+  padding: 40px 50px;
+}
+
+.modalText .image {
+  margin: 30px 0;
+  text-align: center;
+}
+.modalText .image img {
+  max-width: 100%;
+}
+.modalText p:not(.heading01) {
+  font-size: 1rem;
+  line-height: 1.75;
+}
+.modalText p.title {
+  margin-bottom: 15px;
+  color: #555;
+  font-size: 1.5rem;
+  line-height: 1.5;
+}
+.modalText p:not(.heading01) + p.title { margin-top: 50px; }
+.modalText .bold {
+  color: #555;
+  font-weight: bold;
+}
+.modalText .red { color: #d92100; }
+
+/* 閉じるボタン */
+.buttonClose {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 198px;
+  height: 48px;
+  margin: 25px auto 0;
+  border: 1px solid #666;
+  border-radius: 25px;
+  color: #666;
+  text-decoration: none;
+  cursor: pointer;
+}
+.buttonClose .icon {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  width: 17px;
+  height: 17px;
+  transform: translateY(-50%);
+  transition-duration: .2s;
+  fill: #666;
+}
+.buttonClose:hover .icon {
+  transform: translateY(-50%) scale(-1, 1);
+}

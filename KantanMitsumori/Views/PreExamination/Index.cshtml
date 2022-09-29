@@ -1,0 +1,519 @@
+﻿@using KantanMitsumori.Model.Response
+@model ResponsePreExamination
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+    <noscript><meta http-equiv="refresh" content="1; URL=/autoflat/app/error/no_support/"></noscript>
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon-180x180.png">
+    <link href="css/common.css" rel="stylesheet" type="text/css" media="all" />
+    <!-- PC逕ｨcss隱ｭ縺ｿ霎ｼ縺ｿ -->
+    <link rel="stylesheet" type="text/css" href="~/css/screen.css" media="print, screen" charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="~/css/pageFooterMenu.css" media="print, screen" charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="~/css/pageHeaderMenu.css" media="print, screen" charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="~/css/modal.css" media="print, screen" charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="~/css/examination_confirm.css" media="print, screen" charset="UTF-8" />
+
+    <script type="text/javascript" src="~/js/PreExamination/jquery.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="~/js/PreExamination/jquery.heightLine.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="~/js/PreExamination/jquery.ah-placeholder.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="~/js/PreExamination/process.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="~/js/PreExamination/common.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="~/js/PreExamination/common_design.js" charset="UTF-8"></script>
+    <script src="~/js/PreExamination/svg4everybody.min.js"></script>
+    <script>svg4everybody();</script>
+    <script type="text/javascript">
+        $(function() {
+            $(".js-agree input").click(function() {
+                if ($(this).prop("checked") == true) {
+                    $(".js-entryButton").removeClass("buttonDisabled");
+                } else {
+                    $(".js-entryButton").addClass("buttonDisabled");
+                }
+            });
+        });
+    </script>
+    <title>Autoflat | 繝ｪ繝ｼ繧ｹ蟇ｩ譟ｻ縺顔筏縺苓ｾｼ縺ｿ</title>
+</head>
+<body>
+
+    <!-- ##### 蜈ｱ騾壹�倥ャ繝繝ｼ縲START ##### -->
+    <div data-import="pageHeaderMenu" class="parts">
+        <header class="header js-floating">
+            <div class="headerWrap">
+                <h1 class="headerLogo" id="headerLogo"><a href="https://www.idemitsu-autoflat.com/"><img src="~/img/logo.png" alt="出光のカーリース「オートフラット」"></a></h1>
+            </div>
+        </header>
+    </div>
+    <!-- ##### 蜈ｱ騾壹�倥ャ繝繝ｼ縲END ##### -->
+    <!-- ##### 繝｡繧､繝ｳ繧ｳ繝ｳ繝�繝ｳ繝�縲START ##### -->
+    <main class="main" id="mainContents">
+        <div data-type="order.examination_confirm">
+            <h1 class="headline01">リース審査お申し込み</h1>
+            <div id="message" class="pl30"></div>
+            <div id="examinationConfirmArea">
+                <form id="formArea" method="post" runat="server">          
+                    <input type="hidden" runat="server" id="leaseEstimateNo" name="leaseEstimateNo" value="@Model.leaseEstimateNo">
+                    <input type="hidden" runat="server" id="ssCode" name="ssCode" value="@Model.ssCode">
+                    <input type="hidden" runat="server" id="ssName" name="ssName" value="@Model.ssName">
+                    <input type="hidden" runat="server" id="ssStaffName" name="ssStaffName" value="@Model.ssStaffName">
+                    <input type="hidden" runat="server" id="ssMailAddress" name="ssMailAddress" value="@Model.ssMailAddress">
+                    <input type="hidden" runat="server" id="vendorName" name="vendorName" value="@Model.vendorName">
+                    <input type="hidden" runat="server" id="mkNm" name="mkNm" value="@Model.mkNm">
+                    <input type="hidden" runat="server" id="commodityName" name="commodityName" value="@Model.commodityName">
+                    <input type="hidden" runat="server" id="gradeName" name="gradeName" value="@Model.gradeName">
+                    <input type="hidden" runat="server" id="bcolorNm" name="bcolorNm" value="@Model.bcolorNm">
+                    <input type="hidden" runat="server" id="fuelName" name="fuelName" value="@Model.fuelName">
+                    <input type="hidden" runat="server" id="haiki" name="haiki" value="@Model.haiki">
+                    <input type="hidden" runat="server" id="missionCd" name="missionCd" value="@Model.missionCd">
+                    <input type="hidden" runat="server" id="wheelDriveName" name="wheelDriveName" value="@Model.wheelDriveName">
+                    <input type="hidden" runat="server" id="doorCd" name="doorCd" value="@Model.doorCd">
+                    <input type="hidden" runat="server" id="body" name="body" value="@Model.body">
+                    <input type="hidden" runat="server" id="teiinA" name="teiinA" value="@Model.teiinA">
+                    <input type="hidden" runat="server" id="ninKata" name="ninKata" value="@Model.ninKata">
+                    <input type="hidden" runat="server" id="colorCost" name="colorCost" value="@Model.colorCost">
+                    <input type="hidden" runat="server" id="reopName1" name="reopName1" value="@Model.reopName1">
+                    <input type="hidden" runat="server" id="Mileage" name="Mileage" value="@Model.Mileage">
+                    <input type="hidden" runat="server" id="carType" name="carType" value="@Model.carType">
+                    <input type="hidden" runat="server" id="firstMonth" name="firstMonth" value="@Model.firstMonth">
+                    <input type="hidden" runat="server" id="reopGroupName1" name="reopGroupName1" value="@Model.reopGroupName1">
+                    <input type="hidden" runat="server" id="reopCost1" name="reopCost1" value="@Model.reopCost1">
+                    <input type="hidden" runat="server" id="leasePeriod" name="leasePeriod" value="@Model.leasePeriod">
+                    <input type="hidden" runat="server" id="reopGroupName2" name="reopGroupName2" value="@Model.reopGroupName2">
+                    <input type="hidden" runat="server" id="maintenanceName" name="maintenanceName" value="@Model.maintenanceName">
+                    <input type="hidden" runat="server" id="maothlyFeeT" name="maothlyFeeT" value="@Model.maothlyFeeT">
+                    <input type="hidden" runat="server" id="guaranteeFee" name="guaranteeFee" value="@Model.guaranteeFee">
+                    <input type="hidden" runat="server" id="guaranteeFeeOne" name="guaranteeFeeOne" value="@Model.guaranteeFeeOne">
+                    <input type="hidden" runat="server" id="guaranteeFeeEx" name="guaranteeFeeEx" value="@Model.guaranteeFeeEx">
+                    <input type="hidden" runat="server" id="insuranceWhich" name="insuranceWhich" value="@Model.insuranceWhich">
+                    <input type="hidden" runat="server" id="carInsCompany" name="carInsCompany" value="@Model.carInsCompany">
+                    <input type="hidden" runat="server" id="carInsPrice" name="carInsPrice" value="@Model.carInsPrice">
+                    <input type="hidden" runat="server" id="carPriceTax" name="carPriceTax" value="@Model.carPriceTax">
+                    <input type="hidden" runat="server" id="nebiki" name="nebiki" value="@Model.nebiki">
+                    <input type="hidden" runat="server" id="otherTax" name="otherTax" value="@Model.otherTax">
+                    <input type="hidden" runat="server" id="carMaintenance" name="carMaintenance" value="@Model.carMaintenance">
+                    <input type="hidden" runat="server" id="fOpCost" name="fOpCost" value="@Model.fOpCost">
+                    <input type="hidden" runat="server" id="carSellPriceT" name="carSellPriceT" value="@Model.carSellPriceT">
+                    <input type="hidden" runat="server" id="automobileTax" name="automobileTax" value="@Model.automobileTax">
+                    <input type="hidden" runat="server" id="environmental" name="environmental" value="@Model.environmental">
+                    <input type="hidden" runat="server" id="weightTax" name="weightTax" value="@Model.weightTax">
+                    <input type="hidden" runat="server" id="liabilityInsur" name="liabilityInsur" value="@Model.liabilityInsur">
+                    <input type="hidden" runat="server" id="totalTaxEx" name="totalTaxEx" value="@Model.totalTaxEx">
+                    <input type="hidden" runat="server" id="legalCustody" name="legalCustody" value="@Model.legalCustody">
+                    <input type="hidden" runat="server" id="procedureAgency" name="procedureAgency" value="@Model.procedureAgency">
+                    <input type="hidden" runat="server" id="recyclingCost" name="recyclingCost" value="@Model.recyclingCost">
+                    <input type="hidden" runat="server" id="custodyStatutory" name="custodyStatutory" value="@Model.custodyStatutory">
+                    <input type="hidden" runat="server" id="cashSellingT" name="cashSellingT" value="@Model.cashSellingT">
+                    <input type="hidden" runat="server" id="reopName2" name="reopName2" value="@Model.reopName2">
+                    <input type="hidden" runat="server" id="fOp1ComName" name="fOp1ComName" value="@Model.fOp1ComName">
+                    <input type="hidden" runat="server" id="fOp1Cost" name="fOp1Cost" value="@Model.fOp1Cost">
+                    <input type="hidden" runat="server" id="fOp2ComName" name="fOp2ComName" value="@Model.fOp2ComName">
+                    <input type="hidden" runat="server" id="fOp2Cost" name="fOp2Cost" value="@Model.fOp2Cost">
+                    <input type="hidden" runat="server" id="fOp3ComName" name="fOp3ComName" value="@Model.fOp3ComName">
+                    <input type="hidden" runat="server" id="fOp3Cost" name="fOp3Cost" value="@Model.fOp3Cost">
+                    <input type="hidden" runat="server" id="fOp4ComName" name="fOp4ComName" value="@Model.fOp4ComName">
+                    <input type="hidden" runat="server" id="fOp4Cost" name="fOp4Cost" value="@Model.fOp4Cost">
+                    <input type="hidden" runat="server" id="fOp5ComName" name="fOp5ComName" value="@Model.fOp5ComName">
+                    <input type="hidden" runat="server" id="fOp5Cost" name="fOp5Cost" value="@Model.fOp5Cost">
+                    <input type="hidden" runat="server" id="fOp6ComName" name="fOp6ComName" value="@Model.fOp6ComName">
+                    <input type="hidden" runat="server" id="fOp6Cost" name="fOp6Cost" value="@Model.fOp6Cost">
+                    <input type="hidden" runat="server" id="fOp7ComName" name="fOp7ComName" value="@Model.fOp7ComName">
+                    <input type="hidden" runat="server" id="fOp7Cost" name="fOp7Cost" value="@Model.fOp7Cost">
+                    <input type="hidden" runat="server" id="fOp8ComName" name="fOp8ComName" value="@Model.fOp8ComName">
+                    <input type="hidden" runat="server" id="fOp8Cost" name="fOp8Cost" value="@Model.fOp8Cost">
+                    <input type="hidden" runat="server" id="fOp9ComName" name="fOp9ComName" value="@Model.fOp9ComName">
+                    <input type="hidden" runat="server" id="fOp9Cost" name="fOp9Cost" value="@Model.fOp9Cost">
+                    <input type="hidden" runat="server" id="fOp10ComName" name="fOp10ComName" value="@Model.fOp10ComName">
+                    <input type="hidden" runat="server" id="fOp10Cost" name="fOp10Cost" value="@Model.fOp10Cost">
+                    <input type="hidden" runat="server" id="fOp11ComName" name="fOp11ComName" value="@Model.fOp11ComName">
+                    <input type="hidden" runat="server" id="fOp11Cost" name="fOp11Cost" value="@Model.fOp11Cost">
+                    <input type="hidden" runat="server" id="fOp12ComName" name="fOp12ComName" value="@Model.fOp12ComName">
+                    <input type="hidden" runat="server" id="fOp12Cost" name="fOp12Cost" value="@Model.fOp12Cost">
+                    <input type="hidden" runat="server" id="dPaymentPriceTax" name="dPaymentPriceTax" value="@Model.dPaymentPriceTax">
+                    <input type="hidden" runat="server" id="TITradeIn" name="TITradeIn" value="@Model.TITradeIn">
+                    <input type="hidden" runat="server" id="DP_TIT" name="DP_TIT" value="@Model.DP_TIT">
+                    <input type="hidden" runat="server" id="leasePriceInTax" name="leasePriceInTax" value="@Model.leasePriceInTax">
+                    <input type="hidden" runat="server" id="costAdjustPriceT" name="costAdjustPriceT" value="@Model.costAdjustPriceT">
+                    <input type="hidden" runat="server" id="examOrderType" name="examOrderType" value="@Model.examOrderType">
+
+
+                    <div class="textIntro">
+                        <p>このたびは当社リースをご検討いただき、誠にありがとうございます。</p>
+                        <p>
+                            次のページより、リース審査に向けた個人情報をご入力いただきますので、当社個人情報の取り扱いについて事前にご確認ください。<br>
+                            なお、<strong>審査の申し込みと同時にリース契約が確定することはございません</strong>。
+                        </p>
+                        <p>
+                            審査通過後にお送りいたします、自動車リース契約書をご返送いただいた時点で、リース契約の成立となります。<br>
+                            リース契約書をご返送いただいた後のキャンセルはできませんので、ご注意ください。
+                        </p>
+
+                        <p>また、審査結果によっては、リース契約のお引き受けができない場合がございます。あらかじめご了承ください。</p>
+                    </div>
+
+                    <!-- ##### 同意事項 START ##### -->
+                    <section class="box">
+                        <h2 class="subHead01">個人情報の取り扱いについて</h2>
+
+                        <div class="boxGray01 boxContract">
+                            <!-- スクロール領域 START -->
+                            <div class="inner js-scrollBox">
+                                <p>
+                                    申込者及び連帯保証人予定者（以下、総称して「申込者等」といい、契約者を含む。以下同じ）は、本申込みを含む出光クレジット株式会社（以下｢当社｣という）との各種契約の取引（以下｢各取引｣という）について、以下の各条項（以下、「本同意条項」という）及び今回お申込みされる取引の約款等に同意します。
+                                </p>
+                                <br>
+                                <div class="boxWrap">
+                                    <p class="title">第1条（個人情報の取得･保有･利用･提供）</p>
+                                    <ul>
+                                        <li>
+                                            1.
+                                            申込者等は、各取引の与信判断及び与信後の管理、並びに第2条（営業活動の目的での個人情報の利用）に定める営業活動のため、以下の情報（以下これらを総称して｢個人情報｣という）を保護措置を講じた上で取得･保有･利用することに同意します。
+                                        </li>
+                                        <li>
+                                            <ol style="margin-left:40px">
+                                                <li>
+                                                    （1）各取引所定の申込書に申込者等が記載した申込者等の名称・氏名、代表者氏名、年齢、生年月日、性別、所在地・住所、電話番号、FAX番号、Eメールアドレス、職業、勤務先、運転免許証等の記号番号、家族構成、住居状況等および申込書以外で申込者等が届け出た事項
+                                                </li>
+                                                <li>（2）各取引に関する契約の種類、申込日、契約日、商品名、契約金額、支払回数、決済口座情報</li>
+                                                <li>（3）各取引に関する入金日、入金予定日、利用残高、完済日、返済状況等、取引の状況や履歴に関する情報</li>
+                                                <li>
+                                                    （4）各取引に関する申込者等の支払能力を調査するためまたは支払途上における支払能力を調査するため、申込者等が申告した申込者等の資産、負債、収入、支出、及び取得したクレジット利用履歴および過去の債務の返済状況等取引事実の関する情報
+                                                </li>
+                                                <li>
+                                                    （5）｢犯罪による収益の移転防止に関する法律｣及び貸金業法に基づき申込者等の運転免許証、パスポート等によって本人確認を行った際に取得した情報
+                                                </li>
+                                                <li>（6）各取引の規約等に基づき住民票を取得した場合には、その際に取得した情報</li>
+                                                <li>
+                                                    （7）各取引に関する申込者等の支払い能力を調査するため、申込者等の源泉徴収票、所得証明等によって収入の確認を行った場合には、その際に取得した情報
+                                                </li>
+                                                <li>（8）各取引に関して申込者等が当社への問い合わせや申し立ての際に取得した情報（音声、映像等の電磁的記録を含む）</li>
+                                                <li>（9）官報や電話帳等一般に公開されている情報</li>
+                                            </ol>
+                                        </li>
+                                        <li>
+                                            2.
+                                            各取引に関する与信、管理、その他の業務の一部または全部を、委託先企業に委託する場合に、個人情報の保護措置を講じた上で、前項により取得した個人情報を当該委託先企業に提供し、当該委託先企業が受託の目的に限って利用することがあります。
+                                        </li>
+                                        <li>与信後の管理業務の一部についての委託先企業は以下の通りです。</li>
+                                        <li>
+                                            <ol style="margin-left:40px">
+                                                <li>株式会社クレディセゾン</li>
+                                                <li>〒170-6073　東京都豊島区東池袋3-1-1サンシャイン60　52階</li>
+                                                <li>
+                                                    ホームページアドレス　<a href="https://www.saisoncard.co.jp"
+                                                                  target="_blank">https://www.saisoncard.co.jp</a>
+                                                </li>
+                                            </ol>
+                                        </li>
+                                        <li>
+                                            3.
+                                            自動車リース取引に関する契約の履行、管理業務（車両の管理、メンテナンス業務の管理等を含む）を業務提携先企業及びその代理店が行う場合に、個人情報の保護措置を講じた上で、前項により取得した個人情報を当該業務提携先企業及びその代理店に提供し、当該業務提携先企業及びその代理店が業務の目的に限って利用することがあります。
+                                        </li>
+                                        <li>自動車リースの契約の履行、管理業務についての業務提携先企業は以下の通りです。</li>
+                                        <li style="margin-left:35px">住友三井オートサービス株式会社</li>
+                                        <li style="margin-left:35px">〒163-1434　東京都新宿区西新宿3丁目20番2</li>
+                                        <li style="margin-left:35px">
+                                            ホームページアドレス　<a href="http://www.smauto.co.jp"
+                                                          target="_blank">http://www.smauto.co.jp</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="boxWrap">
+                                    <p class="title">第2条（営業活動の目的での個人情報の利用）</p>
+                                    <ul>
+                                        <li>
+                                            1.
+                                            申込者等は、当社が第1条（個人情報の取得･保有･利用･提供）1に定める利用目的のほか、下記の目的のために第1条1（1）（2）の個人情報を利用することに同意します。
+                                        </li>
+                                        <li>
+                                            <ol style="margin-left:40px">
+                                                <li>
+                                                    （1）当社のクレジット関連事業および金融サービス事業（それらに付随して提供するサービスを含む）並びにその他当社の事業におけるサービス提供、宣伝物･印刷物の送付、電話等による営業案内、関連するアフターサービスに利用する場合
+                                                </li>
+                                                <li>
+                                                    （2）当社のクレジット関連事業および金融サービス事業（それらに付随して提供するサービスを含む）、並びに当社の事業における市場調査･商品開発に利用する場合
+                                                </li>
+                                                <li>（3）当社以外の第三者から受託して行なう当該第三者の宣伝物･印刷物の送付、電話等による営業案内に利用する場合</li>
+                                                <li>
+                                                    ※当社の具体的な事業内容は、当社ホームページ（<a href="http://www.idemitsucard.com"
+                                                                              target="_blank">http://www.idemitsucard.com</a>）に常時掲載しております。
+                                                </li>
+                                            </ol>
+                                        </li>
+                                        <li>
+                                            2.
+                                            申込者等は、下記の提携先が自らのサービスの提供、宣伝物・印刷物の送付等の営業案内ならびに市場調査、商品開発のために、第1条1（1）（2）の個人情報を利用することに同意します。
+                                        </li>
+                                        <li>
+                                            <ol style="margin-left:40px">
+                                                <li>（1）出光興産株式会社</li>
+                                                <li style="margin-left:35px">〒100-8321　東京都千代田区大手町一丁目2番1号</li>
+                                                <li style="margin-left:35px">
+                                                    ホームページアドレス　<a href="https://www.idss.co.jp"
+                                                                  target="_blank">https://www.idss.co.jp</a>
+                                                </li>
+                                                <li>（2）本申込みを取り次いだ出光興産株式会社の系列特約販売店</li>
+                                                <li style="margin-left:35px">
+                                                    ただし、当該系列特約販売店の廃業・運営者の変更等の場合は、当該特約販売店の取り次ぎ業務を継承するものとして出光興産株式会社が指定する系列特約販売店
+                                                </li>
+                                            </ol>
+                                        </li>
+                                        <li>
+                                            3.
+                                            申込者等は、前項による利用について、中止の申し出ができます。ただし、各取引の規約等に基づき申込者等に送付する請求書等に記載される営業案内及びその同封物についてはこの限りではありません。
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="boxWrap">
+                                    <p class="title">第3条（信用情報機関への登録･利用）</p>
+                                    <ul>
+                                        <li>
+                                            1.
+                                            申込者等の支払能力・返済能力の調査のために、当社が加盟する信用情報機関（以下｢加盟先機関｣という）（個人及び法人の支払能力・返済能力に関する情報の収集及び加盟会員に対する当該情報の提供を業とするもの）及び当該加盟先機関と提携する信用情報機関（以下｢提携先機関｣という）に照会し、申込者等の法人貸付情報または個人情報が登録されている場合には、それを利用することに同意します。
+                                        </li>
+                                        <li>
+                                            2.
+                                            申込者等に係る本申込及び本契約に基づく法人貸付情報、個人情報、客観的な取引事実が、当社の加盟先機関に下表に定める期間登録され、加盟先機関および提携先機関の加盟会員により、申込者等の支払能力・返済能力の調査の目的のために利用されることに同意します。
+                                        </li>
+                                        <!--/* 表エリアSTART */-->
+                                        <div>
+                                            <table frame="box" rules="all" cellpadding="15%">
+                                                <thead>
+                                                    <tr bgcolor="#f5f4ef">
+                                                        <th rowspan="2" style="width:30%">登録情報</th>
+                                                        <th colspan="2" style="width:70%">登録期間</th>
+                                                    </tr>
+                                                    <tr bgcolor="#f5f4ef">
+                                                        <td style="width:35%">（株）シー･アイ･シー</td>
+                                                        <td style="width:35%">（株）日本信用情報機構</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th align="left">
+                                                            a.氏名、生年月日、住所、電話番号、運転免許証等の記号番号等の本人を特定する情報
+                                                        </th>
+                                                        <td colspan="2">下記、c、d、eの登録情報のいずれかが登録されている期間</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th align="left">b.法人名、代表者名、所在地、電話番号等の法人を特定する情報</th>
+                                                        <td>－</td>
+                                                        <td>下記、c、d、eの登録情報のいずれかが登録されている期間</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th align="left">c.本契約に係る申込みをした事実</th>
+                                                        <td>当社が照会した日から6ヵ月間</td>
+                                                        <td>当該申込日から6ヵ月を超えない期間</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th align="left">d.本契約に係る客観的な取引事実</th>
+                                                        <td>契約期間中および契約終了後<br>5年以内</td>
+                                                        <td>
+                                                            契約継続中および完済日から5年を超えない期間<br>
+                                                            （ただし、債権譲渡の事実に係る情報については当該事実の発生日から1年を超えない期間）
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th align="left">e.債務の支払を延滞した事実</th>
+                                                        <td>契約期間中および契約終了後<br>5年間</td>
+                                                        <td>
+                                                            当該事実の発生日から5年を超えない期間<br>
+                                                            （ただし、延滞情報については延滞継続中、延滞解消の事実に係る情報については当該事実の発生日から1年を超えない期間）
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!--/* 表エリアEND */-->
+                                        <li>
+                                            3.
+                                            当社の加盟先機関の名称、住所、問い合わせ電話番号及び登録する情報は下記の通りです。また、本契約期間中に新たに信用情報機関に加盟し、登録･利用する場合は、別途書面により通知し、同意を得るものとします。
+                                        </li>
+                                        <li>
+                                            <ol style="margin-left:40px">
+                                                <li>（1）（株）シー・アイ・シー（略称：CIC）</li>
+                                                <li style="margin-left:35px">
+                                                    〒160-8375　東京都新宿区西新宿1-23-7　新宿ファーストウエスト15階
+                                                </li>
+                                                <li style="margin-left:35px">フリーダイヤル　0120-810-414</li>
+                                                <li style="margin-left:35px">
+                                                    ホームページアドレス　<a href="https://www.cic.co.jp/"
+                                                                  target="_blank">https://www.cic.co.jp/</a>
+                                                </li>
+                                                <li style="margin-left:35px">
+                                                    登録情報
+                                                    氏名、生年月日、住所、電話番号、勤務先、勤務先電話番号、運転免許証の記号番号等の本人を特定するための情報等、及び契約の種類、契約日、契約額、貸付額、商品名、支払回数、支払期間等の契約内容に関する情報等、利用残高、支払日、完済日、延滞等の支払状況に関する情報等
+                                                </li>
+                                                <li>（2）（株）日本信用情報機構（略称：JICC）</li>
+                                                <li style="margin-left:35px">
+                                                    〒110-0014
+                                                    東京都台東区北上野一丁目10番14号　住友不動産上野ビル5号館
+                                                </li>
+                                                <li style="margin-left:35px">電話番号　0120-441-481</li>
+                                                <li style="margin-left:35px">
+                                                    ホームページアドレス　<a href="https://www.jicc.co.jp/"
+                                                                  target="_blank">https://www.jicc.co.jp/</a>
+                                                </li>
+                                                <li style="margin-left:35px">
+                                                    登録情報　
+                                                    氏名、生年月日、性別、住所、電話番号、勤務先、勤務先電話番号、運転免許証等の記号番号等の本人を特定するための情報、法人名、代表者名、所在地、電話番号等の法人を特定するための情報、申込日、申込商品種別等の申込に関する情報、契約の種類、契約日、貸付日、契約金額、契約の数量･単位等の契約内容に関する情報、入金日、入金予定日、残高金額、完済日、延滞等の返済状況に関する情報、債権回収、債務整理、保証履行、強制解約、破産申立、債権譲渡等の取引事実に関する情報
+                                                </li>
+                                            </ol>
+                                        </li>
+                                        <li>4. 当社の加盟先機関が提携する個人信用情報機関は、下記の通りです。</li>
+                                        <li>
+                                            <ol style="margin-left:40px">
+                                                <li>（1）全国銀行個人信用情報センター</li>
+                                                <li style="margin-left:35px">〒100-8216　東京都千代田区丸の内1-3-1</li>
+                                                <li style="margin-left:35px">電話番号　03-3214-5020</li>
+                                                <li style="margin-left:35px">
+                                                    ホームページアドレス　<a href="https://www.zenginkyo.or.jp/pcic/"
+                                                                  target="_blank">https://www.zenginkyo.or.jp/pcic/</a>
+                                                </li>
+                                                <li style="margin-left:35px">なお、当社の加盟先機関CICおよびJICCは相互に提携しております。</li>
+                                                <li style="margin-left:35px">
+                                                    上記の加盟先機関、提携先機関の加盟資格、加盟会員企業名の詳細は、各社ホームページをご覧下さい。
+                                                </li>
+                                            </ol>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="boxWrap">
+                                    <p class="title">第4条（個人情報の開示・訂正・削除）</p>
+                                    <ul>
+                                        <li>
+                                            1.
+                                            申込者等は、当社及び第3条（信用情報機関への登録・利用）3で記載する加盟先機関及び第3条4で記載する提携先機関に対して、下記各号に定める方法により申込者等の情報を開示するよう請求することができます。
+                                        </li>
+                                        <li>
+                                            <ol style="margin-left:40px">
+                                                <li>（1）当社が保有する、申込者等の個人情報について開示を求める場合には、第6条（問い合わせ窓口）に連絡する方法</li>
+                                                <li>
+                                                    （2）第3条3で記載する加盟先機関および第3条4で記載する提携先機関が保有する申込者等の情報について開示を求める場合には、加盟先機関および提携先機関に連絡する方法
+                                                </li>
+                                                <li>
+                                                    （3）当社の提携会社等に対して開示を求める場合には、第2条（営業活動の目的での個人情報の利用）2に記載の当社の提携会社等に連絡ください。
+                                                </li>
+                                            </ol>
+                                        </li>
+                                        <li>
+                                            2.
+                                            当社が保有する個人情報について、万一登録内容が不正確または誤りであることが判明した場合には、当社は、速やかに訂正または削除に応じるものとします。
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="boxWrap">
+                                    <p class="title">第5条（本同意条項に不同意の場合）</p>
+                                    <p>
+                                        当社は、申込者等が各取引のお申込に必要な記載事項（各取引の申込書で申込者等が記載すべき事項）の記載をされない場合及び本同意条項の内容の全部または一部を承認できない場合、各取引のお申し込みに対する承諾をしないことがあります。ただし、第2条（営業活動の目的での個人情報の利用）1または2に同意しない場合でも、これを理由に各取引のお申し込みに対する承諾をしないことはありません。
+                                    </p>
+                                </div>
+
+                                <div class="boxWrap">
+                                    <p class="title">第6条（問い合わせ窓口）</p>
+                                    <p>
+                                        当社の保有する申込者等の個人情報に関するお問合せや、開示･訂正･削除の申し出、第2条（営業活動の目的での個人情報の利用）3の営業目的での利用の中止の申し出等に関しましては、下記の当社リース事務局にご連絡ください。
+                                    </p>
+                                    <p>出光クレジット　リース事務局</p>
+                                    <p>電話番号（一般電話）：03-5624-7289</p>
+                                </div>
+
+                                <div class="boxWrap">
+                                    <p class="title">第7条（各取引の契約が不成立の場合）</p>
+                                    <ul>
+                                        <li>
+                                            1.
+                                            各取引の契約が不成立の場合にも、その不成立の理由の如何を問わず、第1条（個人情報の取得・保有・利用・提供）1に基づき当社が取得した個人情報は以下の利用をされますが、それ以外に利用いたしません。
+                                        </li>
+                                        <li>
+                                            <ol style="margin-left:40px">
+                                                <li>（1）申込者等との各取引（新たなお申込を含む）に際して、当社が与信目的でする利用</li>
+                                                <li>（2）第3条（信用情報機関への登録・利用）2に基づく指定信用情報機関への登録。</li>
+                                            </ol>
+                                        </li>
+                                        <li>
+                                            2.
+                                            前項（2）は、第3条3の加盟先機関の加盟会員、及び第3条4の提携先機関の加盟会員により、申込者等の支払能力（返済能力）に関する調査のための利用がされます。
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="boxWrap">
+                                    <p class="title">第8条（合意管轄裁判所）</p>
+                                    <p>
+                                        申込者等と当社の間で個人情報について、訴訟の必要が生じた場合は、訴訟額の多少にかかわらず、申込者等の住所地および当社の本社、支店を管轄する簡易裁判所及び地方裁判所を管轄裁判所といたします。
+                                    </p>
+                                </div>
+
+                                <div class="boxWrap">
+                                    <p class="title">第9条（条項の変更）</p>
+                                    <p>本同意条項は、当社所定の手続により変更することができます。</p>
+                                </div>
+
+                                <div class="boxWrap">
+                                    <p class="title">■　個人情報管理責任者</p>
+                                    <p>当社では、個人情報保護の徹底を推進する為、代表取締役を個人情報管理責任者としております。</p>
+                                    <p align="right">2019年7月改定</p>
+                                </div>
+                            </div>
+                            <!-- スクロール領域 END -->
+
+                            <div class="js-agree">
+                                <label class="typeCheck">
+                                    <input type="checkbox" name="examinationCheck"
+                                           value="1">上記の個人情報の取り扱いに同意する
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="buttonBox">
+                            <button type="submit" class="buttonDecision buttonDisabled js-entryButton">
+                                審査を申し込む
+                                <svg class="arrowNext">
+                                    <use xlink:href="/img/sprite.svg#ico_arrow"></use>
+                                </svg>
+                            </button>
+                            <a href="javascript:history.back()" class="buttonPrev backButton">
+                                <svg class="arrowNext">
+                                    <use xlink:href="/img/sprite.svg#ico_arrow"></use>
+                                </svg>
+                                戻る
+                            </a>
+                        </div>
+
+                    </section>
+                    <!-- ##### 同意事項 END ##### -->
+                    <a href="https://www.idemitsu-autoflat.com/" id="stcid" hidden></a>
+                </form>
+            </div>
+        </div>
+    </main>
+    <!-- ##### 繝｡繧､繝ｳ繧ｳ繝ｳ繝�繝ｳ繝�縲END ##### -->
+    <!-- ##### 蜈ｱ騾壹ヵ繝�繧ｿ繝ｼ縲START ##### -->
+    <div data-import="pageFooterMenu" class="parts">
+        <div class="pagetop">
+            <a href="#" class="pagetopLink js-scroll js-pcPagetop">
+                <svg class="arrowNext">
+                    <use xlink:href="/img/sprite.svg#ico_arrow_solid"></use>
+                </svg>
+                上へ 
+            </a>
+        </div>
+        <footer class="footer">
+            <div class="box clearfix">
+                <div class="footerLogo">
+                    <a href="https://www.idemitsu-autoflat.com/"><img src="~/img/logo.png" alt="蜃ｺ蜈峨�ｮ繧ｫ繝ｼ繝ｪ繝ｼ繧ｹ縲後が繝ｼ繝医ヵ繝ｩ繝�繝医�"></a>
+                </div>
+                <small class="footerCopyright">Copyright &copy; Idemitsu Kosan Co.,Ltd. All Rights Reserved.</small>
+            </div>
+        </footer>
+    </div>
+    <!-- ##### 蜈ｱ騾壹ヵ繝�繧ｿ繝ｼ縲END ##### -->
+</body>
+</html>
