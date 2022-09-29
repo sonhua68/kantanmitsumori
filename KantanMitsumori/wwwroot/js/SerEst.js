@@ -506,9 +506,9 @@ function setSelectM(type,M) {
 }
 function setSelectY(type,Y) {
     if (type == 1) {
-        Framework.SetSelectedNumber("ddlFromSelectM", Y);
+        Framework.SetSelectedNumber("ddlFromSelectY", Y);
     } else if (type == 2) {
-        Framework.SetSelectedNumber("ddlToSelectM", Y);
+        Framework.SetSelectedNumber("ddlToSelectY", Y);
     }
 }
 
