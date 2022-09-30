@@ -369,8 +369,8 @@ function onChangeSelect(type) {
     } else {
         let toY = parseInt($($thisToY).val());
         let ToM = parseInt($($thisToM).val());
-        let nMonth = (toY - 1);
-        if (fromY == (currentYear - 1)) {
+        let nMonth = (ToM - 1);
+        if (ToM == (currentYear - 1)) {
             InitSelectList($thisToY, $thisToM, $thisToD, toY, nMonth, "", "from", type);
         } else {
             InitSelectList($thisToY, $thisToM, $thisToD, toY, nMonth, "this", "from", type);
