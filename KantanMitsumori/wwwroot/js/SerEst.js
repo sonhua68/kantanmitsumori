@@ -437,7 +437,7 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2,type) {
                 currentDay = parseInt(day.getDate());
                 Tday.setDate(Tday.getDate() + 1)
                 let j = Tday.getDay();
-                for (let i = j; i <= CurrentDay; i++) {
+                for (let i = j; i <= currentDay; i++) {
                     $(D).append(new Option(i, i));
                 }
             } else {
