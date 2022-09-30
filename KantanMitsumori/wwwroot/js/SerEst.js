@@ -357,7 +357,7 @@ function SortPagination(itemsArr) {
 
 function onChangeSelect(type) {
     if (type == 1) {
-        let fromY = parseInt($($thisToY).val());
+        let fromY = parseInt($($thisFromY).val());
         let fromM = parseInt($($thisFromM).val());
         let nMonth = (fromM - 1);
         if (fromY == (currentYear - 1)) {
