@@ -489,7 +489,7 @@ var Framework =
                 }
                 else {
                     let length = idOption.length;
-                    for (let i = 1; i < length; i++) {
+                    for (let i = 0; i < length; i++) {
                         let value = idOption[i].value;
                         if (value === defaultValue) {
                             $("#" + nameId + " option[value='" + value + "']").attr("selected", "selected");

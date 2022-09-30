@@ -1,15 +1,27 @@
 ﻿// JScript File
 // Create Date 2022/09/13 by HoaiPhong
 let Tday = new Date();
+const currentYear = Tday.getFullYear();
+const currentMonth = parseInt(Tday.getMonth());
+const currentDay = Tday.getDate();
 let month = parseInt(Tday.getMonth()) + 1;
+var $thisFromY = "#ddlFromSelectY";
+var $thisFromM = "#ddlFromSelectM";
+var $thisFromD = "#ddlFromSelectD";
+var $thisToY = "#ddlToSelectY";
+var $thisToM = "#ddlToSelectM";
+var $thisToD = "#ddlToSelectD";
 let _conNumberSort = true;
 let _conNumber = 0;
+InitSelectList($thisFromY, $thisFromM, $thisFromD, currentYear, currentMonth, "this", "first",1)
+InitSelectList($thisToY, $thisToM, $thisToD, currentYear, currentMonth, "this", "first",2)
 GetListMaker();
-GetDayOfMonth(1);
-GetDayOfMonth(2);
+//GetDayOfMonth(1);
+//GetDayOfMonth(2);
 SetInitToDay();
 LoadData(1);
 setCookie("btnHanei", "1", 1);
+
 function GetListMaker() {
     ; var result = Framework.GetObjectDataFromUrl("/SerEst/GetMakerNameAndModelName?makerName=");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
@@ -88,7 +100,6 @@ function GetDayOfMonth(type) {
     let lastDay = parseInt(Tday.getDate());
     let lastMonth = parseInt(Tday.getMonth()) + 1;
     if (type == 1) {
-
         let fromY = $('#ddlFromSelectY').val();
         let fromM = $('#ddlFromSelectM').val();
         var $this = $("#ddlFromSelectD");
@@ -171,14 +182,14 @@ function SortData(colNumber) {
         $("#SortPage").val(colNumber);
         _conNumber = colNumber;
     }
-    model.pageNumber = 1; 
+    model.pageNumber = 1;
     model.colSort = _conNumber;
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
     $('tr#pagination').remove();
     $('#trId').twbsPagination('destroy');
     UiPagination(result[0].totalPages)
     AddPagination(result[0].totalPages);
-    ReloadListData(result);  
+    ReloadListData(result);
 }
 function DeleteEstimate(value) {
     var data = value.toString().split("-");
@@ -282,7 +293,7 @@ function AddPagination(totalPages) {
         totalPages: totalPages,
         visiblePages: 10,
         next: '次',
-        prev: '前',        
+        prev: '前',
         onPageClick: function (event, page) {
             GoNextPage(page)
         }
@@ -343,4 +354,162 @@ function SortPagination(itemsArr) {
     }
 
 }
+
+function onChangeSelect(type) {
+    if (type == 1) {
+        let fromY = parseInt($($thisToY).val());
+        let fromM = parseInt($($thisFromM).val());
+        let nMonth = (fromM - 1);
+        if (fromY == (currentYear - 1)) {
+            InitSelectList($thisFromY, $thisFromM, $thisFromD, fromY, nMonth, "", "from", type)
+
+        } else {
+            InitSelectList($thisFromY, $thisFromM, $thisFromD, fromY, nMonth, "this", "from", type)
+        }
+    } else {
+        let toY = parseInt($($thisToY).val());
+        let ToM = parseInt($($thisToM).val());
+        let nMonth = (toY - 1);
+        if (fromY == (currentYear - 1)) {
+            InitSelectList($thisToY, $thisToM, $thisToD, toY, nMonth, "", "from", type);
+        } else {
+            InitSelectList($thisToY, $thisToM, $thisToD, toY, nMonth, "this", "from", type);
+        }
+    }
+}
+function InitSelectList(Y, M, D, year, month, ddflg, ddflg2,type) {
+    let currentYear = Tday.getFullYear();
+    let currentMonth = parseInt(Tday.getMonth());
+    let currentDay = Tday.getDate();
+    month = month + 1;
+    $(Y).empty();
+    $(M).empty();
+    $(D).empty();
+    var birthYear;
+    var birthMonth;
+    var dtBirth = new Date(currentYear, currentMonth, currentDay);
+    console.log(dtBirth);
+    currentMonth = currentMonth + 1;
+    dtBirth.setMonth(dtBirth.getMonth() - 3);
+    birthYear = dtBirth.getFullYear();
+    birthMonth = dtBirth.getMonth();
+    if (birthYear == (Tday.getFullYear() - 1)) {
+        $(Y).append(new Option(birthYear, birthYear));
+        $(Y).append(new Option(currentYear, currentYear));
+        if (year == currentYear - 1 && month < 3) {
+            dtBirth.setDate(dtBirth.getDate() + 1)
+            month = dtBirth.getMonth();
+        } else if (year == currentYear && month == currentMonth || year == currentYear && month > currentMonth) {
+            month = currentMonth;
+        }
+        if (ddflg == "this") {
+            // add month
+            for (let i = 1; i <= currentMonth; i++) {
+                $(M).append(new Option(i, i));
+            }
+            // add day
+            if (currentMonth == month) {
+                for (let i = 1; i <= currentDay; i++) {
+                    $(D).append(new Option(i, i));
+                }
+                setSelectD(type, currentDay)
+           /*     $(D + " option[value='" + currentDay + "']").attr("selected", "selected");*/
+            } else {
+                let day = new Date(currentYear - 1, month, 0);
+                currentDay = parseInt(day.getDate());
+                for (let i = 1; i <= currentDay; i++) {
+                    $(D).append(new Option(i, i));
+                }
+            }
+            //$(Y + " option[value='" + currentYear + "']").attr("selected", "selected");
+             //$(M + " option[value='" + month + "']").attr("selected", "selected");
+            setSelectY(type, currentYear)
+            setSelectM(type, month)
+           
+
+        } else {
+            dtBirth.setDate(dtBirth.getDate() + 1)
+            let nMonth = dtBirth.getMonth() + 1;
+            for (let i = nMonth; i <= 12; i++) {
+                $(M).append(new Option(i, i));
+            }
+
+            if (currentMonth == month) {
+                let day = new Date(currentYear - 1, month, 0);
+                currentDay = parseInt(day.getDate());
+                for (let i = 1; i <= currentDay; i++) {
+                    $(D).append(new Option(i, i));
+                }
+            } else if (nMonth == month) {
+                let day = new Date(year, nMonth, 0);
+                currentDay = parseInt(day.getDate());
+                Tday.setDate(Tday.getDate() + 1)
+                let j = Tday.getDay();
+                for (let i = j; i <= CurrentDay; i++) {
+                    $(D).append(new Option(i, i));
+                }
+            } else {
+                let day = new Date(year, month, 0);
+                currentDay = parseInt(day.getDate());
+                for (let i = j; i <= currentDay; i++) {
+                    $(D).append(new Option(i, i));
+                }
+            }
+            //$(Y + " option[value='" + currentYear - 1 + "']").attr("selected", "selected");
+            setSelectY(type, (currentYear - 1))
+        }
+
+    } else {
+        dtBirth.setDate(dtBirth.getDate() + 1)
+        let i = currentMonth;
+        let nMonth = dtBirth.getMonth() + 1;
+        do {
+            $(M).append(new Option(i, i));
+            i--;
+        }
+        while (i > (nMonth - 1));
+        if (currentMonth == month) {
+            for (let i = 1; i <= currentDay; i++) {
+                $(D).append(new Option(i, i));
+            }
+        } else if (nMonth == month) {
+            let day = new Date(year, month, 0);
+            currentDay = parseInt(day.getDate());
+            for (let i = nMonth; i <= currentDay; i++) {
+                $(D).append(new Option(i, i));
+            }
+        } else {
+            let day = new Date(currentYear - 1, month, 0);
+            currentDay = parseInt(day.getDate());
+            for (let i = 1; i <= currentDay; i++) {
+                $(D).append(new Option(i, i));
+            }
+        }
+        $(Y).append(new Option(currentYear, currentYear));
+    }
+    return;
+}
+
+function setSelectD(type,D) {
+    if (type == 1) {
+        Framework.SetSelectedNumber("ddlFromSelectD", D)
+    } else if (type == 2) {
+        Framework.SetSelectedNumber("ddlToSelectD", D)
+    }
+}
+function setSelectM(type,M) {
+    if (type == 1) {
+        Framework.SetSelectedNumber("ddlFromSelectM", M); 
+    } else if (type == 2) {
+        Framework.SetSelectedNumber("ddlToSelectM", M);
+    }
+}
+function setSelectY(type,Y) {
+    if (type == 1) {
+        Framework.SetSelectedNumber("ddlFromSelectM", Y);
+    } else if (type == 2) {
+        Framework.SetSelectedNumber("ddlToSelectM", Y);
+    }
+}
+
 
