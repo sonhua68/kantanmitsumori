@@ -16,8 +16,6 @@ let _conNumber = 0;
 InitSelectList($thisFromY, $thisFromM, $thisFromD, currentYear, currentMonth, "this", "first",1)
 InitSelectList($thisToY, $thisToM, $thisToD, currentYear, currentMonth, "this", "first",2)
 GetListMaker();
-//GetDayOfMonth(1);
-//GetDayOfMonth(2);
 SetInitToDay();
 LoadData(1);
 setCookie("btnHanei", "1", 1);
@@ -394,8 +392,8 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2,type) {
     birthYear = dtBirth.getFullYear();
     birthMonth = dtBirth.getMonth();
     if (birthYear == (Tday.getFullYear() - 1)) {
-        $(Y).append(new Option(birthYear, birthYear));
         $(Y).append(new Option(currentYear, currentYear));
+        $(Y).append(new Option(birthYear, birthYear));      
         if (year == currentYear - 1 && month < 3) {
             dtBirth.setDate(dtBirth.getDate() + 1)
             month = dtBirth.getMonth();
