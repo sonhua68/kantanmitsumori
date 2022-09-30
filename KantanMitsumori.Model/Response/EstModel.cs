@@ -169,5 +169,6 @@ namespace KantanMitsumori.Model.Response
         public bool LoanRecalcSettingFlag { get; set; }
         public byte LoanInfo { get; set; }
         public string AAInfo { get; set; }
+        public int IsError { get; set; } = 0;
     }
 }

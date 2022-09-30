@@ -203,7 +203,7 @@
                                 </tr>
                                 <tr>
                                     <td class="inpbtntd">
-                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPageUrl('/');return false;" style="height:32px;width:100px;">
+                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();return false;" style="height:32px;width:100px;">
                                         <input type="submit" name="btnInputCar" value="Ok" form="formInputCar" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                     </td>
                                 </tr>
@@ -235,7 +235,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCar/UpdateInputCar");
             if (result.resultStatus == 0) {
-               Framework.GoBackReloadPageUrl('/');
+               Framework.GoBackReloadPage();
             } else {
                 let Items = result.data;
                 console.log(Items)
@@ -260,7 +260,7 @@
         if (@Model.AccidentHis == 0) {
             $("#raSyuhukuM").attr("checked", "checked");
 
-        } else {
+        } else if (@Model.AccidentHis == 1) {
             $("#raSyuhukuU").attr("checked", "checked");
         }
         var businessHis = $("#hidBusinessHis").val() == "" ? "自家用" : $("#hidBusinessHis").val();

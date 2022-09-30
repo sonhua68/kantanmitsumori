@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using System.Net;
 
 namespace KantanMitsumori.Service.Helper
@@ -154,22 +153,23 @@ namespace KantanMitsumori.Service.Helper
             string wOne = "";
             string wStr = "";
             string wInt = "";
-            int i = 0;
 
             try
             {
                 // 文字数分ループ
-                for (i = 1; i <= vEncNo.Length; i++)
+                for (int i = 0; i < vEncNo.Length; i++)
                 {
-                    wOne = Strings.Mid(vEncNo, i, 1);
+                    wOne = CommonFunction.Mid(vEncNo, i, 1);
+
+                    int a = Convert.ToChar(wOne);
 
                     // 取り出した文字が英小文字(a～z)の場合
-                    if (Strings.Asc(wOne) >= 97 && Strings.Asc(wOne) <= 122)
+                    if (Convert.ToChar(wOne) >= 97 && Convert.ToChar(wOne) <= 122)
                     {
                         // 英小文字と数字がすでに格納されていれば1文字分デコード
                         if (wStr.Length == 1 && wInt.Length > 0)
                         {
-                            vDecNo += Strings.Chr(Strings.Asc(wStr) - Convert.ToInt32(wInt));
+                            vDecNo += Convert.ToChar(Convert.ToChar(wStr) - Convert.ToInt32(wInt));
                             // ワーククリア
                             wStr = "";
                             wInt = "";
@@ -186,7 +186,7 @@ namespace KantanMitsumori.Service.Helper
                 }
 
                 // 最後の文字分のデコード
-                vDecNo += Strings.Chr(Strings.Asc(wStr) - Convert.ToInt32(wInt));
+                vDecNo += Convert.ToChar(Convert.ToChar(wStr) - Convert.ToInt32(wInt));
                 return true;
             }
             catch (Exception ex)
@@ -209,7 +209,7 @@ namespace KantanMitsumori.Service.Helper
             {
                 var getTbSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
 
-                if (!Information.IsDBNull(getTbSys.Corner))
+                if (!string.IsNullOrEmpty(getTbSys.Corner))
                 {
                     return getTbSys.CornerType;
                 }
@@ -266,7 +266,7 @@ namespace KantanMitsumori.Service.Helper
 
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
-                strCarImgPlace = "~/img/CarImg";  //"~/img/CarImg"
+                strCarImgPlace = CommonSettings.def_CarImgPlace;
                 strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMM") + "/";
                 if (!Directory.Exists(strCarImgPlace))
                 {
@@ -321,14 +321,12 @@ namespace KantanMitsumori.Service.Helper
         }
 
 
-        // 商談メモ画像枚数追加
+
         public void CheckImgPath(string strImagePath, string strSesName, string strDefImage, ref string strOutImagePath, string strImgSuffix, string cor, string fex)
         {
             string strOutImg = "";
             string strSaveName = "";
             string strTempImagePath = "";
-
-            // 画像が未設定の場合画像パスはなし
             if (string.IsNullOrEmpty(strImagePath))
             {
                 strOutImagePath = "";
@@ -338,12 +336,8 @@ namespace KantanMitsumori.Service.Helper
                 strTempImagePath = strImagePath.ToUpper();
                 if (!strTempImagePath.EndsWith(".JPG") & !strTempImagePath.EndsWith(".GIF") & !strTempImagePath.EndsWith(".PNG") & strImgSuffix is not null)
                 {
-                    // URLの末尾が画像の拡張子ではなく、サフィックスが設定されている場合は
-                    // コーナー区分、出品番号より画像ファイル名を生成する。
                     strSaveName = cor + fex + strImgSuffix;
                 }
-
-                // 画像をダウンロードし、ファイル名を取得する
                 DownloadImg(strImagePath, strSesName, strDefImage, ref strOutImg, strSaveName);
                 strOutImagePath = strOutImg;
             }
@@ -363,7 +357,6 @@ namespace KantanMitsumori.Service.Helper
             {
                 return 0;
             }
-
             try
             {
                 var getPsinfos = _unitOfWork.Psinfos.GetSingle(x => x.Corner == inCor && x.ExhNum == inFullExhNum);
@@ -402,8 +395,8 @@ namespace KantanMitsumori.Service.Helper
             string[] arrExclusionList;
             try
             {
-                strExclusionList = File.ReadAllText(CommonConst.def_ExclusionListOfAutoCalc, enc);
-                arrExclusionList = Strings.Split(strExclusionList, Constants.vbCrLf);
+                strExclusionList = File.ReadAllText(CommonSettings.def_ExclusionListOfAutoCalc, enc);
+                arrExclusionList = strExclusionList.Split("\r\n");
             }
             catch (Exception ex)
             {
@@ -411,7 +404,7 @@ namespace KantanMitsumori.Service.Helper
                 return false;
             }
 
-            if (0 <= Array.IndexOf(arrExclusionList, Strings.Trim(inMakerName)))
+            if (0 <= Array.IndexOf(arrExclusionList, inMakerName.Trim()))
                 // 除外リストに存在する場合、自動計算不可
                 return false;
 
@@ -419,31 +412,31 @@ namespace KantanMitsumori.Service.Helper
         }
 
 
-   
+
         public int getCarTax(int intRegistMonth, int intExaust)
-        {           
+        {
             if (intExaust <= 660)
             {
                 return 0;
             }
-            int intYEAR_AMOUNT = getYearAmount(intExaust);          
+            int intYEAR_AMOUNT = getYearAmount(intExaust);
             if (intYEAR_AMOUNT == -1)
-                return -1;        
-            int intPassedMonth = getCarTaxPassedMonth(intRegistMonth);        
-            decimal dblCarTax = intYEAR_AMOUNT * Convert.ToDecimal(intPassedMonth / (double)12);
+                return -1;
+            int intPassedMonth = getCarTaxPassedMonth(intRegistMonth);
+            decimal dblCarTax = Math.Round(intYEAR_AMOUNT * (intPassedMonth / 12.0m), 2);
             return (int)CommonFunction.ToRoundDown(dblCarTax, -2);
         }
         public bool getSelfInsurance(int intExaust, string inYear, string inMonth, int inUserDefMonth, ref int outSelfIns, ref int outRemIns)
         {
             try
-            {      
+            {
                 DateTime vSyaken;
                 int SyakenDiff = 0;
-                outRemIns = inUserDefMonth > 0 ? inUserDefMonth : CommonConst.def_DamegeInsMonth25;             
-                if ((inYear != "" & inMonth != "") && Information.IsDate(inYear + "/" + inMonth + "/01"))
+                outRemIns = inUserDefMonth > 0 ? inUserDefMonth : CommonConst.def_DamegeInsMonth25;
+                if ((inYear != "" & inMonth != "") && CommonFunction.IsDate(inYear + "/" + inMonth + "/01"))
                 {
                     vSyaken = DateTime.Parse(inYear + "/" + inMonth + "/01");
-                    SyakenDiff = (int)DateAndTime.DateDiff(DateInterval.Month, DateTime.Now, vSyaken);
+                    SyakenDiff = CommonFunction.DateDiff(IntervalEnum.Months, DateTime.Now, vSyaken);
                     if (SyakenDiff > 0)
                         outRemIns = SyakenDiff + 1;
                 }

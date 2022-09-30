@@ -4,6 +4,16 @@ function closeWin() {
     window.close();
 }
 
+// function input only number
+function onlyNumbers(evt) {
+    evt = (evt) ? evt : window.event;
+    var charCode = (evt.which) ? evt.which : evt.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    return true;
+}
+
 /* 数値桁揃え関数 */
 function format(val, digit, flg) {//val:数値;digit:桁;flg:(0:四捨五入;1:切り捨て;2:切り上げ)
     val *= Math.pow(10.0, digit);
@@ -264,7 +274,7 @@ function getWareki(str) {
             return "R" + (intYear - 2018);
         }
     }
-   
+
 }
 const def_Space = "    "
 /*
@@ -275,18 +285,18 @@ const def_Space = "    "
 function FormatDayGetYear(str) {
     let vlength = str.length;
     var year = "";
-    switch (vlength) {     
+    switch (vlength) {
         case 2:
-            year = def_Space; 
+            year = def_Space;
             break;
         case 1:
-            year = def_Space; 
+            year = def_Space;
             break;
         case 0:
-            year = def_Space;  
+            year = def_Space;
             break;
         default:
-            year = str.toString().substring(0, 4);  
+            year = str.toString().substring(0, 4);
             return year
     }
 }
@@ -312,12 +322,10 @@ function FormatDayGetMonth(str) {
         case 0:
             month = def_Space;
             break;
-       
         default:
             month = str.toString().substring(4, 6);
             return month
     }
-
 }
 /*
  * groupBy
@@ -351,10 +359,24 @@ String.prototype.compose = (function () {
     }
 }());
 /*
+ *  
+ *  Create By HoaiPhong
+ *  Date 2022/09/23
+ /*/
+$(document).ready(function () {
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+});
+/*
  * sortElements
  *  Create By HoaiPhong
  *  Date 2022/09/14
  /*/
+
 jQuery.fn.sortElements = (function () {
     var sort = [].sort;
     return function (comparator, getSortable) {
@@ -375,7 +397,7 @@ jQuery.fn.sortElements = (function () {
                         "Error :You can't sort elements "
                     );
                 }
-                parentNode.insertBefore(this, nextSibling);               
+                parentNode.insertBefore(this, nextSibling);
                 parentNode.removeChild(nextSibling);
             };
         });
@@ -386,3 +408,59 @@ jQuery.fn.sortElements = (function () {
     };
 
 })();
+/*
+ * setCookie
+ *  Create By HoaiPhong
+ *  Date 2022/09/22
+ /*/
+const TimeOutCooKieExdays = 30;
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (TimeOutCooKieExdays * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+/*
+ * getCookie
+ *  Create By HoaiPhong
+ *  Date 2022/09/22
+ /*/
+function getCookie(cname) {
+    let name = cname + "=";
+    let ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+/*
+ * checkCookie
+ *  Create By HoaiPhong
+ *  Date 2022/09/22
+ /*/
+function checkCookie() {
+    let user = getCookie("username");
+    if (user != "") {
+        console.log("Welcome again " + user);
+    } else {
+        user = prompt("Please enter your name:", "");
+        if (user != "" && user != null) {
+            setCookie("username", user, 365);
+        }
+    }
+
+}
+// constant
+var DATE_FORMAT_MOMENT = "DD-MMM-YY";
+var DATE_FORMAT_MOMENT_NEW = "DD-MM-YYYY";
+var DATE_FORMAT_MOMENT_WITH_TIME = "DD-MMM-YY hh:mm A";
+var DATE_FORMAT_MOMENT_WITH_TIME_NEW = "DD-MM-YYYY HH:mm:ss";
+
+
+

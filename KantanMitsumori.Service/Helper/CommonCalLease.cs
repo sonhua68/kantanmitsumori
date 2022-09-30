@@ -1,7 +1,7 @@
-﻿using KantanMitsumori.Infrastructure.Base;
+﻿using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Infrastructure.Base;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
-
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -39,12 +39,12 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <returns></returns>
         public double GetConsumptionTax()
-        {    
+        {
             var dt = _unitOfWorkIde.ConsumptionTaxs.GetAll().ToList();
             if (dt.Count > 0)
             {
                 consumptionTax = dt.FirstOrDefault()!.ConsumptionTax;
-               
+
             }
             _logger.LogInformation("4-1 ConsumptionTax:={0}", consumptionTax);
             return consumptionTax;
@@ -314,7 +314,7 @@ namespace KantanMitsumori.Service.Helper
         public double GetPricePromotional(int salesSum)
         {
             double pricePromotional = 0;
-             promotion = _unitOfWorkIde.Promotions.GetAll().FirstOrDefault()!.Promotion;
+            promotion = _unitOfWorkIde.Promotions.GetAll().FirstOrDefault()!.Promotion;
             pricePromotional = salesSum * promotion * contractTime;
             _logger.LogInformation("4-6 PricePromotional:={0}", pricePromotional);
             if (pricePromotional > 100000)
@@ -480,11 +480,11 @@ namespace KantanMitsumori.Service.Helper
             {
                 if (over13Year < expCurrSttY)
                 {
-                    month = Convert.ToInt32(DateAndTime.DateDiff(DateInterval.Month, expCurrSttY, expCurrLeaseExpY));
+                    month = Convert.ToInt32(CommonFunction.DateDiff(IntervalEnum.Months, expCurrSttY, expCurrLeaseExpY));
                 }
                 else
                 {
-                    month = Convert.ToInt32(DateAndTime.DateDiff(DateInterval.Month, over13Year, expCurrLeaseExpY));
+                    month = Convert.ToInt32(CommonFunction.DateDiff(IntervalEnum.Months, over13Year, expCurrLeaseExpY));
                 }
                 _logger.LogInformation("getMonthLease  > Over13Year :={0}", month);
             }
@@ -496,7 +496,7 @@ namespace KantanMitsumori.Service.Helper
                 }
                 else
                 {
-                    month = Convert.ToInt32(DateAndTime.DateDiff(DateInterval.Month, expCurrSttY, over13Year));
+                    month = Convert.ToInt32(CommonFunction.DateDiff(IntervalEnum.Months, expCurrSttY, over13Year));
                 }
                 _logger.LogInformation("getMonthLease  < Over13Year :={0}", month);
             }

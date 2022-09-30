@@ -1,7 +1,7 @@
 ﻿// JScript File
 // Create Date 2022/09/06 by HoaiPhong
 // JScript File
-
+SetTextArea();
 function inputChk() {	
 	document.getElementById("txMsg").innerHTML = "";
 	var outMsg;
@@ -21,4 +21,9 @@ function inputChk() {
 	outMsg = chkBytes("責任者",$('#Sekinin').val(), 20)
 	//#2067 エラーメッセージ出力をHiddenからLabalに変更 2022/06/16 by Huy
 	if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
+}
+
+function SetTextArea() {
+	var $this = $("#HanName");
+		$this.css({ resize: "both" });	
 }

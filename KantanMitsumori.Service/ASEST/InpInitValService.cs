@@ -23,12 +23,13 @@ namespace KantanMitsumori.Service
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
-
-        public InpInitValService(IMapper mapper, ILogger<InpInitValService> logger, IUnitOfWork unitOfWork)
+        private CommonEstimate _commonEst;
+        public InpInitValService(IMapper mapper, CommonEstimate commonEst, ILogger<InpInitValService> logger, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _commonEst = commonEst;
         }
         public ResponseBase<ResponseUserDef> GetUserDefData(string userNo)
         {
@@ -48,8 +49,7 @@ namespace KantanMitsumori.Service
 
             }
         }
-
-        public async Task<ResponseBase<int>> UpdateInpInitVal(RequestUpdateInpInitVal model)
+        public async Task<ResponseBase<int>> UpdateInpInitVal(RequestUpdateInpInitVal model, LogToken logToken)
         {
             try
             {
@@ -65,14 +65,23 @@ namespace KantanMitsumori.Service
                     _unitOfWork.UserDefs.Update(mUserDef);
                 }
                 InsertAndUpdateTaxRationDef(model);
+                await _unitOfWork.CommitAsync();
                 if (model.ButtonSummit == "btnHanei")
                 {
+                    if (!await _commonEst.calcSum(model.EstNo!, model.EstSubNo!, logToken!))
+                    {
+                        return ResponseHelper.Error<int>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
+                    }
                     var dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
                     var dtEstimateSubs = _unitOfWork.EstimateSubs.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
                     UpdateEstimates(model, dtEstimates, dtEstimateSubs);
                     UpdateEstimateSub(model, dtEstimates, dtEstimateSubs);
+                    await _unitOfWork.CommitAsync();
+                    if (!await _commonEst.calcSum(model.EstNo!, model.EstSubNo!, logToken!))
+                    {
+                        return ResponseHelper.Error<int>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
+                    }
                 }
-                await _unitOfWork.CommitAsync();
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
             }
             catch (Exception ex)
@@ -82,7 +91,6 @@ namespace KantanMitsumori.Service
             }
         }
         #region Func Private 
-
         private MUserDef UpdateMUserDef(MUserDef mMUserDeOdl, RequestUpdateInpInitVal model)
         {
 
@@ -110,12 +118,12 @@ namespace KantanMitsumori.Service
             {
 
                 taxRatioDef.UserNo = model.UserNo!;
-                taxRatioDef.TaxRatioId = 0;
+                taxRatioDef.TaxRatioId = CommonConst.TAX_10_PERCENT_ID;
                 _unitOfWork.TaxRatioDefs.Add(taxRatioDef);
             }
             else
             {
-                taxRatioDef.TaxRatioId = 0;
+                taxRatioDef.TaxRatioId = CommonConst.TAX_10_PERCENT_ID;
                 _unitOfWork.TaxRatioDefs.Update(taxRatioDef);
             }
         }
@@ -129,27 +137,23 @@ namespace KantanMitsumori.Service
                 dtEstimates.Rate = model.Rate;
                 dtEstimates.TaxCheck = isCheckHaiKi ? model.TaxCheckH : model.TaxCheckK;
                 dtEstimates.TaxGarage = isCheckHaiKi ? model.TaxGarageH : model.TaxGarageK;
-                if (dtEstimates.TradeInPrice > 0 && dtEstimates.Balance > 0)
+                if (dtEstimates.TradeInPrice > 0 || dtEstimates.Balance > 0)
                 {
                     dtEstimates.TaxTradeIn = isCheckHaiKi ? model.TaxTradeInH : model.TaxTradeInK;
                     dtEstimates.TaxFreeTradeIn = isCheckHaiKi ? model.TaxFreeTradeInH : model.TaxFreeTradeInK;
                 }
-                else
-                {
-                    dtEstimates.TaxRecycle = isCheckHaiKi ? model.TaxRecycleH : model.TaxRecycleK;
-                    dtEstimates.TaxDelivery = isCheckHaiKi ? model.TaxDeliveryH : model.TaxDeliveryK;
-                    dtEstimates.TaxFreeCheck = isCheckHaiKi ? model.TaxFreeCheckH : model.TaxFreeCheckK;
-                    dtEstimates.TaxFreeGarage = isCheckHaiKi ? model.TaxRecycleH : model.TaxRecycleH;
-                }
-
-                if (model.sesMode == "1" && dtEstimates.EstInpKbn != "2")
+                dtEstimates.TaxRecycle = isCheckHaiKi ? model.TaxRecycleH : model.TaxRecycleK;
+                dtEstimates.TaxDelivery = isCheckHaiKi ? model.TaxDeliveryH : model.TaxDeliveryK;
+                dtEstimates.TaxFreeCheck = isCheckHaiKi ? model.TaxFreeCheckH : model.TaxFreeCheckK;
+                dtEstimates.TaxFreeGarage = isCheckHaiKi ? model.TaxRecycleH : model.TaxRecycleH;
+                if (model.sesMode == "0" && dtEstimates.EstInpKbn != "2")
                 {
                     var price = isCheckHaiKi ? (model.YtiRiekiH - dtEstimateSubs.YtiRieki) : (model.YtiRiekiK - dtEstimateSubs.YtiRieki);
                     dtEstimates.CarPrice = dtEstimates.CarPrice + (price);
                 }
                 if (model.SyakenNewZok!.Contains("zok"))
                 {
-                    dtEstimates.SyakenZok = isCheckHaiKi ? model.SyakenZokH : model.SyakenZokH;
+                    dtEstimates.SyakenZok = isCheckHaiKi ? model.SyakenZokH : model.SyakenZokK;
                 }
                 else
                 {
@@ -181,24 +185,20 @@ namespace KantanMitsumori.Service
                 dtEstimateSubs.TaxFreeSet1 = isCheckHaiKi ? model.TaxFreeSet1H : Convert.ToInt32(model.TaxFreeSet1K);
                 dtEstimateSubs.TaxFreeSet2Title = model.TaxFreeSet2Title;
                 dtEstimateSubs.TaxFreeSet2 = isCheckHaiKi ? model.TaxFreeSet2H : model.TaxFreeSet2K;
-                if (model.sesMode == "1" && dtEstimates.EstInpKbn != "2")
+                if (model.sesMode == "0" && dtEstimates.EstInpKbn != "2")
                 {
                     dtEstimateSubs.YtiRieki = isCheckHaiKi ? model.YtiRiekiH : model.YtiRiekiK;
                 }
-                if (dtEstimates.TradeInPrice > 0 && dtEstimates.Balance > 0)
+                if (dtEstimates.TradeInPrice > 0 || dtEstimates.Balance > 0)
                 {
                     dtEstimateSubs.TaxTradeInSatei = isCheckHaiKi ? model.TaxTradeInChkH : model.TaxTradeInChkK;
                 }
                 dtEstimateSubs.Udate = DateTime.Now;
-
                 _unitOfWork.EstimateSubs.Update(dtEstimateSubs);
             }
 
         }
-
         #endregion Func Private 
     }
-
-
 
 }

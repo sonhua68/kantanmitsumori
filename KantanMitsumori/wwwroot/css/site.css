@@ -227,8 +227,8 @@ td.info {
 }
 
 .TxtLink {
-    font-size: 11pt;
-    margin: 0px 0px 2px 2px;
+    font-size: 10pt;
+    margin: 0px 0px 2px 4px;
     color: #cc0033;
 }
 
@@ -294,6 +294,8 @@ td.info {
 }
 
 .inpbtntd {
+    border-bottom: solid 2px white;
+    border-right: solid 2px white;
     background-color: White;
     text-align: right;
     border-bottom: none;
@@ -309,4 +311,23 @@ td.info {
 
 input#btnPrintShow {
     margin-right: 30px;
+}
+.imgHeader {
+    width: 14%;
+    height: 0%;
+    color: Black;
+    position: sticky;
+    top: 46px;
+    text-align: right;
+    padding-left: 37px;
+}
+.headerTitle {
+    display: inline-block;
+    color: Black;
+    font-size: 12pt;
+    font-weight: bold;
+    position: sticky;
+    top: 11px;
+    padding-right: 60px;
+    text-align: right;
 }

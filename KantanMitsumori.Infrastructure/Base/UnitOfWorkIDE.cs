@@ -1,9 +1,7 @@
-﻿using KantanMitsumori.Entity.ASESTEntities;
-using KantanMitsumori.Entity.IDEEnitities;
+﻿using KantanMitsumori.DataAccess;
 using KantanMitsumori.Infrastructure.IRepositories;
 using KantanMitsumori.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
-using KantanMitsumori.DataAccess;
 
 namespace KantanMitsumori.Infrastructure.Base
 {
@@ -14,42 +12,44 @@ namespace KantanMitsumori.Infrastructure.Base
         private bool _disposed = false;
         public IDEContext DbContext => _context;
         public IMtIdeCarTaxRepository CarTaxs { get; private set; }
-   
-      public IMtIdeCartypeRepository CarTypes { get; private set; }
-   
-      public IMtIdeCommissionRepository Commissions { get; private set; }
-   
-      public IMtIdeConsumptionTaxRepository ConsumptionTaxs { get; private set; }
-    
-      public IMtIdeContractPlanRepository ContractPlans { get; private set; }
-     
-      public IMtIdeFeeAdjustmentRepository FeeAdjustments { get; private set; }
- 
-      public IMtIdeGuaranteeRepository Guarantees { get; private set; }
-   
-      public IMtIdeInspectionRepository Inspections { get; private set; }
-    
-      public IMtIdeInterestRepository Interests { get; private set; }
 
-      public IMtIdeLeaseFeeLowerLimitRepository LeaseFeeLowerLimits { get; private set; }
-  
-      public IMtIdeLeaseTargetRepository LeaseTargets { get; private set; }
+        public IMtIdeCartypeRepository CarTypes { get; private set; }
 
-      public IMtIdeLiabilityInsuranceRepository LiabilityInsurances { get; private set; }
+        public IMtIdeCommissionRepository Commissions { get; private set; }
 
-      public IMtIdeMaintenanceRepository Maintenances { get; private set; }
-   
-      public IMtIdeNameChangeRepository NameChanges { get; private set; }
+        public IMtIdeConsumptionTaxRepository ConsumptionTaxs { get; private set; }
 
-      public IMtIdePromotionRepository Promotions { get; private set; }
+        public IMtIdeContractPlanRepository ContractPlans { get; private set; }
 
-      public IMtIdeUnitPriceRepository UnitPrices { get; private set; }
- 
-      public IMtIdeVoluntaryInsuranceRepository VoluntaryInsurances { get; private set; }
+        public IMtIdeFeeAdjustmentRepository FeeAdjustments { get; private set; }
 
-      public IMtIdeWeightTaxRepository WeightTaxs { get; private set; }
-     
-          public UnitOfWorkIDE(IDEContext context, ILogger<UnitOfWorkIDE> logger)
+        public IMtIdeGuaranteeRepository Guarantees { get; private set; }
+
+        public IMtIdeInspectionRepository Inspections { get; private set; }
+
+        public IMtIdeInterestRepository Interests { get; private set; }
+
+        public IMtIdeLeaseFeeLowerLimitRepository LeaseFeeLowerLimits { get; private set; }
+
+        public IMtIdeLeaseTargetRepository LeaseTargets { get; private set; }
+
+        public IMtIdeLiabilityInsuranceRepository LiabilityInsurances { get; private set; }
+
+        public IMtIdeMaintenanceRepository Maintenances { get; private set; }
+
+        public IMtIdeNameChangeRepository NameChanges { get; private set; }
+
+        public IMtIdePromotionRepository Promotions { get; private set; }
+
+        public IMtIdeUnitPriceRepository UnitPrices { get; private set; }
+
+        public IMtIdeVoluntaryInsuranceRepository VoluntaryInsurances { get; private set; }
+
+        public IMtIdeWeightTaxRepository WeightTaxs { get; private set; }
+
+        public IMtIdeMemberRepository Members { get; private set; }
+
+        public UnitOfWorkIDE(IDEContext context, ILogger<UnitOfWorkIDE> logger)
         {
             _context = context;
             _logger = logger;
@@ -71,7 +71,7 @@ namespace KantanMitsumori.Infrastructure.Base
             UnitPrices = new MtIdeUnitPriceRepository(context, logger);
             VoluntaryInsurances = new MtIdeVoluntaryInsuranceRepository(context, logger);
             WeightTaxs = new MtIdeWeightTaxRepository(context, logger);
-
+            Members = new MtIdeMemberRepository(context, logger);
         }
 
         public async Task<bool> CommitAsync()

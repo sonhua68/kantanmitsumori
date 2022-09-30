@@ -18,7 +18,6 @@ var Framework =
         function Framework() {
             _classCallCheck(this, Framework);
         }
-
         _createClass(Framework, null, [{
             key: "getFormData",
             value: function getFormData($form) {
@@ -485,7 +484,7 @@ var Framework =
             key: "SetSelectedNumber",
             value: function SetSelectedNumber(nameId, defaultValue) {
                 let idOption = $("#" + nameId + " option");
-                if (defaultValue === null || defaultValue === "" || defaultValue === " ") {
+                if (isNaN(defaultValue) || defaultValue === 0) {
                     idOption[0].selected == true;
                 }
                 else {
@@ -506,12 +505,6 @@ var Framework =
             value: function SetCheckValueById(nameId, defaultValue) {
                 console.log(nameId);
                 $("#" + nameId + "").attr('checked', true);
-                //var value = $("#" + nameId + "").val();
-                //if (value.includes(defaultValue)) {
-                //    $("#" + nameId + "").attr('checked', true);
-                //} else {
-
-                //}
                 return;
             }
         },
@@ -525,22 +518,31 @@ var Framework =
         {
             key: "GoBackReloadPage",
             value: function GoBackReloadPage() {
-                window.setTimeout(window.history.back(), 2000);
-                location.reload(true);
+                window.location.href = "/Estmain?IsInpBack=1";
 
             }
-        },
+        },       
         {
             key: "GoBackPage",
             value: function GoBackPage() {
-                window.history.back();
+                let url = window.location.href;
+                if (url.includes("#")) {
+                    window.history.go(-2);
+                } else {
+                    window.history.back();
+                }
             }
         },
         {
             key: "GoBackReloadPageUrl",
             value: function GoBackReloadPageUrl(PageUrl) {
-                window.location.href = PageUrl;
-
+                var ListUrl = ["/InpSitaCar","/"];
+                let LeaseFlag = parseInt($("#hidLeaseFlag").val());
+                if (LeaseFlag == 1 && ListUrl.includes(PageUrl)) {
+                    alert("リース画面でのみ、下取りの設定が可能。");
+                } else {
+                    window.location.href = PageUrl;
+                }               
             }
         },
         {

@@ -14,19 +14,19 @@
             <div class="border-button container text-center">
                 <br>
                 <div class="col d-flex justify-content-between">
-                    <a href="#" onclick="Framework.GoBackReloadPageUrl('/');return false">
+                    <a href="#" onclick="Framework.GoBackReloadPage();return false">
                         <img src="./img/btn%e8%a6%8b%e7%a9%8dTOP.png">
                     </a>
                 </div>
                 <br>
                 <div class="col d-flex justify-content-between">
-                    <a href="">
-                        <img src="img/btn%E6%A4%9C%E7%B4%A2.png">
+                    <a href="#" onclick="Framework.GoBackReloadPageUrl('/SelCar');return false">
+                        <img src="img/btnフリー見積.png">
                     </a>
                 </div>
                 <br>
                 <div class="col d-flex justify-content-between">
-                    <a href="">
+                    <a href="#" onclick="Framework.GoBackReloadPageUrl('/InpInitVal');return false">
                         <img src="img/btn%E8%AB%B8%E8%B2%BB%E7%94%A8%E8%A8%AD%E5%AE%9A.png">
                     </a>
                 </div>
@@ -37,7 +37,6 @@
             </div>
         </div>
     </div>
-
     <div class="col-sm-2">
         <div class="row">
             <div class="col-2 col-sm-2 ">
@@ -63,9 +62,9 @@
                                     <span id="Label2" class="inplabel" style="display:inline-block;height:17px;">見積書番号</span>
                                 </td>
                                 <td align="left" class="inptd">
-                                    <input name="EstNo" type="text" maxlength="11" id="EstNo" tabindex="1" class="inpbox" style="width:111px;IME-MODE:disabled">
+                                    <input name="EstNo" type="text" maxlength="11" id="EstNo" tabindex="1" class="inpbox" style="width:111px;">
                                     <span id="Label3" class="inplabel" style="display:inline-block;height:20px;">－</span>
-                                    <input name="EstSubNo" type="text" maxlength="2" id="EstSubNo" tabindex="2" class="inpbox" style="width:40px;IME-MODE:disabled">
+                                    <input name="EstSubNo" type="text" maxlength="2" id="EstSubNo" tabindex="2" class="inpbox" style="width:40px;">
                                 </td>
                             </tr>
                             <tr>
@@ -73,7 +72,7 @@
                                     <span id="Label1" class="inplabel">見積書作成日</span>
                                 </td>
                                 <td align="left" class="inptd">
-                                    <select name="ddlFromSelectY" onchange="javascript:setTimeout('__doPostBack(\'ddlFromSelectY\',\'\')', 0)" id="ddlFromSelectY" tabindex="4" class="inpbox" style="width:70px;">
+                                    <select name="ddlFromSelectY"  id="ddlFromSelectY" tabindex="4" class="inpbox" style="width:70px;">
                                         <option selected="selected" value="@DateTime.Now.Year">@DateTime.Now.Year</option>
 
                                     </select>
@@ -85,12 +84,12 @@
                                             {
                                                 if (i == Month)
                                                 {
-                                                    <option selected="selected" value="@Month">@Month</option>
+                                                                    <option selected="selected" value="@Month">@Month</option>
                                                 }
                                                 else
                                                 {
                                                     var value = @Month - i;
-                                                    <option value="@value">@value</option>
+                                                                    <option value="@value">@value</option>
                                                 }
                                             }
                                         }
@@ -102,7 +101,7 @@
                                     </select>
                                     <span id="Label5" class="inplabel" style="display:inline-block;width:13px;">日</span>
                                     <span id="Label9" class="inplabel" style="display:inline-block;font-size:14pt;font-weight:bold;width:29px;text-align:center;">～</span>&nbsp;
-                                    <select name="ddlToSelectY" onchange="javascript:setTimeout('__doPostBack(\'ddlToSelectY\',\'\')', 0)" id="ddlToSelectY" tabindex="7" class="inpbox" style="width:70px;">
+                                    <select name="ddlToSelectY"  id="ddlToSelectY" tabindex="7" class="inpbox" style="width:70px;">
                                         <option selected="selected" value="@DateTime.Now.Year">@DateTime.Now.Year</option>
 
                                     </select>
@@ -114,12 +113,12 @@
                                             {
                                                 if (i == Month)
                                                 {
-                                                    <option selected="selected" value="@Month">@Month</option>
+                                                                    <option selected="selected" value="@Month">@Month</option>
                                                 }
                                                 else
                                                 {
                                                     var value = @Month - i;
-                                                    <option value="@value">@value</option>
+                                                                    <option value="@value">@value</option>
                                                 }
                                             }
                                         }
@@ -183,13 +182,12 @@
                             <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
                                 <th scope="col">選択</th>
                                 <th scope="col">再作成</th>
-                                <th id="SortEstNo" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortEstNo')" style="color:White;">見積書番号</a></th>
-                                <th id="SortTradeDate" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortTradeDate')" style="color:White;">見積日</a></th>
-                                <th id="SortCustKName" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortCustKName')" style="color:White;">カナ名</a></th>
-                                <th id="SortCarName" scope="col"><a href="#" onclick="return Framework.SortDataTable('TableSerEst','SortCarName')" style="color:White;">車両</a></th>
+                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(10);return false;" style="color:White;">見積書番号</a></th>
+                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(20);return false;" style="color:White;">見積日</a></th>
+                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(30);return false;" style="color:White;">カナ名</a></th>
+                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(40);return false;" style="color:White;">車両</a></th>
                                 <th scope="col">削除</th>
                             </tr>
-                            <div id="reloadData"></div>
                         </tbody>
                     </table>
 
@@ -198,6 +196,7 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="SortPage" value="10">
 </div>
 <script src="~/js/SerEst.js"></script>
 

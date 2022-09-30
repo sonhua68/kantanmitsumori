@@ -70,7 +70,7 @@
                                 <tr>
                                     <td class="inpbtntd" colspan="2" style=" height: 37px;">
 
-                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPageUrl('/');return false;" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
                                         <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" form="formInpOption" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
 
                                     </td>
@@ -106,7 +106,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpOption/UpdateInpOption");
             if (result.resultStatus == 0) {
-             Framework.GoBackReloadPageUrl('/');
+                Framework.GoBackReloadPage();
             } else {
                 let Items = result.data;
                 console.log(Items)

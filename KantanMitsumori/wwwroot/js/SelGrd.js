@@ -1,34 +1,60 @@
 ﻿// JScript File
 // Create Date 2022/09/09 by HoaiPhong
-
-
+let vCaseSet = getCookie("CaseSet");
+let vKbnSet = getCookie("KbnSet");
+setCookie("btnHanei", "1", 1);
+let _conNumberSort = true;
+let _conNumber = 0;
 InitPage();
-function GoNextPage_bk(pageNumber) {
-    var model = {};
-    model.sesMakID = $("#sesMakID").val();
-    model.sesMaker = $("#sesMaker").val();
-    model.sesCarNM = $("#sesCarNM").val();
-    model.pageNumber = pageNumber
-    Framework.SummitForm("/SelGrd", model)
-}
 function GoNextPage(pageNumber) {
     var model = {};
     model.sesMakID = $("#sesMakID").val();
     model.sesMaker = $("#sesMaker").val();
     model.sesCarNM = $("#sesCarNM").val();
+    model.CaseSet = vCaseSet;
+    model.KbnSet = vKbnSet;
+    model.colSort = _conNumber;
     model.pageNumber = pageNumber
-    var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");   
+    var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
+    ReloadListData(result);
+}
+function SortData(colNumber) {
+    var model = {};
+    model.sesMakID = $("#sesMakID").val();
+    model.sesMaker = $("#sesMaker").val();
+    model.sesCarNM = $("#sesCarNM").val();
+    model.CaseSet = vCaseSet;
+    model.KbnSet = vKbnSet;
+    model.pageNumber = 1;
+    let sort = parseInt($("#SortPage").val());
+    if (sort == 0) {
+        let val = colNumber + sort;
+        $("#SortPage").val(val)
+        _conNumber = val;
+    } else if (sort == colNumber) {
+        let val = colNumber + 1;
+        $("#SortPage").val(val);
+        _conNumber = val;
+    } else {
+        $("#SortPage").val(colNumber);
+        _conNumber = colNumber;
+    }
+    model.colSort = _conNumber;
+    var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
+    $('tr#pagination').remove();
+    $('#trId').twbsPagination('destroy');
+    UiPagination(result[0].totalPages)
+    AddPagination(result[0].totalPages);
     ReloadListData(result);
 }
 function ReloadListData(data) {
     $("#gvGrade").css("display", "inline-table");
-    var row = '<tr  id="tbremote">' +
+    var row = '<tr id="tbremote">' +
         '<td align="center" valign="middle" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;width:60px;white-space:nowrap;">' +
-        '<input type="button" value="選択" onclick="Framework.GoBackReloadPageUrl("/");return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">' +
-        '</td>' +
+        '<input type="submit" value="選択" onclick="SetFreeEst(`{{gradeName}}`,`{{regularCase}}`,`{{dispVol}}`,`{{driveTypeCode}}`);return false" style="font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;height:25px;">' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;white-space:nowrap;">{{gradeName}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{regularCase}}' + '</td>' +
-        '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;white-space:nowrap;">{{dispVol}' + '</td>' +
+        '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:bold;white-space:nowrap;">{{dispVol}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{shift}}' + '</td>' +
         '<td align="left" style="border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:10pt;font-weight:bold;">{{driveTypeCode}}' + '</td>' +
         '</tr>';
@@ -51,10 +77,8 @@ function AddPagination(totalPages) {
         visiblePages: 10,
         next: '次',
         prev: '前',
-        onPageClick: function (event, page) {           
-            if (page > 1) {
-                GoNextPage(page)
-            }
+        onPageClick: function (event, page) {
+            GoNextPage(page)
         }
     });
 }
@@ -64,7 +88,7 @@ function UiPagination(totalPages) {
         $('#TablePage').remove();
         var tbody = $('#gvGrade').children('tbody');
         var table = tbody.length ? tbody : $('#gvGrade');
-        var pageTable = '<tr id="pagination" align="center"  style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">' +
+        var pageTable = '<tr id="pagination" align="center" style="color:White;background-color:#3C82ED;font-family:ＭＳ Ｐゴシック;font-size:14pt;font-weight:bold;white-space:nowrap;">' +
             '<td colspan  = "7">' +
             '<table border="0" id=TablePage>' +
             '<tbody>' +
@@ -86,8 +110,27 @@ function SortPagination(itemsArr) {
             p = i;
         }
     }
-    itemsArr.push(items[p]);
+    if (p != 0) {
+        itemsArr.push(items[p]);
+    }
     for (i = 0; i < itemsArr.length; ++i) {
         tbody.append(itemsArr[i]);
+    }
+}
+
+function SetFreeEst(gradeName, carCase, dispVol, driveTypeCode) {
+    var model = {};
+    model.MakerName = $("#sesMaker").val();
+    model.ModelName = $("#sesCarNM").val();
+    model.GradeName = gradeName + " " + driveTypeCode;
+    model.CarCase = carCase;
+    model.DispVol = dispVol;
+    var result = Framework.submitAjaxFormUpdateAsync(model, "/SelGrd/SetFreeEst");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {       
+        let isError = parseInt(result.data.estModel.isError);
+        Framework.GoBackReloadPage();
+        if (isError == 1) {
+            alert("最初に車両本体価格をご確認下さい")
+        }
     }
 }

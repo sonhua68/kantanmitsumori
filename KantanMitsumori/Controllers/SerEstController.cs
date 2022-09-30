@@ -17,12 +17,15 @@ namespace KantanMitsumori.Controllers
         private readonly ILogger<SerEstController> _logger;
         private readonly ISelCarService _selCarService;
         private readonly IEstimateService _estimateService;
-        public SerEstController(IEstMainService appService, ISelCarService selCarService, IEstimateService estimateService, IConfiguration config, ILogger<SerEstController> logger) : base(config)
+        private readonly IEstMainService _estMainService;
+
+        public SerEstController(IEstMainService appService, ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, IConfiguration config, ILogger<SerEstController> logger) : base(config)
         {
             _appService = appService;
             _logger = logger;
             _selCarService = selCarService;
             _estimateService = estimateService;
+            _estMainService = estMainService;
         }
 
         #region SerEstController      
@@ -67,6 +70,28 @@ namespace KantanMitsumori.Controllers
             {
                 return ErrorAction(response);
             }
+            return Ok(response);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddEstimate(RequestSerEst requestData)
+        {
+            var response = await _estMainService.AddEstimate(requestData,_logToken);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            setTokenCookie(response.Data!);
+            return Ok(response);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CalcSum(RequestSerEst requestData)
+        {
+            var response = await _estMainService.CalcSum(requestData, _logToken);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }          
+            setTokenCookie(response.Data!);
             return Ok(response);
         }
         #endregion SerEstController

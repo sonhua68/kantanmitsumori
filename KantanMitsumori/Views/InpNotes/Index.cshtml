@@ -52,13 +52,13 @@
 </form>
 <script>
     $('#formInputNotes').validate({
-        submitHandler: function(form) {
+        submitHandler: function (form) {
             if (inputChk() == false) { return; }
             var model = Framework.getFormData($("#formInputNotes"));
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpNotes/UpdateInpNotes");
             if (result.resultStatus == 0) {
-                Framework.GoBackReloadPageUrl('/?IsInpBack=1');
+                Framework.GoBackReloadPageUrl('/Estmain/?IsInpBack=1');
             } else {
                 let Items = result.data;
                 console.log(Items)

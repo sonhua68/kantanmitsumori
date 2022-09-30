@@ -1,13 +1,10 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
-using KantanMitsumori.Helper.Enum;
+﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using Microsoft.AspNetCore.Mvc;
-
-using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Controllers
 {
@@ -24,41 +21,37 @@ namespace KantanMitsumori.Controllers
             _estimateService = estimateService;
             _logger = logger;
         }
-        public IActionResult Header()
-        {
-            _logToken = new LogToken();
-            _logToken.UserNo = "88888195";
-            _logToken.UserNm = "test";
-            return PartialView("_Header", _logToken);
-        }
-
-        [HttpPost]
         public async Task<IActionResult> Index([FromQuery] RequestActionModel requestAction, [FromForm] RequestHeaderModel request)
         {
-            Uri pageUrl;
-            try
-            {
-                string headRef = Request.Headers["Referer"];
-                pageUrl = new Uri(headRef);
-            }
-            catch (Exception)
-            {
-                pageUrl = new Uri("http://www.asnet2.com/asest2/test.html");
-            }
             var response = new ResponseBase<ResponseEstMainModel>();
-            if (Strings.InStr(pageUrl.AbsolutePath, "/asest2/") == 0 || Strings.InStr(pageUrl.AbsolutePath, "/test.htm/") > 0)
-                response = await _appService.getEstMain(requestAction, request);
+            if (requestAction.IsInpBack == 1)
+            {
+                response = await _appService.ReloadGetEstMain(_logToken);
+            }
             else
-                response = await _appService.setFreeEst();
-
-            // check response result 
+            {
+                response = await _appService.getEstMain(requestAction, request);
+                if (response.ResultStatus == (int)enResponse.isSuccess)
+                {
+                    setTokenCookie(response.Data!.AccessToken);
+                }
+            }
             if (response.ResultStatus == (int)enResponse.isError)
+            {
                 return ErrorAction(response);
-            // set cookie access token 
-            setTokenCookie(response.Data!.AccessToken);
+            }
             return View(response.Data);
         }
-
+        [HttpGet]
+        public async Task<IActionResult> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer)
+        {
+            var response = await _appService.CheckGoPageLease(firstRegYm, makerName, nowOdometer);
+            if (response.ResultStatus == (int)enResponse.isError)
+            {
+                return ErrorAction(response);
+            }
+            return Ok(response);
+        }
     }
 }
 

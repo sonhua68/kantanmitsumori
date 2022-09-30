@@ -2,7 +2,7 @@
 // Create Date 2022/09/16 by HoaiPhong
 // JScript File
 
-
+CheckBtnHanei();
 getUserDefData();
 resetValue();
 setTitle();
@@ -292,5 +292,16 @@ function SetInitData(data) {
         $("#radUse").prop("checked", true);
     } else {
         $("#radDisuse").prop("checked", true);
+    }
+}
+
+function CheckBtnHanei(){
+    var btnHanei = getCookie("btnHanei")
+    if (btnHanei == "1") {  
+        $("#btnHanei").css('display', 'none');
+        $("#lblUwagaki1").css('display', 'none');
+        $("#lblUwagaki4").css('display', 'none');
+        $("#lblUwagaki2").css('display', 'none');
+        $("#lblUwagaki3").css('display', 'none');
     }
 }

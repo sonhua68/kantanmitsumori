@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace KantanMitsumori.Controllers
 {
     public class ReportController : BaseController
-    {        
+    {
         private readonly IReportService _reportService;
         private readonly ILogger<ReportController> _logger;
         private readonly IMapper _mapper;
@@ -48,6 +48,7 @@ namespace KantanMitsumori.Controllers
             var result = _reportService.GenerateReport(model);
             
             // Process result
+
             if (result.ResultStatus != 0)
                 return ErrorAction(result);
 
@@ -69,7 +70,7 @@ namespace KantanMitsumori.Controllers
             _mapper.Map(_logToken, model);
 
             // Sample data            
-            model = new RequestReport()
+           var  model = new RequestReport()
             {
                 EstNo = "22092300054",
                 EstSubNo = "01",                

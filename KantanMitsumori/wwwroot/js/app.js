@@ -52,10 +52,3 @@ function delay(callback, ms) {
 }
 
 
-// constant
-var DATE_FORMAT_MOMENT = "DD-MMM-YY";
-var DATE_FORMAT_MOMENT_NEW = "DD-MM-YYYY";
-var DATE_FORMAT_MOMENT_WITH_TIME = "DD-MMM-YY hh:mm A";
-var DATE_FORMAT_MOMENT_WITH_TIME_NEW = "DD-MM-YYYY HH:mm:ss";
-
-

@@ -1,6 +1,5 @@
 ﻿using KantanMitsumori.Helper.Constant;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -94,84 +93,53 @@ namespace KantanMitsumori.Service.Helper
         {
             _logger = logger;
         }
-
-        // 通常ローン計算
         public bool calcRegLoan()
         {
             try
             {
-                // 共通部（残金まで）計算
-                // 残金 = 販売価格計 - 頭金
                 Principal = SaleSumPrice - Deposit;
-
-                // 分割払分手数料
-                // --金利０の場合
                 if (MoneyRate > 0)
                 {
-                    // --アドオン率計算
                     decimal vCalcRate = MoneyRate / (decimal)100;
-                    // --計算用(小数点5桁以下四捨五入)
                     decimal vAddon = ToHalfAjust(PayTimes * (vCalcRate / 12) / (1 - (decimal)Math.Pow((double)(1 + (vCalcRate / 12)), (PayTimes * -1))) - 1, 4);
-                    // --表示用
+
                     AddonDisp = ToHalfAjust(vAddon * 100, 2);
-                    // --分割払分手数料(小数点以下切捨て)
                     Fee = (int)ToRoundDown(Principal, vAddon, 0);
-
                 }
-
-                // 支払合計額        
                 PayTotal = Principal + Fee;
-                // ボーナス回数
                 if (Bonus > 0)
                     BonusTimes = countBonusTimes(FirstMonth, PayTimes, BonusFirst, BonusSecond);
                 else
                     BonusTimes = 0;
-                // ボーナス支払額合計
                 BonusTotal = Bonus * BonusTimes;
-                // 分割支払総額
                 PartitionPayTotal = PayTotal - BonusTotal;
-                // 第2回目以降分割支払金(100円未満切捨て)
                 PayMonth = (int)ToRoundDown(PartitionPayTotal / (decimal)PayTimes, -2);
-
-                // 第1回目分割支払金
                 FirstPay = PartitionPayTotal - PayMonth * (PayTimes - 1);
-
-                // 計算結果のチェック
-
-                // --月々支払額が3000円未満の場合
                 if (FirstPay < 3000 | PayMonth < 3000)
                 {
                     CalcInfo = CommonConst.msgPayMonthShort;
                     return false;
                 }
-                // --ボーナス支払額合計が分割支払金合計の70%超の場合
-                // If vPrincipal / 2 < vBonusTotal Then
                 if (PayTotal * 0.7 < BonusTotal)
                 {
                     CalcInfo = CommonConst.msgBonusSevenOver;
                     return false;
                 }
-                // --ボーナス月がローン期間外
                 if (BonusTimes == 0 & Bonus > 0)
                 {
                     CalcInfo = CommonConst.msgBonusMonthErr;
                     return false;
                 }
-                // 分割支払金合計上限チェック
                 if (PayTotal > 99999999)
                 {
                     CalcInfo = CommonConst.msgPayTotalOver;
                     return false;
                 }
-
-                // --ボーナス回数が一回の時（ガイダンスのみ）
                 if (BonusTimes == 1 & BonusSecond != 0)
                     CalcInfo = CommonConst.msgBonusTimesErr;
 
-                // 初回支払年月
                 DateTime wFirstDt;
                 string wNowMonth = DateTime.Now.ToString("MM");
-                // 操作日が10月以降で翌年の1月～3月が指定された場合
                 if (int.Parse(wNowMonth) >= 10 & FirstMonth <= 3)
                 {
                     wNowMonth = DateTime.Now.AddYears(1).Year + "/" + FirstMonth + "/01";
@@ -181,14 +149,11 @@ namespace KantanMitsumori.Service.Helper
                     wNowMonth = DateTime.Now.Year + "/" + FirstMonth + "/01";
                 }
                 wFirstDt = DateTime.Parse(wNowMonth);
-                FirstPayMonth = Convert.ToInt32(Strings.Format(wFirstDt, "yyyyMM"));
-
-                // 最終回支払年月
-                LastPayMonth = Convert.ToInt32(Strings.Format(wFirstDt.AddMonths(PayTimes - 1), "yyyyMM"));
+                FirstPayMonth = Convert.ToInt32(wFirstDt.ToString("yyyyMM"));
+                LastPayMonth = Convert.ToInt32(wFirstDt.AddMonths(PayTimes - 1).ToString("yyyyMM"));
             }
             catch (Exception ex)
             {
-                // エラーログ書出し
                 CalcInfo = CommonConst.msgCalcException;
                 _logger.LogInformation(ex, "CalcRegLoan", "CSIM-010C");
                 return false;
@@ -251,12 +216,11 @@ namespace KantanMitsumori.Service.Helper
         // **************************************************************************
         // * 指定桁未満を切り捨て2
         // **************************************************************************
-        public decimal ToRoundDown(int inint, decimal inSgl, int iDigits)
+        public decimal ToRoundDown(long inint, decimal inSgl, int iDigits)
         {
             decimal dCoef = (decimal)Math.Pow(10, iDigits);
-            int intR = (int)(inSgl * 10000);
-            decimal dValue = inint * intR / (decimal)10000;
-
+            long intR = (int)(inSgl * 10000);
+            decimal dValue = (inint * intR * 1.0m) / 10000.0m;
             if (dValue > 0)
                 return Math.Floor(dValue * dCoef) / dCoef;
             else

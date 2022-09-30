@@ -4,9 +4,6 @@
     {
 
         public const string def_DmyImg = "~/img/CarImgDummy.png";
-        public const string def_ExclusionListOfAutoCalc = "F:\\KantanMitsumori\\KantanMitsumori\\wwwroot\\List\\ExclusionList_of_AutoCalc.sjis.txt";
-    
-
         /// <summary>
         /// タイトル
         /// ※プログラムで制御してセットする必要がある場合は定数を使用
@@ -89,10 +86,10 @@
         public const string sesUserAdr = "sesUserAdr";                      //ユーザー住所
         public const string sesUserTel = "sesUserTel";                      //ユーザー電話
         public const string sesdispUserInf = "sesdispUserInf";              //ユーザー情報整形済み
-        public const string sesCustNm_forPrint = "sesCustNm_forPrint";      //ユーザーのお客様の名前
-        public const string sesCustZip_forPrint = "sesCustZip_forPrint";    //ユーザーのお客様の郵便番号
-        public const string sesCustAdr_forPrint = "sesCustAdr_forPrint";    //ユーザーのお客様の住所
-        public const string sesCustTel_forPrint = "sesCustTel_forPrint";    //ユーザーのお客様の電話番号
+        public const string sesCustNm_forPrint = "CustNm_forPrint";      //ユーザーのお客様の名前
+        public const string sesCustZip_forPrint = "CustZip_forPrint";    //ユーザーのお客様の郵便番号
+        public const string sesCustAdr_forPrint = "CustAdr_forPrint";    //ユーザーのお客様の住所
+        public const string sesCustTel_forPrint = "CustTel_forPrint";    //ユーザーのお客様の電話番号
         public const string sesOneFlg = "sesOneFlg";                        //ワンプラorワンプラ以外フラグ
         public const string sesAAPlace = "sesAAPlace";                      //AA会場
         public const string sesAANo = "sesAANo";                            //出品No
@@ -203,6 +200,18 @@
         public const string LOAN_RECALC_CLEAR = "※ご確認ください<br />お支払い総合計が変更になりましたが、自動計算を行わない設定になっている為、ローン計算情報をクリアしました";
         public const string LOAN_RECALC_NORMAL_END = "※ご確認ください<br />お支払い総合計が変更になりましたので、入力済の金利、支払い条件<br />ボーナス加算条件等のローン条件を元に、ローン再計算を行いました";
         public const string LOAN_RECALC_ERROR = "※ご確認ください<br />お支払い総合計が変更になりましたが、ローン再計算でエラーが発生した為、ローン計算情報をクリアしました";
+   
+        public const int TAX_5_PERCENT_ID = 1;
+
+        public const int TAX_8_PERCENT_ID = 2;
+    
+        public const int TAX_10_PERCENT_ID = 3;
+
+        public const decimal TAX_5_PERCENT_VALUE = 0.05M;
+   
+        public const decimal TAX_8_PERCENT_VALUE = 0.08M;
+      
+        public const decimal TAX_10_PERCENT_VALUE = 0.1M;
 
     }
 }

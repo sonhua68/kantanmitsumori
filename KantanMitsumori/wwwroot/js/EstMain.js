@@ -1,4 +1,6 @@
 ﻿setInitialValue();
+DeleteBtnHanei()
+//setInitValueCookie();
 function setInitialValue() {
     var leaseFlag = $("#hidLeaseFlag").val();
 
@@ -57,4 +59,100 @@ function inputChk() {
     if (flgErr) { return false; }
 
     return true;
+}
+/*
+ * setInitValueCookie
+ *  Create By HoaiPhong
+ *  Date 2022/09/22
+ /*/
+function setInitValueCookie() {
+    var custNm_forPrint = getCookie("CustNm_forPrint")
+    var custZip_forPrint = getCookie("CustZip_forPrint")
+    var custAdr_forPrint = getCookie("CustAdr_forPrint")
+    var custTel_forPrint = getCookie("CustTel_forPrint")
+    console.log(custNm_forPrint);
+    $("#CustNm_forPrint").val(custNm_forPrint);
+    $("#CustZip_forPrint").val(custZip_forPrint);
+    $("#CustAdr_forPrint").val(custAdr_forPrint);
+    $("#CustTel_forPrint").val(custTel_forPrint);
+}
+/*
+ * setCookiePageMain
+ *  Create By HoaiPhong
+ *  Date 2022/09/22
+ /*/
+(function () {
+    var oldVal;
+    var idName = "CustNm_forPrint";
+    $('#' + idName).on('change textInput input', function () {
+        var val = this.value;
+        if (val !== oldVal) {
+            oldVal = val;
+            setCookie(idName, val, 1);
+        }
+    });
+}());
+(function () {
+    var oldVal;
+    var idName = "CustZip_forPrint";
+    $('#' + idName).on('change textInput input', function () {
+        var val = this.value;
+        if (val !== oldVal) {
+            oldVal = val;
+            setCookie(idName, val, 1);
+        }
+    });
+}());
+(function () {
+    var oldVal;
+    var idName = "CustAdr_forPrint";
+    $('#' + idName).on('change textInput input', function () {
+        var val = this.value;
+        if (val !== oldVal) {
+            oldVal = val;
+            setCookie(idName, val, 1);
+        }
+    });
+}());
+(function () {
+    var oldVal;
+    var idName = "CustTel_forPrint";
+    $('#' + idName).on('change textInput input', function () {
+        var val = this.value;
+        if (val !== oldVal) {
+            oldVal = val;
+            setCookie(idName, val, 1);
+        }
+    });
+}());
+
+function DeleteBtnHanei() {
+    document.cookie = "btnHanei" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+const ERR_MSG = "この車両はリース対象外です。\n リース対象車両は、国産車かつ初年度12年以内かつ走行距離15万km以内となります。"
+const ERR_MSG_FirstRegYm = "先に初年度登録を行ってください。"
+function CheckNowOdometer() {
+    let hidFirstRegYm = $("#hidFirstRegYm").val();
+    let hidNowOdometer = $("#hidNowOdometer").val();
+    let hidMilUnit = $("#hidMilUnit").val();
+    let makerName = $("#hidMakerName").val();
+    if (hidFirstRegYm == "") {
+        alert(ERR_MSG_FirstRegYm);
+        return;
+    };
+    let nowOdometer = 0;
+    if (hidMilUnit.includes("千km")) {
+        nowOdometer = parseInt(hidNowOdometer) * 1000;
+    }
+    var pram = "?firstRegYm=" + hidFirstRegYm + "&makerName=" + makerName + "&nowOdometer=" + nowOdometer;
+    var result = Framework.GetObjectDataFromUrl("/Estmain/CheckGoPageLease" + pram);
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        Framework.GoBackReloadPageUrl("/InpLeaseCalc")
+    } else if (result.resultStatus == 0 && result.messageCode === 'I0003') {
+        alert(ERR_MSG);
+        return;
+    } else {
+        location.reload();
+    }
+
 }

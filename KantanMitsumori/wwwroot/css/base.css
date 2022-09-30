@@ -1,0 +1,126 @@
+@charset "utf-8";
+
+/* ===================================================== */
+/* HTML5 */
+/* ===================================================== */
+article, aside, dialog, figure, footer, header,hgroup, menu, nav, section{ display: block;
+	margin: 0;
+	padding: 0; }
+[hidden], command, datalist, menu[type=context], rp, source{ display: none;
+	margin: 0;
+	padding: 0; }
+
+/* ===================================================== */
+/* ALL ELEMENT SET */
+/* ===================================================== */
+*{
+	color: #555;
+	text-decoration: none;
+	line-height:1;
+}
+html {
+	overflow-y:scroll;
+}
+
+/* ===================================================== */
+/* BODY ELEMENT SET */
+/* ===================================================== */
+
+body {
+	position:relative;
+	margin: 0;
+	padding: 0;
+	font-size: 0.875rem;
+	font-family: "メイリオ", Meiryo, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+	font-weight: normal;
+	-webkit-text-size-adjust: none;
+}
+
+
+/* ===================================================== */
+/* IMG ELEMENT SET */
+/* ===================================================== */
+img {
+	max-width: 100%;
+	max-height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align:top;
+}
+
+/* ===================================================== */
+/* H ELEMENT SET */
+/* ===================================================== */
+h1,h2,h3,h4 {
+	margin: 0;
+	padding: 0;
+	line-height: 1.5;
+}
+
+/* ===================================================== */
+/* P ELEMENT SET */
+/* ===================================================== */
+p{
+	margin: 0;
+	padding: 0;
+	line-height: 1.5;
+	word-break: break-all;
+	word-wrap: break-word;
+}
+
+/* ===================================================== */
+/* A ELEMENT SET */
+/* ===================================================== */
+/* LINK COLOR */
+a {
+	color:#008dda;
+	text-decoration: underline;
+}
+
+a:hover{
+	text-decoration: none;
+}
+
+a:active{
+	text-decoration: none;
+}
+
+/* ===================================================== */
+/* LIST ELEMENT SET */
+/* ===================================================== */
+ul,
+ol,
+dl {
+	margin:0;
+	padding:0;
+}
+li {
+	margin:0;
+	padding:0;
+	list-style-type:none;
+	word-break: break-all;
+	word-wrap: break-word;
+}
+dt,
+dd {
+	margin:0;
+	padding:0;
+	list-style-type:none;
+	word-break: break-all;
+	word-wrap: break-word;
+}
+
+/* ===================================================== */
+/* indent SET */
+/* ===================================================== */
+/* text-align */
+.left{
+	text-align:left;
+}
+.right{
+	text-align:right;
+}
+.center{
+	text-align:center;
+}

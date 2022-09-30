@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Entity.ASESTSQL;
+using KantanMitsumori.Entity.IDEEnitities;
 using KantanMitsumori.Model;
-using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Model.Response.Report;
@@ -48,6 +48,9 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<MUserDef, UserDefModel>().ReverseMap();
             CreateMap<MUser, UserModel>().ReverseMap();
             CreateMap<TEstimateIde, EstimateIdeModel>().ReverseMap();
+            CreateMap<ResponseInpSitaCar, EstModel>().ReverseMap();
+            CreateMap<ResponseInpSyohiyo, EstModel>().ReverseMap();
+            CreateMap<MtIdeMember, MemberIDEModel>().ReverseMap();
 
             CreateMap<AsopMaker, ResponseAsopMaker>();
             CreateMap<AsopCarname, ResponseAsopCarname>();

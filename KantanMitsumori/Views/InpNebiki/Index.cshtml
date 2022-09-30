@@ -289,7 +289,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpNebiki/UpdateInpNebiki");
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPageUrl('/');
+                Framework.GoBackReloadPage();
             } else {
                 let Items = result.data;
                 console.log(Items)
