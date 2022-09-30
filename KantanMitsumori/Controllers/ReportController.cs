@@ -70,7 +70,7 @@ namespace KantanMitsumori.Controllers
             _mapper.Map(_logToken, model);
 
             // Sample data            
-           var  model = new RequestReport()
+            model = new RequestReport()
             {
                 EstNo = "22092300054",
                 EstSubNo = "01",                
