@@ -12,29 +12,22 @@ namespace KantanMitsumori.Model.Response
         public string EstNo { get; set; } = "";
         public string EstSubNo { get; set; } = "";
         public string UserNo { get; set; } = "";
-        public string txtPrice { get; set; } = "";
-        public string txtRakuSatu { get; set; } = "";
-        public string txtRikusou { get; set; } = "";
-        public string txtSonotaTitle { get; set; } = "その他費用";
-        public string txtSonotaSumTitle { get; set; } = "その他費用計";
-        public string txtSonota { get; set; } = "";
-        public string txtCarSum { get; set; } = "";
-        public string DispVol { get; set; } = "";
-        public string txtSyakenSeibi { get; set; } = "";
-        public string SyakenZok { get; set; } = "";
-        public string lblZei1 { get; set; } = "";
-        public string lblZei2 { get; set; } = "";
-        public string lblZei3 { get; set; } = "";
-        public string radSyakenY { get; set; } = "";
-        public string radSyakenN { get; set; } = "";
-
-        public string hidEstNo { get; set; } = "";
-        public string hidEstSubNo { get; set; } = "";
-        public string hidUserNo { get; set; } = "";
-        public string hidSyakenNewZok { get; set; } = "";
-        public string hidDispVol { get; set; } = "";
-        
-        
+        public string CarPrice { get; set; } = "";
+        public string RakuSatu { get; set; } = "";
+        public string Rikusou { get; set; } = "";
+        public string SonotaTitle { get; set; } = "その他費用";
+        public string SonotaSumTitle => $"{SonotaTitle}計" ;
+        public string Sonota { get; set; } = "";
+        public string CarSum { get; set; } = "";        
+        public string SyakenSeibi { get; set; } = "";        
+        public bool IsSyakenZok { get; set; } = true;
+        public bool IsSyakenNew => !IsSyakenZok;
+        public string UserSyakenZok { get; set; } = "";
+        public string UserSyakenNew { get; set; } = "";
+        public string TaxIncluded { get; set; } = "（税込）";
+        public string Zei1 => $"車両販売価格{TaxIncluded}";
+        public string Zei2 => $"整備費用{TaxIncluded}";
+        public string Zei3 => $"{TaxIncluded}";
 
     }
 }
