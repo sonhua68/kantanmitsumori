@@ -370,7 +370,7 @@ function onChangeSelect(type) {
         let toY = parseInt($($thisToY).val());
         let ToM = parseInt($($thisToM).val());
         let nMonth = (ToM - 1);
-        if (ToM == (currentYear - 1)) {
+        if (toY == (currentYear - 1)) {
             InitSelectList($thisToY, $thisToM, $thisToD, toY, nMonth, "", "from", type);
         } else {
             InitSelectList($thisToY, $thisToM, $thisToD, toY, nMonth, "this", "from", type);
@@ -402,38 +402,30 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2,type) {
         } else if (year == currentYear && month == currentMonth || year == currentYear && month > currentMonth) {
             month = currentMonth;
         }
-        if (ddflg == "this") {
-            // add month
+        if (ddflg == "this") {          
             for (let i = 1; i <= currentMonth; i++) {
                 $(M).append(new Option(i, i));
-            }
-            // add day
+            }        
             if (currentMonth == month) {
                 for (let i = 1; i <= currentDay; i++) {
                     $(D).append(new Option(i, i));
                 }
-                setSelectD(type, currentDay)
-           /*     $(D + " option[value='" + currentDay + "']").attr("selected", "selected");*/
+                setSelectD(type, currentDay);            
             } else {
                 let day = new Date(currentYear - 1, month, 0);
                 currentDay = parseInt(day.getDate());
                 for (let i = 1; i <= currentDay; i++) {
                     $(D).append(new Option(i, i));
                 }
-            }
-            //$(Y + " option[value='" + currentYear + "']").attr("selected", "selected");
-             //$(M + " option[value='" + month + "']").attr("selected", "selected");
-            setSelectY(type, currentYear)
-            setSelectM(type, month)
-           
-
+            }          
+            setSelectY(type, currentYear);
+            setSelectM(type, month);  
         } else {
             dtBirth.setDate(dtBirth.getDate() + 1)
             let nMonth = dtBirth.getMonth() + 1;
             for (let i = nMonth; i <= 12; i++) {
                 $(M).append(new Option(i, i));
             }
-
             if (currentMonth == month) {
                 let day = new Date(currentYear - 1, month, 0);
                 currentDay = parseInt(day.getDate());
@@ -451,12 +443,11 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2,type) {
             } else {
                 let day = new Date(year, month, 0);
                 currentDay = parseInt(day.getDate());
-                for (let i = j; i <= currentDay; i++) {
+                for (let i = 1; i <= currentDay; i++) {
                     $(D).append(new Option(i, i));
                 }
-            }
-            //$(Y + " option[value='" + currentYear - 1 + "']").attr("selected", "selected");
-            setSelectY(type, (currentYear - 1))
+            }          
+            setSelectY(type, (currentYear - 1));
         }
 
     } else {
