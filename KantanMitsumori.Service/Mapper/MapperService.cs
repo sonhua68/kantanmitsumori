@@ -8,6 +8,7 @@ using KantanMitsumori.Model.Response;
 using KantanMitsumori.Model.Response.Report;
 using KantanMitsumori.Service.Mapper.MapperConverter;
 using KantanMitsumori.Entity.IDEEnitities;
+using KantanMitsumori.Helper.Constant;
 
 namespace KantanMitsumori.Service.Mapper
 {
@@ -17,12 +18,26 @@ namespace KantanMitsumori.Service.Mapper
         {
             // Generic type mapping
             CreateMap<int?, string>().ConvertUsing(s => s.ToStringOrEmpty());
-            CreateMap<string?, string>().ConvertUsing(s => s.ToStringOrEmpty());
-            CreateMap<bool?, string>().ConvertUsing(s => s.ToStringOrEmpty());
-            CreateMap<DateTime?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<long?, string>().ConvertUsing(s => s.ToStringOrEmpty());
             CreateMap<byte?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<bool?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<string?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<double?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<float?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<decimal?, string>().ConvertUsing(s => s.ToStringOrEmpty());            
+            CreateMap<DateTime?, string>().ConvertUsing(s => s.ToStringOrEmpty());            
+            CreateMap<string, int>().ConstructUsing(s => s.FromStringOrDefault<int>());
+            CreateMap<string, long>().ConstructUsing(s => s.FromStringOrDefault<long>());
+            CreateMap<string, bool>().ConstructUsing(s => s.FromStringOrDefault<bool>());
+            CreateMap<string, byte>().ConstructUsing(s => s.FromStringOrDefault<byte>());
+            CreateMap<string, double>().ConstructUsing(s => s.FromStringOrDefault<double>());
+            CreateMap<string, float>().ConstructUsing(s => s.FromStringOrDefault<float>());
+            CreateMap<string, decimal>().ConstructUsing(s => s.FromStringOrDefault<decimal>());
+            
             // Source name as sesPropertyName
             RecognizePrefixes("ses");
+            RecognizePrefixes("hid");
+            RecognizePrefixes("txt");
 
             // Specified class mapping            
             CreateMap<MMaker, MakerModel>();
@@ -43,14 +58,38 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<MUserDef, ResponseUserDef>();
             CreateMap<RequestUpdateInpInitVal, MUserDef>();
 
+            // Mapping for InpCarPrice
+            CreateMap<LogToken, RequestInpCarPrice>();
+            CreateMap<RequestInpCarPrice, ResponseInpCarPrice>();
+            CreateMap<TEstimate, ResponseInpCarPrice>()
+                .ForMember(t => t.SyakenSeibi, o => { o.MapFrom(new SyakenSeibiResolver()); })                
+                .ForMember(t => t.IsSyakenZok, o => { o.MapFrom(new IsSyakenZokResolver()); })
+                .ForMember(t => t.TaxIncluded, o => { o.MapFrom(s => s.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax); });
+
+            CreateMap<TEstimateSub, ResponseInpCarPrice>()
+                .ForMember(t => t.EstNo, o => { o.Ignore(); })
+                .ForMember(t => t.EstSubNo, o => { o.Ignore(); })
+                .ForMember(t => t.UserNo, o => { o.Ignore(); });
+                
+
+            CreateMap<RequestUpdateInpCarPrice, RequestUpdateCarPrice>()
+                .ForMember(t => t.SyakenZok, o => { o.PreCondition(s => s.IsSyakenZok); o.MapFrom(s => s.txtSyakenSeibi.FromStringOrDefault<int>()); })
+                .ForMember(t => t.SyakenNew, o => { o.PreCondition(s => !s.IsSyakenZok); o.MapFrom(s => s.txtSyakenSeibi.FromStringOrDefault<int>()); })
+                .ForMember(t => t.SonotaTitle, o => { o.MapFrom(s => string.IsNullOrWhiteSpace(s.txtSonotaTitle) ? "その他費用" : s.txtSonotaTitle); });
+
+            CreateMap<RequestUpdateCarPrice, TEstimate>();
+            CreateMap<RequestUpdateCarPrice, TEstimateSub>();
+
+            // Maping for reports
             CreateMapForReport();
+            
            
         }
 
         private void CreateMapForReport()
-        {            
+        {
             // Request mapping
-            CreateMap<LogToken, RequestReport>()                
+            CreateMap<LogToken, RequestReport>();        
 
             // Response mapping
             CreateMap<TEstimate, EstimateReportModel>()
