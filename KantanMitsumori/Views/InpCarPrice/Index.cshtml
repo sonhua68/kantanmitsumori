@@ -1,8 +1,7 @@
 ﻿@using KantanMitsumori.Model.Response;
-@model ResponseInp
+@model ResponseInpCarPrice
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "かんたん見積";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
 }
 <form id="formInpCarPrice">
     <table border="0" width="100%">
@@ -31,14 +30,14 @@
             </tr>
 			<tr>
 				<td class="tabletitle" colspan="2">
-				<span id="lblZei1" class="titlelabel" style="display:inline-block;width:338px;">車両販売価格（税込）</span></td>
+				<span id="lblZei1" class="titlelabel" style="display:inline-block;width:338px;">@Model.Zei1</span></td>
 			</tr>
 	        <tr>
 				<td class="inptd" style="width: 150px" align="left">
 				    <span id="Label38" class="inplabel" style="display:inline-block;width:150px;">車両本体</span>
 				</td>
 				<td class="inptd" align="left">
-				    <input name="txtPrice" type="text" id="txtPrice"  value="1130000" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+				    <input name="txtCarPrice" type="text" id="txtCarPrice"  value="@Model.CarPrice" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
 			        <span id="Label55" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
 			    </td>
 	        </tr>
@@ -48,15 +47,15 @@
             </tr>
 			<tr>
 				<td class="tabletitle" colspan="2">
-				<input name="txtSonotaTitle" type="text" id="txtSonotaTitle"  class="inpbox_l" onblur="chgSonotaSumTitle();" style="WIDTH: 129px;" tabindex="48" maxlength="10" value="その他費用">
-				<span id="lblZei3" class="titlelabel">（税込）</span>&nbsp;&nbsp;<span id="Label1" class="titlelabel">←タイトルを変える場合は直接編集して下さい</span></td>
+				<input name="txtSonotaTitle" type="text" id="txtSonotaTitle"  class="inpbox_l" onblur="chgSonotaSumTitle();" style="WIDTH: 129px;" tabindex="48" maxlength="10" value="@Model.SonotaTitle">
+				<span id="lblZei3" class="titlelabel">@Model.Zei3</span>&nbsp;&nbsp;<span id="Label1" class="titlelabel">←タイトルを変える場合は直接編集して下さい</span></td>
 			</tr>
 	        <tr>
 				<td class="inptd" style="width: auto" align="left">
 				<span id="Label2" class="inplabel" style="display:inline-block;width:150px;">落札料</span>
 				</td>
 				<td class="inptd" align="left">
-				<input name="txtRakuSatu" type="text" id="txtRakuSatu"  value="22000" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+				<input name="txtRakuSatu" type="text" id="txtRakuSatu"  value="@Model.RakuSatu" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
 			    <span id="Label3" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
 			    </td>
 	        </tr>
@@ -65,16 +64,16 @@
 				<span id="Label4" class="inplabel" style="display:inline-block;width:150px;">陸送代</span>
 				</td>
 				<td class="inptd" align="left">
-				<input name="txtRikusou" type="text" id="txtRikusou"  maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+				<input name="txtRikusou" type="text" id="txtRikusou"  maxlength="8" value="@Model.Rikusou" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px;" size="10">
 			    <span id="Label5" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
 			    </td>
 	        </tr>
 	        <tr>
 				<td class="sumtd" style="width: auto" align="left">
-                    <input name="txtSonotaSumTitle" type="text" id="txtSonotaSumTitle"  class="InpTitle1" style="WIDTH: 197px; " readonly="readonly" tabindex="48" maxlength="8" value="その他費用計">
+                    <input name="txtSonotaSumTitle" type="text" id="txtSonotaSumTitle"  class="InpTitle1" style="WIDTH: 197px; " readonly="readonly" tabindex="48" maxlength="8" value="@Model.SonotaSumTitle">
 				</td>
 				<td class="sumtd" align="left">
-				<input name="txtSonota" type="text" id="txtSonota"  value="22000" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readonly">
+				<input name="txtSonota" type="text" id="txtSonota"  value="@Model.Sonota" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readonly">
 			    <span id="Label9" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
 			    </td>
 	        </tr>
@@ -84,15 +83,15 @@
             </tr>
 			<tr>
 				<td class="tabletitle" colspan="2">
-				<span id="lblZei2" class="titlelabel" style="display:inline-block;width:338px;">整備費用（税込）</span></td>
+				<span id="lblZei2" class="titlelabel" style="display:inline-block;width:338px;">@Model.Zei2</span></td>
 			</tr>
 	        <tr>
 				<td class="inptd" style="width: auto" align="left">
-                    <input id="radSyakenY" type="radio" name="Syaken" value="radSyakenY" checked="checked" onclick="chgSeibi();"><label for="radSyakenY">車検整備（車検する） </label><br>
-                    <input id="radSyakenN" type="radio" name="Syaken" value="radSyakenN" checked="checked" onclick="chgSeibi();"><label for="radSyakenN">納車整備（車検しない）</label>
+                    <input id="radSyakenY" type="radio" name="Syaken" value="radSyakenY" checked="@Model.IsSyakenZok" onclick="chgSeibi();"><label for="radSyakenY">車検整備（車検する） </label><br>
+                    <input id="radSyakenN" type="radio" name="Syaken" value="radSyakenN" checked="@Model.IsSyakenNew" onclick="chgSeibi();"><label for="radSyakenN">納車整備（車検しない）</label>
 				</td>
 				<td class="inptd" style="" align="left">
-				    <input name="txtSyakenSeibi" type="text" id="txtSyakenSeibi"  value="11000" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px; " size="10">
+				    <input name="txtSyakenSeibi" type="text" id="txtSyakenSeibi"  value="@Model.SyakenSeibi" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px; " size="10">
 			        <span id="Label12" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
 			    </td>
 	        </tr>
@@ -105,29 +104,26 @@
                     <span id="Labelaa6" class="InpTitle1" style="display:inline-block;width:150px;">車両計</span>
 				</td>
 				<td class="sumtd" align="left">
-				<input name="txtCarSum" type="text" id="txtCarSum"  class="inpboxsum" readonly="readonly" tabindex="48" maxlength="8" value="1163000" style="width: 97px">
+				<input name="txtCarSum" type="text" id="txtCarSum"  class="inpboxsum" readonly="readonly" tabindex="48" maxlength="8" value="@Model.CarSum" style="width: 97px">
 			    <span id="Labela7" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
 			    </td>
 	        </tr>
             <tr>
                 <td class="inpbtntd" colspan="2">
 
-                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
+                    <input type="button" name="btnCancel" onclick="goToMainPage(); return false;" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
                     <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;</td>
 
             </tr>
             <tr>
                 <td class="inpbtntd" colspan="2">
-
                     <span id="txMsg" class="inpboxsum" style="display:inline-block;color:Red;width:462px;"></span>&nbsp;</td>
-
             </tr>
-        </tbody></table> 
-        <input name="hidUserNo" type="hidden" id="hidUserNo" value="88888195">
-        <input name="hidEstNo" type="hidden" id="hidEstNo" value="22092300072">
-        <input name="hidEstSubNo" type="hidden" id="hidEstSubNo" value="01">
-        <input name="hidDispVol" type="hidden" id="hidDispVol" value="1500">
-        <input name="hidSyakenNewZok" type="hidden" id="hidSyakenNewZok" value="Syaken">
+        </tbody></table>
+        <input name="hidEstNo" type="hidden" id="hidEstNo" value="@Model.EstNo">
+        <input name="hidEstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">        
+        <input name="hidUserSyakenZok" type="hidden" id="hidUserSyakenZok" value="@Model.UserSyakenZok">
+        <input name="hidUserSyakenNew" type="hidden" id="hidUserSyakenNew" value="@Model.UserSyakenNew">                
     </div>
     </td>
     </tr>
@@ -138,20 +134,31 @@
     $('#formInpCarPrice').validate({
         submitHandler: function (form) {
             var model = Framework.getFormData($("#formInpCarPrice"));
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpHanbaiten/UpdateInpHanbaiten");
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCarPrice/Update");
             if (result.resultStatus == 0) {
-                Framework.GoBackReloadPageUrl('/');
+                goToMainPage();
             } else {
                 let Items = result.data;
                 console.log(Items)
                 if (typeof (Items) != "undefined") {
                     $("#txMsg").html(Items)
                 } else {
-                    location.reload();
+                    goToErrorPage();
                 }
             }
         }
     });
 
+    function goToMainPage()
+    {
+        window.location.href = './EstMain?IsInpBack=1';
+    }
+
+    function goToErrorPage()
+    {
+        window.location.href = './Error/ErrorPage';
+    }
+
 </script>
+<script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
 <script src="~/js/InpCarPrice.js"></script>
