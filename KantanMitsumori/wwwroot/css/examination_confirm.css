@@ -1,0 +1,77 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* 導入文
+----------------------- */
+.textIntro {
+  width: 1000px;
+  margin: 30px auto 40px;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+.textIntro p {
+  margin: 20px 0;
+}
+
+/* 同意事項
+----------------------- */
+.main .box {
+  width: 1000px;
+}
+.boxContract {
+  padding: 10px 10px 20px;
+}
+.box .inner {
+  height: 260px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: #fff;
+  line-height: 1.75;
+  overflow: auto;
+}
+.box .boxWrap {
+  width: 100%;
+}
+.box .boxWrap div { margin: 20px 0; }
+.box .boxWrap p {
+  margin: 0 30px;
+  line-height: 1.75;
+}
+.box .boxWrap  .title {
+  margin:  0;
+  font-weight: bold;
+}
+.box .boxWrap ul { margin: 0 40px; }
+.box .boxWrap li { line-height: 1.75; }
+
+.textConfirm {
+  margin: 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.typeCheck {
+  width: 398px;
+  margin: 10px auto 0;
+  padding: 15px 0;
+  border: 1px solid #fff;
+  border-radius: 4px;
+  background: #fff;
+  text-align: center;
+}
+.typeCheck::before {
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+}
+
+.typeCheck.disabled {
+  background: #ccc;
+  color: #626d78;
+  pointer-events: none;
+}
+.typeCheck.disabled::before {
+  border-color: #fff;
+  background: #ccc;
+}

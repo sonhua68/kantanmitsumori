@@ -92,7 +92,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
                     break;
                 case 5:
                     year = Left(strDay, 4).Trim();
-                    month = DateFormatZero(Right(strDay, 1)).Trim(); ;
+                    month = DateFormatZero(Right(strDay, 1)).Trim();
                     break;
                 case 6:
                     year = Left(strDay, 4).Trim();

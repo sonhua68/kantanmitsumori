@@ -8,10 +8,11 @@
     var ListDropDownSyakenYM = DropDownList.ListDropDownSyakenYM(true);
     var ListDropDownFirstYM = DropDownList.ListDropDownFirstYM(true);
     var NowOdometer = CommonFunction.FormatString(Model.NowOdometer);
+    var FirstRegYm = string.IsNullOrEmpty(Model.FirstRegYm) ? "" : Model.FirstRegYm;
 }
 <form id="formInputCar">
-    <table border="0" width="100%">       
-        <tbody>          
+    <table border="0" width="100%">
+        <tbody>
             <tr>
                 <td style="width: 1017px" align="center">
                     <div>
@@ -67,21 +68,21 @@
                                     <td class="inptd" align="left">
                                         <span class="inplabel" style="display:inline-block;width:100px;">初年度登録</span>
                                         <select name="ddlFirstYear" id="ddlFirstYear" class="inpbox" style="color:Black;background-color:White;font-family:ＭＳ Ｐゴシック;width:109px;">
-                                                @{
-                                                    foreach (var item in ListDropDownFirstYM)
-                                                    {
+                                            @{
+                                                foreach (var item in ListDropDownFirstYM)
+                                                {
                                                     <option value="@item.Value">@item.Text</option>
-                                                    }
                                                 }
+                                            }
                                         </select>
                                         <span class="inplabel" style="display:inline-block;width:13px;">年</span>
                                         <select name="ddlFirstMonth" id="ddlFirstMonth" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:48px;">
-                                                @{
-                                                    foreach (var item in listMonth)
-                                                    {
+                                            @{
+                                                foreach (var item in listMonth)
+                                                {
                                                     <option value="@item.Value">@item.Text</option>
-                                                    }
                                                 }
+                                            }
                                         </select>
                                         <span class="inplabel" style="display:inline-block;width:46px;">月</span>
                                     </td>
@@ -90,21 +91,21 @@
                                     <td class="inptd" align="left" style="vertical-align:middle; height: 28px;">
                                         <span class="inplabel" style="display:inline-block;width:100px;">車検有効期限</span>
                                         <select name="ddlSyakenYear" id="ddlSyakenYear" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:109px;">
-                                                @{
-                                                    foreach (var item in ListDropDownSyakenYM)
-                                                    {
+                                            @{
+                                                foreach (var item in ListDropDownSyakenYM)
+                                                {
                                                     <option value="@item.Value">@item.Text</option>
-                                                    }
                                                 }
+                                            }
                                         </select>
                                         <span class="inplabel" style="display:inline-block;width:13px;">年</span>
                                         <select name="ddlSyakenMonth" id="ddlSyakenMonth" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:48px;">
-                                                @{
-                                                    foreach (var item in listMonth)
-                                                    {
+                                            @{
+                                                foreach (var item in listMonth)
+                                                {
                                                     <option value="@item.Value">@item.Text</option>
-                                                    }
                                                 }
+                                            }
                                         </select>
                                         <span class="inplabel" style="display:inline-block;width:23px;">月</span>
                                         <span class="inplabel" style="display:inline-block;width:52px;">
@@ -220,7 +221,7 @@
                         <input type="hidden" id="hidCheckCarYm" value="@Model.CheckCarYm">
                         <input type="hidden" id="hidDispVolUnit" value="@Model.DispVolUnit">
                         <input type="hidden" id="hidMilUnit" value="@Model.MilUnit">
-                     
+                        <input type="hidden" id="hidFirstRegYm" value="@FirstRegYm">
                     </div>
                 </td>
             </tr>
@@ -235,7 +236,7 @@
             console.log(model)
             var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCar/UpdateInputCar");
             if (result.resultStatus == 0) {
-               Framework.GoBackReloadPage();
+                Framework.GoBackReloadPage();
             } else {
                 let Items = result.data;
                 console.log(Items)
@@ -265,14 +266,18 @@
         }
         var businessHis = $("#hidBusinessHis").val() == "" ? "自家用" : $("#hidBusinessHis").val();
         Framework.SetSelected("ddlCarReki", businessHis);
-        let firstRegYm = @Model.FirstRegYm;
-        var firstYear = firstRegYm.toString().substring(0, 4);
-        var firstMonth = firstRegYm.toString().substring(4, 6);
-        if (parseInt(firstMonth) < 10) {
-            firstMonth = firstMonth.substring(1, 2)
+        let firstRegYm = $("#hidFirstRegYm").val();
+        var firstYear = "";
+        var firstMonth = "";
+        if (firstRegYm != null || firstRegYm != "") {
+            var firstYear = firstRegYm.toString().substring(0, 4);
+            var firstMonth = firstRegYm.toString().substring(4, 6);
+            if (parseInt(firstMonth) < 10) {
+                firstMonth = firstMonth.substring(1, 2)
+            }
+            Framework.SetSelectedString("ddlFirstYear", firstYear)
+            Framework.SetSelectedNumber("ddlFirstMonth", firstMonth)
         }
-        Framework.SetSelectedString("ddlFirstYear", firstYear)
-        Framework.SetSelectedNumber("ddlFirstMonth", firstMonth)
         let checkCarYm = $("#hidCheckCarYm").val();
         if (checkCarYm.includes("無し")) {
             $("#chkSyaken").attr('checked', true);

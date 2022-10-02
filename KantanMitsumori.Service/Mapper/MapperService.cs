@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Entity.ASESTSQL;
+using KantanMitsumori.Entity.IDEEnitities;
 using KantanMitsumori.Model;
-using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Model.Response.Report;
@@ -20,7 +20,7 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<bool?, string>().ConvertUsing(s => s.ToStringOrEmpty());
             CreateMap<DateTime?, string>().ConvertUsing(s => s.ToStringOrEmpty());
             CreateMap<byte?, string>().ConvertUsing(s => s.ToStringOrEmpty());
-            
+
             // Specified class mapping            
             CreateMap<MMaker, MakerModel>();
             CreateMap<MMaker, MakerModel>();
@@ -32,6 +32,7 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<TEstimateIde, EstimateIdeModel>().ReverseMap();
             CreateMap<ResponseInpSitaCar, EstModel>().ReverseMap();
             CreateMap<ResponseInpSyohiyo, EstModel>().ReverseMap();
+            CreateMap<MtIdeMember, MemberIDEModel>().ReverseMap();
 
             CreateMap<AsopMaker, ResponseAsopMaker>();
             CreateMap<AsopCarname, ResponseAsopCarname>();
@@ -43,7 +44,7 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<RequestUpdateInpInitVal, MUserDef>();
 
             CreateMapForReport();
-           
+
         }
 
         private void CreateMapForReport()
@@ -150,7 +151,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.TaxFreeOther, o => { o.Condition(s => s.TaxFreeKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxGarage, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxCheck, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
-                .ForMember(t => t.TaxTradeIn, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })                
+                .ForMember(t => t.TaxTradeIn, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxDelivery, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxRecycle, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxOther, o => { o.Condition(s => s.TaxCostKb ?? false); o.ConvertUsing(new YenCurrencyConverter()); })
