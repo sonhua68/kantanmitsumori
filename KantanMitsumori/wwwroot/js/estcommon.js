@@ -466,16 +466,16 @@ function CleanCookies() {
     let sesMaker = "sesMaker";
     let sesCarNM = "sesCarNM";
     let btnHanei = "btnHanei";
-    RemoteCookies(custZip_forPrint);
-    RemoteCookies(custNm_forPrint);
-    RemoteCookies(custAdr_forPrint);
-    RemoteCookies(custTel_forPrint);
-    RemoteCookies(kbnSet);
-    RemoteCookies(caseSet);
-    RemoteCookies(sesMaker);
-    RemoteCookies(sesCarNM);
-    RemoteCookies(btnHanei);
-    function RemoteCookies(name) {
+    RemoveCookies(custZip_forPrint);
+    RemoveCookies(custNm_forPrint);
+    RemoveCookies(custAdr_forPrint);
+    RemoveCookies(custTel_forPrint);
+    RemoveCookies(kbnSet);
+    RemoveCookies(caseSet);
+    RemoveCookies(sesMaker);
+    RemoveCookies(sesCarNM);
+    RemoveCookies(btnHanei);
+    function RemoveCookies(name) {
         document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
 }
