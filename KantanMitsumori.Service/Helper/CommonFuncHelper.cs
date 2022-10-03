@@ -298,16 +298,8 @@ namespace KantanMitsumori.Service.Helper
 
                 // ファイルに書き込むためのFileStreamを作成
                 var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-
-                // 応答データをファイルに書き込む
-                int b;
-                while (true)
-                {
-                    b = strm.ReadByte();
-                    if (b == -1)
-                        break;
-                    fs.WriteByte(Convert.ToByte(b));
-                }
+                
+                strm.CopyTo(fs);
 
                 // 閉じる
                 fs.Close();
