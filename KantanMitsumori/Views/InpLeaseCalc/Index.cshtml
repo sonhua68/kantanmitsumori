@@ -1,0 +1,372 @@
+﻿@using KantanMitsumori.Model.Response
+@model ResponseInpCustKana
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+}
+<form id="formInpLeaseCalc">
+    <table border="0" width="100%">
+        <!-- Header -->
+        <tbody>
+            <tr>
+                <td align="center">
+                    <table border="0">
+                        <tbody>
+                            <tr>
+                                <td class="inptd" style="background-color: White; height: 27px;" align="left">
+                                    <span id="Label1" class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">オートフラットお手軽中古車・リース料計算情報の入力</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" align="right">
+                                    <table class="inptable" id="Table2" cellpadding="2" cellspacing="0" style="background-color: #ffccff;">
+                                        <tbody>
+                                            <tr>
+                                                <td class="tabletitle" colspan="2" style="background-color: mediumvioletred; height: 15px" align="left">
+                                                    <span id="Label2" class="titlelabel" style="display:inline-block;width:150px;">リース条件</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="Label3" class="inplabel">用途車種</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cboCarType" id="cboCarType" style="border: solid 1px mediumvioletred;" class="inpbox" onchange="changeCarType();">
+                                                        <option value="    ">    </option>
+                                                        <option value="2">軽自動車</option>
+                                                        <option value="1">普通車</option>
+                                                        <option value="3">軽貨物</option>
+                                                        <option value="4">小型貨物</option>
+                                                    </select>
+                                                    <input name="chkElectricCar" type="checkbox" id="chkElectricCar" onchange="changeElectricCar();" disabled="">電気自動車
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_CarModel" class="inplabel">初度登録月</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cboFirstYear" id="cboFirstYear" style="width: 70px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeFirstYM();">
+                                                        <option value="    ">    </option>
+                                                        <option value="2022">2022</option>
+                                                        <option value="2021">2021</option>
+                                                        <option value="2020">2020</option>
+                                                        <option value="2019">2019</option>
+                                                        <option value="2018">2018</option>
+                                                        <option value="2017">2017</option>
+                                                        <option selected="selected" value="2016">2016</option>
+                                                        <option value="2015">2015</option>
+                                                        <option value="2014">2014</option>
+                                                        <option value="2013">2013</option>
+                                                        <option value="2012">2012</option>
+                                                        <option value="2011">2011</option>
+                                                        <option value="2010">2010</option>
+                                                    </select>
+                                                    <span id="Label4" class="inplabel">年</span>
+                                                    <select name="cboFirstMonth" id="cboFirstMonth" style="width: 45px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeFirstYM();">
+                                                        <option selected="selected" value="    ">    </option>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                    </select>
+                                                    <span id="Label5" class="inplabel">月</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_InsurExpires" class="inplabel">車検満了日(予定日)</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_ExpiresYear" id="cbo_ExpiresYear" style="width: 70px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeExpiresYear();">
+                                                        <option value="    ">    </option>
+                                                        <option value="2022">2022</option>
+                                                        <option value="2023">2023</option>
+                                                        <option value="2024">2024</option>
+                                                        <option value="2025">2025</option>
+                                                    </select>
+                                                    <span id="Label6" class="inplabel">年</span>
+                                                    <select name="cbo_ExpiresMon" id="cbo_ExpiresMon" class="inpbox" style="width: 45px; border: solid 1px mediumvioletred;" onchange="return changeExpiresMonth();">
+                                                        <option value="    ">    </option>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                    </select>
+                                                    <span id="Label7" class="inplabel">月</span>
+                                                    <select name="cbo_ExpiresDay" id="cbo_ExpiresDay" class="inpbox" style="width: 55px; border: solid 1px mediumvioletred;" onchange="return changeExpiresDay();">
+                                                        <option value="    ">    </option>
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                        <option value="13">13</option>
+                                                        <option value="14">14</option>
+                                                        <option value="15">15</option>
+                                                        <option value="16">16</option>
+                                                        <option value="17">17</option>
+                                                        <option value="18">18</option>
+                                                        <option value="19">19</option>
+                                                        <option value="20">20</option>
+                                                        <option value="21">21</option>
+                                                        <option value="22">22</option>
+                                                        <option value="23">23</option>
+                                                        <option value="24">24</option>
+                                                        <option value="25">25</option>
+                                                        <option value="26">26</option>
+                                                        <option value="27">27</option>
+                                                        <option value="28">28</option>
+                                                        <option value="29">29</option>
+                                                        <option value="30">30</option>
+                                                        <option value="31">31</option>
+                                                    </select>
+                                                    <span id="Label8" class="inplabel">日</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_LeaseStart" class="inplabel">リース開始月</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_LeaseSttY" id="cbo_LeaseSttY" style="width: 70px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeLeaseSttYM();">
+                                                        <option value="2022">2022</option>
+                                                        <option value="2023">2023</option>
+                                                    </select>
+                                                    <span id="Label9" class="inplabel">年</span>
+                                                    <select name="cbo_LeaseSttM" id="cbo_LeaseSttM" style="width: 45px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeLeaseSttYM();">
+                                                        <option value="1">1</option>
+                                                        <option value="2">2</option>
+                                                        <option value="3">3</option>
+                                                        <option value="4">4</option>
+                                                        <option value="5">5</option>
+                                                        <option value="6">6</option>
+                                                        <option value="7">7</option>
+                                                        <option value="8">8</option>
+                                                        <option value="9">9</option>
+                                                        <option selected="selected" value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                    </select>
+                                                    <span id="Label10" class="inplabel">月</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_ContractTimes" class="inplabel">契約期間</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_ContractTimes" id="cbo_ContractTimes" style="width: 95px; border: solid 1px mediumvioletred;
+                                                font-family:ＭＳ Ｐゴシック;" class="inpbox" onchange="changeContractTimes();">
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_LeaseEndTitle" class="inplabel">リース満了日</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_LeaseEnd" class="inplabel" style="font-family:ＭＳ Ｐゴシック;"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_ContractPlan" class="inplabel">契約プラン</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_ContractPlan" id="cbo_ContractPlan" style="width: 155px; border: solid 1px mediumvioletred;
+                                                font-family: @ＭＳ Ｐゴシック;" onchange="changeContractPlan();">
+                                                        <option selected="selected" value="1">マイメンテプラン</option>
+                                                        <option value="99">メンテなし</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_InsurExpand" class="inplabel">延長保証（＋1年）</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_InsurExpanded" id="cbo_InsurExpanded" style="width: 95px; border: solid 1px mediumvioletred;
+                                                font-family:ＭＳ Ｐゴシック;" onchange="changeExtendedGuarantee();">
+                                                        <option selected="selected" value="0">あり</option>
+                                                        <option value="1">なし</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_OptionInsurance" class="inplabel">任意保険</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_OptionInsurance" id="cbo_OptionInsurance" style="width: 95px; border: solid 1px mediumvioletred;
+                                                font-family:ＭＳ Ｐゴシック;" onchange="changeOptionIns();">
+                                                        <option value="1">あり</option>
+                                                        <option selected="selected" value="0">なし</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_InsuranceCompany" class="inplabel">保険会社名</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_InsuranceCompany" id="cbo_InsuranceCompany" style="width: 305px; border: 1px solid mediumvioletred; background-color: rgb(169, 169, 169);" onchange="changeInsuranCompany();" disabled="">
+                                                        <option value="99">選択してください</option>
+                                                        <option value="1">東京海上日動火災保険株式会社</option>
+                                                        <option value="2">損害保険ジャパン株式会社</option>
+                                                        <option value="3">三井住友海上火災保険株式会社</option>
+                                                        <option value="4">あいおいニッセイ同和損害保険株式会社</option>
+                                                        <option value="5">セコム損害保険株式会社</option>
+                                                        <option value="6">共栄火災海上保険株式会社</option>
+                                                        <option value="7">日新火災海上保険株式会社</option>
+                                                        <option value="8">楽天損害保険株式会社</option>
+                                                        <option value="9">大同火災海上保険株式会社</option>
+                                                        <option value="10">AIG損害保険株式会社</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left" style="height: 28px">
+                                                    <span id="lbl_InsuranceFee" class="inplabel">保険料</span>
+                                                </td>
+                                                <td class="inptd" align="left" style="height: 28px">
+                                                    <input name="txt_InsuranceFee" type="text" id="txt_InsuranceFee" class="inpbox_r" style="border: 1px solid mediumvioletred; width: 90px; background-color: rgb(169, 169, 169);" onkeypress="return onlyNumbersInsuranceFee(event);" onchange="chgSetBtnConfim();" value="0" disabled="true">
+                                                    <span id="Label11" class="inplabel">円</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_PrePay" class="inplabel">頭金(税込)</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <input name="txt_PrePay" type="text" id="txt_PrePay" class="inpbox_r" style="border: solid 1px mediumvioletred;
+                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="0">
+                                                    <span id="Label12" class="inplabel" style="display:inline-block;width:25px;">円</span>
+                                                    <span id="lbl_ErrPrePay" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left" style="height: 28px">
+                                                    <span id="lbl_TradeIn" class="inplabel">下取(税込)</span>
+                                                </td>
+                                                <td class="inptd" align="left" style="height: 28px">
+                                                    <input name="txt_TradeIn" type="text" id="txt_TradeIn" class="inpbox_r" style="border: solid 1px mediumvioletred;
+                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="0">
+                                                    <span id="Label13" class="inplabel" style="display:inline-block;width:25px;">円</span>
+                                                    <span id="lbl_ErrTradeIn" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_AdjustFee" class="inplabel">手数料調整(税込)</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <input name="txt_AdjustFee" type="text" id="txt_AdjustFee" class="inpbox_r" style="border: solid 1px mediumvioletred;
+                                                width: 90px" onkeypress="return onlyNegativeNumbers(event, event.target.value);" onchange="chgSetBtnConfim();" value="0">
+                                                    <span id="Label14" class="inplabel" style="display:inline-block;width:25px;">円</span>
+                                                    <span id="lbl_ErrAdjustFee" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inpbtntd" colspan="2" style="text-align: right;">
+                                                    <span id="lbl_ErrorMessage" class="inplabel" style="color:Red;font-size:Medium;display: none;"></span>
+                                                    <input type="submit" name="btnLeaseCalc" value="リース料計算" onclick="return inputChk();" id="btnLeaseCalc" class="Btn1" style="height:32px;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_MonthlyLeaseTitle" class="inplabel">月額リース料(税込)</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_MonthlyLease" class="inplabel" style="font-family:ＭＳ Ｐゴシック;margin-left: 15px;"></span>
+                                                    <span id="Label15" class="inplabel" style="display:inline-block;width:25px;"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inpbtntd" style="text-align: left;">
+                                                    <input type="submit" name="btnBack" value="戻る" id="btnBack" class="Btn1" style="height:32px;width:100px;">
+                                                </td>
+                                                <td class="inpbtntd" style="text-align: right;">
+                                                    <input type="submit" name="btnPrintShow" value="見積書印刷" id="btnPrintShow" class="Btn1" style="height:32px;" disabled="">
+                                                    <input type="submit" name="btnBookExam" value="予定審査" id="btnBookExam" class="Btn1" style="height:32px;width:100px;" disabled="">
+                                                    <input type="submit" name="btnExamination" value="確定審査" id="btnExamination" class="Btn1" style="height:32px;width:100px;" disabled="">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="listlogLease" class="inptd" style="background-color: White; height: 27px;" align="left">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <input name="hidIsData" type="hidden" id="hidIsData" value="False">
+                    <input name="hidCarType" type="hidden" id="hidCarType" value="0">
+                    <input name="hidElectricCar" type="hidden" id="hidElectricCar" value="0">
+                    <input name="hidFirstTerm" type="hidden" id="hidFirstTerm" value="36">
+                    <input name="hidAfterSecondTerm" type="hidden" id="hidAfterSecondTerm" value="24">
+                    <input name="hidFirstReg" type="hidden" id="hidFirstReg">
+                    <input name="hidExpiresDate" type="hidden" id="hidExpiresDate">
+                    <input name="hidLeaseSttMonth" type="hidden" id="hidLeaseSttMonth">
+                    <input name="hidContractTimes" type="hidden" id="hidContractTimes">
+                    <input name="hidLeasePeriod" type="hidden" id="hidLeasePeriod" value="0">
+                    <input name="hidLeaseExpirationDate" type="hidden" id="hidLeaseExpirationDate">
+                    <input name="hidContractPlan" type="hidden" id="hidContractPlan" value="1">
+                    <input name="hidInsurExpanded" type="hidden" id="hidInsurExpanded" value="0">
+                    <input name="hidOptionInsurance" type="hidden" id="hidOptionInsurance">
+                    <input name="hidInsuranceCompany" type="hidden" id="hidInsuranceCompany" value="0">
+                    <input name="hidDiffMonth" type="hidden" id="hidDiffMonth">
+                    <input name="hidCalcDiffMonth" type="hidden" id="hidCalcDiffMonth">
+                    <input name="hidLeaseSttDay" type="hidden" id="hidLeaseSttDay">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script>
+    $('#formInpLeaseCalc').validate({
+        submitHandler: function (form) {
+            if (inputChk() == false) { return; }
+            var model = Framework.getFormData($("#formInpLeaseCalc"));
+            console.log(model)
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLeaseCalc/LeaseCalc");
+            if (result.resultStatus == 0) {
+                Framework.GoBackReloadPage();
+            } else {
+                let Items = result.data;
+                console.log(Items)
+                if (typeof (Items) != "undefined") {
+                    $("#Msg").html(Items)
+                } else {
+                    location.reload();
+                }
+            }
+        }
+    });
+</script>
+<script src="~/js/InpCustKana.js"></script>
