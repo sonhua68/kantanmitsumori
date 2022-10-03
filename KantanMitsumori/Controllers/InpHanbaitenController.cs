@@ -35,11 +35,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpHanbaiten([FromForm] RequestUpdateInpHanbaiten requestData)
         {
-            var response = await _estimateService.UpdateInpHanbaiten(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = await _estimateService.UpdateInpHanbaiten(requestData);          
             return Ok(response);
         }
         #endregion InpHanbaiten

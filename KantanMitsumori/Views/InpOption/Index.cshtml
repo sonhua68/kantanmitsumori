@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
 }
@@ -45,25 +44,25 @@
                                     {
                                         var OptionName = "OptionName" + i;
                                         var OptionPrice = "OptionPrice" + i;
-                                  
+
                                         <tr>
                                             <td class="inptd" align="left">
                                                 <input name="@OptionName" type="text" id="@OptionName" class="inpbox" style="WIDTH: 281px;" tabindex="30" maxlength="40" size="41">
                                                 <input name="btOpen1" type="button" id="btOpen1" style="FONT-SIZE: 6pt; WIDTH: 17px; FONT-FAMILY: 'ＭＳ Ｐゴシック'; HEIGHT: 22px; padding:0px;" onclick="OptionOpen(@i)" value="▼">
                                             </td>
                                             <td class="inptd" align="left">
-                                                <input name="@OptionPrice" type="text" id="@OptionPrice" language="javascript"  maxlength="8" class="inpbox_r" tabindex="31" onblur="EstSum();" style="WIDTH: 94px;" size="10">
+                                                <input name="@OptionPrice" type="text" id="@OptionPrice" language="javascript" maxlength="8" class="inpbox_r" tabindex="31" onblur="EstSum();" style="WIDTH: 94px;" size="10">
                                                 <span id="Label29" class="inplabel" style="display:inline-block;height:14px;width:27px;">&nbsp;円</span>
                                             </td>
                                         </tr>
                                     }
-                                }                              
+                                }
                                 <tr>
                                     <td class="sumtd" style="text-align:right;  height: 29px;" align="right">
                                         <span id="Labelaa6" class="inplabel">小計</span>
                                     </td>
                                     <td class="sumtd" style="height: 29px" align="left">
-                                        <input name="OptionPriceAll" type="text" id="OptionPriceAll"  language="javascript" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
+                                        <input name="OptionPriceAll" type="text" id="OptionPriceAll" language="javascript" maxlength="8" class="inpboxsum" tabindex="48" style="WIDTH: 97px; " size="10" readonly="readOnly">
                                         <span id="Labela7" class="InpTitle1" style="display:inline-block;width:41px;">&nbsp;円</span>
                                     </td>
                                 </tr>
@@ -108,13 +107,7 @@
             if (result.resultStatus == 0) {
                 Framework.GoBackReloadPage();
             } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#Msg").html(Items)
-                } else {
-                    location.reload();
-                }
+                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
             }
         }
     });

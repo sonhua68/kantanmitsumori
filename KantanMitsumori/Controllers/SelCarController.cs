@@ -31,21 +31,13 @@ namespace KantanMitsumori.Controllers
         [HttpGet]
         public IActionResult GetListASOPMaker()
         {
-            var response = _selCarService.GetListASOPMakers();
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = _selCarService.GetListASOPMakers();           
             return Ok(response);
         }
         [HttpGet]
         public IActionResult GetListASOPCarName(int markId)
         {
-            var response = _selCarService.GetListASOPCarName(markId);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = _selCarService.GetListASOPCarName(markId);           
             return Ok(response);
         }
         [HttpPost]
