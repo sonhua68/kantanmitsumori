@@ -159,7 +159,7 @@ namespace KantanMitsumori.Service.Helper
                 foreach (char item in vEncNo)
                 {
                     // 取り出した文字が英小文字(a～z)の場合
-                    if (Convert.ToChar(item) >= 97 && Convert.ToChar(item) <= 122)
+                    if (item >= 97 && item <= 122)
                     {
                         // 英小文字と数字がすでに格納されていれば1文字分デコード
                         if (wStr.Length == 1 && wInt.Length > 0)
