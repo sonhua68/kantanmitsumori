@@ -80,13 +80,8 @@ namespace KantanMitsumori.Service.ASEST
             }
         }
 
-
-
         private ResponsePreExamination ToModel(RequestPreExaminationModel model)
         {
-            if (model == null)
-                return null;
-
             // set binding data
             var responseModel = new ResponsePreExamination();
             responseModel.EstNo = model.EstModel.EstNo;
@@ -127,7 +122,7 @@ namespace KantanMitsumori.Service.ASEST
             responseModel.carInsCompany = model.CompanyName;
             responseModel.carInsPrice = model.EstIDEModel.InsuranceFee;
             responseModel.carPriceTax = model.EstModel.CarPrice;
-            responseModel.nebiki = model.EstModel.CarPrice;
+            responseModel.nebiki = model.EstModel.Discount;
             responseModel.otherTax = model.EstModel.Sonota;
             responseModel.carMaintenance = model.EstModel.SyakenNew > 0 ? model.EstModel.SyakenNew : (model.EstModel.SyakenNew == 0 && model.EstModel.SyakenZok > 0) ? model.EstModel.SyakenZok : 0;
             responseModel.fOpCost = (model.EstModel.OptionPrice1 + model.EstModel.OptionPrice2 + model.EstModel.OptionPrice3 + model.EstModel.OptionPrice4 + model.EstModel.OptionPrice5 + model.EstModel.OptionPrice6 + model.EstModel.OptionPrice7 + model.EstModel.OptionPrice8 + model.EstModel.OptionPrice9 + model.EstModel.OptionPrice10 + model.EstModel.OptionPrice11 + model.EstModel.OptionPrice12);
