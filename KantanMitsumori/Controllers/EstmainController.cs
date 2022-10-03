@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.Helper.Enum;
+﻿using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model;
@@ -52,6 +53,19 @@ namespace KantanMitsumori.Controllers
             }
             return Ok(response);
         }
+
+        /// <summary>
+        /// Download PDF
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult DownloadPdf()
+        {
+            string filepath = CommonSettings.def_BizFilePdf;
+            string[] strArr = filepath.Split(@"/");
+
+            return File("~/pdf/" + strArr[strArr.Length - 1], "application/pdf", strArr[strArr.Length - 1]);
+        }
+
     }
 }
 
