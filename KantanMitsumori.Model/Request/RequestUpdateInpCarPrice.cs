@@ -19,7 +19,7 @@ namespace KantanMitsumori.Model.Request
         public string txtSonota { get; set; } = "";
         public string txtCarSum { get; set; } = "";
         public string Syaken { get; set; } = "";
-        public bool IsSyakenZok => Syaken == "radSyakenY";
+        public bool IsSyakenZok => Syaken == "radSyakenN";
         
 
     }

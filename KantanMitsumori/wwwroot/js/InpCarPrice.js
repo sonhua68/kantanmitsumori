@@ -56,7 +56,7 @@ function EstSum() {
 }
 //整備費用のボタン切り替え時の金額取得
 function chgSeibi() {
-	var isSyakenZok = $get('radSyakenY').checked;
+	var isSyakenZok = $get('radSyakenN').checked;
 	var userSyakenZok = $get('hidUserSyakenZok').value;
 	var userSyakenNew = $get('hidUserSyakenNew').value;
 	if(isSyakenZok)

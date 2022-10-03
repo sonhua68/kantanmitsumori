@@ -87,8 +87,8 @@
 			</tr>
 	        <tr>
 				<td class="inptd" style="width: auto" align="left">
-                    <input id="radSyakenY" type="radio" name="Syaken" value="radSyakenY" checked="@Model.IsSyakenZok" onclick="chgSeibi();"><label for="radSyakenY">車検整備（車検する） </label><br>
-                    <input id="radSyakenN" type="radio" name="Syaken" value="radSyakenN" checked="@Model.IsSyakenNew" onclick="chgSeibi();"><label for="radSyakenN">納車整備（車検しない）</label>
+                    <input id="radSyakenY" type="radio" name="Syaken" value="radSyakenY" checked="@Model.IsSyakenNew" onclick="chgSeibi();"><label for="radSyakenY">車検整備（車検する） </label><br>
+                    <input id="radSyakenN" type="radio" name="Syaken" value="radSyakenN" checked="@Model.IsSyakenZok" onclick="chgSeibi();"><label for="radSyakenN">納車整備（車検しない）</label>
 				</td>
 				<td class="inptd" style="" align="left">
 				    <input name="txtSyakenSeibi" type="text" id="txtSyakenSeibi"  value="@Model.SyakenSeibi" maxlength="8" class="inpbox_r" tabindex="48" onblur="EstSum();" style="WIDTH: 94px; " size="10">
