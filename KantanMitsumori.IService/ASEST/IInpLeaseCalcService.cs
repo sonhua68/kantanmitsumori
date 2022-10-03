@@ -8,5 +8,7 @@ namespace KantanMitsumori.IService
     public interface IInpLeaseCalcService
     {
         Task<ResponseBase<List<ResponseCarType>>> GetCarType();
+        Task<ResponseBase<List<ResponseCarType>>> GetContractPlan();
+        Task<ResponseBase<List<ResponseCarType>>> GetVolInsurance();
     }
 }

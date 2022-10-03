@@ -42,6 +42,23 @@ namespace KantanMitsumori.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCarType()
         {
+            var response = await _inpLeaseCalc.GetCarType();        
+            return Ok(response);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetContractPlan()
+        {
+            //var response = await _estMainService.setFreeEst(requestData, _logToken);
+            //if (response.ResultStatus == (int)enResponse.isError)
+            //{
+            //    return ErrorAction(response);
+            //}
+            //setTokenCookie(response.Data!.AccessToken);
+            return Ok();
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetVolInsurance()
+        {
             //var response = await _estMainService.setFreeEst(requestData, _logToken);
             //if (response.ResultStatus == (int)enResponse.isError)
             //{

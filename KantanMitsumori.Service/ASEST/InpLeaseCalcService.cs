@@ -48,6 +48,16 @@ namespace KantanMitsumori.Service
                 return ResponseHelper.Error<List<ResponseCarType>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
+
+        public Task<ResponseBase<List<ResponseCarType>>> GetContractPlan()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResponseBase<List<ResponseCarType>>> GetVolInsurance()
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

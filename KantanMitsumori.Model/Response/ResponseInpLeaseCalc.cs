@@ -15,4 +15,14 @@ namespace KantanMitsumori.Model.Response
         public int CarType { get; set; }
         public string? CarTypeName { get; set; }
     }
+    public class ResponseContractPlan
+    {
+        public int CarType { get; set; }
+        public string? CarTypeName { get; set; }
+    }
+    public class ResponseVolInsurance
+    {
+        public int ID { get; set; }
+        public string? CompanyName { get; set; }
+    }
 }

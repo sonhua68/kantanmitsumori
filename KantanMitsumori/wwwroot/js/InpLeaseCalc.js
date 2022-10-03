@@ -1027,3 +1027,45 @@ function calcDateDiff() {
         $get('hidCalcDiffMonth').value = diffMonth;
     }
 }
+
+function GetCarType() {
+    var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetCarType");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        let length = result.data.length;
+        $("#cboCarType").append(new Option("", ''));
+        for (let i = 0; i < length; i++) {
+            let value = result.data[i].makerName;
+            $("#cboCarType").append(new Option(value, value));
+        }
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    }
+}
+function GetContractPlan() {
+    var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetContractPlan");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        let length = result.data.length;     
+        for (let i = 0; i < length; i++) {
+            let value = result.data[i].makerName;
+            $("#cbo_ContractPlan").append(new Option(value, value));
+        }
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    }
+}
+function GetVolInsurance() {
+    var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetVolInsurance");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        let length = result.data.length;
+        $("#cbo_InsuranceCompany").append(new Option("99", '選択してください'));
+        for (let i = 0; i < length; i++) {
+            let value = result.data[i].makerName;
+            if (value != "99") {
+                $("#cbo_InsuranceCompany").append(new Option(value, value));
+            }
+        }
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    }
+}
+
