@@ -13,12 +13,12 @@ namespace KantanMitsumori.Controllers
 
 
         private readonly ILogger<InpLeaseCalcController> _logger;
-        private readonly ISelCarService _selCarService;
+        private readonly IInpLeaseCalcService _inpLeaseCalc;
         private readonly IEstMainService _estMainService;
-        public InpLeaseCalcController( ISelCarService selCarService, IEstMainService estMainService, IConfiguration config, ILogger<InpLeaseCalcController> logger) : base(config)
-        {           
+        public InpLeaseCalcController(IInpLeaseCalcService inpLeaseCalc, IEstMainService estMainService, IConfiguration config, ILogger<InpLeaseCalcController> logger) : base(config)
+        {
             _logger = logger;
-            _selCarService = selCarService;
+            _inpLeaseCalc = inpLeaseCalc;
             _estMainService = estMainService;
         }
 
@@ -26,8 +26,20 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             return View();
-        }       
-    
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCarType()
+        {
+            //var response = await _estMainService.setFreeEst(requestData, _logToken);
+            //if (response.ResultStatus == (int)enResponse.isError)
+            //{
+            //    return ErrorAction(response);
+            //}
+            //setTokenCookie(response.Data!.AccessToken);
+            return Ok();
+        }
+
         [HttpPost]
         public async Task<IActionResult> LeaseCalc(RequestSelGrdFreeEst requestData)
         {

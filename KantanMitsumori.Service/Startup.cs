@@ -14,9 +14,7 @@ namespace KantanMitsumori.Service
             services.AddTransient<IEstMainService, EstMainService>();
             services.AddTransient<IEstimateIdeService, EstimateIdeService>();
             services.AddTransient<IEstimateService, EstimateService>();
-
             services.AddTransient<IEstimateSubService, EstimateSubService>();
-
             services.AddTransient<IEstimateSubService, EstimateSubService>();
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IInpLoanService, InpLoanService>();
@@ -28,7 +26,7 @@ namespace KantanMitsumori.Service
             services.AddTransient<IInpSitaCarService, InpSitaCarService>();
             services.AddTransient<IInpSyohiyoService, InpSyohiyoService>();
             services.AddTransient<IPreExaminationService, PreExaminationService>();
-
+            services.AddTransient<IInpLeaseCalcService, InpLeaseCalcService>();
             services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();
             return services;
         }

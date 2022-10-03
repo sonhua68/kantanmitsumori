@@ -42,7 +42,7 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<SerEstEntity, ResponseSerEst>();
             CreateMap<MUserDef, ResponseUserDef>();
             CreateMap<RequestUpdateInpInitVal, MUserDef>();
-
+            CreateMap<ResponseCarType, MtIdeCartype>();
             CreateMapForReport();
 
         }

@@ -365,6 +365,7 @@ var Framework =
                         console.log(_error)
                         location.reload();
 
+
                     }
                 });
                 return result;
@@ -521,7 +522,15 @@ var Framework =
                 window.location.href = "/Estmain?IsInpBack=1";
 
             }
-        },       
+            },   
+            {
+                key: "GoBackErrorPage",
+                value: function GoBackErrorPage(messageCode, messContent) {                   
+                    var url = "/Error?messageCode=" + messageCode + " &messContent=" + messContent;
+                    window.location.href = url;
+
+                }
+            }, 
         {
             key: "GoBackPage",
             value: function GoBackPage() {
