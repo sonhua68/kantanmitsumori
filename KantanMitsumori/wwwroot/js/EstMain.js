@@ -1,6 +1,6 @@
 ﻿setInitialValue();
 DeleteBtnHanei()
-//setInitValueCookie();
+setInitValueCookie();
 function setInitialValue() {
     var leaseFlag = $("#hidLeaseFlag").val();
 

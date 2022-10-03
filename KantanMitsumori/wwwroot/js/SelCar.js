@@ -178,9 +178,11 @@ function AddEstimate() {
     var result = Framework.submitAjaxFormUpdateAsync(model, "/SelCar/SetFreeEst");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let isError = parseInt(result.data.estModel.isError);
+        CleanCookies();
         Framework.GoBackReloadPage(isError);
         if (isError == 1) {
             alert("最初に車両本体価格をご確認下さい")
         }
+   
     }
 }

@@ -131,6 +131,8 @@ function SetFreeEst(gradeName, carCase, dispVol, driveTypeCode) {
         Framework.GoBackReloadPage();
         if (isError == 1) {
             alert("最初に車両本体価格をご確認下さい")
+        } else {
+            CleanCookies();
         }
     }
 }
