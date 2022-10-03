@@ -28,7 +28,7 @@ function GetListASOPMaker() {
         if (typeof (Items) != "undefined") {
             $("#lblErrMsg2").html(Items)
         } else {
-            location.reload();
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     }
 }
@@ -77,7 +77,7 @@ function GetListASOPCarName() {
         if (typeof (Items) != "undefined") {
             $("#lblErrMsg2").html(Items)
         } else {
-            location.reload();
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     }
 
@@ -157,7 +157,7 @@ function SetInitCarSet() {
         $("#CaseSet").val(vCaseSet);
         $("#KbnSet").val(vKbnSet);
     }
-  
+
 }
 function CleanCarSet() {
     $("#CaseSet").val("");
@@ -173,16 +173,17 @@ function OnclickSelCar() {
     CleanCarSet();
     Framework.GoBackReloadPageUrl('/SerEst');
 }
-function AddEstimate() {    
-    var model = {};   
+function AddEstimate() {
+    var model = {};
     var result = Framework.submitAjaxFormUpdateAsync(model, "/SelCar/SetFreeEst");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let isError = parseInt(result.data.estModel.isError);
         CleanCookies();
         Framework.GoBackReloadPage(isError);
-        if (isError == 1) {
+        if (isError == 1)
             alert("最初に車両本体価格をご確認下さい")
-        }
-   
+    }
+    else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }

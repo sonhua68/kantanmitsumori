@@ -40,11 +40,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInputCar([FromForm] RequestUpdateInputCar requestData)
         {
-            var response = await _estimateService.UpdateInputCar(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = await _estimateService.UpdateInputCar(requestData);           
             return Ok(response);
         }
         #endregion InpCar

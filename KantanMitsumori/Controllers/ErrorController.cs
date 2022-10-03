@@ -11,10 +11,6 @@ namespace KantanMitsumori.Controllers
         public ErrorController(ILogger<ErrorController> logger, IConfiguration config) : base(config)
         {
             _logger = logger;
-        }
-        public IActionResult ErrorPage()
-        {
-            return View();
-        }
+        }       
     }
 }

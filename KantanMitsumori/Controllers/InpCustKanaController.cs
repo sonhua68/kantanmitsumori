@@ -36,17 +36,9 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpCustKana([FromForm] RequestUpdateInpCustKana requestData)
         {
-            var response = await _inpCustKanaService.UpdateInpCustKana(requestData);
-
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = await _inpCustKanaService.UpdateInpCustKana(requestData);           
             return Ok(response);
         }
-
-
-
 
     }
 }

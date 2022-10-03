@@ -20,8 +20,8 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             // 見積書番号を取得
-            string estNo = _logToken.sesEstNo;
-            string estSubNo = _logToken.sesEstSubNo;
+            string estNo = _logToken.sesEstNo!;
+            string estSubNo = _logToken.sesEstSubNo!;
 
             var response = _inpNotesService.getInfoNotes(estNo, estSubNo);
 
@@ -36,17 +36,9 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpNotes([FromForm] RequestUpdateInpNotes requestData)
         {
-            var response = await _inpNotesService.UpdateInpNotes(requestData);
-
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = await _inpNotesService.UpdateInpNotes(requestData);           
             return Ok(response);
         }
-
-
-
 
     }
 }

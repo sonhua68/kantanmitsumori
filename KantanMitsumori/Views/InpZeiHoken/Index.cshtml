@@ -247,13 +247,7 @@
             if (result.resultStatus == 0 && result.messageCode === 'I0002') {
                 Framework.GoBackReloadPage();
             } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#Msg").html(Items)
-                } else {
-                    location.reload();
-                }
+                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
             }
         }
     });

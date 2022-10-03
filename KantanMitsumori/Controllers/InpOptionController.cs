@@ -28,11 +28,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpOption([FromForm] RequestUpdateInpOption requestData)
         {
-            var response = await _estimateService.UpdateInpOption(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = await _estimateService.UpdateInpOption(requestData);           
             return Ok(response);
         }
         [HttpGet]

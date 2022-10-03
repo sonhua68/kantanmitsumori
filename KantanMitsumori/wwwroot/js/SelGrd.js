@@ -126,7 +126,7 @@ function SetFreeEst(gradeName, carCase, dispVol, driveTypeCode) {
     model.CarCase = carCase;
     model.DispVol = dispVol;
     var result = Framework.submitAjaxFormUpdateAsync(model, "/SelGrd/SetFreeEst");
-    if (result.resultStatus == 0 && result.messageCode === 'I0002') {       
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let isError = parseInt(result.data.estModel.isError);
         Framework.GoBackReloadPage();
         if (isError == 1) {
@@ -134,5 +134,7 @@ function SetFreeEst(gradeName, carCase, dispVol, driveTypeCode) {
         } else {
             CleanCookies();
         }
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }

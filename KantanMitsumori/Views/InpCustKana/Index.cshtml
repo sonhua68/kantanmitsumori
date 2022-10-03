@@ -64,7 +64,7 @@
 </form>
 <script>
     $('#formInputCustKana').validate({
-        submitHandler: function(form) {
+        submitHandler: function (form) {
             if (inputChk() == false) { return; }
             var model = Framework.getFormData($("#formInputCustKana"));
             console.log(model)
@@ -72,13 +72,7 @@
             if (result.resultStatus == 0) {
                 Framework.GoBackReloadPage();
             } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#Msg").html(Items)
-                } else {
-                    location.reload();
-                }
+                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
             }
         }
     });
