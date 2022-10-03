@@ -21,8 +21,6 @@ namespace KantanMitsumori.Service.Helper
 
         private LogToken valToken;
         private CommonFuncHelper _commonFuncHelper;
-        private List<string> reCalEstModel;
-        private List<string> reCalEstSubModel;
 
         public CommonEstimate(ILogger<CommonEstimate> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, IMapper mapper, HelperMapper helperMapper, CommonFuncHelper commonFuncHelper)
         {
@@ -34,8 +32,6 @@ namespace KantanMitsumori.Service.Helper
             _helperMapper = helperMapper;
 
             valToken = new LogToken();
-            reCalEstModel = new List<string>();
-            reCalEstSubModel = new List<string>();
         }
         public async Task<bool> calcSum(string inEstNo, string inEstSubNo, LogToken logToken)
         {
@@ -61,9 +57,10 @@ namespace KantanMitsumori.Service.Helper
                         Type typeEstSub = estSubModel.GetType();
                         IList<PropertyInfo> propsEst = new List<PropertyInfo>(typeEst.GetProperties().Where(x => x.PropertyType.Name == "Int32"));
                         IList<PropertyInfo> propsEstSub = new List<PropertyInfo>(typeEstSub.GetProperties().Where(x => x.PropertyType.Name == "Int32"));
+                        var reCalEstModel = new List<string>();
+                        var reCalEstSubModel = new List<string>();
                         foreach (PropertyInfo propEst in propsEst)
                         {
-                            string properties = propEst.Name;
                             reCalEstModel.Add(propEst.Name);
                             int objValue = (int)propEst.GetValue(estModel)!;
                             if (reCalEstModel.Contains(propEst.Name))
@@ -74,7 +71,6 @@ namespace KantanMitsumori.Service.Helper
                         }
                         foreach (PropertyInfo propEstSub in propsEstSub)
                         {
-                            string properties = propEstSub.Name;
                             reCalEstSubModel.Add(propEstSub.Name);
                             int objValue = (int)propEstSub.GetValue(estModel)!;
                             if (reCalEstSubModel.Contains(propEstSub.Name))
