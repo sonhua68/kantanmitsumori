@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.Helper.Enum;
+﻿using KantanMitsumori.Entity.IDEEnitities;
+using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Model;
 
 namespace KantanMitsumori.Service.Helper
@@ -11,6 +12,11 @@ namespace KantanMitsumori.Service.Helper
         public static ResponseBase<T> Error<T>(string messageCode, string messageContent) => new ResponseBase<T> { ResultStatus = (int)enResponse.isError, MessageCode = messageCode, MessageContent = messageContent };
 
         internal static ResponseBase<T> Ok<T>(string v1, string v2, ResponseBase<T> getAsInfo)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static ResponseBase<T> Ok<T>(string i0002, string v, List<MtIdeCartype> data)
         {
             throw new NotImplementedException();
         }

@@ -39,8 +39,8 @@ namespace KantanMitsumori.Service
         {
             try
             {
-                var data = _unitOfWorkIDE.CarTypes.GetAll().Select(i => _mapper.Map<MtIdeCartype>(i)).ToList();
-                return ResponseHelper.Ok<List<ResponseCarType>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+                var data = _unitOfWorkIDE.CarTypes.GetAll().Select(i => _mapper.Map<ResponseCarType>(i)).ToList();
+                return ResponseHelper.Ok<List<ResponseCarType>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002),data);
             }
             catch (Exception ex)
             {
@@ -49,14 +49,65 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public Task<ResponseBase<List<ResponseCarType>>> GetContractPlan()
+        public async Task<ResponseBase<List<ResponseContractPlan>>> GetContractPlan()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var data = _unitOfWorkIDE.ContractPlans.GetAll().Select(i => _mapper.Map<ResponseContractPlan>(i)).ToList();
+                return ResponseHelper.Ok<List<ResponseContractPlan>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002),data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetContractPlan");
+                return ResponseHelper.Error<List<ResponseContractPlan>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
         }
 
-        public Task<ResponseBase<List<ResponseCarType>>> GetVolInsurance()
+        public async Task<ResponseBase<List<ResponseFirstAfterSecondTerm>>> GetFirstAfterSecondTerm(int carType)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var data = _unitOfWorkIDE.Inspections.Query(n=>n.CarType ==carType).Select(i => _mapper.Map<ResponseFirstAfterSecondTerm>(i)).ToList();
+                return ResponseHelper.Ok<List<ResponseFirstAfterSecondTerm>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetFirstAfterSecondTerm");
+                return ResponseHelper.Error<List<ResponseFirstAfterSecondTerm>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+
+        public async Task<ResponseBase<ResponseUnitPriceRatesLimit>> GetUnitPriceRatesLimit()
+        {
+            try
+            {
+                var  data= new ResponseUnitPriceRatesLimit();          
+                var UnitPrice = _unitOfWorkIDE.UnitPrices.GetAll().FirstOrDefault()!.UnitPrice;
+                var dt = _unitOfWorkIDE.FeeAdjustments.GetAll().FirstOrDefault()!;
+                data.UnitPrice = UnitPrice;
+                data.LowerLimit = dt.LowerLimit;
+                data.UpperLimit = dt.UpperLimit;
+                return ResponseHelper.Ok<ResponseUnitPriceRatesLimit>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetCarType");
+                return ResponseHelper.Error<ResponseUnitPriceRatesLimit>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+
+        public async Task<ResponseBase<List<ResponseVolInsurance>>> GetVolInsurance()
+        {
+           try
+            {
+                var data = _unitOfWorkIDE.VoluntaryInsurances.GetAll().Select(i => _mapper.Map<ResponseVolInsurance>(i)).ToList();
+                return ResponseHelper.Ok<List<ResponseVolInsurance>>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002),data);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetVolInsurance");
+                return ResponseHelper.Error<List<ResponseVolInsurance>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
         }
     }
 

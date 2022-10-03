@@ -1,10 +1,19 @@
 ﻿@using KantanMitsumori.Model.Response
 @using KantanMitsumori.Helper.CommonFuncs;
-@model ResponseInp
+@model ResponseEstMainModel
 @{
     var listMonth = DropDownList.ListMonth(true);
     var listDay = DropDownList.ListDay(true);
-    var FirstRegYm = string.IsNullOrEmpty(Model.FirstRegYm) ? "" : Model.FirstRegYm;
+    var FirstRegYm = string.IsNullOrEmpty(Model.EstModel.FirstRegYm) ? "" : Model.EstModel.FirstRegYm;
+    var IdeModel = Model.EstIDEModel;
+    var InsuranceFee = (IdeModel.InsuranceFee);
+    var PrePay = (IdeModel.DownPayment);
+    var TradeIn = (IdeModel.TradeInPrice);
+    var AdjustFee = (IdeModel.FeeAdjustment);
+    var MonthlyLeaseFee = IdeModel.MonthlyLeaseFee;
+    var IsData = IdeModel.IsData == true ? "True" : "False";
+    var lbl_MonthlyLease = MonthlyLeaseFee != 0 ? CommonFunction.setFormatCurrency(IdeModel.MonthlyLeaseFee, "") : "";
+    var Label15 = MonthlyLeaseFee != 0 ? "円" : "";
     var today = DateTime.Today;
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
@@ -37,11 +46,6 @@
                                                 </td>
                                                 <td class="inptd" align="left">
                                                     <select name="cboCarType" id="cboCarType" style="border: solid 1px mediumvioletred;" class="inpbox" onchange="changeCarType();">
-                                                        <option value="    ">    </option>
-                                                        <option value="2">軽自動車</option>
-                                                        <option value="1">普通車</option>
-                                                        <option value="3">軽貨物</option>
-                                                        <option value="4">小型貨物</option>
                                                     </select>
                                                     <input name="chkElectricCar" type="checkbox" id="chkElectricCar" onchange="changeElectricCar();" disabled="">電気自動車
                                                 </td>
@@ -55,7 +59,7 @@
                                                         @{
                                                             foreach (var item in DropDownList.ListMinusYears(true, 12))
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -64,7 +68,7 @@
                                                         @{
                                                             foreach (var item in listMonth)
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -81,7 +85,7 @@
                                                         @{
                                                             foreach (var item in DropDownList.ListYear(true, 3))
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -90,7 +94,7 @@
                                                         @{
                                                             foreach (var item in listMonth)
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -99,7 +103,7 @@
                                                         @{
                                                             foreach (var item in listDay)
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -116,7 +120,7 @@
                                                         @{
                                                             foreach (var item in DropDownList.ListYear(false, 1))
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -125,7 +129,7 @@
                                                         @{
                                                             foreach (var item in listMonth)
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -157,8 +161,6 @@
                                                 <td class="inptd" align="left">
                                                     <select name="cbo_ContractPlan" id="cbo_ContractPlan" style="width: 155px; border: solid 1px mediumvioletred;
                                                 font-family: ＭＳ Ｐゴシック;" onchange="changeContractPlan();">
-                                                        <option selected="selected" value="1">マイメンテプラン</option>
-                                                        <option value="99">メンテなし</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -192,17 +194,6 @@
                                                 </td>
                                                 <td class="inptd" align="left">
                                                     <select name="cbo_InsuranceCompany" id="cbo_InsuranceCompany" style="width: 305px; border: 1px solid mediumvioletred; background-color: rgb(169, 169, 169);" onchange="changeInsuranCompany();" disabled="">
-                                                        <option value="99">選択してください</option>
-                                                        <option value="1">東京海上日動火災保険株式会社</option>
-                                                        <option value="2">損害保険ジャパン株式会社</option>
-                                                        <option value="3">三井住友海上火災保険株式会社</option>
-                                                        <option value="4">あいおいニッセイ同和損害保険株式会社</option>
-                                                        <option value="5">セコム損害保険株式会社</option>
-                                                        <option value="6">共栄火災海上保険株式会社</option>
-                                                        <option value="7">日新火災海上保険株式会社</option>
-                                                        <option value="8">楽天損害保険株式会社</option>
-                                                        <option value="9">大同火災海上保険株式会社</option>
-                                                        <option value="10">AIG損害保険株式会社</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -211,7 +202,7 @@
                                                     <span id="lbl_InsuranceFee" class="inplabel">保険料</span>
                                                 </td>
                                                 <td class="inptd" align="left" style="height: 28px">
-                                                    <input name="txt_InsuranceFee" type="text" id="txt_InsuranceFee" class="inpbox_r" style="border: 1px solid mediumvioletred; width: 90px; background-color: rgb(169, 169, 169);" onkeypress="return onlyNumbersInsuranceFee(event);" onchange="chgSetBtnConfim();" value="0" disabled="true">
+                                                    <input name="InsuranceFee" type="text" id="InsuranceFee" class="inpbox_r" style="border: 1px solid mediumvioletred; width: 90px; background-color: rgb(169, 169, 169);" onkeypress="return onlyNumbersInsuranceFee(event);" onchange="chgSetBtnConfim();" value="@InsuranceFee">
                                                     <span id="Label11" class="inplabel">円</span>
                                                 </td>
                                             </tr>
@@ -220,8 +211,8 @@
                                                     <span id="lbl_PrePay" class="inplabel">頭金(税込)</span>
                                                 </td>
                                                 <td class="inptd" align="left">
-                                                    <input name="txt_PrePay" type="text" id="txt_PrePay" class="inpbox_r" style="border: solid 1px mediumvioletred;
-                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="0">
+                                                    <input name="PrePay" type="text" id="PrePay" class="inpbox_r" style="border: solid 1px mediumvioletred;
+                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="@PrePay">
                                                     <span id="Label12" class="inplabel" style="display:inline-block;width:25px;">円</span>
                                                     <span id="lbl_ErrPrePay" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
                                                 </td>
@@ -231,8 +222,8 @@
                                                     <span id="lbl_TradeIn" class="inplabel">下取(税込)</span>
                                                 </td>
                                                 <td class="inptd" align="left" style="height: 28px">
-                                                    <input name="txt_TradeIn" type="text" id="txt_TradeIn" class="inpbox_r" style="border: solid 1px mediumvioletred;
-                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="0">
+                                                    <input name="TradeIn" type="text" id="TradeIn" class="inpbox_r" style="border: solid 1px mediumvioletred;
+                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="@TradeIn">
                                                     <span id="Label13" class="inplabel" style="display:inline-block;width:25px;">円</span>
                                                     <span id="lbl_ErrTradeIn" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
                                                 </td>
@@ -242,8 +233,8 @@
                                                     <span id="lbl_AdjustFee" class="inplabel">手数料調整(税込)</span>
                                                 </td>
                                                 <td class="inptd" align="left">
-                                                    <input name="txt_AdjustFee" type="text" id="txt_AdjustFee" class="inpbox_r" style="border: solid 1px mediumvioletred;
-                                                width: 90px" onkeypress="return onlyNegativeNumbers(event, event.target.value);" onchange="chgSetBtnConfim();" value="0">
+                                                    <input name="AdjustFee" type="text" id="AdjustFee" class="inpbox_r" style="border: solid 1px mediumvioletred;
+                                                width: 90px" onkeypress="return onlyNegativeNumbers(event, event.target.value);" onchange="chgSetBtnConfim();" value="@AdjustFee">
                                                     <span id="Label14" class="inplabel" style="display:inline-block;width:25px;">円</span>
                                                     <span id="lbl_ErrAdjustFee" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
                                                 </td>
@@ -259,8 +250,8 @@
                                                     <span id="lbl_MonthlyLeaseTitle" class="inplabel">月額リース料(税込)</span>
                                                 </td>
                                                 <td class="inptd" align="left">
-                                                    <span id="lbl_MonthlyLease" class="inplabel" style="font-family:ＭＳ Ｐゴシック;margin-left: 15px;"></span>
-                                                    <span id="Label15" class="inplabel" style="display:inline-block;width:25px;"></span>
+                                                    <span id="lbl_MonthlyLease" class="inplabel" style="font-family:ＭＳ Ｐゴシック;margin-left: 15px;">@lbl_MonthlyLease</span>
+                                                    <span id="Label15" class="inplabel" style="display:inline-block;width:25px;">@Label15</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -283,24 +274,24 @@
                             </tr>
                         </tbody>
                     </table>
-                    <input name="hidIsData" type="hidden" id="hidIsData" value="False">
-                    <input name="hidCarType" type="hidden" id="hidCarType" value="0">
-                    <input name="hidElectricCar" type="hidden" id="hidElectricCar" value="0">
-                    <input name="hidFirstTerm" type="hidden" id="hidFirstTerm" value="36">
-                    <input name="hidAfterSecondTerm" type="hidden" id="hidAfterSecondTerm" value="24">
-                    <input name="hidFirstReg" type="hidden" id="hidFirstReg">
-                    <input name="hidExpiresDate" type="hidden" id="hidExpiresDate">
-                    <input name="hidLeaseSttMonth" type="hidden" id="hidLeaseSttMonth">
-                    <input name="hidContractTimes" type="hidden" id="hidContractTimes">
-                    <input name="hidLeasePeriod" type="hidden" id="hidLeasePeriod" value="0">
-                    <input name="hidLeaseExpirationDate" type="hidden" id="hidLeaseExpirationDate">
-                    <input name="hidContractPlan" type="hidden" id="hidContractPlan" value="1">
-                    <input name="hidInsurExpanded" type="hidden" id="hidInsurExpanded" value="0">
-                    <input name="hidOptionInsurance" type="hidden" id="hidOptionInsurance">
-                    <input name="hidInsuranceCompany" type="hidden" id="hidInsuranceCompany" value="0">
-                    <input name="hidDiffMonth" type="hidden" id="hidDiffMonth">
-                    <input name="hidCalcDiffMonth" type="hidden" id="hidCalcDiffMonth">
-                    <input name="hidLeaseSttDay" type="hidden" id="hidLeaseSttDay">
+                    <input name="IsData" type="hidden" id="hidIsData" value=@IsData">
+                    <input name="CarType" type="hidden" id="hidCarType" value="@IdeModel.CarType">
+                    <input name="ElectricCar" type="hidden" id="hidElectricCar" value="@IdeModel.IsElectricCar">
+                    <input name="FirstTerm" type="hidden" id="hidFirstTerm" value="">
+                    <input name="AfterSecondTerm" type="hidden" id="hidAfterSecondTerm">
+                    <input name="FirstReg" type="hidden" id="hidFirstReg">
+                    <input name="ExpiresDate" type="hidden" id="hidExpiresDate">
+                    <input name="LeaseSttMonth" type="hidden" id="hidLeaseSttMonth">
+                    <input name="ContractTimes" type="hidden" id="hidContractTimes">
+                    <input name="LeasePeriod" type="hidden" id="hidLeasePeriod">
+                    <input name="LeaseExpirationDate" type="hidden" id="hidLeaseExpirationDate">
+                    <input name="ContractPlan" type="hidden" id="hidContractPlan">
+                    <input name="InsurExpanded" type="hidden" id="hidInsurExpanded">
+                    <input name="OptionInsurance" type="hidden" id="hidOptionInsurance">
+                    <input name="InsuranceCompany" type="hidden" id="hidInsuranceCompany" value="@IdeModel.InsuranceCompanyId">
+                    <input name="DiffMonth" type="hidden" id="hidDiffMonth">
+                    <input name="CalcDiffMonth" type="hidden" id="hidCalcDiffMonth">
+                    <input name="LeaseSttDay" type="hidden" id="hidLeaseSttDay">
                 </td>
             </tr>
         </tbody>
@@ -339,7 +330,7 @@
             }
             Framework.SetSelectedString("cboFirstYear", firstYear)
             Framework.SetSelectedNumber("cboFirstMonth", firstMonth)
-        }   
+        }
         Framework.SetSelectedNumber("cbo_LeaseSttY", @today.Year)
         Framework.SetSelectedNumber("cbo_LeaseSttM", @today.Month)
     }

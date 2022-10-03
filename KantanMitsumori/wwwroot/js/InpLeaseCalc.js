@@ -3,6 +3,9 @@
 // JScript File
 var FALSE_COLOR = '#FF3333';
 var DISABLE_COLOR = '#A9A9A9';
+GetCarType();
+GetContractPlan();
+GetVolInsurance();
 function setInitialValue() {
     // set init prpperties
     setInitProperties();
@@ -38,9 +41,9 @@ function setInitProperties() {
         $get('cbo_InsuranceCompany').value = '';
         $get('cbo_InsuranceCompany').style.backgroundColor = DISABLE_COLOR;
 
-        document.getElementById('txt_InsuranceFee').value = 0;
-        document.getElementById('txt_InsuranceFee').setAttribute('disabled', true);
-        $get('txt_InsuranceFee').style.backgroundColor = DISABLE_COLOR;
+        document.getElementById('InsuranceFee').value = 0;
+        document.getElementById('InsuranceFee').setAttribute('disabled', true);
+        $get('InsuranceFee').style.backgroundColor = DISABLE_COLOR;
     }
 
     // Set Change Day For ExpiresDate
@@ -87,15 +90,19 @@ function setContractTimesCalLeaseEnd() {
 
 // function get FirstTerm & AfterSecondTerm
 function getValTerm(value) {
-    var rtnValue = asest2.WebService.getFirstAfterSecondTerm(value, callBackSetTerm)
+    var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetFirstAfterSecondTerm?carType=" + value);
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        callBackSetTerm(result.data);
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    }
 }
 
 // function call back for cal cboContractTimes
 function callBackSetTerm(rtnValue) {
     if (rtnValue) {
-        frm.hidFirstTerm.value = rtnValue[0];
-        frm.hidAfterSecondTerm.value = rtnValue[1];
-
+        $("#hidFirstTerm").val(rtnValue[0].firstTerm);
+        $("#hidAfterSecondTerm").val(rtnValue[0].afterSecondTerm);    
         // Set ContractTimes & Calculator Lease End
         setContractTimesCalLeaseEnd();
     }
@@ -215,7 +222,7 @@ function onlyNumbers(evt) {
 }
 
 function onlyNumbersInsuranceFee(evt) {
-    $get('txt_InsuranceFee').style.backgroundColor = "White";
+    $get('InsuranceFee').style.backgroundColor = "White";
 
     evt = (evt) ? evt : window.event;
     var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -231,7 +238,7 @@ function onlyNumbersInsuranceFee(evt) {
 
 // function input only number & negative numbers
 function onlyNegativeNumbers(evt, value) {
-    $get('txt_AdjustFee').style.backgroundColor = "White";
+    $get('AdjustFee').style.backgroundColor = "White";
     if (evt.charCode >= 48 && evt.charCode <= 57 || evt.charCode == 45) {
         return true;
     }
@@ -666,21 +673,21 @@ function changeOptionIns() {
     if (valOpIns == 1) {
         $get('cbo_InsuranceCompany').disabled = false;
         $get('cbo_InsuranceCompany').style.backgroundColor = "White";
-        $get('txt_InsuranceFee').disabled = false;
-        $get('txt_InsuranceFee').style.backgroundColor = "White";
+        $get('InsuranceFee').disabled = false;
+        $get('InsuranceFee').style.backgroundColor = "White";
         var select = document.getElementById('cbo_InsuranceCompany');
-        select.options[0].selected = true;
+        select.options[1].selected = true;
         $get('hidInsuranceCompany').value = chkNull($get('cbo_InsuranceCompany').value);
-        document.getElementById('txt_InsuranceFee').value = 0;
+        document.getElementById('InsuranceFee').value = 0;
     }
     else {
         $get('cbo_InsuranceCompany').disabled = true;
         $get('cbo_InsuranceCompany').value = '';
         $get('cbo_InsuranceCompany').style.backgroundColor = DISABLE_COLOR;
         $get('hidInsuranceCompany').value = -1;
-        document.getElementById('txt_InsuranceFee').value = 0;
-        document.getElementById('txt_InsuranceFee').setAttribute('disabled', true);
-        $get('txt_InsuranceFee').style.backgroundColor = DISABLE_COLOR;
+        document.getElementById('InsuranceFee').value = 0;
+        document.getElementById('InsuranceFee').setAttribute('disabled', true);
+        $get('InsuranceFee').style.backgroundColor = DISABLE_COLOR;
     }
     // Set disabled for button confirm
     buttonDisabled();
@@ -753,15 +760,15 @@ function inputChk() {
     if (!chkInsuranCompany()) {
         return false;
     }
-    if ($get('cbo_OptionInsurance').value == 1 && chkNull($get('txt_InsuranceFee').value) == 0) {
+    if ($get('cbo_OptionInsurance').value == 1 && chkNull($get('InsuranceFee').value) == 0) {
 
-        $get('txt_InsuranceFee').style.backgroundColor = FALSE_COLOR;
+        $get('InsuranceFee').style.backgroundColor = FALSE_COLOR;
         return false;
     }
 
     // check input number AdjustFee
     if (!chkInputNumbersAdjustFee()) {
-        $get('txt_AdjustFee').style.backgroundColor = FALSE_COLOR;
+        $get('AdjustFee').style.backgroundColor = FALSE_COLOR;
         return false;
     }
     chkValueInput();
@@ -792,7 +799,13 @@ function chkLeasePeriodLeaseExpirationDate() {
 }
 
 function chkValueInput() {
-    return asest2.WebService.getUnitPriceRatesLimit((rtnValInput) => callBackSetUnitPriceRatesLimit(rtnValInput));
+  
+    var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetUnitPriceRatesLimit");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        callBackSetUnitPriceRatesLimit(result.data)
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    }
 }
 
 function callBackSetUnitPriceRatesLimit(rtnValInput) {
@@ -801,9 +814,9 @@ function callBackSetUnitPriceRatesLimit(rtnValInput) {
     document.getElementById("lbl_ErrAdjustFee").style.display = "none";
 
     // Get value input
-    var valPrePay = chkNull($get('txt_PrePay').value);
-    var valTradeIn = chkNull($get('txt_TradeIn').value);
-    var valAdjustFee = chkNull($get('txt_AdjustFee').value);
+    var valPrePay = chkNull($get('PrePay').value);
+    var valTradeIn = chkNull($get('TradeIn').value);
+    var valAdjustFee = chkNull($get('AdjustFee').value);
 
     // init value input for cal
     var valCalPrePay = 0;
@@ -811,57 +824,57 @@ function callBackSetUnitPriceRatesLimit(rtnValInput) {
     var valCalAdjustFee = 0;
 
     if (valPrePay != 0) {
-        valCalPrePay = valPrePay % rtnValInput[0];
+        valCalPrePay = valPrePay % rtnValInput.unitPrice;
     }
     if (valTradeIn != 0) {
-        valCalTradeIn = valTradeIn % rtnValInput[0];
+        valCalTradeIn = valTradeIn % rtnValInput.unitPrice;
     }
     if (valAdjustFee != 0) {
-        valCalAdjustFee = valAdjustFee % rtnValInput[0];
+        valCalAdjustFee = valAdjustFee % rtnValInput.unitPrice;
     }
 
     // check value input numeric % unitPrice
     if (valCalPrePay != 0 || valCalTradeIn != 0 || valCalAdjustFee != 0) {
         if (valCalPrePay != 0) {
             document.getElementById("lbl_ErrPrePay").style.display = "inline";
-            document.getElementById("lbl_ErrPrePay").innerHTML = rtnValInput[0] + '円単位で入力してください。';
+            document.getElementById("lbl_ErrPrePay").innerHTML = rtnValInput.unitPrice + '円単位で入力してください。';
         }
         if (valCalTradeIn != 0) {
             document.getElementById("lbl_ErrTradeIn").style.display = "inline";
-            document.getElementById("lbl_ErrTradeIn").innerHTML = rtnValInput[0] + '円単位で入力してください。';
+            document.getElementById("lbl_ErrTradeIn").innerHTML = rtnValInput.unitPrice + '円単位で入力してください。';
         }
         if (valCalAdjustFee != 0) {
             document.getElementById("lbl_ErrAdjustFee").style.display = "inline";
-            document.getElementById("lbl_ErrAdjustFee").innerHTML = rtnValInput[0] + '円単位で入力してください。';
+            document.getElementById("lbl_ErrAdjustFee").innerHTML = rtnValInput.unitPrice + '円単位で入力してください。';
 
-            if ((valAdjustFee < (rtnValInput[1])) || (valAdjustFee > rtnValInput[2])) {
-                document.getElementById("lbl_ErrAdjustFee").innerHTML = rtnValInput[0] + '円単位で入力してください。' + ' ' + rtnValInput[1] + '～' + rtnValInput[2] + '円に収まるように入力してください。';
+            if ((valAdjustFee < (rtnValInput.lowerLimit)) || (valAdjustFee > rtnValInput.upperLimit)) {
+                document.getElementById("lbl_ErrAdjustFee").innerHTML = rtnValInput.unitPrice + '円単位で入力してください。' + ' ' + rtnValInput.lowerLimit + '～' + rtnValInput.upperLimit + '円に収まるように入力してください。';
             }
         }
-        else if ((valAdjustFee < (rtnValInput[1])) || (valAdjustFee > rtnValInput[2])) {
+        else if ((valAdjustFee < (rtnValInput.lowerLimit)) || (valAdjustFee > rtnValInput.upperLimit)) {
             document.getElementById("lbl_ErrAdjustFee").style.display = "inline";
-            document.getElementById("lbl_ErrAdjustFee").innerHTML = rtnValInput[1] + '～' + rtnValInput[2] + '円に収まるように入力してください。';
+            document.getElementById("lbl_ErrAdjustFee").innerHTML = rtnValInput.lowerLimit + '～' + rtnValInput.upperLimit + '円に収まるように入力してください。';
         }
 
         return false;
     }
 
     // check value input numeric AdjustFee over LowerLimit & UpperLimit
-    if ((valAdjustFee < (rtnValInput[1])) || (valAdjustFee > rtnValInput[2])) {
+    if ((valAdjustFee < (rtnValInput.lowerLimit)) || (valAdjustFee > rtnValInput.upperLimit)) {
         document.getElementById("lbl_ErrAdjustFee").style.display = "inline";
-        document.getElementById("lbl_ErrAdjustFee").innerHTML = rtnValInput[1] + '～' + rtnValInput[2] + '円に収まるように入力してください。';
+        document.getElementById("lbl_ErrAdjustFee").innerHTML = rtnValInput.lowerLimit + '～' + rtnValInput.upperLimit + '円に収まるように入力してください。';
 
         return false;
     }
     calcDateDiff();
     // Wait 0.5 second for above calculation complete
-    setTimeout(function () { return __doPostBack('btnLeaseCalc', ''); }, 500);
+    //setTimeout(function () { return __doPostBack('btnLeaseCalc', ''); }, 500);
 
 }
 
 // check input number AdjustFee
 function chkInputNumbersAdjustFee() {
-    var value = $get('txt_AdjustFee').value;
+    var value = $get('AdjustFee').value;
 
     if (!isNaN(Number(value))) {
         return true;
@@ -1028,40 +1041,56 @@ function calcDateDiff() {
     }
 }
 
+/**
+ * GetCarType
+ * Create [2022/09/02] by HoaiPhong 
+ */
 function GetCarType() {
     var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetCarType");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let length = result.data.length;
         $("#cboCarType").append(new Option("", ''));
         for (let i = 0; i < length; i++) {
-            let value = result.data[i].makerName;
-            $("#cboCarType").append(new Option(value, value));
+            let key = result.data[i].carType ;
+            let value = result.data[i].carTypeName;
+            $("#cboCarType").append(new Option(value, key));
         }
     } else {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }
+/**
+ * GetContractPlan
+ * Create [2022/09/02] by HoaiPhong 
+ */
 function GetContractPlan() {
     var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetContractPlan");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let length = result.data.length;     
         for (let i = 0; i < length; i++) {
-            let value = result.data[i].makerName;
-            $("#cbo_ContractPlan").append(new Option(value, value));
+            let key = result.data[i].id;
+            let value = result.data[i].planName;
+            $("#cbo_ContractPlan").append(new Option(value, key));
         }
     } else {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }
+/**
+ * GetVolInsurance
+ * Create [2022/09/02] by HoaiPhong 
+ */
 function GetVolInsurance() {
     var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetVolInsurance");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let length = result.data.length;
-        $("#cbo_InsuranceCompany").append(new Option("99", '選択してください'));
+        $("#cbo_InsuranceCompany").append(new Option("", ''));
+        $("#cbo_InsuranceCompany").append(new Option('選択してください', "99"));
         for (let i = 0; i < length; i++) {
-            let value = result.data[i].makerName;
-            if (value != "99") {
-                $("#cbo_InsuranceCompany").append(new Option(value, value));
+            let key = result.data[i].id;
+            let value = result.data[i].companyName;
+            if (key != "99") {
+                $("#cbo_InsuranceCompany").append(new Option(value, key));
             }
         }
     } else {
@@ -1069,3 +1098,20 @@ function GetVolInsurance() {
     }
 }
 
+
+
+//CarType = chkNullToInt(.Item("CarType"))
+//IsElectricCar = chkNullToInt(.Item("IsElectricCar"))
+//FirstRegistration = chkDbNull(.Item("FirstRegistration"))
+//InspectionExpirationDate = chkDbNull(.Item("InspectionExpirationDate"))
+//LeaseStartMonth = chkDbNull(.Item("LeaseStartMonth"))
+//LeasePeriod = chkNullToInt(.Item("LeasePeriod"))
+//LeaseExpirationDate = chkDbNull(.Item("LeaseExpirationDate"))
+//ContractPlanID = chkNullToInt(.Item("ContractPlanID"))
+//IsExtendedGuarantee = chkNullToInt(.Item("IsExtendedGuarantee"))
+//InsuranceCompanyID = chkNullToInt(.Item("InsuranceCompanyID"))
+//InsuranceFee = chkNullToInt(.Item("InsuranceFee"))
+//DownPayment = chkNullToInt(.Item("DownPayment"))
+//TradeInPrice = chkNullToInt(.Item("TradeInPrice"))
+//FeeAdjustment = chkNullToInt(.Item("FeeAdjustment"))
+//MonthlyLeaseFee = chkNullToInt(.Item("MonthlyLeaseFee"))

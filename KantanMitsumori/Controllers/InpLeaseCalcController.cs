@@ -24,14 +24,9 @@ namespace KantanMitsumori.Controllers
         }
 
         #region InpLeaseCalc 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            RequestInp request = new RequestInp();
-            request.EstNo = _logToken.sesEstNo;
-            request.EstSubNo = _logToken.sesEstSubNo;
-            request.UserNo = _logToken.UserNo;
-            request.TaxRatio = _logToken.sesTaxRatio;
-            var response = _estimateService.GetDetail(request);
+            var response = await _estMainService.ReloadGetEstMain(_logToken);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
@@ -42,43 +37,34 @@ namespace KantanMitsumori.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCarType()
         {
-            var response = await _inpLeaseCalc.GetCarType();        
+            var response = await _inpLeaseCalc.GetCarType();
             return Ok(response);
         }
         [HttpGet]
         public async Task<IActionResult> GetContractPlan()
         {
-            //var response = await _estMainService.setFreeEst(requestData, _logToken);
-            //if (response.ResultStatus == (int)enResponse.isError)
-            //{
-            //    return ErrorAction(response);
-            //}
-            //setTokenCookie(response.Data!.AccessToken);
-            return Ok();
+            var response = await _inpLeaseCalc.GetContractPlan();
+            return Ok(response);
         }
         [HttpGet]
         public async Task<IActionResult> GetVolInsurance()
         {
-            //var response = await _estMainService.setFreeEst(requestData, _logToken);
-            //if (response.ResultStatus == (int)enResponse.isError)
-            //{
-            //    return ErrorAction(response);
-            //}
-            //setTokenCookie(response.Data!.AccessToken);
-            return Ok();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> LeaseCalc(RequestSelGrdFreeEst requestData)
-        {
-            var response = await _estMainService.setFreeEst(requestData, _logToken);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
-            setTokenCookie(response.Data!.AccessToken);
+            var response = await _inpLeaseCalc.GetVolInsurance();
             return Ok(response);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetFirstAfterSecondTerm(int carType)
+        {
+            var response = await _inpLeaseCalc.GetFirstAfterSecondTerm(carType);
+            return Ok(response);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetUnitPriceRatesLimit()
+        {
+            var response = await _inpLeaseCalc.GetUnitPriceRatesLimit();
+            return Ok(response);
+        }
+
 
         #endregion InpLeaseCalc
     }
