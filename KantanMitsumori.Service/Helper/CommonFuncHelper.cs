@@ -150,21 +150,16 @@ namespace KantanMitsumori.Service.Helper
         /// <returns></returns>
         public bool DecUserNo(string vEncNo, ref string vDecNo)
         {
-            string wOne = "";
             string wStr = "";
             string wInt = "";
 
             try
             {
                 // 文字数分ループ
-                for (int i = 0; i < vEncNo.Length; i++)
+                foreach (char item in vEncNo)
                 {
-                    wOne = CommonFunction.Mid(vEncNo, i, 1);
-
-                    int a = Convert.ToChar(wOne);
-
                     // 取り出した文字が英小文字(a～z)の場合
-                    if (Convert.ToChar(wOne) >= 97 && Convert.ToChar(wOne) <= 122)
+                    if (Convert.ToChar(item) >= 97 && Convert.ToChar(item) <= 122)
                     {
                         // 英小文字と数字がすでに格納されていれば1文字分デコード
                         if (wStr.Length == 1 && wInt.Length > 0)
@@ -176,12 +171,12 @@ namespace KantanMitsumori.Service.Helper
                         }
 
                         //英小文字を格納
-                        wStr = wOne;
+                        wStr = item.ToString();
                     }
                     else
                     {
                         // 数字を格納（'－'マイナスもありえる）
-                        wInt += wOne;
+                        wInt += item;
                     }
                 }
 
