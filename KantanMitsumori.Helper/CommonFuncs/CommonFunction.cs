@@ -505,5 +505,33 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return value;
         }
 
+        /// <summary>
+        /// Standardlize BodyName
+        /// </summary>
+        /// <param name="bodyName"></param>
+        /// <returns></returns>
+        public static string StandardlizeBodyName(string bodyName)
+        {
+            const string HybridFull = "ハイブリッド";
+            const string HybridHalf = "ﾊｲﾌﾞﾘｯﾄﾞ";
+            // Check null value
+            if (string.IsNullOrEmpty(bodyName))
+                return "";
+            // Split body name with space character
+            var bdArr = bodyName.Split(" ");
+            // Get first item that is not Hybird
+            string tempHybrid = "";
+            foreach (var item in bdArr)
+            {
+                if (item.CompareTo(HybridFull) == 0 || item.CompareTo(HybridHalf) == 0)
+                    tempHybrid = item;
+                else if (item != "")
+                    return item;// Return first item
+            }
+            if (tempHybrid != "")
+                return tempHybrid;
+            return "";
+        }
+
     }
 }

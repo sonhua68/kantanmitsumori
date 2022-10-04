@@ -506,7 +506,7 @@ namespace KantanMitsumori.Service.ASEST
             estModel.FuelName = request.FuelName;
             estModel.DriveName = request.DriveName;
             estModel.CarDoors = CommonFunction.IsNumeric(request.CarDoors) ? int.Parse(request.CarDoors) : 0;
-            estModel.BodyName = request.BodyName;
+            estModel.BodyName = CommonFunction.StandardlizeBodyName(request.BodyName);
             estModel.Capacity = CommonFunction.IsNumeric(request.Capacity) ? int.Parse(request.Capacity) : 0;
             estModel.Equipment = request.equ;
             estModel.BodyColor = request.col;
