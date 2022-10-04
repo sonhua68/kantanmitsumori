@@ -65,14 +65,18 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<LogToken, RequestInpCarPrice>();
             CreateMap<RequestInpCarPrice, ResponseInpCarPrice>();
             CreateMap<TEstimate, ResponseInpCarPrice>()
-                .ForMember(t => t.SyakenSeibi, o => { o.MapFrom(new SyakenSeibiResolver()); })                
+                .ForMember(t => t.SyakenSeibi, o => { o.MapFrom(new SyakenSeibiResolver()); })
                 .ForMember(t => t.IsSyakenZok, o => { o.MapFrom(new IsSyakenZokResolver()); })
-                .ForMember(t => t.TaxIncluded, o => { o.MapFrom(s => s.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax); });
-
+                .ForMember(t => t.TaxIncluded, o => { o.MapFrom(s => s.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax); })
+                .ForMember(t => t.CarSum, o => o.MapFrom(s => s.CarSum.ToStringWithNoZero()))
+                .ForMember(t => t.CarPrice, o => o.MapFrom(s => s.CarPrice.ToStringWithNoZero()));                
             CreateMap<TEstimateSub, ResponseInpCarPrice>()
                 .ForMember(t => t.EstNo, o => { o.Ignore(); })
                 .ForMember(t => t.EstSubNo, o => { o.Ignore(); })
-                .ForMember(t => t.UserNo, o => { o.Ignore(); });
+                .ForMember(t => t.UserNo, o => { o.Ignore(); })
+                .ForMember(t => t.RakuSatu, o => o.MapFrom(s => s.RakuSatu.ToStringWithNoZero()))
+                .ForMember(t => t.Rikusou, o => o.MapFrom(s => s.Rikusou.ToStringWithNoZero()))
+                .ForMember(t => t.Sonota, o => o.MapFrom(s => s.Sonota.ToStringWithNoZero()));
                 
 
             CreateMap<RequestUpdateInpCarPrice, RequestUpdateCarPrice>()

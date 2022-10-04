@@ -19,6 +19,18 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         /// </summary>
         public static string ToStringOrEmpty<T>(this T? obj) => obj?.ToString() ?? "";
         /// <summary>
+        /// Return empty string when object is null or zero, or return ToString
+        /// </summary>        
+        /// <returns></returns>
+        public static string ToStringWithNoZero(this int? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
+        public static string ToStringWithNoZero(this long? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
+        public static string ToStringWithNoZero(this byte? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
+        public static string ToStringWithNoZero(this short? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
+        public static string ToStringWithNoZero(this float? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
+        public static string ToStringWithNoZero(this double? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
+        public static string ToStringWithNoZero(this decimal? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
+
+        /// <summary>
         /// Convert string to built-in type or default value
         /// </summary>        
         public static T FromStringOrDefault<T>(this string text) where T : struct
