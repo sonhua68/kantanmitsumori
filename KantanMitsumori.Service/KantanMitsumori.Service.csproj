@@ -17,6 +17,7 @@
     <PackageReference Include="GrapeCity.ActiveReports.Document" Version="16.2.0" />
     <PackageReference Include="GrapeCity.ActiveReports.Export.Pdf" Version="16.2.0" />
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
     <PackageReference Include="Microsoft.JSInterop" Version="6.0.8" />
