@@ -41,11 +41,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public IActionResult CalInpLoan([FromForm] RequestCalInpLoan requestData)
         {
-            var response = _inpLoanService.CalInpLoan(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = _inpLoanService.CalInpLoan(requestData);          
             return Ok(response);
         }
 
