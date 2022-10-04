@@ -21,8 +21,8 @@ namespace KantanMitsumori.Service.ASEST
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUnitOfWorkIDE _unitOfWorkIDE;
         private LogToken valToken;
-        private CommonFuncHelper _commonFuncHelper;
-        private CommonEstimate _commonEst;
+        private readonly CommonFuncHelper _commonFuncHelper;
+        private readonly CommonEstimate _commonEst;
         public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst)
         {
             _mapper = mapper;
@@ -33,7 +33,7 @@ namespace KantanMitsumori.Service.ASEST
             _commonEst = commonEst;
         }
 
-        public UserModel getUserName(string userNo)
+        public UserModel? getUserName(string userNo)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace KantanMitsumori.Service.ASEST
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GCMF-020D" + " ◆会員認証エラー◆ 復号化後会員番号：" + userNo);
+                _logger.LogError(ex, "◆会員認証エラー◆ 復号化後会員番号：", userNo);
                 return null;
             }
         }
@@ -52,8 +52,11 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 valToken = new LogToken();
-                var response = new ResponseEstMainModel();
-                response.EstCustomerModel = new EstCustomerModel();
+                var response = new ResponseEstMainModel
+                {
+                    EstCustomerModel = new EstCustomerModel(),
+                    EstModelView = new EstModelView()
+                };
                 bool isSesPriDisp = requestAction.IsInpBack != 1 && requestAction.Sel == 0;
                 valToken.sesPriDisp = isSesPriDisp ? "0" : "";
                 valToken.stateLoadWindow = "EstMain";
@@ -70,7 +73,7 @@ namespace KantanMitsumori.Service.ASEST
                 {
                     valToken.sesPriDisp = request.PriDisp;
                 }
-                var getAsInfo = await getAsnetInfo(request);
+                var getAsInfo = await GetAsnetInfo(request);
                 if (getAsInfo.ResultStatus == (int)enResponse.isError)
                     return ResponseHelper.Error<ResponseEstMainModel>("Error", getAsInfo.MessageContent);
                 getAsInfo.Data!.EstNo = valToken.sesEstNo!;
@@ -116,10 +119,13 @@ namespace KantanMitsumori.Service.ASEST
         {
             try
             {
-                var response = new ResponseEstMainModel();
-                response.EstCustomerModel = new EstCustomerModel();
-                response.EstIDEModel = new EstimateIdeModel();
-                response.EstModel = new EstModel();
+                var response = new ResponseEstMainModel
+                {
+                    EstCustomerModel = new EstCustomerModel(),
+                    EstIDEModel = new EstimateIdeModel(),
+                    EstModel = new EstModel(),
+                    EstModelView = new EstModelView()
+                };
                 var estData = _commonEst.SetEstData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
                 if (estData.ResultStatus == (int)enResponse.isSuccess)
                     response.EstModel = estData.Data!;
@@ -170,26 +176,28 @@ namespace KantanMitsumori.Service.ASEST
         public async Task<ResponseBase<ResponseEstMainModel>> setFreeEst(RequestSelGrdFreeEst model, LogToken logtoken)
         {
             valToken = logtoken;
-            var estModel = new EstModel();
-            estModel.CallKbn = "3";
-            estModel.EstInpKbn = "2";
-            estModel.TradeDate = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd"));
-            estModel.MakerName = model.MakerName!;
-            estModel.ModelName = model.ModelName!;
-            estModel.GradeName = model.GradeName!;
-            estModel.Case = model.CarCase!;
-            estModel.MilUnit = CommonConst.def_MilUnitTKM;
-            estModel.DispVol = model.DispVol!;
-            estModel.DispVolUnit = CommonConst.def_DispVolUnitCC;
-            estModel.AccidentHis = 2;
-            estModel.CarImgPath = CommonConst.def_DmyImg;
-            estModel.SonotaTitle = CommonConst.def_TitleSonota;
-            estModel.OptionInputKb = true;
-            estModel.TaxInsInputKb = true;
-            estModel.TaxFreeKb = true;
-            estModel.TaxCostKb = true;
-            estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM;
-            estModel.LeaseFlag = logtoken.sesLeaseFlag!;
+            var estModel = new EstModel
+            {
+                CallKbn = "3",
+                EstInpKbn = "2",
+                TradeDate = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd")),
+                MakerName = model.MakerName!,
+                ModelName = model.ModelName!,
+                GradeName = model.GradeName!,
+                Case = model.CarCase!,
+                MilUnit = CommonConst.def_MilUnitTKM,
+                DispVol = model.DispVol!,
+                DispVolUnit = CommonConst.def_DispVolUnitCC,
+                AccidentHis = 2,
+                CarImgPath = CommonConst.def_DmyImg,
+                SonotaTitle = CommonConst.def_TitleSonota,
+                OptionInputKb = true,
+                TaxInsInputKb = true,
+                TaxFreeKb = true,
+                TaxCostKb = true,
+                TradeInMilUnit = CommonConst.def_TradeInMilUnitKM,
+                LeaseFlag = logtoken.sesLeaseFlag!
+            };
             int intHaiki = CommonFunction.IsNumeric(estModel.DispVol) ? int.Parse(estModel.DispVol) : 0;
             bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(model.MakerName!);
             int intFirstMonth = Convert.ToInt32(string.Format("{0:D2}", DateTime.Now.Month));
@@ -255,13 +263,15 @@ namespace KantanMitsumori.Service.ASEST
             estModel.YtiRieki = 0;
             estModel.CarPrice = 0;
             estModel.Mode = (byte)(string.IsNullOrEmpty(valToken.sesMode) ? 0 : Convert.ToByte(valToken.sesMode));
-            if (!await regEstData(estModel))
+            if (!await RegEstData(estModel))
             {
                 return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
 
             }
-            var response = new ResponseEstMainModel();
-            response.EstModel = estModel;
+            var response = new ResponseEstMainModel
+            {
+                EstModel = estModel
+            };
             if (string.IsNullOrEmpty(valToken.sesEstNo) || string.IsNullOrEmpty(valToken.sesEstSubNo))
             {
                 return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
@@ -269,11 +279,13 @@ namespace KantanMitsumori.Service.ASEST
             var estData = _commonEst.SetEstData(valToken.sesEstNo, valToken.sesEstSubNo);
             if (estData.ResultStatus == (int)enResponse.isSuccess)
                 response.EstModel = estData.Data!;
-            response.EstCustomerModel = new EstCustomerModel();
-            response.EstCustomerModel.CustNm = valToken.sesCustNm_forPrint ?? "";
-            response.EstCustomerModel.CustZip = valToken.sesCustZip_forPrint ?? "";
-            response.EstCustomerModel.CustAdr = valToken.sesCustAdr_forPrint ?? "";
-            response.EstCustomerModel.CustTel = valToken.sesCustTel_forPrint ?? "";
+            response.EstCustomerModel = new EstCustomerModel
+            {
+                CustNm = valToken.sesCustNm_forPrint ?? "",
+                CustZip = valToken.sesCustZip_forPrint ?? "",
+                CustAdr = valToken.sesCustAdr_forPrint ?? "",
+                CustTel = valToken.sesCustTel_forPrint ?? ""
+            };
             response.EstIDEModel = new EstimateIdeModel();
             if (response.EstModel.LeaseFlag == "1")
             {
@@ -292,7 +304,7 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 valToken = logToken;
-                var res = await addEstNextSubNo(model.EstNo!, model.EstSubNo!, true);
+                var res = await AddEstNextSubNo(model.EstNo!, model.EstSubNo!, true);
                 if (res.ResultStatus == (int)enResponse.isSuccess)
                 {
                     SetvalueToken();
@@ -335,7 +347,7 @@ namespace KantanMitsumori.Service.ASEST
             }
         }
         #region fuc private     
-        private int chkAANo(string? userNo, string AANo, string AAPlace, int CornerType, int mode)
+        private int ChkAANo(string? userNo, string AANo, string AAPlace, int CornerType, int mode)
         {
             try
             {
@@ -376,7 +388,8 @@ namespace KantanMitsumori.Service.ASEST
                 return -1;
             }
         }
-        private async Task<ResponseBase<EstModel>> addEstNextSubNo(string estNo, string estSubNo, bool flgRecreate = false)
+
+        private async Task<ResponseBase<EstModel>> AddEstNextSubNo(string estNo, string estSubNo, bool flgRecreate = false)
         {
             try
             {
@@ -402,7 +415,7 @@ namespace KantanMitsumori.Service.ASEST
                 {
                     return ResponseHelper.LogicError<EstModel>("", "");
                 }
-                TEstimate entityEst = new TEstimate();
+                TEstimate entityEst = new();
                 entityEst = _mapper.Map<TEstimate>(estData);
                 entityEst.EstNo = estNo;
                 entityEst.EstSubNo = vNextSubNo;
@@ -414,7 +427,7 @@ namespace KantanMitsumori.Service.ASEST
                 entityEst.Rdate = DateTime.Now;
                 entityEst.Udate = DateTime.Now;
                 entityEst.Dflag = false;
-                TEstimateSub entityEstSub = new TEstimateSub();
+                TEstimateSub entityEstSub = new();
                 entityEstSub = _mapper.Map<TEstimateSub>(estData);
                 entityEstSub.EstNo = estNo;
                 entityEstSub.EstSubNo = vNextSubNo;
@@ -439,7 +452,7 @@ namespace KantanMitsumori.Service.ASEST
             }
         }
 
-        private async Task<ResponseBase<EstModel>> getAsnetInfo(RequestHeaderModel request)
+        private async Task<ResponseBase<EstModel>> GetAsnetInfo(RequestHeaderModel request)
         {
             var estModel = new EstModel();
             string leaseFlag = string.IsNullOrEmpty(request.leaseFlag) ? "0" : request.leaseFlag;
@@ -460,11 +473,11 @@ namespace KantanMitsumori.Service.ASEST
                 string wAAPlace = request.aan!;
                 string wConnerType = request.cot!;
                 string wMode = request.Mode!;
-                var checkAANo = chkAANo(userInfo.Data.UserNo, wAANo, wAAPlace, int.Parse(wConnerType), int.Parse(wMode));
+                var checkAANo = ChkAANo(userInfo.Data.UserNo, wAANo, wAAPlace, int.Parse(wConnerType), int.Parse(wMode));
                 if (checkAANo == 1)
                 {
                     // check condition addEstNextSubNo 
-                    var result = await addEstNextSubNo(valToken.sesEstNo!, valToken.sesEstSubNo!);
+                    var result = await AddEstNextSubNo(valToken.sesEstNo!, valToken.sesEstSubNo!);
                     if (result.ResultStatus == (int)enResponse.isLogicError)
                         return ResponseHelper.Error<EstModel>(HelperMessage.CEST051D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST051D));
                     else if (result.ResultStatus == (int)enResponse.isError)
@@ -682,7 +695,7 @@ namespace KantanMitsumori.Service.ASEST
 
             estModel.CarPrice = Convert.ToInt32(intCarPrice);
             estModel.SonotaTitle = CommonConst.def_TitleSonota;
-            if (!await regEstData(estModel))
+            if (!await RegEstData(estModel))
             {
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAI029D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI029D));
 
@@ -697,7 +710,7 @@ namespace KantanMitsumori.Service.ASEST
             valToken.Token = token;
         }
 
-        private async Task<bool> regEstData(EstModel model)
+        private async Task<bool> RegEstData(EstModel model)
         {
             try
             {
@@ -711,7 +724,7 @@ namespace KantanMitsumori.Service.ASEST
                 {
                     return false;
                 }
-                TEstimate entityEst = new TEstimate();
+                TEstimate entityEst = new();
                 entityEst = _mapper.Map<TEstimate>(model);
                 entityEst.EstNo = strEstNo;
                 entityEst.EstSubNo = strEstSubNo;
@@ -725,7 +738,7 @@ namespace KantanMitsumori.Service.ASEST
                 entityEst.Rdate = DateTime.Now;
                 entityEst.Udate = DateTime.Now;
                 entityEst.Dflag = false;
-                TEstimateSub entityEstSub = new TEstimateSub();
+                TEstimateSub entityEstSub = new();
                 entityEstSub = _mapper.Map<TEstimateSub>(model);
                 entityEstSub.EstNo = strEstNo;
                 entityEstSub.EstSubNo = strEstSubNo;
@@ -753,10 +766,9 @@ namespace KantanMitsumori.Service.ASEST
 
             return true;
         }
-        private ResponseEstMainModel BindingDataEsmain(ResponseEstMainModel Model)
+        private static ResponseEstMainModel BindingDataEsmain(ResponseEstMainModel Model)
         {
             var estModelView = Model.EstModelView;
-            estModelView = new EstModelView();
             estModelView.TradeDate = CommonFunction.japaneseFormat(Model.EstModel.TradeDate);
             estModelView.SalesSum = CommonFunction.setFormatCurrency(Model.EstModel.SalesSum);
 
@@ -812,7 +824,7 @@ namespace KantanMitsumori.Service.ASEST
                     estModelView.SyakenNewZokT = CommonConst.def_TitleSyakenZok;
                 }
             }
-            estModelView.SyakenNewZokT = estModelView.SyakenNewZokT + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.SyakenNewZokT += Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax;
             estModelView.SyakenNew = CommonFunction.setFormatCurrency(wSyakenNew);
             estModelView.OpSpeCialTitle = CommonConst.def_TitleOpSpeCial + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
             estModelView.OptionPriceAll = CommonFunction.setFormatCurrency(Model.EstModel.OptionPriceAll);
