@@ -521,7 +521,16 @@ var Framework =
                 window.location.href = "/Estmain?IsInpBack=1";
 
             }
-        },       
+        },
+
+        {
+            key: "GoBackErrorPage",
+            value: function GoBackErrorPage(messageCode, messContent) {
+                var url = "/Error/ErrorPage?messageCode=" + messageCode + " &messContent=" + messContent;
+                window.location.href = url;
+
+            }
+        },
         {
             key: "GoBackPage",
             value: function GoBackPage() {
@@ -536,13 +545,13 @@ var Framework =
         {
             key: "GoBackReloadPageUrl",
             value: function GoBackReloadPageUrl(PageUrl) {
-                var ListUrl = ["/InpSitaCar","/"];
+                var ListUrl = ["/InpSitaCar", "/"];
                 let LeaseFlag = parseInt($("#hidLeaseFlag").val());
                 if (LeaseFlag == 1 && ListUrl.includes(PageUrl)) {
                     alert("リース画面でのみ、下取りの設定が可能。");
                 } else {
                     window.location.href = PageUrl;
-                }               
+                }
             }
         },
         {

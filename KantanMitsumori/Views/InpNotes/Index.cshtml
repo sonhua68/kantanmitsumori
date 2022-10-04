@@ -60,13 +60,7 @@
             if (result.resultStatus == 0) {
                 Framework.GoBackReloadPageUrl('/Estmain/?IsInpBack=1');
             } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#Msg").html(Items)
-                } else {
-                    location.reload();
-                }
+                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
             }
         }
     });

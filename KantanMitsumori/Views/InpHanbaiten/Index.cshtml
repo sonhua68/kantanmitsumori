@@ -107,13 +107,7 @@
             if (result.resultStatus == 0) {
                 Framework.GoBackReloadPage();
             } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#txMsg").html(Items)
-                } else {
-                    location.reload();
-                }
+                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
             }
         }
     });

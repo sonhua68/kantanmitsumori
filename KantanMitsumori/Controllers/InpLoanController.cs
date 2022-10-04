@@ -19,7 +19,7 @@ namespace KantanMitsumori.Controllers
             _inpLoanService = inpLoanService;
             _logger = logger;
         }
-        #region HoaiPhong
+        #region InpLoan
 
 
         public IActionResult Index()
@@ -49,15 +49,10 @@ namespace KantanMitsumori.Controllers
             return Ok(response);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> UpdateInpLoan([FromForm] RequestUpdateInpLoan requestData)
         {
-            var response = await _inpLoanService.UpdateInputLoan(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = await _inpLoanService.UpdateInputLoan(requestData);          
             return Ok(response);
         }
         #endregion HoaiPhong

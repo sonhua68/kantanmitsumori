@@ -32,12 +32,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpSyohiyo([FromForm] RequestUpdateInpSyohiyo requestData)
         {
-            var response = await _inpSyohiyoService.UpdateInpSyohiyo(requestData);
-
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = await _inpSyohiyoService.UpdateInpSyohiyo(requestData);          
             return Ok(response);
         }
     }

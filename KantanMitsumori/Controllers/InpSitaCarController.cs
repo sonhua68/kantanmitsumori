@@ -48,12 +48,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpSitaCar([FromForm] RequestUpdateInpSitaCar requestData)
         {
-            var response = await _inpSitaCarService.UpdateInpSitaCar(requestData);
-
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = await _inpSitaCarService.UpdateInpSitaCar(requestData);          
             return Ok(response);
         }
     }

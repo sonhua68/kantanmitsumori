@@ -28,7 +28,7 @@ function GetListASOPMaker() {
         if (typeof (Items) != "undefined") {
             $("#lblErrMsg2").html(Items)
         } else {
-            location.reload();
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     }
 }
@@ -77,7 +77,7 @@ function GetListASOPCarName() {
         if (typeof (Items) != "undefined") {
             $("#lblErrMsg2").html(Items)
         } else {
-            location.reload();
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     }
 
@@ -182,5 +182,7 @@ function AddEstimate() {
         if (isError == 1) {
             alert("最初に車両本体価格をご確認下さい")
         }
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }
