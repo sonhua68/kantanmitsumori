@@ -201,7 +201,20 @@ namespace KantanMitsumori.Service.Helper
                 }
                 if (strClearMsg != "")
                 {
+                    estModel.Rate = 0;
+                    estModel.Deposit = 0;
                     estModel.Principal = estModel.SalesSum;
+                    estModel.PartitionFee = 0;
+                    estModel.PartitionAmount = 0;
+                    estModel.PayTimes = 0;
+                    estModel.FirstPayMonth = null;
+                    estModel.LastPayMonth = null;
+                    estModel.FirstPayAmount = 0;
+                    estModel.PayAmount = 0;
+                    estModel.BonusAmount = 0;
+                    estModel.BonusFirst = null;
+                    estModel.BonusSecond = null;
+                    estModel.BonusTimes = 0;
                     estSubModel.LoanModifyFlag = false;
                     estSubModel.LoanRecalcSettingFlag = true;
                     estSubModel.LoanInfo = Convert.ToByte(strClearMsg);
