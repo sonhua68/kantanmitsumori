@@ -294,7 +294,7 @@ namespace KantanMitsumori.Service.ASEST
             {
                 valToken = logToken;
                 var res = await addEstNextSubNo(model.EstNo!, model.EstSubNo!, true);
-                if (res)
+                if (res == 1)
                 {
                     SetvalueToken();
                     string AccessToken = valToken.Token!;
@@ -377,31 +377,31 @@ namespace KantanMitsumori.Service.ASEST
                 return -1;
             }
         }
-        private async Task<bool> addEstNextSubNo(string estNo, string estSubNo, bool flgRecreate = false)
+        private async Task<int> addEstNextSubNo(string estNo, string estSubNo, bool flgRecreate = false)
         {
             try
             {
                 if (!await _commonEst.calcSum(estNo, estSubNo, valToken))
                 {
-                    return false;
+                    return -1;
                 }
                 var estData = _commonEst.getEstData(estNo, estSubNo);
                 if (estData == null)
                 {
-                    return false;
+                    return 0;
                 }
                 if (flgRecreate)
                 {
                     estNo = "";
                     if (!_commonEst.getEstNoFromDb(ref estNo))
                     {
-                        return false;
+                        return -1;
                     }
                 }
                 string vNextSubNo = "";
                 if (!_commonEst.getEstSubNoFromDb(estNo, ref vNextSubNo))
                 {
-                    return false;
+                    return -1;
                 }
                 TEstimate entityEst = new TEstimate();
                 entityEst = _mapper.Map<TEstimate>(estData);
@@ -431,10 +431,10 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "addEstNextSubNo " + "CEST-052D");
-                return false;
+                return -1;
             }
 
-            return true;
+            return 1;
         }
 
         private async Task<ResponseBase<EstModel>> getAsnetInfo(RequestHeaderModel request)
@@ -461,14 +461,11 @@ namespace KantanMitsumori.Service.ASEST
                 var checkAANo = chkAANo(userInfo.Data.UserNo, wAANo, wAAPlace, int.Parse(wConnerType), int.Parse(wMode));
                 if (checkAANo == 1)
                 {
-                    if (!await addEstNextSubNo(valToken.sesEstNo!, valToken.sesEstSubNo!))
+                    if (await addEstNextSubNo(valToken.sesEstNo!, valToken.sesEstSubNo!) == 0)
                         return ResponseHelper.Error<EstModel>(HelperMessage.CEST051D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST051D));
-
                 }
                 else if (checkAANo == -1)
                     return ResponseHelper.Error<EstModel>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
-
-
             }
             estModel.EstUserNo = userInfo.Data.UserNo;
             estModel.CallKbn = request.cot == "2" || request.cot == "5" ? "1" : "2";
