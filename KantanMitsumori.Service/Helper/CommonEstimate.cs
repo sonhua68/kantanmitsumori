@@ -7,7 +7,6 @@ using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Response;
 using Microsoft.Extensions.Logging;
-using System.Reflection;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -21,6 +20,8 @@ namespace KantanMitsumori.Service.Helper
 
         private LogToken valToken;
         private CommonFuncHelper _commonFuncHelper;
+        private List<string> reCalEstModel;
+        private List<string> reCalEstSubModel;
 
         public CommonEstimate(ILogger<CommonEstimate> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, IMapper mapper, HelperMapper helperMapper, CommonFuncHelper commonFuncHelper)
         {
@@ -32,6 +33,8 @@ namespace KantanMitsumori.Service.Helper
             _helperMapper = helperMapper;
 
             valToken = new LogToken();
+            reCalEstModel = new List<string>() { "CarPrice", "Discount", "SyakenNew", "SyakenZok", "OptionPrice1", "OptionPrice2", "OptionPrice3", "OptionPrice4", "OptionPrice5", "OptionPrice6", "OptionPrice7", "OptionPrice8", "OptionPrice9", "OptionPrice10", "OptionPrice11", "OptionPrice12", "TaxCheck", "TaxGarage", "TaxTradeIn", "TaxRecycle", "TaxDelivery", "TaxOther" };
+            reCalEstSubModel = new List<string>() { "YtiRieki", "RakuSatu", "Rikusou", "TaxTradeInSatei", "TaxSet1", "TaxSet2", "TaxSet3", "AutoTaxEquivalent", "DamageInsEquivalent" };
         }
         public async Task<bool> calcSum(string inEstNo, string inEstSubNo, LogToken logToken)
         {
@@ -53,31 +56,26 @@ namespace KantanMitsumori.Service.Helper
                     if (estModel.ConTaxInputKb != getUserDef.ConTaxInputKb)
                     {
                         estModel.ConTaxInputKb = getUserDef.ConTaxInputKb;
-                        Type typeEst = estModel.GetType();
-                        Type typeEstSub = estSubModel.GetType();
-                        IList<PropertyInfo> propsEst = new List<PropertyInfo>(typeEst.GetProperties().Where(x => x.PropertyType.Name == "Int32"));
-                        IList<PropertyInfo> propsEstSub = new List<PropertyInfo>(typeEstSub.GetProperties().Where(x => x.PropertyType.Name == "Int32"));
-                        var reCalEstModel = new List<string>();
-                        var reCalEstSubModel = new List<string>();
-                        foreach (PropertyInfo propEst in propsEst)
+
+                        var arrayEst = estModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
+                        var arrayEstSub = estSubModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
+                        foreach (var itemEst in arrayEst)
                         {
-                            reCalEstModel.Add(propEst.Name);
-                            int objValue = (int)propEst.GetValue(estModel)!;
-                            if (reCalEstModel.Contains(propEst.Name))
+                            if (reCalEstModel.Contains(itemEst.Name))
                             {
+                                int objValue = (int)itemEst.GetValue(estModel)!;
                                 objValue = CommonFunction.reCalcItem(objValue, (bool)estModel.ConTaxInputKb, vTax);
+                                itemEst.SetValue(estModel, objValue);
                             }
-                            propEst.SetValue(estModel, objValue);
                         }
-                        foreach (PropertyInfo propEstSub in propsEstSub)
+                        foreach (var itemSub in arrayEstSub)
                         {
-                            reCalEstSubModel.Add(propEstSub.Name);
-                            int objValue = (int)propEstSub.GetValue(estModel)!;
-                            if (reCalEstSubModel.Contains(propEstSub.Name))
+                            if (reCalEstSubModel.Contains(itemSub.Name))
                             {
+                                int objValue = (int)itemSub.GetValue(estModel)!;
                                 objValue = CommonFunction.reCalcItem(objValue, (bool)estModel.ConTaxInputKb, vTax);
+                                itemSub.SetValue(estModel, objValue);
                             }
-                            propEstSub.SetValue(estSubModel, objValue);
                         }
                     }
                 }
@@ -172,9 +170,7 @@ namespace KantanMitsumori.Service.Helper
                         }
                         simLon.ConTax = vTax;
                         if (simLon.calcRegLoan() == false)
-                        {
                             strClearMsg = CommonConst.def_LoanInfo_Error.ToString();
-                        }
                         else
                         {
                             estModel.Rate = (double)simLon.MoneyRate;
@@ -197,9 +193,7 @@ namespace KantanMitsumori.Service.Helper
                         }
                     }
                     else
-                    {
                         strClearMsg = CommonConst.def_LoanInfo_Clear.ToString();
-                    }
                 }
                 else
                 {
