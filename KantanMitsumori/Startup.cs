@@ -52,6 +52,8 @@ namespace KantanMitsumori
                 app.UseDeveloperExceptionPage();
             }
 
+            loggerFactory.AddLog4Net("log4net.config");
+
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
