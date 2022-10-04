@@ -2,27 +2,26 @@ namespace KantanMitsumori.Model.Response
 {
     public class EstModel
     {
-        public string EstNo { get; set; } = null!;
-        public string EstSubNo { get; set; } = null!;
-        public string EstUserNo { get; set; }
-        public string CallKbn { get; set; }
-        public string EstInpKbn { get; set; }
-        public DateTime TradeDate { get; set; }
-        public string MakerName { get; set; }
-        public string ModelName { get; set; }
-        public string GradeName { get; set; }
-        public string Case { get; set; }
-        public string ChassisNo { get; set; }
-        public string FirstRegYm { get; set; }
-        public string CheckCarYm { get; set; }
+        public string EstNo { get; set; } = string.Empty;
+        public string EstSubNo { get; set; } = string.Empty;
+        public string EstUserNo { get; set; } = string.Empty;
+        public string CallKbn { get; set; } = string.Empty;
+        public string EstInpKbn { get; set; } = string.Empty;
+        public string MakerName { get; set; } = string.Empty;
+        public string ModelName { get; set; } = string.Empty;
+        public string GradeName { get; set; } = string.Empty;
+        public string Case { get; set; } = string.Empty;
+        public string ChassisNo { get; set; } = string.Empty;
+        public string FirstRegYm { get; set; } = string.Empty;
+        public string CheckCarYm { get; set; } = string.Empty;
         public int NowOdometer { get; set; }
-        public string DispVol { get; set; }
-        public string Mission { get; set; }
+        public string DispVol { get; set; } = string.Empty;
+        public string Mission { get; set; } = string.Empty;
         public byte AccidentHis { get; set; }
-        public string BusinessHis { get; set; }
-        public string Equipment { get; set; }
-        public string BodyColor { get; set; }
-        public string CarImgPath { get; set; }
+        public string BusinessHis { get; set; } = string.Empty;
+        public string Equipment { get; set; } = string.Empty;
+        public string BodyColor { get; set; } = string.Empty;
+        public string CarImgPath { get; set; } = string.Empty;
         public bool ConTaxInputKb { get; set; }
         public int TotalCost { get; set; }
         public int CarPrice { get; set; }
@@ -32,17 +31,17 @@ namespace KantanMitsumori.Model.Response
         public int SyakenZok { get; set; }
         public int CarSum { get; set; }
         public bool OptionInputKb { get; set; }
-        public string OptionName1 { get; set; }
+        public string OptionName1 { get; set; } = string.Empty;
         public int OptionPrice1 { get; set; }
-        public string OptionName2 { get; set; }
+        public string OptionName2 { get; set; } = string.Empty;
         public int OptionPrice2 { get; set; }
-        public string OptionName3 { get; set; }
+        public string OptionName3 { get; set; } = string.Empty;
         public int OptionPrice3 { get; set; }
-        public string OptionName4 { get; set; }
+        public string OptionName4 { get; set; } = string.Empty;
         public int OptionPrice4 { get; set; }
-        public string OptionName5 { get; set; }
+        public string OptionName5 { get; set; } = string.Empty;
         public int OptionPrice5 { get; set; }
-        public string OptionName6 { get; set; }
+        public string OptionName6 { get; set; } = string.Empty;
         public int OptionPrice6 { get; set; }
         public int OptionPriceAll { get; set; }
         public bool TaxInsInputKb { get; set; }
@@ -69,106 +68,107 @@ namespace KantanMitsumori.Model.Response
         public int TaxCostAll { get; set; }
         public int ConTax { get; set; }
         public int CarSaleSum { get; set; }
-        public string TradeInCarName { get; set; }
-        public string TradeInFirstRegYm { get; set; }
-        public string TradeInCheckCarYm { get; set; }
+        public string TradeInCarName { get; set; } = string.Empty;
+        public string TradeInFirstRegYm { get; set; } = string.Empty;
+        public string TradeInCheckCarYm { get; set; } = string.Empty;
         public int TradeInNowOdometer { get; set; }
-        public string TradeInRegNo { get; set; }
-        public string TradeInChassisNo { get; set; }
-        public string TradeInBodyColor { get; set; }
+        public string TradeInRegNo { get; set; } = string.Empty;
+        public string TradeInChassisNo { get; set; } = string.Empty;
+        public string TradeInBodyColor { get; set; } = string.Empty;
         public int TradeInPrice { get; set; }
         public int Balance { get; set; }
         public int SalesSum { get; set; }
-        public string CustKname { get; set; }
+        public string CustKname { get; set; } = string.Empty;
         public decimal Rate { get; set; }
         public int Deposit { get; set; }
         public int Principal { get; set; }
         public decimal PartitionFee { get; set; }
         public int PartitionAmount { get; set; }
         public int PayTimes { get; set; }
-        public string FirstPayMonth { get; set; }
-        public string LastPayMonth { get; set; }
+        public string FirstPayMonth { get; set; } = string.Empty;
+        public string LastPayMonth { get; set; } = string.Empty;
         public int FirstPayAmount { get; set; }
         public int PayAmount { get; set; }
         public int BonusAmount { get; set; }
-        public string BonusFirst { get; set; }
-        public string BonusSecond { get; set; }
+        public string BonusFirst { get; set; } = string.Empty;
+        public string BonusSecond { get; set; } = string.Empty;
         public int BonusTimes { get; set; }
         public string ShopNm { get; set; }
-        public string ShopAdr { get; set; }
-        public string ShopTel { get; set; }
-        public string EstTanName { get; set; }
+        public string ShopAdr { get; set; } = string.Empty;
+        public string ShopTel { get; set; } = string.Empty;
+        public string EstTanName { get; set; } = string.Empty;
         public DateTime Rdate { get; set; }
         public DateTime Udate { get; set; }
         public bool Dflag { get; set; }
-        public string CarImgPath1 { get; set; }
-        public string CarImgPath2 { get; set; }
-        public string CarImgPath3 { get; set; }
-        public string CarImgPath4 { get; set; }
-        public string CarImgPath5 { get; set; }
-        public string CarImgPath6 { get; set; }
-        public string CarImgPath7 { get; set; }
-        public string CarImgPath8 { get; set; }
-        public string OptionName7 { get; set; }
+        public string CarImgPath1 { get; set; } = string.Empty;
+        public string CarImgPath2 { get; set; } = string.Empty;
+        public string CarImgPath3 { get; set; } = string.Empty;
+        public string CarImgPath4 { get; set; } = string.Empty;
+        public string CarImgPath5 { get; set; } = string.Empty;
+        public string CarImgPath6 { get; set; } = string.Empty;
+        public string CarImgPath7 { get; set; } = string.Empty;
+        public string CarImgPath8 { get; set; } = string.Empty;
+        public string OptionName7 { get; set; } = string.Empty;
         public int OptionPrice7 { get; set; }
-        public string OptionName8 { get; set; }
+        public string OptionName8 { get; set; } = string.Empty;
         public int OptionPrice8 { get; set; }
-        public string OptionName9 { get; set; }
+        public string OptionName9 { get; set; } = string.Empty;
         public int OptionPrice9 { get; set; }
-        public string OptionName10 { get; set; }
+        public string OptionName10 { get; set; } = string.Empty;
         public int OptionPrice10 { get; set; }
-        public string OptionName11 { get; set; }
+        public string OptionName11 { get; set; } = string.Empty;
         public int OptionPrice11 { get; set; }
-        public string OptionName12 { get; set; }
+        public string OptionName12 { get; set; } = string.Empty;
         public int OptionPrice12 { get; set; }
-        public string SekininName { get; set; }
-        public string LeaseFlag { get; set; }
-        public string FuelName { get; set; }
-        public string DriveName { get; set; }
+        public string SekininName { get; set; } = string.Empty;
+        public string LeaseFlag { get; set; } = string.Empty;
+        public string FuelName { get; set; } = string.Empty;
+        public string DriveName { get; set; } = string.Empty;
         public int CarDoors { get; set; }
         public string BodyName { get; set; }
         public int Capacity { get; set; }
-        public string Aayear { get; set; }
-        public string Aahyk { get; set; }
+        public string Aayear { get; set; } = string.Empty;
+        public string Aahyk { get; set; } = string.Empty;
         public int Aaprice { get; set; }
         public int SirPrice { get; set; }
         public int YtiRieki { get; set; }
         public int RakuSatu { get; set; }
         public int Rikusou { get; set; }
-        public string Aaplace { get; set; }
-        public string Aano { get; set; }
-        public string Aatime { get; set; }
-        public string AutoTaxMonth { get; set; }
-        public string DamageInsMonth { get; set; }
+        public string Aaplace { get; set; } = string.Empty;
+        public string Aano { get; set; } = string.Empty;
+        public string Aatime { get; set; } = string.Empty;
+        public string AutoTaxMonth { get; set; } = string.Empty;
+        public string DamageInsMonth { get; set; } = string.Empty;
         public int TaxTradeInSatei { get; set; }
-        public string TaxSet1Title { get; set; }
+        public string TaxSet1Title { get; set; } = string.Empty;
         public int TaxSet1 { get; set; }
-        public string TaxSet2Title { get; set; }
+        public string TaxSet2Title { get; set; } = string.Empty;
         public int TaxSet2 { get; set; }
-        public string TaxSet3Title { get; set; }
+        public string TaxSet3Title { get; set; } = string.Empty;
         public int TaxSet3 { get; set; }
-        public string TaxFreeSet1Title { get; set; }
+        public string TaxFreeSet1Title { get; set; } = string.Empty;
         public int TaxFreeSet1 { get; set; }
-        public string TaxFreeSet2Title { get; set; }
+        public string TaxFreeSet2Title { get; set; } = string.Empty;
         public int TaxFreeSet2 { get; set; }
-        public string CustMemo { get; set; }
-        public string SonotaTitle { get; set; }
+        public string CustMemo { get; set; } = string.Empty;
+        public string SonotaTitle { get; set; } = string.Empty;
         public int Sonota { get; set; }
         public int TradeInUm { get; set; }
-        public string Corner { get; set; }
+        public string Corner { get; set; } = string.Empty;
         public int Aacount { get; set; }
         public byte Mode { get; set; }
-        public string Notes { get; set; }
+        public string Notes { get; set; } = string.Empty;
         public int AutoTaxEquivalent { get; set; }
         public int DamageInsEquivalent { get; set; }
         public int TaxInsEquivalentAll { get; set; }
-        public string DispVolUnit { get; set; }
-        public string MilUnit { get; set; }
-        public string TradeInMilUnit { get; set; }
+        public string DispVolUnit { get; set; } = string.Empty;
+        public string MilUnit { get; set; } = string.Empty;
+        public string TradeInMilUnit { get; set; } = string.Empty;
         public bool LoanModifyFlag { get; set; }
         public bool LoanRecalcSettingFlag { get; set; }
         public byte LoanInfo { get; set; }
-        public string AAInfo { get; set; }
+        public string AAInfo { get; set; } = string.Empty;
+        public DateTime TradeDate { get; set; }
         public int IsError { get; set; } = 0;
     }
 }
