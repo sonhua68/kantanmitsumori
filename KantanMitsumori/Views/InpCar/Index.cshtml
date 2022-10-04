@@ -230,16 +230,15 @@
 </form>
 <script>
     SetInitData();
-    $('#formInputCar').validate({
-        submitHandler: function (form) {
-            var model = Framework.getFormData($("#formInputCar"));
-            console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCar/UpdateInputCar");
-            if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
-            } else {
-                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
-            }
+    $("form#formInputCar").submit(function (event) {
+        event.preventDefault();
+        var model = Framework.getFormData($("#formInputCar"));
+        console.log(model)
+        var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCar/UpdateInputCar");
+        if (result.resultStatus == 0) {
+            Framework.GoBackReloadPage();
+        } else {
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     });
     function swichUnit(NameId, value) {
