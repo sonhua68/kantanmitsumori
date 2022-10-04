@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using GrapeCity.ActiveReports.PageReportModel.DV;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
@@ -463,7 +462,7 @@ namespace KantanMitsumori.Service.ASEST
                 if (checkAANo == 1)
                 {
                     if (!await addEstNextSubNo(valToken.sesEstNo!, valToken.sesEstSubNo!))
-                        return ResponseHelper.Error<EstModel>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
+                        return ResponseHelper.Error<EstModel>(HelperMessage.CEST051D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST051D));
 
                 }
                 else if (checkAANo == -1)
