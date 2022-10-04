@@ -12,5 +12,6 @@ namespace KantanMitsumori.IService
         Task<ResponseBase<List<ResponseVolInsurance>>> GetVolInsurance();
         Task<ResponseBase<List<ResponseFirstAfterSecondTerm>>> GetFirstAfterSecondTerm(int carType);
         Task<ResponseBase<ResponseUnitPriceRatesLimit>> GetUnitPriceRatesLimit();
+        Task<ResponseBase<ResponseInpLeaseCalc>> InpLeaseCal(RequestInpLeaseCalc model, LogToken logToken);
     }
 }

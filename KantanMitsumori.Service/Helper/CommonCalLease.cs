@@ -1,6 +1,7 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Infrastructure.Base;
+using KantanMitsumori.Model.Request;
 using Microsoft.Extensions.Logging;
 
 namespace KantanMitsumori.Service.Helper
@@ -9,6 +10,7 @@ namespace KantanMitsumori.Service.Helper
     {
         private readonly ILogger _logger;
         private readonly IUnitOfWorkIDE _unitOfWorkIde;
+    
         private int carType = 0;
         private string firstReg = "";
         private int contractTime = 0;
@@ -27,11 +29,15 @@ namespace KantanMitsumori.Service.Helper
         private int pricePropertyFee2 = 0;
         private int pricePropertyFee3 = 0;
         private int pricePropertyFee4 = 0;
-
-        public CommonCalLease(ILogger logger, IUnitOfWorkIDE unitOfWorkIde)
+        private string isShowLogUI = CommonSettings.IsShowLogUI;
+        public List<string> _lstWriteLog = new List<string>();
+        public readonly RequestInpLeaseCalc _requestInCalc;
+        public CommonCalLease(ILogger logger, IUnitOfWorkIDE unitOfWorkIde, List<string> lstWriteLog, RequestInpLeaseCalc requestInCalc)
         {
             _logger = logger;
             _unitOfWorkIde = unitOfWorkIde;
+            _lstWriteLog = lstWriteLog;
+            _requestInCalc = requestInCalc;
         }
         /// <summary>
         /// 4-1 file doc  lay thue tieu thu  
@@ -58,9 +64,9 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="taxFreeAll"></param>
         /// <param name="consumptionTax"></param>
         /// <returns></returns>
-        public decimal GetPrice(int salesSum, int taxInsAll, int taxFreeAll, decimal consumptionTax)
+        public decimal GetPrice(int? salesSum, int? taxInsAll, int? taxFreeAll)
         {
-            decimal dPrice = (salesSum - taxInsAll - taxFreeAll) / (1 + consumptionTax) + taxInsAll + taxFreeAll;
+            decimal dPrice = (decimal)((salesSum! - taxInsAll! - taxFreeAll!) / (1 + consumptionTax) + taxInsAll! + taxFreeAll!);
             _logger.LogInformation("SalesSum :={0}", salesSum);
             _logger.LogInformation("TaxInsAll :={0}", taxInsAll);
             _logger.LogInformation("TaxFreeAll :={0}", taxFreeAll);
@@ -79,8 +85,8 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="displacementTo"></param>
         /// <returns></returns>
         public decimal GetPriceTax(
-            int firstRegistrationDateFrom, int firstRegistrationDateTo,
-            int isElectricCar, int displacementFrom, int displacementTo)
+            int? firstRegistrationDateFrom, int? firstRegistrationDateTo,
+            int? isElectricCar, int? displacementFrom, int? displacementTo)
         {
             decimal monthlyPrice = 0;
             var dt = _unitOfWorkIde.CarTaxs.Query(n => n.CarType == carType &&
@@ -135,43 +141,33 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="chkElectricCar"></param>
         /// <param name="dispVol"></param>
         /// <returns></returns>
-        public decimal GetVehicleTaxWithinTheTerm(int carType, int autoTax, string dispVolUnit,
-            bool chkElectricCar, int dispVol)
+        public decimal GetVehicleTaxWithinTheTerm(int autoTax, string dispVolUnit,
+             int dispVol)
         {
-            decimal vehicleTaxPrice = 0;
-            int displacementFromAndTo = 0;
-            int isElectricCar = 0;
-            decimal priceMonth = 0;
-            if (chkElectricCar)
-            {
-                isElectricCar = 1;
-            }
-            if (dispVolUnit != "cc")
-            {
-                displacementFromAndTo = 0;
-            }
-            else
-            {
-                displacementFromAndTo = dispVol;
-            }
-            var priceTax = GetPriceTax(Convert.ToInt32(firstReg), Convert.ToInt32(firstReg), isElectricCar, displacementFromAndTo, displacementFromAndTo);
-            string endLeaseDate = leaseExpirationDate; //Ngay het han hop dong thue
-            string endDate = CheckYear(156);// 156 = 13Year
-            if (endDate == endLeaseDate) //< 13Year 
-            {
-                priceMonth = priceTax * contractTime;
-                _logger.LogInformation("4-3-3 PriceMonth  < 13Year :={0}", priceMonth);
-            }
-            else //'> 13Year
-            {
-                var taxCollection = GetTaxCollectionIncrease(Convert.ToInt32(firstReg), Convert.ToInt32(firstReg), isElectricCar, dispVol, dispVol);
-                priceMonth = (priceTax * GetMonthLease(1) + (taxCollection + GetMonthLease(0)));
-                _logger.LogInformation("4-3-3 PriceMonth  > 13Year :={0}", priceMonth);
+         //var d =   _requestInCalc.FirstReg;
+         //   decimal vehicleTaxPrice = 0;
+         //   int displacementFromAndTo = 0;        
+         //   decimal priceMonth = 0;
+         //   bool ischeck = dispVolUnit != "cc" && _requestInCalc.ElectricCar == 1;
+         //   displacementFromAndTo = ischeck == false ? dispVol : displacementFromAndTo;          
+         //   var priceTax = GetPriceTax(Convert.ToInt32(_requestInCalc.FirstReg), Convert.ToInt32(_requestInCalc.FirstReg)), _RequestInCalc.ElectricCar, displacementFromAndTo, displacementFromAndTo);
+         //   string endLeaseDate = leaseExpirationDate; //Ngay het han hop dong thue
+         //   string endDate = CheckYear(156);// 156 = 13Year
+         //   if (endDate == endLeaseDate) //< 13Year 
+         //   {
+         //       priceMonth = priceTax * contractTime;
+         //       _logger.LogInformation("4-3-3 PriceMonth  < 13Year :={0}", priceMonth);
+         //   }
+         //   else //'> 13Year
+         //   {
+         //       var taxCollection = GetTaxCollectionIncrease(Convert.ToInt32(firstReg), Convert.ToInt32(firstReg), isElectricCar, dispVol, dispVol);
+         //       priceMonth = (priceTax * GetMonthLease(1) + (taxCollection + GetMonthLease(0)));
+         //       _logger.LogInformation("4-3-3 PriceMonth  > 13Year :={0}", priceMonth);
 
-            }
-            vehicleTaxPrice = priceMonth - autoTax;
-            _logger.LogInformation("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax) :={0}", priceMonth);
-            return vehicleTaxPrice;
+         //   }
+         //   vehicleTaxPrice = priceMonth - autoTax;
+         //   _logger.LogInformation("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax) :={0}", priceMonth);
+           return 0;
 
         }
         /// <summary>

@@ -65,6 +65,12 @@ namespace KantanMitsumori.Controllers
             return Ok(response);
         }
 
+        [HttpPost]
+        public IActionResult InpLeaseCal([FromForm] RequestInpLeaseCalc requestData)
+        {
+            var response = _inpLeaseCalc.InpLeaseCal(requestData,_logToken);           
+            return Ok(response);
+        }
 
         #endregion InpLeaseCalc
     }
