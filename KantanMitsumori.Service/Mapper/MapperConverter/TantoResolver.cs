@@ -21,11 +21,9 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                     return "";
                 switch (requestReport.ReportType)
                 {
-                    case ReportType.Estimate:
-                    case ReportType.LeaseEstimate:
+                    case ReportType.Estimate:                    
                         return GetEstimateTanto(source);
-                    case ReportType.Order:
-                    case ReportType.LeaseOrder:                        
+                    case ReportType.Order:                    
                         var tanto = $"担当 : {source.EstTanName}";
                         if (tanto.Length > 23)
                             return tanto.Substring(0, 23);

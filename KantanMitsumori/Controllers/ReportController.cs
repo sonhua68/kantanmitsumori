@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
+﻿using AutoMapper;
+using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.IService;
@@ -12,29 +13,39 @@ namespace KantanMitsumori.Controllers
     {
         private readonly IReportService _reportService;
         private readonly ILogger<ReportController> _logger;
-        public ReportController(IReportService reportService, IConfiguration config, ILogger<ReportController> logger):base(config)
+        private readonly IMapper _mapper;
+        public ReportController(IReportService reportService, IConfiguration config, ILogger<ReportController> logger, IMapper mapper) : base(config)
         {
             _reportService = reportService;
             _logger = logger;
+            _mapper = mapper;
         }
 
         /// <summary>
-        /// Demo download article sub report
+        /// Download estimate report
         /// </summary>        
         public IActionResult DownloadEstimateReport()
-        {          
-          var   model = new RequestReport()
+        {
+            // Get request model
+            var model = new RequestReport();
+            _mapper.Map(_logToken, model);
+
+            // Sample data            
+            model = new RequestReport()
             {
-                EstNo = _logToken.sesEstNo!,
-                EstSubNo = _logToken.sesEstSubNo!,
-                ReportType = ReportType.Estimate,
-                CustNm_forPrint = _logToken.sesCustNm_forPrint!,
-                CustZip_forPrint = _logToken.sesCustZip_forPrint!,
-                CustAdr_forPrint = _logToken.sesCustAdr_forPrint!,
-                CustTel_forPrint = _logToken.sesCustTel_forPrint!
-          };
+                EstNo = "22092300054",
+                EstSubNo = "01",                
+                CustNm_forPrint = "DANG PHAM",
+                CustZip_forPrint = "702201",
+                CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
+                CustTel_forPrint = "028-3801-5151"
+            };
+
+            // Set report type
+            model.ReportType = ReportType.Estimate;
+
             // Generate report
-            var result = _reportService.GenerateEstimateReport(model);
+            var result = _reportService.GenerateReport(model);
             
             // Process result
 
@@ -50,23 +61,30 @@ namespace KantanMitsumori.Controllers
 
 
         /// <summary>
-        /// Demo download article sub report
+        /// Download order report
         /// </summary>        
         public IActionResult DownloadOrderReport()
         {
+            // Get request model
+            var model = new RequestReport();
+            _mapper.Map(_logToken, model);
+
             // Sample data            
-           var  model = new RequestReport()
+            model = new RequestReport()
             {
-               EstNo = _logToken.sesEstNo!,
-               EstSubNo = _logToken.sesEstSubNo!,
-               ReportType = ReportType.Order,
-               CustNm_forPrint = _logToken.sesCustNm_forPrint!,
-               CustZip_forPrint = _logToken.sesCustZip_forPrint!,
-               CustAdr_forPrint = _logToken.sesCustAdr_forPrint!,
-               CustTel_forPrint = _logToken.sesCustTel_forPrint!
-           };
+                EstNo = "22092300054",
+                EstSubNo = "01",                
+                CustNm_forPrint = "DANG PHAM",
+                CustZip_forPrint = "702201",
+                CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
+                CustTel_forPrint = "028-3801-5151"
+            };
+            
+            // Set report type
+            model.ReportType = ReportType.Order;
+
             // Generate report
-            var result = _reportService.GenerateOrderReport(model);
+            var result = _reportService.GenerateReport(model);
 
             // Process result
             if (result.ResultStatus != 0)
@@ -78,7 +96,6 @@ namespace KantanMitsumori.Controllers
 
             return File(responseModel.Data, responseModel.ContentType, responseModel.Name);
         }
-
 
     }
 }
