@@ -494,15 +494,12 @@ namespace KantanMitsumori.Service.ASEST
             bool isCheckMilUnit = string.IsNullOrEmpty(request.milUnit);
             estModel.MilUnit = isCheckMilUnit ? CommonConst.def_MilUnitTKM : request.milUnit;
             estModel.DispVol = string.IsNullOrEmpty(request.vol) ? "" : request.vol.Trim().Replace("cc", ")");
-            bool isCheckDispVolUnit = string.IsNullOrEmpty(request.volUnit);
-            if (request.volUnit == "null")
-            {
+
+            if (request.volUnit.ToLower() == "null")
                 estModel.DispVolUnit = CommonConst.def_DispVolUnitCC;
-            }
             else
-            {
-                estModel.DispVolUnit = isCheckDispVolUnit ? CommonConst.def_DispVolUnitCC : request.volUnit;
-            }
+                estModel.DispVolUnit = string.IsNullOrEmpty(request.volUnit) ? CommonConst.def_DispVolUnitCC : request.volUnit;
+
             estModel.Mission = request.shi;
             estModel.AccidentHis = 2;
             estModel.BusinessHis = request.his;
