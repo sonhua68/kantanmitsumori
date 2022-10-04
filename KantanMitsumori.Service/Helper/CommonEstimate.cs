@@ -19,9 +19,9 @@ namespace KantanMitsumori.Service.Helper
         private readonly HelperMapper _helperMapper;
 
         private LogToken valToken;
-        private CommonFuncHelper _commonFuncHelper;
-        private List<string> reCalEstModel;
-        private List<string> reCalEstSubModel;
+        private readonly CommonFuncHelper _commonFuncHelper;
+        private readonly List<string> reCalEstModel;
+        private readonly List<string> reCalEstSubModel;
 
         public CommonEstimate(ILogger<CommonEstimate> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, IMapper mapper, HelperMapper helperMapper, CommonFuncHelper commonFuncHelper)
         {
@@ -36,7 +36,7 @@ namespace KantanMitsumori.Service.Helper
             reCalEstModel = new List<string>() { "CarPrice", "Discount", "SyakenNew", "SyakenZok", "OptionPrice1", "OptionPrice2", "OptionPrice3", "OptionPrice4", "OptionPrice5", "OptionPrice6", "OptionPrice7", "OptionPrice8", "OptionPrice9", "OptionPrice10", "OptionPrice11", "OptionPrice12", "TaxCheck", "TaxGarage", "TaxTradeIn", "TaxRecycle", "TaxDelivery", "TaxOther" };
             reCalEstSubModel = new List<string>() { "YtiRieki", "RakuSatu", "Rikusou", "TaxTradeInSatei", "TaxSet1", "TaxSet2", "TaxSet3", "AutoTaxEquivalent", "DamageInsEquivalent" };
         }
-        public async Task<bool> calcSum(string inEstNo, string inEstSubNo, LogToken logToken)
+        public async Task<bool> CalcSum(string inEstNo, string inEstSubNo, LogToken logToken)
         {
             try
             {
@@ -132,7 +132,7 @@ namespace KantanMitsumori.Service.Helper
                 {
                     wkContax = (decimal?)((estModel.CarSum + estSubModel.TaxInsEquivalentAll + estModel.TaxCostAll) / (1 + vTax));
                     wkContax = Math.Ceiling((decimal)wkContax!);
-                    wkContax = wkContax * vTax;
+                    wkContax *= vTax;
                 }
                 estModel.ConTax = Convert.ToInt32(Math.Floor((decimal)wkContax!));
                 estModel.CarSaleSum = estModel.CarSum
@@ -156,12 +156,14 @@ namespace KantanMitsumori.Service.Helper
                 {
                     if (Convert.ToBoolean(estSubModel.LoanRecalcSettingFlag))
                     {
-                        CommonSimLon simLon = new CommonSimLon(_logger);
-                        simLon.SaleSumPrice = Convert.ToInt32(estModel.SalesSum);
-                        simLon.Deposit = Convert.ToInt32(estModel.Deposit);
-                        simLon.MoneyRate = Convert.ToInt32(estModel.Rate);
-                        simLon.PayTimes = Convert.ToInt32(estModel.PayTimes);
-                        simLon.FirstMonth = Convert.ToInt32(CommonFunction.Right(estModel.FirstPayMonth ?? "", 2));
+                        CommonSimLon simLon = new(_logger)
+                        {
+                            SaleSumPrice = Convert.ToInt32(estModel.SalesSum),
+                            Deposit = Convert.ToInt32(estModel.Deposit),
+                            MoneyRate = Convert.ToInt32(estModel.Rate),
+                            PayTimes = Convert.ToInt32(estModel.PayTimes),
+                            FirstMonth = Convert.ToInt32(CommonFunction.Right(estModel.FirstPayMonth ?? "", 2))
+                        };
                         if (estModel.BonusAmount > 0)
                         {
                             simLon.Bonus = Convert.ToInt32(estModel.BonusAmount);
@@ -169,7 +171,7 @@ namespace KantanMitsumori.Service.Helper
                             simLon.BonusSecond = Convert.ToInt32(estModel.BonusSecond);
                         }
                         simLon.ConTax = vTax;
-                        if (simLon.calcRegLoan() == false)
+                        if (simLon.CalcRegLoan() == false)
                             strClearMsg = CommonConst.def_LoanInfo_Error.ToString();
                         else
                         {
@@ -231,7 +233,7 @@ namespace KantanMitsumori.Service.Helper
             return true;
         }
 
-        public EstModel getEstData(string inEstNo, string inEstSubNo)
+        public EstModel GetEstData(string inEstNo, string inEstSubNo)
         {
             var responseEst = new EstModel();
             try
@@ -250,14 +252,14 @@ namespace KantanMitsumori.Service.Helper
                 if (estSubModel.Sonota == 0 && (estSubModel.RakuSatu + estSubModel.Rikusou) > 0)
                 {
                     estSubModel.Sonota = estSubModel.RakuSatu + estSubModel.Rikusou;
-                    estModel.CarPrice = estModel.CarPrice - estSubModel.Sonota;
+                    estModel.CarPrice -= estSubModel.Sonota;
                 }
                 if (string.IsNullOrEmpty(estSubModel.SonotaTitle))
                 {
                     estSubModel.SonotaTitle = CommonConst.def_TitleSonota;
                 }
                 responseEst = _helperMapper.MergeInto<EstModel>(estModel, estSubModel);
-                responseEst = creDispData(responseEst);
+                responseEst = CreDispData(responseEst);
             }
             catch (Exception ex)
             {
@@ -266,14 +268,13 @@ namespace KantanMitsumori.Service.Helper
             }
             return responseEst;
         }
-        public EstModel creDispData(EstModel model)
+        public EstModel CreDispData(EstModel model)
         {
-            int intCornerType = 0;
             if (model.Aano != "")
             {
                 if (model.Mode == 1)
                 {
-                    intCornerType = _commonFuncHelper.GetCornerType(model.Corner);
+                    int intCornerType = _commonFuncHelper.GetCornerType(model.Corner);
                     if (intCornerType == 1)
                         model.AAInfo = string.Format("お問合せ番号{0}00-{1:00000}-{2:00000}", intCornerType, model.Aacount, Convert.ToInt32(model.Aano));
                     else
@@ -290,7 +291,7 @@ namespace KantanMitsumori.Service.Helper
             }
             return model;
         }
-        public bool getEstNoFromDb(ref string outEstNo)
+        public bool GetEstNoFromDb(ref string outEstNo)
         {
             try
             {
@@ -309,7 +310,7 @@ namespace KantanMitsumori.Service.Helper
             }
             return true;
         }
-        public bool getEstSubNoFromDb(string inEstNo, ref string outEstSubNo)
+        public bool GetEstSubNoFromDb(string inEstNo, ref string outEstSubNo)
         {
             try
             {
@@ -325,9 +326,9 @@ namespace KantanMitsumori.Service.Helper
             return true;
         }
 
-        public ResponseBase<EstModel> setEstData(string estNo, string estSubNo)
+        public ResponseBase<EstModel> SetEstData(string estNo, string estSubNo)
         {
-            var estData = getEstData(estNo, estSubNo);
+            var estData = GetEstData(estNo, estSubNo);
             if (estData == null)
             {
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL041D));
@@ -335,9 +336,9 @@ namespace KantanMitsumori.Service.Helper
             return ResponseHelper.Ok<EstModel>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estData);
         }
 
-        public EstimateIdeModel setEstIDEData(LogToken logtoken)
+        public EstimateIdeModel SetEstIDEData(LogToken logtoken)
         {
-            var dataEstIDE = getEstIDEData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
+            var dataEstIDE = GetEstIDEData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
             if (dataEstIDE != null)
             {
                 var getContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);
@@ -347,7 +348,7 @@ namespace KantanMitsumori.Service.Helper
             }
             return dataEstIDE!;
         }
-        public EstimateIdeModel getEstIDEData(string inEstNo, string inEstSubNo)
+        public EstimateIdeModel? GetEstIDEData(string inEstNo, string inEstSubNo)
         {
             var dataIDE = new EstimateIdeModel();
             try
@@ -369,7 +370,7 @@ namespace KantanMitsumori.Service.Helper
         }
 
 
-        public EstModel getEst_EstSubData(string inEstNo, string inEstSubNo)
+        public EstModel? GetEst_EstSubData(string inEstNo, string inEstSubNo)
         {
             try
             {
@@ -387,7 +388,7 @@ namespace KantanMitsumori.Service.Helper
                 return null;
             }
         }
-        public TEstimateSub getEstSubData(string inEstNo, string inEstSubNo)
+        public TEstimateSub? GetEstSubData(string inEstNo, string inEstSubNo)
         {
             try
             {

@@ -55,13 +55,13 @@
                                 <tr>
                                     <td class="inptd" align="left">
                                         <span class="inplabel" style="display:inline-block;width:100px;">型式</span>
-                                        <input name="Kata" type="text" value="@Model.Case" maxlength="30" id="Kata" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:197px;ime-mode: disabled">
+                                        <input name="Kata" type="text" value="@Model.Case" maxlength="30" id="Kata" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:197px;">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="inptd" align="left">
                                         <span class="inplabel" style="display:inline-block;width:100px;">車台番号</span>
-                                        <input name="CarNo" type="text" value="@Model.ChassisNo" maxlength="30" id="CarNo" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:198px;IME-MODE: disabled">
+                                        <input name="CarNo" type="text" value="@Model.ChassisNo" maxlength="30" id="CarNo" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:198px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -71,7 +71,7 @@
                                             @{
                                                 foreach (var item in ListDropDownFirstYM)
                                                 {
-                                                    <option value="@item.Value">@item.Text</option>
+                                                        <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -80,7 +80,7 @@
                                             @{
                                                 foreach (var item in listMonth)
                                                 {
-                                                    <option value="@item.Value">@item.Text</option>
+                                                        <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -94,7 +94,7 @@
                                             @{
                                                 foreach (var item in ListDropDownSyakenYM)
                                                 {
-                                                    <option value="@item.Value">@item.Text</option>
+                                                        <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -103,7 +103,7 @@
                                             @{
                                                 foreach (var item in listMonth)
                                                 {
-                                                    <option value="@item.Value">@item.Text</option>
+                                                        <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -116,7 +116,7 @@
                                 <tr>
                                     <td class="inptd" align="left">
                                         <span class="inplabel" style="display:inline-block;width:100px;">走行距離</span>
-                                        <input name="Run" type="text" value="@NowOdometer" maxlength="7" id="Run" class="inpbox_r" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:70px;IME-MODE: disabled;">
+                                        <input name="Run" type="text" value="@NowOdometer" maxlength="7" id="Run" class="inpbox_r" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:70px;">
 
                                         &nbsp;&nbsp;<span class="inplabel">
                                             <input id="radMilUnitTKM" type="radio" name="radMilUnit" value="千km" checked="checked" onclick="swichUnit('MilUnit',false);">
@@ -136,7 +136,7 @@
                                 <tr>
                                     <td class="inptd" align="left">
                                         <span class="inplabel" style="display:inline-block;width:100px;">排気量</span>
-                                        <input name="Haiki" type="text" value="@Model.DispVol" maxlength="5" id="Haiki" class="inpbox_r" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:70px;IME-MODE: disabled">
+                                        <input name="Haiki" type="text" value="@Model.DispVol" maxlength="5" id="Haiki" class="inpbox_r" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:70px;">
                                         &nbsp;&nbsp;<span class="inplabel">
                                             <input id="radDispVolUnitCC" type="radio" name="radDispVol" value="cc" checked="checked" onclick="swichUnit('DispVolUnit',false);">
                                             <label for="radDispVolUnitCC">cc</label>
@@ -162,7 +162,7 @@
                                 <tr>
                                     <td class="inptd" align="left">
                                         <span class="inplabel" style="display:inline-block;width:100px;">シフト</span>
-                                        <input name="Sft" type="text" value="@Model.Mission" maxlength="5" id="Sft" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:55px;IME-MODE: disabled">
+                                        <input name="Sft" type="text" value="@Model.Mission" maxlength="5" id="Sft" class="inpbox" style="background-color:White;font-family:ＭＳ Ｐゴシック;width:55px;">
                                     </td>
                                 </tr>
                                 <tr>

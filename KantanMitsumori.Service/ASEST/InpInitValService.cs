@@ -68,7 +68,7 @@ namespace KantanMitsumori.Service
                 await _unitOfWork.CommitAsync();
                 if (model.ButtonSummit == "btnHanei")
                 {
-                    if (!await _commonEst.calcSum(model.EstNo!, model.EstSubNo!, logToken!))
+                    if (!await _commonEst.CalcSum(model.EstNo!, model.EstSubNo!, logToken!))
                     {
                         return ResponseHelper.Error<int>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
                     }
@@ -77,7 +77,7 @@ namespace KantanMitsumori.Service
                     UpdateEstimates(model, dtEstimates, dtEstimateSubs);
                     UpdateEstimateSub(model, dtEstimates, dtEstimateSubs);
                     await _unitOfWork.CommitAsync();
-                    if (!await _commonEst.calcSum(model.EstNo!, model.EstSubNo!, logToken!))
+                    if (!await _commonEst.CalcSum(model.EstNo!, model.EstSubNo!, logToken!))
                     {
                         return ResponseHelper.Error<int>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
                     }

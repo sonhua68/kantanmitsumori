@@ -33,7 +33,7 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 // 見積書データ取得
-                var estData = _commonEst.getEst_EstSubData(estNo, estSubNo);
+                var estData = _commonEst.GetEst_EstSubData(estNo, estSubNo);
                 if (estData == null)
                 {
                     return ResponseHelper.Error<ResponseInpCustKana>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));

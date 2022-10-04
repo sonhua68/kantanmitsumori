@@ -37,7 +37,6 @@ namespace KantanMitsumori.Service
 
         public async Task<ResponseBase<int>> Create(TEstimate model)
         {
-            ResponseBase<int> iResult = new ResponseBase<int>();
             try
             {
                 _unitOfWork.Estimates.Add(model);
@@ -55,7 +54,6 @@ namespace KantanMitsumori.Service
         {
             try
             {
-                ResponseBase<List<TEstimate>> iResult = new ResponseBase<List<TEstimate>>();
                 var estimatesList = _unitOfWork.Estimates.Query(n => n.EstNo == requestInputCar.EstNo && n.EstSubNo == requestInputCar.EstSubNo).Select(i => _mapper.Map<TEstimate>(i)).ToList();
                 if (estimatesList == null)
                 {
@@ -293,7 +291,7 @@ namespace KantanMitsumori.Service
                      && n.Rdate >= Convert.ToDateTime(dtFrom.ToString("yyyy/M/d")))
                      .Select(i => new
                      {
-                         MakerName = i.MakerName
+                         i.MakerName
                      }).GroupBy(n => n.MakerName).Select(n => new
                      {
                          MakerName = n.Key
@@ -308,7 +306,7 @@ namespace KantanMitsumori.Service
                      && n.Rdate >= Convert.ToDateTime(dtFrom.ToString("yyyy/M/d")))
                      .Select(i => new
                      {
-                         ModelName = i.ModelName
+                         i.ModelName
                      }).GroupBy(n => n.ModelName).Select(n => new
                      {
                          ModelName = n.Key

@@ -13,7 +13,7 @@ namespace KantanMitsumori.Service.Helper
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IHttpClientFactory _httpClientFactory; 
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public CommonFuncHelper(IMapper mapper
                         , ILogger<CommonFuncHelper> logger
@@ -131,7 +131,7 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="inUserNo"></param>
         /// <returns></returns>
 
-        public UserDefModel getUserDefData(string inUserNo)
+        public UserDefModel? getUserDefData(string inUserNo)
         {
             try
             {
@@ -285,14 +285,14 @@ namespace KantanMitsumori.Service.Helper
                 {
                     fileName = Path.Combine(strCarImgPlace, strSaveName);
                 }
-                
+
                 // Use HttpClient to download image
                 var httpClient = _httpClientFactory.CreateClient();
                 var task = httpClient.GetByteArrayAsync(uri);
                 task.Wait();
                 var data = task.Result;
                 File.WriteAllBytes(fileName, task.Result);
-              
+
             }
             catch (Exception ex)
             {

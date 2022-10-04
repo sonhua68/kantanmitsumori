@@ -35,7 +35,7 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 // 見積書データ取得
-                var estData = _commonEst.getEst_EstSubData(estNo, estSubNo);
+                var estData = _commonEst.GetEst_EstSubData(estNo, estSubNo);
 
                 if (estData == null)
                 {

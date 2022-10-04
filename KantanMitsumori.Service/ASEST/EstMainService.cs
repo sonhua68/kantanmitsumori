@@ -81,13 +81,13 @@ namespace KantanMitsumori.Service.ASEST
                 response.EstCustomerModel.CustZip = valToken.sesCustZip_forPrint ?? "";
                 response.EstCustomerModel.CustAdr = valToken.sesCustAdr_forPrint ?? "";
                 response.EstCustomerModel.CustTel = valToken.sesCustTel_forPrint ?? "";
-                var estData = _commonEst.setEstData(valToken.sesEstNo!, valToken.sesEstSubNo!);
+                var estData = _commonEst.SetEstData(valToken.sesEstNo!, valToken.sesEstSubNo!);
                 if (estData.ResultStatus == (int)enResponse.isSuccess)
                     response.EstModel = estData.Data!;
                 response.EstIDEModel = new EstimateIdeModel();
                 if (response.EstModel.LeaseFlag == "1")
                 {
-                    response.EstIDEModel = _commonEst.setEstIDEData(valToken);
+                    response.EstIDEModel = _commonEst.SetEstIDEData(valToken);
                     if (response.EstIDEModel == null)
                         return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
                 }
@@ -120,7 +120,7 @@ namespace KantanMitsumori.Service.ASEST
                 response.EstCustomerModel = new EstCustomerModel();
                 response.EstIDEModel = new EstimateIdeModel();
                 response.EstModel = new EstModel();
-                var estData = _commonEst.setEstData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
+                var estData = _commonEst.SetEstData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
                 if (estData.ResultStatus == (int)enResponse.isSuccess)
                     response.EstModel = estData.Data!;
                 response.EstCustomerModel.CustNm = logtoken.sesCustNm_forPrint ?? "";
@@ -129,7 +129,7 @@ namespace KantanMitsumori.Service.ASEST
                 response.EstCustomerModel.CustTel = logtoken.sesCustTel_forPrint ?? "";
                 if (response.EstModel.LeaseFlag == "1")
                 {
-                    response.EstIDEModel = _commonEst.setEstIDEData(logtoken);
+                    response.EstIDEModel = _commonEst.SetEstIDEData(logtoken);
                     if (response.EstIDEModel == null)
                         return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
                 }
@@ -266,7 +266,7 @@ namespace KantanMitsumori.Service.ASEST
             {
                 return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
             }
-            var estData = _commonEst.setEstData(valToken.sesEstNo, valToken.sesEstSubNo);
+            var estData = _commonEst.SetEstData(valToken.sesEstNo, valToken.sesEstSubNo);
             if (estData.ResultStatus == (int)enResponse.isSuccess)
                 response.EstModel = estData.Data!;
             response.EstCustomerModel = new EstCustomerModel();
@@ -277,7 +277,7 @@ namespace KantanMitsumori.Service.ASEST
             response.EstIDEModel = new EstimateIdeModel();
             if (response.EstModel.LeaseFlag == "1")
             {
-                response.EstIDEModel = _commonEst.setEstIDEData(valToken);
+                response.EstIDEModel = _commonEst.SetEstIDEData(valToken);
                 if (response.EstIDEModel == null)
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
 
@@ -317,7 +317,7 @@ namespace KantanMitsumori.Service.ASEST
                 valToken = logToken;
                 valToken.sesEstNo = model.EstNo!;
                 valToken.sesEstSubNo = model.EstSubNo!;
-                var res = await _commonEst.calcSum(model.EstNo!, model.EstSubNo!, valToken);
+                var res = await _commonEst.CalcSum(model.EstNo!, model.EstSubNo!, valToken);
                 if (res)
                 {
                     SetvalueToken();
@@ -380,11 +380,11 @@ namespace KantanMitsumori.Service.ASEST
         {
             try
             {
-                if (!await _commonEst.calcSum(estNo, estSubNo, valToken))
+                if (!await _commonEst.CalcSum(estNo, estSubNo, valToken))
                 {
                     return ResponseHelper.LogicError<EstModel>("", "");
                 }
-                var estData = _commonEst.getEstData(estNo, estSubNo);
+                var estData = _commonEst.GetEstData(estNo, estSubNo);
                 if (estData == null)
                 {
                     return ResponseHelper.Error<EstModel>("", "");
@@ -392,13 +392,13 @@ namespace KantanMitsumori.Service.ASEST
                 if (flgRecreate)
                 {
                     estNo = "";
-                    if (!_commonEst.getEstNoFromDb(ref estNo))
+                    if (!_commonEst.GetEstNoFromDb(ref estNo))
                     {
                         return ResponseHelper.LogicError<EstModel>("", "");
                     }
                 }
                 string vNextSubNo = "";
-                if (!_commonEst.getEstSubNoFromDb(estNo, ref vNextSubNo))
+                if (!_commonEst.GetEstSubNoFromDb(estNo, ref vNextSubNo))
                 {
                     return ResponseHelper.LogicError<EstModel>("", "");
                 }
@@ -703,11 +703,11 @@ namespace KantanMitsumori.Service.ASEST
             {
                 string strEstNo = "";
                 string strEstSubNo = "";
-                if (!_commonEst.getEstNoFromDb(ref strEstNo))
+                if (!_commonEst.GetEstNoFromDb(ref strEstNo))
                 {
                     return false;
                 }
-                if (!_commonEst.getEstSubNoFromDb(strEstNo, ref strEstSubNo))
+                if (!_commonEst.GetEstSubNoFromDb(strEstNo, ref strEstSubNo))
                 {
                     return false;
                 }
@@ -746,7 +746,7 @@ namespace KantanMitsumori.Service.ASEST
                 _logger.LogError(ex, "regEstData", "CEST-010D");
                 return false;
             }
-            if (!await _commonEst.calcSum(valToken.sesEstNo, valToken.sesEstSubNo, valToken))
+            if (!await _commonEst.CalcSum(valToken.sesEstNo, valToken.sesEstSubNo, valToken))
             {
                 return false;
             }

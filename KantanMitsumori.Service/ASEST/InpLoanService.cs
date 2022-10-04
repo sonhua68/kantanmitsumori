@@ -47,7 +47,7 @@ namespace KantanMitsumori.Service
                 simLon.BonusFirst = model.BonusFirst;
                 simLon.BonusSecond = model.BonusSecond;
                 simLon.ConTax = model.ConTax;
-                if (simLon.calcRegLoan())
+                if (simLon.CalcRegLoan())
                 {
                     response.MoneyRate = simLon.MoneyRate;
                     response.Deposit = simLon.Deposit;
