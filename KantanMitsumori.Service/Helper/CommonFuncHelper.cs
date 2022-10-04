@@ -235,7 +235,7 @@ namespace KantanMitsumori.Service.Helper
 
                 if (getSys != null)
                 {
-                    return (int)getSys.Aacount;
+                    return Convert.ToInt32(getSys.Aacount);
                 }
                 else
                     return 0;

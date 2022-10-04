@@ -3,7 +3,6 @@ using GrapeCity.Enterprise.Data.VisualBasicReplacement;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
-using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
@@ -12,8 +11,6 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Principal;
 
 namespace KantanMitsumori.Service
 {
@@ -258,7 +255,7 @@ namespace KantanMitsumori.Service
                 {
                     double num = System.Convert.ToDouble(strNumber);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     return itemName + "の形式が不正です。";
                 }

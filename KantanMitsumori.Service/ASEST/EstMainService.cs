@@ -20,7 +20,6 @@ namespace KantanMitsumori.Service.ASEST
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUnitOfWorkIDE _unitOfWorkIDE;
-        private readonly int LocaleID = new System.Globalization.CultureInfo("ja-JP", true).LCID;
         private LogToken valToken;
         private CommonFuncHelper _commonFuncHelper;
         private CommonEstimate _commonEst;
@@ -29,9 +28,9 @@ namespace KantanMitsumori.Service.ASEST
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _unitOfWorkIDE = unitOfWorkIDE;
             _commonFuncHelper = commonFuncHelper;
             _commonEst = commonEst;
-            _unitOfWorkIDE = unitOfWorkIDE;
         }
 
         public UserModel getUserName(string userNo)

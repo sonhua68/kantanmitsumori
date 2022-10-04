@@ -93,7 +93,7 @@ namespace KantanMitsumori.Model.Response
         public string BonusFirst { get; set; } = string.Empty;
         public string BonusSecond { get; set; } = string.Empty;
         public int BonusTimes { get; set; }
-        public string ShopNm { get; set; }
+        public string ShopNm { get; set; } = string.Empty;
         public string ShopAdr { get; set; } = string.Empty;
         public string ShopTel { get; set; } = string.Empty;
         public string EstTanName { get; set; } = string.Empty;
@@ -125,7 +125,7 @@ namespace KantanMitsumori.Model.Response
         public string FuelName { get; set; } = string.Empty;
         public string DriveName { get; set; } = string.Empty;
         public int CarDoors { get; set; }
-        public string BodyName { get; set; }
+        public string BodyName { get; set; } = string.Empty;
         public int Capacity { get; set; }
         public string Aayear { get; set; } = string.Empty;
         public string Aahyk { get; set; } = string.Empty;
