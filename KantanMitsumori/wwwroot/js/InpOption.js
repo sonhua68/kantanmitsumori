@@ -148,9 +148,9 @@ function CallData() {
         $("#OptionPriceAll").val(Items.optionPriceAll)
         $("#EstNo").val(Items.estNo)
         $("#EstSubNo").val(Items.estSubNo)
-        for (var i = 1; i <= 12; i++) {        
+        for (var i = 1; i <= 12; i++) {
             let OptionName = $("#OptionName" + i);
-            let OptionPrice = $("#OptionPrice" + i);  
+            let OptionPrice = $("#OptionPrice" + i);
             switch (i) {
                 case 1:
                     OptionName.val(Items.optionName1)
@@ -200,12 +200,14 @@ function CallData() {
                     OptionName.val(Items.optionName12)
                     OptionPrice.val(StringNull(Items.optionPrice12))
                     break;
-             
+
                 default:
                 // code block
             }
-           
+
         }
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }
 

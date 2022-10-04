@@ -121,8 +121,8 @@
                                 <tr>
                                     <td class="inpbtntd" colspan="2">
 
-                                        <input type="button" name="btnCancel" onclick="  Framework.GoBackReloadPage(); return false;" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
-                                        <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                                        <input type="button" name="btnCancel" onclick=" Framework.GoBackReloadPage(); return false;" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="submit" name="btnOK" value="OK" onclick="return onSummit();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
                                     </td>
 
                                 </tr>
@@ -144,16 +144,11 @@
     </table>
 </form>
 <script>
-    $("form#formInpCarPrice").submit(function (event) {
-        event.preventDefault();
-        var model = Framework.getFormData($("#formInpCarPrice"));
-        var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCarPrice/Update");
-        if (result.resultStatus == 0) {
-            Framework.GoBackReloadPage();
-        } else {
-            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
-        }
-    });
+    function onSummit() {
+        if (inputChk() == false) { return; }
+        Framework.OnSubmitForm("/InpCarPrice/Update", "formInpCarPrice");
+        return false;
+    }
 </script>
 <script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
 <script src="~/js/InpCarPrice.js"></script>

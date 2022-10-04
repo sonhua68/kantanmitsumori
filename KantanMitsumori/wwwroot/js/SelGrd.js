@@ -16,7 +16,11 @@ function GoNextPage(pageNumber) {
     model.colSort = _conNumber;
     model.pageNumber = pageNumber
     var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
-    ReloadListData(result);
+    if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    } else {
+        ReloadListData(result);
+    }
 }
 function SortData(colNumber) {
     var model = {};
@@ -41,11 +45,16 @@ function SortData(colNumber) {
     }
     model.colSort = _conNumber;
     var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
-    $('tr#pagination').remove();
-    $('#trId').twbsPagination('destroy');
-    UiPagination(result[0].totalPages)
-    AddPagination(result[0].totalPages);
-    ReloadListData(result);
+    if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    } else {
+        $('tr#pagination').remove();
+        $('#trId').twbsPagination('destroy');
+        UiPagination(result[0].totalPages)
+        AddPagination(result[0].totalPages);
+        ReloadListData(result);
+    }
+
 }
 function ReloadListData(data) {
     $("#gvGrade").css("display", "inline-table");

@@ -46,7 +46,7 @@ namespace KantanMitsumori.Controllers
             var response = _selCarService.chkGetListRuiBetSu(requestData, (int)enTypeButton.isNextGrade);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             else if (response.Data != null)
             {
@@ -62,7 +62,7 @@ namespace KantanMitsumori.Controllers
             var response = _selCarService.chkGetListRuiBetSu(requestData, (int)enTypeButton.isChkModel);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             else if (response.Data != null)
             {
@@ -80,7 +80,7 @@ namespace KantanMitsumori.Controllers
             var response = await _estMainService.setFreeEst(requestData, _logToken);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             setTokenCookie(response.Data!.AccessToken);
             return Ok(response);

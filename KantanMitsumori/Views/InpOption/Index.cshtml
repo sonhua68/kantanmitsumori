@@ -68,9 +68,8 @@
                                 </tr>
                                 <tr>
                                     <td class="inpbtntd" colspan="2" style=" height: 37px;">
-
                                         <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
-                                        <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" form="formInpOption" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                                        <input type="submit" name="btnOK" value="OK" onclick="return onSummit();" form="formInpOption" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
 
                                     </td>
                                 </tr>
@@ -99,18 +98,10 @@
     </table>
 </form>
 <script>
-    $('#formInpOption').validate({
-        submitHandler: function (form) {
-            var model = Framework.getFormData($("#formInpOption"));
-            console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpOption/UpdateInpOption");
-            if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
-            } else {
-                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
-            }
-        }
-    });
-
+    function onSummit() {
+        if (inputChk() == false) { return; }
+        Framework.OnSubmitForm("/InpOption/UpdateInpOption", "formInpOption");
+        return false;
+    }
 </script>
 <script src="~/js/InpOption.js"></script>

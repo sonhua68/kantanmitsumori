@@ -79,7 +79,7 @@
                                 <tr>
                                     <td class="inpbtntd" colspan="2">
                                         <input type="button" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();return false;" style="height:32px;width:100px;">&nbsp;
-                                        <input type="submit" value="OK" id="btnOK" form="formInpHanbaiten" onclick="return inputChk();" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="submit" value="OK" id="btnOK" form="formInpHanbaiten" onclick="return onSummit()" class="Btn1" style="height:32px;width:100px;">
                                     </td>
 
                                 </tr>
@@ -100,17 +100,10 @@
     </table>
 </form>
 <script>
-    $('#formInpHanbaiten').validate({
-        submitHandler: function (form) {
-            var model = Framework.getFormData($("#formInpHanbaiten"));
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpHanbaiten/UpdateInpHanbaiten");
-            if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
-            } else {
-                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
-            }
-        }
-    });
-
+    function onSummit() {
+        if (inputChk() == false) { return; }
+        Framework.OnSubmitForm("/InpHanbaiten/UpdateInpHanbaiten", "formInpHanbaiten");
+        return false;
+    }
 </script>
 <script src="~/js/InpHanbaiten.js"></script>

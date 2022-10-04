@@ -32,7 +32,7 @@ namespace KantanMitsumori.Controllers
 
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             var dt = await PaginatedList<ResponseTbRuibetsuNew>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
             return View(dt);
@@ -47,7 +47,7 @@ namespace KantanMitsumori.Controllers
 
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             var dt = await PaginatedList<ResponseTbRuibetsuNew>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
 
@@ -64,7 +64,7 @@ namespace KantanMitsumori.Controllers
             var response = await _estMainService.setFreeEst(requestData, _logToken);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             setTokenCookie(response.Data!.AccessToken);
             return Ok(response);

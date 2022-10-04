@@ -33,7 +33,7 @@
                                             <input id="radOutTax" type="radio" name="Szi" value="radOutTax" onclick="resetValue();" tabindex="2"><label for="radOutTax" style="margin-left:5px">税抜きで入力する</label>
                                         </span><br>
                                         <span id="Label5" class="inplabel" style="display:inline-block;height:21px;width:373px;">（車両価格、付属品、代行費用等の金額の入力方法です）</span>
-                                        <input name="ConTaxInputKb" type="hidden" id="hidConTaxInputKb" >
+                                        <input name="ConTaxInputKb" type="hidden" id="hidConTaxInputKb">
                                     </td>
                                 </tr>
                                 <tr>
@@ -438,7 +438,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="inpbtntd"  colspan="2"  style="text-align:left; width: 236px; height:120px" valign="top">
+                                    <td class="inpbtntd" colspan="2" style="text-align:left; width: 236px; height:120px" valign="top">
                                         &nbsp;<input type="submit" name="btnHanei" value="入力中の見積に反映" form="formInpInitVal" id="btnHanei" class="Btn1" style="height:32px;">
                                         <span id="lblUwagaki1" class="inplabel" style="display:inline-block;width:520px;color:Red;">※現在入力中の見積に上書きされますのでご注意下さい。</span>
                                         <span id="lblUwagaki4" class="inplabel" style="display:inline-block;width:520px;color:Red;">※自賠責保険料の再計算は行われません。</span>
@@ -447,7 +447,7 @@
                                     </td>
                                     <td class="inpbtntd" style=" " valign="top">
                                         <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackPage();return false;" class="Btn1" style="height:32px;width:100px;">&nbsp;
-                                        <input type="submit" name="btnOK" value="OK" form="formInpInitVal" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="submit" name="btnOK" value="OK"  form="formInpInitVal" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -463,9 +463,9 @@
                         <input name="EstNo" type="hidden" id="hidEstNo" value="@Model.EstNo">
                         <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
                         <input name="Haiki" type="hidden" id="hidHaiki" value="@Model.DispVol">
-                        <input name="SyakenNewZok" type="hidden" id="hidSyakenNewZok" value="@SyakenNewZok">                 
-                        
-                        
+                        <input name="SyakenNewZok" type="hidden" id="hidSyakenNewZok" value="@SyakenNewZok">
+
+
                         @*<input name="hidCallName" type="hidden" id="hidCallName"><!-- 呼び元 -->*@
                     </div>
                 </td>
@@ -474,23 +474,23 @@
     </table>
 </form>
 <script>
-    $('#formInpInitVal').validate({
-        submitHandler: function (form) {          
-            if (inputChk() == false) { return; }
-            var model = Framework.getFormData($("#formInpInitVal"));
-            console.log(model)
-            model.AsArticle = model.Article == "radUse" ? 1 : 0;
-            model.DamageInsMonth = 25;
-            model.Rate = model.Rate == "" ? 0 : model.Rate;
-            model.ButtonSummit=event.submitter.name;
-            model.ConTaxInputKb = model.Szi == "radOutTax"?"False":"True";
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpInitVal/UpdateInpInitVal");
-            if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPage();
-            } else {
-                  Framework.GoBackErrorPage(result.messageCode, result.messageContent);
-            }
+    $("form#formInpInitVal").submit(function (event) {
+        event.preventDefault();
+        if (inputChk() == false) { return; }
+        var model = Framework.getFormData($("#formInpInitVal"));
+        console.log(model)
+        model.AsArticle = model.Article == "radUse" ? 1 : 0;
+        model.DamageInsMonth = 25;
+        model.Rate = model.Rate == "" ? 0 : model.Rate;
+        model.ButtonSummit = event.originalEvent.submitter.name;
+        model.ConTaxInputKb = model.Szi == "radOutTax" ? "False" : "True";
+        var result = Framework.submitAjaxFormUpdateAsync(model, "/InpInitVal/UpdateInpInitVal");
+        if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+            Framework.GoBackReloadPage();
+        } else {
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     });
+
 </script>
 <script src="~/js/InpInitVal.js"></script>

@@ -354,7 +354,7 @@ function CalInpLoan() {
             resetBonus_Result();
             calcResultGankin();
         } else {
-            location.reload();
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     }
 };

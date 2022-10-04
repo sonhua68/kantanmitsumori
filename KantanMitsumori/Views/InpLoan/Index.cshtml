@@ -360,7 +360,7 @@
                                                 <tr>
                                                     <td class="inpbtntd" colspan="2" style=" height: 21px; text-align:right;">
                                                         <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
-                                                        <input type="submit" name="btnOK" value="OK" @*onclick="clickOK();"*@ form="formInpLoan" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                                                        <input type="submit" name="btnOK" value="OK" onclick="return onSummit();" form="formInpLoan" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -384,17 +384,10 @@
 </form>
 <script>
     SetInitData();
-    $('#formInpLoan').validate({
-        submitHandler: function (form) {
-            var model = Framework.getFormData($("#formInpLoan"));
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLoan/UpdateInpLoan");
-            if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPage();
-            } else {
-                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
-            }
-        }
-    });
+    function onSummit() {
+        Framework.OnSubmitForm("/InpLoan/UpdateInpLoan", "formInpLoan");
+        return false;
+    }
     function SetInitData() {
         if (@LoanModifyFlag == "0") {
             $("#hidLoanModifyFlag").val("0");
