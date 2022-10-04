@@ -12,7 +12,7 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
     /// Source format: yyyyMM, yyyy/MM
     /// Destination format: R01年12月
     /// </summary>
-    public class JpYMConverter : IValueConverter<string?, string>
+    public class JpEraYMConverter : IValueConverter<string?, string>
     {
         public string Convert(string? source, ResolutionContext context)
         {
@@ -22,7 +22,7 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                     return "";
                 if (source == "無し" || source == "")
                     return source;
-                // Standardlize source: 2022/01 -> 202201
+                // Standardlize source: 2022/01/01 -> 20220101
                 source = source.Trim().Replace("/", "");
                 // Converter source to integer
                 int ym = System.Convert.ToInt32(source);

@@ -11,12 +11,18 @@
 		<None Remove="Reports\Estimate.rpx" />
 		<None Remove="Reports\EstimateWithMemo.rpx" />
 		<None Remove="Reports\LeaseEstimate.rpx" />
+		<None Remove="Reports\LeaseEstimateWithMemo.rpx" />
 		<None Remove="Reports\LeaseOrder.rpx" />
+		<None Remove="Reports\LeaseOrderWithArticle.rpx" />
 		<None Remove="Reports\Memo.rpx" />
 		<None Remove="Reports\Order.rpx" />
 		<None Remove="Reports\OrderWithArticle.rpx" />
-		<EmbeddedResource Include="Reports\LeaseEstimate.rpx" />
+		<EmbeddedResource Include="Reports\LeaseEstimateWithMemo.rpx">
+		  <SubType>Component</SubType>
+		</EmbeddedResource>
 		<EmbeddedResource Include="Reports\LeaseOrder.rpx" />
+		<EmbeddedResource Include="Reports\LeaseEstimate.rpx" />
+		<EmbeddedResource Include="Reports\LeaseOrderWithArticle.rpx" />
 		<EmbeddedResource Include="Reports\OrderWithArticle.rpx" />
 		<EmbeddedResource Include="Reports\EstimateWithMemo.rpx" />
 		<EmbeddedResource Include="Reports\Estimate.rpx" />

@@ -34,5 +34,6 @@ namespace KantanMitsumori.Infrastructure.Base
         IAsMemberRepository AsMembers { get; }
         ASESTContext DbContext { get; }
         Task<bool> CommitAsync();
+        bool Commit();
     }
 }
