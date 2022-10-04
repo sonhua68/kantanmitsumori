@@ -1,10 +1,11 @@
 ﻿// JScript File
 // Create Date 2022/09/13 by HoaiPhong
-let Tday = new Date();
-const currentYear = Tday.getFullYear();
-const currentMonth = parseInt(Tday.getMonth());
-const currentDay = Tday.getDate();
-let month = parseInt(Tday.getMonth()) + 1;
+/*var Tday = moment("20240229", "YYYYMMDD")*/
+var Tday = moment();
+const currentYear = getYear();;
+const currentMonth = getMonth();
+const currentDay = getDay();
+let month = getMonth();
 var $thisFromY = "#ddlFromSelectY";
 var $thisFromM = "#ddlFromSelectM";
 var $thisFromD = "#ddlFromSelectD";
@@ -13,15 +14,15 @@ var $thisToM = "#ddlToSelectM";
 var $thisToD = "#ddlToSelectD";
 let _conNumberSort = true;
 let _conNumber = 0;
-InitSelectList($thisFromY, $thisFromM, $thisFromD, currentYear, currentMonth, "this", "first",1)
-InitSelectList($thisToY, $thisToM, $thisToD, currentYear, currentMonth, "this", "first",2)
+InitSelectList($thisFromY, $thisFromM, $thisFromD, currentYear, currentMonth, "this", "first", 1)
+InitSelectList($thisToY, $thisToM, $thisToD, currentYear, currentMonth, "this", "first", 2)
 GetListMaker();
 SetInitToDay();
 LoadData(1);
 setCookie("btnHanei", "1", 1);
 
 function GetListMaker() {
-    ; var result = Framework.GetObjectDataFromUrl("/SerEst/GetMakerNameAndModelName?makerName=");
+    var result = Framework.GetObjectDataFromUrl("/SerEst/GetMakerNameAndModelName?makerName=");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let length = result.data.length;
         $("#ddlMaker").append(new Option("", ''));
@@ -39,14 +40,13 @@ function GetListMaker() {
 
 }
 function SetInitToDay() {
-    let lastDay = parseInt(Tday.getDate());
+    let lastDay = getDay();
     $("#ddlFromSelectD option[value='" + lastDay + "']").attr("selected", "selected");
     $("#ddlToSelectD option[value='" + lastDay + "']").attr("selected", "selected");
 }
 function setToDayChangeMonth(type) {
-    let Tday = new Date();
-    let lastDay = parseInt(Tday.getDate());
-    let month = parseInt(Tday.getMonth()) + 1;
+    let lastDay = getDay();
+    let month = getMonth();
     if (type == 1) {
         let fromM = parseInt($('#ddlFromSelectM').val());
         if (fromM == month) {
@@ -94,9 +94,8 @@ function GetListModel() {
 }
 function GetDayOfMonth(type) {
     let d = 1;
-    let Tday = new Date();
-    let lastDay = parseInt(Tday.getDate());
-    let lastMonth = parseInt(Tday.getMonth()) + 1;
+    let lastDay = getDay();
+    let lastMonth = getMonth();
     if (type == 1) {
         let fromY = $('#ddlFromSelectY').val();
         let fromM = $('#ddlFromSelectM').val();
@@ -149,22 +148,6 @@ function LoadData(pageNumber) {
     }
 
 }
-function SortData(colNumber) {
-    var model = Framework.getFormData($("#FormSerEst"));
-    model.pageNumber = 1;
-    let number = !_conNumberSort ? getNumberSort(colNumber) : colNumber;
-    model.colSort = number;
-    var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
-    $('tr#pagination').remove();
-    $('#trId').twbsPagination('destroy');
-    UiPagination(result[0].totalPages)
-    AddPagination(result[0].totalPages);
-    ReloadListData(result);
-    _conNumberSort = !_conNumberSort;
-    _conNumber = number;
-    return false;
-}
-
 function SortData(colNumber) {
     var model = Framework.getFormData($("#FormSerEst"));
     let sort = parseInt($("#SortPage").val());
@@ -239,8 +222,8 @@ function Cleanform() {
     $("#ddlToSelectD").empty();
     $("#ddlFromSelectD").empty();
     GetListMaker();
-    GetDayOfMonth(1);
-    GetDayOfMonth(2);
+    InitSelectList($thisFromY, $thisFromM, $thisFromD, currentYear, currentMonth, "this", "first", 1);
+    InitSelectList($thisToY, $thisToM, $thisToD, currentYear, currentMonth, "this", "first", 2);
     SetInitToDay();
     LoadData(1);
 }
@@ -357,101 +340,98 @@ function onChangeSelect(type) {
     if (type == 1) {
         let fromY = parseInt($($thisFromY).val());
         let fromM = parseInt($($thisFromM).val());
-        let nMonth = (fromM - 1);
         if (fromY == (currentYear - 1)) {
-            InitSelectList($thisFromY, $thisFromM, $thisFromD, fromY, nMonth, "", "from", type)
+            InitSelectList($thisFromY, $thisFromM, $thisFromD, fromY, (fromM), "", "from", type)
 
-        } else {
-            InitSelectList($thisFromY, $thisFromM, $thisFromD, fromY, nMonth, "this", "from", type)
+        } else if (fromY = currentYear) {
+            InitSelectList($thisFromY, $thisFromM, $thisFromD, fromY, (fromM), "this", "from", type)
         }
     } else {
         let toY = parseInt($($thisToY).val());
         let ToM = parseInt($($thisToM).val());
-        let nMonth = (ToM - 1);
         if (toY == (currentYear - 1)) {
-            InitSelectList($thisToY, $thisToM, $thisToD, toY, nMonth, "", "from", type);
-        } else {
-            InitSelectList($thisToY, $thisToM, $thisToD, toY, nMonth, "this", "from", type);
+            InitSelectList($thisToY, $thisToM, $thisToD, toY, ToM, "", "from", type);
+        } else if (toY = currentYear) {
+            InitSelectList($thisToY, $thisToM, $thisToD, toY, ToM, "this", "from", type);
         }
     }
 }
-function InitSelectList(Y, M, D, year, month, ddflg, ddflg2,type) {
-    let currentYear = Tday.getFullYear();
-    let currentMonth = parseInt(Tday.getMonth());
-    let currentDay = Tday.getDate();
-    month = month + 1;
+function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
+    let currentYear = getYear();
+    let currentMonth = getMonth();
+    let currentDay = getDay();
     $(Y).empty();
     $(M).empty();
     $(D).empty();
     var birthYear;
     var birthMonth;
-    var dtBirth = new Date(currentYear, currentMonth, currentDay);
+    var birthDay;
+    var dtBirth = SetFormatYear(currentYear, currentMonth, currentDay);
     console.log(dtBirth);
-    currentMonth = currentMonth + 1;
-    dtBirth.setMonth(dtBirth.getMonth() - 3);
-    birthYear = dtBirth.getFullYear();
-    birthMonth = dtBirth.getMonth();
-    if (birthYear == (Tday.getFullYear() - 1)) {
+    dtBirth = moment(dtBirth).add(-3, 'month');
+    birthYear = parseInt(dtBirth.format('YYYY'));
+    birthMonth = parseInt(dtBirth.format('M'));
+    birthDay = parseInt(dtBirth.format('D'));
+    if (birthYear == (getYear() - 1)) {
         $(Y).append(new Option(currentYear, currentYear));
-        $(Y).append(new Option(birthYear, birthYear));      
+        $(Y).append(new Option(birthYear, birthYear));
         if (year == currentYear - 1 && month < 3) {
-            dtBirth.setDate(dtBirth.getDate() + 1)
-            month = dtBirth.getMonth();
+            let dtBr = moment(dtBirth).add(1, 'days');
+            month = parseInt(dtBr.format('M'));
         } else if (year == currentYear && month == currentMonth || year == currentYear && month > currentMonth) {
             month = currentMonth;
         }
-        if (ddflg == "this") {          
+        if (ddflg == "this") {
             for (let i = 1; i <= currentMonth; i++) {
                 $(M).append(new Option(i, i));
-            }        
+            }
             if (currentMonth == month) {
                 for (let i = 1; i <= currentDay; i++) {
                     $(D).append(new Option(i, i));
                 }
-                setSelectD(type, currentDay);            
+                setSelectD(type, currentDay);
             } else {
-                let day = new Date(currentYear - 1, month, 0);
-                currentDay = parseInt(day.getDate());
-                for (let i = 1; i <= currentDay; i++) {
+                let daysInMonth = GetDaysInMonth(currentYear - 1, month);
+                for (let i = 1; i <= daysInMonth; i++) {
                     $(D).append(new Option(i, i));
                 }
-            }          
+            }
+            setSelectM(type, month);
             setSelectY(type, currentYear);
-            setSelectM(type, month);  
+
         } else {
-            dtBirth.setDate(dtBirth.getDate() + 1)
-            let nMonth = dtBirth.getMonth() + 1;
+            let dtB = moment(dtBirth).add(1, 'days');
+            let nMonth = parseInt(dtB.format('M'));
             for (let i = nMonth; i <= 12; i++) {
                 $(M).append(new Option(i, i));
             }
             if (currentMonth == month) {
-                let day = new Date(currentYear - 1, month, 0);
-                currentDay = parseInt(day.getDate());
-                for (let i = 1; i <= currentDay; i++) {
+                let daysInMonth = GetDaysInMonth(currentYear - 1, month)
+                for (let i = 1; i <= daysInMonth; i++) {
                     $(D).append(new Option(i, i));
                 }
             } else if (nMonth == month) {
-                let day = new Date(year, nMonth, 0);
-                currentDay = parseInt(day.getDate());
-                Tday.setDate(Tday.getDate() + 1)
-                let j = Tday.getDay();
-                for (let i = j; i <= currentDay; i++) {
+                let daysInMonth = GetDaysInMonth(year, month);
+                let todate = moment(Tday).add(1, 'days');
+                let j = parseInt(todate.format('D'));
+                for (let i = j; i <= daysInMonth; i++) {
                     $(D).append(new Option(i, i));
                 }
             } else {
-                let day = new Date(year, month, 0);
-                currentDay = parseInt(day.getDate());
-                for (let i = 1; i <= currentDay; i++) {
+                let daysInMonth = GetDaysInMonth(year, month)
+                for (let i = 1; i <= daysInMonth; i++) {
                     $(D).append(new Option(i, i));
                 }
-            }          
+            }
+            setSelectM(type, month);
             setSelectY(type, (currentYear - 1));
         }
 
     } else {
-        dtBirth.setDate(dtBirth.getDate() + 1)
+        let dtB = moment(dtBirth).add(1, 'days');
         let i = currentMonth;
-        let nMonth = dtBirth.getMonth() + 1;
+        let nMonth = parseInt(dtB.format('M'));
+        let nDay = parseInt(dtB.format('D'));
         do {
             $(M).append(new Option(i, i));
             i--;
@@ -461,39 +441,40 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2,type) {
             for (let i = 1; i <= currentDay; i++) {
                 $(D).append(new Option(i, i));
             }
+            setSelectD(type, currentDay);
         } else if (nMonth == month) {
-            let day = new Date(year, month, 0);
-            currentDay = parseInt(day.getDate());
-            for (let i = nMonth; i <= currentDay; i++) {
+            let daysInMonth = GetDaysInMonth(year, month)
+            for (let i = nDay; i <= daysInMonth; i++) {
                 $(D).append(new Option(i, i));
             }
         } else {
-            let day = new Date(currentYear - 1, month, 0);
-            currentDay = parseInt(day.getDate());
-            for (let i = 1; i <= currentDay; i++) {
+            let daysInMonth = GetDaysInMonth(currentYear - 1, month)
+            for (let i = 1; i <= daysInMonth; i++) {
                 $(D).append(new Option(i, i));
             }
         }
         $(Y).append(new Option(currentYear, currentYear));
+        setSelectM(type, month);
+        setSelectY(type, (currentYear));
     }
     return;
 }
 
-function setSelectD(type,D) {
+function setSelectD(type, D) {
     if (type == 1) {
         Framework.SetSelectedNumber("ddlFromSelectD", D)
     } else if (type == 2) {
         Framework.SetSelectedNumber("ddlToSelectD", D)
     }
 }
-function setSelectM(type,M) {
+function setSelectM(type, M) {
     if (type == 1) {
-        Framework.SetSelectedNumber("ddlFromSelectM", M); 
+        Framework.SetSelectedNumber("ddlFromSelectM", M);
     } else if (type == 2) {
         Framework.SetSelectedNumber("ddlToSelectM", M);
     }
 }
-function setSelectY(type,Y) {
+function setSelectY(type, Y) {
     if (type == 1) {
         Framework.SetSelectedNumber("ddlFromSelectY", Y);
     } else if (type == 2) {
@@ -502,3 +483,47 @@ function setSelectY(type,Y) {
 }
 
 
+function getMonth() {
+    var month = Tday.format('M');
+    console.log(month);
+    return parseInt(month);
+}
+
+function getDay() {
+    var day = Tday.format('D');
+    console.log(day);
+    return parseInt(day)
+}
+function getYear() {
+    var year = Tday.format('YYYY');
+    console.log(year);
+    return parseInt(year)
+}
+
+function addDay(y, m, d, numberday) {
+    var day = moment([y, m, d]).add(numberday, 'days')
+    console.log(day);
+    return day
+}
+function addYear(y, m, d, numberYeaer) {
+    var day = moment([y, m, d]).add(numberday, 'month')
+    console.log(day);
+    return day
+}
+
+function addYear(y, m, d, numberYeaer) {
+    var day = moment([y, m, d]).add(numberday, 'daysInMonth')
+    console.log(day);
+    return day;
+}
+
+function GetDaysInMonth(y, m) {
+    var daysInMonth = moment([y, (m - 1)]).daysInMonth();
+    console.log(daysInMonth);
+    return parseInt(daysInMonth)
+}
+
+function SetFormatYear(y, m, d) {
+    var date = moment([y, m, d], "YYYYMMDD");
+    return date;
+}
