@@ -339,9 +339,8 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
     if (birthYear == (currentYear - 1)) {
         $(Y).append(new Option(currentYear, currentYear));
         $(Y).append(new Option(birthYear, birthYear));
-        if (year == currentYear - 1 && month < 3) {
-            let dtBr = moment(dtBirth).add(1, 'days');
-            month = parseInt(dtBr.format('M'));
+        if (year == currentYear - 1 && month <= 3) {
+            month = birthMonth;
         } else if (year == currentYear && month == currentMonth || year == currentYear && month > currentMonth) {
             month = currentMonth;
         }
@@ -358,16 +357,13 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
             setSelectY(type, currentYear);
 
         } else {
-            let dtB = moment(dtBirth);
-            let nMonth = parseInt(dtB.format('M'));
-            let nDay = parseInt(dtB.format('D'));
-            addSelectOption(M, nMonth, 12)
+            addSelectOption(M, birthMonth, 12)
             if (currentMonth == month) {
                 let daysInMonth = GetDaysInMonth(currentYear - 1, month)
                 addSelectOption(D, 1, daysInMonth);
-            } else if (nMonth == month) {
+            } else if (birthMonth == month) {
                 let daysInMonth = GetDaysInMonth(year, month);
-                addSelectOption(D, nDay, daysInMonth);
+                addSelectOption(D, birthDay, daysInMonth);
 
             } else {
                 let daysInMonth = GetDaysInMonth(year, month)
@@ -378,21 +374,18 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
         }
 
     } else {
-        let dtB = moment(dtBirth);
         let i = currentMonth;
-        let nMonth = parseInt(dtB.format('M'));
-        let nDay = parseInt(dtB.format('D'));
         do {
             $(M).append(new Option(i, i));
             i--;
         }
-        while (i > (nMonth - 1));
+        while (i > (birthMonth - 1));
         if (currentMonth == month) {
             addSelectOption(D, 1, currentDay)           
             setSelectD(type, currentDay);
-        } else if (nMonth == month) {
+        } else if (birthMonth == month) {
             let daysInMonth = GetDaysInMonth(year, month);
-            addSelectOption(D, nDay, daysInMonth);           
+            addSelectOption(D, birthDay, daysInMonth);           
 
         } else {
             let daysInMonth = GetDaysInMonth(currentYear - 1, month)
