@@ -485,7 +485,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 case IntervalEnum.Days:
                     return periods.Days;
                 case IntervalEnum.Months:
-                    return periods.Months;
+                    return (periods.Years * 12) + periods.Months;
                 case IntervalEnum.Years:
                     return periods.Years;
                 default:
