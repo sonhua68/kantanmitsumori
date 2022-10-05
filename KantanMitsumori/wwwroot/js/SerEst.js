@@ -1,6 +1,7 @@
 ﻿// JScript File
 // Create Date 2022/09/13 by HoaiPhong
-/*var Tday = moment("20240229", "YYYYMMDD")*/
+/*var Tday = moment("20221228", "YYYYMMDD")*/
+/*console.log(Tday)*/
 var Tday = moment();
 const currentYear = getYear();;
 const currentMonth = getMonth();
@@ -371,7 +372,7 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
     var birthYear;
     var birthMonth;
     var birthDay;
-    var dtBirth = SetFormatYear(currentYear, currentMonth, currentDay);   
+    var dtBirth = SetFormatYear(currentYear, currentMonth, currentDay);
     dtBirth = moment(dtBirth).add(-3, 'month');
     birthYear = parseInt(dtBirth.format('YYYY'));
     birthMonth = parseInt(dtBirth.format('M'));
@@ -425,7 +426,7 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
                 let daysInMonth = GetDaysInMonth(year, month)
                 for (let i = 1; i <= daysInMonth; i++) {
                     $(D).append(new Option(i, i));
-                }
+                }             
             }
             setSelectM(type, month);
             setSelectY(type, (currentYear - 1));
@@ -447,10 +448,17 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
             }
             setSelectD(type, currentDay);
         } else if (nMonth == month) {
-            let daysInMonth = GetDaysInMonth(year, month)
-            for (let i = nDay; i <= daysInMonth; i++) {
+            let daysInMonth = GetDaysInMonth(year, month);
+            let todate = moment(Tday).add(1, 'days');
+            let j = parseInt(todate.format('D'));
+            for (let i = j; i <= daysInMonth; i++) {
                 $(D).append(new Option(i, i));
             }
+            //let daysInMonth = GetDaysInMonth(year, month)
+            //for (let i = nDay; i <= daysInMonth; i++) {
+            //    $(D).append(new Option(i, i));
+            //}
+
         } else {
             let daysInMonth = GetDaysInMonth(currentYear - 1, month)
             for (let i = 1; i <= daysInMonth; i++) {
