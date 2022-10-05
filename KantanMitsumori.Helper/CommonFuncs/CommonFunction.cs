@@ -314,10 +314,10 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
             return strSesName;
         }
-        public static string setFormatCurrency(object value)
+        public static string setFormatCurrency(object value, bool isDisplay = true)
         {
             var formatParm = "";
-            if (Convert.ToInt32(value) == 0)
+            if (Convert.ToInt32(value) == 0 || !isDisplay)
             {
                 return formatParm;
             }
