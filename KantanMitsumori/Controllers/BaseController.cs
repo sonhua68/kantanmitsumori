@@ -23,16 +23,6 @@ namespace KantanMitsumori.Controllers
             _config = config;
             _logToken = new LogToken();
 
-        }     
-        [Route("[controller]/[action]")]
-        public IActionResult ErrorPage([FromForm] RequestError model)
-        {
-            var ErrorViewModel = new ErrorViewModel()
-            {
-                MessageCode = model.messageCode,
-                MessageContent = model.messageContent
-            };
-            return View(ErrorViewModel);
         }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
@@ -46,15 +36,10 @@ namespace KantanMitsumori.Controllers
             _logToken = HelperToken.EncodingToken(cookies!)!;
             if (_logToken == null)
             {
-                var ErrorViewModel = new ErrorViewModel()
-                {
-                    MessageCode = HelperMessage.SMAI001P,
-                    MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P)
-                };
-                if (!actionName.Contains("Index") && !controllerName.Contains("Error"))
+                if (!actionName.Contains("Index"))
                     filterContext.Result = ErrorAction();
                 else
-                    filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
+                    filterContext.Result = new RedirectToActionResult("ErrorPage", "Error", new RequestError { messageCode = HelperMessage.SMAI001P, messageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P) });
                 return;
             }
             else if (_logToken != null)
@@ -71,15 +56,26 @@ namespace KantanMitsumori.Controllers
         public IActionResult ErrorAction<T>(ResponseBase<T> response, int isUnexpectedErr = 0)
         {
             if (isUnexpectedErr != 1)
-                return new RedirectToActionResult("ErrorPage", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
+
+                return new RedirectToActionResult("ErrorPage", "Error", new RequestError { messageCode = response.MessageCode, messageContent = response.MessageContent });
             else
-                return new RedirectToActionResult("ErrorPage", "Home", new ErrorViewModel { MessageCode = HelperMessage.ISYS010I, MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I) });
+                return new RedirectToActionResult("ErrorPage", "Error", new RequestError { messageCode = HelperMessage.ISYS010I, messageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I) });
         }
 
         public IActionResult ErrorAction()
         {
             var response = ResponseHelper.Error<int>(HelperMessage.SMAI001P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P));
             return Ok(response);
+        }     
+        [Route("[controller]/[action]")]
+        public IActionResult ErrorPage(RequestError model)
+        {
+            var ErrorViewModel = new ErrorViewModel()
+            {
+                MessageCode = model.messageCode,
+                MessageContent = model.messageContent
+            };
+            return View(ErrorViewModel);
         }
         /// <summary> 
         ///setTokenCookie

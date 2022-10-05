@@ -1,17 +1,20 @@
 ﻿using KantanMitsumori.Model.Request;
 using Microsoft.AspNetCore.Mvc;
-
+using KantanMitsumori.Models;
 namespace KantanMitsumori.Controllers
 {
 
-    public class ErrorController : BaseController
+    public class ErrorController :Controller
     {
 
-        private readonly ILogger<ErrorController> _logger;
-
-        public ErrorController(ILogger<ErrorController> logger, IConfiguration config) : base(config)
+        public IActionResult ErrorPage(RequestError model)
         {
-            _logger = logger;
+            var ErrorViewModel = new ErrorViewModel()
+            {
+                MessageCode = model.messageCode,
+                MessageContent = model.messageContent
+            };
+            return View(ErrorViewModel);
         }
     }
 }
