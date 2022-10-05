@@ -373,8 +373,9 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
     var birthMonth;
     var birthDay;
     var dtBirth = SetFormatYear(currentYear, currentMonth, currentDay);
-    dtBirth = moment(dtBirth).add(1, 'days');
+   
     dtBirth = moment(dtBirth).add(-3, 'month');
+     dtBirth = moment(dtBirth).add(1, 'days');
     birthYear = parseInt(dtBirth.format('YYYY'));
     birthMonth = parseInt(dtBirth.format('M'));
     birthDay = parseInt(dtBirth.format('D'));
@@ -406,8 +407,9 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
             setSelectY(type, currentYear);
 
         } else {
-            let dtB = moment(dtBirth).add(1, 'days');
+            let dtB = moment(dtBirth);
             let nMonth = parseInt(dtB.format('M'));
+            let nDay = parseInt(dtB.format('D'));
             for (let i = nMonth; i <= 12; i++) {
                 $(M).append(new Option(i, i));
             }
@@ -418,9 +420,7 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
                 }
             } else if (nMonth == month) {
                 let daysInMonth = GetDaysInMonth(year, month);
-                let todate = moment(Tday).add(1, 'days');
-                let j = parseInt(todate.format('D'));
-                for (let i = j; i <= daysInMonth; i++) {
+                for (let i = nDay; i <= daysInMonth; i++) {
                     $(D).append(new Option(i, i));
                 }
             } else {
@@ -434,7 +434,7 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
         }
 
     } else {
-        let dtB = moment(dtBirth).add(1, 'days');
+        let dtB = moment(dtBirth);
         let i = currentMonth;
         let nMonth = parseInt(dtB.format('M'));
         let nDay = parseInt(dtB.format('D'));
@@ -450,15 +450,9 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
             setSelectD(type, currentDay);
         } else if (nMonth == month) {
             let daysInMonth = GetDaysInMonth(year, month);
-            let todate = moment(Tday).add(1, 'days');
-            let j = parseInt(todate.format('D'));
-            for (let i = j; i <= daysInMonth; i++) {
+            for (let i = nDay; i <= daysInMonth; i++) {
                 $(D).append(new Option(i, i));
             }
-            //let daysInMonth = GetDaysInMonth(year, month)
-            //for (let i = nDay; i <= daysInMonth; i++) {
-            //    $(D).append(new Option(i, i));
-            //}
 
         } else {
             let daysInMonth = GetDaysInMonth(currentYear - 1, month)
