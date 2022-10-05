@@ -138,9 +138,9 @@ function SetFreeEst(gradeName, carCase, dispVol, driveTypeCode) {
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let isError = parseInt(result.data.estModel.isError);
         Framework.GoBackReloadPage();
-        if (isError == 1) {
-            alert("最初に車両本体価格をご確認下さい")
-        }
+        //if (isError == 1) {
+        //    alert("最初に車両本体価格をご確認下さい")
+        //}
     } else {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
