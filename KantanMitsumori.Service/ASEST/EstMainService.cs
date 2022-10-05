@@ -884,13 +884,10 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.PartitionAmount = Model.EstModel.PartitionAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.PartitionAmount) : "";
             estModelView.PayTimes = Model.EstModel.PayTimes > 0 ? Model.EstModel.PayTimes + " 回" : "";
 
-            string fromdt = "";
-            if (!string.IsNullOrEmpty(Model.EstModel.FirstPayMonth))
-                fromdt = CommonFunction.Mid(Model.EstModel.FirstPayMonth, 0, 4) + "年" + Convert.ToString(CommonFunction.Mid(Model.EstModel.FirstPayMonth, 4, 2)) + "月";
-            string todt = "";
-            if (!string.IsNullOrEmpty(Model.EstModel.LastPayMonth))
-                todt = CommonFunction.Mid(Model.EstModel.LastPayMonth, 0, 4) + "年" + Convert.ToString(CommonFunction.Mid(Model.EstModel.LastPayMonth, 4, 2)) + "月";
-            estModelView.Kikan = (!string.IsNullOrEmpty(fromdt) || !string.IsNullOrEmpty(todt)) ? fromdt + " - " + todt : "";
+            string fromdt = CommonFunction.getFormatDayYMD(Model.EstModel.FirstPayMonth);
+            string todt = CommonFunction.getFormatDayYMD(Model.EstModel.LastPayMonth); ;
+            estModelView.Kikan = (string.IsNullOrEmpty(fromdt) || string.IsNullOrEmpty(todt)) ? "" : fromdt + " - " + todt;
+
             estModelView.FirstPayAmount = Model.EstModel.FirstPayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.FirstPayAmount) : "";
             estModelView.PayAmount = Model.EstModel.PayAmount > 0 ? CommonFunction.setFormatCurrency(Model.EstModel.PayAmount) : "";
             estModelView.PayTimes2 = Model.EstModel.PayTimes > 0 ? "（×" + Convert.ToString(Model.EstModel.PayTimes - 1) + "回）" : "";
@@ -945,7 +942,7 @@ namespace KantanMitsumori.Service.ASEST
             return Model;
         }
 
-        public async Task<ResponseBase<int>> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer)
+        public ResponseBase<int> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer)
         {
             var LeaseTargetsID2 = _unitOfWorkIDE.LeaseTargets.Query(n => n.Id == 2).FirstOrDefault();
             var LeaseTargetsID1 = _unitOfWorkIDE.LeaseTargets.Query(n => n.Id == 1).FirstOrDefault();

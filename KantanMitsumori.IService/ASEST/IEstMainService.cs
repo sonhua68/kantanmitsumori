@@ -13,7 +13,7 @@ namespace KantanMitsumori.IService.ASEST
         Task<ResponseBase<ResponseEstMainModel>> setFreeEst(RequestSelGrdFreeEst model, LogToken logtoken);
         Task<ResponseBase<string>> AddEstimate(RequestSerEst model, LogToken logToken);
         Task<ResponseBase<string>> CalcSum(RequestSerEst model, LogToken logToken);
-        Task<ResponseBase<int>> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer);
+        ResponseBase<int> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer);
 
     }
 }
