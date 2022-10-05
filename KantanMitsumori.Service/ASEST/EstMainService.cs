@@ -795,11 +795,12 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.ShopTel += "TEL : " + Model.EstModel.ShopTel;
             estModelView.AAInfo = Model.EstModel.Mode == 1 ? Model.EstModel.AAInfo : "";
 
-            estModelView.CarPriceTitle = CommonConst.def_TitleCarPrice + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            string titleInOutTax = Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax;
+            estModelView.CarPriceTitle = CommonConst.def_TitleCarPrice + titleInOutTax;
             estModelView.CarPrice = CommonFunction.setFormatCurrency(Model.EstModel.CarPrice);
-            estModelView.DiscountT = Model.EstModel.Discount == 0 ? "" : CommonConst.def_TitleDisCount + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.DiscountT = Model.EstModel.Discount == 0 ? "" : CommonConst.def_TitleDisCount + titleInOutTax;
             estModelView.Discount = Model.EstModel.Discount == 0 ? "" : "▲" + Convert.ToString(CommonFunction.setFormatCurrency(Model.EstModel.Discount));
-            estModelView.SonotaTitle = Model.EstModel.SonotaTitle + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.SonotaTitle = Model.EstModel.SonotaTitle + titleInOutTax;
             estModelView.Sonota = CommonFunction.setFormatCurrency(Model.EstModel.Sonota);
             long wSyakenNew;
             if (Model.EstModel.SyakenNew > 0 && Model.EstModel.SyakenZok == 0)
@@ -823,9 +824,9 @@ namespace KantanMitsumori.Service.ASEST
                     estModelView.SyakenNewZokT = CommonConst.def_TitleSyakenZok;
                 }
             }
-            estModelView.SyakenNewZokT += Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax;
+            estModelView.SyakenNewZokT += titleInOutTax;
             estModelView.SyakenNew = CommonFunction.setFormatCurrency(wSyakenNew);
-            estModelView.OpSpeCialTitle = CommonConst.def_TitleOpSpeCial + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
+            estModelView.OpSpeCialTitle = CommonConst.def_TitleOpSpeCial + titleInOutTax;
             estModelView.OptionPriceAll = CommonFunction.setFormatCurrency(Model.EstModel.OptionPriceAll);
             estModelView.CarSum = CommonFunction.setFormatCurrency(Model.EstModel.CarSum);
             estModelView.TaxInsAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxInsAll);
@@ -833,11 +834,11 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.TaxFreeAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxFreeAll);
 
 
-            estModelView.DaikoTitle = CommonConst.def_TitleDaiko + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
-            estModelView.TaxInsEquivalentTitle = CommonConst.def_TitleDaiko + (Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax);
-            estModelView.TaxName = Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleConTaxTotalInTax : CommonConst.def_TitleConTaxTotalOutTax;
-            estModelView.CarSaleSumTitle = Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleCarKeiInTax : CommonConst.def_TitleCarKeiOutTax;
-            estModelView.SalesSumTitle = Model.EstModel.ConTaxInputKb == true ? CommonConst.def_TitleSalesSumInTax : CommonConst.def_TitleSalesSumOutTax;
+            estModelView.DaikoTitle = CommonConst.def_TitleDaiko + titleInOutTax;
+            estModelView.TaxInsEquivalentTitle = CommonConst.def_TitleDaiko + titleInOutTax;
+            estModelView.TaxName = Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleConTaxTotalInTax : CommonConst.def_TitleConTaxTotalOutTax;
+            estModelView.CarSaleSumTitle = Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleCarKeiInTax : CommonConst.def_TitleCarKeiOutTax;
+            estModelView.SalesSumTitle = Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleSalesSumInTax : CommonConst.def_TitleSalesSumOutTax;
 
             estModelView.TaxCostAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxCostAll);
             estModelView.ConTax = CommonFunction.setFormatCurrency(Model.EstModel.ConTax);
