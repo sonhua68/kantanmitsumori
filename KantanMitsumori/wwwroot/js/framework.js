@@ -526,8 +526,12 @@ var Framework =
         {
             key: "GoBackErrorPage",
             value: function GoBackErrorPage(messageCode, messContent) {
-                var url = "/Error/ErrorPage?messageCode=" + messageCode + " &messContent=" + messContent;
-                window.location.href = url;
+                var param = {};
+                param.messageCode = messageCode;
+                param.messContent = messContent;
+                Framework.SummitForm("/Error/ErrorPage", param)
+                //var url = "/Error/ErrorPage?messageCode=" + messageCode + " &messContent=" + messContent;
+                //window.location.href = url;
 
             }
         },

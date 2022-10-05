@@ -120,7 +120,7 @@ namespace KantanMitsumori.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInputCar");
-                return ResponseHelper.Error<string>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                return ResponseHelper.Error<string>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
 

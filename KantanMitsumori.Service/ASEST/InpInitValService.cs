@@ -45,7 +45,7 @@ namespace KantanMitsumori.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetUserDefData");
-                return ResponseHelper.Error<ResponseUserDef>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                return ResponseHelper.Error<ResponseUserDef>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
 
             }
         }
@@ -87,7 +87,7 @@ namespace KantanMitsumori.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInpInitVal");
-                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                return ResponseHelper.Error<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
         #region Func Private 

@@ -65,7 +65,7 @@
         public const string SMAI013D = "SMAI-013D";
         public const string SMAI023D = "SMAI-023D";
         public const string SMAI020P = "SMAI-020P";
-
+        public const string ISYS010I = "ISYS-010I";
         #endregion
 
 

@@ -72,7 +72,7 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetInfoPreExamination");
-                return ResponseHelper.Error<ResponsePreExamination>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                return ResponseHelper.Error<ResponsePreExamination>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
 

@@ -95,7 +95,9 @@ function LoadData(pageNumber) {
     model.pageNumber = pageNumber
     model.colSort = 11;
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
-    if (result.length > 0) {
+    if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    } else if (result.length > 0) {
         AddRowTable(result);
         let TotalPages = result[0].totalPages;
         AddPagination(TotalPages);
@@ -346,7 +348,7 @@ function InitSelectList(Y, M, D, year, month, ddflg, type) {
         } else if (year == currentYear && month == currentMonth || year == currentYear && month > currentMonth) {
             month = currentMonth;
         }
-        if (ddflg == "this") {            
+        if (ddflg == "this") {
             addSelectOption(M, 1, currentMonth);
             if (currentMonth == month) {
                 addSelectOption(D, 1, currentDay);
@@ -383,15 +385,15 @@ function InitSelectList(Y, M, D, year, month, ddflg, type) {
         }
         while (i > (birthMonth - 1));
         if (currentMonth == month) {
-            addSelectOption(D, 1, currentDay)           
+            addSelectOption(D, 1, currentDay)
             setSelectD(type, currentDay);
         } else if (birthMonth == month) {
             let daysInMonth = GetDaysInMonth(year, month);
-            addSelectOption(D, birthDay, daysInMonth);           
+            addSelectOption(D, birthDay, daysInMonth);
 
         } else {
             let daysInMonth = GetDaysInMonth(currentYear - 1, month)
-            addSelectOption(D, 1, daysInMonth);            
+            addSelectOption(D, 1, daysInMonth);
         }
         $(Y).append(new Option(currentYear, currentYear));
         setSelectM(type, month);

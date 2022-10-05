@@ -1,8 +1,12 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
+﻿using GrapeCity.ActiveReports;
+using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Model;
+using KantanMitsumori.Model.Request;
 using KantanMitsumori.Models;
+using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -19,34 +23,38 @@ namespace KantanMitsumori.Controllers
             _config = config;
             _logToken = new LogToken();
 
-        }
+        }     
         [Route("[controller]/[action]")]
-        public IActionResult ErrorPage([FromQuery] string messageCode, string messageContent)
+        public IActionResult ErrorPage([FromForm] RequestError model)
         {
             var ErrorViewModel = new ErrorViewModel()
             {
-                MessageCode = messageCode,
-                MessageContent = messageContent
+                MessageCode = model.messageCode,
+                MessageContent = model.messageContent
             };
             return View(ErrorViewModel);
         }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
         {
-
+            var pramQuery = Request.Query.Count == 0;
             var cookies = Request.Cookies[COOKIES]!;
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
-            if(controllerName.Contains("Home")) await next();
+            if (controllerName.Contains("Home")) await next();
+            if (controllerName.Contains("Estmain") && pramQuery) await next();
             _logToken = HelperToken.EncodingToken(cookies!)!;
-            if (_logToken == null && !controllerName.Contains("Estmain"))
+            if (_logToken == null)
             {
                 var ErrorViewModel = new ErrorViewModel()
                 {
-                    MessageCode = HelperMessage.SMAL020P,
-                    MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL020P)
+                    MessageCode = HelperMessage.SMAI001P,
+                    MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P)
                 };
-                filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
+                if (!actionName.Contains("Index") && !controllerName.Contains("Error"))
+                    filterContext.Result = ErrorAction();
+                else
+                    filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
                 return;
             }
             else if (_logToken != null)
@@ -60,11 +68,20 @@ namespace KantanMitsumori.Controllers
             await next();
         }
 
-        public IActionResult ErrorAction<T>(ResponseBase<T> response)
+        public IActionResult ErrorAction<T>(ResponseBase<T> response, int isUnexpectedErr = 0)
         {
-            return new RedirectToActionResult("ErrorPage", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
+            if (isUnexpectedErr != 1)
+                return new RedirectToActionResult("ErrorPage", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
+            else
+                return new RedirectToActionResult("ErrorPage", "Home", new ErrorViewModel { MessageCode = HelperMessage.ISYS010I, MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I) });
         }
-        /// <summary>
+
+        public IActionResult ErrorAction()
+        {
+            var response = ResponseHelper.Error<int>(HelperMessage.SMAI001P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P));
+            return Ok(response);
+        }
+        /// <summary> 
         ///setTokenCookie
         /// </summary>
         /// <param name="token"></param>     

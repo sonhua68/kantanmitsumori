@@ -51,7 +51,7 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "getInfoCust");
-                return ResponseHelper.Error<ResponseInpCustKana>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));
+                return ResponseHelper.Error<ResponseInpCustKana>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
 
             }
         }
@@ -80,7 +80,7 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInpCustKana");
-                return ResponseHelper.Error<int>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));
+                return ResponseHelper.Error<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
 

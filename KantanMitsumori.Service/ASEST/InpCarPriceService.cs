@@ -53,7 +53,7 @@ namespace KantanMitsumori.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetCarPriceInfo");
-                return ResponseHelper.Error<ResponseInpCarPrice>(HelperMessage.CEST040D, KantanMitsumoriUtil.GetMessage(HelperMessage.CEST040D));
+                return ResponseHelper.Error<ResponseInpCarPrice>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(HelperMessage.ISYS010I));
             }
         }
 
@@ -106,7 +106,7 @@ namespace KantanMitsumori.Service
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetCarPriceInfo");
-                return ResponseHelper.Error<bool?>(HelperMessage.CEST040D, KantanMitsumoriUtil.GetMessage(HelperMessage.CEST040D), false);
+                return ResponseHelper.Error<bool?>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(HelperMessage.ISYS010I), false);
             }
         }
 

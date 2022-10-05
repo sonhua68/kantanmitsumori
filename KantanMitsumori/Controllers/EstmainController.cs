@@ -46,10 +46,6 @@ namespace KantanMitsumori.Controllers
         public IActionResult CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer)
         {
             var response = _appService.CheckGoPageLease(firstRegYm, makerName, nowOdometer);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
             return Ok(response);
         }
     }
