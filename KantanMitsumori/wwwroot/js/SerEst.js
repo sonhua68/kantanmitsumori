@@ -373,6 +373,7 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
     var birthMonth;
     var birthDay;
     var dtBirth = SetFormatYear(currentYear, currentMonth, currentDay);
+    dtBirth = moment(dtBirth).add(1, 'days');
     dtBirth = moment(dtBirth).add(-3, 'month');
     birthYear = parseInt(dtBirth.format('YYYY'));
     birthMonth = parseInt(dtBirth.format('M'));
