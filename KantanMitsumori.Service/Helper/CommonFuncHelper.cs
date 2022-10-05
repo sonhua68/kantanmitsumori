@@ -2,6 +2,7 @@
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using Microsoft.Extensions.Logging;
@@ -266,7 +267,7 @@ namespace KantanMitsumori.Service.Helper
 
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
-                strCarImgPlace = CommonSettings.def_CarImgPlace;
+                strCarImgPlace = CommonSettings.PhysicalPathSettings.def_CarImgPlace;
                 strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMM") + "/";
                 if (!Directory.Exists(strCarImgPlace))
                 {
@@ -395,7 +396,7 @@ namespace KantanMitsumori.Service.Helper
             string[] arrExclusionList;
             try
             {
-                strExclusionList = File.ReadAllText(CommonSettings.def_ExclusionListOfAutoCalc, enc);
+                strExclusionList = File.ReadAllText(CommonSettings.PhysicalPathSettings.def_ExclusionListOfAutoCalc, enc);
                 arrExclusionList = strExclusionList.Split("\r\n");
             }
             catch (Exception ex)

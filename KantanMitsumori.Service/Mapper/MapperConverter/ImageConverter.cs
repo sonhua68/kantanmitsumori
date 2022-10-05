@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +15,9 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         /// Load image from input path and convert to base64 string
         /// </summary>
         public string Convert(string? imgFilePath, ResolutionContext context)
-        {
-            //var settings = context.Items["commonSettings"] as CommonSettings;
-            //if (settings == null)
-            //    throw new MissingMemberException("The settings is missing.");
+        {            
             if (string.IsNullOrEmpty(imgFilePath) || !File.Exists(imgFilePath))
-                return ConverterHelper.LoadImage(CommonSettings.def_DmyImg);
+                return ConverterHelper.LoadImage(CommonSettings.PhysicalPathSettings.def_DmyImg);
             return ConverterHelper.LoadImage(imgFilePath);
         }
     }

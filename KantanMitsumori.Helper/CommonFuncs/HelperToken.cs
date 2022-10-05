@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.Model;
+﻿using KantanMitsumori.Helper.Settings;
+using KantanMitsumori.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -15,18 +16,14 @@ namespace KantanMitsumori.Helper.CommonFuncs
 {
     public static class HelperToken
     {
-        public static IConfiguration? _config;
-        public static void Configure(IConfiguration config)
-        {
-            _config = config;
-        }
+        static JwtSettings _jwtSettings = CommonSettings.JwtSettings;        
         public static LogToken? EncodingToken(string token)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(token)) return null;
                 var tokenHandler = new JwtSecurityTokenHandler();            
-                var key = Encoding.UTF8.GetBytes(_config!["JwtSettings:Key"]);
+                var key = Encoding.UTF8.GetBytes(_jwtSettings.Key);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -52,7 +49,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
         public static string GenerateJsonToken(LogToken model)
         {           
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config!["JwtSettings:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             string genderStr = JsonConvert.SerializeObject(model);
             var claims = new[]
@@ -61,11 +58,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             var currentDate = DateTime.Now;
-            var RefreshExpires = _config["JwtSettings:AccessExpires"];
+            var RefreshExpires = _jwtSettings.AccessExpires;
             TimeSpan time = TimeSpan.Parse(RefreshExpires);
             var token = new JwtSecurityToken(
-                issuer: _config["JwtSettings:Issuer"],
-                audience: _config["JwtSettings:Issuer"],
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Issuer,
                 claims,
                 notBefore: currentDate,
                 expires: currentDate.Add(time),

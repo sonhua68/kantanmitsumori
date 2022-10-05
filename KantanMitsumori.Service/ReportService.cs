@@ -32,17 +32,15 @@ namespace KantanMitsumori.Service
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUnitOfWorkIDE _unitOfWorkIDE;
-        private readonly HelperMapper _helperMapper;
-        private readonly CommonSettings _commonSettings;
+        private readonly HelperMapper _helperMapper;        
 
-        public ReportService(IMapper mapper, ILogger<ReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper, CommonSettings commonSettings)
+        public ReportService(IMapper mapper, ILogger<ReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _unitOfWorkIDE = unitOfWorkIDE;
-            _helperMapper = helperMapper;
-            _commonSettings = commonSettings;
+            _helperMapper = helperMapper;            
         }
         
         public ResponseBase<ReportFileModel> GenerateEstimateReport(RequestReport model)
@@ -113,10 +111,10 @@ namespace KantanMitsumori.Service
         {
             var assembly = Assembly.GetEntryAssembly();
             var resourcePath = $"KantanMitsumori.Reports.{resourceName}";
-            using (Stream stream = assembly.GetManifestResourceStream(resourcePath))
+            using (Stream stream = assembly.GetManifestResourceStream(resourcePath!))
             using (MemoryStream ms = new MemoryStream())
             {
-                stream.CopyTo(ms);
+                stream!.CopyTo(ms);
                 return Convert.ToBase64String(ms.ToArray());
             }
         }
@@ -155,15 +153,13 @@ namespace KantanMitsumori.Service
             _mapper.Map(estEntity, reportModel
                 , o => {
                     o.Items["estSubEntity"] = estSubEntity;
-                    o.Items["sysEntity"] = sysEntity;
-                    o.Items["commonSettings"] = _commonSettings;
+                    o.Items["sysEntity"] = sysEntity;                    
                     o.Items["requestReport"] = input;
                 });
             _mapper.Map(estSubEntity, reportModel
                 , o => {
                     o.Items["estEntity"] = estEntity;
-                    o.Items["sysEntity"] = sysEntity;
-                    o.Items["commonSettings"] = _commonSettings;
+                    o.Items["sysEntity"] = sysEntity;                    
                     o.Items["requestReport"] = input;
                 });
             _mapper.Map(input, reportModel);

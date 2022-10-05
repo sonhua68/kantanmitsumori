@@ -1,4 +1,5 @@
 using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Service.ASEST;
@@ -43,8 +44,7 @@ namespace KantanMitsumori.Service
         {
             services.AddScoped<CommonFuncHelper>();
             services.AddScoped<CommonEstimate>();
-            services.AddScoped<HelperMapper>();
-            services.AddScoped<CommonSettings>();
+            services.AddScoped<HelperMapper>();            
             services.AddScoped<CommonFuncHelper>();
             services.AddScoped<CommonIDE>();
             return services;

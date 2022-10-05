@@ -4,6 +4,7 @@ using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService.ASEST;
@@ -941,7 +942,7 @@ namespace KantanMitsumori.Service.ASEST
             var regYear = int.Parse(CommonFunction.Left(firstRegYm, 4));
             var firstYear = regYear + LeaseTargetsID1!.Restriction;
             var zenkaku = StringWidthHelper.ToFullWidth(makerName);
-            var arrayMakerName = CommonSettings.def_MakerName;
+            var arrayMakerName = CommonSettings.DataSettings.def_MakerName;
             var cmakerName = arrayMakerName.Contains(zenkaku);
             if (nowOdometer > LeaseTargetsID2!.Restriction || firstYear < year || cmakerName == false)
             {
