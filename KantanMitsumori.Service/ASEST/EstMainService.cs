@@ -115,7 +115,7 @@ namespace KantanMitsumori.Service.ASEST
 
             }
         }
-        public async Task<ResponseBase<ResponseEstMainModel>> ReloadGetEstMain(LogToken logtoken)
+        public ResponseBase<ResponseEstMainModel> ReloadGetEstMain(LogToken logtoken)
         {
             try
             {

@@ -9,8 +9,8 @@ namespace KantanMitsumori.IService.ASEST
         UserModel getUserName(string userNo);
         ResponseBase<UserModel> getUserInfo(string mem);
         Task<ResponseBase<ResponseEstMainModel>> getEstMain(RequestActionModel requestAction, RequestHeaderModel request);
-        Task<ResponseBase<ResponseEstMainModel>> ReloadGetEstMain(LogToken logtoken);
-        Task<ResponseBase<ResponseEstMainModel>> setFreeEst(RequestSelGrdFreeEst model, LogToken logtoken);       
+        ResponseBase<ResponseEstMainModel> ReloadGetEstMain(LogToken logtoken);
+        Task<ResponseBase<ResponseEstMainModel>> setFreeEst(RequestSelGrdFreeEst model, LogToken logtoken);
         Task<ResponseBase<string>> AddEstimate(RequestSerEst model, LogToken logToken);
         Task<ResponseBase<string>> CalcSum(RequestSerEst model, LogToken logToken);
         Task<ResponseBase<int>> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer);
