@@ -1,5 +1,6 @@
 ﻿using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
+using NodaTime;
 using System.Globalization;
 
 namespace KantanMitsumori.Helper.CommonFuncs
@@ -475,14 +476,18 @@ namespace KantanMitsumori.Helper.CommonFuncs
             if (dtEnd < dtInit)
                 throw new ArithmeticException("Init date should be previous to End date.");
 
+            var periods = Period.Between(
+                        new LocalDate(dtInit.Year, dtInit.Month, dtInit.Day),
+                        new LocalDate(dtEnd.Year, dtEnd.Month, dtEnd.Day));
+
             switch (eInterval)
             {
                 case IntervalEnum.Days:
-                    return (int)(dtEnd - dtInit).TotalDays;
+                    return periods.Days;
                 case IntervalEnum.Months:
-                    return ((dtEnd.Year - dtInit.Year) * 12) + dtEnd.Month - dtInit.Month;
+                    return periods.Months;
                 case IntervalEnum.Years:
-                    return dtEnd.Year - dtInit.Year;
+                    return periods.Years;
                 default:
                     throw new ArgumentException("Incorrect interval code.");
             }
