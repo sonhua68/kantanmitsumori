@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
+﻿using GrapeCity.ActiveReports;
+using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
@@ -22,34 +23,35 @@ namespace KantanMitsumori.Controllers
             _config = config;
             _logToken = new LogToken();
 
-        }
+        }     
         [Route("[controller]/[action]")]
-        public IActionResult ErrorPage([FromQuery] string messageCode, string messageContent)
+        public IActionResult ErrorPage([FromForm] RequestError model)
         {
             var ErrorViewModel = new ErrorViewModel()
             {
-                MessageCode = messageCode,
-                MessageContent = messageContent
+                MessageCode = model.messageCode,
+                MessageContent = model.messageContent
             };
             return View(ErrorViewModel);
         }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
         {
-
+            var pramQuery = Request.Query.Count == 0;
             var cookies = Request.Cookies[COOKIES]!;
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
             if (controllerName.Contains("Home")) await next();
+            if (controllerName.Contains("Estmain") && pramQuery) await next();
             _logToken = HelperToken.EncodingToken(cookies!)!;
-            if (_logToken == null && !controllerName.Contains("Estmain"))
+            if (_logToken == null)
             {
                 var ErrorViewModel = new ErrorViewModel()
                 {
-                    MessageCode = HelperMessage.SMAL020P,
-                    MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL020P)
+                    MessageCode = HelperMessage.SMAI001P,
+                    MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P)
                 };
-                if (!actionName.Contains("Index")&& !controllerName.Contains("Error"))
+                if (!actionName.Contains("Index") && !controllerName.Contains("Error"))
                     filterContext.Result = ErrorAction();
                 else
                     filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
@@ -76,7 +78,7 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult ErrorAction()
         {
-            var response = ResponseHelper.Error<int>(HelperMessage.SMAL020P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL020P));
+            var response = ResponseHelper.Error<int>(HelperMessage.SMAI001P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P));
             return Ok(response);
         }
         /// <summary> 

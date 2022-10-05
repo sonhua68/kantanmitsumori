@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using KantanMitsumori.Model.Request;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
 {
@@ -11,6 +12,6 @@ namespace KantanMitsumori.Controllers
         public ErrorController(ILogger<ErrorController> logger, IConfiguration config) : base(config)
         {
             _logger = logger;
-        }       
+        }
     }
 }

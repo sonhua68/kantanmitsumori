@@ -105,6 +105,7 @@ namespace KantanMitsumori.Service.ASEST
             {
                 _logger.LogError(ex, "UpdateInpSyohiyo");
                 return ResponseHelper.Error<int>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));
+                in
             }
         }
 
