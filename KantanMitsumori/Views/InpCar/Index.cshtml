@@ -205,7 +205,7 @@
                                 <tr>
                                     <td class="inpbtntd">
                                         <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();return false;" style="height:32px;width:100px;">
-                                        <input type="submit" name="btnInputCar" value="Ok" form="formInputCar" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="submit" name="btnInputCar" value="Ok" onclick="return onSummit();" form="formInputCar" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -230,18 +230,10 @@
 </form>
 <script>
     SetInitData();
-    $('#formInputCar').validate({
-        submitHandler: function (form) {
-            var model = Framework.getFormData($("#formInputCar"));
-            console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCar/UpdateInputCar");
-            if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
-            } else {
-                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
-            }
-        }
-    });
+    function onSummit() {
+        Framework.OnSubmitForm("/InpCar/UpdateInputCar", "formInputCar");
+        return false;
+    }
     function swichUnit(NameId, value) {
         var $this = $("#" + NameId + "");
         if (value == true) {

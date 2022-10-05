@@ -29,8 +29,8 @@
     <script src="~/js/PreExamination/svg4everybody.min.js"></script>
     <script>svg4everybody();</script>
     <script type="text/javascript">
-        $(function() {
-            $(".js-agree input").click(function() {
+        $(function () {
+            $(".js-agree input").click(function () {
                 if ($(this).prop("checked") == true) {
                     $(".js-entryButton").removeClass("buttonDisabled");
                 } else {
@@ -59,88 +59,88 @@
             <div id="message" class="pl30"></div>
             <div id="examinationConfirmArea">
                 <form id="formArea" method="post" runat="server" action="@actionURL">
-                    <input type="hidden" runat="server" id="leaseEstimateNo" name="leaseEstimateNo" value="@Model.leaseEstimateNo">
-                    <input type="hidden" runat="server" id="ssCode" name="ssCode" value="@Model.ssCode">
-                    <input type="hidden" runat="server" id="ssName" name="ssName" value="@Model.ssName">
-                    <input type="hidden" runat="server" id="ssStaffName" name="ssStaffName" value="@Model.ssStaffName">
-                    <input type="hidden" runat="server" id="ssMailAddress" name="ssMailAddress" value="@Model.ssMailAddress">
-                    <input type="hidden" runat="server" id="vendorName" name="vendorName" value="@Model.vendorName">
-                    <input type="hidden" runat="server" id="mkNm" name="mkNm" value="@Model.mkNm">
-                    <input type="hidden" runat="server" id="commodityName" name="commodityName" value="@Model.commodityName">
-                    <input type="hidden" runat="server" id="gradeName" name="gradeName" value="@Model.gradeName">
-                    <input type="hidden" runat="server" id="bcolorNm" name="bcolorNm" value="@Model.bcolorNm">
-                    <input type="hidden" runat="server" id="fuelName" name="fuelName" value="@Model.fuelName">
-                    <input type="hidden" runat="server" id="haiki" name="haiki" value="@Model.haiki">
-                    <input type="hidden" runat="server" id="missionCd" name="missionCd" value="@Model.missionCd">
-                    <input type="hidden" runat="server" id="wheelDriveName" name="wheelDriveName" value="@Model.wheelDriveName">
-                    <input type="hidden" runat="server" id="doorCd" name="doorCd" value="@Model.doorCd">
-                    <input type="hidden" runat="server" id="body" name="body" value="@Model.body">
-                    <input type="hidden" runat="server" id="teiinA" name="teiinA" value="@Model.teiinA">
-                    <input type="hidden" runat="server" id="ninKata" name="ninKata" value="@Model.ninKata">
-                    <input type="hidden" runat="server" id="colorCost" name="colorCost" value="@Model.colorCost">
-                    <input type="hidden" runat="server" id="reopName1" name="reopName1" value="@Model.reopName1">
-                    <input type="hidden" runat="server" id="Mileage" name="Mileage" value="@Model.Mileage">
-                    <input type="hidden" runat="server" id="carType" name="carType" value="@Model.carType">
-                    <input type="hidden" runat="server" id="firstMonth" name="firstMonth" value="@Model.firstMonth">
-                    <input type="hidden" runat="server" id="reopGroupName1" name="reopGroupName1" value="@Model.reopGroupName1">
-                    <input type="hidden" runat="server" id="reopCost1" name="reopCost1" value="@Model.reopCost1">
-                    <input type="hidden" runat="server" id="leasePeriod" name="leasePeriod" value="@Model.leasePeriod">
-                    <input type="hidden" runat="server" id="reopGroupName2" name="reopGroupName2" value="@Model.reopGroupName2">
-                    <input type="hidden" runat="server" id="maintenanceName" name="maintenanceName" value="@Model.maintenanceName">
-                    <input type="hidden" runat="server" id="maothlyFeeT" name="maothlyFeeT" value="@Model.maothlyFeeT">
-                    <input type="hidden" runat="server" id="guaranteeFee" name="guaranteeFee" value="@Model.guaranteeFee">
-                    <input type="hidden" runat="server" id="guaranteeFeeOne" name="guaranteeFeeOne" value="@Model.guaranteeFeeOne">
-                    <input type="hidden" runat="server" id="guaranteeFeeEx" name="guaranteeFeeEx" value="@Model.guaranteeFeeEx">
-                    <input type="hidden" runat="server" id="insuranceWhich" name="insuranceWhich" value="@Model.insuranceWhich">
-                    <input type="hidden" runat="server" id="carInsCompany" name="carInsCompany" value="@Model.carInsCompany">
-                    <input type="hidden" runat="server" id="carInsPrice" name="carInsPrice" value="@Model.carInsPrice">
-                    <input type="hidden" runat="server" id="carPriceTax" name="carPriceTax" value="@Model.carPriceTax">
-                    <input type="hidden" runat="server" id="nebiki" name="nebiki" value="@Model.nebiki">
-                    <input type="hidden" runat="server" id="otherTax" name="otherTax" value="@Model.otherTax">
-                    <input type="hidden" runat="server" id="carMaintenance" name="carMaintenance" value="@Model.carMaintenance">
-                    <input type="hidden" runat="server" id="fOpCost" name="fOpCost" value="@Model.fOpCost">
-                    <input type="hidden" runat="server" id="carSellPriceT" name="carSellPriceT" value="@Model.carSellPriceT">
-                    <input type="hidden" runat="server" id="automobileTax" name="automobileTax" value="@Model.automobileTax">
-                    <input type="hidden" runat="server" id="environmental" name="environmental" value="@Model.environmental">
-                    <input type="hidden" runat="server" id="weightTax" name="weightTax" value="@Model.weightTax">
-                    <input type="hidden" runat="server" id="liabilityInsur" name="liabilityInsur" value="@Model.liabilityInsur">
-                    <input type="hidden" runat="server" id="totalTaxEx" name="totalTaxEx" value="@Model.totalTaxEx">
-                    <input type="hidden" runat="server" id="legalCustody" name="legalCustody" value="@Model.legalCustody">
-                    <input type="hidden" runat="server" id="procedureAgency" name="procedureAgency" value="@Model.procedureAgency">
-                    <input type="hidden" runat="server" id="recyclingCost" name="recyclingCost" value="@Model.recyclingCost">
-                    <input type="hidden" runat="server" id="custodyStatutory" name="custodyStatutory" value="@Model.custodyStatutory">
-                    <input type="hidden" runat="server" id="cashSellingT" name="cashSellingT" value="@Model.cashSellingT">
-                    <input type="hidden" runat="server" id="reopName2" name="reopName2" value="@Model.reopName2">
-                    <input type="hidden" runat="server" id="fOp1ComName" name="fOp1ComName" value="@Model.fOp1ComName">
-                    <input type="hidden" runat="server" id="fOp1Cost" name="fOp1Cost" value="@Model.fOp1Cost">
-                    <input type="hidden" runat="server" id="fOp2ComName" name="fOp2ComName" value="@Model.fOp2ComName">
-                    <input type="hidden" runat="server" id="fOp2Cost" name="fOp2Cost" value="@Model.fOp2Cost">
-                    <input type="hidden" runat="server" id="fOp3ComName" name="fOp3ComName" value="@Model.fOp3ComName">
-                    <input type="hidden" runat="server" id="fOp3Cost" name="fOp3Cost" value="@Model.fOp3Cost">
-                    <input type="hidden" runat="server" id="fOp4ComName" name="fOp4ComName" value="@Model.fOp4ComName">
-                    <input type="hidden" runat="server" id="fOp4Cost" name="fOp4Cost" value="@Model.fOp4Cost">
-                    <input type="hidden" runat="server" id="fOp5ComName" name="fOp5ComName" value="@Model.fOp5ComName">
-                    <input type="hidden" runat="server" id="fOp5Cost" name="fOp5Cost" value="@Model.fOp5Cost">
-                    <input type="hidden" runat="server" id="fOp6ComName" name="fOp6ComName" value="@Model.fOp6ComName">
-                    <input type="hidden" runat="server" id="fOp6Cost" name="fOp6Cost" value="@Model.fOp6Cost">
-                    <input type="hidden" runat="server" id="fOp7ComName" name="fOp7ComName" value="@Model.fOp7ComName">
-                    <input type="hidden" runat="server" id="fOp7Cost" name="fOp7Cost" value="@Model.fOp7Cost">
-                    <input type="hidden" runat="server" id="fOp8ComName" name="fOp8ComName" value="@Model.fOp8ComName">
-                    <input type="hidden" runat="server" id="fOp8Cost" name="fOp8Cost" value="@Model.fOp8Cost">
-                    <input type="hidden" runat="server" id="fOp9ComName" name="fOp9ComName" value="@Model.fOp9ComName">
-                    <input type="hidden" runat="server" id="fOp9Cost" name="fOp9Cost" value="@Model.fOp9Cost">
-                    <input type="hidden" runat="server" id="fOp10ComName" name="fOp10ComName" value="@Model.fOp10ComName">
-                    <input type="hidden" runat="server" id="fOp10Cost" name="fOp10Cost" value="@Model.fOp10Cost">
-                    <input type="hidden" runat="server" id="fOp11ComName" name="fOp11ComName" value="@Model.fOp11ComName">
-                    <input type="hidden" runat="server" id="fOp11Cost" name="fOp11Cost" value="@Model.fOp11Cost">
-                    <input type="hidden" runat="server" id="fOp12ComName" name="fOp12ComName" value="@Model.fOp12ComName">
-                    <input type="hidden" runat="server" id="fOp12Cost" name="fOp12Cost" value="@Model.fOp12Cost">
-                    <input type="hidden" runat="server" id="dPaymentPriceTax" name="dPaymentPriceTax" value="@Model.dPaymentPriceTax">
-                    <input type="hidden" runat="server" id="TITradeIn" name="TITradeIn" value="@Model.TITradeIn">
-                    <input type="hidden" runat="server" id="DP_TIT" name="DP_TIT" value="@Model.DP_TIT">
-                    <input type="hidden" runat="server" id="leasePriceInTax" name="leasePriceInTax" value="@Model.leasePriceInTax">
-                    <input type="hidden" runat="server" id="costAdjustPriceT" name="costAdjustPriceT" value="@Model.costAdjustPriceT">
-                    <input type="hidden" runat="server" id="examOrderType" name="examOrderType" value="@Model.examOrderType">
+                    <input type="hidden" id="leaseEstimateNo" name="leaseEstimateNo" value="@Model.leaseEstimateNo">
+                    <input type="hidden" id="ssCode" name="ssCode" value="@Model.ssCode">
+                    <input type="hidden" id="ssName" name="ssName" value="@Model.ssName">
+                    <input type="hidden" id="ssStaffName" name="ssStaffName" value="@Model.ssStaffName">
+                    <input type="hidden" id="ssMailAddress" name="ssMailAddress" value="@Model.ssMailAddress">
+                    <input type="hidden" id="vendorName" name="vendorName" value="@Model.vendorName">
+                    <input type="hidden" id="mkNm" name="mkNm" value="@Model.mkNm">
+                    <input type="hidden" id="commodityName" name="commodityName" value="@Model.commodityName">
+                    <input type="hidden" id="gradeName" name="gradeName" value="@Model.gradeName">
+                    <input type="hidden" id="bcolorNm" name="bcolorNm" value="@Model.bcolorNm">
+                    <input type="hidden" id="fuelName" name="fuelName" value="@Model.fuelName">
+                    <input type="hidden" id="haiki" name="haiki" value="@Model.haiki">
+                    <input type="hidden" id="missionCd" name="missionCd" value="@Model.missionCd">
+                    <input type="hidden" id="wheelDriveName" name="wheelDriveName" value="@Model.wheelDriveName">
+                    <input type="hidden" id="doorCd" name="doorCd" value="@Model.doorCd">
+                    <input type="hidden" id="body" name="body" value="@Model.body">
+                    <input type="hidden" id="teiinA" name="teiinA" value="@Model.teiinA">
+                    <input type="hidden" id="ninKata" name="ninKata" value="@Model.ninKata">
+                    <input type="hidden" id="colorCost" name="colorCost" value="@Model.colorCost">
+                    <input type="hidden" id="reopName1" name="reopName1" value="@Model.reopName1">
+                    <input type="hidden" id="Mileage" name="Mileage" value="@Model.Mileage">
+                    <input type="hidden" id="carType" name="carType" value="@Model.carType">
+                    <input type="hidden" id="firstMonth" name="firstMonth" value="@Model.firstMonth">
+                    <input type="hidden" id="reopGroupName1" name="reopGroupName1" value="@Model.reopGroupName1">
+                    <input type="hidden" id="reopCost1" name="reopCost1" value="@Model.reopCost1">
+                    <input type="hidden" id="leasePeriod" name="leasePeriod" value="@Model.leasePeriod">
+                    <input type="hidden" id="reopGroupName2" name="reopGroupName2" value="@Model.reopGroupName2">
+                    <input type="hidden" id="maintenanceName" name="maintenanceName" value="@Model.maintenanceName">
+                    <input type="hidden" id="maothlyFeeT" name="maothlyFeeT" value="@Model.maothlyFeeT">
+                    <input type="hidden" id="guaranteeFee" name="guaranteeFee" value="@Model.guaranteeFee">
+                    <input type="hidden" id="guaranteeFeeOne" name="guaranteeFeeOne" value="@Model.guaranteeFeeOne">
+                    <input type="hidden" id="guaranteeFeeEx" name="guaranteeFeeEx" value="@Model.guaranteeFeeEx">
+                    <input type="hidden" id="insuranceWhich" name="insuranceWhich" value="@Model.insuranceWhich">
+                    <input type="hidden" id="carInsCompany" name="carInsCompany" value="@Model.carInsCompany">
+                    <input type="hidden" id="carInsPrice" name="carInsPrice" value="@Model.carInsPrice">
+                    <input type="hidden" id="carPriceTax" name="carPriceTax" value="@Model.carPriceTax">
+                    <input type="hidden" id="nebiki" name="nebiki" value="@Model.nebiki">
+                    <input type="hidden" id="otherTax" name="otherTax" value="@Model.otherTax">
+                    <input type="hidden" id="carMaintenance" name="carMaintenance" value="@Model.carMaintenance">
+                    <input type="hidden" id="fOpCost" name="fOpCost" value="@Model.fOpCost">
+                    <input type="hidden" id="carSellPriceT" name="carSellPriceT" value="@Model.carSellPriceT">
+                    <input type="hidden" id="automobileTax" name="automobileTax" value="@Model.automobileTax">
+                    <input type="hidden" id="environmental" name="environmental" value="@Model.environmental">
+                    <input type="hidden" id="weightTax" name="weightTax" value="@Model.weightTax">
+                    <input type="hidden" id="liabilityInsur" name="liabilityInsur" value="@Model.liabilityInsur">
+                    <input type="hidden" id="totalTaxEx" name="totalTaxEx" value="@Model.totalTaxEx">
+                    <input type="hidden" id="legalCustody" name="legalCustody" value="@Model.legalCustody">
+                    <input type="hidden" id="procedureAgency" name="procedureAgency" value="@Model.procedureAgency">
+                    <input type="hidden" id="recyclingCost" name="recyclingCost" value="@Model.recyclingCost">
+                    <input type="hidden" id="custodyStatutory" name="custodyStatutory" value="@Model.custodyStatutory">
+                    <input type="hidden" id="cashSellingT" name="cashSellingT" value="@Model.cashSellingT">
+                    <input type="hidden" id="reopName2" name="reopName2" value="@Model.reopName2">
+                    <input type="hidden" id="fOp1ComName" name="fOp1ComName" value="@Model.fOp1ComName">
+                    <input type="hidden" id="fOp1Cost" name="fOp1Cost" value="@Model.fOp1Cost">
+                    <input type="hidden" id="fOp2ComName" name="fOp2ComName" value="@Model.fOp2ComName">
+                    <input type="hidden" id="fOp2Cost" name="fOp2Cost" value="@Model.fOp2Cost">
+                    <input type="hidden" id="fOp3ComName" name="fOp3ComName" value="@Model.fOp3ComName">
+                    <input type="hidden" id="fOp3Cost" name="fOp3Cost" value="@Model.fOp3Cost">
+                    <input type="hidden" id="fOp4ComName" name="fOp4ComName" value="@Model.fOp4ComName">
+                    <input type="hidden" id="fOp4Cost" name="fOp4Cost" value="@Model.fOp4Cost">
+                    <input type="hidden" id="fOp5ComName" name="fOp5ComName" value="@Model.fOp5ComName">
+                    <input type="hidden" id="fOp5Cost" name="fOp5Cost" value="@Model.fOp5Cost">
+                    <input type="hidden" id="fOp6ComName" name="fOp6ComName" value="@Model.fOp6ComName">
+                    <input type="hidden" id="fOp6Cost" name="fOp6Cost" value="@Model.fOp6Cost">
+                    <input type="hidden" id="fOp7ComName" name="fOp7ComName" value="@Model.fOp7ComName">
+                    <input type="hidden" id="fOp7Cost" name="fOp7Cost" value="@Model.fOp7Cost">
+                    <input type="hidden" id="fOp8ComName" name="fOp8ComName" value="@Model.fOp8ComName">
+                    <input type="hidden" id="fOp8Cost" name="fOp8Cost" value="@Model.fOp8Cost">
+                    <input type="hidden" id="fOp9ComName" name="fOp9ComName" value="@Model.fOp9ComName">
+                    <input type="hidden" id="fOp9Cost" name="fOp9Cost" value="@Model.fOp9Cost">
+                    <input type="hidden" id="fOp10ComName" name="fOp10ComName" value="@Model.fOp10ComName">
+                    <input type="hidden" id="fOp10Cost" name="fOp10Cost" value="@Model.fOp10Cost">
+                    <input type="hidden" id="fOp11ComName" name="fOp11ComName" value="@Model.fOp11ComName">
+                    <input type="hidden" id="fOp11Cost" name="fOp11Cost" value="@Model.fOp11Cost">
+                    <input type="hidden" id="fOp12ComName" name="fOp12ComName" value="@Model.fOp12ComName">
+                    <input type="hidden" id="fOp12Cost" name="fOp12Cost" value="@Model.fOp12Cost">
+                    <input type="hidden" id="dPaymentPriceTax" name="dPaymentPriceTax" value="@Model.dPaymentPriceTax">
+                    <input type="hidden" id="TITradeIn" name="TITradeIn" value="@Model.TITradeIn">
+                    <input type="hidden" id="DP_TIT" name="DP_TIT" value="@Model.DP_TIT">
+                    <input type="hidden" id="leasePriceInTax" name="leasePriceInTax" value="@Model.leasePriceInTax">
+                    <input type="hidden" id="costAdjustPriceT" name="costAdjustPriceT" value="@Model.costAdjustPriceT">
+                    <input type="hidden" id="examOrderType" name="examOrderType" value="@Model.examOrderType">
 
 
                     <div class="textIntro">

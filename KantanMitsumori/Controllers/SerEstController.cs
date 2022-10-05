@@ -42,7 +42,7 @@ namespace KantanMitsumori.Controllers
             var response = _selCarService.GetListSerEst(requestData);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             var dt = await PaginatedList<ResponseSerEst>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
             if (dt.Count > 0)
@@ -58,7 +58,7 @@ namespace KantanMitsumori.Controllers
             var response = _estimateService.GetMakerNameAndModelName(_logToken.UserNo!, makerName);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             return Ok(response);
         }
@@ -68,7 +68,7 @@ namespace KantanMitsumori.Controllers
             var response = await _estimateService.DeleteEstimate(requestData.EstNo!, requestData.EstSubNo!);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             return Ok(response);
         }
@@ -78,7 +78,7 @@ namespace KantanMitsumori.Controllers
             var response = await _estMainService.AddEstimate(requestData,_logToken);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             setTokenCookie(response.Data!);
             return Ok(response);
@@ -89,7 +89,7 @@ namespace KantanMitsumori.Controllers
             var response = await _estMainService.CalcSum(requestData, _logToken);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }          
             setTokenCookie(response.Data!);
             return Ok(response);

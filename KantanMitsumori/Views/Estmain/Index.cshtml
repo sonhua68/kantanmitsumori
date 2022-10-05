@@ -1289,19 +1289,21 @@
     <input type="hidden" id="hidFirstRegYm" value="@Model.EstModel.FirstRegYm">
     <input type="hidden" id="hidMakerName" value="@Model.EstModel.MakerName">
 </form>
+@section scripts{
+    <script>
+        SetInitValue();
+        function SetInitValue() {
+            if (@Model.EstModel.CallKbn == "2" || @Model.EstModel.CallKbn == "3" || @Model.EstModel.IsError == 1) {
+                alert("最初に車両本体価格をご確認下さい")
+            }
+            if (@Model.EstModel.AccidentHis == 0) {
+                $("#raJikoHisMu").attr("checked", "checked");
 
-<script>
-    SetInitValue();
-    function SetInitValue() {
-        if (@Model.EstModel.IsError == 1) {
-            alert("最初に車両本体価格をご確認下さい")
+            } else if (@Model.EstModel.AccidentHis == 1) {
+                $("#raJikoHisU").attr("checked", "checked");
+            }
         }
-        if (@Model.EstModel.AccidentHis == 0) {
-            $("#raJikoHisMu").attr("checked", "checked");
+    </script>
+    <script src="~/js/EstMain.js"></script>
+}
 
-        } else if (@Model.EstModel.AccidentHis == 1) {
-            $("#raJikoHisU").attr("checked", "checked");
-        }
-    }
-</script>
-<script src="~/js/EstMain.js"></script>

@@ -1,6 +1,7 @@
 ﻿// JScript File
 // Create Date 2022/09/13 by HoaiPhong
-/*var Tday = moment("20240229", "YYYYMMDD")*/
+/*var Tday = moment("20221228", "YYYYMMDD")*/
+/*console.log(Tday)*/
 var Tday = moment();
 const currentYear = getYear();;
 const currentMonth = getMonth();
@@ -20,7 +21,6 @@ GetListMaker();
 SetInitToDay();
 LoadData(1);
 setCookie("btnHanei", "1", 1);
-
 function GetListMaker() {
     var result = Framework.GetObjectDataFromUrl("/SerEst/GetMakerNameAndModelName?makerName=");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
@@ -31,13 +31,9 @@ function GetListMaker() {
             $("#ddlMaker").append(new Option(value, value));
         }
 
-    } else {
-        let Items = result.data;
-        if (typeof (Items) != "undefined") {
-            location.reload();
-        }
+    } else if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
-
 }
 function SetInitToDay() {
     let lastDay = getDay();
@@ -81,11 +77,8 @@ function GetListModel() {
                 let value = result.data[i].modelName;
                 $("#ddlModel").append(new Option(value, value));
             }
-        } else {
-            let Items = result.data;
-            if (typeof (Items) != "undefined") {
-                location.reload();
-            }
+        } else if (result.resultStatus == -1) {
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     } else {
         $("#ddlModel").empty();
@@ -131,7 +124,11 @@ function GoNextPage(pageNumber) {
     model.pageNumber = pageNumber
     model.colSort = _conNumber;
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
-    ReloadListData(result);
+    if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    } else {
+        ReloadListData(result);
+    }
 }
 
 function LoadData(pageNumber) {
@@ -166,11 +163,16 @@ function SortData(colNumber) {
     model.pageNumber = 1;
     model.colSort = _conNumber;
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
-    $('tr#pagination').remove();
-    $('#trId').twbsPagination('destroy');
-    UiPagination(result[0].totalPages)
-    AddPagination(result[0].totalPages);
-    ReloadListData(result);
+    if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    } else {
+        $('tr#pagination').remove();
+        $('#trId').twbsPagination('destroy');
+        UiPagination(result[0].totalPages)
+        AddPagination(result[0].totalPages);
+        ReloadListData(result);
+    }
+
 }
 function DeleteEstimate(value) {
     var data = value.toString().split("-");
@@ -183,7 +185,7 @@ function DeleteEstimate(value) {
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         LoadData(1)
     } else {
-        LoadData(1)
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }
 function AddEstimate(value) {
@@ -197,6 +199,8 @@ function AddEstimate(value) {
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         CleanCookies();
         Framework.GoBackReloadPage();
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }
 function CalcSum(value) {
@@ -210,6 +214,8 @@ function CalcSum(value) {
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         CleanCookies();
         Framework.GoBackReloadPage();
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }
 
@@ -369,7 +375,7 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
     var birthMonth;
     var birthDay;
     var dtBirth = SetFormatYear(currentYear, currentMonth, currentDay);
-    console.log(dtBirth);
+    dtBirth = moment(dtBirth).add(1, 'days');
     dtBirth = moment(dtBirth).add(-3, 'month');
     birthYear = parseInt(dtBirth.format('YYYY'));
     birthMonth = parseInt(dtBirth.format('M'));
@@ -423,7 +429,7 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
                 let daysInMonth = GetDaysInMonth(year, month)
                 for (let i = 1; i <= daysInMonth; i++) {
                     $(D).append(new Option(i, i));
-                }
+                }             
             }
             setSelectM(type, month);
             setSelectY(type, (currentYear - 1));
@@ -445,10 +451,17 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
             }
             setSelectD(type, currentDay);
         } else if (nMonth == month) {
-            let daysInMonth = GetDaysInMonth(year, month)
-            for (let i = nDay; i <= daysInMonth; i++) {
+            let daysInMonth = GetDaysInMonth(year, month);
+            let todate = moment(Tday).add(1, 'days');
+            let j = parseInt(todate.format('D'));
+            for (let i = j; i <= daysInMonth; i++) {
                 $(D).append(new Option(i, i));
             }
+            //let daysInMonth = GetDaysInMonth(year, month)
+            //for (let i = nDay; i <= daysInMonth; i++) {
+            //    $(D).append(new Option(i, i));
+            //}
+
         } else {
             let daysInMonth = GetDaysInMonth(currentYear - 1, month)
             for (let i = 1; i <= daysInMonth; i++) {
@@ -487,41 +500,34 @@ function setSelectY(type, Y) {
 
 function getMonth() {
     var month = Tday.format('M');
-    console.log(month);
     return parseInt(month);
 }
 
 function getDay() {
     var day = Tday.format('D');
-    console.log(day);
     return parseInt(day)
 }
 function getYear() {
     var year = Tday.format('YYYY');
-    console.log(year);
     return parseInt(year)
 }
 
 function addDay(y, m, d, numberday) {
     var day = moment([y, m, d]).add(numberday, 'days')
-    console.log(day);
     return day
 }
 function addYear(y, m, d, numberYeaer) {
     var day = moment([y, m, d]).add(numberday, 'month')
-    console.log(day);
     return day
 }
 
 function addYear(y, m, d, numberYeaer) {
     var day = moment([y, m, d]).add(numberday, 'daysInMonth')
-    console.log(day);
     return day;
 }
 
 function GetDaysInMonth(y, m) {
     var daysInMonth = moment([y, (m - 1)]).daysInMonth();
-    console.log(daysInMonth);
     return parseInt(daysInMonth)
 }
 

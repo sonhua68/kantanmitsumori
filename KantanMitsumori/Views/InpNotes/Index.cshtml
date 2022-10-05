@@ -36,8 +36,8 @@
             </tr>
             <tr>
                 <td class="InpTableTd" colspan="2" style=" background-color:White; text-align:right; border-bottom:none; padding-top:3px;">
-                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPageUrl('/?IsInpBack=1');return false;" style="height:32px;width:100px;">
-                    <input type="submit" name="btnOK" value="OK" form="formInputNotes" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                    <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();return false;" style="height:32px;width:100px;">
+                    <input type="submit" name="btnOK" value="OK" form="formInputNotes" onclick="return onSummit()" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                 </td>
             </tr>
             <tr>
@@ -51,18 +51,10 @@
     </div>
 </form>
 <script>
-    $('#formInputNotes').validate({
-        submitHandler: function (form) {
-            if (inputChk() == false) { return; }
-            var model = Framework.getFormData($("#formInputNotes"));
-            console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpNotes/UpdateInpNotes");
-            if (result.resultStatus == 0) {
-                Framework.GoBackReloadPageUrl('/Estmain/?IsInpBack=1');
-            } else {
-                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
-            }
-        }
-    });
+    function onSummit() {
+        if (inputChk() == false) { return; }
+        Framework.OnSubmitForm("/InpNotes/UpdateInpNotes", "formInputNotes");
+        return false;
+    }
 </script>
 <script src="~/js/InpNotes.js"></script>

@@ -576,6 +576,29 @@ var Framework =
             }
         },
         {
+            key: "OnSubmitForm",
+            value: function OnSubmitForm(Url, idForm) {
+                var model = Framework.getFormData($("#" + idForm));
+                var result = Framework.submitAjaxFormUpdateAsync(model, Url);
+                if (result.resultStatus == 0) {
+                    Framework.GoBackReloadPage();
+                } else {
+                    Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+                }
+            }
+            },
+            {
+                key: "OnSubmitFormValueModel",
+                value: function OnSubmitFormValueModel(Url, model) {                  
+                    var result = Framework.submitAjaxFormUpdateAsync(model, Url);
+                    if (result.resultStatus == 0) {
+                        Framework.GoBackReloadPage();
+                    } else {
+                        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+                    }
+                }
+            },
+        {
             key: "SortDataTable",
             value: function SortDataTable(tableId, sortName) {
                 var table = $("#" + tableId);
