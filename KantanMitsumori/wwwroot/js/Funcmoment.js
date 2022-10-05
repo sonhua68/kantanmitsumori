@@ -3,20 +3,20 @@
 /*var Tday = moment("20221228", "YYYYMMDD")*/
 /*console.log(Tday)*/
 var Tday = moment();
-const currentYear = getYear();;
-const currentMonth = getMonth();
-const currentDay = getDay();
-let month = getMonth();
-function getMonth() {
+const currentYear = getSystemYear();;
+const currentMonth = getSystemMonth();
+const currentDay = getSystemDay();
+let month = getSystemMonth();
+function getSystemMonth() {
     var month = Tday.format('M');
     return parseInt(month);
 }
 
-function getDay() {
+function getSystemDay() {
     var day = Tday.format('D');
     return parseInt(day)
 }
-function getYear() {
+function getSystemYear() {
     var year = Tday.format('YYYY');
     return parseInt(year)
 }

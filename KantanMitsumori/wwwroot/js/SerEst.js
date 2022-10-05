@@ -30,13 +30,13 @@ function GetListMaker() {
     }
 }
 function SetInitToDay() {
-    let lastDay = getDay();
+    let lastDay = getSystemDay();
     $("#ddlFromSelectD option[value='" + lastDay + "']").attr("selected", "selected");
     $("#ddlToSelectD option[value='" + lastDay + "']").attr("selected", "selected");
 }
 function setToDayChangeMonth(type) {
-    let lastDay = getDay();
-    let month = getMonth();
+    let lastDay = getSystemDay();
+    let month = getSystemMonth();
     if (type == 1) {
         let fromM = parseInt($('#ddlFromSelectM').val());
         if (fromM == month) {
@@ -321,9 +321,9 @@ function onChangeSelect(type) {
     }
 }
 function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
-    let currentYear = getYear();
-    let currentMonth = getMonth();
-    let currentDay = getDay();
+    let currentYear = getSystemYear();
+    let currentMonth = getSystemMonth();
+    let currentDay = getSystemDay();
     cleanSelectOption(D);
     cleanSelectOption(M);
     cleanSelectOption(Y);
@@ -336,7 +336,7 @@ function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
     birthYear = parseInt(dtBirth.format('YYYY'));
     birthMonth = parseInt(dtBirth.format('M'));
     birthDay = parseInt(dtBirth.format('D'));
-    if (birthYear == (getYear() - 1)) {
+    if (birthYear == (currentYear - 1)) {
         $(Y).append(new Option(currentYear, currentYear));
         $(Y).append(new Option(birthYear, birthYear));
         if (year == currentYear - 1 && month < 3) {
