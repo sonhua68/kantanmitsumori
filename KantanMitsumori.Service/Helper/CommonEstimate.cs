@@ -50,12 +50,12 @@ namespace KantanMitsumori.Service.Helper
                 int? oldSalesSum = estModel.SalesSum;
                 var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.UserNo!);
                 valToken.sesTaxRatio = vTax;
-                var getUserDef = _commonFuncHelper.getUserDefData(logToken.UserNo!);
-                if (getUserDef != null)
+                var dtUserDef = _commonFuncHelper.getUserDefData(logToken.UserNo!);
+                if (dtUserDef != null)
                 {
-                    if (estModel.ConTaxInputKb != getUserDef.ConTaxInputKb)
+                    if (estModel.ConTaxInputKb != dtUserDef.ConTaxInputKb)
                     {
-                        estModel.ConTaxInputKb = getUserDef.ConTaxInputKb;
+                        estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
 
                         var arrayEst = estModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
                         var arrayEstSub = estSubModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
@@ -341,10 +341,10 @@ namespace KantanMitsumori.Service.Helper
             var dataEstIDE = GetEstIDEData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
             if (dataEstIDE != null)
             {
-                var getContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);
-                dataEstIDE.ContractPlanName = getContractPlan == null ? "" : getContractPlan.PlanName;
-                var getVoluntaryInsurance = _unitOfWorkIDE.VoluntaryInsurances.GetSingleOrDefault(x => x.Id == dataEstIDE.InsuranceCompanyId);
-                dataEstIDE.InsuranceCompanyName = getVoluntaryInsurance == null ? "" : getVoluntaryInsurance.CompanyName;
+                var dtContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);
+                dataEstIDE.ContractPlanName = dtContractPlan == null ? "" : dtContractPlan.PlanName;
+                var dtVoluntaryInsurance = _unitOfWorkIDE.VoluntaryInsurances.GetSingleOrDefault(x => x.Id == dataEstIDE.InsuranceCompanyId);
+                dataEstIDE.InsuranceCompanyName = dtVoluntaryInsurance == null ? "" : dtVoluntaryInsurance.CompanyName;
             }
             return dataEstIDE!;
         }

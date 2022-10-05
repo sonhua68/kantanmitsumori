@@ -5,6 +5,7 @@ using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -135,9 +136,9 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                var getUserDef = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.GetSingle(x => x.UserNo == inUserNo && x.Dflag == false));
+                var dtUserDef = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.GetSingle(x => x.UserNo == inUserNo && x.Dflag == false));
 
-                return getUserDef;
+                return dtUserDef;
             }
             catch (Exception ex)
             {
@@ -206,11 +207,11 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                var getTbSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
+                var dtTbSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
 
-                if (!string.IsNullOrEmpty(getTbSys.Corner))
+                if (!string.IsNullOrEmpty(dtTbSys.Corner))
                 {
-                    return getTbSys.CornerType;
+                    return dtTbSys.CornerType;
                 }
                 else
                     return 0;
@@ -235,11 +236,11 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                var getSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
+                var dtSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
 
-                if (getSys != null)
+                if (dtSys != null)
                 {
-                    return Convert.ToInt32(getSys.Aacount);
+                    return Convert.ToInt32(dtSys.Aacount);
                 }
                 else
                     return 0;
@@ -307,14 +308,13 @@ namespace KantanMitsumori.Service.Helper
         {
             string strOutImg = "";
             string strSaveName = "";
-            string strTempImagePath = "";
             if (string.IsNullOrEmpty(strImagePath))
             {
                 strOutImagePath = "";
             }
             else
             {
-                strTempImagePath = strImagePath.ToUpper();
+                string strTempImagePath = strImagePath.ToUpper();
                 if (!strTempImagePath.EndsWith(".JPG") & !strTempImagePath.EndsWith(".GIF") & !strTempImagePath.EndsWith(".PNG") & strImgSuffix is not null)
                 {
                     strSaveName = cor + fex + strImgSuffix;
@@ -340,11 +340,11 @@ namespace KantanMitsumori.Service.Helper
             }
             try
             {
-                var getPsinfos = _unitOfWork.Psinfos.GetSingle(x => x.Corner == inCor && x.ExhNum == inFullExhNum);
+                var dtPsinfos = _unitOfWork.Psinfos.GetSingle(x => x.Corner == inCor && x.ExhNum == inFullExhNum);
 
-                if (getPsinfos != null)
+                if (dtPsinfos != null)
                 {
-                    return getPsinfos.RecycleFlag == 1 ? Convert.ToInt32(getPsinfos.RecyclingCharge) : 0;
+                    return dtPsinfos.RecycleFlag == 1 ? Convert.ToInt32(dtPsinfos.RecyclingCharge) : 0;
                 }
                 else
                     return 0;
@@ -371,12 +371,11 @@ namespace KantanMitsumori.Service.Helper
                 return true;
 
             // 除外リスト読み込み
-            System.Text.Encoding enc = System.Text.Encoding.GetEncoding("shift_jis");
-            string strExclusionList = "";
+            var enc = Encoding.GetEncoding("shift_jis");
             string[] arrExclusionList;
             try
             {
-                strExclusionList = File.ReadAllText(CommonSettings.def_ExclusionListOfAutoCalc, enc);
+                string strExclusionList = File.ReadAllText(CommonSettings.def_ExclusionListOfAutoCalc, enc);
                 arrExclusionList = strExclusionList.Split("\r\n");
             }
             catch (Exception ex)
@@ -423,10 +422,10 @@ namespace KantanMitsumori.Service.Helper
                 }
                 int intCarType = intExaust > 660 ? 1 : 2;
                 int intRemIns = outRemIns;
-                var getSelfInsurance = _unitOfWork.SelfInsurances.GetSingle(x => x.CarType == intCarType && x.RemainInspection == intRemIns && x.Dflag == false);
-                if (getSelfInsurance == null)
+                var dtSelfInsurance = _unitOfWork.SelfInsurances.GetSingle(x => x.CarType == intCarType && x.RemainInspection == intRemIns && x.Dflag == false);
+                if (dtSelfInsurance == null)
                     return false;
-                outSelfIns = getSelfInsurance != null ? Convert.ToInt32(getSelfInsurance.SelfInsurance) : 0;
+                outSelfIns = dtSelfInsurance != null ? Convert.ToInt32(dtSelfInsurance.SelfInsurance) : 0;
             }
             catch (Exception ex)
             {
@@ -468,10 +467,10 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                var getCarTax = _unitOfWork.CarTaxs.GetSingle(x => x.ExaustFrom <= intTargetExault && x.ExaustTo >= intTargetExault && x.Dflag == false);
-                if (getCarTax != null)
+                var dtCarTax = _unitOfWork.CarTaxs.GetSingle(x => x.ExaustFrom <= intTargetExault && x.ExaustTo >= intTargetExault && x.Dflag == false);
+                if (dtCarTax != null)
                 {
-                    return Convert.ToInt32(getCarTax.YearAmount);
+                    return Convert.ToInt32(dtCarTax.YearAmount);
                 }
                 else
                     return -1;

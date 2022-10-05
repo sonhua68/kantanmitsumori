@@ -37,9 +37,9 @@ namespace KantanMitsumori.Service.ASEST
         {
             try
             {
-                var mUser = _mapper.Map<UserModel>(_unitOfWork.Users.GetSingle(x => x.UserNo == userNo));
-                mUser!.UserInfo = mUser.UserNo + " " + mUser.UserNm + " 様";
-                return mUser;
+                var dtMUser = _mapper.Map<UserModel>(_unitOfWork.Users.GetSingle(x => x.UserNo == userNo));
+                dtMUser!.UserInfo = dtMUser.UserNo + " " + dtMUser.UserNm + " 様";
+                return dtMUser;
             }
             catch (Exception ex)
             {
@@ -73,11 +73,11 @@ namespace KantanMitsumori.Service.ASEST
                 {
                     valToken.sesPriDisp = request.PriDisp;
                 }
-                var getAsInfo = await GetAsnetInfo(request);
-                if (getAsInfo.ResultStatus == (int)enResponse.isError)
-                    return ResponseHelper.Error<ResponseEstMainModel>("Error", getAsInfo.MessageContent);
-                getAsInfo.Data!.EstNo = valToken.sesEstNo!;
-                getAsInfo.Data.EstSubNo = valToken.sesEstSubNo!;
+                var dtAsnetInfo = await GetAsnetInfo(request);
+                if (dtAsnetInfo.ResultStatus == (int)enResponse.isError)
+                    return ResponseHelper.Error<ResponseEstMainModel>("Error", dtAsnetInfo.MessageContent);
+                dtAsnetInfo.Data!.EstNo = valToken.sesEstNo!;
+                dtAsnetInfo.Data.EstSubNo = valToken.sesEstSubNo!;
                 SetvalueToken();
                 response.AccessToken = valToken.Token!;
                 response.EstCustomerModel.CustNm = valToken.sesCustNm_forPrint ?? "";
@@ -211,36 +211,36 @@ namespace KantanMitsumori.Service.ASEST
                 estModel.AutoTaxMonth = intFirstMonth.ToString();
             }
             int userDefDamageInsMonth = 0;
-            var getUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo!);
-            if (getUserDef != null)
+            var dtUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo!);
+            if (dtUserDef != null)
             {
-                estModel.EstUserNo = getUserDef.UserNo;
-                estModel.ConTaxInputKb = getUserDef.ConTaxInputKb;
-                estModel.ShopNm = getUserDef.ShopNm;
-                estModel.ShopAdr = getUserDef.ShopAdr;
-                estModel.ShopTel = getUserDef.ShopTel;
-                estModel.EstTanName = getUserDef.EstTanName;
-                estModel.SekininName = getUserDef.SekininName;
-                userDefDamageInsMonth = Convert.ToInt32(getUserDef.DamageInsMonth);
+                estModel.EstUserNo = dtUserDef.UserNo;
+                estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
+                estModel.ShopNm = dtUserDef.ShopNm;
+                estModel.ShopAdr = dtUserDef.ShopAdr;
+                estModel.ShopTel = dtUserDef.ShopTel;
+                estModel.EstTanName = dtUserDef.EstTanName;
+                estModel.SekininName = dtUserDef.SekininName;
+                userDefDamageInsMonth = Convert.ToInt32(dtUserDef.DamageInsMonth);
                 bool isIntHaiki = intHaiki > 0 && intHaiki <= 660;
                 estModel.SyakenZok = 0;
-                estModel.SyakenNew = isIntHaiki ? getUserDef.SyakenNewK : getUserDef.SyakenNewH;
-                estModel.TaxFreeCheck = isIntHaiki ? getUserDef.TaxFreeCheckK : getUserDef.TaxFreeCheckH;
-                estModel.TaxFreeGarage = isIntHaiki ? getUserDef.TaxFreeGarageK : getUserDef.TaxFreeGarageH;
-                estModel.TaxCheck = isIntHaiki ? getUserDef.TaxCheckK : getUserDef.TaxCheckH;
-                estModel.TaxGarage = isIntHaiki ? getUserDef.TaxGarageK : getUserDef.TaxGarageH;
-                estModel.TaxRecycle = isIntHaiki ? getUserDef.TaxRecycleK : getUserDef.TaxRecycleH;
-                estModel.TaxDelivery = isIntHaiki ? getUserDef.TaxDeliveryK : getUserDef.TaxDeliveryH;
-                estModel.TaxSet1Title = getUserDef.TaxSet1Title;
-                estModel.TaxSet1 = isIntHaiki ? getUserDef.TaxSet1K : getUserDef.TaxSet1H;
-                estModel.TaxSet2Title = getUserDef.TaxSet2Title;
-                estModel.TaxSet2 = isIntHaiki ? getUserDef.TaxSet2K : getUserDef.TaxSet2H;
-                estModel.TaxSet3Title = getUserDef.TaxSet3Title;
-                estModel.TaxSet3 = isIntHaiki ? getUserDef.TaxSet3K : getUserDef.TaxSet3H;
-                estModel.TaxFreeSet1Title = getUserDef.TaxFreeSet1Title;
-                estModel.TaxFreeSet1 = isIntHaiki ? int.Parse(getUserDef.TaxFreeSet1K) : getUserDef.TaxFreeSet1H;
-                estModel.TaxFreeSet2Title = getUserDef.TaxFreeSet2Title;
-                estModel.TaxFreeSet2 = isIntHaiki ? getUserDef.TaxFreeSet2K : getUserDef.TaxFreeSet2H;
+                estModel.SyakenNew = isIntHaiki ? dtUserDef.SyakenNewK : dtUserDef.SyakenNewH;
+                estModel.TaxFreeCheck = isIntHaiki ? dtUserDef.TaxFreeCheckK : dtUserDef.TaxFreeCheckH;
+                estModel.TaxFreeGarage = isIntHaiki ? dtUserDef.TaxFreeGarageK : dtUserDef.TaxFreeGarageH;
+                estModel.TaxCheck = isIntHaiki ? dtUserDef.TaxCheckK : dtUserDef.TaxCheckH;
+                estModel.TaxGarage = isIntHaiki ? dtUserDef.TaxGarageK : dtUserDef.TaxGarageH;
+                estModel.TaxRecycle = isIntHaiki ? dtUserDef.TaxRecycleK : dtUserDef.TaxRecycleH;
+                estModel.TaxDelivery = isIntHaiki ? dtUserDef.TaxDeliveryK : dtUserDef.TaxDeliveryH;
+                estModel.TaxSet1Title = dtUserDef.TaxSet1Title;
+                estModel.TaxSet1 = isIntHaiki ? dtUserDef.TaxSet1K : dtUserDef.TaxSet1H;
+                estModel.TaxSet2Title = dtUserDef.TaxSet2Title;
+                estModel.TaxSet2 = isIntHaiki ? dtUserDef.TaxSet2K : dtUserDef.TaxSet2H;
+                estModel.TaxSet3Title = dtUserDef.TaxSet3Title;
+                estModel.TaxSet3 = isIntHaiki ? dtUserDef.TaxSet3K : dtUserDef.TaxSet3H;
+                estModel.TaxFreeSet1Title = dtUserDef.TaxFreeSet1Title;
+                estModel.TaxFreeSet1 = isIntHaiki ? int.Parse(dtUserDef.TaxFreeSet1K) : dtUserDef.TaxFreeSet1H;
+                estModel.TaxFreeSet2Title = dtUserDef.TaxFreeSet2Title;
+                estModel.TaxFreeSet2 = isIntHaiki ? dtUserDef.TaxFreeSet2K : dtUserDef.TaxFreeSet2H;
             }
             else
             {
@@ -351,29 +351,29 @@ namespace KantanMitsumori.Service.ASEST
         {
             try
             {
-                var getMaxEstSub = (from sub in _unitOfWork.DbContext.TEstimateSubs
-                                    join sys in _unitOfWork.DbContext.TbSys
-                                    on new { sub.Corner, sub.Aacount } equals
-                                       new { sys.Corner, sys.Aacount }
-                                    into x
-                                    from joinGroup in x.DefaultIfEmpty()
-                                    where sub.EstUserNo == userNo &&
-                                           sub.Aano == AANo &&
-                                           sub.Aaplace == AAPlace &&
-                                           joinGroup.CornerType == CornerType &&
-                                           sub.Mode == mode &&
-                                           sub.Dflag == false
-                                    group sub by sub.EstNo into g
-                                    select new
-                                    {
-                                        maxEstNo = g.Max(x => x.EstNo),
-                                        maxEstSubNo = g.Max(x => x.EstSubNo),
-                                    }).FirstOrDefault();
+                var dtMaxEstSub = (from sub in _unitOfWork.DbContext.TEstimateSubs
+                                   join sys in _unitOfWork.DbContext.TbSys
+                                   on new { sub.Corner, sub.Aacount } equals
+                                      new { sys.Corner, sys.Aacount }
+                                   into x
+                                   from joinGroup in x.DefaultIfEmpty()
+                                   where sub.EstUserNo == userNo &&
+                                          sub.Aano == AANo &&
+                                          sub.Aaplace == AAPlace &&
+                                          joinGroup.CornerType == CornerType &&
+                                          sub.Mode == mode &&
+                                          sub.Dflag == false
+                                   group sub by sub.EstNo into g
+                                   select new
+                                   {
+                                       maxEstNo = g.Max(x => x.EstNo),
+                                       maxEstSubNo = g.Max(x => x.EstSubNo),
+                                   }).FirstOrDefault();
 
-                if (getMaxEstSub != null)
+                if (dtMaxEstSub != null)
                 {
-                    valToken.sesEstNo = getMaxEstSub!.maxEstNo;
-                    valToken.sesEstSubNo = getMaxEstSub.maxEstSubNo;
+                    valToken.sesEstNo = dtMaxEstSub!.maxEstNo;
+                    valToken.sesEstSubNo = dtMaxEstSub.maxEstSubNo;
                 }
                 else
                 {
@@ -605,45 +605,45 @@ namespace KantanMitsumori.Service.ASEST
                 estModel.AutoTaxMonth = intFirstMonth.ToString();
             }
             int userDefDamageInsMonth = 0;
-            var getUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo);
-            if (getUserDef != null)
+            var dtUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo);
+            if (dtUserDef != null)
             {
-                estModel.ConTaxInputKb = getUserDef.ConTaxInputKb;
-                estModel.ShopNm = getUserDef.ShopNm;
-                estModel.ShopAdr = getUserDef.ShopAdr;
-                estModel.ShopTel = getUserDef.ShopTel;
-                estModel.EstTanName = getUserDef.EstTanName;
-                estModel.SekininName = getUserDef.SekininName;
-                userDefDamageInsMonth = Convert.ToInt32(getUserDef.DamageInsMonth);
+                estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
+                estModel.ShopNm = dtUserDef.ShopNm;
+                estModel.ShopAdr = dtUserDef.ShopAdr;
+                estModel.ShopTel = dtUserDef.ShopTel;
+                estModel.EstTanName = dtUserDef.EstTanName;
+                estModel.SekininName = dtUserDef.SekininName;
+                userDefDamageInsMonth = Convert.ToInt32(dtUserDef.DamageInsMonth);
                 bool isIntHaiki = intHaiki > 0 && intHaiki <= 660;
                 if ((string.IsNullOrEmpty(valToken.sesMode) ? int.Parse(valToken.sesMode!) : 0) == 0)
                 {
-                    estModel.YtiRieki = isIntHaiki ? getUserDef.YtiRiekiK : getUserDef.YtiRiekiH;
+                    estModel.YtiRieki = isIntHaiki ? dtUserDef.YtiRiekiK : dtUserDef.YtiRiekiH;
                 }
-                estModel.SyakenNew = isIntHaiki ? getUserDef.SyakenNewK : getUserDef.SyakenNewH;
+                estModel.SyakenNew = isIntHaiki ? dtUserDef.SyakenNewK : dtUserDef.SyakenNewH;
                 estModel.SyakenZok = 0;
                 if ((strCheckCarYm.Length == 6 && CommonFunction.DateDiff(IntervalEnum.Months, DateTime.Today, DateTime.Parse(CommonFunction.Left(strCheckCarYm, 4) + "/" + CommonFunction.Right(strCheckCarYm, 2) + "/01")) > 0)
                     || (strCheckCarYm.Length == 4 && CommonFunction.DateDiff(IntervalEnum.Years, DateTime.Today, DateTime.Parse(strCheckCarYm + "/01")) > 0))
                 {
                     estModel.SyakenNew = 0;
-                    estModel.SyakenZok = isIntHaiki ? getUserDef.SyakenZokK : getUserDef.SyakenZokH;
+                    estModel.SyakenZok = isIntHaiki ? dtUserDef.SyakenZokK : dtUserDef.SyakenZokH;
                 }
-                estModel.TaxFreeCheck = isIntHaiki ? getUserDef.TaxFreeCheckK : getUserDef.TaxFreeCheckH;
-                estModel.TaxFreeGarage = isIntHaiki ? getUserDef.TaxFreeGarageK : getUserDef.TaxFreeGarageH;
-                estModel.TaxCheck = isIntHaiki ? getUserDef.TaxCheckK : getUserDef.TaxCheckH;
-                estModel.TaxGarage = isIntHaiki ? getUserDef.TaxGarageK : getUserDef.TaxGarageH;
-                estModel.TaxRecycle = isIntHaiki ? getUserDef.TaxRecycleK : getUserDef.TaxRecycleH;
-                estModel.TaxDelivery = isIntHaiki ? getUserDef.TaxDeliveryK : getUserDef.TaxDeliveryH;
-                estModel.TaxSet1Title = getUserDef.TaxSet1Title;
-                estModel.TaxSet1 = isIntHaiki ? getUserDef.TaxSet1K : getUserDef.TaxSet1H;
-                estModel.TaxSet2Title = getUserDef.TaxSet2Title;
-                estModel.TaxSet2 = isIntHaiki ? getUserDef.TaxSet2K : getUserDef.TaxSet2H;
-                estModel.TaxSet3Title = getUserDef.TaxSet3Title;
-                estModel.TaxSet3 = isIntHaiki ? getUserDef.TaxSet3K : getUserDef.TaxSet3H;
-                estModel.TaxFreeSet1Title = getUserDef.TaxFreeSet1Title;
-                estModel.TaxFreeSet1 = isIntHaiki ? int.Parse(getUserDef.TaxFreeSet1K) : getUserDef.TaxFreeSet1H;
-                estModel.TaxFreeSet2Title = getUserDef.TaxFreeSet2Title;
-                estModel.TaxFreeSet2 = isIntHaiki ? getUserDef.TaxFreeSet2K : getUserDef.TaxFreeSet2H;
+                estModel.TaxFreeCheck = isIntHaiki ? dtUserDef.TaxFreeCheckK : dtUserDef.TaxFreeCheckH;
+                estModel.TaxFreeGarage = isIntHaiki ? dtUserDef.TaxFreeGarageK : dtUserDef.TaxFreeGarageH;
+                estModel.TaxCheck = isIntHaiki ? dtUserDef.TaxCheckK : dtUserDef.TaxCheckH;
+                estModel.TaxGarage = isIntHaiki ? dtUserDef.TaxGarageK : dtUserDef.TaxGarageH;
+                estModel.TaxRecycle = isIntHaiki ? dtUserDef.TaxRecycleK : dtUserDef.TaxRecycleH;
+                estModel.TaxDelivery = isIntHaiki ? dtUserDef.TaxDeliveryK : dtUserDef.TaxDeliveryH;
+                estModel.TaxSet1Title = dtUserDef.TaxSet1Title;
+                estModel.TaxSet1 = isIntHaiki ? dtUserDef.TaxSet1K : dtUserDef.TaxSet1H;
+                estModel.TaxSet2Title = dtUserDef.TaxSet2Title;
+                estModel.TaxSet2 = isIntHaiki ? dtUserDef.TaxSet2K : dtUserDef.TaxSet2H;
+                estModel.TaxSet3Title = dtUserDef.TaxSet3Title;
+                estModel.TaxSet3 = isIntHaiki ? dtUserDef.TaxSet3K : dtUserDef.TaxSet3H;
+                estModel.TaxFreeSet1Title = dtUserDef.TaxFreeSet1Title;
+                estModel.TaxFreeSet1 = isIntHaiki ? int.Parse(dtUserDef.TaxFreeSet1K) : dtUserDef.TaxFreeSet1H;
+                estModel.TaxFreeSet2Title = dtUserDef.TaxFreeSet2Title;
+                estModel.TaxFreeSet2 = isIntHaiki ? dtUserDef.TaxFreeSet2K : dtUserDef.TaxFreeSet2H;
             }
             else
             {
