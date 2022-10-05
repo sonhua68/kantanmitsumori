@@ -9,8 +9,8 @@ var $thisToM = "#ddlToSelectM";
 var $thisToD = "#ddlToSelectD";
 let _conNumberSort = true;
 let _conNumber = 0;
-InitSelectList($thisFromY, $thisFromM, $thisFromD, currentYear, currentMonth, "this", "first", 1)
-InitSelectList($thisToY, $thisToM, $thisToD, currentYear, currentMonth, "this", "first", 2)
+InitSelectList($thisFromY, $thisFromM, $thisFromD, currentYear, currentMonth, "this", 1)
+InitSelectList($thisToY, $thisToM, $thisToD, currentYear, currentMonth, "this", 2)
 GetListMaker();
 SetInitToDay();
 LoadData(1);
@@ -186,8 +186,8 @@ function Cleanform() {
     $("#ddlToSelectD").empty();
     $("#ddlFromSelectD").empty();
     GetListMaker();
-    InitSelectList($thisFromY, $thisFromM, $thisFromD, currentYear, currentMonth, "this", "first", 1);
-    InitSelectList($thisToY, $thisToM, $thisToD, currentYear, currentMonth, "this", "first", 2);
+    InitSelectList($thisFromY, $thisFromM, $thisFromD, currentYear, currentMonth, "this", 1);
+    InitSelectList($thisToY, $thisToM, $thisToD, currentYear, currentMonth, "this", 2);
     SetInitToDay();
     LoadData(1);
 }
@@ -305,22 +305,22 @@ function onChangeSelect(type) {
         let fromY = parseInt($($thisFromY).val());
         let fromM = parseInt($($thisFromM).val());
         if (fromY == (currentYear - 1)) {
-            InitSelectList($thisFromY, $thisFromM, $thisFromD, fromY, (fromM), "", "from", type)
+            InitSelectList($thisFromY, $thisFromM, $thisFromD, fromY, (fromM), "", type)
 
         } else if (fromY = currentYear) {
-            InitSelectList($thisFromY, $thisFromM, $thisFromD, fromY, (fromM), "this", "from", type)
+            InitSelectList($thisFromY, $thisFromM, $thisFromD, fromY, (fromM), "this", type)
         }
     } else {
         let toY = parseInt($($thisToY).val());
         let ToM = parseInt($($thisToM).val());
         if (toY == (currentYear - 1)) {
-            InitSelectList($thisToY, $thisToM, $thisToD, toY, ToM, "", "from", type);
+            InitSelectList($thisToY, $thisToM, $thisToD, toY, ToM, "", type);
         } else if (toY = currentYear) {
-            InitSelectList($thisToY, $thisToM, $thisToD, toY, ToM, "this", "from", type);
+            InitSelectList($thisToY, $thisToM, $thisToD, toY, ToM, "this", type);
         }
     }
 }
-function InitSelectList(Y, M, D, year, month, ddflg, ddflg2, type) {
+function InitSelectList(Y, M, D, year, month, ddflg, type) {
     let currentYear = getSystemYear();
     let currentMonth = getSystemMonth();
     let currentDay = getSystemDay();
