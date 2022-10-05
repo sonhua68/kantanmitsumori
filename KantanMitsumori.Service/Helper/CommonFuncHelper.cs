@@ -425,7 +425,7 @@ namespace KantanMitsumori.Service.Helper
                 var dtSelfInsurance = _unitOfWork.SelfInsurances.GetSingle(x => x.CarType == intCarType && x.RemainInspection == intRemIns && x.Dflag == false);
                 if (dtSelfInsurance == null)
                     return false;
-                outSelfIns = dtSelfInsurance != null ? Convert.ToInt32(dtSelfInsurance.SelfInsurance) : 0;
+                outSelfIns = Convert.ToInt32(dtSelfInsurance.SelfInsurance);
             }
             catch (Exception ex)
             {
