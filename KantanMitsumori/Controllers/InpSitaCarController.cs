@@ -36,11 +36,7 @@ namespace KantanMitsumori.Controllers
         [HttpGet]
         public IActionResult GetListRikuji()
         {
-            var response = _inpSitaCarService.GetListOffice();
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = _inpSitaCarService.GetListOffice();           
             return Ok(response);
         }
 

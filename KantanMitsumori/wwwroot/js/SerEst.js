@@ -95,7 +95,9 @@ function LoadData(pageNumber) {
     model.pageNumber = pageNumber
     model.colSort = 11;
     var result = Framework.submitAjaxLoadData(model, "/SerEst/LoadData");
-    if (result.length > 0) {
+    if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    } else if (result.length > 0) {
         AddRowTable(result);
         let TotalPages = result[0].totalPages;
         AddPagination(TotalPages);

@@ -1,8 +1,11 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Model;
+using KantanMitsumori.Model.Request;
 using KantanMitsumori.Models;
+using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -37,7 +40,7 @@ namespace KantanMitsumori.Controllers
             var cookies = Request.Cookies[COOKIES]!;
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
-            if(controllerName.Contains("Home")) await next();
+            if (controllerName.Contains("Home")) await next();
             _logToken = HelperToken.EncodingToken(cookies!)!;
             if (_logToken == null && !controllerName.Contains("Estmain"))
             {
@@ -46,7 +49,10 @@ namespace KantanMitsumori.Controllers
                     MessageCode = HelperMessage.SMAL020P,
                     MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL020P)
                 };
-                filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
+                if (!actionName.Contains("Index")&& !controllerName.Contains("Error"))
+                    filterContext.Result = ErrorAction();
+                else
+                    filterContext.Result = new RedirectToActionResult("ErrorPage", "Home", ErrorViewModel);
                 return;
             }
             else if (_logToken != null)
@@ -60,11 +66,20 @@ namespace KantanMitsumori.Controllers
             await next();
         }
 
-        public IActionResult ErrorAction<T>(ResponseBase<T> response)
+        public IActionResult ErrorAction<T>(ResponseBase<T> response, int isUnexpectedErr = 0)
         {
-            return new RedirectToActionResult("ErrorPage", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
+            if (isUnexpectedErr != 1)
+                return new RedirectToActionResult("ErrorPage", "Home", new ErrorViewModel { MessageCode = response.MessageCode, MessageContent = response.MessageContent });
+            else
+                return new RedirectToActionResult("ErrorPage", "Home", new ErrorViewModel { MessageCode = HelperMessage.ISYS010I, MessageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I) });
         }
-        /// <summary>
+
+        public IActionResult ErrorAction()
+        {
+            var response = ResponseHelper.Error<int>(HelperMessage.SMAL020P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL020P));
+            return Ok(response);
+        }
+        /// <summary> 
         ///setTokenCookie
         /// </summary>
         /// <param name="token"></param>     
