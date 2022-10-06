@@ -528,7 +528,7 @@ var Framework =
             value: function GoBackErrorPage(messageCode, messContent) {
                 var param = {};
                 param.messageCode = messageCode;
-                param.messContent = messContent;
+                param.messageContent = messContent;
                 Framework.SummitForm("/Error/ErrorPage", param)
                 //var url = "/Error/ErrorPage?messageCode=" + messageCode + " &messContent=" + messContent;
                 //window.location.href = url;
