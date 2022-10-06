@@ -141,8 +141,8 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="chkElectricCar"></param>
         /// <param name="dispVol"></param>
         /// <returns></returns>
-        public decimal GetVehicleTaxWithinTheTerm(int autoTax, string dispVolUnit,
-             int dispVol)
+        public decimal GetVehicleTaxWithinTheTerm(int carType, int autoTax, string dispVolUnit,
+            int electricCar, int dispVol)
         {
          //var d =   _requestInCalc.FirstReg;
          //   decimal vehicleTaxPrice = 0;
@@ -150,7 +150,7 @@ namespace KantanMitsumori.Service.Helper
          //   decimal priceMonth = 0;
          //   bool ischeck = dispVolUnit != "cc" && _requestInCalc.ElectricCar == 1;
          //   displacementFromAndTo = ischeck == false ? dispVol : displacementFromAndTo;          
-         //   var priceTax = GetPriceTax(Convert.ToInt32(_requestInCalc.FirstReg), Convert.ToInt32(_requestInCalc.FirstReg)), _RequestInCalc.ElectricCar, displacementFromAndTo, displacementFromAndTo);
+         //   var priceTax = GetPriceTax(Convert.ToInt32(FirstReg), Convert.ToInt32(FirstReg)), electricCar, displacementFromAndTo, displacementFromAndTo);
          //   string endLeaseDate = leaseExpirationDate; //Ngay het han hop dong thue
          //   string endDate = CheckYear(156);// 156 = 13Year
          //   if (endDate == endLeaseDate) //< 13Year 
@@ -160,7 +160,7 @@ namespace KantanMitsumori.Service.Helper
          //   }
          //   else //'> 13Year
          //   {
-         //       var taxCollection = GetTaxCollectionIncrease(Convert.ToInt32(firstReg), Convert.ToInt32(firstReg), isElectricCar, dispVol, dispVol);
+         //       var taxCollection = GetTaxCollectionIncrease(Convert.ToInt32(firstReg), Convert.ToInt32(firstReg), electricCar, dispVol, dispVol);
          //       priceMonth = (priceTax * GetMonthLease(1) + (taxCollection + GetMonthLease(0)));
          //       _logger.LogInformation("4-3-3 PriceMonth  > 13Year :={0}", priceMonth);
 
