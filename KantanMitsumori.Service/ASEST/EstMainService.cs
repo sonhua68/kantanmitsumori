@@ -171,128 +171,138 @@ namespace KantanMitsumori.Service.ASEST
         }
         public async Task<ResponseBase<ResponseEstMainModel>> setFreeEst(RequestSelGrdFreeEst model, LogToken logtoken)
         {
-            valToken = logtoken;
-            var estModel = new EstModel
+            try
             {
-                CallKbn = "3",
-                EstInpKbn = "2",
-                TradeDate = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd")),
-                MakerName = model.MakerName!,
-                ModelName = model.ModelName!,
-                GradeName = model.GradeName!,
-                Case = model.CarCase!,
-                MilUnit = CommonConst.def_MilUnitTKM,
-                DispVol = model.DispVol!,
-                DispVolUnit = CommonConst.def_DispVolUnitCC,
-                AccidentHis = 2,
-                CarImgPath = CommonConst.def_DmyImg,
-                SonotaTitle = CommonConst.def_TitleSonota,
-                OptionInputKb = true,
-                TaxInsInputKb = true,
-                TaxFreeKb = true,
-                TaxCostKb = true,
-                TradeInMilUnit = CommonConst.def_TradeInMilUnitKM,
-                LeaseFlag = logtoken.sesLeaseFlag!
-            };
-            int intHaiki = CommonFunction.IsNumeric(estModel.DispVol) ? int.Parse(estModel.DispVol) : 0;
-            bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(model.MakerName!);
-            int intFirstMonth = Convert.ToInt32(string.Format("{0:D2}", DateTime.Now.Month));
-            if (flgTaxAutoCalc && intHaiki > 0)
-            {
-                var carTax = _commonFuncHelper.getCarTax(intFirstMonth, intHaiki);
-                if (carTax == -1)
-                    return ResponseHelper.Error<ResponseEstMainModel>("Error", CommonConst.def_ErrMsg1_Maker + CommonConst.def_ErrCodeL + "SMAI-023D" + CommonConst.def_ErrCodeR);
 
-                estModel.AutoTax = carTax;
-                estModel.AutoTaxMonth = intFirstMonth.ToString();
-            }
-            int userDefDamageInsMonth = 0;
-            var dtUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo!);
-            if (dtUserDef != null)
-            {
-                estModel.EstUserNo = dtUserDef.UserNo;
-                estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
-                estModel.ShopNm = dtUserDef.ShopNm;
-                estModel.ShopAdr = dtUserDef.ShopAdr;
-                estModel.ShopTel = dtUserDef.ShopTel;
-                estModel.EstTanName = dtUserDef.EstTanName;
-                estModel.SekininName = dtUserDef.SekininName;
-                userDefDamageInsMonth = Convert.ToInt32(dtUserDef.DamageInsMonth);
-                bool isIntHaiki = intHaiki > 0 && intHaiki <= 660;
-                estModel.SyakenZok = 0;
-                estModel.SyakenNew = isIntHaiki ? dtUserDef.SyakenNewK : dtUserDef.SyakenNewH;
-                estModel.TaxFreeCheck = isIntHaiki ? dtUserDef.TaxFreeCheckK : dtUserDef.TaxFreeCheckH;
-                estModel.TaxFreeGarage = isIntHaiki ? dtUserDef.TaxFreeGarageK : dtUserDef.TaxFreeGarageH;
-                estModel.TaxCheck = isIntHaiki ? dtUserDef.TaxCheckK : dtUserDef.TaxCheckH;
-                estModel.TaxGarage = isIntHaiki ? dtUserDef.TaxGarageK : dtUserDef.TaxGarageH;
-                estModel.TaxRecycle = isIntHaiki ? dtUserDef.TaxRecycleK : dtUserDef.TaxRecycleH;
-                estModel.TaxDelivery = isIntHaiki ? dtUserDef.TaxDeliveryK : dtUserDef.TaxDeliveryH;
-                estModel.TaxSet1Title = dtUserDef.TaxSet1Title;
-                estModel.TaxSet1 = isIntHaiki ? dtUserDef.TaxSet1K : dtUserDef.TaxSet1H;
-                estModel.TaxSet2Title = dtUserDef.TaxSet2Title;
-                estModel.TaxSet2 = isIntHaiki ? dtUserDef.TaxSet2K : dtUserDef.TaxSet2H;
-                estModel.TaxSet3Title = dtUserDef.TaxSet3Title;
-                estModel.TaxSet3 = isIntHaiki ? dtUserDef.TaxSet3K : dtUserDef.TaxSet3H;
-                estModel.TaxFreeSet1Title = dtUserDef.TaxFreeSet1Title;
-                estModel.TaxFreeSet1 = isIntHaiki ? int.Parse(dtUserDef.TaxFreeSet1K) : dtUserDef.TaxFreeSet1H;
-                estModel.TaxFreeSet2Title = dtUserDef.TaxFreeSet2Title;
-                estModel.TaxFreeSet2 = isIntHaiki ? dtUserDef.TaxFreeSet2K : dtUserDef.TaxFreeSet2H;
-            }
-            else
-            {
-                estModel.ConTaxInputKb = true;
-            }
-            int intSelfIns = 0; int intRemIns = 0;
-            if (flgTaxAutoCalc && intHaiki > 0)
-            {
-                if (!_commonFuncHelper.getSelfInsurance(intHaiki, "", "", userDefDamageInsMonth, ref intSelfIns, ref intRemIns))
+
+                valToken = logtoken;
+                var estModel = new EstModel
                 {
-                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI013D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI013D));
-
-                }
-                else if (intSelfIns > 0)
+                    CallKbn = "3",
+                    EstInpKbn = "2",
+                    TradeDate = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd")),
+                    MakerName = model.MakerName!,
+                    ModelName = model.ModelName!,
+                    GradeName = model.GradeName!,
+                    Case = model.CarCase!,
+                    MilUnit = CommonConst.def_MilUnitTKM,
+                    DispVol = model.DispVol!,
+                    DispVolUnit = CommonConst.def_DispVolUnitCC,
+                    AccidentHis = 2,
+                    CarImgPath = CommonConst.def_DmyImg,
+                    SonotaTitle = CommonConst.def_TitleSonota,
+                    OptionInputKb = true,
+                    TaxInsInputKb = true,
+                    TaxFreeKb = true,
+                    TaxCostKb = true,
+                    TradeInMilUnit = CommonConst.def_TradeInMilUnitKM,
+                    LeaseFlag = logtoken.sesLeaseFlag!
+                };
+                int intHaiki = CommonFunction.IsNumeric(estModel.DispVol) ? int.Parse(estModel.DispVol) : 0;
+                bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(model.MakerName!);
+                int intFirstMonth = Convert.ToInt32(string.Format("{0:D2}", DateTime.Now.Month));
+                if (flgTaxAutoCalc && intHaiki > 0)
                 {
-                    estModel.DamageIns = intSelfIns;
-                    estModel.DamageInsMonth = intRemIns.ToString();
-                }
-            }
-            estModel.YtiRieki = 0;
-            estModel.CarPrice = 0;
-            estModel.Mode = (byte)(string.IsNullOrEmpty(valToken.sesMode) ? 0 : Convert.ToByte(valToken.sesMode));
-            if (!await RegEstData(estModel))
-            {
-                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
+                    var carTax = _commonFuncHelper.getCarTax(intFirstMonth, intHaiki);
+                    if (carTax == -1)
+                        return ResponseHelper.Error<ResponseEstMainModel>("Error", CommonConst.def_ErrMsg1_Maker + CommonConst.def_ErrCodeL + "SMAI-023D" + CommonConst.def_ErrCodeR);
 
-            }
-            var response = new ResponseEstMainModel
-            {
-                EstModel = estModel
-            };
-            if (string.IsNullOrEmpty(valToken.sesEstNo) || string.IsNullOrEmpty(valToken.sesEstSubNo))
-            {
-                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
-            }
-            var estData = _commonEst.SetEstData(valToken.sesEstNo, valToken.sesEstSubNo);
-            if (estData.ResultStatus == (int)enResponse.isSuccess)
-                response.EstModel = estData.Data!;
-            response.EstCustomerModel = new EstCustomerModel
-            {
-                CustNm = valToken.sesCustNm_forPrint ?? "",
-                CustZip = valToken.sesCustZip_forPrint ?? "",
-                CustAdr = valToken.sesCustAdr_forPrint ?? "",
-                CustTel = valToken.sesCustTel_forPrint ?? ""
-            };
-            response.EstIDEModel = new EstimateIdeModel();
-            if (response.EstModel.LeaseFlag == "1")
-            {
-                response.EstIDEModel = _commonEst.SetEstIDEData(valToken);
-                if (response.EstIDEModel == null)
+                    estModel.AutoTax = carTax;
+                    estModel.AutoTaxMonth = intFirstMonth.ToString();
+                }
+                int userDefDamageInsMonth = 0;
+                var dtUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo!);
+                if (dtUserDef != null)
+                {
+                    estModel.EstUserNo = dtUserDef.UserNo;
+                    estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
+                    estModel.ShopNm = dtUserDef.ShopNm;
+                    estModel.ShopAdr = dtUserDef.ShopAdr;
+                    estModel.ShopTel = dtUserDef.ShopTel;
+                    estModel.EstTanName = dtUserDef.EstTanName;
+                    estModel.SekininName = dtUserDef.SekininName;
+                    userDefDamageInsMonth = Convert.ToInt32(dtUserDef.DamageInsMonth);
+                    bool isIntHaiki = intHaiki > 0 && intHaiki <= 660;
+                    estModel.SyakenZok = 0;
+                    estModel.SyakenNew = isIntHaiki ? dtUserDef.SyakenNewK : dtUserDef.SyakenNewH;
+                    estModel.TaxFreeCheck = isIntHaiki ? dtUserDef.TaxFreeCheckK : dtUserDef.TaxFreeCheckH;
+                    estModel.TaxFreeGarage = isIntHaiki ? dtUserDef.TaxFreeGarageK : dtUserDef.TaxFreeGarageH;
+                    estModel.TaxCheck = isIntHaiki ? dtUserDef.TaxCheckK : dtUserDef.TaxCheckH;
+                    estModel.TaxGarage = isIntHaiki ? dtUserDef.TaxGarageK : dtUserDef.TaxGarageH;
+                    estModel.TaxRecycle = isIntHaiki ? dtUserDef.TaxRecycleK : dtUserDef.TaxRecycleH;
+                    estModel.TaxDelivery = isIntHaiki ? dtUserDef.TaxDeliveryK : dtUserDef.TaxDeliveryH;
+                    estModel.TaxSet1Title = dtUserDef.TaxSet1Title;
+                    estModel.TaxSet1 = isIntHaiki ? dtUserDef.TaxSet1K : dtUserDef.TaxSet1H;
+                    estModel.TaxSet2Title = dtUserDef.TaxSet2Title;
+                    estModel.TaxSet2 = isIntHaiki ? dtUserDef.TaxSet2K : dtUserDef.TaxSet2H;
+                    estModel.TaxSet3Title = dtUserDef.TaxSet3Title;
+                    estModel.TaxSet3 = isIntHaiki ? dtUserDef.TaxSet3K : dtUserDef.TaxSet3H;
+                    estModel.TaxFreeSet1Title = dtUserDef.TaxFreeSet1Title;
+                    estModel.TaxFreeSet1 = isIntHaiki ? int.Parse(dtUserDef.TaxFreeSet1K) : dtUserDef.TaxFreeSet1H;
+                    estModel.TaxFreeSet2Title = dtUserDef.TaxFreeSet2Title;
+                    estModel.TaxFreeSet2 = isIntHaiki ? dtUserDef.TaxFreeSet2K : dtUserDef.TaxFreeSet2H;
+                }
+                else
+                {
+                    estModel.ConTaxInputKb = true;
+                }
+                int intSelfIns = 0; int intRemIns = 0;
+                if (flgTaxAutoCalc && intHaiki > 0)
+                {
+                    if (!_commonFuncHelper.getSelfInsurance(intHaiki, "", "", userDefDamageInsMonth, ref intSelfIns, ref intRemIns))
+                    {
+                        return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI013D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI013D));
+
+                    }
+                    else if (intSelfIns > 0)
+                    {
+                        estModel.DamageIns = intSelfIns;
+                        estModel.DamageInsMonth = intRemIns.ToString();
+                    }
+                }
+                estModel.YtiRieki = 0;
+                estModel.CarPrice = 0;
+                estModel.Mode = (byte)(string.IsNullOrEmpty(valToken.sesMode) ? 0 : Convert.ToByte(valToken.sesMode));
+                if (!await RegEstData(estModel))
+                {
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
+
+                }
+                var response = new ResponseEstMainModel
+                {
+                    EstModel = estModel
+                };
+                if (string.IsNullOrEmpty(valToken.sesEstNo) || string.IsNullOrEmpty(valToken.sesEstSubNo))
+                {
+                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
+                }
+                var estData = _commonEst.SetEstData(valToken.sesEstNo, valToken.sesEstSubNo);
+                if (estData.ResultStatus == (int)enResponse.isSuccess)
+                    response.EstModel = estData.Data!;
+                response.EstCustomerModel = new EstCustomerModel
+                {
+                    CustNm = valToken.sesCustNm_forPrint ?? "",
+                    CustZip = valToken.sesCustZip_forPrint ?? "",
+                    CustAdr = valToken.sesCustAdr_forPrint ?? "",
+                    CustTel = valToken.sesCustTel_forPrint ?? ""
+                };
+                response.EstIDEModel = new EstimateIdeModel();
+                if (response.EstModel.LeaseFlag == "1")
+                {
+                    response.EstIDEModel = _commonEst.SetEstIDEData(valToken);
+                    if (response.EstIDEModel == null)
+                        return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
+                }
+                SetvalueToken();
+                response.AccessToken = valToken.Token!;
+                response.EstModel.IsError = 1;// alert("最初に車両本体価格をご確認下さい")
+                return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
             }
-            SetvalueToken();
-            response.AccessToken = valToken.Token!;
-            response.EstModel.IsError = 1;// alert("最初に車両本体価格をご確認下さい")
-            return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "setFreeEst");
+                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+            }
         }
         public async Task<ResponseBase<string>> AddEstimate(RequestSerEst model, LogToken logToken)
         {
@@ -449,252 +459,259 @@ namespace KantanMitsumori.Service.ASEST
 
         private async Task<ResponseBase<EstModel>> GetAsnetInfo(RequestHeaderModel request)
         {
-            var estModel = new EstModel();
-            string leaseFlag = string.IsNullOrEmpty(request.leaseFlag) ? "0" : request.leaseFlag;
-            bool isCheck = string.IsNullOrEmpty(request.cot) || string.IsNullOrEmpty(request.cna) || string.IsNullOrEmpty(request.mem);
-            if (isCheck)
-                return ResponseHelper.Error<EstModel>(HelperMessage.SMAI020P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI020P));
-
-            string strTempImagePath;
-            string strSavePath = "";
-            estModel.LeaseFlag = leaseFlag;
-            var userInfo = getUserInfo(request.mem);
-            valToken.UserNo = userInfo.Data!.UserNo;
-            valToken.UserNm = userInfo.Data!.UserNm;
-            valToken.sesLeaseFlag = leaseFlag;
-            if (!string.IsNullOrEmpty(request.exh))
+            try
             {
-                string wAANo = request.exh!;
-                string wAAPlace = request.aan!;
-                string wConnerType = request.cot!;
-                string wMode = request.Mode!;
-                var checkAANo = ChkAANo(userInfo.Data.UserNo, wAANo, wAAPlace, int.Parse(wConnerType), int.Parse(wMode));
-                if (checkAANo == 1)
+                var estModel = new EstModel();
+                string leaseFlag = string.IsNullOrEmpty(request.leaseFlag) ? "0" : request.leaseFlag;
+                bool isCheck = string.IsNullOrEmpty(request.cot) || string.IsNullOrEmpty(request.cna) || string.IsNullOrEmpty(request.mem);
+                if (isCheck)
+                    return ResponseHelper.Error<EstModel>(HelperMessage.SMAI020P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI020P));
+
+                string strTempImagePath;
+                string strSavePath = "";
+                estModel.LeaseFlag = leaseFlag;
+                var userInfo = getUserInfo(request.mem);
+                valToken.UserNo = userInfo.Data!.UserNo;
+                valToken.UserNm = userInfo.Data!.UserNm;
+                valToken.sesLeaseFlag = leaseFlag;
+                if (!string.IsNullOrEmpty(request.exh))
                 {
-                    // check condition addEstNextSubNo 
-                    var result = await AddEstNextSubNo(valToken.sesEstNo!, valToken.sesEstSubNo!);
-                    if (result.ResultStatus == (int)enResponse.isLogicError)
-                        return ResponseHelper.Error<EstModel>(HelperMessage.CEST051D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST051D));
-                    else if (result.ResultStatus == (int)enResponse.isError)
-                        return ResponseHelper.Error<EstModel>("", "");
-                    else
-                        return ResponseHelper.Ok<EstModel>("", "", result.Data!);
+                    string wAANo = request.exh!;
+                    string wAAPlace = request.aan!;
+                    string wConnerType = request.cot!;
+                    string wMode = request.Mode!;
+                    var checkAANo = ChkAANo(userInfo.Data.UserNo, wAANo, wAAPlace, int.Parse(wConnerType), int.Parse(wMode));
+                    if (checkAANo == 1)
+                    {
+                        // check condition addEstNextSubNo 
+                        var result = await AddEstNextSubNo(valToken.sesEstNo!, valToken.sesEstSubNo!);
+                        if (result.ResultStatus == (int)enResponse.isLogicError)
+                            return ResponseHelper.Error<EstModel>(HelperMessage.CEST051D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST051D));
+                        else if (result.ResultStatus == (int)enResponse.isError)
+                            return ResponseHelper.LogicError<EstModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+                        else
+                            return ResponseHelper.Ok<EstModel>("", "", result.Data!);
+                    }
+                    else if (checkAANo == -1)
+                        return ResponseHelper.Error<EstModel>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
                 }
-                else if (checkAANo == -1)
-                    return ResponseHelper.Error<EstModel>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
-            }
-            estModel.EstUserNo = userInfo.Data.UserNo;
-            estModel.CallKbn = request.cot == "2" || request.cot == "5" ? "1" : "2";
-            int vAAcount = request.cot == "1" || request.cot == "2" ? _commonFuncHelper.GetAACount(request.cor) : 0;
-            estModel.EstInpKbn = "1";
-            estModel.TradeDate = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd"));
-            estModel.MakerName = request.mak;
-            estModel.ModelName = request.cna;
-            estModel.GradeName = request.gra;
-            estModel.Case = request.carCase;
-            estModel.ChassisNo = request.pla;
-            string vNensiki = request.mod.Trim();
-            estModel.FirstRegYm = CommonFunction.IsNumeric(vNensiki) ? vNensiki : "";
-            string strCheckCarYm = CommonFunction.setCheckCarYm(request.ins);
-            estModel.CheckCarYm = strCheckCarYm;
-            estModel.NowOdometer = CommonFunction.IsNumeric(request.mil) ? int.Parse(request.mil) : 0;
-            bool isCheckMilUnit = string.IsNullOrEmpty(request.milUnit);
-            estModel.MilUnit = isCheckMilUnit ? CommonConst.def_MilUnitTKM : request.milUnit;
-            estModel.DispVol = string.IsNullOrEmpty(request.vol) ? "" : request.vol.Trim().Replace("cc", ")");
+                estModel.EstUserNo = userInfo.Data.UserNo;
+                estModel.CallKbn = request.cot == "2" || request.cot == "5" ? "1" : "2";
+                int vAAcount = request.cot == "1" || request.cot == "2" ? _commonFuncHelper.GetAACount(request.cor) : 0;
+                estModel.EstInpKbn = "1";
+                estModel.TradeDate = DateTime.Parse(DateTime.Now.ToString("yyyy/MM/dd"));
+                estModel.MakerName = request.mak;
+                estModel.ModelName = request.cna;
+                estModel.GradeName = request.gra;
+                estModel.Case = request.carCase;
+                estModel.ChassisNo = request.pla;
+                string vNensiki = request.mod.Trim();
+                estModel.FirstRegYm = CommonFunction.IsNumeric(vNensiki) ? vNensiki : "";
+                string strCheckCarYm = CommonFunction.setCheckCarYm(request.ins);
+                estModel.CheckCarYm = strCheckCarYm;
+                estModel.NowOdometer = CommonFunction.IsNumeric(request.mil) ? int.Parse(request.mil) : 0;
+                bool isCheckMilUnit = string.IsNullOrEmpty(request.milUnit);
+                estModel.MilUnit = isCheckMilUnit ? CommonConst.def_MilUnitTKM : request.milUnit;
+                estModel.DispVol = string.IsNullOrEmpty(request.vol) ? "" : request.vol.Trim().Replace("cc", ")");
 
-            if (request.volUnit.ToLower() == "null")
-                estModel.DispVolUnit = CommonConst.def_DispVolUnitCC;
-            else
-                estModel.DispVolUnit = string.IsNullOrEmpty(request.volUnit) ? CommonConst.def_DispVolUnitCC : request.volUnit;
+                if (request.volUnit.ToLower() == "null")
+                    estModel.DispVolUnit = CommonConst.def_DispVolUnitCC;
+                else
+                    estModel.DispVolUnit = string.IsNullOrEmpty(request.volUnit) ? CommonConst.def_DispVolUnitCC : request.volUnit;
 
-            estModel.Mission = request.shi;
-            estModel.AccidentHis = 2;
-            estModel.BusinessHis = request.his;
-            estModel.FuelName = request.FuelName;
-            estModel.DriveName = request.DriveName;
-            estModel.CarDoors = CommonFunction.IsNumeric(request.CarDoors) ? int.Parse(request.CarDoors) : 0;
-            estModel.BodyName = CommonFunction.StandardlizeBodyName(request.BodyName);
-            estModel.Capacity = CommonFunction.IsNumeric(request.Capacity) ? int.Parse(request.Capacity) : 0;
-            estModel.Equipment = request.equ;
-            estModel.BodyColor = request.col;
-            string wCarImgPath = request.img;
-            string outImg = "";
-            string outImg1 = "";
-            string outImg2 = ""; string outImg3 = ""; string outImg4 = ""; string outImg5 = ""; string outImg6 = ""; string outImg7 = ""; string outImg8 = "";
-            if (string.IsNullOrEmpty(wCarImgPath))
-            {
-                estModel.CarImgPath = CommonConst.def_DmyImg;
-            }
-            else
-            {
-                strTempImagePath = wCarImgPath.ToUpper();
-                if (!strTempImagePath.EndsWith(".JPG") && !strTempImagePath.EndsWith(".GIF") && !strTempImagePath.EndsWith(".PNG"))
+                estModel.Mission = request.shi;
+                estModel.AccidentHis = 2;
+                estModel.BusinessHis = request.his;
+                estModel.FuelName = request.FuelName;
+                estModel.DriveName = request.DriveName;
+                estModel.CarDoors = CommonFunction.IsNumeric(request.CarDoors) ? int.Parse(request.CarDoors) : 0;
+                estModel.BodyName = CommonFunction.StandardlizeBodyName(request.BodyName);
+                estModel.Capacity = CommonFunction.IsNumeric(request.Capacity) ? int.Parse(request.Capacity) : 0;
+                estModel.Equipment = request.equ;
+                estModel.BodyColor = request.col;
+                string wCarImgPath = request.img;
+                string outImg = "";
+                string outImg1 = "";
+                string outImg2 = ""; string outImg3 = ""; string outImg4 = ""; string outImg5 = ""; string outImg6 = ""; string outImg7 = ""; string outImg8 = "";
+                if (string.IsNullOrEmpty(wCarImgPath))
                 {
-                    strSavePath = request.cor + request.fex + "001.jpg";
+                    estModel.CarImgPath = CommonConst.def_DmyImg;
                 }
-                _commonFuncHelper.DownloadImg(wCarImgPath, valToken.sesCarImgPath!, CommonConst.def_DmyImg, ref outImg, strSavePath);
-                estModel.CarImgPath = outImg;
-                _commonFuncHelper.CheckImgPath(request.img1, valToken.sesCarImgPath1!, "", ref outImg1, "201.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img2, valToken.sesCarImgPath2!, "", ref outImg2, "202.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img3, valToken.sesCarImgPath3!, "", ref outImg3, "203.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img4, valToken.sesCarImgPath4!, "", ref outImg4, "204.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img5, valToken.sesCarImgPath5!, "", ref outImg5, "205.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img6, valToken.sesCarImgPath6!, "", ref outImg6, "206.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img7, valToken.sesCarImgPath7!, "", ref outImg7, "207.jpg", request.cor, request.fex);
-                _commonFuncHelper.CheckImgPath(request.img8, valToken.sesCarImgPath8!, "", ref outImg8, "208.jpg", request.cor, request.fex);
-                estModel.CarImgPath1 = outImg1;
-                estModel.CarImgPath2 = outImg2;
-                estModel.CarImgPath3 = outImg3;
-                estModel.CarImgPath4 = outImg4;
-                estModel.CarImgPath5 = outImg5;
-                estModel.CarImgPath6 = outImg6;
-                estModel.CarImgPath7 = outImg7;
-                estModel.CarImgPath8 = outImg8;
-            }
-
-            estModel.TotalCost = 0;
-            decimal intCarPrice = CommonFunction.IsNumeric(request.pri) ? Convert.ToDecimal(request.pri) : 0m;
-            estModel.RakuSatu = CommonFunction.IsNumeric(request.fee) ? request.cor == "F6" ? 25000 : int.Parse(request.fee) : 0;
-            estModel.Rikusou = CommonFunction.IsNumeric(request.tra) ? int.Parse(request.tra) : 0;
-            estModel.OptionInputKb = true;
-            estModel.TaxInsInputKb = true;
-            estModel.TaxFreeKb = true;
-            if (!string.IsNullOrEmpty(request.fex))
-            {
-                estModel.TaxFreeRecycle = _commonFuncHelper.GetRecDeposit(request.cor, request.fex);
-            }
-            estModel.TaxCostKb = true;
-            estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM;
-            estModel.ShopNm = userInfo.Data.UserNm;
-            estModel.ShopAdr = userInfo.Data.UserAdr;
-            estModel.ShopTel = userInfo.Data.UserTel;
-            estModel.Corner = request.cor;
-            estModel.Aacount = vAAcount;
-            estModel.Mode = Convert.ToByte(request.Mode);
-            estModel.Aayear = vNensiki;
-            estModel.Aahyk = CommonFunction.IsNumeric(request.poi) ? request.poi : "0";
-            estModel.Aaprice = (int)intCarPrice;
-            estModel.SirPrice = estModel.CarPrice;
-            estModel.YtiRieki = 0;
-            estModel.Aaplace = request.aan;
-            estModel.Aano = request.exh;
-            if (!string.IsNullOrEmpty(request.lim))
-            {
-                string vAATime = request.lim.Trim();
-                estModel.Aatime = request.lim.Trim().Length == 8 ? CommonFunction.Left(vAATime, 4) + "/" + CommonFunction.Mid(vAATime, 4, 2) + "/" + CommonFunction.Right(vAATime, 2) : vAATime;
-
-            }
-            int intHaiki = 0;
-            if (CommonFunction.IsNumeric(estModel.DispVol))
-            {
-                intHaiki = int.Parse(estModel.DispVol);
-            }
-            bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(request.mak);
-            int intFirstMonth = Convert.ToInt32(string.Format("{0:D2}", DateTime.Now.Month));
-            if (flgTaxAutoCalc && intHaiki > 0 && estModel.DispVolUnit == CommonConst.def_DispVolUnitCC)
-            {
-                var carTax = _commonFuncHelper.getCarTax(intFirstMonth, intHaiki);
-                if (carTax == -1)
-                    return ResponseHelper.Error<EstModel>(HelperMessage.SMAI023D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI023D));
-                estModel.AutoTax = carTax;
-                estModel.AutoTaxMonth = intFirstMonth.ToString();
-            }
-            int userDefDamageInsMonth = 0;
-            var dtUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo);
-            if (dtUserDef != null)
-            {
-                estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
-                estModel.ShopNm = dtUserDef.ShopNm;
-                estModel.ShopAdr = dtUserDef.ShopAdr;
-                estModel.ShopTel = dtUserDef.ShopTel;
-                estModel.EstTanName = dtUserDef.EstTanName;
-                estModel.SekininName = dtUserDef.SekininName;
-                userDefDamageInsMonth = Convert.ToInt32(dtUserDef.DamageInsMonth);
-                bool isIntHaiki = intHaiki > 0 && intHaiki <= 660;
-                if ((string.IsNullOrEmpty(valToken.sesMode) ? int.Parse(valToken.sesMode!) : 0) == 0)
+                else
                 {
-                    estModel.YtiRieki = isIntHaiki ? dtUserDef.YtiRiekiK : dtUserDef.YtiRiekiH;
+                    strTempImagePath = wCarImgPath.ToUpper();
+                    if (!strTempImagePath.EndsWith(".JPG") && !strTempImagePath.EndsWith(".GIF") && !strTempImagePath.EndsWith(".PNG"))
+                    {
+                        strSavePath = request.cor + request.fex + "001.jpg";
+                    }
+                    _commonFuncHelper.DownloadImg(wCarImgPath, valToken.sesCarImgPath!, CommonConst.def_DmyImg, ref outImg, strSavePath);
+                    estModel.CarImgPath = outImg;
+                    _commonFuncHelper.CheckImgPath(request.img1, valToken.sesCarImgPath1!, "", ref outImg1, "201.jpg", request.cor, request.fex);
+                    _commonFuncHelper.CheckImgPath(request.img2, valToken.sesCarImgPath2!, "", ref outImg2, "202.jpg", request.cor, request.fex);
+                    _commonFuncHelper.CheckImgPath(request.img3, valToken.sesCarImgPath3!, "", ref outImg3, "203.jpg", request.cor, request.fex);
+                    _commonFuncHelper.CheckImgPath(request.img4, valToken.sesCarImgPath4!, "", ref outImg4, "204.jpg", request.cor, request.fex);
+                    _commonFuncHelper.CheckImgPath(request.img5, valToken.sesCarImgPath5!, "", ref outImg5, "205.jpg", request.cor, request.fex);
+                    _commonFuncHelper.CheckImgPath(request.img6, valToken.sesCarImgPath6!, "", ref outImg6, "206.jpg", request.cor, request.fex);
+                    _commonFuncHelper.CheckImgPath(request.img7, valToken.sesCarImgPath7!, "", ref outImg7, "207.jpg", request.cor, request.fex);
+                    _commonFuncHelper.CheckImgPath(request.img8, valToken.sesCarImgPath8!, "", ref outImg8, "208.jpg", request.cor, request.fex);
+                    estModel.CarImgPath1 = outImg1;
+                    estModel.CarImgPath2 = outImg2;
+                    estModel.CarImgPath3 = outImg3;
+                    estModel.CarImgPath4 = outImg4;
+                    estModel.CarImgPath5 = outImg5;
+                    estModel.CarImgPath6 = outImg6;
+                    estModel.CarImgPath7 = outImg7;
+                    estModel.CarImgPath8 = outImg8;
                 }
-                estModel.SyakenNew = isIntHaiki ? dtUserDef.SyakenNewK : dtUserDef.SyakenNewH;
-                estModel.SyakenZok = 0;
-                if ((strCheckCarYm.Length == 6 && CommonFunction.DateDiff(IntervalEnum.Months, DateTime.Today, DateTime.Parse(CommonFunction.Left(strCheckCarYm, 4) + "/" + CommonFunction.Right(strCheckCarYm, 2) + "/01")) > 0)
-                    || (strCheckCarYm.Length == 4 && CommonFunction.DateDiff(IntervalEnum.Years, DateTime.Today, DateTime.Parse(strCheckCarYm + "/01")) > 0))
-                {
-                    estModel.SyakenNew = 0;
-                    estModel.SyakenZok = isIntHaiki ? dtUserDef.SyakenZokK : dtUserDef.SyakenZokH;
-                }
-                estModel.TaxFreeCheck = isIntHaiki ? dtUserDef.TaxFreeCheckK : dtUserDef.TaxFreeCheckH;
-                estModel.TaxFreeGarage = isIntHaiki ? dtUserDef.TaxFreeGarageK : dtUserDef.TaxFreeGarageH;
-                estModel.TaxCheck = isIntHaiki ? dtUserDef.TaxCheckK : dtUserDef.TaxCheckH;
-                estModel.TaxGarage = isIntHaiki ? dtUserDef.TaxGarageK : dtUserDef.TaxGarageH;
-                estModel.TaxRecycle = isIntHaiki ? dtUserDef.TaxRecycleK : dtUserDef.TaxRecycleH;
-                estModel.TaxDelivery = isIntHaiki ? dtUserDef.TaxDeliveryK : dtUserDef.TaxDeliveryH;
-                estModel.TaxSet1Title = dtUserDef.TaxSet1Title;
-                estModel.TaxSet1 = isIntHaiki ? dtUserDef.TaxSet1K : dtUserDef.TaxSet1H;
-                estModel.TaxSet2Title = dtUserDef.TaxSet2Title;
-                estModel.TaxSet2 = isIntHaiki ? dtUserDef.TaxSet2K : dtUserDef.TaxSet2H;
-                estModel.TaxSet3Title = dtUserDef.TaxSet3Title;
-                estModel.TaxSet3 = isIntHaiki ? dtUserDef.TaxSet3K : dtUserDef.TaxSet3H;
-                estModel.TaxFreeSet1Title = dtUserDef.TaxFreeSet1Title;
-                estModel.TaxFreeSet1 = isIntHaiki ? int.Parse(dtUserDef.TaxFreeSet1K) : dtUserDef.TaxFreeSet1H;
-                estModel.TaxFreeSet2Title = dtUserDef.TaxFreeSet2Title;
-                estModel.TaxFreeSet2 = isIntHaiki ? dtUserDef.TaxFreeSet2K : dtUserDef.TaxFreeSet2H;
-            }
-            else
-            {
-                estModel.ConTaxInputKb = true;
-            }
-            int intSelfIns = 0;
-            int intRemIns = 0;
-            string inYYYY = "";
-            string inMM = "";
 
-            if (flgTaxAutoCalc && intHaiki > 0)
-            {
-                if (strCheckCarYm.Length == 6)
+                estModel.TotalCost = 0;
+                decimal intCarPrice = CommonFunction.IsNumeric(request.pri) ? Convert.ToDecimal(request.pri) : 0m;
+                estModel.RakuSatu = CommonFunction.IsNumeric(request.fee) ? request.cor == "F6" ? 25000 : int.Parse(request.fee) : 0;
+                estModel.Rikusou = CommonFunction.IsNumeric(request.tra) ? int.Parse(request.tra) : 0;
+                estModel.OptionInputKb = true;
+                estModel.TaxInsInputKb = true;
+                estModel.TaxFreeKb = true;
+                if (!string.IsNullOrEmpty(request.fex))
                 {
-                    inYYYY = CommonFunction.Left(estModel.CheckCarYm, 4);
-                    inMM = CommonFunction.Right(estModel.CheckCarYm, 2);
+                    estModel.TaxFreeRecycle = _commonFuncHelper.GetRecDeposit(request.cor, request.fex);
                 }
-                if (!_commonFuncHelper.getSelfInsurance(intHaiki, inYYYY, inMM, userDefDamageInsMonth, ref intSelfIns, ref intRemIns))
-                    return ResponseHelper.Error<EstModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
+                estModel.TaxCostKb = true;
+                estModel.TradeInMilUnit = CommonConst.def_TradeInMilUnitKM;
+                estModel.ShopNm = userInfo.Data.UserNm;
+                estModel.ShopAdr = userInfo.Data.UserAdr;
+                estModel.ShopTel = userInfo.Data.UserTel;
+                estModel.Corner = request.cor;
+                estModel.Aacount = vAAcount;
+                estModel.Mode = Convert.ToByte(request.Mode);
+                estModel.Aayear = vNensiki;
+                estModel.Aahyk = CommonFunction.IsNumeric(request.poi) ? request.poi : "0";
+                estModel.Aaprice = (int)intCarPrice;
+                estModel.SirPrice = estModel.CarPrice;
+                estModel.YtiRieki = 0;
+                estModel.Aaplace = request.aan;
+                estModel.Aano = request.exh;
+                if (!string.IsNullOrEmpty(request.lim))
+                {
+                    string vAATime = request.lim.Trim();
+                    estModel.Aatime = request.lim.Trim().Length == 8 ? CommonFunction.Left(vAATime, 4) + "/" + CommonFunction.Mid(vAATime, 4, 2) + "/" + CommonFunction.Right(vAATime, 2) : vAATime;
 
-                else if (intSelfIns > 0)
-                {
-                    estModel.DamageIns = intSelfIns;
-                    estModel.DamageInsMonth = intRemIns.ToString();
                 }
-            }
-            var vTax = _commonFuncHelper.getTax(estModel.Udate, valToken.sesTaxRatio, valToken.UserNo);
-            decimal wkVal;
-            if (estModel.ConTaxInputKb == true)
-            {
-                if (request.nonTax != "1")
+                int intHaiki = 0;
+                if (CommonFunction.IsNumeric(estModel.DispVol))
                 {
-                    intCarPrice += Math.Floor(intCarPrice * vTax);
+                    intHaiki = int.Parse(estModel.DispVol);
+                }
+                bool flgTaxAutoCalc = _commonFuncHelper.enableTaxCalc(request.mak);
+                int intFirstMonth = Convert.ToInt32(string.Format("{0:D2}", DateTime.Now.Month));
+                if (flgTaxAutoCalc && intHaiki > 0 && estModel.DispVolUnit == CommonConst.def_DispVolUnitCC)
+                {
+                    var carTax = _commonFuncHelper.getCarTax(intFirstMonth, intHaiki);
+                    if (carTax == -1)
+                        return ResponseHelper.Error<EstModel>(HelperMessage.SMAI023D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI023D));
+                    estModel.AutoTax = carTax;
+                    estModel.AutoTaxMonth = intFirstMonth.ToString();
+                }
+                int userDefDamageInsMonth = 0;
+                var dtUserDef = _commonFuncHelper.getUserDefData(valToken.UserNo);
+                if (dtUserDef != null)
+                {
+                    estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
+                    estModel.ShopNm = dtUserDef.ShopNm;
+                    estModel.ShopAdr = dtUserDef.ShopAdr;
+                    estModel.ShopTel = dtUserDef.ShopTel;
+                    estModel.EstTanName = dtUserDef.EstTanName;
+                    estModel.SekininName = dtUserDef.SekininName;
+                    userDefDamageInsMonth = Convert.ToInt32(dtUserDef.DamageInsMonth);
+                    bool isIntHaiki = intHaiki > 0 && intHaiki <= 660;
+                    if ((string.IsNullOrEmpty(valToken.sesMode) ? int.Parse(valToken.sesMode!) : 0) == 0)
+                    {
+                        estModel.YtiRieki = isIntHaiki ? dtUserDef.YtiRiekiK : dtUserDef.YtiRiekiH;
+                    }
+                    estModel.SyakenNew = isIntHaiki ? dtUserDef.SyakenNewK : dtUserDef.SyakenNewH;
+                    estModel.SyakenZok = 0;
+                    if ((strCheckCarYm.Length == 6 && CommonFunction.DateDiff(IntervalEnum.Months, DateTime.Today, DateTime.Parse(CommonFunction.Left(strCheckCarYm, 4) + "/" + CommonFunction.Right(strCheckCarYm, 2) + "/01")) > 0)
+                        || (strCheckCarYm.Length == 4 && CommonFunction.DateDiff(IntervalEnum.Years, DateTime.Today, DateTime.Parse(strCheckCarYm + "/01")) > 0))
+                    {
+                        estModel.SyakenNew = 0;
+                        estModel.SyakenZok = isIntHaiki ? dtUserDef.SyakenZokK : dtUserDef.SyakenZokH;
+                    }
+                    estModel.TaxFreeCheck = isIntHaiki ? dtUserDef.TaxFreeCheckK : dtUserDef.TaxFreeCheckH;
+                    estModel.TaxFreeGarage = isIntHaiki ? dtUserDef.TaxFreeGarageK : dtUserDef.TaxFreeGarageH;
+                    estModel.TaxCheck = isIntHaiki ? dtUserDef.TaxCheckK : dtUserDef.TaxCheckH;
+                    estModel.TaxGarage = isIntHaiki ? dtUserDef.TaxGarageK : dtUserDef.TaxGarageH;
+                    estModel.TaxRecycle = isIntHaiki ? dtUserDef.TaxRecycleK : dtUserDef.TaxRecycleH;
+                    estModel.TaxDelivery = isIntHaiki ? dtUserDef.TaxDeliveryK : dtUserDef.TaxDeliveryH;
+                    estModel.TaxSet1Title = dtUserDef.TaxSet1Title;
+                    estModel.TaxSet1 = isIntHaiki ? dtUserDef.TaxSet1K : dtUserDef.TaxSet1H;
+                    estModel.TaxSet2Title = dtUserDef.TaxSet2Title;
+                    estModel.TaxSet2 = isIntHaiki ? dtUserDef.TaxSet2K : dtUserDef.TaxSet2H;
+                    estModel.TaxSet3Title = dtUserDef.TaxSet3Title;
+                    estModel.TaxSet3 = isIntHaiki ? dtUserDef.TaxSet3K : dtUserDef.TaxSet3H;
+                    estModel.TaxFreeSet1Title = dtUserDef.TaxFreeSet1Title;
+                    estModel.TaxFreeSet1 = isIntHaiki ? int.Parse(dtUserDef.TaxFreeSet1K) : dtUserDef.TaxFreeSet1H;
+                    estModel.TaxFreeSet2Title = dtUserDef.TaxFreeSet2Title;
+                    estModel.TaxFreeSet2 = isIntHaiki ? dtUserDef.TaxFreeSet2K : dtUserDef.TaxFreeSet2H;
+                }
+                else
+                {
+                    estModel.ConTaxInputKb = true;
+                }
+                int intSelfIns = 0;
+                int intRemIns = 0;
+                string inYYYY = "";
+                string inMM = "";
+
+                if (flgTaxAutoCalc && intHaiki > 0)
+                {
+                    if (strCheckCarYm.Length == 6)
+                    {
+                        inYYYY = CommonFunction.Left(estModel.CheckCarYm, 4);
+                        inMM = CommonFunction.Right(estModel.CheckCarYm, 2);
+                    }
+                    if (!_commonFuncHelper.getSelfInsurance(intHaiki, inYYYY, inMM, userDefDamageInsMonth, ref intSelfIns, ref intRemIns))
+                        return ResponseHelper.Error<EstModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
+
+                    else if (intSelfIns > 0)
+                    {
+                        estModel.DamageIns = intSelfIns;
+                        estModel.DamageInsMonth = intRemIns.ToString();
+                    }
+                }
+                var vTax = _commonFuncHelper.getTax(estModel.Udate, valToken.sesTaxRatio, valToken.UserNo);
+                decimal wkVal;
+                if (estModel.ConTaxInputKb == true)
+                {
+                    if (request.nonTax != "1")
+                    {
+                        intCarPrice += Math.Floor(intCarPrice * vTax);
+                        intCarPrice += estModel.YtiRieki;
+                    }
+                    estModel.RakuSatu += (int)Math.Floor(estModel.RakuSatu * vTax);
+                    estModel.Rikusou += (int)Math.Floor(estModel.Rikusou * vTax);
+                }
+                else if (request.nonTax != "1")
+                {
                     intCarPrice += estModel.YtiRieki;
                 }
-                estModel.RakuSatu += (int)Math.Floor(estModel.RakuSatu * vTax);
-                estModel.Rikusou += (int)Math.Floor(estModel.Rikusou * vTax);
-            }
-            else if (request.nonTax != "1")
-            {
-                intCarPrice += estModel.YtiRieki;
-            }
-            else
-            {
-                wkVal = intCarPrice / (1 + vTax);
-                intCarPrice = Math.Ceiling(wkVal);
-            }
+                else
+                {
+                    wkVal = intCarPrice / (1 + vTax);
+                    intCarPrice = Math.Ceiling(wkVal);
+                }
 
-            estModel.CarPrice = Convert.ToInt32(intCarPrice);
-            estModel.SonotaTitle = CommonConst.def_TitleSonota;
-            if (!await RegEstData(estModel))
-            {
-                return ResponseHelper.Error<EstModel>(HelperMessage.SMAI029D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI029D));
+                estModel.CarPrice = Convert.ToInt32(intCarPrice);
+                estModel.SonotaTitle = CommonConst.def_TitleSonota;
+                if (!await RegEstData(estModel))
+                {
+                    return ResponseHelper.Error<EstModel>(HelperMessage.SMAI029D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI029D));
+                }
+                return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estModel);
             }
-
-            return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estModel);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAsnetInfo");
+                return ResponseHelper.Error<EstModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+            }
         }
         private void SetvalueToken()
         {
