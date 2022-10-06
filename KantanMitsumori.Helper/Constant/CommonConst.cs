@@ -19,8 +19,7 @@
         public const string def_TitleDaiko = "手続代行費用";
         public const string def_TitleConTaxTotalInTax = "（内消費税合計）";
         public const string def_TitleConTaxTotalOutTax = "消費税合計";
-        public const string def_TitleCarKeiInTax = "現金販売価格（6～10）";
-        public const string def_TitleCarKeiOutTax = "現金販売価格（6～10）";
+        public const string def_TitleCarKei = "現金販売価格（6～10）";
         public const string def_TitleSalesSumInTax = "お支払総額（12～14）";
         public const string def_TitleSalesSumOutTax = "お支払総額（11～14）";
         //-- タイトル（明細行用）
@@ -200,17 +199,17 @@
         public const string LOAN_RECALC_CLEAR = "※ご確認ください<br />お支払い総合計が変更になりましたが、自動計算を行わない設定になっている為、ローン計算情報をクリアしました";
         public const string LOAN_RECALC_NORMAL_END = "※ご確認ください<br />お支払い総合計が変更になりましたので、入力済の金利、支払い条件<br />ボーナス加算条件等のローン条件を元に、ローン再計算を行いました";
         public const string LOAN_RECALC_ERROR = "※ご確認ください<br />お支払い総合計が変更になりましたが、ローン再計算でエラーが発生した為、ローン計算情報をクリアしました";
-   
+
         public const int TAX_5_PERCENT_ID = 1;
 
         public const int TAX_8_PERCENT_ID = 2;
-    
+
         public const int TAX_10_PERCENT_ID = 3;
 
         public const decimal TAX_5_PERCENT_VALUE = 0.05M;
-   
+
         public const decimal TAX_8_PERCENT_VALUE = 0.08M;
-      
+
         public const decimal TAX_10_PERCENT_VALUE = 0.1M;
 
     }

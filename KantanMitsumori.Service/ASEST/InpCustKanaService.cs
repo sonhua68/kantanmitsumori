@@ -37,8 +37,6 @@ namespace KantanMitsumori.Service.ASEST
                 if (estData == null)
                 {
                     return ResponseHelper.Error<ResponseInpCustKana>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
-
-
                 }
                 var model = new ResponseInpCustKana();
                 model.EstNo = estData.EstNo;
@@ -52,7 +50,6 @@ namespace KantanMitsumori.Service.ASEST
             {
                 _logger.LogError(ex, "getInfoCust");
                 return ResponseHelper.Error<ResponseInpCustKana>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
-
             }
         }
 

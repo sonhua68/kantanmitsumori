@@ -111,8 +111,7 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "getEstMain");
-                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
-
+                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
         public ResponseBase<ResponseEstMainModel> ReloadGetEstMain(LogToken logtoken)
@@ -150,8 +149,7 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "ReloadGetEstMain");
-                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
-
+                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
         public ResponseBase<UserModel> getUserInfo(string mem)
@@ -169,9 +167,7 @@ namespace KantanMitsumori.Service.ASEST
             else
             {
                 return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), responseUser);
-
             }
-
         }
         public async Task<ResponseBase<ResponseEstMainModel>> setFreeEst(RequestSelGrdFreeEst model, LogToken logtoken)
         {
@@ -292,7 +288,6 @@ namespace KantanMitsumori.Service.ASEST
                 response.EstIDEModel = _commonEst.SetEstIDEData(valToken);
                 if (response.EstIDEModel == null)
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
-
             }
             SetvalueToken();
             response.AccessToken = valToken.Token!;
@@ -319,7 +314,7 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "AddEstimate");
-                return ResponseHelper.Error<string>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                return ResponseHelper.Error<string>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
         public async Task<ResponseBase<string>> CalcSum(RequestSerEst model, LogToken logToken)
@@ -343,7 +338,7 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "CalcSum");
-                return ResponseHelper.Error<string>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                return ResponseHelper.Error<string>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
         #region fuc private     
@@ -448,7 +443,7 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "addEstNextSubNo " + "CEST-052D");
-                return ResponseHelper.LogicError<EstModel>("", "");
+                return ResponseHelper.LogicError<EstModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
 
@@ -697,11 +692,9 @@ namespace KantanMitsumori.Service.ASEST
             if (!await RegEstData(estModel))
             {
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAI029D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI029D));
-
             }
 
             return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estModel);
-
         }
         private void SetvalueToken()
         {
@@ -837,7 +830,7 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.DaikoTitle = CommonConst.def_TitleDaiko + titleInOutTax;
             estModelView.TaxInsEquivalentTitle = CommonConst.def_TitleDaiko + titleInOutTax;
             estModelView.TaxName = Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleConTaxTotalInTax : CommonConst.def_TitleConTaxTotalOutTax;
-            estModelView.CarSaleSumTitle = Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleCarKeiInTax : CommonConst.def_TitleCarKeiOutTax;
+            estModelView.CarSaleSumTitle = CommonConst.def_TitleCarKei;
             estModelView.SalesSumTitle = Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleSalesSumInTax : CommonConst.def_TitleSalesSumOutTax;
 
             estModelView.TaxCostAll = CommonFunction.setFormatCurrency(Model.EstModel.TaxCostAll);
