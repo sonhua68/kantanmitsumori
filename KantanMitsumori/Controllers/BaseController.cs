@@ -35,29 +35,33 @@ namespace KantanMitsumori.Controllers
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
             if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && pramQuery))
+            {
                 await next();
+            }
             else
+            {
                 _logToken = HelperToken.EncodingToken(cookies!)!;
-            if (_logToken == null)
-            {
-                if (!actionName.Contains("Index"))
-                    filterContext.Result = ErrorAction();
-                else
-                    filterContext.Result = new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
-                    {
-                        messageCode = HelperMessage.SMAI001P,
-                        messageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P)
-                    }));
-                return;
+                if (_logToken == null)
+                {
+                    if (!actionName.Contains("Index"))
+                        filterContext.Result = ErrorAction();
+                    else
+                        filterContext.Result = new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
+                        {
+                            messageCode = HelperMessage.SMAI001P,
+                            messageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P)
+                        }));
+                    return;
+                }
+                else if (_logToken != null)
+                {
+                    _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
+                    _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
+                    _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
+                    _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
+                }
+                await next();
             }
-            else if (_logToken != null)
-            {
-                _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
-                _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
-                _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
-                _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
-            }
-            await next();
 
         }
 
