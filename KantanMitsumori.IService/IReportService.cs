@@ -11,8 +11,7 @@ namespace KantanMitsumori.IService
 {
     public interface IReportService
     {        
-        ResponseBase<ReportFileModel> GenerateEstimateReport(RequestReport model);
-        ResponseBase<ReportFileModel> GenerateOrderReport(RequestReport model);
+        ResponseBase<ReportFileModel> GenerateReport(RequestReport model);        
        
     }
 }

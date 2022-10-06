@@ -11,12 +11,18 @@
 		<None Remove="Reports\Estimate.rpx" />
 		<None Remove="Reports\EstimateWithMemo.rpx" />
 		<None Remove="Reports\LeaseEstimate.rpx" />
+		<None Remove="Reports\LeaseEstimateWithMemo.rpx" />
 		<None Remove="Reports\LeaseOrder.rpx" />
+		<None Remove="Reports\LeaseOrderWithArticle.rpx" />
 		<None Remove="Reports\Memo.rpx" />
 		<None Remove="Reports\Order.rpx" />
 		<None Remove="Reports\OrderWithArticle.rpx" />
-		<EmbeddedResource Include="Reports\LeaseEstimate.rpx" />
+		<EmbeddedResource Include="Reports\LeaseEstimateWithMemo.rpx">
+		  <SubType>Component</SubType>
+		</EmbeddedResource>
 		<EmbeddedResource Include="Reports\LeaseOrder.rpx" />
+		<EmbeddedResource Include="Reports\LeaseEstimate.rpx" />
+		<EmbeddedResource Include="Reports\LeaseOrderWithArticle.rpx" />
 		<EmbeddedResource Include="Reports\OrderWithArticle.rpx" />
 		<EmbeddedResource Include="Reports\EstimateWithMemo.rpx" />
 		<EmbeddedResource Include="Reports\Estimate.rpx" />
@@ -37,6 +43,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
 		<PackageReference Include="GrapeCity.ActiveReports" Version="16.2.0" />
 		<PackageReference Include="GrapeCity.ActiveReports.Chart" Version="16.1.2" />

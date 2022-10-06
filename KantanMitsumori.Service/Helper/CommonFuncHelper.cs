@@ -5,7 +5,6 @@ using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using Microsoft.Extensions.Logging;
-using System.Net;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -14,12 +13,17 @@ namespace KantanMitsumori.Service.Helper
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpClientFactory _httpClientFactory; 
 
-        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork)
+        public CommonFuncHelper(IMapper mapper
+                        , ILogger<CommonFuncHelper> logger
+                        , IUnitOfWork unitOfWork
+                        , IHttpClientFactory httpClientFactory)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _httpClientFactory = httpClientFactory;
         }
 
         #region Constant Initialization
@@ -261,9 +265,7 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                // WebRequestの作成
-                HttpWebRequest webreq = (HttpWebRequest)WebRequest.Create(url);
-
+                Uri uri = new Uri(url);
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
                 strCarImgPlace = CommonSettings.def_CarImgPlace;
@@ -282,36 +284,20 @@ namespace KantanMitsumori.Service.Helper
                 // 保存先のファイル名
                 if (string.IsNullOrEmpty(strSaveName))
                 {
-                    fileName = strCarImgPlace + webreq.RequestUri.Segments.LastOrDefault();
+                    fileName = strCarImgPlace + uri.Segments.LastOrDefault();
                 }
                 else
                 {
                     fileName = Path.Combine(strCarImgPlace, strSaveName);
                 }
-                // fileName = def_CarImgPlace & webreq.RequestUri.Segments(leng - 1)
-
-                // サーバーからの応答を受信するためのWebResponseを取得
-                HttpWebResponse webres = (HttpWebResponse)webreq.GetResponse();
-
-                // 応答データを受信するためのStreamを取得
-                Stream strm = webres.GetResponseStream();
-
-                // ファイルに書き込むためのFileStreamを作成
-                var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-
-                // 応答データをファイルに書き込む
-                int b;
-                while (true)
-                {
-                    b = strm.ReadByte();
-                    if (b == -1)
-                        break;
-                    fs.WriteByte(Convert.ToByte(b));
-                }
-
-                // 閉じる
-                fs.Close();
-                strm.Close();
+                
+                // Use HttpClient to download image
+                var httpClient = _httpClientFactory.CreateClient();
+                var task = httpClient.GetByteArrayAsync(uri);
+                task.Wait();
+                var data = task.Result;
+                File.WriteAllBytes(fileName, task.Result);
+              
             }
             catch (Exception ex)
             {

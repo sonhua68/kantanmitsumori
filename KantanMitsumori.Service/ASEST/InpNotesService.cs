@@ -52,7 +52,7 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "");
-                return ResponseHelper.Error<ResponseInpNotes>("Error", "Error");
+                return ResponseHelper.Error<ResponseInpNotes>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
 
@@ -80,8 +80,9 @@ namespace KantanMitsumori.Service.ASEST
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "UpdateInpNotes");
-                return ResponseHelper.Error<int>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));
+                _logger.LogError(ex, "UpdateInpNotes");              
+                return ResponseHelper.Error<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+
             }
         }
 

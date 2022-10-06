@@ -28,6 +28,9 @@ namespace KantanMitsumori.Service
             services.AddTransient<IPreExaminationService, PreExaminationService>();
             services.AddTransient<IInpLeaseCalcService, InpLeaseCalcService>();
             services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();
+            services.AddTransient<IPreExaminationService, PreExaminationService>();            
+            services.AddTransient<IInpCarPriceService, InpCarPriceService>();
+            services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();  
             return services;
         }
 

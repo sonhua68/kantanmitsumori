@@ -98,6 +98,34 @@ namespace KantanMitsumori.Infrastructure.Base
             return result;
         }
 
+        public bool Commit()
+        {
+            _logger.LogInformation("[UnitOfWork] begin process [SaveChanges]...");
+            var result = true;
+            var errorCode = 0;
+            using (var transaction = _context.Database.BeginTransaction())
+            {
+                try
+                {
+                    errorCode = _context.SaveChanges();
+                    _logger.LogInformation("[UnitOfWork] begin commit transaction...");
+                    transaction.Commit();
+                    _logger.LogInformation("[UnitOfWork] commit transaction success.");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "[UnitOfWork] occur a exception when process [SaveChanges]. exit with code {0}", errorCode);
+                    result = false;
+
+                    _logger.LogInformation("[UnitOfWork] begin rollback transaction...");
+                    transaction.Rollback();
+                    _logger.LogInformation("[UnitOfWork] rollback transaction success.");
+                }
+            }
+            _logger.LogInformation("[UnitOfWork] end process [SaveChanges] with result=[{0}]", result);
+            return result;
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             if (!_disposed)

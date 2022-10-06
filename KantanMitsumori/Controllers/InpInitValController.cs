@@ -44,11 +44,7 @@ namespace KantanMitsumori.Controllers
         [HttpGet]
         public IActionResult GetUserDefData()
         {            
-            var response = _inpInitValService.GetUserDefData(_logToken.UserNo!);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = _inpInitValService.GetUserDefData(_logToken.UserNo!);           
             return Ok(response);
         }
 
@@ -56,11 +52,7 @@ namespace KantanMitsumori.Controllers
         public async Task<IActionResult> UpdateInpInitVal([FromForm] RequestUpdateInpInitVal requestData)
         {
             requestData.sesMode = _logToken.sesMode;
-            var response = await _inpInitValService.UpdateInpInitVal(requestData, _logToken);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = await _inpInitValService.UpdateInpInitVal(requestData, _logToken);          
             return Ok(response);
         }
 

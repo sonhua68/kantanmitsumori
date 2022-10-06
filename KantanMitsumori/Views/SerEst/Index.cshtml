@@ -75,7 +75,7 @@
                                     <select name="ddlFromSelectY" onchange="return onChangeSelect(1)" id="ddlFromSelectY" tabindex="4" class="inpbox" style="width:70px;">
                                     </select>
                                     <span id="Label8" class="inplabel" style="display:inline-block;width:13px;">年</span>
-                                    <select name="ddlFromSelectM" onchange="return GetDayOfMonth(1)" id="ddlFromSelectM" tabindex="5" class="inpbox" style="width:70px;">
+                                    <select name="ddlFromSelectM" onchange="return  onChangeSelect(1)" id="ddlFromSelectM" tabindex="5" class="inpbox" style="width:70px;">
                                     </select>
                                     <span id="Label6" class="inplabel" style="display:inline-block;width:13px;">月</span>
                                     <select name="ddlFromSelectD" id="ddlFromSelectD" tabindex="6" class="inpbox" style="width:70px;">
@@ -85,7 +85,7 @@
                                     <select name="ddlToSelectY" id="ddlToSelectY" onchange="return onChangeSelect(2)" tabindex="7" class="inpbox" style="width:70px;">
                                     </select>
                                     <span id="Label12" class="inplabel" style="display:inline-block;width:13px;">年</span>
-                                    <select name="ddlToSelectM" onchange="return GetDayOfMonth(2)" id="ddlToSelectM" tabindex="8" class="inpbox" style="width:70px;">
+                                    <select name="ddlToSelectM" onchange="return onChangeSelect(2)" id="ddlToSelectM" tabindex="8" class="inpbox" style="width:70px;">
                                     </select>
                                     <span id="Label11" class="inplabel" style="display:inline-block;width:13px;">月</span>
                                     <select name="ddlToSelectD" id="ddlToSelectD" tabindex="9" class="inpbox" style="width:70px;">
@@ -161,6 +161,8 @@
     </div>
     <input type="hidden" id="SortPage" value="10">
 </div>
+<script src="~/js/funcmoment.js"></script>
 <script src="~/js/SerEst.js"></script>
+
 
 

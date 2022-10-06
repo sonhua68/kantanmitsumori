@@ -23,12 +23,14 @@ function GetListASOPMaker() {
             $("#ddlMaker").append(new Option(value, text));
         }
 
+    } else if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     } else {
         let Items = result.data;
         if (typeof (Items) != "undefined") {
             $("#lblErrMsg2").html(Items)
         } else {
-            location.reload();
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     }
 }
@@ -69,7 +71,10 @@ function GetListASOPCarName() {
             $("#ddlModel").append(new Option(value, text));
             $('#ddlModel').attr("disabled", false);
         }
-    } else if (result.resultStatus == 0 && result.messageCode == 'I0003') {
+    } else if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    }
+    else if (result.resultStatus == 0 && result.messageCode == 'I0003') {
         $("#lblErrMsg1").html(def_DataNotFoundMsg_NULL);
         ReSetddlMaker();
     } else {
@@ -77,7 +82,7 @@ function GetListASOPCarName() {
         if (typeof (Items) != "undefined") {
             $("#lblErrMsg2").html(Items)
         } else {
-            location.reload();
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     }
 
@@ -102,8 +107,8 @@ function btnChkModel() {
     model.KbnSet = $("#KbnSet").val();
     var result = Framework.submitAjaxLoadData(model, "/SelCar/ChkModel");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-    } else if (result.resultStatus == 0 && result.messageCode != 'I0003') {
-
+    } else if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     } else {
         let Items = result.data;
         if (typeof (Items) != "undefined") {
@@ -124,8 +129,8 @@ function btnNextGrade() {
     model.sesCarNM = $("#ddlModel option:selected").text();
     var result = Framework.submitAjaxLoadData(model, "/SelCar/NextGrade");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-    } else if (result.resultStatus == 0 && result.messageCode != 'I0003') {
-
+    } else if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     } else {
         let Items = result.data;
         if (typeof (Items) != "undefined") {
@@ -157,7 +162,7 @@ function SetInitCarSet() {
         $("#CaseSet").val(vCaseSet);
         $("#KbnSet").val(vKbnSet);
     }
-  
+
 }
 function CleanCarSet() {
     $("#CaseSet").val("");
@@ -173,14 +178,16 @@ function OnclickSelCar() {
     CleanCarSet();
     Framework.GoBackReloadPageUrl('/SerEst');
 }
-function AddEstimate() {    
-    var model = {};   
+function AddEstimate() {
+    var model = {};
     var result = Framework.submitAjaxFormUpdateAsync(model, "/SelCar/SetFreeEst");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let isError = parseInt(result.data.estModel.isError);
         Framework.GoBackReloadPage(isError);
-        if (isError == 1) {
-            alert("最初に車両本体価格をご確認下さい")
-        }
+        //if (isError == 1) {
+        //    alert("最初に車両本体価格をご確認下さい")
+        //}
+    } else if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }

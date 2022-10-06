@@ -79,11 +79,11 @@
                                         @{
                                             if (Model.ConTaxInputKb == true)
                                             {
-                                                <span id="lblTitle_TaxInsEquivalent" class="titlelabel">相当額（税込）</span>
+                                                    <span id="lblTitle_TaxInsEquivalent" class="titlelabel">相当額（税込）</span>
                                             }
                                             else
                                             {
-                                                <span id="lblTitle_TaxInsEquivalent" class="titlelabel">相当額（税抜）</span>
+                                                    <span id="lblTitle_TaxInsEquivalent" class="titlelabel">相当額（税抜）</span>
                                             }
                                         }
 
@@ -98,11 +98,11 @@
                                                 {
                                                     if (@item.Text == Model.AutoTaxMonth!)
                                                     {
-                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                            <option selected="selected" value="@item.Value">@item.Text</option>
                                                     }
                                                     else
                                                     {
-                                                        <option value="@item.Value">@item.Text</option>
+                                                            <option value="@item.Value">@item.Text</option>
                                                     }
 
                                                 }
@@ -155,11 +155,11 @@
                                                 {
                                                     if (@item.Text == Model.DamageInsMonth!)
                                                     {
-                                                        <option selected="selected" value="@item.Value">@item.Text</option>
+                                                            <option selected="selected" value="@item.Value">@item.Text</option>
                                                     }
                                                     else
                                                     {
-                                                        <option value="@item.Value">@item.Text</option>
+                                                            <option value="@item.Value">@item.Text</option>
                                                     }
 
                                                 }
@@ -207,7 +207,7 @@
                                 <tr>
                                     <td colspan="3" class="inpbtntd">
                                         <input type="button" name="btnCancel" onclick="Framework.GoBackReloadPage();return false;" value="キャンセル" id="btnCancel" class="Btn1" style="height:32px;width:100px;">
-                                        <input type="submit" name="btnOK" value="OK" onclick="return inputChk();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                                        <input type="submit" name="btnOK" value="OK" onclick="return onSummit();" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
                                     </td>
                                 </tr>
                                 <tr>
@@ -239,24 +239,11 @@
     const def_DispVolUnitKW = "kw"
     const def_DispVolUnitRE = "RE"
     setInitData();
-    $('#formInpZeiHoken').validate({
-        submitHandler: function (form) {
-            var model = Framework.getFormData($("#formInpZeiHoken"));
-            console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpZeiHoken/UpdateInpZeiHoken");
-            if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPage();
-            } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#Msg").html(Items)
-                } else {
-                    location.reload();
-                }
-            }
-        }
-    });
+    function onSummit() {
+        if (inputChk() == false) { return; }
+        Framework.OnSubmitForm("/InpZeiHoken/UpdateInpZeiHoken", "formInpZeiHoken");
+        return false;
+    } 
     function setInitData() {
         let LeaseFlag = @Model.LeaseFlag;
         let CheckCarYm = $("#CheckCarYm").val();
