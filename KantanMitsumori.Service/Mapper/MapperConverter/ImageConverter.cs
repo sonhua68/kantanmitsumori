@@ -15,10 +15,18 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         /// Load image from input path and convert to base64 string
         /// </summary>
         public string Convert(string? imgFilePath, ResolutionContext context)
-        {            
-            if (string.IsNullOrEmpty(imgFilePath) || !File.Exists(imgFilePath))
-                return ConverterHelper.LoadImage(CommonSettings.PhysicalPathSettings.def_DmyImg);
-            return ConverterHelper.LoadImage(imgFilePath);
+        {
+            try
+            {
+                var commonSettings = context.Items["commonSettings"] as CommonSettings;
+                if (string.IsNullOrEmpty(imgFilePath) || !File.Exists(imgFilePath))
+                    return ConverterHelper.LoadImage(commonSettings!.PhysicalPathSettings.def_DmyImg);
+                return ConverterHelper.LoadImage(imgFilePath);
+            }
+            catch
+            {
+                return "";
+            }
         }
     }
 }

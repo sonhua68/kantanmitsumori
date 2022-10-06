@@ -12,12 +12,16 @@ namespace KantanMitsumori.Service
     {
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
+            // Add helper services
+            services.AddScoped<CommonFuncHelper>();
+            services.AddScoped<CommonEstimate>();
+            services.AddScoped<CommonFuncHelper>();
+            services.AddScoped<CommonIDE>();
+
+            // Add business services
             services.AddTransient<IEstMainService, EstMainService>();
             services.AddTransient<IEstimateIdeService, EstimateIdeService>();
-            services.AddTransient<IEstimateService, EstimateService>();
-
-            services.AddTransient<IEstimateSubService, EstimateSubService>();
-
+            services.AddTransient<IEstimateService, EstimateService>();            
             services.AddTransient<IEstimateSubService, EstimateSubService>();
             services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IInpLoanService, InpLoanService>();
@@ -29,25 +33,11 @@ namespace KantanMitsumori.Service
             services.AddTransient<IInpSitaCarService, InpSitaCarService>();
             services.AddTransient<IInpSyohiyoService, InpSyohiyoService>();
             services.AddTransient<IPreExaminationService, PreExaminationService>();
-
+            
+            // Add generic DI
             services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();
             return services;
         }
 
-        public static IServiceCollection AddAuthenService(this IServiceCollection services)
-        {
-            return services;
-        }
-
-
-        public static IServiceCollection AddHelperServices(this IServiceCollection services)
-        {
-            services.AddScoped<CommonFuncHelper>();
-            services.AddScoped<CommonEstimate>();
-            services.AddScoped<HelperMapper>();            
-            services.AddScoped<CommonFuncHelper>();
-            services.AddScoped<CommonIDE>();
-            return services;
-        }
     }
 }

@@ -23,6 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using KantanMitsumori.Service.Mapper.MapperConverter;
+using KantanMitsumori.Helper.Settings;
 
 namespace KantanMitsumori.Service
 {
@@ -32,15 +33,17 @@ namespace KantanMitsumori.Service
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUnitOfWorkIDE _unitOfWorkIDE;
-        private readonly HelperMapper _helperMapper;        
+        private readonly HelperMapper _helperMapper;
+        private readonly CommonSettings _commonSettings;
 
-        public ReportService(IMapper mapper, ILogger<ReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper)
+        public ReportService(IMapper mapper, ILogger<ReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper, CommonSettings commonSettings)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _unitOfWorkIDE = unitOfWorkIDE;
             _helperMapper = helperMapper;            
+            _commonSettings = commonSettings;
         }
         
         public ResponseBase<ReportFileModel> GenerateEstimateReport(RequestReport model)
@@ -155,12 +158,14 @@ namespace KantanMitsumori.Service
                     o.Items["estSubEntity"] = estSubEntity;
                     o.Items["sysEntity"] = sysEntity;                    
                     o.Items["requestReport"] = input;
+                    o.Items["commonSettings"] = _commonSettings;
                 });
             _mapper.Map(estSubEntity, reportModel
                 , o => {
                     o.Items["estEntity"] = estEntity;
                     o.Items["sysEntity"] = sysEntity;                    
                     o.Items["requestReport"] = input;
+                    o.Items["commonSettings"] = _commonSettings;
                 });
             _mapper.Map(input, reportModel);
 

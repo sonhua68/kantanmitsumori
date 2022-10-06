@@ -15,12 +15,13 @@ namespace KantanMitsumori.Service.Helper
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
-
-        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork)
+        private readonly CommonSettings _commonSettings;
+        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, CommonSettings commonSettings)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _commonSettings = commonSettings; 
         }
 
         #region Constant Initialization
@@ -267,7 +268,7 @@ namespace KantanMitsumori.Service.Helper
 
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
-                strCarImgPlace = CommonSettings.PhysicalPathSettings.def_CarImgPlace;
+                strCarImgPlace = _commonSettings.PhysicalPathSettings.def_CarImgPlace;
                 strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMM") + "/";
                 if (!Directory.Exists(strCarImgPlace))
                 {
@@ -396,7 +397,7 @@ namespace KantanMitsumori.Service.Helper
             string[] arrExclusionList;
             try
             {
-                strExclusionList = File.ReadAllText(CommonSettings.PhysicalPathSettings.def_ExclusionListOfAutoCalc, enc);
+                strExclusionList = File.ReadAllText(_commonSettings.PhysicalPathSettings.def_ExclusionListOfAutoCalc, enc);
                 arrExclusionList = strExclusionList.Split("\r\n");
             }
             catch (Exception ex)

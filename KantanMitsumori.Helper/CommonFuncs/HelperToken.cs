@@ -15,15 +15,14 @@ using System.Threading.Tasks;
 namespace KantanMitsumori.Helper.CommonFuncs
 {
     public static class HelperToken
-    {
-        static JwtSettings _jwtSettings = CommonSettings.JwtSettings;        
-        public static LogToken? EncodingToken(string token)
+    {           
+        public static LogToken? EncodingToken(JwtSettings settings, string token)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(token)) return null;
                 var tokenHandler = new JwtSecurityTokenHandler();            
-                var key = Encoding.UTF8.GetBytes(_jwtSettings.Key);
+                var key = Encoding.UTF8.GetBytes(settings.Key);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -46,10 +45,9 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return null;
             }
         }
-
-        public static string GenerateJsonToken(LogToken model)
+        public static string GenerateJsonToken(JwtSettings settings, LogToken model)
         {           
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             string genderStr = JsonConvert.SerializeObject(model);
             var claims = new[]
@@ -58,11 +56,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             var currentDate = DateTime.Now;
-            var RefreshExpires = _jwtSettings.AccessExpires;
+            var RefreshExpires = settings.AccessExpires;
             TimeSpan time = TimeSpan.Parse(RefreshExpires);
             var token = new JwtSecurityToken(
-                issuer: _jwtSettings.Issuer,
-                audience: _jwtSettings.Issuer,
+                issuer: settings.Issuer,
+                audience: settings.Issuer,
                 claims,
                 notBefore: currentDate,
                 expires: currentDate.Add(time),

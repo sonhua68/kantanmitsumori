@@ -26,7 +26,8 @@ namespace KantanMitsumori.Service.ASEST
         private LogToken valToken;
         private CommonFuncHelper _commonFuncHelper;
         private CommonEstimate _commonEst;
-        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst)
+        private CommonSettings _commonSettings;
+        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst, CommonSettings commonSettings)
         {
             _mapper = mapper;
             _logger = logger;
@@ -34,6 +35,7 @@ namespace KantanMitsumori.Service.ASEST
             _commonFuncHelper = commonFuncHelper;
             _commonEst = commonEst;
             _unitOfWorkIDE = unitOfWorkIDE;
+            _commonSettings = commonSettings;
         }
 
         public UserModel getUserName(string userNo)
@@ -693,7 +695,7 @@ namespace KantanMitsumori.Service.ASEST
         }
         private void SetvalueToken()
         {
-            var token = HelperToken.GenerateJsonToken(valToken);
+            var token = HelperToken.GenerateJsonToken(_commonSettings.JwtSettings, valToken);
             valToken.Token = token;
         }
 
@@ -942,7 +944,7 @@ namespace KantanMitsumori.Service.ASEST
             var regYear = int.Parse(CommonFunction.Left(firstRegYm, 4));
             var firstYear = regYear + LeaseTargetsID1!.Restriction;
             var zenkaku = StringWidthHelper.ToFullWidth(makerName);
-            var arrayMakerName = CommonSettings.DataSettings.def_MakerName;
+            var arrayMakerName = _commonSettings.DataSettings.def_MakerName;
             var cmakerName = arrayMakerName.Contains(zenkaku);
             if (nowOdometer > LeaseTargetsID2!.Restriction || firstYear < year || cmakerName == false)
             {
