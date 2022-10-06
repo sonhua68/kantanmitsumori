@@ -5,10 +5,10 @@
         public string UserNo { get; set; } = null!;
         public bool ConTaxInputKb { get; set; }
         public double Rate { get; set; }
-        public string ShopNm { get; set; }
-        public string ShopAdr { get; set; }
-        public string ShopTel { get; set; }
-        public string EstTanName { get; set; }
+        public string ShopNm { get; set; } = string.Empty;
+        public string ShopAdr { get; set; } = string.Empty;
+        public string ShopTel { get; set; } = string.Empty;
+        public string EstTanName { get; set; } = string.Empty;
         public int YtiRiekiH { get; set; }
         public int YtiRiekiK { get; set; }
         public int SyakenNewH { get; set; }
@@ -33,27 +33,27 @@
         public int TaxRecycleK { get; set; }
         public int TaxDeliveryH { get; set; }
         public int TaxDeliveryK { get; set; }
-        public string TaxSet1Title { get; set; }
+        public string TaxSet1Title { get; set; } = string.Empty;
         public int TaxSet1H { get; set; }
         public int TaxSet1K { get; set; }
-        public string TaxSet2Title { get; set; }
+        public string TaxSet2Title { get; set; } = string.Empty;
         public int TaxSet2H { get; set; }
         public int TaxSet2K { get; set; }
-        public string TaxSet3Title { get; set; }
+        public string TaxSet3Title { get; set; } = string.Empty;
         public int TaxSet3H { get; set; }
         public int TaxSet3K { get; set; }
-        public string TaxFreeSet1Title { get; set; }
+        public string TaxFreeSet1Title { get; set; } = string.Empty;
         public int TaxFreeSet1H { get; set; }
-        public string TaxFreeSet1K { get; set; }
-        public string TaxFreeSet2Title { get; set; }
+        public string TaxFreeSet1K { get; set; } = string.Empty;
+        public string TaxFreeSet2Title { get; set; } = string.Empty;
         public int TaxFreeSet2H { get; set; }
         public int TaxFreeSet2K { get; set; }
-        public string DamageInsMonth { get; set; }
+        public string DamageInsMonth { get; set; } = string.Empty;
         public byte AsArticle { get; set; }
-        public string MemberUrl { get; set; }
+        public string MemberUrl { get; set; } = string.Empty;
         public DateTime Rdate { get; set; }
         public DateTime Udate { get; set; }
         public bool Dflag { get; set; }
-        public string SekininName { get; set; }
+        public string SekininName { get; set; } = string.Empty;
     }
 }

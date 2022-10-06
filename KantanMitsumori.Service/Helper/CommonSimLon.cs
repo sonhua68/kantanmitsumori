@@ -80,9 +80,9 @@ namespace KantanMitsumori.Service.Helper
         // 手数料合計
         public int FeeTotal { get; set; }
         // 月々支払希望額
-        public decimal hPayMonth { get; set; }
+        public decimal HPayMonth { get; set; }
         // ボーナス月加算希望額
-        public decimal hBonus { get; set; }
+        public decimal HBonus { get; set; }
 
         // 計算後メッセージ
         public string CalcInfo { get; set; }
@@ -93,7 +93,7 @@ namespace KantanMitsumori.Service.Helper
         {
             _logger = logger;
         }
-        public bool calcRegLoan()
+        public bool CalcRegLoan()
         {
             try
             {
@@ -108,7 +108,7 @@ namespace KantanMitsumori.Service.Helper
                 }
                 PayTotal = Principal + Fee;
                 if (Bonus > 0)
-                    BonusTimes = countBonusTimes(FirstMonth, PayTimes, BonusFirst, BonusSecond);
+                    BonusTimes = CountBonusTimes(FirstMonth, PayTimes, BonusFirst, BonusSecond);
                 else
                     BonusTimes = 0;
                 BonusTotal = Bonus * BonusTimes;
@@ -165,7 +165,7 @@ namespace KantanMitsumori.Service.Helper
         // **************************************************************************
         // * 小数点以下指定桁未満を四捨五入
         // **************************************************************************
-        public decimal ToHalfAjust(decimal dValue, int iDigits)
+        public static decimal ToHalfAjust(decimal dValue, int iDigits)
         {
             decimal dCoef = (decimal)Math.Pow(10, iDigits);
 
@@ -178,7 +178,7 @@ namespace KantanMitsumori.Service.Helper
         // **************************************************************************
         // * ボーナス回数を求める
         // **************************************************************************
-        public int countBonusTimes(int inFirstMonth, int inPayTimes, int inBonusFirst, int inBonusSecond)
+        public static int CountBonusTimes(int inFirstMonth, int inPayTimes, int inBonusFirst, int inBonusSecond)
         {
             int i;
             int loopMonth = inFirstMonth;
@@ -204,7 +204,7 @@ namespace KantanMitsumori.Service.Helper
         // **************************************************************************
         // * 指定桁未満を切り捨て
         // **************************************************************************
-        public decimal ToRoundDown(decimal dValue, int iDigits)
+        public static decimal ToRoundDown(decimal dValue, int iDigits)
         {
             decimal dCoef = (decimal)Math.Pow(10, iDigits);
 
@@ -216,7 +216,7 @@ namespace KantanMitsumori.Service.Helper
         // **************************************************************************
         // * 指定桁未満を切り捨て2
         // **************************************************************************
-        public decimal ToRoundDown(long inint, decimal inSgl, int iDigits)
+        public static decimal ToRoundDown(long inint, decimal inSgl, int iDigits)
         {
             decimal dCoef = (decimal)Math.Pow(10, iDigits);
             long intR = (int)(inSgl * 10000);

@@ -26,7 +26,7 @@ namespace KantanMitsumori.Controllers
             var response = new ResponseBase<ResponseEstMainModel>();
             if (requestAction.IsInpBack == 1)
             {
-                response = await _appService.ReloadGetEstMain(_logToken);
+                response = _appService.ReloadGetEstMain(_logToken);
             }
             else
             {
@@ -43,9 +43,9 @@ namespace KantanMitsumori.Controllers
             return View(response.Data);
         }
         [HttpGet]
-        public async Task<IActionResult> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer)
+        public IActionResult CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer)
         {
-            var response = await _appService.CheckGoPageLease(firstRegYm, makerName, nowOdometer);           
+            var response = _appService.CheckGoPageLease(firstRegYm, makerName, nowOdometer);
             return Ok(response);
         }
     }

@@ -456,6 +456,29 @@ function checkCookie() {
     }
 
 }
+function CleanCookies() {
+    let custZip_forPrint = "CustZip_forPrint";
+    let custNm_forPrint = "CustNm_forPrint";
+    let custAdr_forPrint = "CustAdr_forPrint";
+    let custTel_forPrint = "CustTel_forPrint";
+    let kbnSet = "KbnSet";
+    let caseSet = "CaseSet";
+    let sesMaker = "sesMaker";
+    let sesCarNM = "sesCarNM";
+    let btnHanei = "btnHanei";
+    RemoveCookies(custZip_forPrint);
+    RemoveCookies(custNm_forPrint);
+    RemoveCookies(custAdr_forPrint);
+    RemoveCookies(custTel_forPrint);
+    RemoveCookies(kbnSet);
+    RemoveCookies(caseSet);
+    RemoveCookies(sesMaker);
+    RemoveCookies(sesCarNM);
+    RemoveCookies(btnHanei);
+    function RemoveCookies(name) {
+        document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+}
 // constant
 var DATE_FORMAT_MOMENT = "DD-MMM-YY";
 var DATE_FORMAT_MOMENT_NEW = "DD-MM-YYYY";
