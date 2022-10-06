@@ -34,9 +34,10 @@ namespace KantanMitsumori.Controllers
             var cookies = Request.Cookies[COOKIES]!;
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
-            if (optionListController.Contains(controllerName)) await next();
-            if (controllerName.Contains("Estmain") && pramQuery) await next();
-            _logToken = HelperToken.EncodingToken(cookies!)!;
+            if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && pramQuery))
+                await next();
+            else
+                _logToken = HelperToken.EncodingToken(cookies!)!;
             if (_logToken == null)
             {
                 if (!actionName.Contains("Index"))
@@ -56,8 +57,8 @@ namespace KantanMitsumori.Controllers
                 _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
                 _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
             }
-
             await next();
+
         }
 
         public IActionResult ErrorAction<T>(ResponseBase<T> response, int isUnexpectedErr = 0)
