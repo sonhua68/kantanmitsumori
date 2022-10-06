@@ -22,16 +22,10 @@ namespace KantanMitsumori.Service.ASEST
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUnitOfWorkIDE _unitOfWorkIDE;
         private LogToken valToken;
-<<<<<<< HEAD
         private CommonFuncHelper _commonFuncHelper;
         private CommonEstimate _commonEst;
         private CommonSettings _commonSettings;
         public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst, CommonSettings commonSettings)
-=======
-        private readonly CommonFuncHelper _commonFuncHelper;
-        private readonly CommonEstimate _commonEst;
-        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst)
->>>>>>> develop
         {
             _mapper = mapper;
             _logger = logger;
@@ -39,11 +33,8 @@ namespace KantanMitsumori.Service.ASEST
             _unitOfWorkIDE = unitOfWorkIDE;
             _commonFuncHelper = commonFuncHelper;
             _commonEst = commonEst;
-<<<<<<< HEAD
             _unitOfWorkIDE = unitOfWorkIDE;
             _commonSettings = commonSettings;
-=======
->>>>>>> develop
         }
 
         public UserModel? getUserName(string userNo)
