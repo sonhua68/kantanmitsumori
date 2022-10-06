@@ -139,7 +139,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.TaxFreeAll, o => o.ConvertUsing(new YenCurrencyConverter()))
                 .ForMember(t => t.DaikoTitle, o => o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.DaikoTitleDict), s => s.ConTaxInputKb ?? false))
                 .ForMember(t => t.DaikoAll, o => o.ConvertUsing(new YenCurrencyConverter(), s => s.TaxCostAll))
-                .ForMember(t => t.TaxTitle, o => o.MapFrom(s => CommonConst.def_TitleCarKei))
+                .ForMember(t => t.TaxTitle, o => o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.TaxTitleDict), s => s.ConTaxInputKb ?? false))
                 .ForMember(t => t.ConTax, o => o.ConvertUsing(new YenCurrencyConverter()))
                 .ForMember(t => t.CarSaleKeiTitle, o => o.MapFrom(s => CommonConst.def_TitleCarKei))
                 .ForMember(t => t.CarSaleKei, o => o.ConvertUsing(new YenCurrencyConverter(), s => s.CarSaleSum))
