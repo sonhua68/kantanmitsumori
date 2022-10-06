@@ -35,33 +35,33 @@ namespace KantanMitsumori.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetCarType()
+        public  IActionResult GetCarType()
         {
-            var response = await _inpLeaseCalc.GetCarType();
+            var response =  _inpLeaseCalc.GetCarType();
             return Ok(response);
         }
         [HttpGet]
-        public async Task<IActionResult> GetContractPlan()
+        public  IActionResult GetContractPlan()
         {
-            var response = await _inpLeaseCalc.GetContractPlan();
+            var response =  _inpLeaseCalc.GetContractPlan();
             return Ok(response);
         }
         [HttpGet]
-        public async Task<IActionResult> GetVolInsurance()
+        public  IActionResult GetVolInsurance()
         {
-            var response = await _inpLeaseCalc.GetVolInsurance();
+            var response =  _inpLeaseCalc.GetVolInsurance();
             return Ok(response);
         }
         [HttpGet]
-        public async Task<IActionResult> GetFirstAfterSecondTerm(int carType)
+        public  IActionResult GetFirstAfterSecondTerm(int carType)
         {
-            var response = await _inpLeaseCalc.GetFirstAfterSecondTerm(carType);
+            var response =  _inpLeaseCalc.GetFirstAfterSecondTerm(carType);
             return Ok(response);
         }
         [HttpGet]
-        public async Task<IActionResult> GetUnitPriceRatesLimit()
+        public  IActionResult GetUnitPriceRatesLimit()
         {
-            var response = await _inpLeaseCalc.GetUnitPriceRatesLimit();
+            var response =  _inpLeaseCalc.GetUnitPriceRatesLimit();
             return Ok(response);
         }
 

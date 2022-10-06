@@ -38,7 +38,7 @@ namespace KantanMitsumori.Service
             //_calLease = new CommonCalLease(_logger, _unitOfWorkIDE, lstWriteLog);
         }
 
-        public async Task<ResponseBase<List<ResponseCarType>>> GetCarType()
+        public  ResponseBase<List<ResponseCarType>> GetCarType()
         {
             try
             {
@@ -52,7 +52,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<List<ResponseContractPlan>>> GetContractPlan()
+        public  ResponseBase<List<ResponseContractPlan>> GetContractPlan()
         {
             try
             {
@@ -66,7 +66,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<List<ResponseFirstAfterSecondTerm>>> GetFirstAfterSecondTerm(int carType)
+        public  ResponseBase<List<ResponseFirstAfterSecondTerm>> GetFirstAfterSecondTerm(int carType)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<ResponseUnitPriceRatesLimit>> GetUnitPriceRatesLimit()
+        public  ResponseBase<ResponseUnitPriceRatesLimit> GetUnitPriceRatesLimit()
         {
             try
             {
@@ -99,7 +99,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<List<ResponseVolInsurance>>> GetVolInsurance()
+        public  ResponseBase<List<ResponseVolInsurance>> GetVolInsurance()
         {
             try
             {
@@ -113,7 +113,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<ResponseInpLeaseCalc>> InpLeaseCal(RequestInpLeaseCalc model, LogToken logToken)
+        public  ResponseBase<ResponseInpLeaseCalc> InpLeaseCal(RequestInpLeaseCalc model, LogToken logToken)
         {
             try
             {

@@ -7,11 +7,11 @@ namespace KantanMitsumori.IService
 {
     public interface IInpLeaseCalcService
     {
-        Task<ResponseBase<List<ResponseCarType>>> GetCarType();
-        Task<ResponseBase<List<ResponseContractPlan>>> GetContractPlan();
-        Task<ResponseBase<List<ResponseVolInsurance>>> GetVolInsurance();
-        Task<ResponseBase<List<ResponseFirstAfterSecondTerm>>> GetFirstAfterSecondTerm(int carType);
-        Task<ResponseBase<ResponseUnitPriceRatesLimit>> GetUnitPriceRatesLimit();
-        Task<ResponseBase<ResponseInpLeaseCalc>> InpLeaseCal(RequestInpLeaseCalc model, LogToken logToken);
+        ResponseBase<List<ResponseCarType>> GetCarType();
+        ResponseBase<List<ResponseContractPlan>> GetContractPlan();
+        ResponseBase<List<ResponseVolInsurance>> GetVolInsurance();
+        ResponseBase<List<ResponseFirstAfterSecondTerm>> GetFirstAfterSecondTerm(int carType);
+        ResponseBase<ResponseUnitPriceRatesLimit> GetUnitPriceRatesLimit();
+        ResponseBase<ResponseInpLeaseCalc> InpLeaseCal(RequestInpLeaseCalc model, LogToken logToken);
     }
 }
