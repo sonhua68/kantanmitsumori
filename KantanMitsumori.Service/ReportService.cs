@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using GrapeCity.ActiveReports;
 using GrapeCity.ActiveReports.Export.Pdf.Section;
-using GrapeCity.ActiveReports.Rendering.IO;
+using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Utility;
@@ -11,18 +11,10 @@ using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response.Report;
 using KantanMitsumori.Service.Helper;
-using KantanMitsumori.Entity.ASESTEntities;
-using KantanMitsumori.Entity.IDEEnitities;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using KantanMitsumori.Service.Mapper.MapperConverter;
+using Microsoft.Extensions.Logging;
+using System.Reflection;
+using System.Xml;
 
 namespace KantanMitsumori.Service
 {
@@ -44,11 +36,11 @@ namespace KantanMitsumori.Service
             _helperMapper = helperMapper;
             _commonSettings = commonSettings;
         }
-        
+
         public ResponseBase<ReportFileModel> GenerateReport(RequestReport model)
         {
             try
-            {                
+            {
                 // Load data
                 var data = LoadReportData(model);
                 if (data == null || data.Length == 0)
@@ -114,14 +106,16 @@ namespace KantanMitsumori.Service
             var reportModel = new EstimateReportModel();
             // Map entity to model            
             _mapper.Map(estEntity, reportModel
-                , o => {
+                , o =>
+                {
                     o.Items["estSubEntity"] = estSubEntity;
                     o.Items["sysEntity"] = sysEntity;
                     o.Items["commonSettings"] = _commonSettings;
                     o.Items["requestReport"] = input;
                 });
             _mapper.Map(estSubEntity, reportModel
-                , o => {
+                , o =>
+                {
                     o.Items["estEntity"] = estEntity;
                     o.Items["sysEntity"] = sysEntity;
                     o.Items["commonSettings"] = _commonSettings;
@@ -194,7 +188,7 @@ namespace KantanMitsumori.Service
             }
             reportModel.SyakenNew = syaken.ToYenCurrency();
         }
-        
+
         #endregion
 
         #region Helper Functions
@@ -211,11 +205,11 @@ namespace KantanMitsumori.Service
                 SectionReport report = new SectionReport();
                 report.LoadLayout(reader);
                 return report;
-            }            
+            }
         }
 
         #endregion
 
-       
+
     }
 }

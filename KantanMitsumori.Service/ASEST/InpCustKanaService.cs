@@ -33,12 +33,10 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 // 見積書データ取得
-                var estData = _commonEst.getEst_EstSubData(estNo, estSubNo);
+                var estData = _commonEst.GetEst_EstSubData(estNo, estSubNo);
                 if (estData == null)
                 {
                     return ResponseHelper.Error<ResponseInpCustKana>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
-
-
                 }
                 var model = new ResponseInpCustKana();
                 model.EstNo = estData.EstNo;
@@ -52,7 +50,6 @@ namespace KantanMitsumori.Service.ASEST
             {
                 _logger.LogError(ex, "getInfoCust");
                 return ResponseHelper.Error<ResponseInpCustKana>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
-
             }
         }
 

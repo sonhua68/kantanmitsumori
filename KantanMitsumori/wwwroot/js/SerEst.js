@@ -158,6 +158,7 @@ function AddEstimate(value) {
     model.EstSubNo = EstSubNo;
     var result = Framework.submitAjaxFormUpdateAsync(model, "/SerEst/AddEstimate");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        CleanCookies();
         Framework.GoBackReloadPage();
     } else {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);
@@ -172,6 +173,7 @@ function CalcSum(value) {
     model.EstSubNo = EstSubNo;
     var result = Framework.submitAjaxFormUpdateAsync(model, "/SerEst/CalcSum");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        CleanCookies();
         Framework.GoBackReloadPage();
     } else {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);
