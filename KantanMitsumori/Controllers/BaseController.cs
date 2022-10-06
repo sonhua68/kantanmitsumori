@@ -1,6 +1,7 @@
 ﻿using GrapeCity.ActiveReports;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Model;
@@ -16,14 +17,15 @@ namespace KantanMitsumori.Controllers
 
     public class BaseController : Controller
     {
-        private const string COOKIES = "CookiesASEST";
+        private const string COOKIES = "CookiesASEST";        
+        public CommonSettings _commonSettings;
         private List<string> optionListController = new List<string> { "Home", "SelCar", "SelGrd", "SerEst" };
         public IConfiguration _config;
         public LogToken _logToken;
 
         public BaseController(IConfiguration config)
-        {
-            _config = config;
+        {            
+            _commonSettings = new CommonSettings(config);
             _logToken = new LogToken();
 
         }
@@ -41,7 +43,7 @@ namespace KantanMitsumori.Controllers
             }
             else
             {
-                _logToken = HelperToken.EncodingToken(cookies!)!;
+                _logToken = HelperToken.EncodingToken(_commonSettings.JwtSettings, cookies!)!;
                 if (_logToken == null)
                 {
                     if (!actionName.Contains("Index"))
@@ -104,8 +106,8 @@ namespace KantanMitsumori.Controllers
         /// <param name="token"></param>     
         public void setTokenCookie(string token)
         {
-            var currentDate = DateTime.Now;
-            var RefreshExpires = _config["JwtSettings:AccessExpires"];
+            var currentDate = DateTime.Now;            
+            var RefreshExpires = _commonSettings.JwtSettings.AccessExpires;
             TimeSpan time = TimeSpan.Parse(RefreshExpires);
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions

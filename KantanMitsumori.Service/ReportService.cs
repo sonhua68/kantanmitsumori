@@ -15,6 +15,8 @@ using KantanMitsumori.Service.Mapper.MapperConverter;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using System.Xml;
+using KantanMitsumori.Service.Mapper.MapperConverter;
+using KantanMitsumori.Helper.Settings;
 
 namespace KantanMitsumori.Service
 {
@@ -33,7 +35,7 @@ namespace KantanMitsumori.Service
             _logger = logger;
             _unitOfWork = unitOfWork;
             _unitOfWorkIDE = unitOfWorkIDE;
-            _helperMapper = helperMapper;
+            _helperMapper = helperMapper;            
             _commonSettings = commonSettings;
         }
 
@@ -109,17 +111,17 @@ namespace KantanMitsumori.Service
                 , o =>
                 {
                     o.Items["estSubEntity"] = estSubEntity;
-                    o.Items["sysEntity"] = sysEntity;
-                    o.Items["commonSettings"] = _commonSettings;
+                    o.Items["sysEntity"] = sysEntity;                    
                     o.Items["requestReport"] = input;
+                    o.Items["commonSettings"] = _commonSettings;
                 });
             _mapper.Map(estSubEntity, reportModel
                 , o =>
                 {
                     o.Items["estEntity"] = estEntity;
-                    o.Items["sysEntity"] = sysEntity;
-                    o.Items["commonSettings"] = _commonSettings;
+                    o.Items["sysEntity"] = sysEntity;                    
                     o.Items["requestReport"] = input;
+                    o.Items["commonSettings"] = _commonSettings;
                 });
             if (estEntity!.LeaseFlag == "1" && estIDEEntity != null)
             {

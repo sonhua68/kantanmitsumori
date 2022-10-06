@@ -1,4 +1,5 @@
 using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Service.ASEST;
@@ -11,10 +12,18 @@ namespace KantanMitsumori.Service
     {
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
+            // Add helper services
+            services.AddScoped<CommonFuncHelper>();
+            services.AddScoped<CommonEstimate>();
+            services.AddScoped<CommonFuncHelper>();
+            services.AddScoped<CommonIDE>();
+
+            // Add business services
             services.AddTransient<IEstMainService, EstMainService>();
             services.AddTransient<IEstimateIdeService, EstimateIdeService>();
             services.AddTransient<IEstimateService, EstimateService>();
             services.AddTransient<IEstimateSubService, EstimateSubService>();
+            services.AddTransient<IEstimateService, EstimateService>();   
             services.AddTransient<IEstimateSubService, EstimateSubService>();
             //services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IInpLoanService, InpLoanService>();
@@ -35,20 +44,14 @@ namespace KantanMitsumori.Service
         }
 
         public static IServiceCollection AddAuthenService(this IServiceCollection services)
-        {
+        {            
+            // Add generic DI
+            services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();
+            services.AddTransient<IPreExaminationService, PreExaminationService>();            
+            services.AddTransient<IInpCarPriceService, InpCarPriceService>();
+
             return services;
         }
 
-
-        public static IServiceCollection AddHelperServices(this IServiceCollection services)
-        {
-            services.AddScoped<CommonFuncHelper>();
-            services.AddScoped<CommonEstimate>();
-            services.AddScoped<HelperMapper>();
-            services.AddScoped<CommonSettings>();
-            services.AddScoped<CommonFuncHelper>();
-            services.AddScoped<CommonIDE>();
-            return services;
-        }
     }
 }

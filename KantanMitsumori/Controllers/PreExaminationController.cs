@@ -28,7 +28,7 @@ namespace KantanMitsumori.Controllers
             {
                 return ErrorAction(response);
             }
-
+            ViewBag.PointReQuestPreExamination = _commonSettings.URLSettings.PointReQuestPreExamination;
             return View(response.Data);
         }
     }

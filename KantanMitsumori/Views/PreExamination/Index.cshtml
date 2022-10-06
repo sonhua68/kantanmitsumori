@@ -1,8 +1,9 @@
 ﻿@using KantanMitsumori.Helper.CommonFuncs
+@using KantanMitsumori.Helper.Settings
 @using KantanMitsumori.Model.Response
 @model ResponsePreExamination
 @{
-    var actionURL = CommonSettings.PointReQuestPreExamination;
+    var actionURL = ViewBag.PointReQuestPreExamination;
 }
 <!DOCTYPE html>
 <html>
