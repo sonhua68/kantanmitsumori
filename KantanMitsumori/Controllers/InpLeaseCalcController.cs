@@ -24,9 +24,9 @@ namespace KantanMitsumori.Controllers
         }
 
         #region InpLeaseCalc 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var response = await _estMainService.ReloadGetEstMain(_logToken);
+            var response =  _estMainService.ReloadGetEstMain(_logToken);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
