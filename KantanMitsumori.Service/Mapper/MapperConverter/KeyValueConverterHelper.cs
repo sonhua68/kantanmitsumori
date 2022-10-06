@@ -1,9 +1,4 @@
 ﻿using KantanMitsumori.Helper.Constant;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service.Mapper.MapperConverter
 {
@@ -45,11 +40,11 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
             {true, $"{CommonConst.def_TitleConTaxTotalInTax}" },
             {false, $"{CommonConst.def_TitleConTaxTotalOutTax}" }
         };
-        public static Dictionary<bool, string> CarSaleKeiTitleDict => new Dictionary<bool, string>
-        {
-            {true, $"{CommonConst.def_TitleCarKeiInTax}" },
-            {false, $"{CommonConst.def_TitleCarKeiOutTax}" }
-        };
+        //public static Dictionary<bool, string> CarSaleKeiTitleDict => new Dictionary<bool, string>
+        //{
+        //    {true, $"{CommonConst.def_TitleCarKei}" },
+        //    {false, $"{CommonConst.def_TitleCarKei}" }
+        //};
         public static Dictionary<bool, string> SaleSumTitleDict => new Dictionary<bool, string>
         {
             {true, $"{CommonConst.def_TitleSalesSumInTax}" },

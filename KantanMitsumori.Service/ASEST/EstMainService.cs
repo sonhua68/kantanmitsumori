@@ -75,7 +75,7 @@ namespace KantanMitsumori.Service.ASEST
                 }
                 var dtAsnetInfo = await GetAsnetInfo(request);
                 if (dtAsnetInfo.ResultStatus == (int)enResponse.isError)
-                    return ResponseHelper.Error<ResponseEstMainModel>("Error", dtAsnetInfo.MessageContent);
+                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
                 dtAsnetInfo.Data!.EstNo = valToken.sesEstNo!;
                 dtAsnetInfo.Data.EstSubNo = valToken.sesEstSubNo!;
                 SetvalueToken();
@@ -399,27 +399,23 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 if (!await _commonEst.CalcSum(estNo, estSubNo, valToken))
-                {
-                    return ResponseHelper.LogicError<EstModel>("", "");
-                }
+                    return ResponseHelper.LogicError<EstModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+
                 var estData = _commonEst.GetEstData(estNo, estSubNo);
                 if (estData == null)
-                {
-                    return ResponseHelper.Error<EstModel>("", "");
-                }
+                    return ResponseHelper.LogicError<EstModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+
                 if (flgRecreate)
                 {
                     estNo = "";
                     if (!_commonEst.GetEstNoFromDb(ref estNo))
-                    {
-                        return ResponseHelper.LogicError<EstModel>("", "");
-                    }
+                        return ResponseHelper.LogicError<EstModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
                 }
+
                 string vNextSubNo = "";
                 if (!_commonEst.GetEstSubNoFromDb(estNo, ref vNextSubNo))
-                {
-                    return ResponseHelper.LogicError<EstModel>("", "");
-                }
+                    return ResponseHelper.LogicError<EstModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+
                 TEstimate entityEst = new();
                 entityEst = _mapper.Map<TEstimate>(estData);
                 entityEst.EstNo = estNo;
