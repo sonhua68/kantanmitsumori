@@ -11,12 +11,18 @@
 		<None Remove="Reports\Estimate.rpx" />
 		<None Remove="Reports\EstimateWithMemo.rpx" />
 		<None Remove="Reports\LeaseEstimate.rpx" />
+		<None Remove="Reports\LeaseEstimateWithMemo.rpx" />
 		<None Remove="Reports\LeaseOrder.rpx" />
+		<None Remove="Reports\LeaseOrderWithArticle.rpx" />
 		<None Remove="Reports\Memo.rpx" />
 		<None Remove="Reports\Order.rpx" />
 		<None Remove="Reports\OrderWithArticle.rpx" />
-		<EmbeddedResource Include="Reports\LeaseEstimate.rpx" />
+		<EmbeddedResource Include="Reports\LeaseEstimateWithMemo.rpx">
+		  <SubType>Component</SubType>
+		</EmbeddedResource>
 		<EmbeddedResource Include="Reports\LeaseOrder.rpx" />
+		<EmbeddedResource Include="Reports\LeaseEstimate.rpx" />
+		<EmbeddedResource Include="Reports\LeaseOrderWithArticle.rpx" />
 		<EmbeddedResource Include="Reports\OrderWithArticle.rpx" />
 		<EmbeddedResource Include="Reports\EstimateWithMemo.rpx" />
 		<EmbeddedResource Include="Reports\Estimate.rpx" />
@@ -31,24 +37,24 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.3.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.8">
+		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.3.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.8" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
-		<PackageReference Include="GrapeCity.ActiveReports" Version="16.2.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
+		<PackageReference Include="GrapeCity.ActiveReports" Version="16.2.1" />
 		<PackageReference Include="GrapeCity.ActiveReports.Chart" Version="16.1.2" />
 		<PackageReference Include="GrapeCity.ActiveReports.Core.DataProviders" Version="2.1.0" />
-		<PackageReference Include="GrapeCity.ActiveReports.Core.Rdl" Version="3.3.0" />
-		<PackageReference Include="GrapeCity.ActiveReports.Core.Rendering" Version="3.3.0" />
-		<PackageReference Include="GrapeCity.ActiveReports.Document" Version="16.2.0" />
-		<PackageReference Include="GrapeCity.ActiveReports.Export.Pdf" Version="16.2.0" />
+		<PackageReference Include="GrapeCity.ActiveReports.Core.Rdl" Version="3.3.1" />
+		<PackageReference Include="GrapeCity.ActiveReports.Core.Rendering" Version="3.3.1" />
+		<PackageReference Include="GrapeCity.ActiveReports.Document" Version="16.2.1" />
+		<PackageReference Include="GrapeCity.ActiveReports.Export.Pdf" Version="16.2.1" />
 		<!--Start: Conflict library with ActiveReport - Solved by use higher version of library  -->
-		<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.3.0" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.0" />
+		<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.3.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" />
 		<!--End: Conflict library with ActiveReport - Solved by use higher version of library  -->
 	</ItemGroup>
 

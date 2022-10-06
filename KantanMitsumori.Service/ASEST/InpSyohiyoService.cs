@@ -35,7 +35,7 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 // 見積書データ取得
-                var estData = _commonEst.getEst_EstSubData(estNo, estSubNo);
+                var estData = _commonEst.GetEst_EstSubData(estNo, estSubNo);
 
                 if (estData == null)
                 {
@@ -104,7 +104,7 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "UpdateInpSyohiyo");
-                return ResponseHelper.Error<int>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));
+                return ResponseHelper.Error<int>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));               
             }
         }
 

@@ -40,32 +40,20 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpZeiHoken([FromForm] RequestUpdateInpZeiHoken requestData)
         {
-            var response = await _estimateService.UpdateInpZeiHoken(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = await _estimateService.UpdateInpZeiHoken(requestData);            
             return Ok(response);
         }
 
         [HttpPost]
         public IActionResult calcCarTax(RequestInpZeiHoken requestData)
         {
-            var response = _inpZeiHokenService.calcCarTax(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = _inpZeiHokenService.calcCarTax(requestData);           
             return Ok(response);
         }
         [HttpPost]
         public IActionResult calcJibai(RequestInpZeiHoken requestData)
         {
-            var response = _inpZeiHokenService.calcJibai(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
+            var response = _inpZeiHokenService.calcJibai(requestData);           
             return Ok(response);
         }
         #endregion InpZeiHoken

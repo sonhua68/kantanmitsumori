@@ -21,9 +21,7 @@ namespace KantanMitsumori.Model.Request
     public enum ReportType : int
     {
         Estimate = 1,
-        Order = 2,
-        LeaseEstimate = 3,
-        LeaseOrder = 4
+        Order = 2
     }
 
 }

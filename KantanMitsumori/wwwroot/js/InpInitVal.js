@@ -225,6 +225,7 @@ function getUserDefData() {
         SetInitData(result.data)
     } else {
         Framework.resetForm();
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }
 function SetInitData(data) {

@@ -91,7 +91,7 @@
                         @{
                             foreach (var item in ListDropDownFirstYM)
                             {
-                                <option value="@item.Value">@item.Text</option>
+                                    <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -100,7 +100,7 @@
                         @{
                             foreach (var item in ListMonth)
                             {
-                                <option value="@item.Value">@item.Text</option>
+                                    <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -116,7 +116,7 @@
                         @{
                             foreach (var item in ListDropDownSyakenYM)
                             {
-                                <option value="@item.Value">@item.Text</option>
+                                    <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -125,7 +125,7 @@
                         @{
                             foreach (var item in ListMonth)
                             {
-                                <option value="@item.Value">@item.Text</option>
+                                    <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -236,7 +236,7 @@
             <tr>
                 <td class="inpbtntd" colspan="2">
                     <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">&nbsp;
-                    <input type="submit" name="btnOK" value="OK" id="btnOK" form="formInputSitaCar" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                    <input type="submit" name="btnOK" value="OK" id="btnOK" onclick="return onSummit();" form="formInputSitaCar" class="Btn1" style="height:32px;width:100px;">&nbsp;
                 </td>
             </tr>
             <tr>
@@ -274,25 +274,11 @@
     GetListKana();
     // list string characters kana
     SetInitData();
-    $('#formInputSitaCar').validate({
-        submitHandler: function(form) {
-            if (inputChk() == false) { return; }
-            var model = Framework.getFormData($("#formInputSitaCar"));
-            console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpSitaCar/UpdateInpSitaCar");
-            if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
-            } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#txMsg").html(Items)
-                } else {
-                    location.reload();
-                }
-            }
-        }
-    });
+    function onSummit() {
+        if (inputChk() == false) { return; }
+        Framework.OnSubmitForm("/InpSitaCar/UpdateInpSitaCar", "formInputSitaCar");
+        return false;
+    }
     function GetListRikuji() {
         var result = Framework.GetObjectDataFromUrl("/InpSitaCar/GetListRikuji");
         if (result.resultStatus == 0 && result.messageCode === 'I0002') {
@@ -306,12 +292,7 @@
             }
 
         } else {
-            let Items = result.data;
-            if (typeof (Items) != "undefined") {
-                $("#txMsg").html(Items)
-            } else {
-                location.reload();
-            }
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     }
 

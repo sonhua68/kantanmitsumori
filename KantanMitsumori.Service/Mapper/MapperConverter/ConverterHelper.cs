@@ -97,7 +97,7 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         }
 
         /// <summary>
-        /// Date japanese date as yyyy年MM月 from yyyyMM
+        /// Date japanese date as yyyy年MM月dd日 from yyyyMM
         /// </summary>        
         public static string GetJpDate(string? date)
         {
@@ -105,9 +105,21 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
             {                
                 if (string.IsNullOrEmpty(date))
                     return "";
-                int year = int.Parse(date.Substring(0, 4));
-                int month = int.Parse(date.Substring(4, 2));
-                return $"{year}年{month}月";
+                date = date.Replace("/", "");
+                if (date.Length == 6)
+                {
+                    int year = int.Parse(date.Substring(0, 4));
+                    int month = int.Parse(date.Substring(4, 2));
+                    return $"{year}年{month}月";
+                }
+                if (date.Length == 8)
+                {
+                    int year = int.Parse(date.Substring(0, 4));
+                    int month = int.Parse(date.Substring(4, 2));
+                    int day = int.Parse(date.Substring(6, 2));
+                    return $"{year}年{month}月{day}日";
+                }
+                return "";
             }
             catch
             {

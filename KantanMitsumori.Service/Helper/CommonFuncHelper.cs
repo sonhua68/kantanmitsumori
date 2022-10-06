@@ -6,7 +6,7 @@ using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using Microsoft.Extensions.Logging;
-using System.Net;
+using System.Text;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -16,12 +16,14 @@ namespace KantanMitsumori.Service.Helper
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly CommonSettings _commonSettings;
-        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, CommonSettings commonSettings)
+        private readonly IHttpClientFactory _httpClientFactory;
+        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, CommonSettings commonSettings)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _commonSettings = commonSettings; 
+            _httpClientFactory = httpClientFactory;
         }
 
         #region Constant Initialization
@@ -129,13 +131,13 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="inUserNo"></param>
         /// <returns></returns>
 
-        public UserDefModel getUserDefData(string inUserNo)
+        public UserDefModel? getUserDefData(string inUserNo)
         {
             try
             {
-                var getUserDef = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.GetSingle(x => x.UserNo == inUserNo && x.Dflag == false));
+                var dtUserDef = _mapper.Map<UserDefModel>(_unitOfWork.UserDefs.GetSingle(x => x.UserNo == inUserNo && x.Dflag == false));
 
-                return getUserDef;
+                return dtUserDef;
             }
             catch (Exception ex)
             {
@@ -152,21 +154,16 @@ namespace KantanMitsumori.Service.Helper
         /// <returns></returns>
         public bool DecUserNo(string vEncNo, ref string vDecNo)
         {
-            string wOne = "";
             string wStr = "";
             string wInt = "";
 
             try
             {
                 // 文字数分ループ
-                for (int i = 0; i < vEncNo.Length; i++)
+                foreach (char item in vEncNo)
                 {
-                    wOne = CommonFunction.Mid(vEncNo, i, 1);
-
-                    int a = Convert.ToChar(wOne);
-
                     // 取り出した文字が英小文字(a～z)の場合
-                    if (Convert.ToChar(wOne) >= 97 && Convert.ToChar(wOne) <= 122)
+                    if (item >= 97 && item <= 122)
                     {
                         // 英小文字と数字がすでに格納されていれば1文字分デコード
                         if (wStr.Length == 1 && wInt.Length > 0)
@@ -178,12 +175,12 @@ namespace KantanMitsumori.Service.Helper
                         }
 
                         //英小文字を格納
-                        wStr = wOne;
+                        wStr = item.ToString();
                     }
                     else
                     {
                         // 数字を格納（'－'マイナスもありえる）
-                        wInt += wOne;
+                        wInt += item;
                     }
                 }
 
@@ -209,11 +206,11 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                var getTbSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
+                var dtTbSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
 
-                if (!string.IsNullOrEmpty(getTbSys.Corner))
+                if (!string.IsNullOrEmpty(dtTbSys.Corner))
                 {
-                    return getTbSys.CornerType;
+                    return dtTbSys.CornerType;
                 }
                 else
                     return 0;
@@ -238,11 +235,11 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                var getSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
+                var dtSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
 
-                if (getSys != null)
+                if (dtSys != null)
                 {
-                    return (int)getSys.Aacount;
+                    return Convert.ToInt32(dtSys.Aacount);
                 }
                 else
                     return 0;
@@ -263,9 +260,7 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                // WebRequestの作成
-                HttpWebRequest webreq = (HttpWebRequest)WebRequest.Create(url);
-
+                Uri uri = new Uri(url);
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
                 strCarImgPlace = _commonSettings.PhysicalPathSettings.def_CarImgPlace;
@@ -284,36 +279,20 @@ namespace KantanMitsumori.Service.Helper
                 // 保存先のファイル名
                 if (string.IsNullOrEmpty(strSaveName))
                 {
-                    fileName = strCarImgPlace + webreq.RequestUri.Segments.LastOrDefault();
+                    fileName = strCarImgPlace + uri.Segments.LastOrDefault();
                 }
                 else
                 {
                     fileName = Path.Combine(strCarImgPlace, strSaveName);
                 }
-                // fileName = def_CarImgPlace & webreq.RequestUri.Segments(leng - 1)
 
-                // サーバーからの応答を受信するためのWebResponseを取得
-                HttpWebResponse webres = (HttpWebResponse)webreq.GetResponse();
+                // Use HttpClient to download image
+                var httpClient = _httpClientFactory.CreateClient();
+                var task = httpClient.GetByteArrayAsync(uri);
+                task.Wait();
+                var data = task.Result;
+                File.WriteAllBytes(fileName, task.Result);
 
-                // 応答データを受信するためのStreamを取得
-                Stream strm = webres.GetResponseStream();
-
-                // ファイルに書き込むためのFileStreamを作成
-                var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
-
-                // 応答データをファイルに書き込む
-                int b;
-                while (true)
-                {
-                    b = strm.ReadByte();
-                    if (b == -1)
-                        break;
-                    fs.WriteByte(Convert.ToByte(b));
-                }
-
-                // 閉じる
-                fs.Close();
-                strm.Close();
             }
             catch (Exception ex)
             {
@@ -328,14 +307,13 @@ namespace KantanMitsumori.Service.Helper
         {
             string strOutImg = "";
             string strSaveName = "";
-            string strTempImagePath = "";
             if (string.IsNullOrEmpty(strImagePath))
             {
                 strOutImagePath = "";
             }
             else
             {
-                strTempImagePath = strImagePath.ToUpper();
+                string strTempImagePath = strImagePath.ToUpper();
                 if (!strTempImagePath.EndsWith(".JPG") & !strTempImagePath.EndsWith(".GIF") & !strTempImagePath.EndsWith(".PNG") & strImgSuffix is not null)
                 {
                     strSaveName = cor + fex + strImgSuffix;
@@ -361,11 +339,11 @@ namespace KantanMitsumori.Service.Helper
             }
             try
             {
-                var getPsinfos = _unitOfWork.Psinfos.GetSingle(x => x.Corner == inCor && x.ExhNum == inFullExhNum);
+                var dtPsinfos = _unitOfWork.Psinfos.GetSingle(x => x.Corner == inCor && x.ExhNum == inFullExhNum);
 
-                if (getPsinfos != null)
+                if (dtPsinfos != null)
                 {
-                    return getPsinfos.RecycleFlag == 1 ? Convert.ToInt32(getPsinfos.RecyclingCharge) : 0;
+                    return dtPsinfos.RecycleFlag == 1 ? Convert.ToInt32(dtPsinfos.RecyclingCharge) : 0;
                 }
                 else
                     return 0;
@@ -392,12 +370,11 @@ namespace KantanMitsumori.Service.Helper
                 return true;
 
             // 除外リスト読み込み
-            System.Text.Encoding enc = System.Text.Encoding.GetEncoding("shift_jis");
-            string strExclusionList = "";
+            var enc = Encoding.GetEncoding("shift_jis");
             string[] arrExclusionList;
             try
             {
-                strExclusionList = File.ReadAllText(_commonSettings.PhysicalPathSettings.def_ExclusionListOfAutoCalc, enc);
+                string strExclusionList = File.ReadAllText(_commonSettings.PhysicalPathSettings.def_ExclusionListOfAutoCalc, enc);
                 arrExclusionList = strExclusionList.Split("\r\n");
             }
             catch (Exception ex)
@@ -444,10 +421,10 @@ namespace KantanMitsumori.Service.Helper
                 }
                 int intCarType = intExaust > 660 ? 1 : 2;
                 int intRemIns = outRemIns;
-                var getSelfInsurance = _unitOfWork.SelfInsurances.GetSingle(x => x.CarType == intCarType && x.RemainInspection == intRemIns && x.Dflag == false);
-                if (getSelfInsurance == null)
+                var dtSelfInsurance = _unitOfWork.SelfInsurances.GetSingle(x => x.CarType == intCarType && x.RemainInspection == intRemIns && x.Dflag == false);
+                if (dtSelfInsurance == null)
                     return false;
-                outSelfIns = getSelfInsurance != null ? Convert.ToInt32(getSelfInsurance.SelfInsurance) : 0;
+                outSelfIns = Convert.ToInt32(dtSelfInsurance.SelfInsurance);
             }
             catch (Exception ex)
             {
@@ -489,10 +466,10 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                var getCarTax = _unitOfWork.CarTaxs.GetSingle(x => x.ExaustFrom <= intTargetExault && x.ExaustTo >= intTargetExault && x.Dflag == false);
-                if (getCarTax != null)
+                var dtCarTax = _unitOfWork.CarTaxs.GetSingle(x => x.ExaustFrom <= intTargetExault && x.ExaustTo >= intTargetExault && x.Dflag == false);
+                if (dtCarTax != null)
                 {
-                    return Convert.ToInt32(getCarTax.YearAmount);
+                    return Convert.ToInt32(dtCarTax.YearAmount);
                 }
                 else
                     return -1;

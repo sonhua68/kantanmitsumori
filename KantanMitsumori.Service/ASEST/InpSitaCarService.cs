@@ -35,7 +35,7 @@ namespace KantanMitsumori.Service.ASEST
             try
             {
                 // 見積書データ取得
-                var estData = _commonEst.getEst_EstSubData(estNo, estSubNo);
+                var estData = _commonEst.GetEst_EstSubData(estNo, estSubNo);
 
                 if (estData == null)
                 {
@@ -78,7 +78,8 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "");
-                return ResponseHelper.Error<ResponseInpSitaCar>("Error", "Error");
+                return ResponseHelper.Error<ResponseInpSitaCar>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+
             }
         }
 
@@ -93,7 +94,8 @@ namespace KantanMitsumori.Service.ASEST
             catch (Exception ex)
             {
                 _logger.LogError(ex, "setRikuji - GCMF-050D");
-                return ResponseHelper.Error<List<string>>("Error", CommonConst.def_ErrMsg1 + CommonConst.def_ErrCodeL + "GCMF-050D" + CommonConst.def_ErrCodeR);
+                return ResponseHelper.Error<List<string>>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+               
             }
         }
 
@@ -172,8 +174,9 @@ namespace KantanMitsumori.Service.ASEST
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "UpdateInpCustKana");
-                return ResponseHelper.Error<int>(HelperMessage.SICK010D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICK010D));
+                _logger.LogError(ex, "UpdateInpCustKana");             
+                return ResponseHelper.Error<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+
             }
         }
 

@@ -489,8 +489,8 @@ var Framework =
                 }
                 else {
                     let length = idOption.length;
-                    for (let i = 1; i < length; i++) {
-                        let value = idOption[i].value;
+                    for (let i = 0; i < length; i++) {
+                        let value = parseInt(idOption[i].value);
                         if (value === defaultValue) {
                             $("#" + nameId + " option[value='" + value + "']").attr("selected", "selected");
                             return;
@@ -521,7 +521,20 @@ var Framework =
                 window.location.href = "/Estmain?IsInpBack=1";
 
             }
-        },       
+        },
+
+        {
+            key: "GoBackErrorPage",
+            value: function GoBackErrorPage(messageCode, messContent) {
+                var param = {};
+                param.messageCode = messageCode;
+                param.messageContent = messContent;
+                Framework.SummitForm("/Error/ErrorPage", param)
+                //var url = "/Error/ErrorPage?messageCode=" + messageCode + " &messContent=" + messContent;
+                //window.location.href = url;
+
+            }
+        },
         {
             key: "GoBackPage",
             value: function GoBackPage() {
@@ -536,13 +549,13 @@ var Framework =
         {
             key: "GoBackReloadPageUrl",
             value: function GoBackReloadPageUrl(PageUrl) {
-                var ListUrl = ["/InpSitaCar","/"];
+                var ListUrl = ["/InpSitaCar", "/"];
                 let LeaseFlag = parseInt($("#hidLeaseFlag").val());
                 if (LeaseFlag == 1 && ListUrl.includes(PageUrl)) {
                     alert("リース画面でのみ、下取りの設定が可能。");
                 } else {
                     window.location.href = PageUrl;
-                }               
+                }
             }
         },
         {
@@ -566,6 +579,29 @@ var Framework =
                 form.submit();
             }
         },
+        {
+            key: "OnSubmitForm",
+            value: function OnSubmitForm(Url, idForm) {
+                var model = Framework.getFormData($("#" + idForm));
+                var result = Framework.submitAjaxFormUpdateAsync(model, Url);
+                if (result.resultStatus == 0) {
+                    Framework.GoBackReloadPage();
+                } else {
+                    Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+                }
+            }
+            },
+            {
+                key: "OnSubmitFormValueModel",
+                value: function OnSubmitFormValueModel(Url, model) {                  
+                    var result = Framework.submitAjaxFormUpdateAsync(model, Url);
+                    if (result.resultStatus == 0) {
+                        Framework.GoBackReloadPage();
+                    } else {
+                        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+                    }
+                }
+            },
         {
             key: "SortDataTable",
             value: function SortDataTable(tableId, sortName) {
