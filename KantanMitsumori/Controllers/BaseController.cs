@@ -1,6 +1,7 @@
 ﻿using GrapeCity.ActiveReports;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Model;
@@ -16,14 +17,15 @@ namespace KantanMitsumori.Controllers
 
     public class BaseController : Controller
     {
-        private const string COOKIES = "CookiesASEST";
+        private const string COOKIES = "CookiesASEST";        
+        public CommonSettings _commonSettings;
         private List<string> optionListController = new List<string> { "Home", "SelCar", "SelGrd", "SerEst" };
         public IConfiguration _config;
         public LogToken _logToken;
 
         public BaseController(IConfiguration config)
-        {
-            _config = config;
+        {            
+            _commonSettings = new CommonSettings(config);
             _logToken = new LogToken();
 
         }
@@ -34,30 +36,35 @@ namespace KantanMitsumori.Controllers
             var cookies = Request.Cookies[COOKIES]!;
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
-            if (optionListController.Contains(controllerName)) await next();
-            if (controllerName.Contains("Estmain") && pramQuery) await next();
-            _logToken = HelperToken.EncodingToken(cookies!)!;
-            if (_logToken == null)
+            if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && pramQuery))
             {
-                if (!actionName.Contains("Index"))
-                    filterContext.Result = ErrorAction();
-                else
-                    filterContext.Result = new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
-                    {
-                        messageCode = HelperMessage.SMAI001P,
-                        messageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P)
-                    }));
-                return;
+                await next();
             }
-            else if (_logToken != null)
+            else
             {
-                _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
-                _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
-                _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
-                _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
+                _logToken = HelperToken.EncodingToken(_commonSettings.JwtSettings, cookies!)!;
+                if (_logToken == null)
+                {
+                    if (!actionName.Contains("Index"))
+                        filterContext.Result = ErrorAction();
+                    else
+                        filterContext.Result = new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
+                        {
+                            messageCode = HelperMessage.SMAI001P,
+                            messageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P)
+                        }));
+                    return;
+                }
+                else if (_logToken != null)
+                {
+                    _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
+                    _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
+                    _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
+                    _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
+                }
+                await next();
             }
 
-            await next();
         }
 
         public IActionResult ErrorAction<T>(ResponseBase<T> response, int isUnexpectedErr = 0)
@@ -98,8 +105,8 @@ namespace KantanMitsumori.Controllers
         /// <param name="token"></param>     
         public void setTokenCookie(string token)
         {
-            var currentDate = DateTime.Now;
-            var RefreshExpires = _config["JwtSettings:AccessExpires"];
+            var currentDate = DateTime.Now;            
+            var RefreshExpires = _commonSettings.JwtSettings.AccessExpires;
             TimeSpan time = TimeSpan.Parse(RefreshExpires);
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions

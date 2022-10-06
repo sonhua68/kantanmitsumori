@@ -1,5 +1,7 @@
 ﻿using KantanMitsumori.DataAccess;
+using KantanMitsumori.Helper;
 using KantanMitsumori.Helper.CommonFuncs;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure;
 using KantanMitsumori.Service;
 using Microsoft.EntityFrameworkCore;
@@ -34,9 +36,7 @@ namespace KantanMitsumori
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
 
-            );
-            HelperToken.Configure(Configuration);
-            CommonSettings.Configure(Configuration);
+            );            
             services.AddUnitOfWork();
             services.AddHttpClient();
             services.AddBusinessServices();

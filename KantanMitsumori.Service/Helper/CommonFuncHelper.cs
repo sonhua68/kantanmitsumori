@@ -2,6 +2,7 @@
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using Microsoft.Extensions.Logging;
@@ -14,16 +15,14 @@ namespace KantanMitsumori.Service.Helper
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly CommonSettings _commonSettings;
         private readonly IHttpClientFactory _httpClientFactory;
-
-        public CommonFuncHelper(IMapper mapper
-                        , ILogger<CommonFuncHelper> logger
-                        , IUnitOfWork unitOfWork
-                        , IHttpClientFactory httpClientFactory)
+        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, CommonSettings commonSettings)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
+            _commonSettings = commonSettings; 
             _httpClientFactory = httpClientFactory;
         }
 
@@ -264,7 +263,7 @@ namespace KantanMitsumori.Service.Helper
                 Uri uri = new Uri(url);
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
-                strCarImgPlace = CommonSettings.def_CarImgPlace;
+                strCarImgPlace = _commonSettings.PhysicalPathSettings.def_CarImgPlace;
                 strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMM") + "/";
                 if (!Directory.Exists(strCarImgPlace))
                 {
@@ -375,7 +374,7 @@ namespace KantanMitsumori.Service.Helper
             string[] arrExclusionList;
             try
             {
-                string strExclusionList = File.ReadAllText(CommonSettings.def_ExclusionListOfAutoCalc, enc);
+                string strExclusionList = File.ReadAllText(_commonSettings.PhysicalPathSettings.def_ExclusionListOfAutoCalc, enc);
                 arrExclusionList = strExclusionList.Split("\r\n");
             }
             catch (Exception ex)
