@@ -10,7 +10,7 @@ function setInitialValue() {
     // set init prpperties
     setInitProperties();
     // check isData
-    if ($get('hidIsData').value == "True") {
+    if ($get('hidIsData').value == true) {
         // Set enable for button confirm
         buttonEnabling();
     }
@@ -923,7 +923,7 @@ function buttonEnabling() {
     document.getElementById("btnBookExam").disabled = false;
     document.getElementById("btnExamination").disabled = false;
     document.getElementById("btnPrintShow").disabled = false;
-    $get('hidIsData').value == "True";
+    $get('hidIsData').value == true;
     return;
 }
 /**
@@ -1102,18 +1102,21 @@ function InpLeaseCal() {
     if (inputChk()) {
         var model = Framework.getFormData($("#formInpLeaseCalc"));
         model.FirstReg = SetFirstReg(model.FirstReg);
-        model.LeaseSttMonth = SetLeaseSttMonth(model.LeaseSttMonth);    
+        model.LeaseSttMonth = SetLeaseSttMonth(model.LeaseSttMonth);
         var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLeaseCalc/InpLeaseCal");
         console.log(result)
         if (result.resultStatus == 0 && result.messageCode === 'I0002') {
             var item = result.data;
-            console.log(item.priceEnd)
+            $("#hidIsData").val(item.IsShowButton);
             $("#lbl_MonthlyLease").text(item.priceEnd);
             if (parseInt(item.priceEnd) > 0) {
                 $("#Label15").text("円");
             }
+            buttonEnabling();
+        } else if (result.resultStatus == 0 && result.messageCode === 'I0003') {
+            var item = result.data;
+            isShowErrorMessage(item.PriceLeaseFeeLowerLimit)
         } else {
-       
             Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
     }

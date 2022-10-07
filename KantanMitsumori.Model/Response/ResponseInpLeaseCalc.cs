@@ -10,8 +10,9 @@ namespace KantanMitsumori.Model.Response
     {
         public List<string>? ListUILog { get; set; }
         public bool IsError { get; set; }
-        public bool IsData { get; set; } = false;
+        public int IsShowButton { get; set; } = 0;
         public string? PriceEnd { get; set; }
+        public int PriceLeaseFeeLowerLimit { get; set; }
 
     }
     public class ResponseCarType

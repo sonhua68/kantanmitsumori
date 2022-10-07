@@ -162,16 +162,22 @@ namespace KantanMitsumori.Service
                 saveLog(consumptionTax, model, estimates, dPrice, vehicleTaxPrice, priceInsurance, priceWeighTax, pricePromotional, pricetPropertyFeeIdemitsu, priceGuaranteeFee, priceNameChange, priceMantance, interest);
                 _logger.LogInformation("金利対象元本(A) ={0}", dPricePrincipalInterest);
                 saveLogFinal(consumptionTax, dPriceEnd, dPriceMonthly, dPriceMonthNoTax, dPriceProcedure);
-                if (dPriceEnd < PriceLeaseFeeLowerLimit())
+                var priceLeaseFeeLowerLimit = PriceLeaseFeeLowerLimit();
+                if (dPriceEnd < priceLeaseFeeLowerLimit)
                 {
                     data.IsError = true;
+                    data.PriceLeaseFeeLowerLimit = priceLeaseFeeLowerLimit;
                     return ResponseHelper.Ok<ResponseInpLeaseCalc>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003), data);
 
                 }
                 else
                 {
-                    var ifffs = EstInsertUpdateData(model, estimates, logToken, dPriceEnd, pricePromotional, priceNameChange, 
+                    var result = EstInsertUpdateData(model, estimates, logToken, dPriceEnd, pricePromotional, priceNameChange, 
                         interest, priceGuaranteeFee, priceMantance, priceWeighTax,priceInsurance,priceWeighTax, 0,pricePromotional);
+                    if (result)                    
+                        data.IsShowButton = 1;
+                    else
+                        return ResponseHelper.Error<ResponseInpLeaseCalc>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
 
                 }
                 return ResponseHelper.Ok<ResponseInpLeaseCalc>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data);
@@ -203,7 +209,7 @@ namespace KantanMitsumori.Service
             _logger.LogInformation("--------------");
             _logger.LogInformation("自動車保険料: {0}", model.InsuranceFee.ToString());
             _logger.LogInformation("--------------");
-            _logger.LogInformation("販売促進費 設定計数: {0}", pricePromotional.ToString());
+            _logger.LogInformation("販売促進費 設定計数: {0}", _calLease.promotion.ToString());
             _logger.LogInformation("--------------");
             _logger.LogInformation("出光興産手数料（税抜）:{0} ", _calLease.pricePropertyFee1.ToString());
             _logger.LogInformation("--------------");
@@ -281,7 +287,7 @@ namespace KantanMitsumori.Service
                 oEstIde.IsElectricCar = (byte)requestModel.ElectricCar;
                 oEstIde.FirstRegistration = CommonFunction.Left( requestModel.FirstReg!,6);
                 oEstIde.InspectionExpirationDate = requestModel.ExpiresDate!;
-                oEstIde.LeaseStartMonth = requestModel.LeaseSttMonth!;
+                oEstIde.LeaseStartMonth = CommonFunction.Left(requestModel.LeaseSttMonth!, 6);
                 oEstIde.LeasePeriod = requestModel.ContractTimes;
                 oEstIde.LeaseExpirationDate = requestModel.LeaseExpirationDate!;
                 oEstIde.ContractPlanId = requestModel.ContractPlan;
@@ -296,7 +302,7 @@ namespace KantanMitsumori.Service
                 oEstIde.SalesStoreFee = _calLease.pricePropertyFee2;
                 oEstIde.Smasfee = _calLease.pricePropertyFee3;
                 oEstIde.IdemitsuCreditFee = _calLease.pricePropertyFee4;
-                oEstIde.Promotion = pricePromotional;
+                oEstIde.Promotion = _calLease.promotion;
                 oEstIde.PromotionFee = (int)iPromotionFee;
                 oEstIde.ConsumptionTax = _calLease.consumptionTax;
                 oEstIde.NameChange = (int)iNameChange;
@@ -310,6 +316,9 @@ namespace KantanMitsumori.Service
                 oEstIde.WeightTax = (int)iWeightTax;
                 oEstIde.LeaseProgress = (int)iLeaseProgress;
                 oEstIde.IsApplyLease = 0;
+                oEstIde.CreateDate = DateTime.Now;
+                oEstIde.UpdateDate = DateTime.Now;
+                oEstIde.UpdateUser = logToken.UserNo;
                 var isCheckData = _unitOfWork.EstimateIdes.GetSingle(n => n.EstNo == oEst.EstNo && n.EstSubNo == oEst.EstSubNo);
                 if (isCheckData != null)
                 {

@@ -11,7 +11,7 @@
     var TradeIn = (IdeModel.TradeInPrice);
     var AdjustFee = (IdeModel.FeeAdjustment);
     var MonthlyLeaseFee = IdeModel.MonthlyLeaseFee;
-    var IsData = IdeModel.IsData == true ? "True" : "False";
+    var IsData = string.IsNullOrEmpty(IdeModel.EstNo) ? "1" : "0";
     var lbl_MonthlyLease = MonthlyLeaseFee != 0 ? CommonFunction.setFormatCurrency(IdeModel.MonthlyLeaseFee, "") : "";
     var Label15 = MonthlyLeaseFee != 0 ? "円" : "";
     var today = DateTime.Today;
@@ -59,7 +59,7 @@
                                                         @{
                                                             foreach (var item in DropDownList.ListMinusYears(true, 12))
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -68,7 +68,7 @@
                                                         @{
                                                             foreach (var item in listMonth)
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -85,7 +85,7 @@
                                                         @{
                                                             foreach (var item in DropDownList.ListYear(true, 3))
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -94,7 +94,7 @@
                                                         @{
                                                             foreach (var item in listMonth)
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -103,7 +103,7 @@
                                                         @{
                                                             foreach (var item in listDay)
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -120,7 +120,7 @@
                                                         @{
                                                             foreach (var item in DropDownList.ListYear(false, 1))
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -129,7 +129,7 @@
                                                         @{
                                                             foreach (var item in listMonth)
                                                             {
-                                                                    <option value="@item.Value">@item.Text</option>
+                                                                <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
