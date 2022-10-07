@@ -8,12 +8,10 @@ namespace KantanMitsumori.Controllers
     public class InpSyohiyoController : BaseController
     {
         private readonly IInpSyohiyoService _inpSyohiyoService;
-        private readonly ILogger<InpSyohiyoController> _logger;
 
-        public InpSyohiyoController(IInpSyohiyoService inpSyohiyoService, ILogger<InpSyohiyoController> logger) : base()
+        public InpSyohiyoController(IInpSyohiyoService inpSyohiyoService)
         {
             _inpSyohiyoService = inpSyohiyoService;
-            _logger = logger;
         }
 
         public IActionResult Index()
@@ -22,7 +20,7 @@ namespace KantanMitsumori.Controllers
             string estNo = _logToken.sesEstNo!;
             string estSubNo = _logToken.sesEstSubNo!;
             var response = _inpSyohiyoService.GetInfoSyohiyo(estNo, estSubNo);
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }

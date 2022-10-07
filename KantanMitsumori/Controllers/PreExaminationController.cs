@@ -9,13 +9,11 @@ namespace KantanMitsumori.Controllers
     public class PreExaminationController : BaseController
     {
         private readonly IPreExaminationService _preExaminationService;
-        private readonly ILogger<PreExaminationController> _logger;
         private readonly URLSettings _urlSettings;
 
-        public PreExaminationController(IPreExaminationService preExaminationService, ILogger<PreExaminationController> logger, IOptions<URLSettings> urlSettings) : base()
+        public PreExaminationController(IPreExaminationService preExaminationService, IOptions<URLSettings> urlSettings)
         {
             _preExaminationService = preExaminationService;
-            _logger = logger;
             _urlSettings = urlSettings.Value;
         }
 
@@ -28,7 +26,7 @@ namespace KantanMitsumori.Controllers
 
             var response = _preExaminationService.GetInfoPreExamination(estNo, estSubNo);
 
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }
