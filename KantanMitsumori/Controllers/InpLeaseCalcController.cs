@@ -1,4 +1,5 @@
 ﻿using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
@@ -6,6 +7,7 @@ using KantanMitsumori.Models;
 using KantanMitsumori.Service;
 using KantanMitsumori.Service.ASEST;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace KantanMitsumori.Controllers
 {
@@ -14,13 +16,14 @@ namespace KantanMitsumori.Controllers
         private readonly ILogger<InpLeaseCalcController> _logger;
         private readonly IInpLeaseCalcService _inpLeaseCalc;
         private readonly IEstMainService _estMainService;
-        private readonly IEstimateService _estimateService;
-        public InpLeaseCalcController(IInpLeaseCalcService inpLeaseCalc, IEstimateService estimateService, IEstMainService estMainService, IConfiguration config, ILogger<InpLeaseCalcController> logger) : base(config)
+    
+        public InpLeaseCalcController(IInpLeaseCalcService inpLeaseCalc, IEstimateService estimateService,
+            IEstMainService estMainService, IConfiguration config, ILogger<InpLeaseCalcController> logger) 
         {
             _logger = logger;
             _inpLeaseCalc = inpLeaseCalc;
             _estMainService = estMainService;
-            _estimateService = estimateService;
+            
         }
 
         #region InpLeaseCalc 

@@ -1,7 +1,9 @@
 ﻿// Create date 2022/06/2022 By Hoai Phong
+using GrapeCity.ActiveReports.Rendering.Tools;
 using GrapeCity.DataVisualization.TypeScript;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model.Request;
 using Microsoft.Extensions.Logging;
@@ -19,15 +21,16 @@ namespace KantanMitsumori.Service.Helper
         public int pricePropertyFee3 = 0;
         public int pricePropertyFee4 = 0;
         public int logCreditFee = 0;
-        //private string isShowLogUI = CommonSettings.IsShowLogUI;
-        public List<string> _lstWriteLog = new List<string>();
+        private readonly TestSettings _testSettings;
+        public List<string> _lstWriteLogUI = new List<string>();
         private RequestInpLeaseCalc _requestInCalc;
-        public CommonCalLease(ILogger logger, IUnitOfWorkIDE unitOfWorkIde, List<string> lstWriteLog, RequestInpLeaseCalc requestInCalc)
+        public CommonCalLease(ILogger logger, IUnitOfWorkIDE unitOfWorkIde, List<string> lstWriteLogUI, RequestInpLeaseCalc requestInCalc, TestSettings testSettings)
         {
             _logger = logger;
             _unitOfWorkIde = unitOfWorkIde;
-            _lstWriteLog = lstWriteLog;
+            _lstWriteLogUI = lstWriteLogUI;
             _requestInCalc = requestInCalc;
+            _testSettings = testSettings;
         }
         /// <summary>
         /// 4-1 file doc  lay thue tieu thu  
@@ -37,12 +40,9 @@ namespace KantanMitsumori.Service.Helper
         public double GetConsumptionTax()
         {
             var dt = _unitOfWorkIde.ConsumptionTaxs.GetAll().ToList();
-            if (dt.Count > 0)
-            {
-                consumptionTax = dt.FirstOrDefault()!.ConsumptionTax;
-
-            }
-            _logger.LogInformation("4-1 ConsumptionTax:={0}", consumptionTax);
+            consumptionTax = dt.Count > 0 ? dt.FirstOrDefault()!.ConsumptionTax : 0;
+            _logger.LogInformation("4-1 ConsumptionTax: {0}", consumptionTax);
+            addLogUI("4-1 ConsumptionTax: " + consumptionTax);
             return consumptionTax;
         }
         /// <summary>
@@ -57,10 +57,14 @@ namespace KantanMitsumori.Service.Helper
         public double GetPrice(int? salesSum, int? taxInsAll, int? taxFreeAll)
         {
             double dPrice = (double)((salesSum! - taxInsAll! - taxFreeAll!) / (1 + consumptionTax) + taxInsAll! + taxFreeAll!);
-            _logger.LogInformation("SalesSum :={0}", salesSum);
-            _logger.LogInformation("TaxInsAll :={0}", taxInsAll);
-            _logger.LogInformation("TaxFreeAll :={0}", taxFreeAll);
-            _logger.LogInformation("4-2 Price = (SalesSum - TaxInsAll - TaxFreeAll) / (1 + ConsumptionTax) + TaxInsAll + TaxFreeAll :={0}", dPrice);
+            _logger.LogInformation("SalesSum: {0}", salesSum);
+            _logger.LogInformation("TaxInsAll:{0}", taxInsAll);
+            _logger.LogInformation("TaxFreeAll: {0}", taxFreeAll);
+            _logger.LogInformation("4-2 Price =(SalesSum - TaxInsAll - TaxFreeAll) / (1 + ConsumptionTax) + TaxInsAll + TaxFreeAll :={0}", dPrice);
+            addLogUI("SalesSum: " + salesSum);
+            addLogUI("TaxInsAllx: " + taxInsAll);
+            addLogUI("TaxFreeAllx: " + taxFreeAll);
+            addLogUI("4-2 Price = (SalesSum - TaxInsAll - TaxFreeAll) / (1 + ConsumptionTax) + TaxInsAll + TaxFreeAll: " + dPrice);
             return dPrice;
         }
 
@@ -91,7 +95,8 @@ namespace KantanMitsumori.Service.Helper
             {
                 monthlyPrice = dt.MonthlyPrice;
             }
-            _logger.LogInformation("4-3-1 PriceTax :={0}", monthlyPrice);
+            _logger.LogInformation("4-3-1 PriceTax: {0}", monthlyPrice);
+            addLogUI("4-3-1 PriceTax: " + monthlyPrice);
             return monthlyPrice;
         }
         /// <summary>
@@ -123,7 +128,8 @@ namespace KantanMitsumori.Service.Helper
             {
                 monthlyPrice = dt.MonthlyPrice; monthlyPrice = dt.MonthlyPrice;
             }
-            _logger.LogInformation("4-3-2 PriceTax :={0}", monthlyPrice);
+            _logger.LogInformation("4-3-2 PriceTax: {0}", monthlyPrice);
+            addLogUI("4-3-2 PriceTax: " + monthlyPrice);
             return monthlyPrice;
         }
         /// <summary>
@@ -145,19 +151,25 @@ namespace KantanMitsumori.Service.Helper
             if (diffMonth == 0) //< 13Year 
             {
                 priceMonth = priceTax * _requestInCalc.ContractTimes;
-                _logger.LogInformation("4-3-3 PriceMonth  < 13Year :={0}", priceMonth);
+                _logger.LogInformation("4-3-3 PriceMonth  < 13Year: {0}", priceMonth);
+                addLogUI("4-3-3 PriceMonth  < 13Year: " + priceMonth);
             }
             else
             {
                 var taxCollection = GetTaxCollectionIncrease(firstReg, firstReg, dispVol, dispVol);
                 var monthsOver13Year = _requestInCalc.ContractTimes - diffMonth;
-                _logger.LogInformation("getMonthLease  < Over13Year :={0}", diffMonth);
-                _logger.LogInformation("getMonthLease  > Over13Year: :={0}", _requestInCalc.ContractTimes - diffMonth);
+                _logger.LogInformation("getMonthLease  < Over13Year: {0}", diffMonth);
+                _logger.LogInformation("getMonthLease  > Over13Year: {0}", _requestInCalc.ContractTimes - diffMonth);
                 priceMonth = (priceTax * diffMonth + (taxCollection * monthsOver13Year));
-                _logger.LogInformation("4-3-3 PriceMonth  > 13Year :={0}", priceMonth);
+                _logger.LogInformation("4-3-3 PriceMonth  > 13Year: {0}", priceMonth);
+
+                addLogUI("getMonthLease  < Over13Year: " + diffMonth);
+                addLogUI("getMonthLease  > Over13Year: " + (_requestInCalc.ContractTimes - diffMonth));
+                addLogUI("4-3-3 PriceMonth  > 13Year: " + priceMonth);
             }
             vehicleTaxPrice = (double)(priceMonth - autoTax);
-            _logger.LogInformation("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax) :={0}", vehicleTaxPrice);
+            _logger.LogInformation("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): {0}", vehicleTaxPrice);
+            addLogUI("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): " + priceMonth);
             return vehicleTaxPrice;
 
         }
@@ -191,12 +203,14 @@ namespace KantanMitsumori.Service.Helper
                 {
                     inspectionCount -= 1;
                 }
-                _logger.LogInformation("InspectionCount :={0}", inspectionCount);
-                _logger.LogInformation("InsuranceFee :={0}", insuranceFee);
+                _logger.LogInformation("InspectionCount: {0}", inspectionCount);
+                _logger.LogInformation("InsuranceFee: {0}", insuranceFee);
+                addLogUI("InspectionCount: " + inspectionCount);
+                addLogUI("InsuranceFee: " + insuranceFee);
                 priceInsurance = inspectionCount * insuranceFee;
-
             }
-            _logger.LogInformation("4-4 PriceInsurance(InspectionCount * InsuranceFee) :={0}", priceInsurance);
+            _logger.LogInformation("4-4 PriceInsurance(InspectionCount * InsuranceFee): {0}", priceInsurance);
+            addLogUI("4-4 PriceInsurance(InspectionCount * InsuranceFee): " + priceInsurance);
             return priceInsurance;
         }
         /// <summary>
@@ -250,9 +264,12 @@ namespace KantanMitsumori.Service.Helper
             var weighTax = GetWeighTax(0); // case 4-5-1
             var weighTax1 = GetWeighTax(1); // case 4-5-2
             var weighTax2 = GetWeighTax(2); // case 4-5-3
-            _logger.LogInformation("4-5-1 WeighTax :={0}", weighTax);
-            _logger.LogInformation("4-5-2 WeighTax :={0}", weighTax1);
-            _logger.LogInformation("4-5-3 WeighTax :={0}", weighTax2);
+            _logger.LogInformation("4-5-1 WeighTax: {0}", weighTax);
+            _logger.LogInformation("4-5-2 WeighTax: {0}", weighTax1);
+            _logger.LogInformation("4-5-3 WeighTax: {0}", weighTax2);
+            addLogUI("4-5-1 WeighTax: " + weighTax);
+            addLogUI("4-5-2 WeighTax: " + weighTax1);
+            addLogUI("4-5-3 WeighTax: " + weighTax2);
             var inspectionCount = 0;
             var inspectionCount1 = 0;
             var inspectionCount2 = 0;
@@ -274,21 +291,25 @@ namespace KantanMitsumori.Service.Helper
             {
                 inspectionCount -= 1;
             }
-            _logger.LogInformation("InspectionCount Not over 13 year:={0}", inspectionCount);
+            _logger.LogInformation("InspectionCount Not over 13 year: {0}", inspectionCount);
+            addLogUI("InspectionCount Not over 13 year: " + inspectionCount);
             //Over 13 year and not over 18 year        
             var endDate1 = CheckYear(215);
             if (endDate <= endDate1)
             {
                 inspectionCount1 = InspectionCount(ref registrationDate, endDate, endDate1, isFirstTime);
             }
-            _logger.LogInformation("InspectionCount Not over 13 year:={0}", inspectionCount);
-
+            _logger.LogInformation("4-5-4 InspectionCount Over 13 year and not over 18 year: {0} ", inspectionCount1);
+            addLogUI("4-5-4 InspectionCount Over 13 year and not over 18 year: " + inspectionCount1);
             if (endDate1 <= endLeaseDate)
             {
                 inspectionCount2 = InspectionCount(ref registrationDate, endDate1, endLeaseDate, isFirstTime);
             }
+            _logger.LogInformation("InspectionCount Over 18 year: {0}", inspectionCount2);
+            addLogUI("4-5-4 InspectionCount Over 18 year: " + inspectionCount2);
             priceWeighTax = (weighTax * inspectionCount) + (weighTax1 * inspectionCount1) + (weighTax2 * inspectionCount2);
-            _logger.LogInformation("4-5-4 PriceWeighTax::={0}", priceWeighTax);
+            _logger.LogInformation("4-5-4 PriceWeighTax: {0}", priceWeighTax);
+            addLogUI("4-5-4 PriceWeighTax: " + priceWeighTax);
             return priceWeighTax;
 
         }
@@ -303,7 +324,8 @@ namespace KantanMitsumori.Service.Helper
             double pricePromotional = 0;
             promotion = _unitOfWorkIde.Promotions.GetAll().FirstOrDefault()!.Promotion;
             pricePromotional = salesSum * promotion * _requestInCalc.ContractTimes;
-            _logger.LogInformation("4-6 PricePromotional:={0}", pricePromotional);
+            _logger.LogInformation("4-6 PricePromotional: {0}", pricePromotional);
+            addLogUI("4-6 PricePromotional: " + pricePromotional);
             if (pricePromotional > 100000)
             {
                 pricePromotional = 100000;
@@ -312,7 +334,8 @@ namespace KantanMitsumori.Service.Helper
             {
                 pricePromotional = 15000;
             }
-            _logger.LogInformation("4-6 PricePromotional  > 100000= 100000 and < 15000= 15000::={0}", pricePromotional);
+            _logger.LogInformation("4-6 PricePromotional  > 100000= 100000 and < 15000= 15000: {0}", pricePromotional);
+            addLogUI("4-6 PricePromotional  > 100000= 100000 and < 15000= 15000: " + pricePromotional);
             return pricePromotional;
         }
         /// <summary>
@@ -328,11 +351,16 @@ namespace KantanMitsumori.Service.Helper
             pricePropertyFee3 = GetPropertyFee(3);
             pricePropertyFee4 = GetPropertyFee(_requestInCalc.CarType + 3);
             pricePropertyFeeIdemitsu = pricePropertyFee1 + pricePropertyFee2 + pricePropertyFee3 + pricePropertyFee4;
-            _logger.LogInformation("ID =1:={0}", pricePropertyFee1);
-            _logger.LogInformation("ID =2:={0}", pricePropertyFee2);
-            _logger.LogInformation("ID =3:={0}", pricePropertyFee3);
-            _logger.LogInformation("ID =CarType+3:={0}", pricePropertyFee4);
-            _logger.LogInformation("4-7 PricePropertyFeeIdemitsu:={0}", pricePropertyFeeIdemitsu);
+            _logger.LogInformation("ID =1: {0}", pricePropertyFee1);
+            _logger.LogInformation("ID =2: {0}", pricePropertyFee2);
+            _logger.LogInformation("ID =3: {0}", pricePropertyFee3);
+            _logger.LogInformation("ID =CarType+3: {0}", pricePropertyFee4);
+            _logger.LogInformation("4-7 PricePropertyFeeIdemitsu: {0}", pricePropertyFeeIdemitsu);
+            addLogUI("ID =1: " + pricePropertyFee1);
+            addLogUI("ID =2: " + pricePropertyFee2);
+            addLogUI("ID =3: " + pricePropertyFee3);
+            addLogUI("ID =CarType+3: " + pricePropertyFee4);
+            addLogUI("4-7 PricePropertyFeeIdemitsu: " + pricePropertyFeeIdemitsu);
             return pricePropertyFeeIdemitsu;
         }
         /// <summary>
@@ -352,13 +380,14 @@ namespace KantanMitsumori.Service.Helper
             else if (_requestInCalc.InsurExpanded == 1)
             {
                 year = 1;
-            }          
+            }
             var dt = _unitOfWorkIde.Guarantees.GetSingleOrDefault(n => n.Years == year);
-            if(dt != null)
+            if (dt != null)
             {
                 priceGuaranteeCharg = dt.GuaranteeCharge;
             }
-            _logger.LogInformation("4-8 PriceGuaranteeFee:={0}", priceGuaranteeCharg);
+            _logger.LogInformation("4-8 PriceGuaranteeFee: {0}", priceGuaranteeCharg);
+            addLogUI("4-8 PriceGuaranteeFee: " + priceGuaranteeCharg);
             return priceGuaranteeCharg;
 
         }
@@ -370,8 +399,13 @@ namespace KantanMitsumori.Service.Helper
         public double GetPriceNameChange()
         {
             double priceNameChange = 0;
-            priceNameChange = _unitOfWorkIde.NameChanges.GetAll().FirstOrDefault()!.NameChange;
-            _logger.LogInformation("4-9 PriceNameChange::={0}", priceNameChange);
+            var dt = _unitOfWorkIde.NameChanges.GetAll().FirstOrDefault();
+            if (dt != null)
+            {
+                priceNameChange = dt.NameChange;
+            }
+            _logger.LogInformation("4-9 PriceNameChange: {0}", priceNameChange);
+            addLogUI("4-9 PriceNameChange: " + priceNameChange);
             return priceNameChange;
         }
         /// <summary>
@@ -398,7 +432,8 @@ namespace KantanMitsumori.Service.Helper
                 {
                     inspectionCount -= 1;
                 }
-                _logger.LogInformation("InspectionCount:={0}", inspectionCount);
+                _logger.LogInformation("4-10 InspectionCount:={0}", inspectionCount);
+                addLogUI("4-10 InspectionCount: " + inspectionCount);
                 var isBeforeFirstInspection = _requestInCalc.CarType == 3 ? 9 : IsBeforeFirstInspection();
                 var dt = _unitOfWorkIde.Maintenances.GetSingleOrDefault(n => n.CarType == _requestInCalc.CarType
                 && n.LeasePeriod == _requestInCalc.ContractTimes && n.BeforeFirstInspection == isBeforeFirstInspection
@@ -407,7 +442,8 @@ namespace KantanMitsumori.Service.Helper
                 {
                     priceMantance = dt.MyMaintenancePrice * _requestInCalc.ContractTimes;
                 }
-                _logger.LogInformation("4-10 PriceMaintenance:={0}", priceMantance);
+                _logger.LogInformation("4-10 PriceMaintenance: {0}", priceMantance);
+                addLogUI("4-10 PriceMaintenance: " + priceMantance);
             }
             return priceMantance;
         }
@@ -426,7 +462,8 @@ namespace KantanMitsumori.Service.Helper
             {
                 interest = dt.Interest;
             }
-            _logger.LogInformation("4-11  PriceInterest:={0}", interest);
+            _logger.LogInformation("4-11 PriceInterest: {0}", interest);
+            addLogUI("4-11  PriceInterest: " + interest);
             return interest;
         }
         #region Fuc
@@ -526,6 +563,14 @@ namespace KantanMitsumori.Service.Helper
             }
             return pricePropertyFee;
 
+        }
+
+        public void addLogUI(string value)
+        {
+            if (_testSettings.IsShowLogUI == "True")
+            {
+                _lstWriteLogUI.Add(value);
+            }
         }
 
         #endregion Fuc

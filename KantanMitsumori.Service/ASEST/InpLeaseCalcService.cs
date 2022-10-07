@@ -18,6 +18,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Principal;
 using Microsoft.VisualBasic;
 using GrapeCity.Enterprise.Data.DataEngine.ExpressionEvaluation;
+using KantanMitsumori.Helper.Settings;
+using Microsoft.Extensions.Options;
 
 namespace KantanMitsumori.Service
 {
@@ -29,15 +31,17 @@ namespace KantanMitsumori.Service
         private readonly IUnitOfWorkIDE _unitOfWorkIDE;
         private CommonEstimate _commonEst;
         private CommonCalLease _calLease;
+        private readonly TestSettings _testSettings;
         private List<string> lstWriteLog = new List<string>();
 
-        public InpLeaseCalcService(IMapper mapper, CommonEstimate commonEst, IUnitOfWorkIDE unitOfWorkIDE, ILogger<InpLeaseCalcService> logger, IUnitOfWork unitOfWork)
+        public InpLeaseCalcService(IMapper mapper, CommonEstimate commonEst, IOptions<TestSettings> testSettings, IUnitOfWorkIDE unitOfWorkIDE, ILogger<InpLeaseCalcService> logger, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _commonEst = commonEst;
             _unitOfWorkIDE = unitOfWorkIDE;
+            _testSettings = testSettings.Value;
         }
 
         public ResponseBase<List<ResponseCarType>> GetCarType()
@@ -131,7 +135,7 @@ namespace KantanMitsumori.Service
                     return ResponseHelper.Error<ResponseInpLeaseCalc>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
                 }
                 _logger.LogInformation("\"-------************* EstNo:{0} EstSubNo: {1} *************-------\"", estimates.EstNo, estimates.EstSubNo);
-                _calLease = new CommonCalLease(_logger, _unitOfWorkIDE, lstWriteLog, model);
+                _calLease = new CommonCalLease(_logger, _unitOfWorkIDE, lstWriteLog, model, _testSettings);
                 var consumptionTax = _calLease.GetConsumptionTax();
                 var dPrice = _calLease.GetPrice(estimates.SalesSum, estimates.TaxInsAll, estimates.TaxFreeAll);  // '4-2 get Price
                 var vehicleTaxPrice = _calLease.GetVehicleTaxWithinTheTerm((int)estimates.AutoTax!, estimateSubs.DispVolUnit!, Convert.ToInt32(estimates.DispVol!));  // '4-3 VehicleTaxPrice
@@ -157,7 +161,7 @@ namespace KantanMitsumori.Service
                 dPriceMonthly = CommonFunction.ToRoundUp(dPriceMonthNoTax + dPriceProcedure, -2);
                 // 'dPriceEnd phi lease hang thang cuoi cung 
                 dPriceEnd = CommonFunction.ToRoundDown(dPriceMonthly + (dPriceMonthly * consumptionTax), 0);
-                data.ListUILog = _calLease._lstWriteLog;
+                data.ListUILog = _calLease._lstWriteLogUI;
                 data.PriceEnd = CommonFunction.setFormatCurrency(dPriceEnd, "");
                 saveLog(consumptionTax, model, estimates, dPrice, vehicleTaxPrice, priceInsurance, priceWeighTax, pricePromotional, pricetPropertyFeeIdemitsu, priceGuaranteeFee, priceNameChange, priceMantance, interest);
                 _logger.LogInformation("金利対象元本(A) ={0}", dPricePrincipalInterest);
@@ -172,9 +176,9 @@ namespace KantanMitsumori.Service
                 }
                 else
                 {
-                    var result = EstInsertUpdateData(model, estimates, logToken, dPriceEnd, pricePromotional, priceNameChange, 
-                        interest, priceGuaranteeFee, priceMantance, priceWeighTax,priceInsurance,priceWeighTax, 0,pricePromotional);
-                    if (result)                    
+                    var result = EstInsertUpdateData(model, estimates, logToken, dPriceEnd, pricePromotional, priceNameChange,
+                        interest, priceGuaranteeFee, priceMantance, priceWeighTax, priceInsurance, priceWeighTax, 0, pricePromotional);
+                    if (result)
                         data.IsShowButton = 1;
                     else
                         return ResponseHelper.Error<ResponseInpLeaseCalc>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
@@ -201,7 +205,7 @@ namespace KantanMitsumori.Service
             _logger.LogInformation("--------------");
             _logger.LogInformation("9.預り法定費用(非課税): {0}", oEst.TaxFreeAll.ToString());
             _logger.LogInformation("--------------");
-            _logger.LogInformation("期間中 自動車税:{0} ", dVehicleTaxPrice.ToString());
+            _logger.LogInformation("期間中 自動車税: {0}", dVehicleTaxPrice.ToString());
             _logger.LogInformation("--------------");
             _logger.LogInformation("期間中 重量税: {0}", priceWeighTax.ToString());
             _logger.LogInformation("--------------");
@@ -211,15 +215,15 @@ namespace KantanMitsumori.Service
             _logger.LogInformation("--------------");
             _logger.LogInformation("販売促進費 設定計数: {0}", _calLease.promotion.ToString());
             _logger.LogInformation("--------------");
-            _logger.LogInformation("出光興産手数料（税抜）:{0} ", _calLease.pricePropertyFee1.ToString());
+            _logger.LogInformation("出光興産手数料（税抜: {0} ", _calLease.pricePropertyFee1.ToString());
             _logger.LogInformation("--------------");
             _logger.LogInformation("出光クレジット月額手数料（税抜）※: ", _calLease.logCreditFee.ToString());
             _logger.LogInformation("--------------");
-            _logger.LogInformation("特販店手数料（税抜）:{0} ", _calLease.pricePropertyFee2.ToString());
+            _logger.LogInformation("特販店手数料（税抜: {0} ", _calLease.pricePropertyFee2.ToString());
             _logger.LogInformation("--------------");
             _logger.LogInformation("SMAS手数料（税抜）額: {0}", _calLease.pricePropertyFee3.ToString());
             _logger.LogInformation("--------------");
-            _logger.LogInformation("保証料（税抜）: {0}", priceGuaranteeFee.ToString());
+            _logger.LogInformation("保証料（税抜 : {0}", priceGuaranteeFee.ToString());
             _logger.LogInformation("--------------");
             _logger.LogInformation("名義変更費用（税抜）: {0}", priceNameChange.ToString());
             _logger.LogInformation("--------------");
@@ -246,9 +250,62 @@ namespace KantanMitsumori.Service
             //_logger.LogInformation("リース満了日: {0}", getFormatDayYMD(dHidLeaseExpirationDate));
             _logger.LogInformation("--------------");
             _logger.LogInformation("消費税率: {0}", _calLease.consumptionTax.ToString());
-
-
-
+            if (_testSettings.IsShowLogUI == "True")
+            {
+                // Save log ui
+                _calLease.addLogUI("-------**********LOG FILE EXCEL************-------");
+                _calLease.addLogUI("15.お支払総額: " + oEst.SalesSum.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("7.税金・保険料(非課税): " + oEst.TaxInsAll.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("9.預り法定費用(非課税): " + oEst.TaxFreeAll.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("期間中 自動車税: " + dVehicleTaxPrice.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("期間中 重量税: " + priceWeighTax.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("期間中 自賠責保険: " + priceInsurance.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("自動車保険料: " + model.InsuranceFee.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("販売促進費 設定計数: " + _calLease.promotion.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("出光興産手数料（税抜: " + _calLease.pricePropertyFee1.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("出光クレジット月額手数料（税抜）※: " + _calLease.logCreditFee.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("特販店手数料（税抜: " + _calLease.pricePropertyFee2.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("SMAS手数料（税抜）額: " + _calLease.pricePropertyFee3.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("保証料（税抜: " + priceGuaranteeFee.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("名義変更費用（税抜: " + priceNameChange.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("月額メンテナンス料（税抜: " + priceMantance.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("頭金（税込: " + model.PrePay.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("下取（税込: " + model.TradeIn.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("手数料調整額（税込: " + model.AdjustFee.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("適用金利(年利): " + interest.ToString());
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("リース期間: " + model.ContractTimes.ToString());
+                _calLease.addLogUI("--------------");
+                //  _calLease.addLogUI("初度登録月:{0} ", getFormatDayYMD(dHidFirstReg));
+                _logger.LogInformation("--------------");
+                //  _calLease.addLogUI("車検満了日（予定日）: {0}", getFormatDayYMD(dHidExpiresDate));
+                _logger.LogInformation("--------------");
+                //  _calLease.addLogUI("リース開始月: {0}", getFormatDayYMD(dHidLeaseSttMonth));
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("リース開始日: " + model.LeaseSttDay.toString() + "日");
+                _calLease.addLogUI("--------------");
+                //  _calLease.addLogUI("リース満了日: {0}", getFormatDayYMD(dHidLeaseExpirationDate));
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("消費税率: " + _calLease.consumptionTax.ToString());
+            }
         }
         private void saveLogFinal(double consumptionTax, double dPriceEnd, double dPriceMonthly, double dPriceMonthNoTax, double dPriceProcedure)
         {
@@ -259,6 +316,15 @@ namespace KantanMitsumori.Service
             _logger.LogInformation("4手数料調整あり　【税別】最終リース料(E)　(10円単位切上)={0} ", dPriceMonthly);
             _logger.LogInformation("5手数料調整あり　【税込】最終リ―ス料（F）　小数点第一位四捨五入 ={0} ", dPriceEnd);
             _logger.LogInformation("-----------------************* END LEASE *************-------------------------");
+            if (_testSettings.IsShowLogUI == "True")
+            {
+                _calLease.addLogUI("1【税別】月額リース料(B)（10円単位切上= " + dPriceMonthNoTax);
+                _calLease.addLogUI("2【税込】月額リース料（Ｃ）　小数点第一位を四捨五入= " + priceMonthNoTax);
+                _calLease.addLogUI("3【税別】手数料調整額 月額増・減算リース料(D)　(10円単位切捨)= " + dPriceProcedure);
+                _calLease.addLogUI("4手数料調整あり　【税別】最終リース料(E)　(10円単位切上)= " + dPriceMonthly);
+                _calLease.addLogUI("5手数料調整あり　【税込】最終リ―ス料（F）　小数点第一位四捨五入 = " + dPriceEnd);
+                _calLease.addLogUI("-----------------************* END LEASE *************-------------------------");
+            }
 
         }
 
@@ -285,7 +351,7 @@ namespace KantanMitsumori.Service
                 oEstIde.EstUserNo = logToken.UserNo!;
                 oEstIde.CarType = requestModel.CarType;
                 oEstIde.IsElectricCar = (byte)requestModel.ElectricCar;
-                oEstIde.FirstRegistration = CommonFunction.Left( requestModel.FirstReg!,6);
+                oEstIde.FirstRegistration = CommonFunction.Left(requestModel.FirstReg!, 6);
                 oEstIde.InspectionExpirationDate = requestModel.ExpiresDate!;
                 oEstIde.LeaseStartMonth = CommonFunction.Left(requestModel.LeaseSttMonth!, 6);
                 oEstIde.LeasePeriod = requestModel.ContractTimes;

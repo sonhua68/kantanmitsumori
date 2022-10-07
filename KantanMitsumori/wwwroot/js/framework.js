@@ -2,6 +2,7 @@
 #Framework 
 #Create [2022/08/01] By Hoài Phong 
  */
+
 "use strict";
 
 function _instanceof(left, right) { if (right !== null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
@@ -156,7 +157,7 @@ var Framework =
                 var result = [];
                 $.ajax({
                     type: "GET",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     async: false,
@@ -177,7 +178,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "GET",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     async: false,
@@ -200,7 +201,7 @@ var Framework =
                 $.ajax({
                     type: "GET",
                     data: id,
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     async: false,
@@ -275,7 +276,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     data: {
                         requestData: data
                     },
@@ -297,7 +298,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     data: {
                         requestData: data
                     },
@@ -318,7 +319,7 @@ var Framework =
             value: function submitAjaxRedirect(data, url) {
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     data: {
                         requestData: data
                     },
@@ -334,7 +335,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     async: false,
                     success: function success(r) {
                         result = r;
@@ -353,7 +354,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     data: {
                         requestData: data
                     },
@@ -364,7 +365,6 @@ var Framework =
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
                         location.reload();
-
 
                     }
                 });
@@ -378,7 +378,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     data: {
                         requestData: data
                     },
@@ -400,7 +400,7 @@ var Framework =
             value: function SummitForm(path, params, method = 'post') {
                 const form = document.createElement('form');
                 form.method = method;
-                form.action = path;
+                form.action = Framework.GetFullHost(path);
 
                 for (const key in params) {
                     if (params.hasOwnProperty(key)) {
@@ -519,24 +519,31 @@ var Framework =
         {
             key: "GoBackReloadPage",
             value: function GoBackReloadPage() {
-                window.location.href = "/Estmain?IsInpBack=1";
+                window.location.href = Framework.GetFullHost("/Estmain?IsInpBack=1");
 
             }
-
         },
+
+        {
+            key: "GetFullHost",
+            value: function GetFullHost(url) {
+                const full = location.protocol + '//' + location.host;
+                return full + url;
+
+            }
+        },
+
         {
             key: "GoBackErrorPage",
             value: function GoBackErrorPage(messageCode, messContent) {
                 var param = {};
                 param.messageCode = messageCode;
                 param.messageContent = messContent;
-                Framework.SummitForm("/Error/ErrorPage", param)
-                //var url = "/Error/ErrorPage?messageCode=" + messageCode + " &messContent=" + messContent;
-                //window.location.href = url;
+                var url = Framework.GetFullHost("/Error/ErrorPage");
+                Framework.SummitForm(url, param);
 
             }
         },
-
         {
             key: "GoBackPage",
             value: function GoBackPage() {
@@ -555,8 +562,8 @@ var Framework =
                 let LeaseFlag = parseInt($("#hidLeaseFlag").val());
                 if (LeaseFlag == 1 && ListUrl.includes(PageUrl)) {
                     alert("リース画面でのみ、下取りの設定が可能。");
-                } else {
-                    window.location.href = PageUrl;
+                } else {                   
+                    window.location.href = Framework.GetFullHost(PageUrl);
                 }
             }
         },
@@ -565,7 +572,8 @@ var Framework =
             value: function SummitForm(path, params, method = 'post') {
                 const form = document.createElement('form');
                 form.method = method;
-                form.action = path;
+                form.action = Framework.GetFullHost(path);
+
 
                 for (const key in params) {
                     if (params.hasOwnProperty(key)) {
@@ -592,18 +600,18 @@ var Framework =
                     Framework.GoBackErrorPage(result.messageCode, result.messageContent);
                 }
             }
-            },
-            {
-                key: "OnSubmitFormValueModel",
-                value: function OnSubmitFormValueModel(Url, model) {                  
-                    var result = Framework.submitAjaxFormUpdateAsync(model, Url);
-                    if (result.resultStatus == 0) {
-                        Framework.GoBackReloadPage();
-                    } else {
-                        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
-                    }
+        },
+        {
+            key: "OnSubmitFormValueModel",
+            value: function OnSubmitFormValueModel(Url, model) {
+                var result = Framework.submitAjaxFormUpdateAsync(model, Url);
+                if (result.resultStatus == 0) {
+                    Framework.GoBackReloadPage();
+                } else {
+                    Framework.GoBackErrorPage(result.messageCode, result.messageContent);
                 }
-            },
+            }
+        },
         {
             key: "SortDataTable",
             value: function SortDataTable(tableId, sortName) {
