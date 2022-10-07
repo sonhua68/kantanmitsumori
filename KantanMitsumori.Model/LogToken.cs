@@ -24,8 +24,9 @@
         public string? sesCarImgPath5 { get; set; }
         public string? sesCarImgPath6 { get; set; }
         public string? sesCarImgPath7 { get; set; }
-        public string? sesCarImgPath8 { get; set; } 
-        public string? sesLeaseFlag { get; set; }
-                     
+        public string? sesCarImgPath8 { get; set; }
+        public string sesLeaseFlag { get; set; } = "0";
+
+
     }
 }
