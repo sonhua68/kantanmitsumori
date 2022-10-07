@@ -1,7 +1,9 @@
 ﻿using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
 using NodaTime;
+using System;
 using System.Globalization;
+using System.IO;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
@@ -173,6 +175,31 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
         }
 
+        public static decimal ToRoundUp(decimal dValue)
+        {
+            return Math.Ceiling(dValue);
+
+        }
+
+        public static double ToRoundDown(double dValue, int iDigits)
+        {
+            double dCoef = Math.Pow(10, iDigits);
+
+            if (dValue > 0)
+                return Math.Floor(dValue * dCoef) / dCoef;
+            else
+                return Math.Ceiling(dValue * dCoef) / dCoef;
+        }
+        public static double PMT(double yearlyInterestRate, int totalNumberOfMonths, double loanAmount)
+        {
+            var rate = (double)yearlyInterestRate / 100 / 12;
+            var denominator = Math.Pow((1 + rate), totalNumberOfMonths) - 1;
+            return (rate + (rate / denominator)) * loanAmount;
+        }
+        public static double ToRoundUp(double value, int iDigits)
+        {
+            return Math.Ceiling(value * (Math.Pow(10, iDigits))) / (Math.Pow(10, iDigits));
+        }
         /// <summary>
         /// 見積書データ項目 税抜／税込切替時の再計算
         /// </summary>
@@ -397,6 +424,43 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
 
             return rtstrDay;
+        }
+        public static void FormatDayYMD(string strDay, ref string year, ref string month, ref string day)
+
+        {
+            int leday = strDay.Replace("/", "").Length;
+            switch (leday)
+            {
+                case 8:
+                    year = Left(strDay, 4).Trim();
+                    month = DateFormatZero(Mid(strDay, 4, 2)).Trim();
+                    day = DateFormatZero(Right(strDay, 2)).Trim();
+                    break;
+                case 6:
+                    year = Left(strDay, 4).Trim();
+                    month = DateFormatZero(Mid(strDay, 4, 2)).Trim();
+                    day = CommonConst.def_Space;
+                    break;
+                case 5:
+                    year = Left(strDay, 4).Trim();
+                    month = DateFormatZero(Right(strDay, 1)).Trim();
+                    day = CommonConst.def_Space;
+                    break;
+
+                case 4:
+                    year = Left(strDay, 4).Trim();
+                    month = CommonConst.def_Space;
+                    day = CommonConst.def_Space;
+                    break;
+
+            }
+
+        }
+
+        public static string ConvertDate(string strDay)
+        {
+            return Left(strDay, 4).Trim() + "/" + DateFormatZero(Mid(strDay, 4, 2)).Trim() + "/" + DateFormatZero(Right(strDay, 2)).Trim();
+
         }
         public static string checkwSyakenNew(int? syakenNew, int? syakenZok)
         {

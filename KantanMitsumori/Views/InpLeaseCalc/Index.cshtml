@@ -59,7 +59,7 @@
                                                         @{
                                                             foreach (var item in DropDownList.ListMinusYears(true, 12))
                                                             {
-                                                                <option value="@item.Value">@item.Text</option>
+                                                                    <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -68,7 +68,7 @@
                                                         @{
                                                             foreach (var item in listMonth)
                                                             {
-                                                                <option value="@item.Value">@item.Text</option>
+                                                                    <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -85,7 +85,7 @@
                                                         @{
                                                             foreach (var item in DropDownList.ListYear(true, 3))
                                                             {
-                                                                <option value="@item.Value">@item.Text</option>
+                                                                    <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -94,7 +94,7 @@
                                                         @{
                                                             foreach (var item in listMonth)
                                                             {
-                                                                <option value="@item.Value">@item.Text</option>
+                                                                    <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -103,7 +103,7 @@
                                                         @{
                                                             foreach (var item in listDay)
                                                             {
-                                                                <option value="@item.Value">@item.Text</option>
+                                                                    <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -120,7 +120,7 @@
                                                         @{
                                                             foreach (var item in DropDownList.ListYear(false, 1))
                                                             {
-                                                                <option value="@item.Value">@item.Text</option>
+                                                                    <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -129,7 +129,7 @@
                                                         @{
                                                             foreach (var item in listMonth)
                                                             {
-                                                                <option value="@item.Value">@item.Text</option>
+                                                                    <option value="@item.Value">@item.Text</option>
                                                             }
                                                         }
                                                     </select>
@@ -242,7 +242,7 @@
                                             <tr>
                                                 <td class="inpbtntd" colspan="2" style="text-align: right;">
                                                     <span id="lbl_ErrorMessage" class="inplabel" style="color:Red;font-size:Medium;display: none;"></span>
-                                                    <input type="submit" name="btnLeaseCalc" value="リース料計算" onclick="return inputChk();" id="btnLeaseCalc" class="Btn1" style="height:32px;">
+                                                    <input type="button" name="btnLeaseCalc" value="リース料計算" onclick="return InpLeaseCal();return false;" id="btnLeaseCalc" class="Btn1" style="height:32px;">
                                                 </td>
                                             </tr>
                                             <tr>
@@ -299,25 +299,6 @@
 </form>
 <script>
     SetInitData();
-    $('#formInpLeaseCalc').validate({
-        submitHandler: function (form) {
-            if (inputChk() == false) { return; }
-            var model = Framework.getFormData($("#formInpLeaseCalc"));
-            console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLeaseCalc/LeaseCalc");
-            if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
-            } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#Msg").html(Items)
-                } else {
-                    location.reload();
-                }
-            }
-        }
-    });
     function SetInitData() {
         let firstRegYm = @FirstRegYm;
         var firstYear = "";
@@ -335,5 +316,6 @@
         Framework.SetSelectedNumber("cbo_LeaseSttM", @today.Month)
     }
 </script>
-<script src="~/js/microsoftajax.js"></script>
+<script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
+<script src="~/js/funcmoment.js"></script>
 <script src="~/js/InpLeaseCalc.js"></script>

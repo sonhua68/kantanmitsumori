@@ -8,8 +8,10 @@ namespace KantanMitsumori.Model.Response
 {
     public class ResponseInpLeaseCalc
     {
-        public List<string>? log { get; set; }
-        public int price { get; set; }
+        public List<string>? ListUILog { get; set; }
+        public bool IsError { get; set; }
+        public bool IsData { get; set; } = false;
+        public string? PriceEnd { get; set; }
 
     }
     public class ResponseCarType

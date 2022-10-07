@@ -102,7 +102,7 @@ function getValTerm(value) {
 function callBackSetTerm(rtnValue) {
     if (rtnValue) {
         $("#hidFirstTerm").val(rtnValue[0].firstTerm);
-        $("#hidAfterSecondTerm").val(rtnValue[0].afterSecondTerm);    
+        $("#hidAfterSecondTerm").val(rtnValue[0].afterSecondTerm);
         // Set ContractTimes & Calculator Lease End
         setContractTimesCalLeaseEnd();
     }
@@ -772,7 +772,7 @@ function inputChk() {
         return false;
     }
     chkValueInput();
-    return false;
+    return true;
 }
 
 // check ExpiresDate over LeaseSttMonth
@@ -799,7 +799,7 @@ function chkLeasePeriodLeaseExpirationDate() {
 }
 
 function chkValueInput() {
-  
+
     var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetUnitPriceRatesLimit");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         callBackSetUnitPriceRatesLimit(result.data)
@@ -1051,7 +1051,7 @@ function GetCarType() {
         let length = result.data.length;
         $("#cboCarType").append(new Option("", ''));
         for (let i = 0; i < length; i++) {
-            let key = result.data[i].carType ;
+            let key = result.data[i].carType;
             let value = result.data[i].carTypeName;
             $("#cboCarType").append(new Option(value, key));
         }
@@ -1066,7 +1066,7 @@ function GetCarType() {
 function GetContractPlan() {
     var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetContractPlan");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-        let length = result.data.length;     
+        let length = result.data.length;
         for (let i = 0; i < length; i++) {
             let key = result.data[i].id;
             let value = result.data[i].planName;
@@ -1098,20 +1098,44 @@ function GetVolInsurance() {
     }
 }
 
+function InpLeaseCal() {
+    if (inputChk()) {
+        var model = Framework.getFormData($("#formInpLeaseCalc"));
+        model.FirstReg = SetFirstReg(model.FirstReg);
+        model.LeaseSttMonth = SetLeaseSttMonth(model.LeaseSttMonth);    
+        var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLeaseCalc/InpLeaseCal");
+        console.log(result)
+        if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+            var item = result.data;
+            console.log(item.priceEnd)
+            $("#lbl_MonthlyLease").text(item.priceEnd);
+            if (parseInt(item.priceEnd) > 0) {
+                $("#Label15").text("円");
+            }
+        } else {
+       
+            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+        }
+    }
 
+}
+function SetFirstReg(FirstReg) {
+    var valFirstRegY = chkNull($get('cboFirstYear').value);
+    var valFirstRegM = chkNull($get('cboFirstMonth').value);
+    var valExpiresDay = chkNull($get('cbo_ExpiresDay').value);
+    var lastDayOfMonth = GetDaysInMonth(valFirstRegY, valFirstRegM);
+    if (lastDayOfMonth > parseInt(valExpiresDay)) {
+        let day = (parseInt(valExpiresDay) < 10 ? +"0" + valExpiresDay.toString() : valExpiresDay.toString())
+        return FirstReg + day;
+    } else {
+        let day = (lastDayOfMonth) < 10 ? +"0" + lastDayOfMonth.toString() : lastDayOfMonth.toString();
+        return FirstReg + day;
+    }
+}
 
-//CarType = chkNullToInt(.Item("CarType"))
-//IsElectricCar = chkNullToInt(.Item("IsElectricCar"))
-//FirstRegistration = chkDbNull(.Item("FirstRegistration"))
-//InspectionExpirationDate = chkDbNull(.Item("InspectionExpirationDate"))
-//LeaseStartMonth = chkDbNull(.Item("LeaseStartMonth"))
-//LeasePeriod = chkNullToInt(.Item("LeasePeriod"))
-//LeaseExpirationDate = chkDbNull(.Item("LeaseExpirationDate"))
-//ContractPlanID = chkNullToInt(.Item("ContractPlanID"))
-//IsExtendedGuarantee = chkNullToInt(.Item("IsExtendedGuarantee"))
-//InsuranceCompanyID = chkNullToInt(.Item("InsuranceCompanyID"))
-//InsuranceFee = chkNullToInt(.Item("InsuranceFee"))
-//DownPayment = chkNullToInt(.Item("DownPayment"))
-//TradeInPrice = chkNullToInt(.Item("TradeInPrice"))
-//FeeAdjustment = chkNullToInt(.Item("FeeAdjustment"))
-//MonthlyLeaseFee = chkNullToInt(.Item("MonthlyLeaseFee"))
+function SetLeaseSttMonth(LeaseSttMonth) {
+    var valExpiresDay = chkNull($get('cbo_ExpiresDay').value);
+    let day = (parseInt(valExpiresDay) < 10 ? +"0" + valExpiresDay.toString() : valExpiresDay.toString())
+    return LeaseSttMonth + day;
+}
+

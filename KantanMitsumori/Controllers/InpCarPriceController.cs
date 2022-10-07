@@ -40,7 +40,7 @@ namespace KantanMitsumori.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(RequestUpdateInpCarPrice requestData)
+        public  IActionResult Update(RequestUpdateInpCarPrice requestData)
         {
             // Create model for update car price
             var model = new RequestUpdateCarPrice();
