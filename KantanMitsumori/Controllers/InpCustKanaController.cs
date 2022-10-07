@@ -10,7 +10,7 @@ namespace KantanMitsumori.Controllers
         private readonly IInpCustKanaService _inpCustKanaService;
         private readonly ILogger<InpCustKanaController> _logger;
 
-        public InpCustKanaController(IConfiguration config, IInpCustKanaService inpCustKanaService, ILogger<InpCustKanaController> logger) : base(config)
+        public InpCustKanaController(IInpCustKanaService inpCustKanaService, ILogger<InpCustKanaController> logger) : base()
         {
             _inpCustKanaService = inpCustKanaService;
             _logger = logger;
@@ -36,7 +36,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpCustKana([FromForm] RequestUpdateInpCustKana requestData)
         {
-            var response = await _inpCustKanaService.UpdateInpCustKana(requestData);           
+            var response = await _inpCustKanaService.UpdateInpCustKana(requestData);
             return Ok(response);
         }
 

@@ -1,6 +1,8 @@
 ﻿using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.IService.ASEST;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace KantanMitsumori.Controllers
 {
@@ -8,11 +10,13 @@ namespace KantanMitsumori.Controllers
     {
         private readonly IPreExaminationService _preExaminationService;
         private readonly ILogger<PreExaminationController> _logger;
+        private readonly URLSettings _urlSettings;
 
-        public PreExaminationController(IConfiguration config, IPreExaminationService preExaminationService, ILogger<PreExaminationController> logger) : base(config)
+        public PreExaminationController(IPreExaminationService preExaminationService, ILogger<PreExaminationController> logger, IOptions<URLSettings> urlSettings) : base()
         {
             _preExaminationService = preExaminationService;
             _logger = logger;
+            _urlSettings = urlSettings.Value;
         }
 
         public IActionResult Index()
@@ -28,7 +32,7 @@ namespace KantanMitsumori.Controllers
             {
                 return ErrorAction(response);
             }
-            ViewBag.PointReQuestPreExamination = _commonSettings.URLSettings.PointReQuestPreExamination;
+            ViewBag.PointReQuestPreExamination = _urlSettings.PointReQuestPreExamination;
             return View(response.Data);
         }
     }

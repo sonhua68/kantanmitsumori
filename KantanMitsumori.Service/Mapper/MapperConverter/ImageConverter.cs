@@ -1,11 +1,4 @@
 ﻿using AutoMapper;
-using KantanMitsumori.Helper.CommonFuncs;
-using KantanMitsumori.Helper.Settings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service.Mapper.MapperConverter
 {
@@ -18,9 +11,9 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         {
             try
             {
-                var commonSettings = context.Items["commonSettings"] as CommonSettings;
+                var defaultImgPath = context.Items["pathSetting"] as string;
                 if (string.IsNullOrEmpty(imgFilePath) || !File.Exists(imgFilePath))
-                    return ConverterHelper.LoadImage(commonSettings!.PhysicalPathSettings.def_DmyImg);
+                    return ConverterHelper.LoadImage(defaultImgPath!);
                 return ConverterHelper.LoadImage(imgFilePath);
             }
             catch

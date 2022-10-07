@@ -2,8 +2,6 @@
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
-using KantanMitsumori.Model.Response;
-using KantanMitsumori.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -16,7 +14,7 @@ namespace KantanMitsumori.Controllers
         private readonly IInpInitValService _inpInitValService;
         private readonly IEstimateService _estimateService;
 
-        public InpInitValController(IEstMainService appService, IInpInitValService inpInitValService, IEstimateService estimateService, IConfiguration config, ILogger<InpInitValController> logger) : base(config)
+        public InpInitValController(IEstMainService appService, IInpInitValService inpInitValService, IEstimateService estimateService, ILogger<InpInitValController> logger) : base()
         {
             _appService = appService;
             _logger = logger;
@@ -43,8 +41,8 @@ namespace KantanMitsumori.Controllers
 
         [HttpGet]
         public IActionResult GetUserDefData()
-        {            
-            var response = _inpInitValService.GetUserDefData(_logToken.UserNo!);           
+        {
+            var response = _inpInitValService.GetUserDefData(_logToken.UserNo!);
             return Ok(response);
         }
 
@@ -52,7 +50,7 @@ namespace KantanMitsumori.Controllers
         public async Task<IActionResult> UpdateInpInitVal([FromForm] RequestUpdateInpInitVal requestData)
         {
             requestData.sesMode = _logToken.sesMode;
-            var response = await _inpInitValService.UpdateInpInitVal(requestData, _logToken);          
+            var response = await _inpInitValService.UpdateInpInitVal(requestData, _logToken);
             return Ok(response);
         }
 

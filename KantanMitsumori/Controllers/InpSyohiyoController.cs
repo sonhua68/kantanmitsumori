@@ -10,7 +10,7 @@ namespace KantanMitsumori.Controllers
         private readonly IInpSyohiyoService _inpSyohiyoService;
         private readonly ILogger<InpSyohiyoController> _logger;
 
-        public InpSyohiyoController(IConfiguration config, IInpSyohiyoService inpSyohiyoService, ILogger<InpSyohiyoController> logger) : base(config)
+        public InpSyohiyoController(IInpSyohiyoService inpSyohiyoService, ILogger<InpSyohiyoController> logger) : base()
         {
             _inpSyohiyoService = inpSyohiyoService;
             _logger = logger;
@@ -32,7 +32,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpSyohiyo([FromForm] RequestUpdateInpSyohiyo requestData)
         {
-            var response = await _inpSyohiyoService.UpdateInpSyohiyo(requestData);          
+            var response = await _inpSyohiyoService.UpdateInpSyohiyo(requestData);
             return Ok(response);
         }
     }

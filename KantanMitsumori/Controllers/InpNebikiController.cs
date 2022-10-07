@@ -11,7 +11,7 @@ namespace KantanMitsumori.Controllers
         private readonly IEstMainService _appService;
         private readonly IEstimateService _estimateService;
         private readonly ILogger<InpNebikiController> _logger;
-        public InpNebikiController(IEstMainService appService, IEstimateService estimateService, IConfiguration config, ILogger<InpNebikiController> logger) : base(config)
+        public InpNebikiController(IEstMainService appService, IEstimateService estimateService, ILogger<InpNebikiController> logger) : base()
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -36,7 +36,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpNebiki([FromForm] RequestUpdateInpNebiki requestData)
         {
-            var response = await _estimateService.UpdateInpNebiki(requestData);           
+            var response = await _estimateService.UpdateInpNebiki(requestData);
             return Ok(response);
         }
         #endregion InpNebiki

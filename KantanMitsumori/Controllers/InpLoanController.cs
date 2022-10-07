@@ -12,7 +12,7 @@ namespace KantanMitsumori.Controllers
         private readonly IEstimateService _estimateService;
         private readonly IInpLoanService _inpLoanService;
         private readonly ILogger<InpLoanController> _logger;
-        public InpLoanController(IEstMainService appService, IEstimateService estimateService, IConfiguration config, IInpLoanService inpLoanService, ILogger<InpLoanController> logger) : base(config)
+        public InpLoanController(IEstMainService appService, IEstimateService estimateService, IInpLoanService inpLoanService, ILogger<InpLoanController> logger) : base()
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -41,14 +41,14 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public IActionResult CalInpLoan([FromForm] RequestCalInpLoan requestData)
         {
-            var response = _inpLoanService.CalInpLoan(requestData);          
+            var response = _inpLoanService.CalInpLoan(requestData);
             return Ok(response);
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateInpLoan([FromForm] RequestUpdateInpLoan requestData)
         {
-            var response = await _inpLoanService.UpdateInputLoan(requestData);          
+            var response = await _inpLoanService.UpdateInputLoan(requestData);
             return Ok(response);
         }
         #endregion HoaiPhong

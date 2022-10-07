@@ -14,7 +14,7 @@ namespace KantanMitsumori.Controllers
         private readonly IReportService _reportService;
         private readonly ILogger<ReportController> _logger;
         private readonly IMapper _mapper;
-        public ReportController(IReportService reportService, IConfiguration config, ILogger<ReportController> logger, IMapper mapper) : base(config)
+        public ReportController(IReportService reportService, ILogger<ReportController> logger, IMapper mapper) : base()
         {
             _reportService = reportService;
             _logger = logger;
@@ -34,7 +34,7 @@ namespace KantanMitsumori.Controllers
             model = new RequestReport()
             {
                 EstNo = "22092300054",
-                EstSubNo = "01",                
+                EstSubNo = "01",
                 CustNm_forPrint = "DANG PHAM",
                 CustZip_forPrint = "702201",
                 CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
@@ -46,14 +46,14 @@ namespace KantanMitsumori.Controllers
 
             // Generate report
             var result = _reportService.GenerateReport(model);
-            
+
             // Process result
 
             if (result.ResultStatus != 0)
                 return ErrorAction(result);
 
             var responseModel = result.Data;
-            if(responseModel == null)
+            if (responseModel == null)
                 return ErrorAction(ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S)));
 
             return File(responseModel.Data, responseModel.ContentType, responseModel.Name);
@@ -73,13 +73,13 @@ namespace KantanMitsumori.Controllers
             model = new RequestReport()
             {
                 EstNo = "22092300054",
-                EstSubNo = "01",                
+                EstSubNo = "01",
                 CustNm_forPrint = "DANG PHAM",
                 CustZip_forPrint = "702201",
                 CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
                 CustTel_forPrint = "028-3801-5151"
             };
-            
+
             // Set report type
             model.ReportType = ReportType.Order;
 
