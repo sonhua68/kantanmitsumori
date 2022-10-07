@@ -15,7 +15,6 @@ namespace KantanMitsumori.Attribute
         private readonly RequestDelegate _next;
         private readonly JwtSettings _jwtSettings;
         public LogToken _logToken;
-        private List<string> optionListController = new List<string> { "Home", "SelCar", "SelGrd", "SerEst" };
         private const string COOKIES = "CookiesASEST";
 
         public JwtMiddleware(RequestDelegate next, IOptions<JwtSettings> jwtSettings)

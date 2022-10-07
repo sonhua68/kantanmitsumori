@@ -2,6 +2,6 @@
 {
     public class DataSettings
     {
-        public string def_MakerName { get; set; }
+        public string MakerName { get; set; }
     }
 }

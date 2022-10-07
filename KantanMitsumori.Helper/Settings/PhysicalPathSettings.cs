@@ -2,10 +2,10 @@
 {
     public class PhysicalPathSettings
     {
-        public string def_DmyImg { get; set; }
-        public string def_ExclusionListOfAutoCalc { get; set; }
-        public string def_BizFilePdf { get; set; }
-        public string def_CarImgPlace { get; set; }
+        public string DmyImg { get; set; }
+        public string ExclusionListOfAutoCalc { get; set; }
+        public string BizFilePdf { get; set; }
+        public string CarImgPlace { get; set; }
 
     }
 }

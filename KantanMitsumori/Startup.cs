@@ -42,7 +42,12 @@ namespace KantanMitsumori
             services.AddBusinessServices();
             services.AddHelperServices();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.Configure<CommonSettings>(Configuration);
+            services.Configure<JwtSettings>(Configuration);
+            services.Configure<ConnectionStrings>(Configuration);
+            services.Configure<DataSettings>(Configuration);
+            services.Configure<PhysicalPathSettings>(Configuration);
+            services.Configure<TestSettings>(Configuration);
+            services.Configure<URLSettings>(Configuration);
         }
 
 

@@ -16,15 +16,15 @@ namespace KantanMitsumori.Service.Helper
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly CommonSettings _commonSettings;
         private readonly IHttpClientFactory _httpClientFactory;
-        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, IOptions<CommonSettings> commonSettings)
+        private readonly PhysicalPathSettings _physicalPathSettings;
+        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, IOptions<PhysicalPathSettings> physicalPathSetting)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
-            _commonSettings = commonSettings.Value;
             _httpClientFactory = httpClientFactory;
+            _physicalPathSettings = physicalPathSetting.Value;
         }
 
         #region Constant Initialization

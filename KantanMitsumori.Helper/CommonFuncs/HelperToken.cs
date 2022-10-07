@@ -56,8 +56,8 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             var currentDate = DateTime.Now;
-            var RefreshExpires = settings.AccessExpires;
-            TimeSpan time = TimeSpan.Parse(RefreshExpires);
+            var AccessExpires = settings.AccessExpires;
+            TimeSpan time = TimeSpan.Parse(AccessExpires);
             var token = new JwtSecurityToken(
                 issuer: settings.Issuer,
                 audience: settings.Issuer,

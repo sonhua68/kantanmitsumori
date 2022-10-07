@@ -25,8 +25,9 @@ namespace KantanMitsumori.Service.ASEST
         private LogToken valToken;
         private readonly CommonFuncHelper _commonFuncHelper;
         private readonly CommonEstimate _commonEst;
-        private readonly CommonSettings _commonSettings;
-        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst, IOptions<CommonSettings> commonSettings)
+        private readonly JwtSettings _jwtSettings;
+        private readonly DataSettings _dataSettings;
+        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst, DataSettings dataSettings, JwtSettings jwtSettings)
         {
             _mapper = mapper;
             _logger = logger;
@@ -35,7 +36,8 @@ namespace KantanMitsumori.Service.ASEST
             _commonFuncHelper = commonFuncHelper;
             _commonEst = commonEst;
             _unitOfWorkIDE = unitOfWorkIDE;
-            _commonSettings = commonSettings.Value;
+            _jwtSettings = jwtSettings;
+            _dataSettings = dataSettings;
         }
 
         public UserModel? getUserName(string userNo)
@@ -716,7 +718,7 @@ namespace KantanMitsumori.Service.ASEST
         }
         private void SetvalueToken()
         {
-            var token = HelperToken.GenerateJsonToken(_commonSettings.JwtSettings, valToken);
+            var token = HelperToken.GenerateJsonToken(_jwtSettings, valToken);
             valToken.Token = token;
         }
 
@@ -974,7 +976,7 @@ namespace KantanMitsumori.Service.ASEST
             var regYear = int.Parse(CommonFunction.Left(firstRegYm, 4));
             var firstYear = regYear + LeaseTargetsID1!.Restriction;
             var zenkaku = StringWidthHelper.ToFullWidth(makerName);
-            var arrayMakerName = _commonSettings.DataSettings.def_MakerName;
+            var arrayMakerName = _dataSettings.MakerName;
             var cmakerName = arrayMakerName.Contains(zenkaku);
             if (nowOdometer > LeaseTargetsID2!.Restriction || firstYear < year || cmakerName == false)
             {

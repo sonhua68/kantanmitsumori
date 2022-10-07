@@ -52,7 +52,7 @@ namespace KantanMitsumori.Controllers
                         }));
                     return;
                 }
-                else if (_logToken != null)
+                else
                 {
                     _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
                     _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
