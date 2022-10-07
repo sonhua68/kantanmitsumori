@@ -8,12 +8,10 @@ namespace KantanMitsumori.Controllers
     public class InpCustKanaController : BaseController
     {
         private readonly IInpCustKanaService _inpCustKanaService;
-        private readonly ILogger<InpCustKanaController> _logger;
 
-        public InpCustKanaController(IInpCustKanaService inpCustKanaService, ILogger<InpCustKanaController> logger) : base()
+        public InpCustKanaController(IInpCustKanaService inpCustKanaService)
         {
             _inpCustKanaService = inpCustKanaService;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -25,7 +23,7 @@ namespace KantanMitsumori.Controllers
 
             var response = _inpCustKanaService.getInfoCust(estNo, estSubNo);
 
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }

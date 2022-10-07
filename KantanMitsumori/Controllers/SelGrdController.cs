@@ -12,16 +12,12 @@ namespace KantanMitsumori.Controllers
 {
     public class SelGrdController : BaseController
     {
-        private readonly IEstMainService _appService;
-        private readonly ILogger<SelGrdController> _logger;
         private readonly ISelCarService _selCarService;
         private readonly IEstMainService _estMainService;
         private readonly JwtSettings _jwtSettings;
 
-        public SelGrdController(IEstMainService appService, ISelCarService selCarService, IEstMainService estMainService, ILogger<SelGrdController> logger, IOptions<JwtSettings> jwtSettings) : base()
+        public SelGrdController(ISelCarService selCarService, IEstMainService estMainService, IOptions<JwtSettings> jwtSettings)
         {
-            _appService = appService;
-            _logger = logger;
             _selCarService = selCarService;
             _estMainService = estMainService;
             _jwtSettings = jwtSettings.Value;
@@ -32,7 +28,7 @@ namespace KantanMitsumori.Controllers
         {
             var response = _selCarService.GetListRuiBetSu(requestData);
 
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return Ok(response);
             }

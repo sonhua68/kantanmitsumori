@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model.Request;
@@ -12,12 +13,11 @@ namespace KantanMitsumori.Controllers
     public class ReportController : BaseController
     {
         private readonly IReportService _reportService;
-        private readonly ILogger<ReportController> _logger;
         private readonly IMapper _mapper;
-        public ReportController(IReportService reportService, ILogger<ReportController> logger, IMapper mapper) : base()
+
+        public ReportController(IReportService reportService, IMapper mapper)
         {
             _reportService = reportService;
-            _logger = logger;
             _mapper = mapper;
         }
 
@@ -49,7 +49,7 @@ namespace KantanMitsumori.Controllers
 
             // Process result
 
-            if (result.ResultStatus != 0)
+            if (result.ResultStatus != (int)enResponse.isSuccess)
                 return ErrorAction(result);
 
             var responseModel = result.Data;
@@ -87,7 +87,7 @@ namespace KantanMitsumori.Controllers
             var result = _reportService.GenerateReport(model);
 
             // Process result
-            if (result.ResultStatus != 0)
+            if (result.ResultStatus != (int)enResponse.isSuccess)
                 return ErrorAction(result);
 
             var responseModel = result.Data;
