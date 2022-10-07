@@ -1,11 +1,14 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Models;
 using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
 
 namespace KantanMitsumori.Controllers
 {
@@ -15,7 +18,7 @@ namespace KantanMitsumori.Controllers
         private const string COOKIES = "CookiesASEST";
         //public CommonSettings _commonSettings;
         private List<string> optionListController = new List<string> { "Home", "SelCar", "SelGrd", "SerEst" };
-        public LogToken _logToken;
+        public LogToken? _logToken;
 
         public BaseController()
         {
@@ -24,42 +27,42 @@ namespace KantanMitsumori.Controllers
 
         }
 
-        //public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
-        //{
-        //    var pramQuery = Request.Query.Count == 0;
-        //    var cookies = Request.Cookies[COOKIES]!;
-        //    string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
-        //    string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
-        //    if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && pramQuery))
-        //    {
-        //        await next();
-        //    }
-        //    else
-        //    {
-        //        _logToken = HelperToken.EncodingToken(_commonSettings.JwtSettings, cookies!)!;
-        //        if (_logToken == null)
-        //        {
-        //            if (!actionName.Contains("Index"))
-        //                filterContext.Result = ErrorAction();
-        //            else
-        //                filterContext.Result = new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
-        //                {
-        //                    messageCode = HelperMessage.SMAI001P,
-        //                    messageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P)
-        //                }));
-        //            return;
-        //        }
-        //        else if (_logToken != null)
-        //        {
-        //            _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
-        //            _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
-        //            _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
-        //            _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
-        //        }
-        //        await next();
-        //    }
+        public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
+        {
+            var pramQuery = Request.Query.Count == 0;
+            _logToken = filterContext.HttpContext.Items["Authorized"] as LogToken;
+            string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
+            string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
+            if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && pramQuery))
+            {
+                await next();
+            }
+            else
+            {
+                
+                if (_logToken == null)
+                {
+                    if (!actionName.Contains("Index"))
+                        filterContext.Result = ErrorAction();
+                    else
+                        filterContext.Result = new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
+                        {
+                            messageCode = HelperMessage.SMAI001P,
+                            messageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P)
+                        }));
+                    return;
+                }
+                else if (_logToken != null)
+                {
+                    _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
+                    _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
+                    _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
+                    _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
+                }
+                await next();
+            }
 
-        //}
+        }
 
         public IActionResult ErrorAction<T>(ResponseBase<T> response, int isUnexpectedErr = 0)
         {

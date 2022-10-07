@@ -66,7 +66,7 @@ namespace KantanMitsumori
             app.UseAuthentication();
             //app.UseSession();
 
-            app.UseMiddleware<ActionFilterMiddleware>();
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
