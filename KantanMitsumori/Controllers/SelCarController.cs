@@ -14,15 +14,15 @@ namespace KantanMitsumori.Controllers
         private readonly ILogger<SelCarController> _logger;
         private readonly ISelCarService _selCarService;
         private readonly IEstMainService _estMainService;
-        private readonly CommonSettings _commonSettings;
+        private readonly JwtSettings _jwtSettings;
 
-        public SelCarController(IEstMainService appService, ISelCarService selCarService, IEstMainService estMainService, ILogger<SelCarController> logger, IOptions<CommonSettings> commonSettings) : base()
+        public SelCarController(IEstMainService appService, ISelCarService selCarService, IEstMainService estMainService, ILogger<SelCarController> logger, IOptions<JwtSettings> jwtSettings) : base()
         {
             _appService = appService;
             _logger = logger;
             _selCarService = selCarService;
             _estMainService = estMainService;
-            _commonSettings = commonSettings.Value;
+            _jwtSettings = jwtSettings.Value;
         }
 
         #region SelCar 
@@ -84,7 +84,7 @@ namespace KantanMitsumori.Controllers
             {
                 return Ok(response);
             }
-            setTokenCookie(_commonSettings.JwtSettings.AccessExpires, response.Data!.AccessToken);
+            setTokenCookie(_jwtSettings.AccessExpires, response.Data!.AccessToken);
             return Ok(response);
         }
 

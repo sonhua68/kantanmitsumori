@@ -16,14 +16,14 @@ namespace KantanMitsumori.Controllers
         private readonly IEstMainService _appService;
         private readonly ILogger<HomeController> _logger;
         private readonly IEstimateService _estimateService;
-        private readonly CommonSettings _commonSettings;
+        private readonly JwtSettings _jwtSettings;
 
-        public EstmainController(IEstMainService appService, IEstimateService estimateService, ILogger<HomeController> logger, IOptions<CommonSettings> commonSettings) : base()
+        public EstmainController(IEstMainService appService, IEstimateService estimateService, ILogger<HomeController> logger, IOptions<JwtSettings> jwtSettings) : base()
         {
             _appService = appService;
             _estimateService = estimateService;
             _logger = logger;
-            _commonSettings = commonSettings.Value;
+            _jwtSettings = jwtSettings.Value;
         }
         public async Task<IActionResult> Index([FromQuery] RequestActionModel requestAction, [FromForm] RequestHeaderModel request)
         {
@@ -37,7 +37,7 @@ namespace KantanMitsumori.Controllers
                 response = await _appService.getEstMain(requestAction, request);
                 if (response.ResultStatus == (int)enResponse.isSuccess)
                 {
-                    setTokenCookie(_commonSettings.JwtSettings.AccessExpires, response.Data!.AccessToken);
+                    setTokenCookie(_jwtSettings.AccessExpires, response.Data!.AccessToken);
                 }
             }
             if (response.ResultStatus == (int)enResponse.isError)

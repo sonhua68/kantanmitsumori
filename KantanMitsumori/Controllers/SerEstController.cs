@@ -17,16 +17,16 @@ namespace KantanMitsumori.Controllers
         private readonly ISelCarService _selCarService;
         private readonly IEstimateService _estimateService;
         private readonly IEstMainService _estMainService;
-        private readonly CommonSettings _commonSettings;
+        private readonly JwtSettings _jwtSettings;
 
-        public SerEstController(IEstMainService appService, ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, ILogger<SerEstController> logger, IOptions<CommonSettings> commonSettings) : base()
+        public SerEstController(IEstMainService appService, ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, ILogger<SerEstController> logger, IOptions<JwtSettings> jwtSettings) : base()
         {
             _appService = appService;
             _logger = logger;
             _selCarService = selCarService;
             _estimateService = estimateService;
             _estMainService = estMainService;
-            _commonSettings = commonSettings.Value;
+            _jwtSettings = jwtSettings.Value;
         }
 
         #region SerEstController      
@@ -81,7 +81,7 @@ namespace KantanMitsumori.Controllers
             {
                 return Ok(response);
             }
-            setTokenCookie(_commonSettings.JwtSettings.AccessExpires, response.Data!);
+            setTokenCookie(_jwtSettings.AccessExpires, response.Data!);
             return Ok(response);
         }
         [HttpPost]
@@ -92,7 +92,7 @@ namespace KantanMitsumori.Controllers
             {
                 return Ok(response);
             }
-            setTokenCookie(_commonSettings.JwtSettings.AccessExpires, response.Data!);
+            setTokenCookie(_jwtSettings.AccessExpires, response.Data!);
             return Ok(response);
         }
         #endregion SerEstController

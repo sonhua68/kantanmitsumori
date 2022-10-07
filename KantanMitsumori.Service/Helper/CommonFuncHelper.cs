@@ -264,7 +264,7 @@ namespace KantanMitsumori.Service.Helper
                 Uri uri = new Uri(url);
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
-                strCarImgPlace = _commonSettings.PhysicalPathSettings.def_CarImgPlace;
+                strCarImgPlace = _physicalPathSettings.CarImgPlace;
                 strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMM") + "/";
                 if (!Directory.Exists(strCarImgPlace))
                 {
@@ -375,7 +375,7 @@ namespace KantanMitsumori.Service.Helper
             string[] arrExclusionList;
             try
             {
-                string strExclusionList = File.ReadAllText(_commonSettings.PhysicalPathSettings.def_ExclusionListOfAutoCalc, enc);
+                string strExclusionList = File.ReadAllText(_physicalPathSettings.ExclusionListOfAutoCalc, enc);
                 arrExclusionList = strExclusionList.Split("\r\n");
             }
             catch (Exception ex)

@@ -2,7 +2,7 @@
 {
     public class ConnectionStrings
     {
-        public string? AsestConnection { get; set; }
-        public string? IDEConnection { get; set; }
+        public string AsestConnection { get; set; }
+        public string IDEConnection { get; set; }
     }
 }

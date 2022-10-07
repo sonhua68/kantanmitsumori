@@ -10,13 +10,13 @@ namespace KantanMitsumori.Controllers
     {
         private readonly IPreExaminationService _preExaminationService;
         private readonly ILogger<PreExaminationController> _logger;
-        private readonly CommonSettings _commonSettings;
+        private readonly URLSettings _urlSettings;
 
-        public PreExaminationController(IPreExaminationService preExaminationService, ILogger<PreExaminationController> logger, IOptions<CommonSettings> commonSettings) : base()
+        public PreExaminationController(IPreExaminationService preExaminationService, ILogger<PreExaminationController> logger, IOptions<URLSettings> urlSettings) : base()
         {
             _preExaminationService = preExaminationService;
             _logger = logger;
-            _commonSettings = commonSettings.Value;
+            _urlSettings = urlSettings.Value;
         }
 
         public IActionResult Index()
@@ -32,7 +32,7 @@ namespace KantanMitsumori.Controllers
             {
                 return ErrorAction(response);
             }
-            ViewBag.PointReQuestPreExamination = _commonSettings.URLSettings.PointReQuestPreExamination;
+            ViewBag.PointReQuestPreExamination = _urlSettings.PointReQuestPreExamination;
             return View(response.Data);
         }
     }

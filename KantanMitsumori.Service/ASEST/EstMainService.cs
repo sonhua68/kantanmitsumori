@@ -22,12 +22,13 @@ namespace KantanMitsumori.Service.ASEST
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUnitOfWorkIDE _unitOfWorkIDE;
-        private LogToken valToken;
         private readonly CommonFuncHelper _commonFuncHelper;
         private readonly CommonEstimate _commonEst;
         private readonly JwtSettings _jwtSettings;
         private readonly DataSettings _dataSettings;
-        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst, DataSettings dataSettings, JwtSettings jwtSettings)
+        private LogToken valToken;
+
+        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst, IOptions<DataSettings> dataSettings, IOptions<JwtSettings> jwtSettings)
         {
             _mapper = mapper;
             _logger = logger;
@@ -36,8 +37,8 @@ namespace KantanMitsumori.Service.ASEST
             _commonFuncHelper = commonFuncHelper;
             _commonEst = commonEst;
             _unitOfWorkIDE = unitOfWorkIDE;
-            _jwtSettings = jwtSettings;
-            _dataSettings = dataSettings;
+            _jwtSettings = jwtSettings.Value;
+            _dataSettings = dataSettings.Value;
         }
 
         public UserModel? getUserName(string userNo)
