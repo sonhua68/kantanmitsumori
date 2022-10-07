@@ -12,8 +12,8 @@ namespace KantanMitsumori.Controllers
         private readonly IEstimateService _estimateService;
         private readonly IInpZeiHokenService _inpZeiHokenService;
         private readonly ILogger<InpZeiHokenController> _logger;
-    
-        public InpZeiHokenController(IEstMainService appService, IEstimateService estimateService, IConfiguration config, IInpZeiHokenService inpZeiHokenService, ILogger<InpZeiHokenController> logger) : base(config)
+
+        public InpZeiHokenController(IEstMainService appService, IEstimateService estimateService, IInpZeiHokenService inpZeiHokenService, ILogger<InpZeiHokenController> logger) : base()
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -40,20 +40,20 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpZeiHoken([FromForm] RequestUpdateInpZeiHoken requestData)
         {
-            var response = await _estimateService.UpdateInpZeiHoken(requestData);            
+            var response = await _estimateService.UpdateInpZeiHoken(requestData);
             return Ok(response);
         }
 
         [HttpPost]
         public IActionResult calcCarTax(RequestInpZeiHoken requestData)
         {
-            var response = _inpZeiHokenService.calcCarTax(requestData);           
+            var response = _inpZeiHokenService.calcCarTax(requestData);
             return Ok(response);
         }
         [HttpPost]
         public IActionResult calcJibai(RequestInpZeiHoken requestData)
         {
-            var response = _inpZeiHokenService.calcJibai(requestData);           
+            var response = _inpZeiHokenService.calcJibai(requestData);
             return Ok(response);
         }
         #endregion InpZeiHoken

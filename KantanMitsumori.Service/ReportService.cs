@@ -4,6 +4,7 @@ using GrapeCity.ActiveReports.Export.Pdf.Section;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
@@ -13,10 +14,9 @@ using KantanMitsumori.Model.Response.Report;
 using KantanMitsumori.Service.Helper;
 using KantanMitsumori.Service.Mapper.MapperConverter;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 using System.Xml;
-using KantanMitsumori.Service.Mapper.MapperConverter;
-using KantanMitsumori.Helper.Settings;
 
 namespace KantanMitsumori.Service
 {
@@ -29,14 +29,14 @@ namespace KantanMitsumori.Service
         private readonly HelperMapper _helperMapper;
         private readonly CommonSettings _commonSettings;
 
-        public ReportService(IMapper mapper, ILogger<IReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper, CommonSettings commonSettings)
+        public ReportService(IMapper mapper, ILogger<IReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper, IOptions<CommonSettings> commonSettings)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _unitOfWorkIDE = unitOfWorkIDE;
-            _helperMapper = helperMapper;            
-            _commonSettings = commonSettings;
+            _helperMapper = helperMapper;
+            _commonSettings = commonSettings.Value;
         }
 
         public ResponseBase<ReportFileModel> GenerateReport(RequestReport model)
@@ -111,7 +111,7 @@ namespace KantanMitsumori.Service
                 , o =>
                 {
                     o.Items["estSubEntity"] = estSubEntity;
-                    o.Items["sysEntity"] = sysEntity;                    
+                    o.Items["sysEntity"] = sysEntity;
                     o.Items["requestReport"] = input;
                     o.Items["commonSettings"] = _commonSettings;
                 });
@@ -119,7 +119,7 @@ namespace KantanMitsumori.Service
                 , o =>
                 {
                     o.Items["estEntity"] = estEntity;
-                    o.Items["sysEntity"] = sysEntity;                    
+                    o.Items["sysEntity"] = sysEntity;
                     o.Items["requestReport"] = input;
                     o.Items["commonSettings"] = _commonSettings;
                 });

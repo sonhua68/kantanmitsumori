@@ -12,6 +12,7 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace KantanMitsumori.Service.ASEST
 {
@@ -22,10 +23,10 @@ namespace KantanMitsumori.Service.ASEST
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUnitOfWorkIDE _unitOfWorkIDE;
         private LogToken valToken;
-        private CommonFuncHelper _commonFuncHelper;
-        private CommonEstimate _commonEst;
-        private CommonSettings _commonSettings;
-        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst, CommonSettings commonSettings)
+        private readonly CommonFuncHelper _commonFuncHelper;
+        private readonly CommonEstimate _commonEst;
+        private readonly CommonSettings _commonSettings;
+        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst, IOptions<CommonSettings> commonSettings)
         {
             _mapper = mapper;
             _logger = logger;
@@ -34,7 +35,7 @@ namespace KantanMitsumori.Service.ASEST
             _commonFuncHelper = commonFuncHelper;
             _commonEst = commonEst;
             _unitOfWorkIDE = unitOfWorkIDE;
-            _commonSettings = commonSettings;
+            _commonSettings = commonSettings.Value;
         }
 
         public UserModel? getUserName(string userNo)

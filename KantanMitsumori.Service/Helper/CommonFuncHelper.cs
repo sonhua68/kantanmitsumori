@@ -6,6 +6,7 @@ using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Text;
 
 namespace KantanMitsumori.Service.Helper
@@ -17,12 +18,12 @@ namespace KantanMitsumori.Service.Helper
         private readonly IUnitOfWork _unitOfWork;
         private readonly CommonSettings _commonSettings;
         private readonly IHttpClientFactory _httpClientFactory;
-        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, CommonSettings commonSettings)
+        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, IOptions<CommonSettings> commonSettings)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
-            _commonSettings = commonSettings; 
+            _commonSettings = commonSettings.Value;
             _httpClientFactory = httpClientFactory;
         }
 

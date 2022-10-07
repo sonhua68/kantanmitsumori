@@ -1,6 +1,6 @@
-﻿using KantanMitsumori.DataAccess;
+﻿using KantanMitsumori.Attribute;
+using KantanMitsumori.DataAccess;
 using KantanMitsumori.Helper;
-using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure;
 using KantanMitsumori.Service;
@@ -36,12 +36,13 @@ namespace KantanMitsumori
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
 
-            );            
+            );
             services.AddUnitOfWork();
             services.AddHttpClient();
             services.AddBusinessServices();
             services.AddHelperServices();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.Configure<CommonSettings>(Configuration);
         }
 
 
@@ -64,6 +65,8 @@ namespace KantanMitsumori
 
             app.UseAuthentication();
             //app.UseSession();
+
+            app.UseMiddleware<ActionFilterMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

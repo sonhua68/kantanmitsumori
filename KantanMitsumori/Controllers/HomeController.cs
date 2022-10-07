@@ -11,7 +11,7 @@ namespace KantanMitsumori.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IEstimateService _estimateService;
 
-        public HomeController(IEstMainService appService, IEstimateService estimateService, IConfiguration config, ILogger<HomeController> logger) : base(config)
+        public HomeController(IEstMainService appService, IEstimateService estimateService, ILogger<HomeController> logger) : base()
         {
             _appService = appService;
             _estimateService = estimateService;

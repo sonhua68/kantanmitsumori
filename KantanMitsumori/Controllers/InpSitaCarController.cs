@@ -10,7 +10,7 @@ namespace KantanMitsumori.Controllers
         private readonly IInpSitaCarService _inpSitaCarService;
         private readonly ILogger<InpSitaCarController> _logger;
 
-        public InpSitaCarController(IConfiguration config, IInpSitaCarService inpSitaCarService, ILogger<InpSitaCarController> logger) : base(config)
+        public InpSitaCarController(IInpSitaCarService inpSitaCarService, ILogger<InpSitaCarController> logger) : base()
         {
             _inpSitaCarService = inpSitaCarService;
             _logger = logger;
@@ -36,7 +36,7 @@ namespace KantanMitsumori.Controllers
         [HttpGet]
         public IActionResult GetListRikuji()
         {
-            var response = _inpSitaCarService.GetListOffice();           
+            var response = _inpSitaCarService.GetListOffice();
             return Ok(response);
         }
 
@@ -44,7 +44,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpSitaCar([FromForm] RequestUpdateInpSitaCar requestData)
         {
-            var response = await _inpSitaCarService.UpdateInpSitaCar(requestData);          
+            var response = await _inpSitaCarService.UpdateInpSitaCar(requestData);
             return Ok(response);
         }
     }

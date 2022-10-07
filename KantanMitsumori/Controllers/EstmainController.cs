@@ -1,10 +1,12 @@
 ﻿using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace KantanMitsumori.Controllers
 {
@@ -14,12 +16,14 @@ namespace KantanMitsumori.Controllers
         private readonly IEstMainService _appService;
         private readonly ILogger<HomeController> _logger;
         private readonly IEstimateService _estimateService;
+        private readonly CommonSettings _commonSettings;
 
-        public EstmainController(IEstMainService appService, IEstimateService estimateService, IConfiguration config, ILogger<HomeController> logger) : base(config)
+        public EstmainController(IEstMainService appService, IEstimateService estimateService, ILogger<HomeController> logger, IOptions<CommonSettings> commonSettings) : base()
         {
             _appService = appService;
             _estimateService = estimateService;
             _logger = logger;
+            _commonSettings = commonSettings.Value;
         }
         public async Task<IActionResult> Index([FromQuery] RequestActionModel requestAction, [FromForm] RequestHeaderModel request)
         {
@@ -33,7 +37,7 @@ namespace KantanMitsumori.Controllers
                 response = await _appService.getEstMain(requestAction, request);
                 if (response.ResultStatus == (int)enResponse.isSuccess)
                 {
-                    setTokenCookie(response.Data!.AccessToken);
+                    setTokenCookie(_commonSettings.JwtSettings.AccessExpires, response.Data!.AccessToken);
                 }
             }
             if (response.ResultStatus == (int)enResponse.isError)

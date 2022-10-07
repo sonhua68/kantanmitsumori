@@ -11,7 +11,7 @@ namespace KantanMitsumori.Controllers
         private readonly IEstMainService _appService;
         private readonly IEstimateService _estimateService;
         private readonly ILogger<InpHanbaitenController> _logger;
-        public InpHanbaitenController(IEstMainService appService, IConfiguration config, IEstimateService estimateService, ILogger<InpHanbaitenController> logger) : base(config)
+        public InpHanbaitenController(IEstMainService appService, IEstimateService estimateService, ILogger<InpHanbaitenController> logger) : base()
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -35,7 +35,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpHanbaiten([FromForm] RequestUpdateInpHanbaiten requestData)
         {
-            var response = await _estimateService.UpdateInpHanbaiten(requestData);          
+            var response = await _estimateService.UpdateInpHanbaiten(requestData);
             return Ok(response);
         }
         #endregion InpHanbaiten

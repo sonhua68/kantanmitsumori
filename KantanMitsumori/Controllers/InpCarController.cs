@@ -1,10 +1,7 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
-using KantanMitsumori.Helper.Enum;
+﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
-using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
-using KantanMitsumori.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -15,7 +12,7 @@ namespace KantanMitsumori.Controllers
         private readonly IEstMainService _appService;
         private readonly IEstimateService _estimateService;
         private readonly ILogger<InpCarController> _logger;
-        public InpCarController(IEstMainService appService, IEstimateService estimateService, IConfiguration config,  ILogger<InpCarController> logger):base(config)
+        public InpCarController(IEstMainService appService, IEstimateService estimateService, ILogger<InpCarController> logger) : base()
         {
             _appService = appService;
             _estimateService = estimateService;
@@ -23,7 +20,7 @@ namespace KantanMitsumori.Controllers
         }
         #region InpCar     
         public IActionResult Index()
-        {            
+        {
             RequestInp request = new RequestInp();
             request.EstNo = _logToken.sesEstNo;
             request.EstSubNo = _logToken.sesEstSubNo;
@@ -35,12 +32,12 @@ namespace KantanMitsumori.Controllers
                 return ErrorAction(response);
             }
             return View(response.Data);
-        }  
+        }
 
         [HttpPost]
         public async Task<IActionResult> UpdateInputCar([FromForm] RequestUpdateInputCar requestData)
         {
-            var response = await _estimateService.UpdateInputCar(requestData);           
+            var response = await _estimateService.UpdateInputCar(requestData);
             return Ok(response);
         }
         #endregion InpCar
