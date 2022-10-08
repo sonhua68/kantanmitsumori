@@ -164,7 +164,8 @@ namespace KantanMitsumori.Service
                 data.ListUILog = _calLease._lstWriteLogUI;
                 data.PriceEnd = CommonFunction.setFormatCurrency(dPriceEnd, "");
                 saveLog(consumptionTax, model, estimates, dPrice, vehicleTaxPrice, priceInsurance, priceWeighTax, pricePromotional, pricetPropertyFeeIdemitsu, priceGuaranteeFee, priceNameChange, priceMantance, interest);
-                _logger.LogInformation("金利対象元本(A) ={0}", dPricePrincipalInterest);
+                _logger.LogInformation("金利対象元本(A)= {0}", dPricePrincipalInterest);
+                _calLease.addLogUI("金利対象元本(A)= " + dPricePrincipalInterest);
                 saveLogFinal(consumptionTax, dPriceEnd, dPriceMonthly, dPriceMonthNoTax, dPriceProcedure);
                 var priceLeaseFeeLowerLimit = PriceLeaseFeeLowerLimit();
                 if (dPriceEnd < priceLeaseFeeLowerLimit)
@@ -239,15 +240,15 @@ namespace KantanMitsumori.Service
             _logger.LogInformation("--------------");
             _logger.LogInformation("リース期間:{0} ", model.ContractTimes.ToString());
             _logger.LogInformation("--------------");
-            //_logger.LogInformation("初度登録月:{0} ", getFormatDayYMD(dHidFirstReg));
+            _logger.LogInformation("初度登録月:{0} ", CommonFunction.getFormatDayYMD(CommonFunction.Left(model.FirstReg!, 6)));
             _logger.LogInformation("--------------");
-            //_logger.LogInformation("車検満了日（予定日）: {0}", getFormatDayYMD(dHidExpiresDate));
+            _logger.LogInformation("車検満了日（予定日）: {0}", CommonFunction.getFormatDayYMD(model.ExpiresDate!));
             _logger.LogInformation("--------------");
-            //_logger.LogInformation("リース開始月: {0}", getFormatDayYMD(dHidLeaseSttMonth));
+            _logger.LogInformation("リース開始月: {0}", CommonFunction.getFormatDayYMD(CommonFunction.Left(model.LeaseSttMonth!, 6)));
             _logger.LogInformation("--------------");
             _logger.LogInformation("リース開始日: {0}{1}", model.LeaseSttDay.toString(), "日");
             _logger.LogInformation("--------------");
-            //_logger.LogInformation("リース満了日: {0}", getFormatDayYMD(dHidLeaseExpirationDate));
+            _logger.LogInformation("リース満了日: {0}", CommonFunction.getFormatDayYMD(model.LeaseExpirationDate!));
             _logger.LogInformation("--------------");
             _logger.LogInformation("消費税率: {0}", _calLease.consumptionTax.ToString());
             if (_testSettings.IsShowLogUI == "True")
@@ -294,18 +295,19 @@ namespace KantanMitsumori.Service
                 _calLease.addLogUI("--------------");
                 _calLease.addLogUI("リース期間: " + model.ContractTimes.ToString());
                 _calLease.addLogUI("--------------");
-                //  _calLease.addLogUI("初度登録月:{0} ", getFormatDayYMD(dHidFirstReg));
-                _logger.LogInformation("--------------");
-                //  _calLease.addLogUI("車検満了日（予定日）: {0}", getFormatDayYMD(dHidExpiresDate));
-                _logger.LogInformation("--------------");
-                //  _calLease.addLogUI("リース開始月: {0}", getFormatDayYMD(dHidLeaseSttMonth));
+                _calLease.addLogUI("初度登録月: " + CommonFunction.getFormatDayYMD(CommonFunction.Left(model.FirstReg!, 6)));
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("車検満了日（予定日: " + CommonFunction.getFormatDayYMD(model.ExpiresDate!));
+                _calLease.addLogUI("--------------");
+                _calLease.addLogUI("リース開始月: " + CommonFunction.getFormatDayYMD(CommonFunction.Left(model.LeaseSttMonth!, 6)));
                 _calLease.addLogUI("--------------");
                 _calLease.addLogUI("リース開始日: " + model.LeaseSttDay.toString() + "日");
                 _calLease.addLogUI("--------------");
-                //  _calLease.addLogUI("リース満了日: {0}", getFormatDayYMD(dHidLeaseExpirationDate));
+                _calLease.addLogUI("リース満了日: " + CommonFunction.getFormatDayYMD(model.LeaseExpirationDate!));
                 _calLease.addLogUI("--------------");
                 _calLease.addLogUI("消費税率: " + _calLease.consumptionTax.ToString());
             }
+     
         }
         private void saveLogFinal(double consumptionTax, double dPriceEnd, double dPriceMonthly, double dPriceMonthNoTax, double dPriceProcedure)
         {
@@ -388,14 +390,12 @@ namespace KantanMitsumori.Service
                 var isCheckData = _unitOfWork.EstimateIdes.GetSingle(n => n.EstNo == oEst.EstNo && n.EstSubNo == oEst.EstSubNo);
                 if (isCheckData != null)
                 {
-                    // update 
                     _unitOfWork.EstimateIdes.Update(oEstIde);
                     _unitOfWork.Commit();
                     return true;
                 }
                 else
                 {
-                    // insert
                     _unitOfWork.EstimateIdes.Add(oEstIde);
                     _unitOfWork.Commit();
                     return true;
@@ -403,7 +403,7 @@ namespace KantanMitsumori.Service
             }
             catch (Exception ex)
             {
-                _logger.LogInformation("EstInsertUpdateData :={0}", ex.ToString());
+                _logger.LogInformation("EstInsertUpdateData: {0}", ex.ToString());
                 return false;
             }
         }

@@ -976,8 +976,7 @@ function isCheckDay(valExpriesMonth, valExpriesDay) {
  * 
  * Create [2022/08/10] by HoaiPhong 
  */
-function appendLogUI(Listlog) {
-    var array = Listlog.split(",");
+function appendLogUI(array) {   
     for (var item in array) {
         var div = document.getElementById("listlogLease")
         var span = document.createElement("span");
@@ -1051,6 +1050,7 @@ function GetCarType() {
         let length = result.data.length;
         $("#cboCarType").append(new Option("", ''));
         for (let i = 0; i < length; i++) {
+            
             let key = result.data[i].carType;
             let value = result.data[i].carTypeName;
             $("#cboCarType").append(new Option(value, key));
@@ -1113,6 +1113,7 @@ function InpLeaseCal() {
                 $("#Label15").text("円");
             }
             buttonEnabling();
+            appendLogUI(item.listUILog);
         } else if (result.resultStatus == 0 && result.messageCode === 'I0003') {
             var item = result.data;
             isShowErrorMessage(item.PriceLeaseFeeLowerLimit)

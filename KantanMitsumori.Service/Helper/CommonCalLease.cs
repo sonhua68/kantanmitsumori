@@ -43,6 +43,7 @@ namespace KantanMitsumori.Service.Helper
             consumptionTax = dt.Count > 0 ? dt.FirstOrDefault()!.ConsumptionTax : 0;
             _logger.LogInformation("4-1 ConsumptionTax: {0}", consumptionTax);
             addLogUI("4-1 ConsumptionTax: " + consumptionTax);
+            addLogUI("--------------");
             return consumptionTax;
         }
         /// <summary>
@@ -65,6 +66,7 @@ namespace KantanMitsumori.Service.Helper
             addLogUI("TaxInsAllx: " + taxInsAll);
             addLogUI("TaxFreeAllx: " + taxFreeAll);
             addLogUI("4-2 Price = (SalesSum - TaxInsAll - TaxFreeAll) / (1 + ConsumptionTax) + TaxInsAll + TaxFreeAll: " + dPrice);
+            addLogUI("--------------");
             return dPrice;
         }
 
@@ -97,6 +99,7 @@ namespace KantanMitsumori.Service.Helper
             }
             _logger.LogInformation("4-3-1 PriceTax: {0}", monthlyPrice);
             addLogUI("4-3-1 PriceTax: " + monthlyPrice);
+            addLogUI("--------------");
             return monthlyPrice;
         }
         /// <summary>
@@ -130,6 +133,7 @@ namespace KantanMitsumori.Service.Helper
             }
             _logger.LogInformation("4-3-2 PriceTax: {0}", monthlyPrice);
             addLogUI("4-3-2 PriceTax: " + monthlyPrice);
+            addLogUI("--------------");
             return monthlyPrice;
         }
         /// <summary>
@@ -170,6 +174,7 @@ namespace KantanMitsumori.Service.Helper
             vehicleTaxPrice = (double)(priceMonth - autoTax);
             _logger.LogInformation("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): {0}", vehicleTaxPrice);
             addLogUI("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): " + priceMonth);
+            addLogUI("--------------");
             return vehicleTaxPrice;
 
         }
@@ -211,6 +216,7 @@ namespace KantanMitsumori.Service.Helper
             }
             _logger.LogInformation("4-4 PriceInsurance(InspectionCount * InsuranceFee): {0}", priceInsurance);
             addLogUI("4-4 PriceInsurance(InspectionCount * InsuranceFee): " + priceInsurance);
+            addLogUI("--------------");
             return priceInsurance;
         }
         /// <summary>
@@ -310,6 +316,7 @@ namespace KantanMitsumori.Service.Helper
             priceWeighTax = (weighTax * inspectionCount) + (weighTax1 * inspectionCount1) + (weighTax2 * inspectionCount2);
             _logger.LogInformation("4-5-4 PriceWeighTax: {0}", priceWeighTax);
             addLogUI("4-5-4 PriceWeighTax: " + priceWeighTax);
+            addLogUI("--------------");
             return priceWeighTax;
 
         }
@@ -336,6 +343,7 @@ namespace KantanMitsumori.Service.Helper
             }
             _logger.LogInformation("4-6 PricePromotional  > 100000= 100000 and < 15000= 15000: {0}", pricePromotional);
             addLogUI("4-6 PricePromotional  > 100000= 100000 and < 15000= 15000: " + pricePromotional);
+            addLogUI("--------------");
             return pricePromotional;
         }
         /// <summary>
@@ -361,6 +369,7 @@ namespace KantanMitsumori.Service.Helper
             addLogUI("ID =3: " + pricePropertyFee3);
             addLogUI("ID =CarType+3: " + pricePropertyFee4);
             addLogUI("4-7 PricePropertyFeeIdemitsu: " + pricePropertyFeeIdemitsu);
+            addLogUI("--------------");
             return pricePropertyFeeIdemitsu;
         }
         /// <summary>
@@ -388,6 +397,7 @@ namespace KantanMitsumori.Service.Helper
             }
             _logger.LogInformation("4-8 PriceGuaranteeFee: {0}", priceGuaranteeCharg);
             addLogUI("4-8 PriceGuaranteeFee: " + priceGuaranteeCharg);
+            addLogUI("--------------");
             return priceGuaranteeCharg;
 
         }
@@ -406,6 +416,7 @@ namespace KantanMitsumori.Service.Helper
             }
             _logger.LogInformation("4-9 PriceNameChange: {0}", priceNameChange);
             addLogUI("4-9 PriceNameChange: " + priceNameChange);
+            addLogUI("--------------");
             return priceNameChange;
         }
         /// <summary>
@@ -444,6 +455,7 @@ namespace KantanMitsumori.Service.Helper
                 }
                 _logger.LogInformation("4-10 PriceMaintenance: {0}", priceMantance);
                 addLogUI("4-10 PriceMaintenance: " + priceMantance);
+                addLogUI("--------------");
             }
             return priceMantance;
         }
@@ -464,6 +476,7 @@ namespace KantanMitsumori.Service.Helper
             }
             _logger.LogInformation("4-11 PriceInterest: {0}", interest);
             addLogUI("4-11  PriceInterest: " + interest);
+            addLogUI("--------------");
             return interest;
         }
         #region Fuc

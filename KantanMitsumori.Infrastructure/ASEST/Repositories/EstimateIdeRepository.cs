@@ -14,7 +14,7 @@ namespace KantanMitsumori.Infrastructure.Repositories
 
         public override bool Add(TEstimateIde entity)
         {
-            try
+            try                                             
             {
                 var recordExists = isExists(entity);
                 if (recordExists != null)
