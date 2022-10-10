@@ -8,15 +8,13 @@ namespace KantanMitsumori.Controllers
 {
     public class InpHanbaitenController : BaseController
     {
-        private readonly IEstMainService _appService;
         private readonly IEstimateService _estimateService;
-        private readonly ILogger<InpHanbaitenController> _logger;
-        public InpHanbaitenController(IEstMainService appService, IEstimateService estimateService, ILogger<InpHanbaitenController> logger) : base()
+
+        public InpHanbaitenController(IEstMainService appService, IEstimateService estimateService, ILogger<InpHanbaitenController> logger)
         {
-            _appService = appService;
             _estimateService = estimateService;
-            _logger = logger;
         }
+
         #region InpHanbaiten
         public IActionResult Index()
         {
@@ -26,7 +24,7 @@ namespace KantanMitsumori.Controllers
             request.UserNo = _logToken.UserNo;
             request.TaxRatio = _logToken.sesTaxRatio;
             var response = _estimateService.GetDetail(request);
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }

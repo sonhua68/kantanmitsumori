@@ -1,6 +1,5 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
-using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
@@ -8,7 +7,6 @@ using KantanMitsumori.Models;
 using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Net;
 
 namespace KantanMitsumori.Controllers
 {
@@ -16,13 +14,11 @@ namespace KantanMitsumori.Controllers
     public class BaseController : Controller
     {
         private const string COOKIES = "CookiesASEST";
-        //public CommonSettings _commonSettings;
         private List<string> optionListController = new List<string> { "Home", "SelCar", "SelGrd", "SerEst" };
         public LogToken? _logToken;
 
         public BaseController()
         {
-            //_commonSettings = new CommonSettings();
             _logToken = new LogToken();
 
         }
@@ -40,7 +36,7 @@ namespace KantanMitsumori.Controllers
             }
             else
             {
-                
+
                 if (_logToken == null)
                 {
                     if (!actionName.Contains("Index"))

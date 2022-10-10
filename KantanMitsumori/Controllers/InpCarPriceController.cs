@@ -10,15 +10,10 @@ namespace KantanMitsumori.Controllers
     public class InpCarPriceController : BaseController
     {
         private readonly IInpCarPriceService _inpCarPriceService;
-        private readonly ILogger<InpCarPriceController> _logger;
         private readonly IMapper _mapper;
-        public InpCarPriceController(ILogger<InpCarPriceController> logger
-            , IMapper mapper
-            , IInpCarPriceService inpCarPriceService
-            ) : base()
+        public InpCarPriceController(ILogger<InpCarPriceController> logger, IMapper mapper, IInpCarPriceService inpCarPriceService)
         {
             _inpCarPriceService = inpCarPriceService;
-            _logger = logger;
             _mapper = mapper;
         }
 
@@ -29,7 +24,7 @@ namespace KantanMitsumori.Controllers
             _mapper.Map(_logToken, request);
             // Get car price data
             var response = _inpCarPriceService.GetCarPriceInfo(request);
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }
