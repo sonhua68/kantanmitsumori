@@ -17,9 +17,10 @@ namespace KantanMitsumori.Controllers
         private readonly ISelCarService _selCarService;
         private readonly IEstimateService _estimateService;
         private readonly IEstMainService _estMainService;
+        private readonly ISerEstService _serEstService;
         private readonly JwtSettings _jwtSettings;
 
-        public SerEstController(IEstMainService appService, ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, ILogger<SerEstController> logger, IOptions<JwtSettings> jwtSettings) : base()
+        public SerEstController(IEstMainService appService, ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, ILogger<SerEstController> logger, IOptions<JwtSettings> jwtSettings, ISerEstService serEstService) : base()
         {
             _appService = appService;
             _logger = logger;
@@ -27,14 +28,31 @@ namespace KantanMitsumori.Controllers
             _estimateService = estimateService;
             _estMainService = estMainService;
             _jwtSettings = jwtSettings.Value;
+            _serEstService = serEstService;
         }
 
         #region SerEstController      
-        public IActionResult Index()
+       
+        /// <summary>
+        /// Call from external system
+        /// </summary>        
+        public IActionResult Index(string mem, string mode)
         {
+            if(string.IsNullOrEmpty(mem) || string.IsNullOrEmpty(mode))
+                return View();
 
+            var request = new RequestSerEstExternal()
+            {
+                Mem = mem,
+                Mode = mode
+            };
+            var res = _serEstService.GenerateToken(request);
+            if (res.ResultStatus == (int)enResponse.isError)
+                ErrorAction(res);
+            setTokenCookie(_jwtSettings.AccessExpires, res.Data?.Token ?? "");
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> LoadData([FromForm] RequestSerEst requestData)
         {
