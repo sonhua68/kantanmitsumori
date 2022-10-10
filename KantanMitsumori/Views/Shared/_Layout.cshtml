@@ -44,7 +44,9 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
     <script>
-        $("#header").load("/Home/Header")
+        const full = location.protocol + '//' + location.host;
+        var urlTest = full + "/Home/Header";
+        $("#header").load(urlTest)
     </script>
     @RenderSection("Scripts", required: false);
 </body>
