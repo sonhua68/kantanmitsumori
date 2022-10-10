@@ -1,6 +1,5 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
-using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,16 +7,11 @@ namespace KantanMitsumori.Controllers
 {
     public class InpInitValController : BaseController
     {
-        private readonly IEstMainService _appService;
-
-        private readonly ILogger<InpInitValController> _logger;
         private readonly IInpInitValService _inpInitValService;
         private readonly IEstimateService _estimateService;
 
-        public InpInitValController(IEstMainService appService, IInpInitValService inpInitValService, IEstimateService estimateService, ILogger<InpInitValController> logger) : base()
+        public InpInitValController(IInpInitValService inpInitValService, IEstimateService estimateService)
         {
-            _appService = appService;
-            _logger = logger;
             _inpInitValService = inpInitValService;
             _estimateService = estimateService;
         }
@@ -32,7 +26,7 @@ namespace KantanMitsumori.Controllers
             request.UserNo = _logToken.UserNo;
             request.TaxRatio = _logToken.sesTaxRatio;
             var response = _estimateService.GetDetail(request);
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }

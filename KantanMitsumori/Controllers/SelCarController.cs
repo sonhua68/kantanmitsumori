@@ -10,16 +10,12 @@ namespace KantanMitsumori.Controllers
 {
     public class SelCarController : BaseController
     {
-        private readonly IEstMainService _appService;
-        private readonly ILogger<SelCarController> _logger;
         private readonly ISelCarService _selCarService;
         private readonly IEstMainService _estMainService;
         private readonly JwtSettings _jwtSettings;
 
-        public SelCarController(IEstMainService appService, ISelCarService selCarService, IEstMainService estMainService, ILogger<SelCarController> logger, IOptions<JwtSettings> jwtSettings) : base()
+        public SelCarController(ISelCarService selCarService, IEstMainService estMainService, ILogger<SelCarController> logger, IOptions<JwtSettings> jwtSettings)
         {
-            _appService = appService;
-            _logger = logger;
             _selCarService = selCarService;
             _estMainService = estMainService;
             _jwtSettings = jwtSettings.Value;

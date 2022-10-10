@@ -12,18 +12,14 @@ namespace KantanMitsumori.Controllers
 {
     public class SerEstController : BaseController
     {
-        private readonly IEstMainService _appService;
-        private readonly ILogger<SerEstController> _logger;
         private readonly ISelCarService _selCarService;
         private readonly IEstimateService _estimateService;
         private readonly IEstMainService _estMainService;
         private readonly ISerEstService _serEstService;
         private readonly JwtSettings _jwtSettings;
 
-        public SerEstController(IEstMainService appService, ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, ILogger<SerEstController> logger, IOptions<JwtSettings> jwtSettings, ISerEstService serEstService) : base()
+        public SerEstController(ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, IOptions<JwtSettings> jwtSettings, ISerEstService serEstService) : base()
         {
-            _appService = appService;
-            _logger = logger;
             _selCarService = selCarService;
             _estimateService = estimateService;
             _estMainService = estMainService;

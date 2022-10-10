@@ -8,12 +8,10 @@ namespace KantanMitsumori.Controllers
     public class InpSitaCarController : BaseController
     {
         private readonly IInpSitaCarService _inpSitaCarService;
-        private readonly ILogger<InpSitaCarController> _logger;
 
-        public InpSitaCarController(IInpSitaCarService inpSitaCarService, ILogger<InpSitaCarController> logger) : base()
+        public InpSitaCarController(IInpSitaCarService inpSitaCarService)
         {
             _inpSitaCarService = inpSitaCarService;
-            _logger = logger;
         }
 
         public IActionResult Index()
@@ -25,7 +23,7 @@ namespace KantanMitsumori.Controllers
 
             var response = _inpSitaCarService.GetInfoSitaCar(estNo, estSubNo, userNo);
 
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }
