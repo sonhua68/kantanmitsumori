@@ -1,4 +1,5 @@
-﻿// JScript File
+﻿
+// JScript File
 // Create Date 2022/10/03 by HoaiPhong
 // JScript File
 var FALSE_COLOR = '#FF3333';
@@ -153,11 +154,7 @@ function setContractTimes() {
 
 // clean select options
 function removeOptions(selectElement) {
-    var i, initVal = selectElement.options.length - 1;
-    for (i = initVal; i >= 0; i--) {
-        selectElement.remove(i);
-    }
-
+    $(selectElement).empty();
     document.getElementById('lbl_LeaseEnd').innerHTML = ''
     $get('hidLeaseExpirationDate').value = ''
 }
@@ -193,17 +190,18 @@ function getLastDayOfMonth(currentDate) {
 // set option contract times
 function setOptionContractTimes(startVal, sumVal, selectedIndex) {
     var select = document.getElementById('cbo_ContractTimes');
-
     select.options[0] = new Option("", 0);
-
-    for (var i = startVal; i <= 96; i += sumVal) {
-        if (i >= 24) {
-            select.options[select.options.length] = new Option(i + "ヶ月", i);
-            if (selectedIndex == i) {
-                select.options[select.options.length - 1].selected = true;
+    if (sumVal != 0) {
+        for (var i = startVal; i <= 96; i += sumVal) {
+            if (i >= 24) {
+                select.options[select.options.length] = new Option(i + "ヶ月", i);
+                if (selectedIndex == i) {
+                    select.options[select.options.length - 1].selected = true;
+                }
             }
         }
     }
+
 }
 
 
@@ -664,11 +662,10 @@ function changeExtendedGuarantee() {
     buttonDisabled();
 }
 // function change option Insurance
-function changeOptionIns() {
+function changeOptionIns(value) {
     var DISABLE_COLOR = '#A9A9A9';
-    var valOpIns = $get('cbo_OptionInsurance').value;
-
-    $get('hidOptionInsurance').value = $get('cbo_OptionInsurance').value;
+    var valOpIns = chkNull($get('cbo_OptionInsurance').value);
+    $get('hidOptionInsurance').value = valOpIns;
 
     if (valOpIns == 1) {
         $get('cbo_InsuranceCompany').disabled = false;
@@ -676,7 +673,7 @@ function changeOptionIns() {
         $get('InsuranceFee').disabled = false;
         $get('InsuranceFee').style.backgroundColor = "White";
         var select = document.getElementById('cbo_InsuranceCompany');
-        select.options[1].selected = true;
+        select.options[0].selected = true;
         $get('hidInsuranceCompany').value = chkNull($get('cbo_InsuranceCompany').value);
         document.getElementById('InsuranceFee').value = 0;
     }
@@ -690,7 +687,10 @@ function changeOptionIns() {
         $get('InsuranceFee').style.backgroundColor = DISABLE_COLOR;
     }
     // Set disabled for button confirm
-    buttonDisabled();
+    if (value == true) {
+        buttonDisabled();
+    }
+
 }
 
 // function change InsuranceCompany
@@ -771,7 +771,9 @@ function inputChk() {
         $get('AdjustFee').style.backgroundColor = FALSE_COLOR;
         return false;
     }
-    chkValueInput();
+    if (!chkValueInput()) {
+        return false;
+    }
     return true;
 }
 
@@ -799,13 +801,14 @@ function chkLeasePeriodLeaseExpirationDate() {
 }
 
 function chkValueInput() {
-
+    let iscallBack = true;
     var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetUnitPriceRatesLimit");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-        callBackSetUnitPriceRatesLimit(result.data)
+        iscallBack = callBackSetUnitPriceRatesLimit(result.data)
     } else {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
+    return iscallBack;
 }
 
 function callBackSetUnitPriceRatesLimit(rtnValInput) {
@@ -867,6 +870,7 @@ function callBackSetUnitPriceRatesLimit(rtnValInput) {
         return false;
     }
     calcDateDiff();
+    return true;
     // Wait 0.5 second for above calculation complete
     //setTimeout(function () { return __doPostBack('btnLeaseCalc', ''); }, 500);
 
@@ -973,10 +977,10 @@ function isCheckDay(valExpriesMonth, valExpriesDay) {
 }
 
 /**
- * 
+ * appendLogUI
  * Create [2022/08/10] by HoaiPhong 
  */
-function appendLogUI(array) {   
+function appendLogUI(array) {
     for (var item in array) {
         var div = document.getElementById("listlogLease")
         var span = document.createElement("span");
@@ -990,6 +994,10 @@ function appendLogUI(array) {
 
     }
 }
+/**
+ * calcDateDiff
+ * Create [2022/08/10] by HoaiPhong 
+ */
 function calcDateDiff() {
     var valExpriesYear = chkNull($get('cbo_ExpiresYear').value);
     var valExpriesMonth = chkNull($get('cbo_ExpiresMon').value);
@@ -1049,11 +1057,13 @@ function GetCarType() {
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let length = result.data.length;
         $("#cboCarType").append(new Option("", ''));
+        $("#cboCarType").append(new Option(result.data[1].carTypeName, result.data[1].carType));
         for (let i = 0; i < length; i++) {
-            
             let key = result.data[i].carType;
             let value = result.data[i].carTypeName;
-            $("#cboCarType").append(new Option(value, key));
+            if (key != 2) {
+                $("#cboCarType").append(new Option(value, key));
+            }          
         }
     } else {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);
@@ -1084,7 +1094,6 @@ function GetVolInsurance() {
     var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetVolInsurance");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         let length = result.data.length;
-        $("#cbo_InsuranceCompany").append(new Option("", ''));
         $("#cbo_InsuranceCompany").append(new Option('選択してください', "99"));
         for (let i = 0; i < length; i++) {
             let key = result.data[i].id;
@@ -1097,14 +1106,17 @@ function GetVolInsurance() {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }
-
+/**
+ * InpLeaseCal
+ * Create [2022/09/02] by HoaiPhong 
+ */
 function InpLeaseCal() {
+    $("#lbl_ErrorMessage").text();
     if (inputChk()) {
         var model = Framework.getFormData($("#formInpLeaseCalc"));
         model.FirstReg = SetFirstReg(model.FirstReg);
         model.LeaseSttMonth = SetLeaseSttMonth(model.LeaseSttMonth);
         var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLeaseCalc/InpLeaseCal");
-        console.log(result)
         if (result.resultStatus == 0 && result.messageCode === 'I0002') {
             var item = result.data;
             $("#hidIsData").val(item.IsShowButton);
@@ -1123,6 +1135,44 @@ function InpLeaseCal() {
     }
 
 }
+/**
+ * btnExamination
+ * Create [2022/09/02] by HoaiPhong 
+ */
+function Examination() {
+    let leaseProgress = 2;
+    var result = Framework.submitAjaxFormUpdateAsync(leaseProgress, "/InpLeaseCalc/UpdateLeaseProgressIde");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        Framework.GoBackReloadPageUrl("/PreExamination")
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    }
+}
+/**
+ * btnBookExam
+ * Create [2022/09/02] by HoaiPhong 
+ */
+function BookExam() {
+    let leaseProgress = 1;
+    var result = Framework.submitAjaxFormUpdateAsync(leaseProgress, "/InpLeaseCalc/UpdateLeaseProgressIde");
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        Framework.GoBackReloadPageUrl("/PreExamination")
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    }
+}
+/**
+ * btnPrintShow
+ * Create [2022/09/02] by HoaiPhong 
+ */
+function PrintShow() {
+    Framework.GoBackReloadPageUrl("/Report/DownloadEstimateReport")
+
+}
+/**
+ * SetFirstReg
+ * Create [2022/09/02] by HoaiPhong 
+ */
 function SetFirstReg(FirstReg) {
     var valFirstRegY = chkNull($get('cboFirstYear').value);
     var valFirstRegM = chkNull($get('cboFirstMonth').value);
@@ -1136,10 +1186,44 @@ function SetFirstReg(FirstReg) {
         return FirstReg + day;
     }
 }
-
+/**
+ * SetLeaseSttMonth
+ * Create [2022/09/02] by HoaiPhong 
+ */
 function SetLeaseSttMonth(LeaseSttMonth) {
     var valExpiresDay = chkNull($get('cbo_ExpiresDay').value);
     let day = (parseInt(valExpiresDay) < 10 ? +"0" + valExpiresDay.toString() : valExpiresDay.toString())
     return LeaseSttMonth + day;
 }
+/**
+ * setValueCbbYear
+ * Create [2022/09/02] by HoaiPhong 
+ */
+function setValueCbbYear(Id, value) {
+    var Year = value.toString().substring(0, 4);
+    Framework.SetSelectedString(Id, Year);
+}
+/**
+ * setValueCbbMonth
+ * Create [2022/09/02] by HoaiPhong 
+ */
+function setValueCbbMonth(Id, value) {
+    var Month = value.toString().substring(4, 6);
+    if (parseInt(Month) < 10) {
+        Month = Month.substring(1, 2)
+    }
+    Framework.SetSelectedNumber(Id, Month);
+    setContractTimesCalLeaseEnd();
+}
+/**
+ * setValueCbbDay
+ * Create [2022/09/02] by HoaiPhong 
+ */
+function setValueCbbDay(Id, value) {
+    var Day = value.toString().substring(8, 6);
+    if (parseInt(Day) < 10) {
+        Day = Day.substring(1, 2)
+    }
+    Framework.SetSelectedNumber(Id, Day);
 
+}

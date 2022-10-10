@@ -485,14 +485,14 @@ var Framework =
             key: "SetSelectedNumber",
             value: function SetSelectedNumber(nameId, defaultValue) {
                 let idOption = $("#" + nameId + " option");
-                if (isNaN(defaultValue) || defaultValue === 0) {
+                if (isNaN(defaultValue)) {
                     idOption[0].selected == true;
                 }
                 else {
                     let length = idOption.length;
                     for (let i = 0; i < length; i++) {
                         let value = parseInt(idOption[i].value);
-                        if (value === defaultValue) {
+                        if (value === parseInt(defaultValue)) {
                             $("#" + nameId + " option[value='" + value + "']").attr("selected", "selected");
                             return;
                         }
@@ -528,10 +528,10 @@ var Framework =
             key: "GetFullHost",
             value: function GetFullHost(url) {
                 const fullpath = location.protocol + '//' + location.host;
-                let pathname = location.pathname.split('/')[1]
-                if (!pathname.includes(url)) {
-                    return fullpath + '/' + pathname + url;
-                }
+                //let pathname = location.pathname.split('/')[1]
+                //if (!pathname.includes(url)) {
+                //    return fullpath + '/' + pathname + url;
+                //}
                 return fullpath + url;
 
             }

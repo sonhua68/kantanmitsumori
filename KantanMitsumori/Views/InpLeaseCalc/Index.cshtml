@@ -2,21 +2,26 @@
 @using KantanMitsumori.Helper.CommonFuncs;
 @model ResponseEstMainModel
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
     var listMonth = DropDownList.ListMonth(true);
     var listDay = DropDownList.ListDay(true);
-    var FirstRegYm = string.IsNullOrEmpty(Model.EstModel.FirstRegYm) ? "" : Model.EstModel.FirstRegYm;
+    var FirstRegistration = string.IsNullOrEmpty(Model.EstIDEModel.FirstRegistration) ? "" : Model.EstIDEModel.FirstRegistration;
     var IdeModel = Model.EstIDEModel;
+    var CarType = IdeModel.CarType;
     var InsuranceFee = (IdeModel.InsuranceFee);
     var PrePay = (IdeModel.DownPayment);
     var TradeIn = (IdeModel.TradeInPrice);
     var AdjustFee = (IdeModel.FeeAdjustment);
     var MonthlyLeaseFee = IdeModel.MonthlyLeaseFee;
-    var IsData = string.IsNullOrEmpty(IdeModel.EstNo) ? "1" : "0";
+    var IsData = !string.IsNullOrEmpty(IdeModel.EstNo) ? "1" : "0";
     var lbl_MonthlyLease = MonthlyLeaseFee != 0 ? CommonFunction.setFormatCurrency(IdeModel.MonthlyLeaseFee, "") : "";
     var Label15 = MonthlyLeaseFee != 0 ? "円" : "";
+    var InspectionExpirationDate = string.IsNullOrEmpty(IdeModel.InspectionExpirationDate) ? "" : IdeModel.InspectionExpirationDate;
+    var LeaseStartMonth = string.IsNullOrEmpty(IdeModel.LeaseStartMonth) ? "" : IdeModel.LeaseStartMonth;
+    var InsuranceCompanyId = IdeModel.InsuranceCompanyId == -1 ? 0 : IdeModel.InsuranceCompanyId;
     var today = DateTime.Today;
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewData["Title"] = "かんたん見積";
+
 }
 <form id="formInpLeaseCalc">
     <table border="0" width="100%">
@@ -47,7 +52,7 @@
                                                 <td class="inptd" align="left">
                                                     <select name="cboCarType" id="cboCarType" style="border: solid 1px mediumvioletred;" class="inpbox" onchange="changeCarType();">
                                                     </select>
-                                                    <input name="chkElectricCar" type="checkbox" id="chkElectricCar" onchange="changeElectricCar();" disabled="">電気自動車
+                                                    <input name="chkElectricCar" type="checkbox" id="chkElectricCar" onchange="changeElectricCar();">電気自動車
                                                 </td>
                                             </tr>
                                             <tr>
@@ -182,9 +187,9 @@
                                                 </td>
                                                 <td class="inptd" align="left">
                                                     <select name="cbo_OptionInsurance" id="cbo_OptionInsurance" style="width: 95px; border: solid 1px mediumvioletred;
-                                                font-family:ＭＳ Ｐゴシック;" onchange="changeOptionIns();">
+                                                font-family:ＭＳ Ｐゴシック;" onchange="changeOptionIns(true);">
                                                         <option value="1">あり</option>
-                                                        <option selected="selected" value="0">なし</option>
+                                                        <option value="0">なし</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -256,12 +261,12 @@
                                             </tr>
                                             <tr>
                                                 <td class="inpbtntd" style="text-align: left;">
-                                                    <input type="submit" name="btnBack" value="戻る" id="btnBack" class="Btn1" style="height:32px;width:100px;">
+                                                    <input type="button" name="btnBack" value="戻る" id="btnBack" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
                                                 </td>
                                                 <td class="inpbtntd" style="text-align: right;">
-                                                    <input type="submit" name="btnPrintShow" value="見積書印刷" id="btnPrintShow" class="Btn1" style="height:32px;" disabled="">
-                                                    <input type="submit" name="btnBookExam" value="予定審査" id="btnBookExam" class="Btn1" style="height:32px;width:100px;" disabled="">
-                                                    <input type="submit" name="btnExamination" value="確定審査" id="btnExamination" class="Btn1" style="height:32px;width:100px;" disabled="">
+                                                    <input type="button" name="btnPrintShow" onclick="return PrintShow();return false;" value="見積書印刷" id="btnPrintShow" class="Btn1" style="height:32px;" disabled="">
+                                                    <input type="button" name="btnBookExam" value="予定審査" onclick="return BookExam();return false;" id="btnBookExam" class="Btn1" style="height:32px;width:100px;" disabled="">
+                                                    <input type="button" name="btnExamination" value="確定審査" onclick="return Examination();return false;" id="btnExamination" class="Btn1" style="height:32px;width:100px;" disabled="">
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -271,51 +276,74 @@
                             <tr>
                                 <td id="listlogLease" class="inptd" style="background-color: White; height: 27px;" align="left">
                                 </td>
-                            </tr>
                         </tbody>
                     </table>
-                    <input name="IsData" type="hidden" id="hidIsData" value=@IsData">
-                    <input name="CarType" type="hidden" id="hidCarType" value="@IdeModel.CarType">
+                    <input name="IsData" type="hidden" id="hidIsData" value="@IsData">
+                    <input name="CarType" type="hidden" id="hidCarType" value="@CarType">
                     <input name="ElectricCar" type="hidden" id="hidElectricCar" value="@IdeModel.IsElectricCar">
-                    <input name="FirstTerm" type="hidden" id="hidFirstTerm" value="">
+                    <input name="FirstTerm" type="hidden" id="hidFirstTerm" >
                     <input name="AfterSecondTerm" type="hidden" id="hidAfterSecondTerm">
                     <input name="FirstReg" type="hidden" id="hidFirstReg">
                     <input name="ExpiresDate" type="hidden" id="hidExpiresDate">
                     <input name="LeaseSttMonth" type="hidden" id="hidLeaseSttMonth">
-                    <input name="ContractTimes" type="hidden" id="hidContractTimes">
-                    <input name="LeasePeriod" type="hidden" id="hidLeasePeriod">
+                    <input name="ContractTimes" type="hidden" id="hidContractTimes" value="@IdeModel.LeasePeriod">
+                    <input name="LeasePeriod" type="hidden" id="hidLeasePeriod" value="@IdeModel.LeasePeriod">
                     <input name="LeaseExpirationDate" type="hidden" id="hidLeaseExpirationDate">
                     <input name="ContractPlan" type="hidden" id="hidContractPlan">
                     <input name="InsurExpanded" type="hidden" id="hidInsurExpanded">
                     <input name="OptionInsurance" type="hidden" id="hidOptionInsurance">
-                    <input name="InsuranceCompany" type="hidden" id="hidInsuranceCompany" value="@IdeModel.InsuranceCompanyId">
+                    <input name="InsuranceCompany" type="hidden" id="hidInsuranceCompany">
                     <input name="DiffMonth" type="hidden" id="hidDiffMonth">
                     <input name="CalcDiffMonth" type="hidden" id="hidCalcDiffMonth">
                     <input name="LeaseSttDay" type="hidden" id="hidLeaseSttDay">
+
                 </td>
             </tr>
         </tbody>
     </table>
 </form>
+<script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
+<script src="~/js/InpLeaseCalc.js"></script>
 <script>
     SetInitData();
-    function SetInitData() {
-        let firstRegYm = @FirstRegYm;
-        var firstYear = "";
-        var firstMonth = "";
-        if (firstRegYm != null || firstRegYm != "") {
-            var firstYear = firstRegYm.toString().substring(0, 4);
-            var firstMonth = firstRegYm.toString().substring(4, 6);
-            if (parseInt(firstMonth) < 10) {
-                firstMonth = firstMonth.substring(1, 2)
-            }
-            Framework.SetSelectedString("cboFirstYear", firstYear)
-            Framework.SetSelectedNumber("cboFirstMonth", firstMonth)
-        }
-        Framework.SetSelectedNumber("cbo_LeaseSttY", @today.Year)
-        Framework.SetSelectedNumber("cbo_LeaseSttM", @today.Month)
+    getValTerm(@IdeModel.CarType);
+    setInitialValue();
+    Framework.SetSelectedNumber("cbo_ContractTimes", @IdeModel.LeasePeriod);
+    changeLeaseEnd();
+   
+    if (@InsuranceCompanyId != 0) {
+        changeOptionIns(false)
+        Framework.SetSelectedNumber("cbo_InsuranceCompany", @IdeModel.InsuranceCompanyId);
+        Framework.SetSelectedNumber("cbo_OptionInsurance", 1);
+    } else {
+        $get('cbo_InsuranceCompany').value = '';
+        Framework.SetSelectedNumber("cbo_OptionInsurance", 0);
     }
+    Framework.SetSelectedNumber("cbo_InsurExpanded", @IdeModel.IsExtendedGuarantee);
+
+    $("#InsuranceFee").val(@InsuranceFee);
+    $("#hidInsuranceCompany").val(@InsuranceCompanyId)
+    function SetInitData() {
+        Framework.SetSelectedNumber("cboCarType", @IdeModel.CarType);
+        let firstRegistration = @FirstRegistration;
+        let leaseStartMonth = @LeaseStartMonth;
+        let inspectionExpirationDate = @InspectionExpirationDate;
+        if (firstRegistration != null || firstRegistration != "") {
+            setValueCbbYear("cboFirstYear", firstRegistration);
+            setValueCbbMonth("cboFirstMonth", firstRegistration);
+        }
+        if (leaseStartMonth != null || leaseStartMonth != "") {
+
+            setValueCbbYear("cbo_LeaseSttY", leaseStartMonth);
+            setValueCbbMonth("cbo_LeaseSttM", leaseStartMonth);
+        }
+        if (inspectionExpirationDate != null || inspectionExpirationDate != "") {
+            setValueCbbYear("cbo_ExpiresYear", inspectionExpirationDate);
+            setValueCbbMonth("cbo_ExpiresMon", inspectionExpirationDate);
+            setValueCbbDay("cbo_ExpiresDay", inspectionExpirationDate);
+        }
+        Framework.SetSelectedNumber("cbo_ContractPlan", @IdeModel.ContractPlanId);
+
+    }
+
 </script>
-<script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
-<script src="~/js/funcmoment.js"></script>
-<script src="~/js/InpLeaseCalc.js"></script>

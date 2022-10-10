@@ -13,5 +13,6 @@ namespace KantanMitsumori.IService
         ResponseBase<List<ResponseFirstAfterSecondTerm>> GetFirstAfterSecondTerm(int carType);
         ResponseBase<ResponseUnitPriceRatesLimit> GetUnitPriceRatesLimit();
         ResponseBase<ResponseInpLeaseCalc> InpLeaseCal(RequestInpLeaseCalc model, LogToken logToken);
+        Task<ResponseBase<int>> UpdateLeaseProgressIde(int leaseProgress, LogToken logToken);
     }
 }

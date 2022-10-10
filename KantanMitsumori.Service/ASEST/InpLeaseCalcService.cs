@@ -194,6 +194,29 @@ namespace KantanMitsumori.Service
 
             }
         }
+        public async Task<ResponseBase<int>> UpdateLeaseProgressIde(int leaseProgress, LogToken logToken)
+        {
+            try
+            {
+                var dtEstimateIdes = _unitOfWork.EstimateIdes.GetSingle(n => n.EstNo == logToken.sesEstNo && n.EstSubNo == logToken.sesEstSubNo);
+                if (dtEstimateIdes == null)
+                {
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
+                dtEstimateIdes.LeaseProgress = leaseProgress;
+                dtEstimateIdes.CreateDate = DateTime.Now;
+                dtEstimateIdes.UpdateDate = DateTime.Now;
+                dtEstimateIdes.UpdateUser = logToken.UserNo;
+                _unitOfWork.EstimateIdes.Update(dtEstimateIdes);
+                await _unitOfWork.CommitAsync();
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdateInpHanbaiten");
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
         #region Func  private
         private void saveLog(double consumptionTax, RequestInpLeaseCalc model, TEstimate oEst, double dPrice,
             double dVehicleTaxPrice, double priceInsurance, double priceWeighTax, double pricePromotional, double pricetPropertyFeeIdemitsu,
@@ -240,7 +263,7 @@ namespace KantanMitsumori.Service
             _logger.LogInformation("--------------");
             _logger.LogInformation("リース期間:{0} ", model.ContractTimes.ToString());
             _logger.LogInformation("--------------");
-            _logger.LogInformation("初度登録月:{0} ", CommonFunction.getFormatDayYMD(CommonFunction.Left(model.FirstReg!, 6)));
+            _logger.LogInformation("初度登録月:{0} ", CommonFunction.getFormatDayYMD(model.FirstReg!));
             _logger.LogInformation("--------------");
             _logger.LogInformation("車検満了日（予定日）: {0}", CommonFunction.getFormatDayYMD(model.ExpiresDate!));
             _logger.LogInformation("--------------");
@@ -295,7 +318,7 @@ namespace KantanMitsumori.Service
                 _calLease.addLogUI("--------------");
                 _calLease.addLogUI("リース期間: " + model.ContractTimes.ToString());
                 _calLease.addLogUI("--------------");
-                _calLease.addLogUI("初度登録月: " + CommonFunction.getFormatDayYMD(CommonFunction.Left(model.FirstReg!, 6)));
+                _calLease.addLogUI("初度登録月: " + CommonFunction.getFormatDayYMD(model.FirstReg!));
                 _calLease.addLogUI("--------------");
                 _calLease.addLogUI("車検満了日（予定日: " + CommonFunction.getFormatDayYMD(model.ExpiresDate!));
                 _calLease.addLogUI("--------------");
@@ -407,6 +430,8 @@ namespace KantanMitsumori.Service
                 return false;
             }
         }
+
+      
 
         #endregion Func  private
     }
