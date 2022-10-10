@@ -527,8 +527,12 @@ var Framework =
         {
             key: "GetFullHost",
             value: function GetFullHost(url) {
-                const full = location.protocol + '//' + location.host;
-                return full + url;
+                const fullpath = location.protocol + '//' + location.host;
+                let pathName = location.pathname.split('/')[1]
+                if (pathName.includes(url)) {
+                    return fullpath + '/' + pathName + url;
+                }
+                return fullpath + url;
 
             }
         },
@@ -562,7 +566,7 @@ var Framework =
                 let LeaseFlag = parseInt($("#hidLeaseFlag").val());
                 if (LeaseFlag == 1 && ListUrl.includes(PageUrl)) {
                     alert("リース画面でのみ、下取りの設定が可能。");
-                } else {                   
+                } else {
                     window.location.href = Framework.GetFullHost(PageUrl);
                 }
             }
