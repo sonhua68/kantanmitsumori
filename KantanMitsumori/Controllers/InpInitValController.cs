@@ -1,25 +1,17 @@
 ﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
-using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
-using KantanMitsumori.Model.Response;
-using KantanMitsumori.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
 {
     public class InpInitValController : BaseController
     {
-        private readonly IEstMainService _appService;
-
-        private readonly ILogger<InpInitValController> _logger;
         private readonly IInpInitValService _inpInitValService;
         private readonly IEstimateService _estimateService;
 
-        public InpInitValController(IEstMainService appService, IInpInitValService inpInitValService, IEstimateService estimateService, IConfiguration config, ILogger<InpInitValController> logger) : base(config)
+        public InpInitValController(IInpInitValService inpInitValService, IEstimateService estimateService)
         {
-            _appService = appService;
-            _logger = logger;
             _inpInitValService = inpInitValService;
             _estimateService = estimateService;
         }
@@ -34,7 +26,7 @@ namespace KantanMitsumori.Controllers
             request.UserNo = _logToken.UserNo;
             request.TaxRatio = _logToken.sesTaxRatio;
             var response = _estimateService.GetDetail(request);
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }
@@ -43,8 +35,8 @@ namespace KantanMitsumori.Controllers
 
         [HttpGet]
         public IActionResult GetUserDefData()
-        {            
-            var response = _inpInitValService.GetUserDefData(_logToken.UserNo!);           
+        {
+            var response = _inpInitValService.GetUserDefData(_logToken.UserNo!);
             return Ok(response);
         }
 
@@ -52,7 +44,7 @@ namespace KantanMitsumori.Controllers
         public async Task<IActionResult> UpdateInpInitVal([FromForm] RequestUpdateInpInitVal requestData)
         {
             requestData.sesMode = _logToken.sesMode;
-            var response = await _inpInitValService.UpdateInpInitVal(requestData, _logToken);          
+            var response = await _inpInitValService.UpdateInpInitVal(requestData, _logToken);
             return Ok(response);
         }
 

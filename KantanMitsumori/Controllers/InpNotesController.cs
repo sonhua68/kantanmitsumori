@@ -8,12 +8,10 @@ namespace KantanMitsumori.Controllers
     public class InpNotesController : BaseController
     {
         private readonly IInpNotesService _inpNotesService;
-        private readonly ILogger<InpNotesController> _logger;
 
-        public InpNotesController(IConfiguration config, IInpNotesService inpNotesService, ILogger<InpNotesController> logger) : base(config)
+        public InpNotesController(IInpNotesService inpNotesService)
         {
             _inpNotesService = inpNotesService;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -25,7 +23,7 @@ namespace KantanMitsumori.Controllers
 
             var response = _inpNotesService.getInfoNotes(estNo, estSubNo);
 
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }
@@ -36,7 +34,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpNotes([FromForm] RequestUpdateInpNotes requestData)
         {
-            var response = await _inpNotesService.UpdateInpNotes(requestData);           
+            var response = await _inpNotesService.UpdateInpNotes(requestData);
             return Ok(response);
         }
 

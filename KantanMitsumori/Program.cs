@@ -11,6 +11,8 @@ public class Program
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<Startup>();
+                webBuilder.UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup<Startup>();
             });
 }

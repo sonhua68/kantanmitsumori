@@ -6,6 +6,7 @@ using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Text;
 
 namespace KantanMitsumori.Service.Helper
@@ -15,15 +16,15 @@ namespace KantanMitsumori.Service.Helper
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly CommonSettings _commonSettings;
         private readonly IHttpClientFactory _httpClientFactory;
-        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, CommonSettings commonSettings)
+        private readonly PhysicalPathSettings _physicalPathSettings;
+        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, IOptions<PhysicalPathSettings> physicalPathSetting)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
-            _commonSettings = commonSettings; 
             _httpClientFactory = httpClientFactory;
+            _physicalPathSettings = physicalPathSetting.Value;
         }
 
         #region Constant Initialization
@@ -263,7 +264,7 @@ namespace KantanMitsumori.Service.Helper
                 Uri uri = new Uri(url);
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
-                strCarImgPlace = _commonSettings.PhysicalPathSettings.def_CarImgPlace;
+                strCarImgPlace = _physicalPathSettings.CarImgPlace;
                 strCarImgPlace = strCarImgPlace + DateTime.Today.ToString("yyyMM") + "/";
                 if (!Directory.Exists(strCarImgPlace))
                 {
@@ -374,7 +375,7 @@ namespace KantanMitsumori.Service.Helper
             string[] arrExclusionList;
             try
             {
-                string strExclusionList = File.ReadAllText(_commonSettings.PhysicalPathSettings.def_ExclusionListOfAutoCalc, enc);
+                string strExclusionList = File.ReadAllText(_physicalPathSettings.ExclusionListOfAutoCalc, enc);
                 arrExclusionList = strExclusionList.Split("\r\n");
             }
             catch (Exception ex)

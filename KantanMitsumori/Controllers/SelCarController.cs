@@ -1,26 +1,24 @@
 ﻿using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
-using KantanMitsumori.Models;
-using KantanMitsumori.Service.ASEST;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace KantanMitsumori.Controllers
 {
     public class SelCarController : BaseController
     {
-        private readonly IEstMainService _appService;
-
-        private readonly ILogger<SelCarController> _logger;
         private readonly ISelCarService _selCarService;
         private readonly IEstMainService _estMainService;
-        public SelCarController(IEstMainService appService, ISelCarService selCarService, IEstMainService estMainService, IConfiguration config, ILogger<SelCarController> logger) : base(config)
+        private readonly JwtSettings _jwtSettings;
+
+        public SelCarController(ISelCarService selCarService, IEstMainService estMainService, ILogger<SelCarController> logger, IOptions<JwtSettings> jwtSettings)
         {
-            _appService = appService;
-            _logger = logger;
             _selCarService = selCarService;
             _estMainService = estMainService;
+            _jwtSettings = jwtSettings.Value;
         }
 
         #region SelCar 
@@ -31,13 +29,13 @@ namespace KantanMitsumori.Controllers
         [HttpGet]
         public IActionResult GetListASOPMaker()
         {
-            var response = _selCarService.GetListASOPMakers();           
+            var response = _selCarService.GetListASOPMakers();
             return Ok(response);
         }
         [HttpGet]
         public IActionResult GetListASOPCarName(int markId)
         {
-            var response = _selCarService.GetListASOPCarName(markId);           
+            var response = _selCarService.GetListASOPCarName(markId);
             return Ok(response);
         }
         [HttpPost]
@@ -82,7 +80,7 @@ namespace KantanMitsumori.Controllers
             {
                 return Ok(response);
             }
-            setTokenCookie(response.Data!.AccessToken);
+            setTokenCookie(_jwtSettings.AccessExpires, response.Data!.AccessToken);
             return Ok(response);
         }
 

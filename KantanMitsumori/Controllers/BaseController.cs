@@ -1,8 +1,5 @@
-﻿using GrapeCity.ActiveReports;
-using KantanMitsumori.Helper.CommonFuncs;
+﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
-using KantanMitsumori.Helper.Settings;
-using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
@@ -10,22 +7,18 @@ using KantanMitsumori.Models;
 using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Linq;
 
 namespace KantanMitsumori.Controllers
 {
 
     public class BaseController : Controller
     {
-        private const string COOKIES = "CookiesASEST";        
-        public CommonSettings _commonSettings;
+        private const string COOKIES = "CookiesASEST";
         private List<string> optionListController = new List<string> { "Home", "SelCar", "SelGrd", "SerEst" };
-        public IConfiguration _config;
-        public LogToken _logToken;
+        public LogToken? _logToken;
 
-        public BaseController(IConfiguration config)
-        {            
-            _commonSettings = new CommonSettings(config);
+        public BaseController()
+        {
             _logToken = new LogToken();
 
         }
@@ -33,7 +26,7 @@ namespace KantanMitsumori.Controllers
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
         {
             var pramQuery = Request.Query.Count == 0;
-            var cookies = Request.Cookies[COOKIES]!;
+            _logToken = filterContext.HttpContext.Items["Authorized"] as LogToken;
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
             if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && pramQuery))
@@ -42,7 +35,7 @@ namespace KantanMitsumori.Controllers
             }
             else
             {
-                _logToken = HelperToken.EncodingToken(_commonSettings.JwtSettings, cookies!)!;
+
                 if (_logToken == null)
                 {
                     if (!actionName.Contains("Index"))
@@ -55,7 +48,7 @@ namespace KantanMitsumori.Controllers
                         }));
                     return;
                 }
-                else if (_logToken != null)
+                else
                 {
                     _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
                     _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
@@ -103,11 +96,12 @@ namespace KantanMitsumori.Controllers
         ///setTokenCookie
         /// </summary>
         /// <param name="token"></param>     
-        public void setTokenCookie(string token)
+        public void setTokenCookie(string accessExp, string token)
         {
-            var currentDate = DateTime.Now;            
-            var RefreshExpires = _commonSettings.JwtSettings.AccessExpires;
-            TimeSpan time = TimeSpan.Parse(RefreshExpires);
+            var currentDate = DateTime.Now;
+            //var RefreshExpires = _commonSettings.JwtSettings.AccessExpires;
+            var refreshExpires = accessExp;
+            TimeSpan time = TimeSpan.Parse(refreshExpires);
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
             {
