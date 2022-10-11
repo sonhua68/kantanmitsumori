@@ -43,7 +43,7 @@
     <!-- Add js bootstrap-->
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script>
-        $("#header").load("./Home/Header"));
+        $("#header").load(Framework.GetFullHost("/Home/Header"));
     </script>
     @RenderSection("Scripts", required: false);
 </body>
