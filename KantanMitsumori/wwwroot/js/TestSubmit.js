@@ -21,3 +21,13 @@ RemoveCookies(btnHanei);
 function RemoveCookies(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
+document.getElementById('esmain').setAttribute('action', getUrl());
+function getUrl() {       
+    let fullpath = location.protocol + '//' + location.host;
+    let pathname = location.pathname.split('/')[1];
+    if (pathname =='') {
+        return fullpath + "/Estmain";
+    } else {
+        return fullpath + "/" + pathname + "/Estmain";
+    }
+}
