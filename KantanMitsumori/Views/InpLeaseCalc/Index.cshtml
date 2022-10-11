@@ -6,7 +6,7 @@
     ViewData["Title"] = "かんたん見積";
     var listMonth = DropDownList.ListMonth(true);
     var listDay = DropDownList.ListDay(true);
-    var FirstRegistration = string.IsNullOrEmpty(Model.EstIDEModel.FirstRegistration) ? "" : Model.EstIDEModel.FirstRegistration;
+    var FirstRegistration = string.IsNullOrEmpty(Model.EstIDEModel.FirstRegistration) ? Model.EstModel.FirstRegYm : Model.EstIDEModel.FirstRegistration;
     var IdeModel = Model.EstIDEModel;
     var CarType = IdeModel.CarType;
     var InsuranceFee = (IdeModel.InsuranceFee);
@@ -17,8 +17,9 @@
     var IsData = !string.IsNullOrEmpty(IdeModel.EstNo) ? "1" : "0";
     var lbl_MonthlyLease = MonthlyLeaseFee != 0 ? CommonFunction.setFormatCurrency(IdeModel.MonthlyLeaseFee, "") : "";
     var Label15 = MonthlyLeaseFee != 0 ? "円" : "";
-    var InspectionExpirationDate = string.IsNullOrEmpty(IdeModel.InspectionExpirationDate) ? "" : IdeModel.InspectionExpirationDate;
-    var LeaseStartMonth = string.IsNullOrEmpty(IdeModel.LeaseStartMonth) ? "" : IdeModel.LeaseStartMonth;
+    var CheckCarYm = string.IsNullOrEmpty(Model.EstModel.CheckCarYm) || Model.EstModel.CheckCarYm.Contains("無し") ? "99999999" : Model.EstModel.CheckCarYm;
+    var InspectionExpirationDate = string.IsNullOrEmpty(IdeModel.InspectionExpirationDate) ? CheckCarYm : IdeModel.InspectionExpirationDate;
+    var LeaseStartMonth = string.IsNullOrEmpty(IdeModel.LeaseStartMonth) ? DateTime.Now.ToString("yyyyMM") : IdeModel.LeaseStartMonth;
     var InsuranceCompanyId = IdeModel.InsuranceCompanyId == -1 ? 0 : IdeModel.InsuranceCompanyId;
     var today = DateTime.Today;
 
@@ -176,7 +177,7 @@
                                                 <td class="inptd" align="left">
                                                     <select name="cbo_InsurExpanded" id="cbo_InsurExpanded" style="width: 95px; border: solid 1px mediumvioletred;
                                                 font-family:ＭＳ Ｐゴシック;" onchange="changeExtendedGuarantee();">
-                                                        <option selected="selected" value="0">あり</option>
+                                                        <option value="0">あり</option>
                                                         <option value="1">なし</option>
                                                     </select>
                                                 </td>
@@ -281,7 +282,7 @@
                     <input name="IsData" type="hidden" id="hidIsData" value="@IsData">
                     <input name="CarType" type="hidden" id="hidCarType" value="@CarType">
                     <input name="ElectricCar" type="hidden" id="hidElectricCar" value="@IdeModel.IsElectricCar">
-                    <input name="FirstTerm" type="hidden" id="hidFirstTerm" >
+                    <input name="FirstTerm" type="hidden" id="hidFirstTerm">
                     <input name="AfterSecondTerm" type="hidden" id="hidAfterSecondTerm">
                     <input name="FirstReg" type="hidden" id="hidFirstReg">
                     <input name="ExpiresDate" type="hidden" id="hidExpiresDate">
@@ -302,15 +303,18 @@
         </tbody>
     </table>
 </form>
+<script src="~/js/funcmoment.js"></script>
 <script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
 <script src="~/js/InpLeaseCalc.js"></script>
 <script>
     SetInitData();
-    getValTerm(@IdeModel.CarType);
+    if (@IdeModel.CarType!= 0) {
+        getValTerm(@IdeModel.CarType);
+    }
     setInitialValue();
     Framework.SetSelectedNumber("cbo_ContractTimes", @IdeModel.LeasePeriod);
     changeLeaseEnd();
-   
+
     if (@InsuranceCompanyId != 0) {
         changeOptionIns(false)
         Framework.SetSelectedNumber("cbo_InsuranceCompany", @IdeModel.InsuranceCompanyId);

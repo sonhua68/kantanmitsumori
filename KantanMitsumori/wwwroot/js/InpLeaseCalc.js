@@ -322,7 +322,7 @@ function changeFirstYM() {
         removeOptions(document.getElementById('cbo_ContractTimes'));
 
         $get('cbo_LeaseSttY').options[0].selected = true;
-        $get('cbo_LeaseSttM').options[todayMonth - 1].selected = true;
+        //$get('cbo_LeaseSttM').options[todayMonth - 1].selected = true;
 
 
         if (valueFirstYear == 0) {
@@ -898,7 +898,7 @@ function isShowErrorMessage(valCheck) {
 
     if (valCheck == '' || typeof valCheck == "undefined") {
         document.getElementById("lbl_ErrorMessage").innerHTML = 'この車両はリース対象外です。';
-     
+
     }
     else {
         document.getElementById("lbl_ErrorMessage").innerHTML = '月額リース料' + valCheck + '円以上になるように調整してください。';
@@ -1094,8 +1094,9 @@ function GetContractPlan() {
 function GetVolInsurance() {
     var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetVolInsurance");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-        let length = result.data.length;
+        let length = result.data.length;     
         $("#cbo_InsuranceCompany").append(new Option('選択してください', "99"));
+
         for (let i = 0; i < length; i++) {
             let key = result.data[i].id;
             let value = result.data[i].companyName;
@@ -1103,6 +1104,7 @@ function GetVolInsurance() {
                 $("#cbo_InsuranceCompany").append(new Option(value, key));
             }
         }
+        $get('cbo_InsuranceCompany').value = '';
     } else {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
@@ -1111,7 +1113,7 @@ function GetVolInsurance() {
  * InpLeaseCal
  * Create [2022/09/02] by HoaiPhong 
  */
-function InpLeaseCal() {  
+function InpLeaseCal() {
     document.getElementById("lbl_ErrorMessage").style.display = 'contents';
     document.getElementById("lbl_ErrorMessage").innerHTML = '';
     if (inputChk()) {
@@ -1129,7 +1131,7 @@ function InpLeaseCal() {
             buttonEnabling();
             appendLogUI(item.listUILog);
         } else if (result.resultStatus == 0 && result.messageCode === 'I0003') {
-            var item = result.data;      
+            var item = result.data;
             if (item.priceLeaseFeeLowerLimit != 0) { isShowErrorMessage(item.priceLeaseFeeLowerLimit) } else {
                 isShowErrorMessage("");
             }
