@@ -8,185 +8,108 @@
 <form id="frm" method="post" action="/home/estmain">
     <div class="container text-center">
         <div class="row">
-            <div class="col-sm-2">
-                <div class="col d-flex justify-content-between">
-                    <div class="border-button container text-center">
-                        <br />
-                        <div class="col d-flex justify-content-between">
-                            <a href="javascript:window.close();">
-                                <img src="~/img/btn閉じる.png" />
-                            </a>
-                        </div>
-                        <br />
-                        <div class="col d-flex justify-content-between" style="margin:1px">
-                            <a href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/Report/DownloadEstimateReport');return false;">
-                                <img src="~/img/btn見積印刷.png" />
-                            </a>
-                        </div>
-                        <div class="col d-flex justify-content-between">
-                            <a href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/Report/DownloadOrderReport');return false;">
-                                <img src="~/img/btn注文印刷.png" />
-                            </a>
-                        </div>
-                        <br />
-                        <div class="col d-flex justify-content-between" style="margin:1px">
-                            <a href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/SerEst');return false;">
-                                <img src="~/img/btn検索.png" />
-                            </a>
-                        </div>
-                        <div class="col d-flex justify-content-between">
-                            <a href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/SelCar');return false;">
-                                <img src="~/img/btnフリー見積.png" />
-                            </a>
-                        </div>
-                        <br />
-                        <div class="col d-flex justify-content-between">
-                            <a href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/InpInitVal');return false;">
-                                <img src="~/img/btn諸費用設定.png" />
-                            </a>
-                        </div>
-                        <div class="col d-flex justify-content-between">
-                            <span class="label label-text">※事前設定必要</span>
-                        </div>
+            <div class="col-2">
+                <div class="border border-primary" style="padding-top:5px;">
+                    <a href="javascript:window.close();">
+                        <img src="~/img/btn閉じる.png" class="img-fluid" />
+                    </a>
+                    <br />
+                    <br />
+                    <div style="margin-bottom:1px;">
+                        <a href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/Report/DownloadEstimateReport');return false;">
+                            <img src="~/img/btn見積印刷.png" class="img-fluid" />
+                        </a>
+                    </div>
+                    <a href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/Report/DownloadOrderReport');return false;">
+                        <img src="~/img/btn注文印刷.png" class="img-fluid" />
+                    </a>
+                    <br />
+                    <br />
+                    <div style="margin-bottom:1px;">
+                        <a href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/SerEst');return false;">
+                            <img src="~/img/btn検索.png" class="img-fluid" />
+                        </a>
+                    </div>
+                    <a href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/SelCar');return false;">
+                        <img src="~/img/btnフリー見積.png" class="img-fluid" />
+                    </a>
+                    <br />
+                    <br />
+                    <a href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/InpInitVal');return false;">
+                        <img src="~/img/btn諸費用設定.png" class="img-fluid" />
+                    </a>
+                    <span id="lblInfoSetting" style="display:inline-block;color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:9pt;font-weight:bold;font-weight: bold;">※事前設定必要</span>
+                </div>
+                <div class="border border-primary" style="margin-top: 15px;">
+                    <div class="EstTitle1" style="text-align: center; color: #0000cc;">
+                        ＜編集ナビ＞
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpCar');return false;" name="ImageButton7" id="ImageButton7" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton1" onclick="Framework.GoBackReloadPageUrl('/InpCar');return false;" class="TxtLink" href="javascript:void(0)">見積車両</a>
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpCarPrice');return false;" name="ImageButton23" id="ImageButton23" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton2" onclick="Framework.GoBackReloadPageUrl('/InpCarPrice');return false;" class="TxtLink" href="javascript:void(0)">販売価格</a>
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpOption');return false;" name="ImageButton24" id="ImageButton24" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton11" onclick="Framework.GoBackReloadPageUrl('/InpOption');return false;" class="TxtLink" href="javascript:void(0)">付属品</a>
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpZeiHoken');return false;" name="ImageButton25" id="ImageButton25" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton3" onclick="Framework.GoBackReloadPageUrl('/InpZeiHoken');return false;" class="TxtLink" href="javascript:void(0)">税金・保険料</a>
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" name="ImageButton26" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" id="ImageButton26" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton4" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" href="javascript:void(0)">預り法定費用</a>
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" name="ImageButton26" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" id="ImageButton26" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton5" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" href="javascript:void(0)">手続代行費用</a>
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" name="ImageButton28" onclick="Framework.GoBackReloadPageUrl('/InpSitaCar');return false;" id="ImageButton28" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton6" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/InpSitaCar');return false;" href="javascript:void(0)">下取車</a>
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpNebiki');return false;" name="ImageButton29" id="ImageButton29" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton7" onclick="Framework.GoBackReloadPageUrl('/InpNebiki');return false;" class="TxtLink" href="javascript:void(0)">価格調整</a>
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        @{
+                            if (Model.EstModel.LeaseFlag == "1")
+                            {
+                                    <input type="image" onclick="CheckNowOdometer();return false;" name="ImageButton30" id="ImageButton30" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                                    <a id="LinkButton8" onclick="CheckNowOdometer();return false;" class="TxtLink" href="javascript:void(0)">リース計算</a>
+                            }
+                            else
+                            {
+                                    <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;" name="ImageButton30" id="ImageButton30" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                                    <a id="LinkButton8" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;" class="TxtLink" href="javascript:void(0)">ローン計算</a>
+                            }
+                        }
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpCustKana');return false;" name="ImageButton31" id="ImageButton31" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton9" onclick="Framework.GoBackReloadPageUrl('/InpCustKana');return false;" class="TxtLink" href="javascript:void(0)">お客様カナ</a>
+                    </div>
+                   <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpHanbaiten');return false;" name="ImageButton32" id="ImageButton32" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton10" onclick="Framework.GoBackReloadPageUrl('/InpHanbaiten');return false;" class="TxtLink" href="javascript:void(0)">販売店</a>
+                    </div>
+                    <div style="text-align: left;padding: 4px 0px 0px 8px;">
+                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpNotes');return false;" name="ImageButton35" id="ImageButton35" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
+                        <a id="LinkButton12" onclick="Framework.GoBackReloadPageUrl('/InpNotes');return false;" class="TxtLink" href="javascript:void(0)">備考</a>
                     </div>
                 </div>
-                <div class="col d-flex justify-content-between">
-                    <div class="border-button container text-center" style="margin-top: 350px;">
-                        <table>
-                            <tbody>
-                                <tr class="d-flex justify-content-between">
-                                    <td class="EstTitle1" style="text-align: center; color: #0000cc;">
-                                        ＜編集ナビ＞
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpCar');return false;" name="ImageButton7" id="ImageButton7" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton1" onclick="Framework.GoBackReloadPageUrl('/InpCar');return false;" class="TxtLink" href="javascript:void(0)">見積車両</a>
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpCarPrice');return false;" name="ImageButton23" id="ImageButton23" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton2" onclick="Framework.GoBackReloadPageUrl('/InpCarPrice');return false;" class="TxtLink" href="javascript:void(0)">販売価格</a>
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpOption');return false;" name="ImageButton24" id="ImageButton24" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton11" onclick="Framework.GoBackReloadPageUrl('/InpOption');return false;" class="TxtLink" href="javascript:void(0)">付属品</a>
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpZeiHoken');return false;" name="ImageButton25" id="ImageButton25" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton3" onclick="Framework.GoBackReloadPageUrl('/InpZeiHoken');return false;" class="TxtLink" href="javascript:void(0)">税金・保険料</a>
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" name="ImageButton26" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" id="ImageButton26" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton4" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" href="javascript:void(0)">預り法定費用</a>
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" name="ImageButton26" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" id="ImageButton26" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton5" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/InpSyohiyo');return false;" href="javascript:void(0)">手続代行費用</a>
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" name="ImageButton28" onclick="Framework.GoBackReloadPageUrl('/InpSitaCar');return false;" id="ImageButton28" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton6" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/InpSitaCar');return false;" href="javascript:void(0)">下取車</a>
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpNebiki');return false;" name="ImageButton29" id="ImageButton29" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton7" onclick="Framework.GoBackReloadPageUrl('/InpNebiki');return false;" class="TxtLink" href="javascript:void(0)">価格調整</a>
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        @{
-                                            if (Model.EstModel.LeaseFlag == "1")
-                                            {
-                                                <input type="image" onclick="CheckNowOdometer();return false;" name="ImageButton30" id="ImageButton30" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                                <a id="LinkButton8" onclick="CheckNowOdometer();return false;" class="TxtLink" href="javascript:void(0)">リース計算</a>
-                                            }
-                                            else
-                                            {
-                                                <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;" name="ImageButton30" id="ImageButton30" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                                <a id="LinkButton8" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;" class="TxtLink" href="javascript:void(0)">ローン計算</a>
-                                            }
-                                        }
-
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpCustKana');return false;" name="ImageButton31" id="ImageButton31" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton9" onclick="Framework.GoBackReloadPageUrl('/InpCustKana');return false;" class="TxtLink" href="javascript:void(0)">お客様カナ</a>
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpHanbaiten');return false;" name="ImageButton32" id="ImageButton32" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton10" onclick="Framework.GoBackReloadPageUrl('/InpHanbaiten');return false;" class="TxtLink" href="javascript:void(0)">販売店</a>
-                                    </td>
-                                </tr>
-                                <tr class="col d-flex justify-content-between">
-                                    <td style="height: 22px;">
-                                        <input type="image" onclick="Framework.GoBackReloadPageUrl('/InpNotes');return false;" name="ImageButton35" id="ImageButton35" class="imgBtn" src="img/page_edit.png" style="border-width:0px;">
-                                        <a id="LinkButton12" onclick="Framework.GoBackReloadPageUrl('/InpNotes');return false;" class="TxtLink" href="javascript:void(0)">備考</a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                @{
-                    if (Model.EstModel.LeaseFlag == "0")
-                    {
-                        <div class="col d-flex justify-content-between">
-                            <div class="border-button container text-center" style="margin-top: 700px;">
-                                <br />
-                                <div class="col d-flex justify-content-between">
-                                    <a href="javascript:window.close();">
-                                        <img src="~/img/btnCSV.png" />
-                                    </a>
-                                </div>
-                                <br />
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="col d-flex justify-content-between">
-                            <div class="border-button-print  container text-center" style="margin-top: 650px;">
-                                <table>
-                                    <tbody>
-                                        <tr class="col d-flex justify-content-between">
-                                            <td style="height: 22px;">
-                                                <input type="image" onclick="" name="print" id="print" class="imgBtn" src="~/img/print.png" style="border-width:0px;">
-                                                <a id="LinkButton1" onclick="" class="TxtLink" href="javascript:void(0)">法人申込書印刷</a>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    }
-                }
-
             </div>
-            <div class="col-sm-10">
+            <div class="col-10">
                 <div class="row">
-                    <div class="col-6 col-sm-6 ">
+                    <div class="col-6">
                         <table cellpadding="1" class="nomal">
                             <tr>
-                                <td class=" table-color  ">
+                                <td class="table-color">
                                     見積書番号
                                 </td>
                                 <td class="data">
@@ -226,13 +149,13 @@
                             </table>
                         </div>
                         <br />
-                        <span class="label-red label-note-right d-flex justify-content-between">
+                        <span class="label-red label-note-right">
                             ※注意※<br>
                             諸費用設定にて、10月以前に「税込み」表示設定をしている場合は、<br>
                             10月より税率が10%になりましたので今一度見直しください。
                         </span>
                     </div>
-                    <div class="col-4 col-sm-4 ">
+                    <div class="col-4">
                         <span class="label-red label-note-left ">
                             ・&nbsp;この見積は既に保存されています<br>
                             ・&nbsp;データの保存期間は3ヶ月です<br>
@@ -244,7 +167,7 @@
                 <br />
                 <!-- お客様情報（印字用） -->
                 <div class="row">
-                    <div class="col-8 col-sm-8">
+                    <div class="col-8">
                         <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
                             <tr>
                                 <td colspan="2" class="title" style="background-color: #d2e0fb; text-align: left;">
@@ -285,7 +208,7 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="col-4 col-sm-4">
+                    <div class="col-4">
                         <table cellpadding="1" class="table table-responsive" style="border: solid 1px #000000;">
                             <tr>
                                 <td class="title" style="background-color: #d2e0fb; text-align: left;">
@@ -461,7 +384,7 @@
                 &nbsp;
                 <div class="row">
                     <!-- table Price Left -->
-                    <div class="col-6 col-sm-6">
+                    <div class="col-6">
                         <!-- 詳細情報：販売価格 -->
                         <table cellpadding="2" class="table table-responsive">
                             <tr>
@@ -785,7 +708,7 @@
                         </table>
                     </div>
                     <!-- table Price Right -->
-                    <div class="col-6 col-sm-6">
+                    <div class="col-6">
                         <!-- 詳細情報：諸費用明細 -->
                         <table cellpadding="2" class="table table-responsive">
                             <tr>
@@ -1115,7 +1038,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="data" style="height: 22px;">
+                                    <td class="data">
                                         <span id="Label1" class="EstTitle1" style="font-size:10pt;">初年度登録</span>
                                     </td>
                                     <td id="Td2" class="data" style="text-align: right; height: 22px;">
@@ -1155,7 +1078,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="data" style="height: 22px;">
+                                    <td class="data">
                                         <span id="Label19" class="EstTitle1" style="font-size:10pt;">契約プラン</span>
                                     </td>
                                     <td id="Td13" class="data" style="width: 271px; text-align: right; height: 22px;">
