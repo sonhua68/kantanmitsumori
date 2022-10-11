@@ -6,5 +6,6 @@ namespace KantanMitsumori.IService.ASEST
     public interface IPreExaminationService
     {
         ResponseBase<ResponsePreExamination> GetInfoPreExamination(string estNo, string estSubNo);
+        Task<ResponseBase<int>> UpdatePreExamination(LogToken logToken);
     }
 }

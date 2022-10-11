@@ -80,6 +80,7 @@ namespace KantanMitsumori.Controllers
             var response = await _inpLeaseCalc.UpdateLeaseProgressIde(requestData, _logToken!);
             return Ok(response);
         }
+       
         #endregion InpLeaseCalc
     }
 }

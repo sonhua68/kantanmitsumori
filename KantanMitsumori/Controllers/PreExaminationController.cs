@@ -19,19 +19,22 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Index()
         {
-            // 見積書データ取得
-
-            string estNo = _logToken.sesEstNo ?? "";
+            string estNo = _logToken!.sesEstNo ?? "";
             string estSubNo = _logToken.sesEstSubNo ?? "";
-
             var response = _preExaminationService.GetInfoPreExamination(estNo, estSubNo);
-
             if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }
             ViewBag.PointReQuestPreExamination = _urlSettings.PointReQuestPreExamination;
             return View(response.Data);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdatePreExamination()
+        {
+            var response = await _preExaminationService.UpdatePreExamination(_logToken!);
+            return Ok(response);
         }
     }
 }

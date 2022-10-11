@@ -210,6 +210,7 @@ namespace KantanMitsumori.Service
                     return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
                 }
                 dtEstimateIdes.LeaseProgress = leaseProgress;
+                dtEstimateIdes.IsApplyLease = 0;
                 dtEstimateIdes.CreateDate = DateTime.Now;
                 dtEstimateIdes.UpdateDate = DateTime.Now;
                 dtEstimateIdes.UpdateUser = logToken.UserNo;
@@ -219,7 +220,7 @@ namespace KantanMitsumori.Service
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "UpdateInpHanbaiten");
+                _logger.LogError(ex, "UpdateLeaseProgressIde");
                 return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
@@ -463,6 +464,7 @@ namespace KantanMitsumori.Service
 
         }
 
+       
         #endregion Func  private
     }
 

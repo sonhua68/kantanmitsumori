@@ -27,7 +27,9 @@
     <script type="text/javascript" src="~/js/PreExamination/process.js" charset="UTF-8"></script>
     <script type="text/javascript" src="~/js/PreExamination/common.js" charset="UTF-8"></script>
     <script type="text/javascript" src="~/js/PreExamination/common_design.js" charset="UTF-8"></script>
-    <script src="~/js/PreExamination/svg4everybody.min.js"></script>
+    <script src="~/js/PreExamination/svg4everybody.min.js">
+    </script>
+    <script src="~/js/framework.js"></script>
     <script>svg4everybody();</script>
     <script type="text/javascript">
         $(function () {
@@ -480,7 +482,7 @@
                         </div>
 
                         <div class="buttonBox">
-                            <button type="submit" class="buttonDecision buttonDisabled js-entryButton">
+                            <button type="submit" class="buttonDecision buttonDisabled js-entryButton" onclick="return upPreExamination();">
                                 審査を申し込む
                                 <svg class="arrowNext">
                                     <use xlink:href="/img/sprite.svg#ico_arrow"></use>
@@ -523,4 +525,12 @@
     </div>
     <!-- ##### 蜈ｱ騾壹ヵ繝�繧ｿ繝ｼ縲END ##### -->
 </body>
+<script>
+    function upPreExamination() {
+        var model = {};
+        var result = Framework.submitAjaxFormUpdateAsync(model, "/PreExamination/UpdatePreExamination");
+        console.log(result)
+    }
+</script>
+
 </html>
