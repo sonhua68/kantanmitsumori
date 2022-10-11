@@ -134,6 +134,12 @@ namespace KantanMitsumori.Service
                 {
                     return ResponseHelper.Error<ResponseInpLeaseCalc>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
                 }
+                if (!IsFirstRegOverLeaseSttMonth(model))
+                {
+                    data.IsError = true;                 
+                    return ResponseHelper.Ok<ResponseInpLeaseCalc>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003), data);
+
+                }
                 _logger.LogInformation("\"-------************* EstNo:{0} EstSubNo: {1} *************-------\"", estimates.EstNo, estimates.EstSubNo);
                 _calLease = new CommonCalLease(_logger, _unitOfWorkIDE, lstWriteLog, model, _testSettings);
                 var consumptionTax = _calLease.GetConsumptionTax();
@@ -330,7 +336,7 @@ namespace KantanMitsumori.Service
                 _calLease.addLogUI("--------------");
                 _calLease.addLogUI("消費税率: " + _calLease.consumptionTax.ToString());
             }
-     
+
         }
         private void saveLogFinal(double consumptionTax, double dPriceEnd, double dPriceMonthly, double dPriceMonthNoTax, double dPriceProcedure)
         {
@@ -431,7 +437,31 @@ namespace KantanMitsumori.Service
             }
         }
 
-      
+        private bool IsFirstRegOverLeaseSttMonth(RequestInpLeaseCalc model)
+        {
+            var restriction = getRestriction();
+            DateTime _firstReg = DateTime.Parse(CommonFunction.ConvertDate(model.FirstReg!));
+            DateTime _leaseSttMonth = DateTime.Parse(CommonFunction.ConvertDate(model.LeaseSttMonth!));
+            _firstReg = _firstReg.AddYears(restriction);
+            if (_firstReg < _leaseSttMonth)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        private int getRestriction()
+        {
+            int dRestriction = 0;
+            var leaseTargets = _unitOfWorkIDE.LeaseTargets.GetSingle(n => n.Id == 1);
+            if (leaseTargets != null)
+            {
+                dRestriction = leaseTargets.Restriction;
+            }
+            return dRestriction;
+
+        }
 
         #endregion Func  private
     }

@@ -896,11 +896,12 @@ function isShowErrorMessage(valCheck) {
     document.getElementById("lbl_ErrorMessage").style.display = 'contents';
     document.getElementById("lbl_ErrorMessage").innerHTML = '';
 
-    if (valCheck != '') {
-        document.getElementById("lbl_ErrorMessage").innerHTML = '月額リース料' + valCheck + '円以上になるように調整してください。';
+    if (valCheck == '' || typeof valCheck == "undefined") {
+        document.getElementById("lbl_ErrorMessage").innerHTML = 'この車両はリース対象外です。';
+     
     }
     else {
-        document.getElementById("lbl_ErrorMessage").innerHTML = 'この車両はリース対象外です。';
+        document.getElementById("lbl_ErrorMessage").innerHTML = '月額リース料' + valCheck + '円以上になるように調整してください。';
     }
 
     // Set disabled for button confirm
@@ -1063,7 +1064,7 @@ function GetCarType() {
             let value = result.data[i].carTypeName;
             if (key != 2) {
                 $("#cboCarType").append(new Option(value, key));
-            }          
+            }
         }
     } else {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);
@@ -1110,8 +1111,9 @@ function GetVolInsurance() {
  * InpLeaseCal
  * Create [2022/09/02] by HoaiPhong 
  */
-function InpLeaseCal() {
-    $("#lbl_ErrorMessage").text();
+function InpLeaseCal() {  
+    document.getElementById("lbl_ErrorMessage").style.display = 'contents';
+    document.getElementById("lbl_ErrorMessage").innerHTML = '';
     if (inputChk()) {
         var model = Framework.getFormData($("#formInpLeaseCalc"));
         model.FirstReg = SetFirstReg(model.FirstReg);
@@ -1127,8 +1129,10 @@ function InpLeaseCal() {
             buttonEnabling();
             appendLogUI(item.listUILog);
         } else if (result.resultStatus == 0 && result.messageCode === 'I0003') {
-            var item = result.data;
-            isShowErrorMessage(item.PriceLeaseFeeLowerLimit)
+            var item = result.data;      
+            if (item.priceLeaseFeeLowerLimit != 0) { isShowErrorMessage(item.priceLeaseFeeLowerLimit) } else {
+                isShowErrorMessage("");
+            }
         } else {
             Framework.GoBackErrorPage(result.messageCode, result.messageContent);
         }
