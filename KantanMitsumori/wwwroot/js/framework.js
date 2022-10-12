@@ -525,18 +525,26 @@ var Framework =
         },
 
         {
-            key: "GetFullHost",
-            value: function GetFullHost(url) {
+            key: "GetFullHost_",
+            value: function GetFullHost_(url) {
                 const fullpath = location.protocol + '//' + location.host;
-                //let pathname = location.pathname.split('/')[1]
-                //if (!pathname.includes(url)) {
-                //    return fullpath + '/' + pathname + url;
-                //}
-                return fullpath + url;
+                let pathName = location.pathname.split('/')[1]
+                let controler = url.split('/')[1];
+                if (pathName.includes("Estmain") && !pathName.includes(controler)) {
+                    return fullpath + url;
+                } else {
+                    return fullpath + '/' + pathName + url;
+                }
 
             }
         },
-
+        {
+            key: "GetFullHost",
+            value: function GetFullHost(url) {
+                let fullpath = '.' + url;     
+                return fullpath;
+            }
+        },
         {
             key: "GoBackErrorPage",
             value: function GoBackErrorPage(messageCode, messContent) {
