@@ -485,14 +485,14 @@ var Framework =
             key: "SetSelectedNumber",
             value: function SetSelectedNumber(nameId, defaultValue) {
                 let idOption = $("#" + nameId + " option");
-                if (isNaN(defaultValue) || defaultValue === 0) {
+                if (isNaN(defaultValue)) {
                     idOption[0].selected == true;
                 }
                 else {
                     let length = idOption.length;
                     for (let i = 0; i < length; i++) {
                         let value = parseInt(idOption[i].value);
-                        if (value === defaultValue) {
+                        if (value === parseInt(defaultValue)) {
                             $("#" + nameId + " option[value='" + value + "']").attr("selected", "selected");
                             return;
                         }
@@ -529,8 +529,8 @@ var Framework =
             value: function GetFullHost_(url) {
                 const fullpath = location.protocol + '//' + location.host;
                 let pathName = location.pathname.split('/')[1]
-                let controler = url.split('/')[1];
-                if (pathName.includes("Estmain") && !pathName.includes(controler)) {
+                let pathName2 = location.pathname.split('/')[2]              
+                if (typeof pathName2 == 'undefined') {
                     return fullpath + url;
                 } else {
                     return fullpath + '/' + pathName + url;
@@ -550,9 +550,8 @@ var Framework =
             value: function GoBackErrorPage(messageCode, messContent) {
                 var param = {};
                 param.messageCode = messageCode;
-                param.messageContent = messContent;
-                var url = Framework.GetFullHost("/Error/ErrorPage");
-                Framework.SummitForm(url, param);
+                param.messageContent = messContent;             
+                Framework.SummitForm("/Error/ErrorPage", param);
 
             }
         },
@@ -584,9 +583,7 @@ var Framework =
             value: function SummitForm(path, params, method = 'post') {
                 const form = document.createElement('form');
                 form.method = method;
-                form.action = Framework.GetFullHost(path);
-
-
+                form.action = Framework.GetFullHost_(path);
                 for (const key in params) {
                     if (params.hasOwnProperty(key)) {
                         const hiddenField = document.createElement('input');
