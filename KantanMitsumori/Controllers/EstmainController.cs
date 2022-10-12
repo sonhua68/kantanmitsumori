@@ -57,7 +57,7 @@ namespace KantanMitsumori.Controllers
         public IActionResult DownloadPdf()
         {
             string filepath = _physicalPathSettings.BizFilePdf;
-            string[] strArr = filepath.Split(@"/");
+            string[] strArr = filepath.Split(@"\");
 
             return File("~/pdf/" + strArr[strArr.Length - 1], "application/pdf", strArr[strArr.Length - 1]);
         }
