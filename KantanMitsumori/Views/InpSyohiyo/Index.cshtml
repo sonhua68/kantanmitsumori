@@ -219,7 +219,7 @@
             <tr>
                 <td class="inpbtntd" colspan="3" style=" ">
                     <input type="submit" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
-                    <input type="submit" name="btnOK" value="OK" form="formInputSyohiyo" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
+                    <input type="submit" name="btnOK" value="OK" onclick="return onSummit();" form="formInputSyohiyo" id="btnOK" class="Btn1" style="height:32px;width:100px;">&nbsp;
                 </td>
             </tr>
             <tr>
@@ -233,25 +233,11 @@
         <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
     </div>
 </form>
-<script>
-    $('#formInputSyohiyo').validate({
-        submitHandler: function(form) {
-            if (inputChk() == false) { return; }
-            var model = Framework.getFormData($("#formInputSyohiyo"));
-            console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpSyohiyo/UpdateInpSyohiyo");
-            if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
-            } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#txMsg").html(Items)
-                } else {
-                    location.reload();
-                }
-            }
-        }
-    });
+<script> 
+    function onSummit() {
+        if (inputChk() == false) { return; }
+        Framework.OnSubmitForm("/InpSyohiyo/UpdateInpSyohiyo", "formInputSyohiyo");
+        return false;
+    }
 </script>
 <script src="~/js/InpSyohiyo.js"></script>

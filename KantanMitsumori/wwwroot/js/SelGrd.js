@@ -16,7 +16,11 @@ function GoNextPage(pageNumber) {
     model.colSort = _conNumber;
     model.pageNumber = pageNumber
     var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
-    ReloadListData(result);
+    if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    } else {
+        ReloadListData(result);
+    }
 }
 function SortData(colNumber) {
     var model = {};
@@ -41,11 +45,16 @@ function SortData(colNumber) {
     }
     model.colSort = _conNumber;
     var result = Framework.submitAjaxLoadData(model, "/SelGrd/LoadData");
-    $('tr#pagination').remove();
-    $('#trId').twbsPagination('destroy');
-    UiPagination(result[0].totalPages)
-    AddPagination(result[0].totalPages);
-    ReloadListData(result);
+    if (result.resultStatus == -1) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    } else {
+        $('tr#pagination').remove();
+        $('#trId').twbsPagination('destroy');
+        UiPagination(result[0].totalPages)
+        AddPagination(result[0].totalPages);
+        ReloadListData(result);
+    }
+
 }
 function ReloadListData(data) {
     $("#gvGrade").css("display", "inline-table");
@@ -126,11 +135,10 @@ function SetFreeEst(gradeName, carCase, dispVol, driveTypeCode) {
     model.CarCase = carCase;
     model.DispVol = dispVol;
     var result = Framework.submitAjaxFormUpdateAsync(model, "/SelGrd/SetFreeEst");
-    if (result.resultStatus == 0 && result.messageCode === 'I0002') {       
-        let isError = parseInt(result.data.estModel.isError);
+    if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+        CleanCookies();
         Framework.GoBackReloadPage();
-        if (isError == 1) {
-            alert("最初に車両本体価格をご確認下さい")
-        }
+    } else {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
     }
 }

@@ -1,10 +1,6 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
-using KantanMitsumori.Helper.Enum;
+﻿using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.IService;
-using KantanMitsumori.IService.ASEST;
-using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
-using KantanMitsumori.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KantanMitsumori.Controllers
@@ -12,39 +8,32 @@ namespace KantanMitsumori.Controllers
 
     public class InpCarController : BaseController
     {
-        private readonly IEstMainService _appService;
         private readonly IEstimateService _estimateService;
-        private readonly ILogger<InpCarController> _logger;
-        public InpCarController(IEstMainService appService, IEstimateService estimateService, IConfiguration config,  ILogger<InpCarController> logger):base(config)
+        public InpCarController(IEstimateService estimateService)
         {
-            _appService = appService;
             _estimateService = estimateService;
-            _logger = logger;
         }
+
         #region InpCar     
         public IActionResult Index()
-        {            
+        {
             RequestInp request = new RequestInp();
             request.EstNo = _logToken.sesEstNo;
             request.EstSubNo = _logToken.sesEstSubNo;
             request.UserNo = _logToken.UserNo;
             request.TaxRatio = _logToken.sesTaxRatio;
             var response = _estimateService.GetDetail(request);
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }
             return View(response.Data);
-        }  
+        }
 
         [HttpPost]
         public async Task<IActionResult> UpdateInputCar([FromForm] RequestUpdateInputCar requestData)
         {
             var response = await _estimateService.UpdateInputCar(requestData);
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
             return Ok(response);
         }
         #endregion InpCar

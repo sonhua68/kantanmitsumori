@@ -18,11 +18,9 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
             {
                 switch (source.ReportType)
                 {
-                    case ReportType.Estimate:
-                    case ReportType.LeaseEstimate:
+                    case ReportType.Estimate:                    
                         return $"{source.CustNm_forPrint}　様";
                     case ReportType.Order:
-                    case ReportType.LeaseOrder:
                         if (source.CustNm_forPrint.Length <= 11)
                             return $"{source.CustNm_forPrint.PadRight(14, '　')}印";
                         else

@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>かんたん見積もりテスト画面</h1>
-    <form method="post" action="/Estmain" target=_blank>
+    <form method="post" id="esmain" target=_blank>
         <input type="submit" value="送信" /><br><br>
         <table>
             <tbody>
@@ -81,7 +81,7 @@
                 </tr>
                 <tr>
                     <th>ins(ins)</th>
-                    <td><input type="text" class="inputTxt" name="ins" value="      "></td>
+                    <td><input type="text" class="inputTxt" name="ins" value=""></td>
                 </tr>
                 <tr>
                     <th>走行距離(mil)</th>
@@ -169,7 +169,7 @@
                 </tr>
                 <tr>
                     <th>volunit(volunit)</th>
-                    <td><input type="text" class="inputTxt" name="volUnit" value="null"></td>
+                    <td><input type="text" class="inputTxt" name="volUnit" value=""></td>
                 </tr>
                 <tr>
                     <th>milUnit(milUnit)</th>
@@ -208,30 +208,6 @@
         <input type="hidden" name="nonTax" value="1" />
     </form>
 </body>
-<script>
-    let custZip_forPrint = "CustZip_forPrint";
-    let custNm_forPrint = "CustNm_forPrint";
-    let custAdr_forPrint = "CustAdr_forPrint";
-    let custTel_forPrint = "CustTel_forPrint";
-    let kbnSet = "KbnSet";
-    let caseSet = "CaseSet";
-    let sesMaker = "sesMaker";
-    let sesCarNM = "sesCarNM";
-    let btnHanei = "btnHanei";
-    let cookiesASEST = "CookiesASEST";
-    RemoteCookies(custZip_forPrint);
-    RemoteCookies(custNm_forPrint);
-    RemoteCookies(custAdr_forPrint);
-    RemoteCookies(custTel_forPrint);
-    RemoteCookies(cookiesASEST);
-    RemoteCookies(kbnSet);
-    RemoteCookies(caseSet);
-    RemoteCookies(sesMaker);
-    RemoteCookies(sesCarNM);
-    RemoteCookies(btnHanei);
-    function RemoteCookies(name) {
-        document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    }
-</script>
+<script src="~/js/testsubmit.js"></script>
 </html>
 

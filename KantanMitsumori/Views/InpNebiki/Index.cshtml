@@ -22,7 +22,7 @@
     var Price = Model.CarPrice - Model.Discount;
     var PriceNew = CommonFunction.FormatString(Price);
     var LblSyakenSeibi = CommonFunction.Syaken(Model.SyakenNew, Model.SyakenZok);
-    var hidConTaxInputKb = Model.ConTaxInputKb == true?"True":"false";
+    var hidConTaxInputKb = Model.ConTaxInputKb == true ? "True" : "false";
 
 }
 <form id="formInpNebiki">
@@ -222,9 +222,9 @@
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="inpbtntd" colspan="2" >
-                                                        <input type="button" name="btnCancel" value="キャンセル" onclick="Framework.GoBackReloadPageUrl('/');return false;" id="btnCancel" class="Btn1" style="height:34px;width:100px;">
-                                                        <input type="submit" name="btnOK" form="formInpNebiki" value="OK" id="btnOK" class="Btn1" style="height:34px;width:100px;">&nbsp;
+                                                    <td class="inpbtntd" colspan="2">
+                                                        <input type="button" name="btnCancel" value="キャンセル" onclick="Framework.GoBackReloadPage();return false;" id="btnCancel" class="Btn1" style="height:34px;width:100px;">
+                                                        <input type="submit" name="btnOK" form="formInpNebiki" onclick="return onSummit()" value="OK" id="btnOK" class="Btn1" style="height:34px;width:100px;">&nbsp;
                                                     </td>
 
                                                 </tr>
@@ -280,27 +280,12 @@
         </tbody>
     </table>
 </form>
-<script>
-   
-    $('#formInpNebiki').validate({
-        submitHandler: function (form) {
-          if (inputChk() == false) { return; }
-            var model = Framework.getFormData($("#formInpNebiki"));
-            console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpNebiki/UpdateInpNebiki");
-            if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-                Framework.GoBackReloadPage();
-            } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#txMsg").html(Items)
-                } else {
-                    location.reload();
-                }
-            }
-        }
-    });  
+<script> 
+    function onSummit() {
+        if (inputChk() == false) { return; }
+        Framework.OnSubmitForm("/InpNebiki/UpdateInpNebiki", "formInpNebiki");
+        return false;
+    }
 
 </script>
 <script src="~/js/InpNebiki.js"></script>

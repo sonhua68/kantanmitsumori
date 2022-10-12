@@ -2,6 +2,7 @@
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Entity.ASESTSQL;
 using KantanMitsumori.Entity.IDEEnitities;
+using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
@@ -16,10 +17,26 @@ namespace KantanMitsumori.Service.Mapper
         {
             // Generic type mapping
             CreateMap<int?, string>().ConvertUsing(s => s.ToStringOrEmpty());
-            CreateMap<string?, string>().ConvertUsing(s => s.ToStringOrEmpty());
-            CreateMap<bool?, string>().ConvertUsing(s => s.ToStringOrEmpty());
-            CreateMap<DateTime?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<long?, string>().ConvertUsing(s => s.ToStringOrEmpty());
             CreateMap<byte?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<bool?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<string?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<double?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<float?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<decimal?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<DateTime?, string>().ConvertUsing(s => s.ToStringOrEmpty());
+            CreateMap<string, int>().ConstructUsing(s => s.FromStringOrDefault<int>());
+            CreateMap<string, long>().ConstructUsing(s => s.FromStringOrDefault<long>());
+            CreateMap<string, bool>().ConstructUsing(s => s.FromStringOrDefault<bool>());
+            CreateMap<string, byte>().ConstructUsing(s => s.FromStringOrDefault<byte>());
+            CreateMap<string, double>().ConstructUsing(s => s.FromStringOrDefault<double>());
+            CreateMap<string, float>().ConstructUsing(s => s.FromStringOrDefault<float>());
+            CreateMap<string, decimal>().ConstructUsing(s => s.FromStringOrDefault<decimal>());
+
+            // Source name as sesPropertyName
+            RecognizePrefixes("ses");
+            RecognizePrefixes("hid");
+            RecognizePrefixes("txt");
 
             // Specified class mapping            
             CreateMap<MMaker, MakerModel>();
@@ -43,21 +60,52 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<MUserDef, ResponseUserDef>();
             CreateMap<RequestUpdateInpInitVal, MUserDef>();
 
+            // Mapping for InpCarPrice
+            CreateMap<LogToken, RequestInpCarPrice>();
+            CreateMap<RequestInpCarPrice, ResponseInpCarPrice>();
+            CreateMap<TEstimate, ResponseInpCarPrice>()
+                .ForMember(t => t.SyakenSeibi, o => { o.MapFrom(new SyakenSeibiResolver()); })
+                .ForMember(t => t.IsSyakenZok, o => { o.MapFrom(new IsSyakenZokResolver()); })
+                .ForMember(t => t.TaxIncluded, o => { o.MapFrom(s => s.ConTaxInputKb == true ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax); })
+                .ForMember(t => t.CarSum, o => o.MapFrom(s => s.CarSum.ToStringWithNoZero()))
+                .ForMember(t => t.CarPrice, o => o.MapFrom(s => s.CarPrice.ToStringWithNoZero()));
+            CreateMap<TEstimateSub, ResponseInpCarPrice>()
+                .ForMember(t => t.EstNo, o => { o.Ignore(); })
+                .ForMember(t => t.EstSubNo, o => { o.Ignore(); })
+                .ForMember(t => t.UserNo, o => { o.Ignore(); })
+                .ForMember(t => t.RakuSatu, o => o.MapFrom(s => s.RakuSatu.ToStringWithNoZero()))
+                .ForMember(t => t.Rikusou, o => o.MapFrom(s => s.Rikusou.ToStringWithNoZero()))
+                .ForMember(t => t.Sonota, o => o.MapFrom(s => s.Sonota.ToStringWithNoZero()));
+
+
+            CreateMap<RequestUpdateInpCarPrice, RequestUpdateCarPrice>()
+                .ForMember(t => t.SyakenZok, o => { o.PreCondition(s => s.IsSyakenZok); o.MapFrom(s => s.txtSyakenSeibi.FromStringOrDefault<int>()); })
+                .ForMember(t => t.SyakenNew, o => { o.PreCondition(s => !s.IsSyakenZok); o.MapFrom(s => s.txtSyakenSeibi.FromStringOrDefault<int>()); })
+                .ForMember(t => t.SonotaTitle, o => { o.MapFrom(s => string.IsNullOrWhiteSpace(s.txtSonotaTitle) ? "その他費用" : s.txtSonotaTitle); });
+
+            CreateMap<RequestUpdateCarPrice, TEstimate>();
+            CreateMap<RequestUpdateCarPrice, TEstimateSub>();
+
+            // Maping for reports
             CreateMapForReport();
+
 
         }
 
         private void CreateMapForReport()
         {
-            // Report mapping
+            // Request mapping
+            CreateMap<LogToken, RequestReport>();
+
+            // Response mapping
             CreateMap<TEstimate, EstimateReportModel>()
                 .ForMember(t => t.EstNo, o => o.MapFrom(s => $"{s.EstNo}-{s.EstSubNo}"))
                 .ForMember(t => t.BusiDate, o => o.MapFrom(s => s.TradeDate.ToString("yyyy年M月d日")))
                 .ForMember(t => t.CarName, o => o.MapFrom(s => $"{s.MakerName}{s.ModelName}"))
                 .ForMember(t => t.CaseName, o => o.MapFrom(s => s.Case ?? ""))
                 .ForMember(t => t.Color, o => o.MapFrom(s => s.BodyColor ?? ""))
-                .ForMember(t => t.FirstRegYm, o => o.ConvertUsing(new JpYMConverter()))
-                .ForMember(t => t.CheckCarYm, o => o.ConvertUsing(new JpYMConverter()))
+                .ForMember(t => t.FirstRegYm, o => o.ConvertUsing(new JpEraYMConverter()))
+                .ForMember(t => t.CheckCarYm, o => o.ConvertUsing(new JpEraYMConverter()))
                 .ForMember(t => t.NowOdometer, o => o.ConvertUsing(new MiUnitConverter()))
                 .ForMember(t => t.AccidentHis, o => o.ConvertUsing(new KeyValueConverter<int>(KeyValueConverterHelper.AccidentHisDict)))
                 .ForMember(t => t.Vol, o => o.ConvertUsing(new VolUnitConverter(), s => s.DispVol))
@@ -72,8 +120,8 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.CarImg8, o => o.ConvertUsing(new ImageConverter(), s => s.CarImgPath8))
                 .ForMember(t => t.AAInfo, o => o.MapFrom(new AAInfoResolver()))
                 .ForMember(t => t.TradeInCarName, o => { o.PreCondition(c => c.IsTradeIn()); })
-                .ForMember(t => t.TradeInFirstRegYm, o => { o.PreCondition(c => c.IsTradeIn()); o.ConvertUsing(new JpYMConverter()); })
-                .ForMember(t => t.TradeInCheckCarYm, o => { o.PreCondition(c => c.IsTradeIn()); o.ConvertUsing(new JpYMConverter()); })
+                .ForMember(t => t.TradeInFirstRegYm, o => { o.PreCondition(c => c.IsTradeIn()); o.ConvertUsing(new JpEraYMConverter()); })
+                .ForMember(t => t.TradeInCheckCarYm, o => { o.PreCondition(c => c.IsTradeIn()); o.ConvertUsing(new JpEraYMConverter()); })
                 .ForMember(t => t.TradeInNowOdometer, o => { o.PreCondition(c => c.IsTradeIn()); o.ConvertUsing(new TradeInMiUnitConverter()); })
                 .ForMember(t => t.TradeInChassisNo, o => o.PreCondition(c => c.IsTradeIn()))
                 .ForMember(t => t.TradeInRegNo, o => { o.PreCondition(c => c.IsTradeIn()); o.MapFrom(s => s.TradeInRegNo != null ? s.TradeInRegNo.Replace("/", "") : ""); })
@@ -93,7 +141,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.DaikoAll, o => o.ConvertUsing(new YenCurrencyConverter(), s => s.TaxCostAll))
                 .ForMember(t => t.TaxTitle, o => o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.TaxTitleDict), s => s.ConTaxInputKb ?? false))
                 .ForMember(t => t.ConTax, o => o.ConvertUsing(new YenCurrencyConverter()))
-                .ForMember(t => t.CarSaleKeiTitle, o => o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.CarSaleKeiTitleDict), s => s.ConTaxInputKb ?? false))
+                .ForMember(t => t.CarSaleKeiTitle, o => o.MapFrom(s => CommonConst.def_TitleCarKei))
                 .ForMember(t => t.CarSaleKei, o => o.ConvertUsing(new YenCurrencyConverter(), s => s.CarSaleSum))
                 .ForMember(t => t.TradeInPrice, o => o.ConvertUsing(new YenCurrencyConverter(prefix: "▲")))
                 .ForMember(t => t.BalanceTitle, o => o.MapFrom(s => "下取車残債"))
@@ -181,6 +229,22 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.AutoTaxMonth, o => { o.Ignore(); })
                 .ForMember(t => t.DamageInsMonth, o => { o.Ignore(); });
 
+            CreateMap<TEstimateIde, EstimateReportModel>()
+                .ForMember(t => t.MonthlyLeaseFeeName, o => { o.MapFrom(s => $"月額リース料（税込）{s.MonthlyLeaseFee:N0}円（{s.LeasePeriod}ヶ月）"); })
+                .ForMember(t => t.InspectionExpirationDate, o => { o.ConvertUsing(new JpYMDConverter()); })
+                .ForMember(t => t.LeaseStartMonth, o => { o.ConvertUsing(new JpYMDConverter()); })
+                .ForMember(t => t.LeasePeriodName, o => { o.ConvertUsing(new YenCurrencyConverter(unit: "ヶ月"), s => s.LeasePeriod); })
+                .ForMember(t => t.LeaseExpirationDate, o => { o.ConvertUsing(new JpYMDConverter()); })
+                .ForMember(t => t.ExtendedGuarantee, o => { o.ConvertUsing(new ExtendedGuaranteeConverter(), s => s.IsExtendedGuarantee); })
+                .ForMember(t => t.HasInsurance, o => { o.ConvertUsing(new HasInsuranceConverter(), s => s.InsuranceCompanyId); })
+                .ForMember(t => t.InsuranceFee, o => { o.ConvertUsing(new YenCurrencyConverter()); })
+                .ForMember(t => t.DownPayment, o => { o.ConvertUsing(new YenCurrencyConverter()); })
+                .ForMember(t => t.TradeInPrice1, o => { o.ConvertUsing(new YenCurrencyConverter(), s => s.TradeInPrice); });
+
+            CreateMap<MtIdeContractPlan, EstimateReportModel>()
+                .ForMember(t => t.ContractPlanName, o => { o.MapFrom(s => s.PlanName); });
+            CreateMap<MtIdeVoluntaryInsurance, EstimateReportModel>()
+                .ForMember(t => t.InsuranceCompanyName, o => { o.MapFrom(s => s.CompanyName); });
             CreateMap<RequestReport, EstimateReportModel>()
                 .ForMember(t => t.EstNo, o => o.Ignore())
                 .ForMember(t => t.CustNm_forPrint, o => { o.MapFrom(new CustNmResolver()); })

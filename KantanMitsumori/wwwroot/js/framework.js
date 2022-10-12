@@ -2,6 +2,7 @@
 #Framework 
 #Create [2022/08/01] By Hoài Phong 
  */
+
 "use strict";
 
 function _instanceof(left, right) { if (right !== null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
@@ -156,7 +157,7 @@ var Framework =
                 var result = [];
                 $.ajax({
                     type: "GET",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     async: false,
@@ -177,7 +178,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "GET",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     async: false,
@@ -200,7 +201,7 @@ var Framework =
                 $.ajax({
                     type: "GET",
                     data: id,
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     async: false,
@@ -275,7 +276,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     data: {
                         requestData: data
                     },
@@ -297,7 +298,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     data: {
                         requestData: data
                     },
@@ -318,7 +319,7 @@ var Framework =
             value: function submitAjaxRedirect(data, url) {
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     data: {
                         requestData: data
                     },
@@ -334,7 +335,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     async: false,
                     success: function success(r) {
                         result = r;
@@ -353,7 +354,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     data: {
                         requestData: data
                     },
@@ -377,7 +378,7 @@ var Framework =
                 var result = {};
                 $.ajax({
                     type: "POST",
-                    url: url,
+                    url: Framework.GetFullHost(url),
                     data: {
                         requestData: data
                     },
@@ -399,7 +400,7 @@ var Framework =
             value: function SummitForm(path, params, method = 'post') {
                 const form = document.createElement('form');
                 form.method = method;
-                form.action = path;
+                form.action = Framework.GetFullHost(path);
 
                 for (const key in params) {
                     if (params.hasOwnProperty(key)) {
@@ -489,8 +490,8 @@ var Framework =
                 }
                 else {
                     let length = idOption.length;
-                    for (let i = 1; i < length; i++) {
-                        let value = idOption[i].value;
+                    for (let i = 0; i < length; i++) {
+                        let value = parseInt(idOption[i].value);
                         if (value === defaultValue) {
                             $("#" + nameId + " option[value='" + value + "']").attr("selected", "selected");
                             return;
@@ -518,10 +519,43 @@ var Framework =
         {
             key: "GoBackReloadPage",
             value: function GoBackReloadPage() {
-                window.location.href = "/Estmain?IsInpBack=1";
+                window.location.href = Framework.GetFullHost("/Estmain?IsInpBack=1");
 
             }
-        },       
+        },
+
+        {
+            key: "GetFullHost_",
+            value: function GetFullHost_(url) {
+                const fullpath = location.protocol + '//' + location.host;
+                let pathName = location.pathname.split('/')[1]
+                let controler = url.split('/')[1];
+                if (pathName.includes("Estmain") && !pathName.includes(controler)) {
+                    return fullpath + url;
+                } else {
+                    return fullpath + '/' + pathName + url;
+                }
+
+            }
+        },
+        {
+            key: "GetFullHost",
+            value: function GetFullHost(url) {
+                let fullpath = '.' + url;     
+                return fullpath;
+            }
+        },
+        {
+            key: "GoBackErrorPage",
+            value: function GoBackErrorPage(messageCode, messContent) {
+                var param = {};
+                param.messageCode = messageCode;
+                param.messageContent = messContent;
+                var url = Framework.GetFullHost("/Error/ErrorPage");
+                Framework.SummitForm(url, param);
+
+            }
+        },
         {
             key: "GoBackPage",
             value: function GoBackPage() {
@@ -536,13 +570,13 @@ var Framework =
         {
             key: "GoBackReloadPageUrl",
             value: function GoBackReloadPageUrl(PageUrl) {
-                var ListUrl = ["/InpSitaCar","/"];
+                var ListUrl = ["/InpSitaCar", "/"];
                 let LeaseFlag = parseInt($("#hidLeaseFlag").val());
                 if (LeaseFlag == 1 && ListUrl.includes(PageUrl)) {
                     alert("リース画面でのみ、下取りの設定が可能。");
                 } else {
-                    window.location.href = PageUrl;
-                }               
+                    window.location.href = Framework.GetFullHost(PageUrl);
+                }
             }
         },
         {
@@ -550,7 +584,8 @@ var Framework =
             value: function SummitForm(path, params, method = 'post') {
                 const form = document.createElement('form');
                 form.method = method;
-                form.action = path;
+                form.action = Framework.GetFullHost(path);
+
 
                 for (const key in params) {
                     if (params.hasOwnProperty(key)) {
@@ -564,6 +599,29 @@ var Framework =
 
                 document.body.appendChild(form);
                 form.submit();
+            }
+        },
+        {
+            key: "OnSubmitForm",
+            value: function OnSubmitForm(Url, idForm) {
+                var model = Framework.getFormData($("#" + idForm));
+                var result = Framework.submitAjaxFormUpdateAsync(model, Url);
+                if (result.resultStatus == 0) {
+                    Framework.GoBackReloadPage();
+                } else {
+                    Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+                }
+            }
+        },
+        {
+            key: "OnSubmitFormValueModel",
+            value: function OnSubmitFormValueModel(Url, model) {
+                var result = Framework.submitAjaxFormUpdateAsync(model, Url);
+                if (result.resultStatus == 0) {
+                    Framework.GoBackReloadPage();
+                } else {
+                    Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+                }
             }
         },
         {

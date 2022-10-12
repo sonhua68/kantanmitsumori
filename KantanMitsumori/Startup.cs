@@ -1,5 +1,7 @@
-﻿using KantanMitsumori.DataAccess;
-using KantanMitsumori.Helper.CommonFuncs;
+﻿using KantanMitsumori.Attribute;
+using KantanMitsumori.DataAccess;
+using KantanMitsumori.Helper;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure;
 using KantanMitsumori.Service;
 using Microsoft.EntityFrameworkCore;
@@ -35,13 +37,17 @@ namespace KantanMitsumori
                 .EnableDetailedErrors()
 
             );
-            HelperToken.Configure(Configuration);
-            CommonSettings.Configure(Configuration);
             services.AddUnitOfWork();
             services.AddHttpClient();
             services.AddBusinessServices();
             services.AddHelperServices();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<DataSettings>(Configuration.GetSection("DataSettings"));
+            services.Configure<PhysicalPathSettings>(Configuration.GetSection("PhysicalPathSettings"));
+            services.Configure<TestSettings>(Configuration.GetSection("TestSettings"));
+            services.Configure<URLSettings>(Configuration.GetSection("URLSettings"));
         }
 
 
@@ -51,6 +57,8 @@ namespace KantanMitsumori
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            loggerFactory.AddLog4Net("log4net.config");
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
@@ -62,6 +70,8 @@ namespace KantanMitsumori
 
             app.UseAuthentication();
             //app.UseSession();
+
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

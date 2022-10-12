@@ -1,37 +1,33 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
-using KantanMitsumori.Models;
-using KantanMitsumori.Service;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
+using Microsoft.Extensions.Options;
 
 namespace KantanMitsumori.Controllers
 {
     public class SerEstController : BaseController
     {
-        private readonly IEstMainService _appService;
-        private readonly ILogger<SerEstController> _logger;
         private readonly ISelCarService _selCarService;
         private readonly IEstimateService _estimateService;
         private readonly IEstMainService _estMainService;
+        private readonly JwtSettings _jwtSettings;
 
-        public SerEstController(IEstMainService appService, ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, IConfiguration config, ILogger<SerEstController> logger) : base(config)
+        public SerEstController(ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, IOptions<JwtSettings> jwtSettings)
         {
-            _appService = appService;
-            _logger = logger;
             _selCarService = selCarService;
             _estimateService = estimateService;
             _estMainService = estMainService;
+            _jwtSettings = jwtSettings.Value;
         }
 
         #region SerEstController      
-        public  IActionResult Index()
+        public IActionResult Index()
         {
-        
             return View();
         }
         [HttpPost]
@@ -42,14 +38,14 @@ namespace KantanMitsumori.Controllers
             var response = _selCarService.GetListSerEst(requestData);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             var dt = await PaginatedList<ResponseSerEst>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
             if (dt.Count > 0)
             {
                 dt[0].TotalPages = dt.TotalPages;
                 dt[0].PageIndex = dt.PageIndex;
-            }           
+            }
             return Ok(dt);
         }
         [HttpGet]
@@ -58,7 +54,7 @@ namespace KantanMitsumori.Controllers
             var response = _estimateService.GetMakerNameAndModelName(_logToken.UserNo!, makerName);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             return Ok(response);
         }
@@ -68,19 +64,19 @@ namespace KantanMitsumori.Controllers
             var response = await _estimateService.DeleteEstimate(requestData.EstNo!, requestData.EstSubNo!);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             return Ok(response);
         }
         [HttpPost]
         public async Task<IActionResult> AddEstimate(RequestSerEst requestData)
         {
-            var response = await _estMainService.AddEstimate(requestData,_logToken);
+            var response = await _estMainService.AddEstimate(requestData, _logToken);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
-            setTokenCookie(response.Data!);
+            setTokenCookie(_jwtSettings.AccessExpires, response.Data!);
             return Ok(response);
         }
         [HttpPost]
@@ -89,9 +85,9 @@ namespace KantanMitsumori.Controllers
             var response = await _estMainService.CalcSum(requestData, _logToken);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
-            }          
-            setTokenCookie(response.Data!);
+                return Ok(response);
+            }
+            setTokenCookie(_jwtSettings.AccessExpires, response.Data!);
             return Ok(response);
         }
         #endregion SerEstController

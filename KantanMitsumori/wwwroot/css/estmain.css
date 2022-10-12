@@ -58,6 +58,7 @@ tr > td.titDataPrice {
     text-align: left;
     border: solid 1px #000;
     border-right: none;
+    height:30px;
 }
 
 tr > td.dataPrice {

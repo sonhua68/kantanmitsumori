@@ -48,7 +48,7 @@
             <tr>
                 <td class="InpTableTd" colspan="2" style=" background-color:White; text-align:right; border-bottom:none; padding-top:3px;">
                     <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
-                    <input type="submit" name="btnOK" value="OK" form="formInputCustKana" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                    <input type="submit" name="btnOK" value="OK" form="formInputCustKana" onclick="return onSummit();" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                 </td>
             </tr>
             <tr>
@@ -63,24 +63,10 @@
     </div>
 </form>
 <script>
-    $('#formInputCustKana').validate({
-        submitHandler: function(form) {
-            if (inputChk() == false) { return; }
-            var model = Framework.getFormData($("#formInputCustKana"));
-            console.log(model)
-            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpCustKana/UpdateInpCustKana");
-            if (result.resultStatus == 0) {
-                Framework.GoBackReloadPage();
-            } else {
-                let Items = result.data;
-                console.log(Items)
-                if (typeof (Items) != "undefined") {
-                    $("#Msg").html(Items)
-                } else {
-                    location.reload();
-                }
-            }
-        }
-    });
+    function onSummit() {
+        if (inputChk() == false) { return; }
+        Framework.OnSubmitForm("/InpCustKana/UpdateInpCustKana", "formInputCustKana");
+        return false;
+    }
 </script>
 <script src="~/js/InpCustKana.js"></script>

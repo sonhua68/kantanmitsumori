@@ -1,4 +1,5 @@
-﻿using KantanMitsumori.Model;
+﻿using KantanMitsumori.Helper.Settings;
+using KantanMitsumori.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -14,19 +15,14 @@ using System.Threading.Tasks;
 namespace KantanMitsumori.Helper.CommonFuncs
 {
     public static class HelperToken
-    {
-        public static IConfiguration? _config;
-        public static void Configure(IConfiguration config)
-        {
-            _config = config;
-        }
-        public static LogToken? EncodingToken(string token)
+    {           
+        public static LogToken? EncodingToken(JwtSettings settings, string token)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(token)) return null;
                 var tokenHandler = new JwtSecurityTokenHandler();            
-                var key = Encoding.UTF8.GetBytes(_config!["JwtSettings:Key"]);
+                var key = Encoding.UTF8.GetBytes(settings.Key);
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
@@ -49,10 +45,9 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 return null;
             }
         }
-
-        public static string GenerateJsonToken(LogToken model)
+        public static string GenerateJsonToken(JwtSettings settings, LogToken model)
         {           
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config!["JwtSettings:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             string genderStr = JsonConvert.SerializeObject(model);
             var claims = new[]
@@ -61,11 +56,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             var currentDate = DateTime.Now;
-            var RefreshExpires = _config["JwtSettings:AccessExpires"];
-            TimeSpan time = TimeSpan.Parse(RefreshExpires);
+            var AccessExpires = settings.AccessExpires;
+            TimeSpan time = TimeSpan.Parse(AccessExpires);
             var token = new JwtSecurityToken(
-                issuer: _config["JwtSettings:Issuer"],
-                audience: _config["JwtSettings:Issuer"],
+                issuer: settings.Issuer,
+                audience: settings.Issuer,
                 claims,
                 notBefore: currentDate,
                 expires: currentDate.Add(time),

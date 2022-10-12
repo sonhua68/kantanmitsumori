@@ -8,24 +8,22 @@ namespace KantanMitsumori.Controllers
     public class InpNotesController : BaseController
     {
         private readonly IInpNotesService _inpNotesService;
-        private readonly ILogger<InpNotesController> _logger;
 
-        public InpNotesController(IConfiguration config, IInpNotesService inpNotesService, ILogger<InpNotesController> logger) : base(config)
+        public InpNotesController(IInpNotesService inpNotesService)
         {
             _inpNotesService = inpNotesService;
-            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
             // 見積書番号を取得
-            string estNo = _logToken.sesEstNo;
-            string estSubNo = _logToken.sesEstSubNo;
+            string estNo = _logToken.sesEstNo!;
+            string estSubNo = _logToken.sesEstSubNo!;
 
             var response = _inpNotesService.getInfoNotes(estNo, estSubNo);
 
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }
@@ -37,16 +35,8 @@ namespace KantanMitsumori.Controllers
         public async Task<IActionResult> UpdateInpNotes([FromForm] RequestUpdateInpNotes requestData)
         {
             var response = await _inpNotesService.UpdateInpNotes(requestData);
-
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
             return Ok(response);
         }
-
-
-
 
     }
 }

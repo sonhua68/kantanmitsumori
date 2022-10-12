@@ -53,7 +53,7 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="carType"></param>
         /// <returns></returns>
-        public MtIdeCartype getCarType(int carType)
+        public MtIdeCartype? getCarType(int carType)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MtIdeVoluntaryInsurance getVoluntaryInsurance(int id)
+        public MtIdeVoluntaryInsurance? getVoluntaryInsurance(int id)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public MtIdeContractPlan getContractPlan(int id)
+        public MtIdeContractPlan? getContractPlan(int id)
         {
             try
             {
@@ -122,7 +122,7 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="year"></param>
         /// <returns></returns>
-        public MtIdeGuarantee getGuarantee(int year)
+        public MtIdeGuarantee? getGuarantee(int year)
         {
             try
             {

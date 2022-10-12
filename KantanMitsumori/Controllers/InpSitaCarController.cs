@@ -8,12 +8,10 @@ namespace KantanMitsumori.Controllers
     public class InpSitaCarController : BaseController
     {
         private readonly IInpSitaCarService _inpSitaCarService;
-        private readonly ILogger<InpSitaCarController> _logger;
 
-        public InpSitaCarController(IConfiguration config, IInpSitaCarService inpSitaCarService, ILogger<InpSitaCarController> logger) : base(config)
+        public InpSitaCarController(IInpSitaCarService inpSitaCarService)
         {
             _inpSitaCarService = inpSitaCarService;
-            _logger = logger;
         }
 
         public IActionResult Index()
@@ -25,7 +23,7 @@ namespace KantanMitsumori.Controllers
 
             var response = _inpSitaCarService.GetInfoSitaCar(estNo, estSubNo, userNo);
 
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
                 return ErrorAction(response);
             }
@@ -37,10 +35,6 @@ namespace KantanMitsumori.Controllers
         public IActionResult GetListRikuji()
         {
             var response = _inpSitaCarService.GetListOffice();
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
             return Ok(response);
         }
 
@@ -49,11 +43,6 @@ namespace KantanMitsumori.Controllers
         public async Task<IActionResult> UpdateInpSitaCar([FromForm] RequestUpdateInpSitaCar requestData)
         {
             var response = await _inpSitaCarService.UpdateInpSitaCar(requestData);
-
-            if (response.ResultStatus == (int)enResponse.isError)
-            {
-                return ErrorAction(response);
-            }
             return Ok(response);
         }
     }

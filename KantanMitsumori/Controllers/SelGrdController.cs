@@ -1,28 +1,26 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
-using KantanMitsumori.Models;
-using KantanMitsumori.Service.ASEST;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace KantanMitsumori.Controllers
 {
     public class SelGrdController : BaseController
     {
-        private readonly IEstMainService _appService;
-
-        private readonly ILogger<SelGrdController> _logger;
         private readonly ISelCarService _selCarService;
         private readonly IEstMainService _estMainService;
-        public SelGrdController(IEstMainService appService, ISelCarService selCarService, IEstMainService estMainService ,IConfiguration config, ILogger<SelGrdController> logger) : base(config)
+        private readonly JwtSettings _jwtSettings;
+
+        public SelGrdController(ISelCarService selCarService, IEstMainService estMainService, IOptions<JwtSettings> jwtSettings)
         {
-            _appService = appService;
-            _logger = logger;
             _selCarService = selCarService;
             _estMainService = estMainService;
+            _jwtSettings = jwtSettings.Value;
         }
 
         #region SelCar 
@@ -30,9 +28,9 @@ namespace KantanMitsumori.Controllers
         {
             var response = _selCarService.GetListRuiBetSu(requestData);
 
-            if (response.ResultStatus == (int)enResponse.isError)
+            if (response.ResultStatus != (int)enResponse.isSuccess)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             var dt = await PaginatedList<ResponseTbRuibetsuNew>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
             return View(dt);
@@ -47,7 +45,7 @@ namespace KantanMitsumori.Controllers
 
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
             var dt = await PaginatedList<ResponseTbRuibetsuNew>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
 
@@ -64,9 +62,9 @@ namespace KantanMitsumori.Controllers
             var response = await _estMainService.setFreeEst(requestData, _logToken);
             if (response.ResultStatus == (int)enResponse.isError)
             {
-                return ErrorAction(response);
+                return Ok(response);
             }
-            setTokenCookie(response.Data!.AccessToken);
+            setTokenCookie(_jwtSettings.AccessExpires, response.Data!.AccessToken);
             return Ok(response);
         }
         #endregion SelCar
