@@ -844,7 +844,7 @@ namespace KantanMitsumori.Service.ASEST
 
 
             estModelView.DaikoTitle = CommonConst.def_TitleDaiko + titleInOutTax;
-            estModelView.TaxInsEquivalentTitle = CommonConst.def_TitleDaiko + titleInOutTax;
+            estModelView.TaxInsEquivalentTitle = CommonConst.def_TitleTaxInsEquivalent + titleInOutTax;
             estModelView.TaxName = Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleConTaxTotalInTax : CommonConst.def_TitleConTaxTotalOutTax;
             estModelView.CarSaleSumTitle = CommonConst.def_TitleCarKei;
             estModelView.SalesSumTitle = Model.EstModel.ConTaxInputKb ? CommonConst.def_TitleSalesSumInTax : CommonConst.def_TitleSalesSumOutTax;
