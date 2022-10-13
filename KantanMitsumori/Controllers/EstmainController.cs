@@ -6,6 +6,7 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Text;
 
 namespace KantanMitsumori.Controllers
 {
@@ -19,13 +20,15 @@ namespace KantanMitsumori.Controllers
         {
             _appService = appService;
             _jwtSettings = jwtSettings.Value;
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
         }
         public async Task<IActionResult> Index([FromQuery] RequestActionModel requestAction, [FromForm] RequestHeaderModel request)
         {
-            var response = new ResponseBase<ResponseEstMainModel>();
+            var response = new ResponseBase<ResponseEstMainModel>(); 
             if (requestAction.IsInpBack == 1)
             {
-                response = _appService.ReloadGetEstMain(_logToken);
+                response = _appService.ReloadGetEstMain(_logToken!);
             }
             else
             {

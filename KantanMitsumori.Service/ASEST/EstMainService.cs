@@ -93,14 +93,18 @@ namespace KantanMitsumori.Service.ASEST
                 response.EstCustomerModel.CustAdr = valToken.sesCustAdr_forPrint ?? "";
                 response.EstCustomerModel.CustTel = valToken.sesCustTel_forPrint ?? "";
                 var estData = _commonEst.SetEstData(valToken.sesEstNo!, valToken.sesEstSubNo!);
-                if (estData.ResultStatus == (int)enResponse.isSuccess)
-                    response.EstModel = estData.Data!;
+                if (estData.ResultStatus != (int)enResponse.isSuccess)
+                {
+                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+
+                }
+                response.EstModel = estData.Data!;
                 response.EstIDEModel = new EstimateIdeModel();
                 if (response.EstModel.LeaseFlag == "1")
                 {
                     response.EstIDEModel = _commonEst.SetEstIDEData(valToken);
                     if (response.EstIDEModel == null)
-                        return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                        return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL041D));
                 }
                 response = BindingDataEsmain(response);
                 //show Mess error 
@@ -134,8 +138,12 @@ namespace KantanMitsumori.Service.ASEST
                     EstModelView = new EstModelView()
                 };
                 var estData = _commonEst.SetEstData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
-                if (estData.ResultStatus == (int)enResponse.isSuccess)
-                    response.EstModel = estData.Data!;
+                if (estData.ResultStatus != (int)enResponse.isSuccess)
+                {
+                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+
+                }
+                response.EstModel = estData.Data!;
                 response.EstCustomerModel.CustNm = logtoken.sesCustNm_forPrint ?? "";
                 response.EstCustomerModel.CustZip = logtoken.sesCustZip_forPrint ?? "";
                 response.EstCustomerModel.CustAdr = logtoken.sesCustAdr_forPrint ?? "";
@@ -285,8 +293,12 @@ namespace KantanMitsumori.Service.ASEST
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
                 }
                 var estData = _commonEst.SetEstData(valToken.sesEstNo, valToken.sesEstSubNo);
-                if (estData.ResultStatus == (int)enResponse.isSuccess)
-                    response.EstModel = estData.Data!;
+                if (estData.ResultStatus != (int)enResponse.isSuccess)
+                {
+                    return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+
+                }
+                response.EstModel = estData.Data!;
                 response.EstCustomerModel = new EstCustomerModel
                 {
                     CustNm = valToken.sesCustNm_forPrint ?? "",

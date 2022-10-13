@@ -7,6 +7,7 @@ using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Response;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -258,7 +259,7 @@ namespace KantanMitsumori.Service.Helper
                 {
                     estSubModel.SonotaTitle = CommonConst.def_TitleSonota;
                 }
-                responseEst = _helperMapper.MergeInto<EstModel>(estModel, estSubModel);
+                responseEst = _helperMapper.MergeInto<EstModel>(estModel, estSubModel);              
                 responseEst = CreDispData(responseEst);
             }
             catch (Exception ex)
@@ -275,6 +276,11 @@ namespace KantanMitsumori.Service.Helper
                 if (model.Mode == 1)
                 {
                     int intCornerType = _commonFuncHelper.GetCornerType(model.Corner);
+                    if (intCornerType == -1)
+                    {
+                        model.AAInfo = "";
+                    }
+                    else
                     if (intCornerType == 1)
                         model.AAInfo = string.Format("お問合せ番号{0}00-{1:00000}-{2:00000}", intCornerType, model.Aacount, Convert.ToInt32(model.Aano));
                     else
@@ -329,7 +335,7 @@ namespace KantanMitsumori.Service.Helper
         public ResponseBase<EstModel> SetEstData(string estNo, string estSubNo)
         {
             var estData = GetEstData(estNo, estSubNo);
-            if (estData == null)
+           if (estData == null || string.IsNullOrEmpty(estData.AAInfo))
             {
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL041D));
             }
