@@ -6,6 +6,7 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Text;
 
 namespace KantanMitsumori.Controllers
 {
@@ -62,6 +63,25 @@ namespace KantanMitsumori.Controllers
             return File("~/pdf/" + strArr[strArr.Length - 1], "application/pdf", strArr[strArr.Length - 1]);
         }
 
+        /// <summary>
+        /// Export CSV
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        //[HttpPost]
+        public IActionResult ExportCSV()
+        {
+            var response = _appService.ExportDataCSV(_logToken!);
+
+            // Process result
+            if (response.ResultStatus != (int)enResponse.isSuccess)
+                return ErrorAction(response);
+
+            var data = Encoding.UTF8.GetBytes(response.Data!);
+            var result = Encoding.UTF8.GetPreamble().Concat(data).ToArray();
+            return File(result, "text/csv", "ASEST_" + _logToken!.sesEstNo + "-" + _logToken.sesEstSubNo + ".csv");
+        }
     }
 }
+
 

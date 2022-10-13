@@ -150,10 +150,10 @@
                     if (Model.EstModel.LeaseFlag == "0")
                     {
                         <div class="col d-flex justify-content-between">
-                            <div class="border-button container text-center" style="margin-top: 700px;">
+                            <div class="border-button container text-center" style="margin-top: 725px;">
                                 <br />
                                 <div class="col d-flex justify-content-between">
-                                    <a href="javascript:window.close();">
+                                    <a  href="javascript:void(0)" onclick="Framework.GoBackReloadPageUrl('/Estmain/ExportCSV');return false;">
                                         <img src="~/img/btnCSV.png" />
                                     </a>
                                 </div>
@@ -170,7 +170,7 @@
                                         <tr class="col d-flex justify-content-between">
                                             <td style="height: 22px;">
                                                 <input type="image" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" name="print" id="print" class="imgBtn" src="~/img/print.png" style="border-width:0px;">
-                                                <a id="LinkButton1"  onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" class="TxtLink" href="javascript:void(0)">法人申込書印刷</a>
+                                                <a id="LinkButton1" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" class="TxtLink" href="javascript:void(0)">法人申込書印刷</a>
                                             </td>
                                         </tr>
                                     </tbody>
