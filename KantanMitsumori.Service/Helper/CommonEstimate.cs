@@ -7,7 +7,6 @@ using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Response;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -259,7 +258,7 @@ namespace KantanMitsumori.Service.Helper
                 {
                     estSubModel.SonotaTitle = CommonConst.def_TitleSonota;
                 }
-                responseEst = _helperMapper.MergeInto<EstModel>(estModel, estSubModel);              
+                responseEst = _helperMapper.MergeInto<EstModel>(estModel, estSubModel);
                 responseEst = CreDispData(responseEst);
             }
             catch (Exception ex)
@@ -288,12 +287,6 @@ namespace KantanMitsumori.Service.Helper
                 }
                 else
                     model.AAInfo = model.Aaplace + "　No：" + model.Aano;
-            }
-            bool isCheckCarYm = model.CheckCarYm == "無し" || string.IsNullOrEmpty(model.CheckCarYm);
-            if (!isCheckCarYm)
-            {
-                model.DamageInsEquivalent = 0;
-                model.DamageIns = 0;
             }
             return model;
         }
@@ -335,7 +328,7 @@ namespace KantanMitsumori.Service.Helper
         public ResponseBase<EstModel> SetEstData(string estNo, string estSubNo)
         {
             var estData = GetEstData(estNo, estSubNo);
-           if (estData == null || string.IsNullOrEmpty(estData.AAInfo))
+            if (estData == null || string.IsNullOrEmpty(estData.AAInfo))
             {
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL041D));
             }
