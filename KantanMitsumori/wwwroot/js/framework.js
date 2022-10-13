@@ -286,7 +286,7 @@ var Framework =
                     },
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
-                        location.reload();
+                        //location.reload();
                     }
                 });
                 return result;
@@ -308,7 +308,7 @@ var Framework =
                     },
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
-                        location.reload();
+                        //location.reload();
                     }
                 });
                 return result;
@@ -342,7 +342,7 @@ var Framework =
                     },
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
-                        location.reload();
+                        //location.reload();
                     }
                 });
                 return result;
@@ -364,7 +364,7 @@ var Framework =
                     },
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
-                        location.reload();
+                        //location.reload();
 
                     }
                 });
@@ -388,7 +388,7 @@ var Framework =
                     },
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
-                        location.reload();
+                        //location.reload();
 
                     }
                 });
@@ -525,8 +525,8 @@ var Framework =
         },
 
         {
-            key: "GetFullHost_",
-            value: function GetFullHost_(url) {
+            key: "GetFullHost",
+            value: function GetFullHost(url) {
                 const fullpath = location.protocol + '//' + location.host;
                 let pathName = location.pathname.split('/')[1]
                 let pathName2 = location.pathname.split('/')[2]              
@@ -539,8 +539,8 @@ var Framework =
             }
         },
         {
-            key: "GetFullHost",
-            value: function GetFullHost(url) {
+            key: "GetFullHost_",
+            value: function GetFullHost_(url) {
                 let fullpath = '.' + url;     
                 return fullpath;
             }
@@ -583,7 +583,7 @@ var Framework =
             value: function SummitForm(path, params, method = 'post') {
                 const form = document.createElement('form');
                 form.method = method;
-                form.action = Framework.GetFullHost_(path);
+                form.action = Framework.GetFullHost(path);
                 for (const key in params) {
                     if (params.hasOwnProperty(key)) {
                         const hiddenField = document.createElement('input');
