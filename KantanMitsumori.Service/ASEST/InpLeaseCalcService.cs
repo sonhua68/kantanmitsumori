@@ -43,7 +43,34 @@ namespace KantanMitsumori.Service
             _unitOfWorkIDE = unitOfWorkIDE;
             _testSettings = testSettings.Value;
         }
-
+        public ResponseBase<ResponseEstMainModel> GetDataEstimate(LogToken logtoken)
+        {
+            try
+            {
+                var response = new ResponseEstMainModel
+                {
+                    EstCustomerModel = new EstCustomerModel(),
+                    EstIDEModel = new EstimateIdeModel(),
+                    EstModel = new EstModel(),
+                    EstModelView = new EstModelView()
+                };
+                var estData = _commonEst.SetEstData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
+                if (estData.ResultStatus == (int)enResponse.isSuccess)
+                    response.EstModel = estData.Data!;   
+                if (response.EstModel.LeaseFlag == "1")
+                {
+                    response.EstIDEModel = _commonEst.SetEstIDEData(logtoken);
+                    if (response.EstIDEModel == null)
+                        return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                }                           
+                return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetDataEstimate");
+                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+            }
+        }
         public ResponseBase<List<ResponseCarType>> GetCarType()
         {
             try
@@ -119,7 +146,13 @@ namespace KantanMitsumori.Service
                 return ResponseHelper.Error<List<ResponseVolInsurance>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
-
+        /// <summary>
+        /// InpLeaseCal
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="logToken"></param>
+        /// <returns></returns>
+        /// Create Date [20221008] by HoaiPhong
         public ResponseBase<ResponseInpLeaseCalc> InpLeaseCal(RequestInpLeaseCalc model, LogToken logToken)
         {
             try
@@ -143,7 +176,7 @@ namespace KantanMitsumori.Service
                 _logger.LogInformation("\"-------************* EstNo:{0} EstSubNo: {1} *************-------\"", estimates.EstNo, estimates.EstSubNo);
                 _calLease = new CommonCalLease(_logger, _unitOfWorkIDE, lstWriteLog, model, _testSettings);
                 var consumptionTax = _calLease.GetConsumptionTax();
-                var dPrice = _calLease.GetPrice(estimates.SalesSum, estimates.TaxInsAll, estimates.TaxFreeAll);  // '4-2 get Price
+                var price = _calLease.GetPrice(estimates.SalesSum, estimates.TaxInsAll, estimates.TaxFreeAll);  // '4-2 get Price
                 var vehicleTaxPrice = _calLease.GetVehicleTaxWithinTheTerm((int)estimates.AutoTax!, estimateSubs.DispVolUnit!, Convert.ToInt32(estimates.DispVol!));  // '4-3 VehicleTaxPrice
                 var priceInsurance = _calLease.GetPriceinsurance();   // '4-4 getPriceinsurance()
                 var priceWeighTax = _calLease.GetPriceWeighTax();  // '4-5 getPriceWeighTax()
@@ -153,7 +186,7 @@ namespace KantanMitsumori.Service
                 var priceNameChange = _calLease.GetPriceNameChange();    // '4-9 getPriceNameChange()
                 var priceMantance = _calLease.GetPriceMantance();  // '4-10 getPriceMantance()
                 var interest = _calLease.GetInterest();  // '4-11 getInterest() 
-                dPriceMonthNoTax = (dPrice + vehicleTaxPrice + priceInsurance + priceWeighTax + pricePromotional + pricetPropertyFeeIdemitsu + priceGuaranteeFee + priceNameChange + priceMantance + model.InsuranceFee);
+                dPriceMonthNoTax = (price + vehicleTaxPrice + priceInsurance + priceWeighTax + pricePromotional + pricetPropertyFeeIdemitsu + priceGuaranteeFee + priceNameChange + priceMantance + model.InsuranceFee);
                 dPriceMonthNoTax = dPriceMonthNoTax - (model.TradeIn / (1 + consumptionTax)) - (model.PrePay / (1 + consumptionTax));
                 // 'tien goc chiu lai
                 dPricePrincipalInterest = dPriceMonthNoTax;
@@ -169,7 +202,7 @@ namespace KantanMitsumori.Service
                 dPriceEnd = CommonFunction.ToRoundDown(dPriceMonthly + (dPriceMonthly * consumptionTax), 0);
                 data.ListUILog = _calLease._lstWriteLogUI;
                 data.PriceEnd = CommonFunction.setFormatCurrency(dPriceEnd, "");
-                saveLog(consumptionTax, model, estimates, dPrice, vehicleTaxPrice, priceInsurance, priceWeighTax, pricePromotional, pricetPropertyFeeIdemitsu, priceGuaranteeFee, priceNameChange, priceMantance, interest);
+                saveLog(consumptionTax, model, estimates, price, vehicleTaxPrice, priceInsurance, priceWeighTax, pricePromotional, pricetPropertyFeeIdemitsu, priceGuaranteeFee, priceNameChange, priceMantance, interest);
                 _logger.LogInformation("金利対象元本(A)= {0}", dPricePrincipalInterest);
                 _calLease.addLogUI("金利対象元本(A)= " + dPricePrincipalInterest);
                 saveLogFinal(consumptionTax, dPriceEnd, dPriceMonthly, dPriceMonthNoTax, dPriceProcedure);
