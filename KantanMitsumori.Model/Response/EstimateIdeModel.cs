@@ -14,7 +14,7 @@
         public string LeaseExpirationDate { get; set; } = null!;
         public int ContractPlanId { get; set; }
         public string ContractPlanName { get; set; }
-        public byte IsExtendedGuarantee { get; set; }
+        public byte IsExtendedGuarantee { get; set; } = 99;
         public int InsuranceCompanyId { get; set; }
         public string InsuranceCompanyName { get; set; }
         public int InsuranceFee { get; set; }

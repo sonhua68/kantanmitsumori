@@ -356,8 +356,9 @@ namespace KantanMitsumori.Service.Helper
                 if (estIdeModel == null)
                 {
                     estIdeModel = new TEstimateIde();
-                }
-                //estIdeModel.IsExtendedGuarantee = unchecked((byte)(-1));
+                    estIdeModel.IsExtendedGuarantee = 99;
+                }    
+
                 dataIDE = _mapper.Map<EstimateIdeModel>(estIdeModel);
             }
             catch (Exception ex)
