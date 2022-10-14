@@ -99,8 +99,9 @@
 </form>
 <script>
     function onSummit() {
-        if (inputChk() == false) { return; }
+        if (inputChk() == true) { 
         Framework.OnSubmitForm("/InpOption/UpdateInpOption", "formInpOption");
+        }        
         return false;
     }
 </script>

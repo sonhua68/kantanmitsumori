@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KantanMitsumori.Helper.Constant
+﻿namespace KantanMitsumori.Helper.Constant
 {
     public static class MessageJapan
     {
@@ -37,6 +31,8 @@ namespace KantanMitsumori.Helper.Constant
             { "SICR-001S", "ページ遷移エラーが発生しました。<br>ASNET/店頭商談NETの元の画面から本サービスを起動して下さい。" },
             { "CEST-040D", "ページ遷移エラーが発生しました。<br>ASNET/店頭商談NETの元の画面から本サービスを起動して下さい。" },
             { "ISYS-010I", "エラーの発生により、操作を続けられません。" },
+            { "SMAI-000S", "エラーが発生しました。" },
+            { "SMAI-000D", "エラーが発生しました。" },
         };
     }
 }

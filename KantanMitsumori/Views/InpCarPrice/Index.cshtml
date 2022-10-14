@@ -145,8 +145,9 @@
 </form>
 <script>
     function onSummit() {
-        if (inputChk() == false) { return; }
-        Framework.OnSubmitForm("/InpCarPrice/Update", "formInpCarPrice");
+        if (inputChk() == true) {
+            Framework.OnSubmitForm("/InpCarPrice/Update", "formInpCarPrice");
+        }
         return false;
     }
 </script>
