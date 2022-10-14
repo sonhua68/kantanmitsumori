@@ -945,7 +945,7 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.MonthlyLeaseFee = CommonFunction.setFormatCurrency(Model.EstIDEModel.MonthlyLeaseFee);
             estModelView.LeaseTotal = string.IsNullOrEmpty(estModelView.LeasePeriod) ? "月額リース料(税込)" : "月額リース料(税込) " + estModelView.MonthlyLeaseFee + " (" + estModelView.LeasePeriod + ")";
             estModelView.ContractPlanName = Model.EstIDEModel.ContractPlanName;
-            estModelView.IsExtendedGuarantee = Model.EstIDEModel.IsExtendedGuarantee == unchecked((byte)(-1)) ? "" : Model.EstIDEModel.IsExtendedGuarantee == 0 ? "あり" : "なし";
+            estModelView.IsExtendedGuarantee = Model.EstIDEModel.IsExtendedGuarantee == 99 ? "" : Model.EstIDEModel.IsExtendedGuarantee == 0 ? "あり" : "なし";
             estModelView.InsuranceCompanyName = Model.EstIDEModel.InsuranceCompanyName;
             estModelView.InsuranceFee = CommonFunction.setFormatCurrency(Model.EstIDEModel.InsuranceFee);
             estModelView.DownPayment = CommonFunction.setFormatCurrency(Model.EstIDEModel.DownPayment);
