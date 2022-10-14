@@ -233,10 +233,11 @@
         <input name="EstSubNo" type="hidden" id="hidEstSubNo" value="@Model.EstSubNo">
     </div>
 </form>
-<script> 
+<script>
     function onSummit() {
-        if (inputChk() == false) { return; }
-        Framework.OnSubmitForm("/InpSyohiyo/UpdateInpSyohiyo", "formInputSyohiyo");
+        if (inputChk() == true) {
+            Framework.OnSubmitForm("/InpSyohiyo/UpdateInpSyohiyo", "formInputSyohiyo");
+        }
         return false;
     }
 </script>

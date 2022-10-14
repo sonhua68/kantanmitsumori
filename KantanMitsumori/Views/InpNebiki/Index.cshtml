@@ -280,10 +280,11 @@
         </tbody>
     </table>
 </form>
-<script> 
+<script>
     function onSummit() {
-        if (inputChk() == false) { return; }
-        Framework.OnSubmitForm("/InpNebiki/UpdateInpNebiki", "formInpNebiki");
+        if (inputChk() == true) {
+            Framework.OnSubmitForm("/InpNebiki/UpdateInpNebiki", "formInpNebiki");
+        }
         return false;
     }
 
