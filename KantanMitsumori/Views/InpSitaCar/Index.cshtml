@@ -91,7 +91,7 @@
                         @{
                             foreach (var item in ListDropDownFirstYM)
                             {
-                                    <option value="@item.Value">@item.Text</option>
+                                <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -100,7 +100,7 @@
                         @{
                             foreach (var item in ListMonth)
                             {
-                                    <option value="@item.Value">@item.Text</option>
+                                <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -116,7 +116,7 @@
                         @{
                             foreach (var item in ListDropDownSyakenYM)
                             {
-                                    <option value="@item.Value">@item.Text</option>
+                                <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -125,7 +125,7 @@
                         @{
                             foreach (var item in ListMonth)
                             {
-                                    <option value="@item.Value">@item.Text</option>
+                                <option value="@item.Value">@item.Text</option>
                             }
                         }
                     </select>
@@ -261,22 +261,23 @@
 
 <script>
     const listKana = ["あ", "い", "う", "え",
-                "か", "き", "く", "け", "こ",
-                "さ", "す", "せ", "そ",
-                "た", "ち", "つ", "て", "と",
-                "な", "に", "ぬ", "ね", "の",
-                "は", "ひ", "ふ", "ほ",
-                "ま", "み", "む", "め", "も",
-                "や", "ゆ", "よ",
-                "ら", "り", "る", "れ", "ろ",
-                "わ", "を"];
+        "か", "き", "く", "け", "こ",
+        "さ", "す", "せ", "そ",
+        "た", "ち", "つ", "て", "と",
+        "な", "に", "ぬ", "ね", "の",
+        "は", "ひ", "ふ", "ほ",
+        "ま", "み", "む", "め", "も",
+        "や", "ゆ", "よ",
+        "ら", "り", "る", "れ", "ろ",
+        "わ", "を"];
     GetListRikuji();
     GetListKana();
     // list string characters kana
     SetInitData();
     function onSummit() {
-        if (inputChk() == false) { return; }
-        Framework.OnSubmitForm("/InpSitaCar/UpdateInpSitaCar", "formInputSitaCar");
+        if (inputChk() == true) {
+            Framework.OnSubmitForm("/InpSitaCar/UpdateInpSitaCar", "formInputSitaCar");
+        }
         return false;
     }
     function GetListRikuji() {
@@ -339,7 +340,7 @@
             Framework.SetSelectedString("ddlSitaSyakenM", "")
         } else {
             var syakenYear = valTradeInCheckCarYm.toString().substring(0, 4);
-            var syakenMonth =  valTradeInCheckCarYm.length > 4 ? parseInt(valTradeInCheckCarYm.toString().substring(4, 6)).toString() : " ";
+            var syakenMonth = valTradeInCheckCarYm.length > 4 ? parseInt(valTradeInCheckCarYm.toString().substring(4, 6)).toString() : " ";
             Framework.SetSelectedString("ddlSitaSyakenY", syakenYear);
             Framework.SetSelectedNumber("ddlSitaSyakenM", syakenMonth);
         }

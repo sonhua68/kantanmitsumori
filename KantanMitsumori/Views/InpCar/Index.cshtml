@@ -277,7 +277,6 @@
             Framework.SetSelectedNumber("ddlSyakenMonth", syakenMonth)
         }
         var milUnit = $("#hidMilUnit").val();
-        console.log(milUnit)
         if (milUnit.includes("千km")) {
             $("#radMilUnitTKM").attr('checked', true);
         } else if (milUnit.includes("千マイル")) {
@@ -287,8 +286,7 @@
             swichUnit('MilUnit', true)
             $("#MilUnit").val(milUnit);
         };
-        var dispVolUnit = $("#hidDispVolUnit").val();
-        console.log(dispVolUnit)
+        var dispVolUnit = $("#hidDispVolUnit").val();       
         if (dispVolUnit.includes("cc")) {
             $("#radDispVolUnitCC").attr('checked', true);
         } else if (dispVolUnit.includes("RE")) {

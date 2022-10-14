@@ -52,8 +52,9 @@
 </form>
 <script>
     function onSummit() {
-        if (inputChk() == false) { return; }
-        Framework.OnSubmitForm("/InpNotes/UpdateInpNotes", "formInputNotes");
+        if (inputChk() == true) {
+            Framework.OnSubmitForm("/InpNotes/UpdateInpNotes", "formInputNotes");
+        }
         return false;
     }
 </script>

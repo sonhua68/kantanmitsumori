@@ -101,8 +101,9 @@
 </form>
 <script>
     function onSummit() {
-        if (inputChk() == false) { return; }
-        Framework.OnSubmitForm("/InpHanbaiten/UpdateInpHanbaiten", "formInpHanbaiten");
+        if (inputChk() == true) {
+            Framework.OnSubmitForm("/InpHanbaiten/UpdateInpHanbaiten", "formInpHanbaiten");
+        }
         return false;
     }
 </script>

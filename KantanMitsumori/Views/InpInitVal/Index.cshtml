@@ -447,7 +447,7 @@
                                     </td>
                                     <td class="inpbtntd" style=" " valign="top">
                                         <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackPage();return false;" class="Btn1" style="height:32px;width:100px;">&nbsp;
-                                        <input type="submit" name="btnOK" value="OK"  form="formInpInitVal" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="submit" name="btnOK" value="OK" form="formInpInitVal" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -476,20 +476,21 @@
 <script>
     $("form#formInpInitVal").submit(function (event) {
         event.preventDefault();
-        if (inputChk() == false) { return; }
-        var model = Framework.getFormData($("#formInpInitVal"));
-        console.log(model)
-        model.AsArticle = model.Article == "radUse" ? 1 : 0;
-        model.DamageInsMonth = 25;
-        model.Rate = model.Rate == "" ? 0 : model.Rate;
-        model.ButtonSummit = event.originalEvent.submitter.name;
-        model.ConTaxInputKb = model.Szi == "radOutTax" ? "False" : "True";
-        var result = Framework.submitAjaxFormUpdateAsync(model, "/InpInitVal/UpdateInpInitVal");
-        if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-            Framework.GoBackReloadPage();
-        } else {
-            Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+        if (inputChk() == true) {
+            var model = Framework.getFormData($("#formInpInitVal"));        
+            model.AsArticle = model.Article == "radUse" ? 1 : 0;
+            model.DamageInsMonth = 25;
+            model.Rate = model.Rate == "" ? 0 : model.Rate;
+            model.ButtonSummit = event.originalEvent.submitter.name;
+            model.ConTaxInputKb = model.Szi == "radOutTax" ? "False" : "True";
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpInitVal/UpdateInpInitVal");
+            if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+                Framework.GoBackReloadPage();
+            } else {
+                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+            }
         }
+        return false;
     });
 
 </script>
