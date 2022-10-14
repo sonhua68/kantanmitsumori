@@ -141,7 +141,6 @@ function SelectOnBlur() {
 }
 function CallData() {
     var result = Framework.GetObjectDataFromUrl("/InpOption/GetData");
-    console.log(result)
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         console.log(result.data)
         let Items = result.data;
