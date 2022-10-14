@@ -28,7 +28,7 @@ namespace KantanMitsumori.Controllers
             var response = new ResponseBase<ResponseEstMainModel>();
             if (requestAction.IsInpBack == 1)
             {
-                response = _appService.ReloadGetEstMain(_logToken);
+                response = _appService.ReloadGetEstMain(_logToken!);
             }
             else
             {

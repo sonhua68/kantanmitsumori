@@ -275,6 +275,11 @@ namespace KantanMitsumori.Service.Helper
                 if (model.Mode == 1)
                 {
                     int intCornerType = _commonFuncHelper.GetCornerType(model.Corner);
+                    if (intCornerType == -1)
+                    {
+                        model.AAInfo = "";
+                    }
+                    else
                     if (intCornerType == 1)
                         model.AAInfo = string.Format("お問合せ番号{0}00-{1:00000}-{2:00000}", intCornerType, model.Aacount, Convert.ToInt32(model.Aano));
                     else
@@ -282,12 +287,6 @@ namespace KantanMitsumori.Service.Helper
                 }
                 else
                     model.AAInfo = model.Aaplace + "　No：" + model.Aano;
-            }
-            bool isCheckCarYm = model.CheckCarYm == "無し" || string.IsNullOrEmpty(model.CheckCarYm);
-            if (!isCheckCarYm)
-            {
-                model.DamageInsEquivalent = 0;
-                model.DamageIns = 0;
             }
             return model;
         }
@@ -329,7 +328,7 @@ namespace KantanMitsumori.Service.Helper
         public ResponseBase<EstModel> SetEstData(string estNo, string estSubNo)
         {
             var estData = GetEstData(estNo, estSubNo);
-            if (estData == null)
+            if (estData == null || string.IsNullOrEmpty(estData.AAInfo))
             {
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL041D));
             }
@@ -357,8 +356,8 @@ namespace KantanMitsumori.Service.Helper
                 if (estIdeModel == null)
                 {
                     estIdeModel = new TEstimateIde();
-                }
-                estIdeModel.IsExtendedGuarantee = unchecked((byte)(-1));
+                    estIdeModel.IsExtendedGuarantee = 99;
+                }         
                 dataIDE = _mapper.Map<EstimateIdeModel>(estIdeModel);
             }
             catch (Exception ex)

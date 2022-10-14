@@ -208,13 +208,11 @@ namespace KantanMitsumori.Service.Helper
             try
             {
                 var dtTbSys = _unitOfWork.Syss.GetSingle(x => x.Corner == inCor);
-
-                if (!string.IsNullOrEmpty(dtTbSys.Corner))
+                if (dtTbSys != null)
                 {
                     return dtTbSys.CornerType;
                 }
-                else
-                    return 0;
+                return -1;
             }
             catch (Exception ex)
             {

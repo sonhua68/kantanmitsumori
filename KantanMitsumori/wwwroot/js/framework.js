@@ -286,7 +286,7 @@ var Framework =
                     },
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
-                        location.reload();
+                        //location.reload();
                     }
                 });
                 return result;
@@ -308,7 +308,7 @@ var Framework =
                     },
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
-                        location.reload();
+                        //location.reload();
                     }
                 });
                 return result;
@@ -342,7 +342,7 @@ var Framework =
                     },
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
-                        location.reload();
+                        //location.reload();
                     }
                 });
                 return result;
@@ -364,7 +364,7 @@ var Framework =
                     },
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
-                        location.reload();
+                        //location.reload();
 
                     }
                 });
@@ -388,7 +388,7 @@ var Framework =
                     },
                     error: function error(xhr, status, thrownError, _error) {
                         console.log(_error)
-                        location.reload();
+                        //location.reload();
 
                     }
                 });
@@ -485,14 +485,14 @@ var Framework =
             key: "SetSelectedNumber",
             value: function SetSelectedNumber(nameId, defaultValue) {
                 let idOption = $("#" + nameId + " option");
-                if (isNaN(defaultValue) || defaultValue === 0) {
+                if (isNaN(defaultValue)) {
                     idOption[0].selected == true;
                 }
                 else {
                     let length = idOption.length;
                     for (let i = 0; i < length; i++) {
                         let value = parseInt(idOption[i].value);
-                        if (value === defaultValue) {
+                        if (value === parseInt(defaultValue)) {
                             $("#" + nameId + " option[value='" + value + "']").attr("selected", "selected");
                             return;
                         }
@@ -525,12 +525,12 @@ var Framework =
         },
 
         {
-            key: "GetFullHost_",
-            value: function GetFullHost_(url) {
+            key: "GetFullHost",
+            value: function GetFullHost(url) {
                 const fullpath = location.protocol + '//' + location.host;
                 let pathName = location.pathname.split('/')[1]
-                let controler = url.split('/')[1];
-                if (pathName.includes("Estmain") && !pathName.includes(controler)) {
+                let pathName2 = location.pathname.split('/')[2]              
+                if (typeof pathName2 == 'undefined') {
                     return fullpath + url;
                 } else {
                     return fullpath + '/' + pathName + url;
@@ -539,8 +539,8 @@ var Framework =
             }
         },
         {
-            key: "GetFullHost",
-            value: function GetFullHost(url) {
+            key: "GetFullHost_",
+            value: function GetFullHost_(url) {
                 let fullpath = '.' + url;     
                 return fullpath;
             }
@@ -550,9 +550,8 @@ var Framework =
             value: function GoBackErrorPage(messageCode, messContent) {
                 var param = {};
                 param.messageCode = messageCode;
-                param.messageContent = messContent;
-                var url = Framework.GetFullHost("/Error/ErrorPage");
-                Framework.SummitForm(url, param);
+                param.messageContent = messContent;             
+                Framework.SummitForm("/Error/ErrorPage", param);
 
             }
         },
@@ -585,8 +584,6 @@ var Framework =
                 const form = document.createElement('form');
                 form.method = method;
                 form.action = Framework.GetFullHost(path);
-
-
                 for (const key in params) {
                     if (params.hasOwnProperty(key)) {
                         const hiddenField = document.createElement('input');
