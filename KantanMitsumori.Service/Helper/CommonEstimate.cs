@@ -40,12 +40,15 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
-                var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == estModel.EstNo && x.EstSubNo == estModel.EstSubNo && x.Dflag == false);
-                if (estModel == null || estSubModel == null)
+                var dtEst = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
+                var dtEstSub = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == dtEst.EstNo && x.EstSubNo == dtEst.EstSubNo && x.Dflag == false);
+                if (dtEst == null || dtEstSub == null)
                 {
                     return false;
                 }
+                var estModel = new EstModel();
+                estModel = _helperMapper.MergeInto<EstModel>(dtEst, dtEstSub);
+
                 // 再計算前の総額
                 int? oldSalesSum = estModel.SalesSum;
                 var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.UserNo!);
@@ -58,7 +61,7 @@ namespace KantanMitsumori.Service.Helper
                         estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
 
                         var arrayEst = estModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
-                        var arrayEstSub = estSubModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
+                        var arrayEstSub = estModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
                         foreach (var itemEst in arrayEst)
                         {
                             if (reCalEstModel.Contains(itemEst.Name))
@@ -79,8 +82,8 @@ namespace KantanMitsumori.Service.Helper
                         }
                     }
                 }
-                estSubModel.Sonota = estSubModel.RakuSatu
-                                   + estSubModel.Rikusou;
+                estModel.Sonota = estModel.RakuSatu
+                                   + estModel.Rikusou;
                 estModel.OptionPriceAll = estModel.OptionPrice1
                                         + estModel.OptionPrice2
                                         + estModel.OptionPrice3
@@ -95,7 +98,7 @@ namespace KantanMitsumori.Service.Helper
                                         + estModel.OptionPrice12;
                 estModel.CarSum = estModel.CarPrice
                                 - estModel.Discount
-                                + estSubModel.Sonota
+                                + estModel.Sonota
                                 + estModel.SyakenNew
                                 + estModel.SyakenZok
                                 + estModel.OptionPriceAll;
@@ -104,40 +107,40 @@ namespace KantanMitsumori.Service.Helper
                             + estModel.WeightTax
                             + estModel.DamageIns
                             + estModel.OptionIns;
-                estSubModel.TaxInsEquivalentAll = estSubModel.AutoTaxEquivalent
-                                                + estSubModel.DamageInsEquivalent;
+                estModel.TaxInsEquivalentAll = estModel.AutoTaxEquivalent
+                                                + estModel.DamageInsEquivalent;
                 estModel.TaxFreeAll = estModel.TaxFreeCheck
                                     + estModel.TaxFreeGarage
                                     + estModel.TaxFreeTradeIn
                                     + estModel.TaxFreeRecycle
                                     + estModel.TaxFreeOther
-                                    + estSubModel.TaxFreeSet1
-                                    + estSubModel.TaxFreeSet2;
+                                    + estModel.TaxFreeSet1
+                                    + estModel.TaxFreeSet2;
                 estModel.TaxCostAll = estModel.TaxCheck
                                     + estModel.TaxGarage
                                     + estModel.TaxTradeIn
                                     + estModel.TaxRecycle
                                     + estModel.TaxDelivery
                                     + estModel.TaxOther
-                                    + estSubModel.TaxTradeInSatei
-                                    + estSubModel.TaxSet1
-                                    + estSubModel.TaxSet2
-                                    + estSubModel.TaxSet3;
+                                    + estModel.TaxTradeInSatei
+                                    + estModel.TaxSet1
+                                    + estModel.TaxSet2
+                                    + estModel.TaxSet3;
                 decimal? wkContax;
                 if (estModel.ConTaxInputKb == false)
                 {
-                    wkContax = (decimal?)((estModel.CarSum + estSubModel.TaxInsEquivalentAll + estModel.TaxCostAll) * vTax);
+                    wkContax = (estModel.CarSum + estModel.TaxInsEquivalentAll + estModel.TaxCostAll) * vTax;
                 }
                 else
                 {
-                    wkContax = (decimal?)((estModel.CarSum + estSubModel.TaxInsEquivalentAll + estModel.TaxCostAll) / (1 + vTax));
+                    wkContax = (estModel.CarSum + estModel.TaxInsEquivalentAll + estModel.TaxCostAll) / (1 + vTax);
                     wkContax = Math.Ceiling((decimal)wkContax!);
                     wkContax *= vTax;
                 }
                 estModel.ConTax = Convert.ToInt32(Math.Floor((decimal)wkContax!));
                 estModel.CarSaleSum = estModel.CarSum
                                     + estModel.TaxInsAll
-                                    + estSubModel.TaxInsEquivalentAll
+                                    + estModel.TaxInsEquivalentAll
                                     + estModel.TaxFreeAll
                                     + estModel.TaxCostAll;
                 if (estModel.ConTaxInputKb == false)
@@ -154,7 +157,7 @@ namespace KantanMitsumori.Service.Helper
 
                 if ((oldSalesSum > 0) && (estModel.SalesSum != oldSalesSum) && (estModel.PayTimes > 0))
                 {
-                    if (Convert.ToBoolean(estSubModel.LoanRecalcSettingFlag))
+                    if (Convert.ToBoolean(estModel.LoanRecalcSettingFlag))
                     {
                         CommonSimLon simLon = new(_logger)
                         {
@@ -175,7 +178,7 @@ namespace KantanMitsumori.Service.Helper
                             strClearMsg = CommonConst.def_LoanInfo_Error.ToString();
                         else
                         {
-                            estModel.Rate = (double)simLon.MoneyRate;
+                            estModel.Rate = simLon.MoneyRate;
                             estModel.Deposit = simLon.Deposit;
                             estModel.Principal = simLon.Principal;
                             estModel.PartitionFee = simLon.Fee;
@@ -189,9 +192,9 @@ namespace KantanMitsumori.Service.Helper
                             estModel.BonusSecond = simLon.BonusSecond.ToString();
                             estModel.BonusTimes = simLon.BonusTimes;
                             estModel.PayTimes = simLon.PayTimes;
-                            estSubModel.LoanModifyFlag = false;
-                            estSubModel.LoanRecalcSettingFlag = true;
-                            estSubModel.LoanInfo = CommonConst.def_LoanInfo_NormalEnd;
+                            estModel.LoanModifyFlag = false;
+                            estModel.LoanRecalcSettingFlag = true;
+                            estModel.LoanInfo = CommonConst.def_LoanInfo_NormalEnd;
                         }
                     }
                     else
@@ -199,7 +202,7 @@ namespace KantanMitsumori.Service.Helper
                 }
                 else
                 {
-                    estSubModel.LoanInfo = CommonConst.def_LoanInfo_Unexecuted;
+                    estModel.LoanInfo = CommonConst.def_LoanInfo_Unexecuted;
                 }
                 if (strClearMsg != "")
                 {
@@ -209,20 +212,26 @@ namespace KantanMitsumori.Service.Helper
                     estModel.PartitionFee = 0;
                     estModel.PartitionAmount = 0;
                     estModel.PayTimes = 0;
-                    estModel.FirstPayMonth = null;
-                    estModel.LastPayMonth = null;
+                    estModel.FirstPayMonth = "";
+                    estModel.LastPayMonth = "";
                     estModel.FirstPayAmount = 0;
                     estModel.PayAmount = 0;
                     estModel.BonusAmount = 0;
-                    estModel.BonusFirst = null;
-                    estModel.BonusSecond = null;
+                    estModel.BonusFirst = "";
+                    estModel.BonusSecond = "";
                     estModel.BonusTimes = 0;
-                    estSubModel.LoanModifyFlag = false;
-                    estSubModel.LoanRecalcSettingFlag = true;
-                    estSubModel.LoanInfo = Convert.ToByte(strClearMsg);
+                    estModel.LoanModifyFlag = false;
+                    estModel.LoanRecalcSettingFlag = true;
+                    estModel.LoanInfo = Convert.ToByte(strClearMsg);
                 }
-                _unitOfWork.Estimates.Update(estModel);
-                _unitOfWork.EstimateSubs.Update(estSubModel);
+
+                var entityEst = _mapper.Map<TEstimate>(estModel);
+                var entityEstSub = _mapper.Map<TEstimateSub>(estModel);
+                //entityEst = _mapper.Map<TEstimate>(estModel);
+                //entityEstSub = _mapper.Map<TEstimateSub>(estModel);
+
+                _unitOfWork.Estimates.Update(entityEst);
+                _unitOfWork.EstimateSubs.Update(entityEstSub);
                 await _unitOfWork.CommitAsync();
             }
             catch (Exception ex)
@@ -357,7 +366,7 @@ namespace KantanMitsumori.Service.Helper
                 {
                     estIdeModel = new TEstimateIde();
                     estIdeModel.IsExtendedGuarantee = 99;
-                }         
+                }
                 dataIDE = _mapper.Map<EstimateIdeModel>(estIdeModel);
             }
             catch (Exception ex)

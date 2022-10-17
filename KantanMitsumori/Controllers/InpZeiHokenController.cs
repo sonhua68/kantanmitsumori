@@ -20,7 +20,7 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             RequestInp request = new RequestInp();
-            request.EstNo = _logToken.sesEstNo;
+            request.EstNo = _logToken!.sesEstNo;
             request.EstSubNo = _logToken.sesEstSubNo;
             request.UserNo = _logToken.UserNo;
             request.TaxRatio = _logToken.sesTaxRatio;
@@ -35,7 +35,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpZeiHoken([FromForm] RequestUpdateInpZeiHoken requestData)
         {
-            var response = await _estimateService.UpdateInpZeiHoken(requestData);
+            var response = await _estimateService.UpdateInpZeiHoken(requestData, _logToken);
             return Ok(response);
         }
 
