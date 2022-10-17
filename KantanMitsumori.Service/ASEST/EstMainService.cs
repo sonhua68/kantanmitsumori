@@ -371,6 +371,459 @@ namespace KantanMitsumori.Service.ASEST
                 return ResponseHelper.Error<string>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
+
+        public ResponseBase<int> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer)
+        {
+            var LeaseTargetsID2 = _unitOfWorkIDE.LeaseTargets.Query(n => n.Id == 2).FirstOrDefault();
+            var LeaseTargetsID1 = _unitOfWorkIDE.LeaseTargets.Query(n => n.Id == 1).FirstOrDefault();
+            var year = DateTime.Now.Year;
+            var regYear = int.Parse(CommonFunction.Left(firstRegYm, 4));
+            var firstYear = regYear + LeaseTargetsID1!.Restriction;
+            var zenkaku = StringWidthHelper.ToFullWidth(makerName);
+            var arrayMakerName = _dataSettings.MakerName;
+            var cmakerName = arrayMakerName.Contains(zenkaku);
+            if (nowOdometer > LeaseTargetsID2!.Restriction || firstYear < year || cmakerName == false)
+            {
+                return ResponseHelper.Ok<int>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003));
+            }
+            return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+        }
+
+        public ResponseBase<string> ExportDataCSV(LogToken logToken)
+        {
+            // 見積書番号を取得
+            if (string.IsNullOrEmpty(logToken.sesEstNo) || string.IsNullOrEmpty(logToken.sesEstSubNo))
+                return ResponseHelper.Error<string>(HelperMessage.SMAI000S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI000S));
+
+            // 見積書データを取得
+            var estData = _commonEst.GetEstData(logToken.sesEstNo, logToken.sesEstSubNo);
+            if (estData == null)
+                return ResponseHelper.LogicError<string>(HelperMessage.SMAI000D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI000D));
+
+            // CSVファイルを編集
+            string strHeading;
+            string strOutdata;
+            // デリミタ文字列を定義
+            string CSV_DELIMITER = ",";
+
+            // （見出し行）
+            strHeading = "";
+            strHeading += "CSV出力書式版数" + CSV_DELIMITER;
+            strHeading += "見積書番号" + CSV_DELIMITER;
+            strHeading += "見積書番号 枝番" + CSV_DELIMITER;
+            strHeading += "見積入力者ＩＤ" + CSV_DELIMITER;
+            strHeading += "見積日" + CSV_DELIMITER;
+            strHeading += "お客様名" + CSV_DELIMITER;
+            strHeading += "お客様郵便番号" + CSV_DELIMITER;
+            strHeading += "お客様住所" + CSV_DELIMITER;
+            strHeading += "お客様電話番号" + CSV_DELIMITER;
+            strHeading += "お客様カナ名" + CSV_DELIMITER;
+            strHeading += "メモ" + CSV_DELIMITER;
+            strHeading += "備考" + CSV_DELIMITER;
+            strHeading += "販売店名" + CSV_DELIMITER;
+            strHeading += "販売店住所" + CSV_DELIMITER;
+            strHeading += "販売店電話番号" + CSV_DELIMITER;
+            strHeading += "見積担当者" + CSV_DELIMITER;
+            strHeading += "責任者" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "メーカー名" + CSV_DELIMITER;
+            strHeading += "車名" + CSV_DELIMITER;
+            strHeading += "グレード" + CSV_DELIMITER;
+            strHeading += "型式" + CSV_DELIMITER;
+            strHeading += "車台番号" + CSV_DELIMITER;
+            strHeading += "初年度登録" + CSV_DELIMITER;
+            strHeading += "車検" + CSV_DELIMITER;
+            strHeading += "走行距離" + CSV_DELIMITER;
+            strHeading += "走行距離単位" + CSV_DELIMITER;
+            strHeading += "修復歴" + CSV_DELIMITER;
+            strHeading += "車歴" + CSV_DELIMITER;
+            strHeading += "シフト" + CSV_DELIMITER;
+            strHeading += "排気量" + CSV_DELIMITER;
+            strHeading += "排気量単位" + CSV_DELIMITER;
+            strHeading += "色" + CSV_DELIMITER;
+            strHeading += "装備" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "課税対象金額の入力方法" + CSV_DELIMITER;
+
+            string titleTax = estData.ConTaxInputKb ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax;
+            strHeading += CommonConst.def_TitleCarPrice + titleTax + CSV_DELIMITER;
+            strHeading += CommonConst.def_TitleDisCount + titleTax + CSV_DELIMITER;
+            strHeading += estData.SonotaTitle + titleTax + CSV_DELIMITER; // [その他費用タイトル]
+            strHeading += "落札料" + CSV_DELIMITER;
+            strHeading += "陸送代" + CSV_DELIMITER;
+            string titleInOutTax = estData.ConTaxInputKb ? CommonConst.def_TitleInTax : CommonConst.def_TitleOutTax;
+            strHeading += SetSyakenNewZokT(estData) + titleInOutTax + CSV_DELIMITER; // 車検整備費用／納車整備費用
+            strHeading += CommonConst.def_TitleOpSpeCial + titleTax + CSV_DELIMITER;
+            strHeading += estData.OptionName1 + CSV_DELIMITER;
+            strHeading += estData.OptionName2 + CSV_DELIMITER;
+            strHeading += estData.OptionName3 + CSV_DELIMITER;
+            strHeading += estData.OptionName4 + CSV_DELIMITER;
+            strHeading += estData.OptionName5 + CSV_DELIMITER;
+            strHeading += estData.OptionName6 + CSV_DELIMITER;
+            strHeading += estData.OptionName7 + CSV_DELIMITER;
+            strHeading += estData.OptionName8 + CSV_DELIMITER;
+            strHeading += estData.OptionName9 + CSV_DELIMITER;
+            strHeading += estData.OptionName10 + CSV_DELIMITER;
+            strHeading += estData.OptionName11 + CSV_DELIMITER;
+            strHeading += estData.OptionName12 + CSV_DELIMITER;
+            strHeading += "車両販売価格" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "リザーブ" + CSV_DELIMITER;
+            strHeading += "税金・保険料（非課税）" + CSV_DELIMITER;
+            strHeading += CommonConst.def_TitleAutoTax + CSV_DELIMITER;
+            strHeading += "自動車税基準月" + CSV_DELIMITER;
+            strHeading += "環境性能割" + CSV_DELIMITER;
+            strHeading += "重量税" + CSV_DELIMITER;
+            strHeading += CommonConst.def_TitleDamageIns + CSV_DELIMITER;
+            strHeading += "自賠責保険基準月数" + CSV_DELIMITER;
+            strHeading += "任意保険料" + CSV_DELIMITER;
+            strHeading += CommonConst.def_TitleTaxInsEquivalent + titleTax + CSV_DELIMITER;
+            strHeading += CommonConst.def_TitleAutoTaxEquivalent + CSV_DELIMITER;
+            strHeading += CommonConst.def_TitleDamageInsEquivalent + CSV_DELIMITER;
+            strHeading += "預り法定費用（非課税）" + CSV_DELIMITER;
+            strHeading += "検査登録" + CSV_DELIMITER;
+            strHeading += "車庫証明" + CSV_DELIMITER;
+            strHeading += "下取車手続・処分" + CSV_DELIMITER;
+            strHeading += "リサイクル預託金" + CSV_DELIMITER;
+            strHeading += (estData.TaxFreeKb ? estData.TaxFreeSet1Title : "") + CSV_DELIMITER; // [項目1タイトル]
+            strHeading += (estData.TaxFreeKb ? estData.TaxFreeSet2Title : "") + CSV_DELIMITER; // [項目2タイトル]
+            strHeading += "その他非課税費用" + CSV_DELIMITER;
+            strHeading += CommonConst.def_TitleDaiko + titleTax + CSV_DELIMITER;
+            strHeading += "検査登録手続" + CSV_DELIMITER;
+            strHeading += "車庫証明手続" + CSV_DELIMITER;
+            strHeading += "下取車手続・処分" + CSV_DELIMITER;
+            strHeading += "下取車査定料" + CSV_DELIMITER;
+            strHeading += "資金管理料金" + CSV_DELIMITER;
+            strHeading += "納車費用" + CSV_DELIMITER;
+            strHeading += (estData.TaxCostKb ? estData.TaxSet1Title : "") + CSV_DELIMITER; // [項目1タイトル]
+            strHeading += (estData.TaxCostKb ? estData.TaxSet2Title : "") + CSV_DELIMITER; // [項目2タイトル]
+            strHeading += (estData.TaxCostKb ? estData.TaxSet3Title : "") + CSV_DELIMITER; // [項目3タイトル]
+            strHeading += "その他費用" + CSV_DELIMITER;
+            strHeading += (estData.ConTaxInputKb ? CommonConst.def_TitleConTaxTotalInTax : CommonConst.def_TitleConTaxTotalOutTax) + CSV_DELIMITER;
+            strHeading += formatCsvTitle(CommonConst.def_TitleCarKei) + CSV_DELIMITER;
+
+            strHeading += "下取車価格" + CSV_DELIMITER;
+            strHeading += "下取車残債" + CSV_DELIMITER;
+            strHeading += "下取車有無" + CSV_DELIMITER;
+            strHeading += "下取車車名" + CSV_DELIMITER;
+            strHeading += "下取車初年度登録" + CSV_DELIMITER;
+            strHeading += "下取車車検" + CSV_DELIMITER;
+            strHeading += "下取車走行距離" + CSV_DELIMITER;
+            strHeading += "下取車走行距離単位" + CSV_DELIMITER;
+            strHeading += "下取車車台番号" + CSV_DELIMITER;
+            strHeading += "下取車登録NO" + CSV_DELIMITER;
+            strHeading += "下取車色" + CSV_DELIMITER;
+            strHeading += formatCsvTitle(CommonConst.def_TitleSalesSumOutTax) + CSV_DELIMITER;
+            strHeading += "金利" + CSV_DELIMITER;
+            strHeading += "頭金" + CSV_DELIMITER;
+            strHeading += "現金・割賦元金" + CSV_DELIMITER;
+            strHeading += "分割払手数料" + CSV_DELIMITER;
+            strHeading += "分割支払金合計" + CSV_DELIMITER;
+            strHeading += "支払回数" + CSV_DELIMITER;
+            strHeading += "初回支払月" + CSV_DELIMITER;
+            strHeading += "最終回支払月" + CSV_DELIMITER;
+            strHeading += "第1回目分割支払金" + CSV_DELIMITER;
+            strHeading += "第2回目以降分割支払金" + CSV_DELIMITER;
+            strHeading += "ボーナス月加算額" + CSV_DELIMITER;
+            strHeading += "ボーナス支払月1" + CSV_DELIMITER;
+            strHeading += "ボーナス支払月2" + CSV_DELIMITER;
+            strHeading += "ボーナス回数" + CSV_DELIMITER;
+            strHeading += "\r\n";
+
+            // （データ行）
+            strOutdata = "";
+            strOutdata += "ASEST-Ver01-1" + CSV_DELIMITER;
+            // -- 見積書番号
+            strOutdata += logToken.sesEstNo + CSV_DELIMITER;
+            // -- 見積書番号 枝番
+            strOutdata += logToken.sesEstSubNo + CSV_DELIMITER;
+            // -- 見積入力者ＩＤ
+            strOutdata += estData.EstUserNo + CSV_DELIMITER;
+            // -- 見積日
+            strOutdata += estData.TradeDate.ToString("yyyyMMdd") + CSV_DELIMITER;
+            // -- お客様名
+            strOutdata += formatCsvItem(logToken.sesCustNm_forPrint!) + CSV_DELIMITER;
+            // -- お客様郵便番号
+            strOutdata += formatCsvItem(logToken.sesCustZip_forPrint!) + CSV_DELIMITER;
+            // -- お客様住所
+            strOutdata += formatCsvItem(logToken.sesCustAdr_forPrint!) + CSV_DELIMITER;
+            // -- お客様電話番号
+            strOutdata += formatCsvItem(logToken.sesCustTel_forPrint!) + CSV_DELIMITER;
+            // -- お客様カナ名
+            strOutdata += formatCsvItem(estData.CustKname) + CSV_DELIMITER;
+            // -- メモ
+            strOutdata += formatCsvItem(estData.CustMemo) + CSV_DELIMITER;
+            // -- 備考
+            strOutdata += formatCsvItem(estData.Notes) + CSV_DELIMITER;
+            // -- 販売店名
+            strOutdata += formatCsvItem(estData.ShopNm) + CSV_DELIMITER;
+            // -- 販売店住所
+            strOutdata += formatCsvItem(estData.ShopAdr) + CSV_DELIMITER;
+            // -- 販売店電話番号
+            strOutdata += formatCsvItem(estData.ShopTel) + CSV_DELIMITER;
+            // -- 見積担当者
+            strOutdata += formatCsvItem(estData.EstTanName) + CSV_DELIMITER;
+            // -- 責任者
+            strOutdata += formatCsvItem(estData.SekininName) + CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- メーカー名
+            strOutdata += formatCsvItem(estData.MakerName) + CSV_DELIMITER;
+            // -- 車名
+            strOutdata += formatCsvItem(estData.ModelName) + CSV_DELIMITER;
+            // -- グレード
+            strOutdata += formatCsvItem(estData.GradeName) + CSV_DELIMITER;
+            // -- 型式
+            strOutdata += formatCsvItem(estData.Case) + CSV_DELIMITER;
+            // -- 車台番号
+            strOutdata += formatCsvItem(estData.ChassisNo) + CSV_DELIMITER;
+            // -- 初年度登録
+            strOutdata += formatCsvItem(estData.FirstRegYm) + CSV_DELIMITER;
+            // -- 車検
+            strOutdata += formatCsvItem(estData.CheckCarYm) + CSV_DELIMITER;
+            // -- 走行距離、走行距離単位
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.NowOdometer)) + CSV_DELIMITER;
+            strOutdata += (string.IsNullOrEmpty(estData.NowOdometer.ToString()) ? "" : formatCsvItem(estData.MilUnit)) + CSV_DELIMITER;
+            // -- 修復歴
+            string csvAccidentHis = estData.AccidentHis == 0 ? "無し" : estData.AccidentHis == 1 ? "有り" : "";
+            strOutdata += csvAccidentHis + CSV_DELIMITER;
+            // -- 車歴
+            strOutdata += formatCsvItem(estData.BusinessHis) + CSV_DELIMITER;
+            // -- シフト
+            strOutdata += formatCsvItem(estData.Mission) + CSV_DELIMITER;
+            // -- 排気量、排気量単位
+            strOutdata += formatCsvItem(estData.DispVol) + CSV_DELIMITER;
+            strOutdata += (string.IsNullOrEmpty(estData.DispVol) ? "" : estData.DispVolUnit) + CSV_DELIMITER;
+            // -- 色
+            strOutdata += formatCsvItem(estData.BodyColor) + CSV_DELIMITER;
+            // -- 装備
+            strOutdata += formatCsvItem(estData.Equipment) + CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- 課税対象金額の入力方法
+            strOutdata += (estData.ConTaxInputKb ? "1" : "0") + CSV_DELIMITER;
+            // -- 車両本体価格（税込）／（税抜）
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.CarPrice)) + CSV_DELIMITER;
+            // -- 値引き（税込）／（税抜）
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.Discount)) + CSV_DELIMITER;
+            // -- [その他費用]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.Sonota)) + CSV_DELIMITER;
+            // -- 落札料
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.RakuSatu)) + CSV_DELIMITER;
+            // -- 陸送代
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.Rikusou)) + CSV_DELIMITER;
+            // -- 車検整備費用／納車整備費用（税込）／（税抜）
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.SyakenNew)) + CSV_DELIMITER;
+            // -- 付属品・特別仕様（税込）／（税抜）
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPriceAll)) + CSV_DELIMITER;
+            // -- [品名1]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice1)) + CSV_DELIMITER;
+            // -- [品名2]金額             
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice2)) + CSV_DELIMITER;
+            // -- [品名3]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice3)) + CSV_DELIMITER;
+            // -- [品名4]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice4)) + CSV_DELIMITER;
+            // -- [品名5]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice5)) + CSV_DELIMITER;
+            // -- [品名6]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice6)) + CSV_DELIMITER;
+            // -- [品名7]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice7)) + CSV_DELIMITER;
+            // -- [品名8]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice8)) + CSV_DELIMITER;
+            // -- [品名9]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice9)) + CSV_DELIMITER;
+            // -- [品名10]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice10)) + CSV_DELIMITER;
+            // -- [品名11]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice11)) + CSV_DELIMITER;
+            // -- [品名12]金額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionPrice12)) + CSV_DELIMITER;
+            // -- 車両販売価格
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.CarSum)) + CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- リザーブ
+            strOutdata += CSV_DELIMITER;
+            // -- 税金・保険料（非課税）
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxInsAll)) + CSV_DELIMITER;
+            // -- 自動車税、自動車税基準月
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.AutoTax)) + CSV_DELIMITER;
+            strOutdata += (estData.AutoTax == 0 ? "" : formatCsvItem(estData.AutoTaxMonth)) + CSV_DELIMITER;
+            // -- 取得税
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.AcqTax)) + CSV_DELIMITER;
+            // -- 重量税
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.WeightTax)) + CSV_DELIMITER;
+            // -- 自賠責保険料、自賠責保険基準月数
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.DamageIns)) + CSV_DELIMITER;
+            strOutdata += (estData.DamageIns == 0 ? "" : formatCsvItem(estData.DamageInsMonth)) + CSV_DELIMITER;
+            // -- 任意保険料
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.OptionIns)) + CSV_DELIMITER;
+            // -- 税金・保険料相当額（税込）／（税抜）
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxInsEquivalentAll)) + CSV_DELIMITER;
+            // -- 自動車税相当額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.AutoTaxEquivalent)) + CSV_DELIMITER;
+            // -- 自賠責保険料相当額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.DamageInsEquivalent)) + CSV_DELIMITER;
+            // -- 預り法定費用(非課税)
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxFreeAll)) + CSV_DELIMITER;
+            // -- 検査登録
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxFreeCheck)) + CSV_DELIMITER;
+            // -- 車庫証明
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxFreeGarage)) + CSV_DELIMITER;
+            // -- 下取車手続・処分
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxFreeTradeIn)) + CSV_DELIMITER;
+            // -- リサイクル預託金
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxFreeRecycle)) + CSV_DELIMITER;
+            // -- [項目1]費用
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxFreeSet1)) + CSV_DELIMITER;
+            // -- [項目2]費用
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxFreeSet2)) + CSV_DELIMITER;
+            // -- その他非課税費用
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxFreeOther)) + CSV_DELIMITER;
+            // -- 手続代行費用（税込）／（税抜）
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxCostAll)) + CSV_DELIMITER;
+            // -- 検査登録手続
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxCheck)) + CSV_DELIMITER;
+            // -- 車庫証明手続
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxGarage)) + CSV_DELIMITER;
+            // -- 下取車手続・処分
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxTradeIn)) + CSV_DELIMITER;
+            // -- 下取車査定料
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxTradeInSatei)) + CSV_DELIMITER;
+            // -- 資金管理料金
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxRecycle)) + CSV_DELIMITER;
+            // -- 納車費用
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxDelivery)) + CSV_DELIMITER;
+            // -- [項目1]費用
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxSet1)) + CSV_DELIMITER;
+            // -- [項目2]費用
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxSet2)) + CSV_DELIMITER;
+            // -- [項目3]費用
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxSet3)) + CSV_DELIMITER;
+            // -- その他費用
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TaxOther)) + CSV_DELIMITER;
+            // -- （内消費税合計）／消費税合計
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.ConTax)) + CSV_DELIMITER;
+            // -- 現金販売価格
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.CarSaleSum)) + CSV_DELIMITER;
+            // -- 下取車価格
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TradeInPrice)) + CSV_DELIMITER;
+            // -- 下取車残債
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.Balance)) + CSV_DELIMITER;
+            // -- 下取車有無
+            if (estData.TradeInUm > 0)
+            {
+                strOutdata += "1" + CSV_DELIMITER;
+                // -- 下取車車名
+                strOutdata += formatCsvItem(estData.TradeInCarName) + CSV_DELIMITER;
+                // -- 下取車初年度登録
+                strOutdata += formatCsvItem(estData.TradeInFirstRegYm) + CSV_DELIMITER;
+                // -- 下取車車検
+                strOutdata += formatCsvItem(estData.TradeInCheckCarYm) + CSV_DELIMITER;
+                // -- 下取車走行距離、下取車走行距離単位
+                strOutdata += formatCsvItem(CommonFunction.FormatString(estData.TradeInNowOdometer)) + CSV_DELIMITER;
+                strOutdata += (estData.TradeInNowOdometer > 0 ? formatCsvItem(estData.TradeInMilUnit) : "") + CSV_DELIMITER;
+                // -- 下取車登録No
+                strOutdata += formatCsvItem(estData.TradeInChassisNo) + CSV_DELIMITER;
+                // -- 下取車車台番号
+                strOutdata += formatCsvItem(estData.TradeInRegNo.Replace("/", "")) + CSV_DELIMITER;
+                // -- 下取車色
+                strOutdata += formatCsvItem(estData.TradeInBodyColor) + CSV_DELIMITER;
+            }
+            else
+            {
+                strOutdata += "0" + CSV_DELIMITER;
+                for (int i = 1; i <= 8; i++)
+                    strOutdata += CSV_DELIMITER;
+            }
+
+            // -- お支払総額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.SalesSum)) + CSV_DELIMITER;
+            // -- （ローン計算情報）金利
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.Rate)) + CSV_DELIMITER;
+            // -- （ローン計算情報）頭金
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.Deposit)) + CSV_DELIMITER;
+            // -- （ローン計算情報）現金・割賦元金
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.Principal)) + CSV_DELIMITER;
+            // -- （ローン計算情報）分割払手数料
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.PartitionFee)) + CSV_DELIMITER;
+            // -- （ローン計算情報）分割支払金合計
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.PartitionAmount)) + CSV_DELIMITER;
+            // -- （ローン計算情報）支払回数
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.PayTimes)) + CSV_DELIMITER;
+            // -- （ローン計算情報）初回支払月
+            strOutdata += formatCsvItem(estData.FirstPayMonth) + CSV_DELIMITER;
+            // -- （ローン計算情報）最終回支払月
+            strOutdata += formatCsvItem(estData.LastPayMonth) + CSV_DELIMITER;
+            // -- （ローン計算情報）第1回目分割支払金
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.FirstPayAmount)) + CSV_DELIMITER;
+            // -- （ローン計算情報）第2回目以降分割支払金
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.PayAmount)) + CSV_DELIMITER;
+            // -- （ローン計算情報）ボーナス月加算額
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.BonusAmount)) + CSV_DELIMITER;
+            // -- （ローン計算情報）ボーナス支払月1
+            strOutdata += formatCsvItem(estData.BonusFirst) + CSV_DELIMITER;
+            // -- （ローン計算情報）ボーナス支払月2
+            strOutdata += formatCsvItem(estData.BonusSecond) + CSV_DELIMITER;
+            // -- （ローン計算情報）ボーナス回数
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.BonusTimes)) + CSV_DELIMITER;
+            strOutdata += "\r\n";
+
+            string data = strHeading + strOutdata;
+
+            return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data);
+        }
+
         #region fuc private     
         private int ChkAANo(string? userNo, string AANo, string AAPlace, int CornerType, int mode)
         {
@@ -976,22 +1429,94 @@ namespace KantanMitsumori.Service.ASEST
             return Model;
         }
 
-        public ResponseBase<int> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer)
+        // ******************************************
+        // CSV ファイル 項目の整形
+        // ******************************************
+        private string formatCsvTitle(string prmStr)
         {
-            var LeaseTargetsID2 = _unitOfWorkIDE.LeaseTargets.Query(n => n.Id == 2).FirstOrDefault();
-            var LeaseTargetsID1 = _unitOfWorkIDE.LeaseTargets.Query(n => n.Id == 1).FirstOrDefault();
-            var year = DateTime.Now.Year;
-            var regYear = int.Parse(CommonFunction.Left(firstRegYm, 4));
-            var firstYear = regYear + LeaseTargetsID1!.Restriction;
-            var zenkaku = StringWidthHelper.ToFullWidth(makerName);
-            var arrayMakerName = _dataSettings.MakerName;
-            var cmakerName = arrayMakerName.Contains(zenkaku);
-            if (nowOdometer > LeaseTargetsID2!.Restriction || firstYear < year || cmakerName == false)
-            {
-                return ResponseHelper.Ok<int>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003));
-            }
-            return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            if (0 <= prmStr.IndexOf("（"))
+                prmStr = CommonFunction.Left(prmStr, prmStr.IndexOf("（"));
+
+            return prmStr;
         }
+
+        private string SetSyakenNewZokT(EstModel estModel)
+        {
+            if (estModel.SyakenNew > 0 && estModel.SyakenZok == 0)
+                return CommonConst.def_TitleSyakenNew;
+            else if (estModel.SyakenNew == 0 && estModel.SyakenZok > 0)
+                return CommonConst.def_TitleSyakenZok;
+            else
+            {
+                string initText = CommonConst.def_TitleSyakenNew;
+
+                if ((estModel.CheckCarYm!.Length == 6 &&
+                    CommonFunction.DateDiff(IntervalEnum.Months, DateTime.Today, DateTime.Parse(CommonFunction.Left(estModel.CheckCarYm, 4) + "/" + CommonFunction.Right(estModel.CheckCarYm, 2) + "/01")) > 0)
+                    || (estModel.CheckCarYm.Length == 4 && CommonFunction.DateDiff(IntervalEnum.Years, DateTime.Today, DateTime.Parse(estModel.CheckCarYm + "/01")) > 0))
+                    initText = CommonConst.def_TitleSyakenZok;
+
+                return initText;
+            }
+        }
+
+        // ******************************************
+        // CSV ファイル 項目の整形
+        // ******************************************
+        private string formatCsvItem(string prmStr)
+        {
+            if (string.IsNullOrEmpty(prmStr))
+            {
+                return "";
+            }
+
+            string strWork = prmStr.Trim();
+
+            // 桁区切りカンマや単位を削除
+            if (((0 <= strWork.IndexOf("円")) || (0 <= strWork.IndexOf("回")) || (0 <= strWork.IndexOf("千Km")) | (0 <= strWork.IndexOf("Km")) || (0 <= strWork.IndexOf("cc"))))
+            {
+                strWork = strWork.Replace(",", "");
+                strWork = strWork.Replace("円", "");
+                strWork = strWork.Replace("回", "");
+                strWork = strWork.Replace("千Km", "");
+                strWork = strWork.Replace("Km", "");
+                strWork = strWork.Replace("cc", "");
+                strWork = strWork.Replace("×", "");
+                strWork = strWork.Replace("（", "");
+                strWork = strWork.Replace("）", "");
+            }
+
+            // マイナス金額表示用記号の変換
+            strWork = strWork.Replace("▲", "");
+
+            // 半角カンマを全角カンマに変換
+            strWork = strWork.Replace(",", "，");
+
+            // 半角ダブルクォーテーションを全角ダブルクォーテーションに変換
+            strWork = strWork.Replace("\"", char.ConvertFromUtf32((int)0x201D));
+
+            // 制御コードが含まれていた場合のエスケープ
+            strWork = strWork.Replace("\r", "%0D");
+            strWork = strWork.Replace("\n", "%0A");
+            strWork = strWork.Replace("\t", "%09");
+            strWork = strWork.Replace("\b", "%08");
+
+            // HTML タグが含まれていた場合のエスケープ
+            strWork = strWork.Replace("<BR>", "%0D%0A");
+            strWork = strWork.Replace("<BR />", "%0A");
+            strWork = strWork.Replace("<br>", "%0D%0A");
+            strWork = strWork.Replace("<br />", "%0A");
+
+            // 末尾がエスケープされた改行コードの場合、それを削除（１行目のみのデータ）
+            // ※先頭がエスケープされた改行コードの場合は、特になにもしない（２行目のみのデータ）
+            if (string.IsNullOrEmpty(strWork) == false && strWork.Length >= 6)
+            {
+                if ((strWork.Substring(strWork.Length - 6) == "%0D%0A"))
+                    strWork = strWork.Replace("%0D%0A", "");
+            }
+
+            return strWork.Trim();
+        }
+
 
 
         #endregion fuc private
