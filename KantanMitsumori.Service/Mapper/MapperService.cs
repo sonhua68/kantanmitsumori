@@ -257,7 +257,7 @@ namespace KantanMitsumori.Service.Mapper
         {
             CreateMap<TEstimate, EstModel>()
                 .ForMember(t => t.NowOdometer, o => o.MapFrom(s => s.NowOdometer ?? 0))
-                .ForMember(t => t.ConTaxInputKb, o => o.MapFrom(s => s.ConTaxInputKb ?? false))
+                .ForMember(t => t.ConTaxInputKb, o => o.MapFrom(s => s.ConTaxInputKb ?? true))
                 .ForMember(t => t.TotalCost, o => o.MapFrom(s => s.TotalCost ?? 0))
                 .ForMember(t => t.CarPrice, o => o.MapFrom(s => s.CarPrice ?? 0))
                 .ForMember(t => t.Discount, o => o.MapFrom(s => s.Discount ?? 0))
@@ -265,7 +265,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.SyakenNew, o => o.MapFrom(s => s.SyakenNew ?? 0))
                 .ForMember(t => t.SyakenZok, o => o.MapFrom(s => s.SyakenZok ?? 0))
                 .ForMember(t => t.CarSum, o => o.MapFrom(s => s.CarSum ?? 0))
-                .ForMember(t => t.OptionInputKb, o => o.MapFrom(s => s.OptionInputKb ?? false))
+                .ForMember(t => t.OptionInputKb, o => o.MapFrom(s => s.OptionInputKb ?? true))
                 .ForMember(t => t.OptionPrice1, o => o.MapFrom(s => s.OptionPrice1 ?? 0))
                 .ForMember(t => t.OptionPrice2, o => o.MapFrom(s => s.OptionPrice2 ?? 0))
                 .ForMember(t => t.OptionPrice3, o => o.MapFrom(s => s.OptionPrice3 ?? 0))
@@ -273,21 +273,21 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.OptionPrice5, o => o.MapFrom(s => s.OptionPrice5 ?? 0))
                 .ForMember(t => t.OptionPrice6, o => o.MapFrom(s => s.OptionPrice6 ?? 0))
                 .ForMember(t => t.OptionPriceAll, o => o.MapFrom(s => s.OptionPriceAll ?? 0))
-                .ForMember(t => t.TaxInsInputKb, o => o.MapFrom(s => s.TaxInsInputKb ?? false))
+                .ForMember(t => t.TaxInsInputKb, o => o.MapFrom(s => s.TaxInsInputKb ?? true))
                 .ForMember(t => t.AutoTax, o => o.MapFrom(s => s.AutoTax ?? 0))
                 .ForMember(t => t.AcqTax, o => o.MapFrom(s => s.AcqTax ?? 0))
                 .ForMember(t => t.WeightTax, o => o.MapFrom(s => s.WeightTax ?? 0))
                 .ForMember(t => t.DamageIns, o => o.MapFrom(s => s.DamageIns ?? 0))
                 .ForMember(t => t.OptionIns, o => o.MapFrom(s => s.OptionIns ?? 0))
                 .ForMember(t => t.TaxInsAll, o => o.MapFrom(s => s.TaxInsAll ?? 0))
-                .ForMember(t => t.TaxFreeKb, o => o.MapFrom(s => s.TaxFreeKb ?? false))
+                .ForMember(t => t.TaxFreeKb, o => o.MapFrom(s => s.TaxFreeKb ?? true))
                 .ForMember(t => t.TaxFreeGarage, o => o.MapFrom(s => s.TaxFreeGarage ?? 0))
                 .ForMember(t => t.TaxFreeCheck, o => o.MapFrom(s => s.TaxFreeCheck ?? 0))
                 .ForMember(t => t.TaxFreeTradeIn, o => o.MapFrom(s => s.TaxFreeTradeIn ?? 0))
                 .ForMember(t => t.TaxFreeRecycle, o => o.MapFrom(s => s.TaxFreeRecycle ?? 0))
                 .ForMember(t => t.TaxFreeOther, o => o.MapFrom(s => s.TaxFreeOther ?? 0))
                 .ForMember(t => t.TaxFreeAll, o => o.MapFrom(s => s.TaxFreeAll ?? 0))
-                .ForMember(t => t.TaxCostKb, o => o.MapFrom(s => s.TaxCostKb ?? false))
+                .ForMember(t => t.TaxCostKb, o => o.MapFrom(s => s.TaxCostKb ?? true))
                 .ForMember(t => t.TaxGarage, o => o.MapFrom(s => s.TaxGarage ?? 0))
                 .ForMember(t => t.TaxCheck, o => o.MapFrom(s => s.TaxCheck ?? 0))
                 .ForMember(t => t.TaxTradeIn, o => o.MapFrom(s => s.TaxTradeIn ?? 0))
@@ -340,7 +340,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.DamageInsEquivalent, o => o.MapFrom(s => s.DamageInsEquivalent ?? 0))
                 .ForMember(t => t.TaxInsEquivalentAll, o => o.MapFrom(s => s.TaxInsEquivalentAll ?? 0))
                 .ForMember(t => t.LoanModifyFlag, o => o.MapFrom(s => s.LoanModifyFlag ?? false))
-                .ForMember(t => t.LoanRecalcSettingFlag, o => o.MapFrom(s => s.LoanRecalcSettingFlag ?? false));
+                .ForMember(t => t.LoanRecalcSettingFlag, o => o.MapFrom(s => s.LoanRecalcSettingFlag ?? true));
         }
     }
 }
