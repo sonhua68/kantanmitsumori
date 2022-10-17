@@ -60,9 +60,8 @@ namespace KantanMitsumori.Service.Helper
                     {
                         estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
 
-                        var arrayEst = estModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
-                        var arrayEstSub = estModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
-                        foreach (var itemEst in arrayEst)
+                        var arrDtEst = estModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
+                        foreach (var itemEst in arrDtEst)
                         {
                             if (reCalEstModel.Contains(itemEst.Name))
                             {
@@ -70,14 +69,11 @@ namespace KantanMitsumori.Service.Helper
                                 objValue = CommonFunction.reCalcItem(objValue, (bool)estModel.ConTaxInputKb, vTax);
                                 itemEst.SetValue(estModel, objValue);
                             }
-                        }
-                        foreach (var itemSub in arrayEstSub)
-                        {
-                            if (reCalEstSubModel.Contains(itemSub.Name))
+                            if (reCalEstSubModel.Contains(itemEst.Name))
                             {
-                                int objValue = (int)itemSub.GetValue(estModel)!;
+                                int objValue = (int)itemEst.GetValue(estModel)!;
                                 objValue = CommonFunction.reCalcItem(objValue, (bool)estModel.ConTaxInputKb, vTax);
-                                itemSub.SetValue(estModel, objValue);
+                                itemEst.SetValue(estModel, objValue);
                             }
                         }
                     }
@@ -227,8 +223,6 @@ namespace KantanMitsumori.Service.Helper
 
                 var entityEst = _mapper.Map<TEstimate>(estModel);
                 var entityEstSub = _mapper.Map<TEstimateSub>(estModel);
-                //entityEst = _mapper.Map<TEstimate>(estModel);
-                //entityEstSub = _mapper.Map<TEstimateSub>(estModel);
 
                 _unitOfWork.Estimates.Update(entityEst);
                 _unitOfWork.EstimateSubs.Update(entityEstSub);
