@@ -286,11 +286,12 @@ namespace KantanMitsumori.Service.Helper
                 }
 
                 // Use HttpClient to download image
-                var httpClient = _httpClientFactory.CreateClient();
-                var task = httpClient.GetByteArrayAsync(uri);
-                task.Wait();
-                var data = task.Result;
-                File.WriteAllBytes(fileName, task.Result);
+                //var httpClient = _httpClientFactory.CreateClient();
+                //var task = httpClient.GetByteArrayAsync(uri);
+                //task.Wait();
+                //var data = task.Result;
+                //File.WriteAllBytes(fileName, task.Result);
+                clonefile(fileName, uri);
 
             }
             catch (Exception ex)
@@ -300,7 +301,18 @@ namespace KantanMitsumori.Service.Helper
             }
         }
 
-
+        public async void clonefile(string fileName, Uri uri)
+        {
+            HttpClient _client = new HttpClient();
+            HttpResponseMessage task = await _client.GetAsync(uri);
+            Stream task2 = await task.Content.ReadAsStreamAsync();
+            var memory = new MemoryStream();
+            await task2.CopyToAsync(memory);
+            memory.Position = 0;
+            File.WriteAllBytes(fileName, memory.ToArray());
+            task2.Dispose();
+            memory.Dispose();
+        }
 
         public void CheckImgPath(string strImagePath, string strSesName, string strDefImage, ref string strOutImagePath, string strImgSuffix, string cor, string fex)
         {
@@ -416,7 +428,7 @@ namespace KantanMitsumori.Service.Helper
                     vSyaken = DateTime.Parse(inYear + "/" + inMonth + "/01");
                     SyakenDiff = CommonFunction.DateDiff(IntervalEnum.Months, DateTime.Now, vSyaken);
                     if (SyakenDiff > 0)
-                        outRemIns = SyakenDiff + 1;
+                        outRemIns = SyakenDiff + 2;
                 }
                 int intCarType = intExaust > 660 ? 1 : 2;
                 int intRemIns = outRemIns;
