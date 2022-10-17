@@ -416,7 +416,7 @@ namespace KantanMitsumori.Service.Helper
                     vSyaken = DateTime.Parse(inYear + "/" + inMonth + "/01");
                     SyakenDiff = CommonFunction.DateDiff(IntervalEnum.Months, DateTime.Now, vSyaken);
                     if (SyakenDiff > 0)
-                        outRemIns = SyakenDiff + 1;
+                        outRemIns = SyakenDiff + 2;
                 }
                 int intCarType = intExaust > 660 ? 1 : 2;
                 int intRemIns = outRemIns;
