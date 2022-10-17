@@ -40,14 +40,19 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
+                // Query data from database
                 var dtEst = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
                 var dtEstSub = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == dtEst.EstNo && x.EstSubNo == dtEst.EstSubNo && x.Dflag == false);
                 if (dtEst == null || dtEstSub == null)
                 {
                     return false;
                 }
+
+                // Initial model
                 var estModel = new EstModel();
-                estModel = _helperMapper.MergeInto<EstModel>(dtEst, dtEstSub);
+                // Map entity to model
+                _mapper.Map(dtEst, estModel);
+                _mapper.Map(dtEstSub, estModel);
 
                 // 再計算前の総額
                 int? oldSalesSum = estModel.SalesSum;
@@ -60,16 +65,10 @@ namespace KantanMitsumori.Service.Helper
                     {
                         estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
 
-                        var arrDtEst = estModel.GetType().GetProperties().Where(x => x.PropertyType.IsGenericType && x.PropertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
+                        var arrDtEst = estModel.GetType().GetProperties().Where(x => x.PropertyType.Name == "Int32");
                         foreach (var itemEst in arrDtEst)
                         {
-                            if (reCalEstModel.Contains(itemEst.Name))
-                            {
-                                int objValue = (int)itemEst.GetValue(estModel)!;
-                                objValue = CommonFunction.reCalcItem(objValue, (bool)estModel.ConTaxInputKb, vTax);
-                                itemEst.SetValue(estModel, objValue);
-                            }
-                            if (reCalEstSubModel.Contains(itemEst.Name))
+                            if (reCalEstModel.Contains(itemEst.Name) || reCalEstSubModel.Contains(itemEst.Name))
                             {
                                 int objValue = (int)itemEst.GetValue(estModel)!;
                                 objValue = CommonFunction.reCalcItem(objValue, (bool)estModel.ConTaxInputKb, vTax);
