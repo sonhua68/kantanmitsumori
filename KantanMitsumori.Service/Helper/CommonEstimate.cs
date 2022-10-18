@@ -65,7 +65,7 @@ namespace KantanMitsumori.Service.Helper
                     {
                         estModel.ConTaxInputKb = dtUserDef.ConTaxInputKb;
 
-                        var arrDtEst = estModel.GetType().GetProperties().Where(x => x.PropertyType.Name == "Int32");
+                        var arrDtEst = estModel.GetType().GetProperties().Where(x => x.PropertyType.Name.ToLower() == "int32");
                         foreach (var itemEst in arrDtEst)
                         {
                             if (reCalEstModel.Contains(itemEst.Name) || reCalEstSubModel.Contains(itemEst.Name))
