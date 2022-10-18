@@ -6,159 +6,135 @@
     ViewData["Title"] = "かんたん見積";
     var Month = DateTime.Now.Month;
 }
-<div class="row">
-    <div class="col-sm-2">
+<div>
+    <div id="DIV2" style="border-right: #3c82ed 1px solid;
+            border-top: #3c82ed 1px solid; z-index: 104; left: 8px; border-left: #3c82ed 1px solid;
+            width: 142px; border-bottom: #3c82ed 1px solid; position: absolute; top: 68px;
+            height: 173px; background-color: transparent;">
+        <input type="image" name="btnBack" onclick="Framework.GoBackReloadPage();return false" src="~/img/btn見積TOP.png" style="height:38px;width:110px;border-width:0px;z-index: 105;
+            left: 17px; position: absolute; top: 8px">
+        &nbsp; &nbsp;
+        <input type="image" name="btnFree" onclick="Framework.GoBackReloadPageUrl('/SelCar');return false" src="~/img/btnフリー見積.png" style="height:38px;width:110px;border-width:0px;z-index: 109; left: 17px; position: absolute; top: 60px">
+        &nbsp; &nbsp;
+        <input type="image" name="btnInitVal" onclick="Framework.GoBackReloadPageUrl('/InpInitVal');return false" src="~/img/btn諸費用設定.png" style="height:38px;width:110px;border-width:0px;z-index: 109; left: 17px; position: absolute; top: 111px">
+        <span id="lblInfoSetting" style="display:inline-block;color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:9pt;font-weight:bold;height:14px;width:100px;font-weight: bold; z-index: 103;
+            left: 25px; vertical-align: top; direction: ltr; position: absolute;
+            top: 151px; text-align: left">※事前設定必要</span>
     </div>
-    <div class="col-sm-2">
-        <div class="col d-flex justify-content-between">
-            <div class="border-button container text-center">
-                <br>
-                <div class="col d-flex justify-content-between">
-                    <a href="#" onclick="Framework.GoBackReloadPage();return false">
-                        <img src="./img/btn%e8%a6%8b%e7%a9%8dTOP.png">
-                    </a>
-                </div>
-                <br>
-                <div class="col d-flex justify-content-between">
-                    <a href="#" onclick="Framework.GoBackReloadPageUrl('/SelCar');return false">
-                        <img src="img/btnフリー見積.png">
-                    </a>
-                </div>
-                <br>
-                <div class="col d-flex justify-content-between">
-                    <a href="#" onclick="Framework.GoBackReloadPageUrl('/InpInitVal');return false">
-                        <img src="img/btn%E8%AB%B8%E8%B2%BB%E7%94%A8%E8%A8%AD%E5%AE%9A.png">
-                    </a>
-                </div>
 
-                <div class="col d-flex justify-content-between">
-                    <span class="label label-text">※事前設定必要</span>
-                </div>
-            </div>
-        </div>
+    <span id="Label15" class="titlelabel" style="color:MediumBlue;font-size:12pt;font-weight:bold;z-index: 105; left: 166px;
+            position: absolute; top: 70px">見積書検索</span>
+
+
+    <form id="FormSerEst" style="LEFT: 164px; POSITION: absolute; TOP: 91px; width: 796px; z-index: 107;">
+        <table class="inptable" id="Table3" cellpadding="2" cellspacing="0">
+            <tbody>
+                <tr>
+                    <td align="left" class="tabletitle" colspan="2">
+                        <span id="lblOption" class="titlelabel" style="display:inline-block;width:302px;">検索条件</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" class="inptd">
+                        <span id="Label2" class="inplabel" style="display:inline-block;height:17px;">見積書番号</span>
+                    </td>
+                    <td align="left" class="inptd">
+                        <input name="EstNo" type="text" maxlength="11" id="EstNo" tabindex="1" class="inpbox" style="width:111px;">
+                        <span id="Label3" class="inplabel" style="display:inline-block;height:20px;">－</span>
+                        <input name="EstSubNo" type="text" maxlength="2" id="EstSubNo" tabindex="2" class="inpbox" style="width:40px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" class="inptd">
+                        <span id="Label1" class="inplabel">見積書作成日</span>
+                    </td>
+                    <td align="left" class="inptd">
+                        <select name="ddlFromSelectY" onchange="return onChangeSelect(1)" id="ddlFromSelectY" tabindex="4" class="inpbox" style="width:70px;">
+                        </select>
+                        <span id="Label8" class="inplabel" style="display:inline-block;width:13px;">年</span>
+                        <select name="ddlFromSelectM" onchange="return  onChangeSelect(1)" id="ddlFromSelectM" tabindex="5" class="inpbox" style="width:70px;">
+                        </select>
+                        <span id="Label6" class="inplabel" style="display:inline-block;width:13px;">月</span>
+                        <select name="ddlFromSelectD" id="ddlFromSelectD" tabindex="6" class="inpbox" style="width:70px;">
+                        </select>
+                        <span id="Label5" class="inplabel" style="display:inline-block;width:13px;">日</span>
+                        <span id="Label9" class="inplabel" style="display:inline-block;font-size:14pt;font-weight:bold;width:29px;text-align:center;">～</span>&nbsp;
+                        <select name="ddlToSelectY" id="ddlToSelectY" onchange="return onChangeSelect(2)" tabindex="7" class="inpbox" style="width:70px;">
+                        </select>
+                        <span id="Label12" class="inplabel" style="display:inline-block;width:13px;">年</span>
+                        <select name="ddlToSelectM" onchange="return onChangeSelect(2)" id="ddlToSelectM" tabindex="8" class="inpbox" style="width:70px;">
+                        </select>
+                        <span id="Label11" class="inplabel" style="display:inline-block;width:13px;">月</span>
+                        <select name="ddlToSelectD" id="ddlToSelectD" tabindex="9" class="inpbox" style="width:70px;">
+                        </select>
+                        <span id="Label10" class="inplabel" style="display:inline-block;width:13px;">日</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" class="inptd">
+                        <span id="Label4" class="inplabel">お客様カナ名</span>
+                    </td>
+                    <td class="inptd" align="left">
+                        <input name="CustKanaName" type="text" maxlength="40" id="CustKanaName" class="inpbox" style="width:216px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" class="inptd">
+                        <span id="Label7" class="inplabel">見積車種</span>
+                    </td>
+                    <td class="inptd">
+                        <span id="Label13" class="inplabel">メーカー</span>
+                        <select name="ddlMaker" id="ddlMaker" onchange="return GetListModel()" class="inpbox" style="width:141px;">
+                        </select>
+                        <span id="Label14" class="inplabel">車種</span>
+                        <select name="ddlModel" id="ddlModel" class="inpbox" style="width:196px;">
+                        </select>
+                        <span id="Label16" class="inplabel">車台番号</span>
+                        <input name="ChassisNo" type="text" maxlength="40" id="ChassisNo" class="inpbox" style="width:158px;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="inpbtntd" colspan="2" style="height: 35px">
+                        <input onclick="return Cleanform();" name="btnCancel" type="button" id="btnCancel" class="Btn1" style="width: 100px; height: 32px;" value="条件クリア">
+                        <input onclick="LoadData(1)" name="btnOK" type="button" id="btnOK" class="Btn1" style="width: 100px; height: 32px;" value="検索">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="inpbtntd" colspan="2" style="height: 30px">
+                        <span name="txMsg" type="text" id="txMsg" class="inpboxsum" style="WIDTH: 428px; color:Red;" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+    <span id="Label17" class="titlelabel" style="display:inline-block;color:MediumBlue;font-size:12pt;font-weight:bold;width:118px;z-index: 111; left: 166px;
+            position: absolute;top: 348px">検索結果一覧</span>
+
+    <span id="Label18" style="display:inline-block;color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Small;font-weight:bold;height:10px;width:796px;z-index: 103; left: 168px;
+            position: absolute;top: 375px; text-align: left;">
+        選択&nbsp;&nbsp;：作成当初の見積日のまま編集画面を起動します（上書き保存します）<br>
+        再作成：見積日を本日にして編集画面を起動します（別保存します）
+    </span>
+
+    <div style=" border:solid 1px #999999;left: 163px; position: absolute; top: 420px; width:800px;">
+        <table id="TableSerEst" class="gvnomal" cellspacing="1" cellpadding="1" rules="all" border="1" id="gvEst" style="background-color:#D2E0FB;border-color:White;border-width:1px;border-style:Solid;height:156px;width:800px;">
+            <tbody>
+                <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
+                    <th scope="col">選択</th>
+                    <th scope="col">再作成</th>
+                    <th scope="col"><a href="javascript:void(0)" onclick="return SortData(10);return false;" style="color:White;">見積書番号</a></th>
+                    <th scope="col"><a href="javascript:void(0)" onclick="return SortData(20);return false;" style="color:White;">見積日</a></th>
+                    <th scope="col"><a href="javascript:void(0)" onclick="return SortData(30);return false;" style="color:White;">カナ名</a></th>
+                    <th scope="col"><a href="javascript:void(0)" onclick="return SortData(40);return false;" style="color:White;">車両</a></th>
+                    <th scope="col">削除</th>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="col-sm-2">
-        <div class="row">
-            <div class="col-2 col-sm-2 ">
-                <span id="Label4" class="InpTitle1" style="display:inline-block;color:MediumBlue;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:8px;width:283px;z-index: 105;
-             top: 66px">見積書検索</span>
-                <br>
-            </div>
-        </div>
-        <br>
-        <!-- お客様情報（印字用） -->
-        <div class="row">
-            <div class="col-8 col-sm-8">
-                <form id="FormSerEst">
-                    <table class="inptable" id="Table3" cellpadding="2" cellspacing="0">
-                        <tbody>
-                            <tr>
-                                <td align="left" class="tabletitle" colspan="2">
-                                    <span id="lblOption" class="titlelabel" style="display:inline-block;width:302px;">検索条件</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left" class="inptd">
-                                    <span id="Label2" class="inplabel" style="display:inline-block;height:17px;">見積書番号</span>
-                                </td>
-                                <td align="left" class="inptd">
-                                    <input name="EstNo" type="text" maxlength="11" id="EstNo" tabindex="1" class="inpbox" style="width:111px;">
-                                    <span id="Label3" class="inplabel" style="display:inline-block;height:20px;">－</span>
-                                    <input name="EstSubNo" type="text" maxlength="2" id="EstSubNo" tabindex="2" class="inpbox" style="width:40px;">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left" class="inptd">
-                                    <span id="Label1" class="inplabel">見積書作成日</span>
-                                </td>
-                                <td align="left" class="inptd">
-                                    <select name="ddlFromSelectY" onchange="return onChangeSelect(1)" id="ddlFromSelectY" tabindex="4" class="inpbox" style="width:70px;">
-                                    </select>
-                                    <span id="Label8" class="inplabel" style="display:inline-block;width:13px;">年</span>
-                                    <select name="ddlFromSelectM" onchange="return  onChangeSelect(1)" id="ddlFromSelectM" tabindex="5" class="inpbox" style="width:70px;">
-                                    </select>
-                                    <span id="Label6" class="inplabel" style="display:inline-block;width:13px;">月</span>
-                                    <select name="ddlFromSelectD" id="ddlFromSelectD" tabindex="6" class="inpbox" style="width:70px;">
-                                    </select>
-                                    <span id="Label5" class="inplabel" style="display:inline-block;width:13px;">日</span>
-                                    <span id="Label9" class="inplabel" style="display:inline-block;font-size:14pt;font-weight:bold;width:29px;text-align:center;">～</span>&nbsp;
-                                    <select name="ddlToSelectY" id="ddlToSelectY" onchange="return onChangeSelect(2)" tabindex="7" class="inpbox" style="width:70px;">
-                                    </select>
-                                    <span id="Label12" class="inplabel" style="display:inline-block;width:13px;">年</span>
-                                    <select name="ddlToSelectM" onchange="return onChangeSelect(2)" id="ddlToSelectM" tabindex="8" class="inpbox" style="width:70px;">
-                                    </select>
-                                    <span id="Label11" class="inplabel" style="display:inline-block;width:13px;">月</span>
-                                    <select name="ddlToSelectD" id="ddlToSelectD" tabindex="9" class="inpbox" style="width:70px;">
-                                    </select>
-                                    <span id="Label10" class="inplabel" style="display:inline-block;width:13px;">日</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left" class="inptd">
-                                    <span id="Label4" class="inplabel">お客様カナ名</span>
-                                </td>
-                                <td class="inptd" align="left">
-                                    <input name="CustKanaName" type="text" maxlength="40" id="CustKanaName" class="inpbox" style="width:216px;">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="left" class="inptd">
-                                    <span id="Label7" class="inplabel">見積車種</span>
-                                </td>
-                                <td class="inptd">
-                                    <span id="Label13" class="inplabel">メーカー</span>
-                                    <select name="ddlMaker" id="ddlMaker" onchange="return GetListModel()" class="inpbox" style="width:141px;">
-                                    </select>
-                                    <span id="Label14" class="inplabel">車種</span>
-                                    <select name="ddlModel" id="ddlModel" class="inpbox" style="width:196px;">
-                                    </select>
-                                    <span id="Label16" class="inplabel">車台番号</span>
-                                    <input name="ChassisNo" type="text" maxlength="40" id="ChassisNo" class="inpbox" style="width:158px;">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="inpbtntd" colspan="2" style="height: 35px">
-                                    <input onclick="return Cleanform();" name="btnCancel" type="button" id="btnCancel" class="Btn1" style="width: 100px; height: 32px;" value="条件クリア">
-                                    <input onclick="LoadData(1)" name="btnOK" type="button" id="btnOK" class="Btn1" style="width: 100px; height: 32px;" value="検索">
-                                </td>
-                            </tr>
 
-                            <tr>
-                                <td class="inpbtntd" colspan="2" style="height: 30px">
-                                    <span name="txMsg" type="text" id="txMsg" class="inpboxsum" style="WIDTH: 428px; color:Red;" />
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </form>
-                <span id="Label17" class="titlelabel" style="display:inline-block;color:MediumBlue;font-size:12pt;font-weight:bold;width:118px;z-index: 111; left: 166px;
-            top: 348px">検索結果一覧</span>
-                <span id="Label18" style="display:inline-block;color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Small;font-weight:bold;height:10px;width:796px;z-index: 103; left: 168px;
-            top: 375px; text-align: left;">
-                    選択&nbsp;&nbsp;：作成当初の見積日のまま編集画面を起動します（上書き保存します）<br>
-                    再作成：見積日を本日にして編集画面を起動します（別保存します）
-                </span>
 
-                <div style=" border:solid 1px #999999;left: 163px; top: 420px; width:800px;">
-                    <table id="TableSerEst" class="gvnomal" cellspacing="1" cellpadding="1" rules="all" border="1" id="gvEst" style="background-color:#D2E0FB;border-color:White;border-width:1px;border-style:Solid;height:156px;width:800px;">
-                        <tbody>
-                            <tr align="center" valign="middle" style="color:White;background-color:#3C82ED;border-color:White;border-width:1px;border-style:Solid;font-family:ＭＳ Ｐゴシック;font-size:11pt;height:20px;white-space:nowrap;">
-                                <th scope="col">選択</th>
-                                <th scope="col">再作成</th>
-                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(10);return false;" style="color:White;">見積書番号</a></th>
-                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(20);return false;" style="color:White;">見積日</a></th>
-                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(30);return false;" style="color:White;">カナ名</a></th>
-                                <th scope="col"><a href="javascript:void(0)" onclick="return SortData(40);return false;" style="color:White;">車両</a></th>
-                                <th scope="col">削除</th>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-                <div style=" position:absolute; top:1300px; left:0px; z-index: 109;">&nbsp;</div>
-            </div>
-        </div>
-    </div>
+    <div style=" position:absolute; top:1300px; left:0px; z-index: 109;">&nbsp;</div>
     <input type="hidden" id="SortPage" value="10">
 </div>
 <script src="~/js/funcmoment.js"></script>

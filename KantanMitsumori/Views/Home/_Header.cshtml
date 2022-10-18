@@ -1,18 +1,25 @@
 ﻿@using KantanMitsumori.Model;
 @model LogToken
-<div class="row">
-    @{
-        if (Model.sesMode == "1")
-        {
-            <img src="~/img/TentoLogo.png" class="imgHeader" />
-        }
-        else
-        {
-            <img src="~/img/AsLogo.png" class="imgHeader" />
-        }
-    }
-    <img src="~/img/HeadTitle.gif" class="imgHeadTitle" />
-    <span id="lblUsr" class="headerTitle">@Model.UserNo　@Model.UserNm　様</span>
+<!-- ヘッダ -->
+@{
+    if (Model.sesMode == "1")
+    {
+        <img id="Image1" src="~/img/TentoLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100; left: 2px; position: absolute; top: 1px">
 
-</div>
-<img class="rounded mx-auto d-block" src="~/img/HeadLine.gif" style="width:100%" />
+    }
+    else
+    {
+        <img id="Image1" src="~/img/AsLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100; left: 2px; position: absolute; top: 1px">
+
+    }
+}
+<img id="Image2" src="~/img/HeadTitle.gif" style="height:32px;width:187px;border-width:0px;z-index: 101; left: 123px; position: absolute; top: 4px">
+<img id="Image4" src="~/img/HeadLine.gif" style="height:12px;width:981px;border-width:0px;z-index: 102; left: 0px; position: absolute; top: 39px">
+<span id="lblUsr" style="display:inline-block;color:Black;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:12px;width:451px;z-index: 103; left: 476px;
+            position: absolute; top: 18px; text-align: right">@Model.UserNo　@Model.UserNm　　様</span>
+<img id="imgIcon" src="~/img/BlankLogoMini.png" style="height:32px;width:41px;border-width:0px;z-index: 104; left: 934px; position: absolute; top: 5px">
+<!-- 固定表示 -->
+<br />
+<br />
+<br />
+<br />
