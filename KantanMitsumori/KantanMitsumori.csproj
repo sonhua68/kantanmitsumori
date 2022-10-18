@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
@@ -18,7 +19,7 @@
 		<None Remove="Reports\Order.rpx" />
 		<None Remove="Reports\OrderWithArticle.rpx" />
 		<EmbeddedResource Include="Reports\LeaseEstimateWithMemo.rpx">
-		  <SubType>Component</SubType>
+			<SubType>Component</SubType>
 		</EmbeddedResource>
 		<EmbeddedResource Include="Reports\LeaseOrder.rpx" />
 		<EmbeddedResource Include="Reports\LeaseEstimate.rpx" />
