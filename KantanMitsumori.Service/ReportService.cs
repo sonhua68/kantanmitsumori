@@ -81,14 +81,14 @@ namespace KantanMitsumori.Service
                 if (reportType == ReportType.Estimate)
                     return "LeaseEstimateWithMemo.rpx";
                 if (reportType == ReportType.Order)
-                    return "LeaseOrderWithMemo.rpx";
+                    return "LeaseOrderWithArticle.rpx";
             }
             else
             {
                 if (reportType == ReportType.Estimate)
                     return "EstimateWithMemo.rpx";
                 if (reportType == ReportType.Order)
-                    return "OrderWithMemo.rpx";
+                    return "OrderWithArticle.rpx";
             }
             return "";
         }
