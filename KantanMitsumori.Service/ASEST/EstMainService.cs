@@ -291,14 +291,14 @@ namespace KantanMitsumori.Service.ASEST
                 if (string.IsNullOrEmpty(valToken.sesEstNo) || string.IsNullOrEmpty(valToken.sesEstSubNo))
                 {
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
-                }
-                var estData = _commonEst.SetEstData(valToken.sesEstNo, valToken.sesEstSubNo);
-                if (estData.ResultStatus != (int)enResponse.isSuccess)
+                }        
+                var estData = _commonEst.GetEstData(valToken.sesEstNo, valToken.sesEstSubNo);
+                if (estData == null)
                 {
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
                 }
-                response.EstModel = estData.Data!;
+                response.EstModel = estData;
                 response.EstCustomerModel = new EstCustomerModel
                 {
                     CustNm = valToken.sesCustNm_forPrint ?? "",
@@ -1425,6 +1425,7 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.OptionPrice10 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice10);
             estModelView.OptionPrice11 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice11);
             estModelView.OptionPrice12 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice12);
+            estModelView.Notes = Model.EstModel.Notes.ReplaceLineEndings("<br />");
             Model.EstModelView = estModelView;
             return Model;
         }

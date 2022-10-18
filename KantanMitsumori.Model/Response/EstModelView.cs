@@ -98,6 +98,7 @@ namespace KantanMitsumori.Model.Response
         public string? TradeInCheckCarYm { get; set; }
         public string? SitaRun { get; set; }
         public string? TradeInRegNo { get; set; }
+        public string? Notes { get; set; }
 
         #region Option
      

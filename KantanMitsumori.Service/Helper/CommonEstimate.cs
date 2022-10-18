@@ -330,7 +330,7 @@ namespace KantanMitsumori.Service.Helper
         public ResponseBase<EstModel> SetEstData(string estNo, string estSubNo)
         {
             var estData = GetEstData(estNo, estSubNo);
-            if (estData == null || string.IsNullOrEmpty(estData.AAInfo))
+            if (estData == null || (string.IsNullOrEmpty(estData.AAInfo) && estData.EstInpKbn == "1"))
             {
                 return ResponseHelper.Error<EstModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL041D));
             }
