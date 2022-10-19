@@ -320,9 +320,7 @@ function changeFirstYM() {
 
         // clean select options ContractTimes
         removeOptions(document.getElementById('cbo_ContractTimes'));
-
-        $get('cbo_LeaseSttY').options[0].selected = true;
-        //$get('cbo_LeaseSttM').options[todayMonth - 1].selected = true;
+        $get('cbo_LeaseSttY').options[0].selected = true;    
 
 
         if (valueFirstYear == 0) {
@@ -339,8 +337,7 @@ function changeFirstYM() {
         // clean select options ContractTimes
         removeOptions(document.getElementById('cbo_ContractTimes'));
 
-        $get('cbo_LeaseSttY').options[0].selected = true;
-        $get('cbo_LeaseSttM').options[todayMonth - 1].selected = true;
+        $get('cbo_LeaseSttY').options[0].selected = true;   
 
         if (valueFirstYear == 0) {
             $get('cboFirstYear').style.backgroundColor = FALSE_COLOR;
