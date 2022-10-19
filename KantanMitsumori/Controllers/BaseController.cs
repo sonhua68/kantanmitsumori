@@ -40,7 +40,7 @@ namespace KantanMitsumori.Controllers
 
                 if (_logToken == null)
                 {
-                    RemoteCookies(COOKIES);
+                    RemoveCookies(COOKIES);
                     if (!actionName.Contains("Index"))
                         filterContext.Result = ErrorAction();
                     else
@@ -101,9 +101,9 @@ namespace KantanMitsumori.Controllers
         /// <param name="token"></param>     
         public void setTokenCookie(string accessExp, string token)
         {
-            var currentDate = DateTime.Now;         
-            var refreshExpires = accessExp;
-            TimeSpan time = TimeSpan.Parse(refreshExpires);
+            //var currentDate = DateTime.Now;         
+            //var refreshExpires = accessExp;
+            //TimeSpan time = TimeSpan.Parse(refreshExpires);
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
             {
