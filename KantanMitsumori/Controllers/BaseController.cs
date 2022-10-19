@@ -7,6 +7,8 @@ using KantanMitsumori.Models;
 using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
+using static GrapeCity.Enterprise.Data.DataEngine.ExpressionEvaluation.Eval;
 
 namespace KantanMitsumori.Controllers
 {
@@ -24,12 +26,12 @@ namespace KantanMitsumori.Controllers
         }
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
-        {
-            var pramQuery = Request.Query.Count == 0;
+        {      
+            var cookies = filterContext.HttpContext.Request.Cookies[COOKIES];
             _logToken = filterContext.HttpContext.Items["Authorized"] as LogToken;
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
-            if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && pramQuery))
+           if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && cookies == null))
             {
                 await next();
             }
@@ -38,6 +40,7 @@ namespace KantanMitsumori.Controllers
 
                 if (_logToken == null)
                 {
+                    RemoteCookies(COOKIES);
                     if (!actionName.Contains("Index"))
                         filterContext.Result = ErrorAction();
                     else
@@ -98,15 +101,14 @@ namespace KantanMitsumori.Controllers
         /// <param name="token"></param>     
         public void setTokenCookie(string accessExp, string token)
         {
-            var currentDate = DateTime.Now;
-            //var RefreshExpires = _commonSettings.JwtSettings.AccessExpires;
+            var currentDate = DateTime.Now;         
             var refreshExpires = accessExp;
             TimeSpan time = TimeSpan.Parse(refreshExpires);
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = currentDate.Add(time),
+                //Expires = currentDate.Add(time),
             };
             Response.Cookies.Append(COOKIES, token, cookieOptions);
         }
@@ -127,5 +129,20 @@ namespace KantanMitsumori.Controllers
                 return "";
             }
         }
+        /// <summary>
+        /// Remote cookies
+        /// </summary>
+        /// <param name="Key"></param>
+        public void RemoteCookies(string Key)
+        {
+            var cookies = Request.Cookies[Key]!;
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.Now.AddMonths(-1),
+            };
+            Response.Cookies.Append(COOKIES, cookies, cookieOptions);
+        }
+        
     }
 }
