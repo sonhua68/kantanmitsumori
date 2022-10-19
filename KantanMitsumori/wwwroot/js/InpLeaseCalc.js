@@ -320,8 +320,8 @@ function changeFirstYM() {
 
         // clean select options ContractTimes
         removeOptions(document.getElementById('cbo_ContractTimes'));
-        $get('cbo_LeaseSttY').options[0].selected = true;    
-
+        $get('cbo_LeaseSttY').options[0].selected = true;
+        $get('cbo_LeaseSttM').options[todayMonth].selected = true;
 
         if (valueFirstYear == 0) {
             $get('cboFirstYear').style.backgroundColor = FALSE_COLOR;
@@ -337,7 +337,8 @@ function changeFirstYM() {
         // clean select options ContractTimes
         removeOptions(document.getElementById('cbo_ContractTimes'));
 
-        $get('cbo_LeaseSttY').options[0].selected = true;   
+        $get('cbo_LeaseSttY').options[0].selected = true;
+        $get('cbo_LeaseSttM').options[todayMonth].selected = true;
 
         if (valueFirstYear == 0) {
             $get('cboFirstYear').style.backgroundColor = FALSE_COLOR;
@@ -1091,7 +1092,7 @@ function GetContractPlan() {
 function GetVolInsurance() {
     var result = Framework.GetObjectDataFromUrl("/InpLeaseCalc/GetVolInsurance");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-        let length = result.data.length;     
+        let length = result.data.length;
         $("#cbo_InsuranceCompany").append(new Option('選択してください', "99"));
 
         for (let i = 0; i < length; i++) {
