@@ -156,3 +156,14 @@ function CheckNowOdometer() {
     }
 
 }
+$(window).on('beforeunload', function () {
+    var vCookies = getCookie("CookiesASEST");
+    if (vCookies == "") {
+        var data = {};
+        data.messageCode = "SMAI-040S";
+        data.messContent = "ページ遷移エラーが発生しました。"
+        var fullHost = Framework.GetFullHost("/Error/ErrorPage")
+        Framework.submitAjaxRedirect(data, fullHost);
+        return false;
+    }
+});

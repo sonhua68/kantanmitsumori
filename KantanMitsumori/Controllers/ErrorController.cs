@@ -7,12 +7,12 @@ namespace KantanMitsumori.Controllers
     public class ErrorController :Controller
     {
 
-        public IActionResult ErrorPage(RequestError model)
+        public IActionResult ErrorPage(RequestError requestData)
         {
             var ErrorViewModel = new ErrorViewModel()
             {
-                MessageCode = model.messageCode,
-                MessageContent = model.messageContent
+                MessageCode = requestData.messageCode,
+                MessageContent = requestData.messageContent
             };
             return View(ErrorViewModel);
         }
