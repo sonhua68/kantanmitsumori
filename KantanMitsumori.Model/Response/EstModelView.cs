@@ -100,8 +100,10 @@ namespace KantanMitsumori.Model.Response
         public string? TradeInRegNo { get; set; }
         public string? Notes { get; set; }
 
+        public string ? CarImgPath { get; set; }
+
         #region Option
-     
+
         public string? OptionPrice1 { get; set; }    
         public string? OptionPrice2 { get; set; }     
         public string? OptionPrice3 { get; set; }      
