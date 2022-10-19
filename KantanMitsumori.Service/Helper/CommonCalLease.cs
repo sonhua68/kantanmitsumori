@@ -129,7 +129,7 @@ namespace KantanMitsumori.Service.Helper
             n.ElapsedYearsFrom <= elapsedYearsFrom && n.ElapsedYearsTo >= elapsedYearsTo);
             if (dt != null)
             {
-                monthlyPrice = dt.MonthlyPrice; monthlyPrice = dt.MonthlyPrice;
+                monthlyPrice = dt.MonthlyPrice;
             }
             _logger.LogInformation("4-3-2 PriceTax: {0}", monthlyPrice);
             addLogUI("4-3-2 PriceTax: " + monthlyPrice);
@@ -148,7 +148,7 @@ namespace KantanMitsumori.Service.Helper
             double vehicleTaxPrice = 0;
             int displacementFromAndTo = 0;
             double priceMonth = 0;
-            bool ischeck = dispVolUnit != "cc" && _requestInCalc.ElectricCar == 1;
+            bool ischeck = dispVolUnit != "cc" || _requestInCalc.ElectricCar == 1;
             displacementFromAndTo = ischeck == false ? dispVol : displacementFromAndTo;
             var priceTax = GetPriceTax(firstReg, firstReg, _requestInCalc.ElectricCar, displacementFromAndTo, displacementFromAndTo);
             var diffMonth = _requestInCalc.CalcDiffMonth;
