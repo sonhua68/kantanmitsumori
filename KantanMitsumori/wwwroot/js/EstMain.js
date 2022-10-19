@@ -161,9 +161,8 @@ $(window).on('beforeunload', function () {
     if (vCookies == "") {
         var data = {};
         data.messageCode = "SMAI-040S";
-        data.messContent = "ページ遷移エラーが発生しました。"
-        var fullHost = Framework.GetFullHost("/Error/ErrorPage")
-        Framework.submitAjaxRedirect(data, fullHost);
+        data.messContent = "ページ遷移エラーが発生しました。"     
+        Framework.submitAjaxRedirect(data, "/Error/ErrorPage");
         return false;
     }
 });
