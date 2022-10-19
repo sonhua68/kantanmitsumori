@@ -133,7 +133,7 @@ namespace KantanMitsumori.Controllers
         /// Remote cookies
         /// </summary>
         /// <param name="Key"></param>
-        public void RemoteCookies(string Key)
+        public void RemoveCookies(string Key)
         {
             var cookies = Request.Cookies[Key]!;
             var cookieOptions = new CookieOptions
