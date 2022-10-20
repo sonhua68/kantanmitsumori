@@ -10,6 +10,7 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System.Data;
 
 namespace KantanMitsumori.Service
@@ -193,7 +194,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model)
+        public async Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model, LogToken logToken)
         {
             try
             {
@@ -229,6 +230,10 @@ namespace KantanMitsumori.Service
                 dtEstimates.OptionPriceAll = model.OptionPriceAll;
                 _unitOfWork.Estimates.Update(dtEstimates);
                 await _unitOfWork.CommitAsync();
+                // 小計・合計計算
+                if (!await _commonEst.CalcSum(dtEstimates.EstNo, dtEstimates.EstSubNo!, logToken))
+                    return ResponseHelper.LogicError<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
             }
             catch (Exception ex)
