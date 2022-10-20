@@ -131,8 +131,8 @@
         {
             <!-- CSV 出力 -->
             <div id="DIV3" style="border-right: #3c82ed 1px solid; border-top: #3c82ed 1px solid;
-                                                            z-index: 118; left: 8px; border-left: #3c82ed 1px solid; width: 142px; border-bottom: #3c82ed 1px solid;
-                                                            position: absolute; top: 782px; height: 66px; background-color: transparent;">
+                                                                        z-index: 118; left: 8px; border-left: #3c82ed 1px solid; width: 142px; border-bottom: #3c82ed 1px solid;
+                                                                        position: absolute; top: 782px; height: 66px; background-color: transparent;">
                 <input type="image" name="btnCSV" id="btnCSV" src="img/btnCSV.png" onclick="Framework.GoBackReloadPageUrl('/Estmain/ExportCSV');return false;" style="height:38px;width:110px;border-width:0px;z-index: 106; left: 16px; position: absolute; top: 14px">
             </div>
         }
@@ -140,7 +140,7 @@
         {
             <!-- Download pdf -->
             <div id="btnDownloadPdf" style=" width: 142px; left:12px;text-align: initial;
-                                                                                position: absolute; top: 745px; background-color: transparent;">
+                                                                                            position: absolute; top: 745px; background-color: transparent;">
                 &nbsp;<input type="image" name="ImageButton37" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" id="ImageButton37" class="imgBtn" src="~/img/print.png" style="border-width:0px;">
                 <a id="LinkButton13" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" href="javascript:void(0)" style="text-decoration:none;">法人申込書印刷</a>
             </div>
@@ -172,7 +172,7 @@
         {
             <div id="tblSaleAll">
                 <table cellpadding="1" class="nomal" style="position: absolute; top: 123px; left: 165px;
-                                                            width: 410px; z-index: 112;">
+                                                                        width: 410px; z-index: 112;">
                     <tbody>
                         <tr>
                             <td style="border-bottom: solid 2px crimson; width: 170px; height: 37px;text-align: initial;">
@@ -191,7 +191,7 @@
         {
             <div id="tblLeaseTotal">
                 <table cellpadding="1" class="nomal" style="position: absolute; top: 123px; left: 165px;
-                                                            width: 455px; z-index: 112;">
+                                                                        width: 455px; z-index: 112;">
                     <tbody>
                         <tr>
                             <td style="border-bottom: solid 2px crimson; height: 37px;text-align: initial;">
@@ -1071,7 +1071,7 @@
                                                                     <tbody>
                                                                         <tr>
                                                                             <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
-                                                                                vertical-align: middle;">
+                                                                                            vertical-align: middle;">
                                                                                 <input type="image" name="ImageButton21" id="ImageButton21" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false" src="~/img/sbtnローン計算.png" style="border-width:0px;">
                                                                             </td>
                                                                         </tr>
@@ -1181,7 +1181,7 @@
                                                                     <tbody>
                                                                         <tr>
                                                                             <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
-                                                                                vertical-align: middle;">
+                                                                                            vertical-align: middle;">
                                                                                 <input type="image" name="imgBtnLease" id="imgBtnLease" onclick="CheckNowOdometer();return false;" src="~/img/btb_リース計算情報.png" style="border-width:0px;">
                                                                             </td>
                                                                         </tr>
@@ -1391,6 +1391,9 @@
     <input type="hidden" id="hidMilUnit" value="@Model.EstModel.MilUnit">
     <input type="hidden" id="hidFirstRegYm" value="@Model.EstModel.FirstRegYm">
     <input type="hidden" id="hidMakerName" value="@Model.EstModel.MakerName">
+    <input type="hidden" id="hidFirstRegYm" value="@Model.EstModel.FirstRegYm">
+    <input type="hidden" id="hidAcqTax" value="@estModelView.AcqTax">
+    <input type="hidden" id="hidWeightTax" value="@estModelView.WeightTax">
 </form>
 @section scripts{
     <script>
@@ -1405,6 +1408,12 @@
             } else if (@Model.EstModel.AccidentHis == 1) {
                 $("#raJikoHisU").attr("checked", "checked");
             }
+        };
+        if ( $("#hidAcqTax").val() != "") {
+            $('#idGetTax').css('background-color', "rgb(255, 255, 255)");
+        }        
+        if ($("#hidWeightTax").val() != "") {
+            $('#idWeightTax ').css('background-color', "rgb(255, 255, 255)");
         }
     </script>
     <script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
