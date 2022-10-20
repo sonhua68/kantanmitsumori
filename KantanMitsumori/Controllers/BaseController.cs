@@ -57,10 +57,10 @@ namespace KantanMitsumori.Controllers
                 }
                 else
                 {
-                    _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
-                    _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
-                    _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
-                    _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
+                    _logToken!.sesCustNm_forPrint =  GetCookieforPrint(filterContext, CommonConst.sesCustNm_forPrint);
+                    _logToken!.sesCustZip_forPrint = GetCookieforPrint(filterContext,CommonConst.sesCustZip_forPrint);
+                    _logToken!.sesCustAdr_forPrint = GetCookieforPrint(filterContext,CommonConst.sesCustAdr_forPrint);
+                    _logToken!.sesCustTel_forPrint = GetCookieforPrint(filterContext,CommonConst.sesCustTel_forPrint);
                 }
                 await next();
             }
@@ -74,7 +74,8 @@ namespace KantanMitsumori.Controllers
                 return new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
                 {
                     messageCode = response.MessageCode,
-                    messageContent = response.MessageContent
+                    messageContent = response.MessageContent,
+
                 }));
             else
                 return new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
@@ -123,9 +124,9 @@ namespace KantanMitsumori.Controllers
         /// </summary>
         /// <param name="Key"></param>
         /// <returns></returns>
-        public string GetCookieforPrint(string Key)
+        public string GetCookieforPrint(ActionExecutingContext filterContext,string Key)
         {
-            var cookies = Request.Cookies[Key]!;
+            var cookies = filterContext.HttpContext.Request.Cookies[Key]!;
             if (!string.IsNullOrEmpty(cookies))
             {
                 return cookies;
@@ -141,13 +142,13 @@ namespace KantanMitsumori.Controllers
         /// <param name="Key"></param>
         public void RemoveCookies(string Key)
         {
-            var cookies = Request.Cookies[Key]!;
+            var cookies = Request.Cookies[Key]!??"";
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Expires = DateTime.Now.AddMonths(-1),
             };
-            Response.Cookies.Append(COOKIES, cookies, cookieOptions);
+            Response.Cookies.Append(Key, cookies, cookieOptions);
         }
         
     }

@@ -51,22 +51,27 @@
                 <div class="form-group">
                     <span id="Label34" class="InpTitle1" style="display:inline-block;color:Red;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:116px;width:625px;Z-INDEX: 100; LEFT: 16px; POSITION: absolute; TOP: 67px">
                         @Html.Raw(@Model.MessageContent)
-                        <br>（エラー番号：@Model.MessageCode）
+                         <br>ASNET/店頭商談NETの元の画面から本サービスを起動して下さい。<br>（エラー番号：@Model.MessageCode）
                     </span>
                     @{
-                        if (Model.logToken!.sesMode == "1")
+                        if (Model.logToken == null)
                         {
-                            <img id="Image1" src="~/img/TentoLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
-                                left: 2px; position: absolute; top: 1px" />
-
+                            <img id="Image1" src="~/img/BlankLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
+                                    left: 2px; position: absolute; top: 1px" />
                         }
-                        else if(Model.logToken!.sesMode =="0")
+                        else
                         {
-                            <img id="Image1" src="~/img/AsLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
-                            left: 2px; position: absolute; top: 1px" />
-                        }else{
-                             <img id="Image1" src="~/img/BlankLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
-                            left: 2px; position: absolute; top: 1px" />
+                            if (Model.logToken!.sesMode == "1")
+                            {
+                                <img id="Image1" src="~/img/TentoLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
+                                        left: 2px; position: absolute; top: 1px" />
+
+                            }
+                            else if (Model.logToken!.sesMode == "0")
+                            {
+                                <img id="Image1" src="~/img/AsLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
+                                    left: 2px; position: absolute; top: 1px" />
+                            }
                         }
                     }
 
