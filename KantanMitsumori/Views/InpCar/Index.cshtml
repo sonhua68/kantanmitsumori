@@ -10,7 +10,7 @@
     var NowOdometer = CommonFunction.FormatString(Model.NowOdometer);
     var FirstRegYm = string.IsNullOrEmpty(Model.FirstRegYm) ? "" : Model.FirstRegYm;
 }
-<form id="formInputCar">
+<form id="formInputCar" onkeydown="return NoSubmit(event);">
     <table border="0" width="100%">
         <tbody>
             <tr>
