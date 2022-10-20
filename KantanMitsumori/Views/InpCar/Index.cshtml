@@ -71,7 +71,7 @@
                                             @{
                                                 foreach (var item in ListDropDownFirstYM)
                                                 {
-                                                        <option value="@item.Value">@item.Text</option>
+                                                    <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -80,7 +80,7 @@
                                             @{
                                                 foreach (var item in listMonth)
                                                 {
-                                                        <option value="@item.Value">@item.Text</option>
+                                                    <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -94,7 +94,7 @@
                                             @{
                                                 foreach (var item in ListDropDownSyakenYM)
                                                 {
-                                                        <option value="@item.Value">@item.Text</option>
+                                                    <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -103,7 +103,7 @@
                                             @{
                                                 foreach (var item in listMonth)
                                                 {
-                                                        <option value="@item.Value">@item.Text</option>
+                                                    <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -198,8 +198,8 @@
                                 <tr>
                                     <td class="inptd" align="left">
                                         <span class="inplabel" style="display:inline-block;width:100px;">修復歴</span>
-                                        <span class="inplabel" style="display:inline-block;width:80px;"><input id="raSyuhukuU" type="radio" name="raJrk" value="1"><label for="raSyuhukuU">有</label></span>
-                                        <span class="inplabel" style="display:inline-block;width:78px;"><input id="raSyuhukuM" type="radio" name="raJrk" value="0"><label for="raSyuhukuM">無</label></span>
+                                        <span class="inplabel" style="display:inline-block;width:80px;"><input id="raSyuhukuU" type="radio" name="raSy" onclick="SetValue(1);" value="1"><label for="raSyuhukuU">有</label></span>
+                                        <span class="inplabel" style="display:inline-block;width:78px;"><input id="raSyuhukuM" type="radio" name="raSy" onclick="SetValue(0);" value="0"><label for="raSyuhukuM">無</label></span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -222,6 +222,7 @@
                         <input type="hidden" id="hidDispVolUnit" value="@Model.DispVolUnit">
                         <input type="hidden" id="hidMilUnit" value="@Model.MilUnit">
                         <input type="hidden" id="hidFirstRegYm" value="@FirstRegYm">
+                        <input type="hidden" name="raJrk" id="hidRaJrk" value="@Model.AccidentHis">
                     </div>
                 </td>
             </tr>
@@ -286,7 +287,7 @@
             swichUnit('MilUnit', true)
             $("#MilUnit").val(milUnit);
         };
-        var dispVolUnit = $("#hidDispVolUnit").val();       
+        var dispVolUnit = $("#hidDispVolUnit").val();
         if (dispVolUnit.includes("cc")) {
             $("#radDispVolUnitCC").attr('checked', true);
         } else if (dispVolUnit.includes("RE")) {
@@ -300,6 +301,15 @@
             $("#DispVolUnit").val(dispVolUnit);
         }
 
-    }
+    };
+
+             function SetValue(value){
+                            if(value ==1){
+                                $("#hidRaJrk").val(value);
+                            }else{
+                                      $("#hidRaJrk").val(value);
+                            }
+
+                        }
 
 </script>
