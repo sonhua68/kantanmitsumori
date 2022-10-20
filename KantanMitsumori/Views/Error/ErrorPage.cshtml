@@ -51,16 +51,31 @@
                 <div class="form-group">
                     <span id="Label34" class="InpTitle1" style="display:inline-block;color:Red;font-family:ＭＳ Ｐゴシック;font-size:12pt;font-weight:bold;height:116px;width:625px;Z-INDEX: 100; LEFT: 16px; POSITION: absolute; TOP: 67px">
                         @Html.Raw(@Model.MessageContent)
-                   @*     <br>ASNET/店頭商談NETの元の画面から本サービスを起動して下さい*@。<br>（エラー番号：@Model.MessageCode）
+                        <br>（エラー番号：@Model.MessageCode）
                     </span>
-                    <img id="Image1" src="~/img/BlankLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
-            left: 2px; position: absolute; top: 1px" />
-                    &nbsp;&nbsp;
+                    @{
+                        if (Model.logToken!.sesMode == "1")
+                        {
+                            <img id="Image1" src="~/img/TentoLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
+                                left: 2px; position: absolute; top: 1px" />
+
+                        }
+                        else if(Model.logToken!.sesMode =="0")
+                        {
+                            <img id="Image1" src="~/img/AsLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
+                            left: 2px; position: absolute; top: 1px" />
+                        }else{
+                             <img id="Image1" src="~/img/BlankLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
+                            left: 2px; position: absolute; top: 1px" />
+                        }
+                    }
+
+                    &nbsp; &nbsp;
                     <a id="closeWin" href="javascript:closeWin();">
                         <img src="~/img/btn閉じる.png" class="imgBtn" alt="" style="z-index: 102; left: 19px; position: absolute; top: 256px" />
                     </a>
                     <span id="lblExitMessage" class="InpTitle1" style="display:inline-block;color:Red;font-family:ＭＳ Ｐゴシック;font-size:11pt;font-weight:normal;height:23px;width:400px;z-index: 100; left: 18px;
-            position: absolute; top: 230px">「閉じる」ボタンを押して、かんたん見積を終了してください。</span>
+                position: absolute; top: 230px">「閉じる」ボタンを押して、かんたん見積を終了してください。</span>
                 </div>
             </form>
         </div>

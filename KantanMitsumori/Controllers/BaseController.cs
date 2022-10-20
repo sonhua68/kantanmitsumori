@@ -16,7 +16,7 @@ namespace KantanMitsumori.Controllers
     public class BaseController : Controller
     {
         private const string COOKIES = "CookiesASEST";
-        private List<string> optionListController = new List<string> { "Home", "SelCar", "SelGrd", "SerEst" };
+        private List<string> optionListController = new List<string> { "Home","Error", "SelCar", "SelGrd", "SerEst" };
         public LogToken? _logToken;
 
         public BaseController()
@@ -41,6 +41,10 @@ namespace KantanMitsumori.Controllers
                 if (_logToken == null)
                 {
                     RemoveCookies(COOKIES);
+                    RemoveCookies(CommonConst.sesCustNm_forPrint);
+                    RemoveCookies(CommonConst.sesCustZip_forPrint);
+                    RemoveCookies(CommonConst.sesCustAdr_forPrint);
+                    RemoveCookies(CommonConst.sesCustTel_forPrint);
                     if (!actionName.Contains("Index"))
                         filterContext.Result = ErrorAction();
                     else
@@ -91,7 +95,9 @@ namespace KantanMitsumori.Controllers
             var ErrorViewModel = new ErrorViewModel()
             {
                 MessageCode = model.messageCode,
-                MessageContent = model.messageContent
+                MessageContent = model.messageContent,
+                logToken = _logToken
+                
             };
             return View(ErrorViewModel);
         }
@@ -130,7 +136,7 @@ namespace KantanMitsumori.Controllers
             }
         }
         /// <summary>
-        /// Remote cookies
+        /// Remove Cookies
         /// </summary>
         /// <param name="Key"></param>
         public void RemoveCookies(string Key)
