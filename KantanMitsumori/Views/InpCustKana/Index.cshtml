@@ -64,8 +64,9 @@
 </form>
 <script>
     function onSummit() {
-        if (inputChk() == false) { return; }
-        Framework.OnSubmitForm("/InpCustKana/UpdateInpCustKana", "formInputCustKana");
+        if (inputChk() == true) {
+            Framework.OnSubmitForm("/InpCustKana/UpdateInpCustKana", "formInputCustKana");
+        }
         return false;
     }
 </script>

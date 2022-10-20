@@ -1,6 +1,5 @@
 ﻿//入力チェック
 function inputChk() {
-
     document.getElementById("txMsg").innerHTML = "";
     var outMsg;
 
@@ -8,7 +7,6 @@ function inputChk() {
         outMsg = chkBytes("備考欄" + i + "行目", $('#txtNotes' + i).val(), 100);
         if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
     }
-
     return true;
 
 }

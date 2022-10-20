@@ -14,6 +14,6 @@ namespace KantanMitsumori.IService.ASEST
         Task<ResponseBase<string>> AddEstimate(RequestSerEst model, LogToken logToken);
         Task<ResponseBase<string>> CalcSum(RequestSerEst model, LogToken logToken);
         ResponseBase<int> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer);
-
+        ResponseBase<string> ExportDataCSV(LogToken logToken);
     }
 }

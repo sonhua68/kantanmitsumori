@@ -66,6 +66,8 @@
         public const string SMAI023D = "SMAI-023D";
         public const string SMAI020P = "SMAI-020P";
         public const string ISYS010I = "ISYS-010I";
+        public const string SMAI000S = "SMAI-000S";
+        public const string SMAI000D = "SMAI-000D";
         #endregion
 
 
@@ -79,7 +81,7 @@
         /// <summary>
         /// I0003 Master data is up to date. 
         /// </summary>
-        public const string I0003 = "I0003"; 
+        public const string I0003 = "I0003";
 
         #endregion
     }

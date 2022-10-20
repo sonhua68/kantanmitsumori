@@ -5,6 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no">
     <link rel="shortcut icon" href="~/favicon.ico">
@@ -28,25 +31,21 @@
     <script src="~/js/estcommon.js"></script>
     <script src="~/js/framework.js"></script>
     <script src="~/js/jquery.twbsPagination.js"></script>
-    <link rel="stylesheet" type="text/css" href="~/css/estmain.css" />
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 </head>
 <body>
 
     <div class="container text-center">
         <div id="header"></div>
-        <br />
+        
         @RenderBody()
     </div>
     <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <!-- Add js bootstrap-->
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
     <script>
-        const full = location.protocol + '//' + location.host;
-        var urlTest = full + "/Home/Header";
-        $("#header").load(urlTest)
+        $("#header").load(Framework.GetFullHost("/Home/Header"));
     </script>
     @RenderSection("Scripts", required: false);
 </body>

@@ -53,7 +53,8 @@ namespace KantanMitsumori.Controllers
         public async Task<IActionResult> LoadData([FromForm] RequestSerEst requestData)
         {
 
-            requestData.EstUserNo = _logToken.UserNo;
+            requestData.EstUserNo = _logToken!.UserNo;
+            requestData.sesMode = _logToken.sesMode;
             var response = _selCarService.GetListSerEst(requestData);
             if (response.ResultStatus == (int)enResponse.isError)
             {

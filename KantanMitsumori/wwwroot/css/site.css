@@ -97,7 +97,7 @@ body {
 }
 
 .InpTitle2 {
-    PADDING-RIGHT: 2px;
+ /*   PADDING-RIGHT: 2px;
     PADDING-LEFT: 2px;
     FONT-SIZE: 11pt;
     Z-INDEX: 149;
@@ -110,7 +110,7 @@ body {
     BORDER-LEFT-STYLE: none;
     BACKGROUND-COLOR: transparent;
     TEXT-ALIGN: right;
-    BORDER-BOTTOM-STYLE: none
+    BORDER-BOTTOM-STYLE: none*/
 }
 
 .InpTitle3 {
@@ -313,13 +313,21 @@ input#btnPrintShow {
     margin-right: 30px;
 }
 .imgHeader {
-    width: 14%;
+    width: 13%;
     height: 0%;
     color: Black;
     position: sticky;
     top: 46px;
     text-align: right;
     padding-left: 37px;
+}
+.imgHeadTitle {
+    width: 19%;
+    height: 0%;
+    position: sticky;
+    top: 46px;
+    text-align: right;
+    padding-left: 10px;
 }
 .headerTitle {
     display: inline-block;

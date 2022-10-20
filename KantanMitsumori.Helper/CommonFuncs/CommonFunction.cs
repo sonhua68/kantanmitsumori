@@ -225,9 +225,9 @@ namespace KantanMitsumori.Helper.CommonFuncs
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static string FormatString(int? value)
+        public static string FormatString(object? value)
         {
-            if (value == 0)
+            if (Convert.ToInt32(value) == 0)
             {
                 return "";
             }

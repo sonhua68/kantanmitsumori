@@ -1,4 +1,4 @@
-﻿setInitialValue();
+﻿//setInitialValue();
 DeleteBtnHanei()
 setInitValueCookie();
 function setInitialValue() {
