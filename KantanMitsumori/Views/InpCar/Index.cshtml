@@ -231,10 +231,12 @@
 </form>
 <script>
     SetInitData();
-    function onSummit() {
-        Framework.OnSubmitForm("/InpCar/UpdateInputCar", "formInputCar");
+      function onSummit() {
+        if (inputChk() == true) {
+           Framework.OnSubmitForm("/InpCar/UpdateInputCar", "formInputCar");
+        }
         return false;
-    }
+    }   
     function swichUnit(NameId, value) {
         var $this = $("#" + NameId + "");
         if (value == true) {
@@ -303,13 +305,8 @@
 
     };
 
-             function SetValue(value){
-                            if(value ==1){
-                                $("#hidRaJrk").val(value);
-                            }else{
-                                      $("#hidRaJrk").val(value);
-                            }
-
-                        }
+          
 
 </script>
+<script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
+<script src="~/js/InpCar.js"></script>
