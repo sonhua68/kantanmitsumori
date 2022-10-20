@@ -28,31 +28,31 @@ function inputChk() {
     var outMsg = "";
     var flgErr = false;
 
-    document.getElementById("txtMsg_CustNm").innerHTML = "";
+    document.getElementById("Msg_CustNm").innerHTML = "";
     outMsg = chkBytes("お名前", $get('CustNm_forPrint').value, 40);
     if (outMsg) {
-        document.getElementById("txtMsg_CustNm").innerHTML = '<br>' + outMsg;
+        document.getElementById("Msg_CustNm").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
-    document.getElementById("txtMsg_CustZip").innerHTML = "";
+    document.getElementById("Msg_CustZip").innerHTML = "";
     outMsg = chkBytes("郵便番号", $get('CustZip_forPrint').value, 8);
     if (outMsg) {
-        document.getElementById("txtMsg_CustZip").innerHTML = '<br>' + outMsg;
+        document.getElementById("Msg_CustZip").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
-    document.getElementById("txtMsg_CustAdr").innerHTML = "";
+    document.getElementById("Msg_CustAdr").innerHTML = "";
     outMsg = chkBytes("住所", $get('CustAdr_forPrint').value, 60);
     if (outMsg) {
-        document.getElementById("txtMsg_CustAdr").innerHTML = '<br>' + outMsg;
+        document.getElementById("Msg_CustAdr").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
-    document.getElementById("txtMsg_CustTel").innerHTML = "";
+    document.getElementById("Msg_CustTel").innerHTML = "";
     outMsg = chkBytes("", $get('CustTel_forPrint').value, 13);
     if (outMsg) {
-        document.getElementById("txtMsg_CustTel").innerHTML = '<br>' + outMsg;
+        document.getElementById("Msg_CustTel").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
@@ -155,4 +155,16 @@ function CheckNowOdometer() {
         location.reload();
     }
 
+}
+
+function onReport(type ) {
+    if (inputChk() == true) {
+        if (type == 1) {
+            Framework.GoBackReloadPageUrl('/Report/DownloadEstimateReport');
+        } else {
+            Framework.GoBackReloadPageUrl('/Report/DownloadOrderReport')
+        }
+
+    }
+    return false;
 }
