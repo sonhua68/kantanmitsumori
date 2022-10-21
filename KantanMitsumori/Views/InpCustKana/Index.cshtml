@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
 }
-<form id="formInputCustKana">
+<form id="formInputCustKana" onkeydown="return NoSubmit(event);">
     <div align="center">
         <table class="inptable" id="Table3" cellpadding="2" cellspacing="0" style="border-color:#ffffff">
             <tr>

@@ -17,8 +17,8 @@
         <a href="javascript:closeWin();">
             <img id="btnClose" src="~/img/btn閉じる.png" style="height:38px;width:110px;border-width:0px;z-index: 105; left: 16px; position: absolute; top: 8px">
         </a>
-        <input type="image" name="btnEst" id="btnEst" src="~/img/btn見積印刷.png" onclick="Framework.GoBackReloadPageUrl('/Report/DownloadEstimateReport');return false;" style="height:38px;width:110px;border-width:0px;z-index: 106; left: 17px; position: absolute; top: 67px">
-        <input type="image" name="btnOrd" id="btnOrd" src="~/img/btn注文印刷.png" onclick="Framework.GoBackReloadPageUrl('/Report/DownloadOrderReport');return false;" style="height:38px;width:110px;border-width:0px;z-index: 107; left: 17px; position: absolute; top: 106px">
+        <input type="image" name="btnEst" id="btnEst" src="~/img/btn見積印刷.png" onclick="onReport(1);return false;" style="height:38px;width:110px;border-width:0px;z-index: 106; left: 17px; position: absolute; top: 67px">
+        <input type="image" name="btnOrd" id="btnOrd" src="~/img/btn注文印刷.png" onclick="onReport(2);return false;" style="height:38px;width:110px;border-width:0px;z-index: 107; left: 17px; position: absolute; top: 106px">
         <input type="image" name="Image8" id="Image8" src="~/img/btn検索.png" onclick="Framework.GoBackReloadPageUrl('/SerEst');return false;" style="height:38px;width:110px;border-width:0px;z-index: 108; left: 17px; position: absolute; top: 161px">
         <input type="image" name="Image9" id="Image9" src="~/img/btnフリー見積.png" onclick="Framework.GoBackReloadPageUrl('/SelCar');return false;" style="height:38px;width:110px;border-width:0px;z-index: 109; left: 17px; position: absolute; top: 200px">
         <input type="image" name="Image10" id="Image10" src="~/img/btn諸費用設定.png" onclick="Framework.GoBackReloadPageUrl('/InpInitVal');return false;" style="height:38px;width:110px;border-width:0px;z-index: 122; left: 17px; position: absolute; top: 255px">
@@ -131,8 +131,8 @@
         {
             <!-- CSV 出力 -->
             <div id="DIV3" style="border-right: #3c82ed 1px solid; border-top: #3c82ed 1px solid;
-                                                            z-index: 118; left: 8px; border-left: #3c82ed 1px solid; width: 142px; border-bottom: #3c82ed 1px solid;
-                                                            position: absolute; top: 782px; height: 66px; background-color: transparent;">
+                                                                                z-index: 118; left: 8px; border-left: #3c82ed 1px solid; width: 142px; border-bottom: #3c82ed 1px solid;
+                                                                                position: absolute; top: 782px; height: 66px; background-color: transparent;">
                 <input type="image" name="btnCSV" id="btnCSV" src="img/btnCSV.png" onclick="Framework.GoBackReloadPageUrl('/Estmain/ExportCSV');return false;" style="height:38px;width:110px;border-width:0px;z-index: 106; left: 16px; position: absolute; top: 14px">
             </div>
         }
@@ -140,7 +140,7 @@
         {
             <!-- Download pdf -->
             <div id="btnDownloadPdf" style=" width: 142px; left:12px;text-align: initial;
-                                                                                position: absolute; top: 745px; background-color: transparent;">
+                                                                                                    position: absolute; top: 745px; background-color: transparent;">
                 &nbsp;<input type="image" name="ImageButton37" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" id="ImageButton37" class="imgBtn" src="~/img/print.png" style="border-width:0px;">
                 <a id="LinkButton13" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" href="javascript:void(0)" style="text-decoration:none;">法人申込書印刷</a>
             </div>
@@ -172,14 +172,14 @@
         {
             <div id="tblSaleAll">
                 <table cellpadding="1" class="nomal" style="position: absolute; top: 123px; left: 165px;
-                                                            width: 410px; z-index: 112;">
+                                                                                width: 410px; z-index: 112;">
                     <tbody>
                         <tr>
                             <td style="border-bottom: solid 2px crimson; width: 170px; height: 37px;text-align: initial;">
                                 <span id="Label86" class="EstTitle1" style="font-size:20pt;">お支払総額</span>
                             </td>
                             <td style="border-bottom: solid 2px crimson; text-align: right; height: 37px;">
-                                <span id="lbl_SaleAll" class="EstTitle1" style="display:inline-block;background-color:Transparent;font-size:20pt;width:192px;">@estModelView.SalesSum</span>
+                                <span id="lbl_SaleAll" class="EstTitle1" style="display:inline-block;background-color:Transparent;font-size:20pt;">@estModelView.SalesSum</span>
                             </td>
                         </tr>
                     </tbody>
@@ -191,14 +191,14 @@
         {
             <div id="tblLeaseTotal">
                 <table cellpadding="1" class="nomal" style="position: absolute; top: 123px; left: 165px;
-                                                            width: 455px; z-index: 112;">
+                                                                                width: 455px; z-index: 112;">
                     <tbody>
                         <tr>
                             <td style="border-bottom: solid 2px crimson; height: 37px;text-align: initial;">
                                 <span id="lblLeaseTotal" class="EstTitle1" style="font-size:20pt;">月額リース料(税込)</span>
                             </td>
                             <td style="border-bottom: solid 2px crimson; text-align: right; height: 37px;">
-                                <span id="lbl_SaleAll" class="EstTitle1" style="display:inline-block;background-color:Transparent;font-size:20pt;width:192px;">@estModelView.LeaseTotal</span>
+                                <span id="lbl_SaleAll" class="EstTitle1" style="display:inline-block;background-color:Transparent;font-size:20pt;">@estModelView.LeaseTotal</span>
                             </td>
                         </tr>
                     </tbody>
@@ -426,8 +426,8 @@
                                     修復歴
                                 </td>
                                 <td class="data" style="width: 80px;">
-                                    <input id="raJikoHisMu" type="radio" name="Jrk" value="raJikoHisMu"><label for="raJikoHisMu">無</label>
-                                    <input id="raJikoHisU" type="radio" name="Jrk" value="raJikoHisU"><label for="raJikoHisU">有</label>
+                                    <input id="raJikoHisMu" type="radio" name="Jrk" value="raJikoHisMu" onclick="upJiko('@Model.EstModel.EstNo','@Model.EstModel.EstSubNo','0')"><label for="raJikoHisMu">無</label>
+                                    <input id="raJikoHisU" type="radio" name="Jrk" value="raJikoHisU" onclick="upJiko('@Model.EstModel.EstNo','@Model.EstModel.EstSubNo','1')"><label for="raJikoHisU">有</label>
                                 </td>
                                 <td class="title" style="height: 20px;">
                                     車歴
@@ -698,7 +698,7 @@
                                                                     15
                                                                 </td>
                                                                 <td class="title" style="width: 220px; text-align: left; border-right: none; height: 25px;">
-                                                                    <span id="lbl_SalesSumTitle" class="EstTitle1" style="display:inline-block;font-size:10.5pt;width:180px;">@estModelView.SalesSumTitle</span>
+                                                                    <span id="lbl_SalesSumTitle" class="EstTitle1" style="display:inline-block;font-size:10.5pt;width:182px;">@estModelView.SalesSumTitle</span>
                                                                 </td>
                                                                 <td class="title" style="border-left: none; height: 24px;" align="right">
                                                                     <input type="image" name="ImageButton33" id="ImageButton33" class="imgBtn" onclick="Framework.GoBackReloadPageUrl('/InpNebiki');return false;" src="~/img/sbtn編集.png" style="width:56px;border-width:0px;">
@@ -1071,7 +1071,7 @@
                                                                     <tbody>
                                                                         <tr>
                                                                             <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
-                                                                                vertical-align: middle;">
+                                                                                                    vertical-align: middle;">
                                                                                 <input type="image" name="ImageButton21" id="ImageButton21" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false" src="~/img/sbtnローン計算.png" style="border-width:0px;">
                                                                             </td>
                                                                         </tr>
@@ -1181,7 +1181,7 @@
                                                                     <tbody>
                                                                         <tr>
                                                                             <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
-                                                                                vertical-align: middle;">
+                                                                                                    vertical-align: middle;">
                                                                                 <input type="image" name="imgBtnLease" id="imgBtnLease" onclick="CheckNowOdometer();return false;" src="~/img/btb_リース計算情報.png" style="border-width:0px;">
                                                                             </td>
                                                                         </tr>
@@ -1391,6 +1391,9 @@
     <input type="hidden" id="hidMilUnit" value="@Model.EstModel.MilUnit">
     <input type="hidden" id="hidFirstRegYm" value="@Model.EstModel.FirstRegYm">
     <input type="hidden" id="hidMakerName" value="@Model.EstModel.MakerName">
+    <input type="hidden" id="hidFirstRegYm" value="@Model.EstModel.FirstRegYm">
+    <input type="hidden" id="hidAcqTax" value="@estModelView.AcqTax">
+    <input type="hidden" id="hidWeightTax" value="@estModelView.WeightTax">
 </form>
 @section scripts{
     <script>
@@ -1405,8 +1408,15 @@
             } else if (@Model.EstModel.AccidentHis == 1) {
                 $("#raJikoHisU").attr("checked", "checked");
             }
+        };
+        if ($("#hidAcqTax").val() != "") {
+            $('#idGetTax').css('background-color', "rgb(255, 255, 255)");
+        }
+        if ($("#hidWeightTax").val() != "") {
+            $('#idWeightTax ').css('background-color', "rgb(255, 255, 255)");
         }
     </script>
+    <script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
     <script src="~/js/EstMain.js"></script>
 }
 

@@ -15,5 +15,6 @@ namespace KantanMitsumori.IService.ASEST
         Task<ResponseBase<string>> CalcSum(RequestSerEst model, LogToken logToken);
         ResponseBase<int> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer);
         ResponseBase<string> ExportDataCSV(LogToken logToken);
+        Task<ResponseBase<int>> UpdateJiko(RequestUpdateJiko model);
     }
 }

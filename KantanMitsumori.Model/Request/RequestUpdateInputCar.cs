@@ -28,8 +28,5 @@
         public string? milUnit { get; set; }
         public string? radMilUnit { get; set; } 
         public string? raJrk { get; set; }
-
-
-
     }
 }
