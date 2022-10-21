@@ -8,6 +8,8 @@
   </StyleSheet>
   <Sections>
     <Section Type="Detail" Name="Section3" Height="15412.2" BackColor="16777215" KeepTogether="1">
+      <Control Type="AR.Field" Name="DamageIns1" DataField="DamageInsEquivalent" Left="8560" Top="6539" Width="1995" Height="224.64" Text="DamageIns" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Shape" Name="Box46" Left="5640" Top="5599" Width="5030" Height="1420" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box10" Left="5641.92" Top="12166.24" Width="5029.92" Height="3140.64" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box31" Left="260.64" Top="5600.16" Width="5009.76" Height="250.56" BackColor="16507090" BackStyle="1" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box17" Left="260" Top="13680" Width="5009.76" Height="1627.2" BackStyle="1" RoundingRadius="10" />
@@ -178,7 +180,6 @@
       <Control Type="AR.Field" Name="OptionPrice61" DataField="OptionPrice6" Left="3325" Top="11865" Width="1883" Height="240.48" Text="OptionPrice6" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="AcqTax1" DataField="AcqTax" Left="8560" Top="6084" Width="1994.4" Height="224.64" Text="AcqTax" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="WeightTax1" DataField="WeightTax" Left="8560" Top="6309" Width="1995" Height="224.64" Text="WeightTax" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="DamageIns1" DataField="DamageIns" Left="8560" Top="6539" Width="1995" Height="224.64" Text="DamageIns" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="OptionIns1" DataField="OptionIns" Left="8560" Top="6769" Width="1995" Height="224.64" Text="OptionIns" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="TaxFreeGarage1" DataField="TaxFreeGarage" Left="8565.121" Top="7585.24" Width="1994.4" Height="224.64" Text="TaxFreeGarage" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="TaxFreeTradeIn1" DataField="TaxFreeTradeIn" Left="8565.121" Top="7810.24" Width="1995" Height="224.64" Text="TaxFreeTradeIn" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
@@ -331,7 +332,6 @@
       <Control Type="AR.Field" Name="Equipment1" DataField="Equipment" Left="1416.96" Top="4135.68" Width="5838" Height="404.6404" Text="Equipment" Style="color: Black; font-family: MS PGothic; text-align: left" />
       <Control Type="AR.Shape" Name="Box6" Left="260.64" Top="2423.52" Width="7080.479" Height="2139.84" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box8" Left="260" Top="4655" Width="10410" Height="850" BackColor="16777215" RoundingRadius="10" />
-      <Control Type="AR.Shape" Name="Box46" Left="5640" Top="5599" Width="5030" Height="1420" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box14" Left="5642.121" Top="7112.241" Width="5029.92" Height="1864.8" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box16" Left="5642.041" Top="9067.161" Width="5029.92" Height="2790.72" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Line" Name="Line76" X1="5648" Y1="12436.48" X2="10663" Y2="12436.48" />

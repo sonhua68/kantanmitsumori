@@ -148,6 +148,7 @@ namespace KantanMitsumori.Model.Response.Report
         public string OptionPrice11 { get; set; } = "";
         public string OptionName12 { get; set; } = "";
         public string OptionPrice12 { get; set; } = "";
+        public string DamageInsEquivalent { get; set; } = "";
         public string SekininName { get; set; } = "";
         public string MonthlyLeaseFeeName { get; set; } = "月額リース料（税込）";
         public string InspectionExpirationDate { get; set; } = "";

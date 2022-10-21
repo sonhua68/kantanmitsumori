@@ -228,7 +228,8 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.TaxSet2, o => { o.PreCondition(s => s.IsTaxCostKb()); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TaxSet3, o => { o.PreCondition(s => s.IsTaxCostKb()); o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.AutoTaxMonth, o => { o.Ignore(); })
-                .ForMember(t => t.DamageInsMonth, o => { o.Ignore(); });
+                .ForMember(t => t.DamageInsMonth, o => { o.Ignore(); })
+                .ForMember(t => t.DamageInsEquivalent, o => o.ConvertUsing(new YenCurrencyConverter()));
 
             CreateMap<TEstimateIde, EstimateReportModel>()
                 .ForMember(t => t.EstNo, opt => opt.Ignore())
@@ -241,7 +242,8 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.HasInsurance, o => { o.ConvertUsing(new HasInsuranceConverter(), s => s.InsuranceCompanyId); })
                 .ForMember(t => t.InsuranceFee, o => { o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.DownPayment, o => { o.ConvertUsing(new YenCurrencyConverter()); })
-                .ForMember(t => t.TradeInPrice1, o => { o.ConvertUsing(new YenCurrencyConverter(), s => s.TradeInPrice); });
+                .ForMember(t => t.TradeInPrice1, o => { o.ConvertUsing(new YenCurrencyConverter(), s => s.TradeInPrice); })
+                .ForMember(t => t.WeightTax, o => { o.Ignore(); });
 
             CreateMap<MtIdeContractPlan, EstimateReportModel>()
                 .ForMember(t => t.ContractPlanName, o => { o.MapFrom(s => s.PlanName); });
