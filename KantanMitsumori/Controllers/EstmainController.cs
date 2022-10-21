@@ -81,6 +81,14 @@ namespace KantanMitsumori.Controllers
             var result = Encoding.UTF8.GetPreamble().Concat(data).ToArray();
             return File(result, "text/csv", "ASEST_" + _logToken!.sesEstNo + "-" + _logToken.sesEstSubNo + ".csv");
         }
+
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateJiko([FromForm] RequestUpdateJiko requestData)
+        {
+            var response = await _appService.UpdateJiko(requestData);
+            return Ok(response);
+        }
     }
 }
 

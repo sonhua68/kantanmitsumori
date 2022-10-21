@@ -22,7 +22,7 @@
     var LoanModifyFlag = Model.LoanModifyFlag == true ? "1" : "0";
     var LoanRecalcSettingFlag = Model.LoanRecalcSettingFlag;
 }
-<form id="formInpLoan">
+<form id="formInpLoan" onkeydown="return NoSubmit(event);">
     <table border="0" width="100%">
         <tbody>
             <tr>
