@@ -50,7 +50,7 @@ namespace KantanMitsumori.Service.ASEST
                     return ResponseHelper.Error<LogToken>(HelperMessage.SSLE011C, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE011C));
 
                 // Get userInfo
-                var userInfo = getUserName(model.Mem);
+                var userInfo = getUserName(decUsrNo);
                 if(userInfo == null)
                     return ResponseHelper.Error<LogToken>(HelperMessage.SSLE012D, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE012D));
 

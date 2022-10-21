@@ -42,7 +42,7 @@ namespace KantanMitsumori.Controllers
             if (_logToken == null || string.IsNullOrEmpty(_logToken.UserNo))            
                 return ErrorAction(ResponseHelper.Error<int>(HelperMessage.SSLE013S, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE013S)));
             
-            return View();
+            return View(_logToken);
         }
 
         /// <summary>
@@ -59,10 +59,10 @@ namespace KantanMitsumori.Controllers
             // Generate token
             var res = _serEstService.GenerateToken(request);
             if (res.ResultStatus == (int)enResponse.isError)
-                ErrorAction(res);
+                return ErrorAction(res);
             // Set cookie with token
             setTokenCookie(_jwtSettings.AccessExpires, res.Data?.Token ?? "");
-            return View();
+            return View(res.Data);
         }
 
         [HttpPost]
