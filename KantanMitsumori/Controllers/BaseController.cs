@@ -25,6 +25,8 @@ namespace KantanMitsumori.Controllers
 
         }
 
+        public string Referer => Request.Headers["Referer"];
+
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
         {      
             var cookies = filterContext.HttpContext.Request.Cookies[COOKIES];

@@ -1,10 +1,13 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Settings;
+using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.IService;
 using KantanMitsumori.IService.ASEST;
+using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
+using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -30,21 +33,34 @@ namespace KantanMitsumori.Controllers
         #region SerEstController      
        
         /// <summary>
+        /// Call from toolbar of estimate page
+        /// </summary>        
+        public IActionResult Index()
+        {            
+            if(string.IsNullOrEmpty(Referer))
+                return ErrorAction(ResponseHelper.Error<LogToken>(HelperMessage.SSLE016P, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE016P)));
+            if (_logToken == null || string.IsNullOrEmpty(_logToken.UserNo))            
+                return ErrorAction(ResponseHelper.Error<int>(HelperMessage.SSLE013S, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE013S)));
+            
+            return View();
+        }
+
+        /// <summary>
         /// Call from external system
         /// </summary>        
-        public IActionResult Index(string mem, string mode)
+        [HttpPost]
+        public IActionResult Index([FromForm] RequestSerEstExternal request)
         {
-            if(string.IsNullOrEmpty(mem) || string.IsNullOrEmpty(mode))
-                return View();
-
-            var request = new RequestSerEstExternal()
-            {
-                Mem = mem,
-                Mode = mode
-            };
+            // Validate model data
+            if (string.IsNullOrEmpty(request.Mode))
+                return ErrorAction(ResponseHelper.Error<LogToken>(HelperMessage.SSLE016P, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE016P)));
+            if (string.IsNullOrEmpty(request.Mem))
+                return ErrorAction(ResponseHelper.Error<LogToken>(HelperMessage.SSLE010P, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE010P)));            
+            // Generate token
             var res = _serEstService.GenerateToken(request);
             if (res.ResultStatus == (int)enResponse.isError)
                 ErrorAction(res);
+            // Set cookie with token
             setTokenCookie(_jwtSettings.AccessExpires, res.Data?.Token ?? "");
             return View();
         }
@@ -60,7 +76,7 @@ namespace KantanMitsumori.Controllers
             {
                 return Ok(response);
             }
-            var dt = await PaginatedList<ResponseSerEst>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
+            var dt = await Helper.CommonFuncs.PaginatedList<ResponseSerEst>.CreateAsync(response.Data!.AsQueryable(), requestData.pageNumber, requestData.pageSize);
             if (dt.Count > 0)
             {
                 dt[0].TotalPages = dt.TotalPages;
