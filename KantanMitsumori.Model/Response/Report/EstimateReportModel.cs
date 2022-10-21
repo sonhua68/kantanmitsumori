@@ -8,7 +8,7 @@ namespace KantanMitsumori.Model.Response.Report
 {
     public class EstimateReportModel
     {
-        public string EstNo { get; set; } = "";
+        public string EstNoEstSubNo { get; set; } = "";
         public string BusiDate { get; set; } = "";
         public string CarName { get; set; } = "";
         public string GradeName { get; set; } = "";
