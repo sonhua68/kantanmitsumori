@@ -162,6 +162,6 @@ namespace KantanMitsumori.Model.Response.Report
         public string DownPayment { get; set; } = "";
         public string TradeInPrice1 { get; set; } = "";
         public string LeaseFlag { get; set; } = "";
-
+        public string AutoFlatLogo { get; set; } = "";
     }
 }
