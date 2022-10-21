@@ -157,7 +157,7 @@ function CheckNowOdometer() {
 
 }
 
-function onReport(type ) {
+function onReport(type) {
     if (inputChk() == true) {
         if (type == 1) {
             Framework.GoBackReloadPageUrl('/Report/DownloadEstimateReport');
@@ -167,4 +167,17 @@ function onReport(type ) {
 
     }
     return false;
+}
+function upJiko(estno, estsubno, raJrk) {
+    var model = {};
+    model.EstNo = estno;
+    model.EstSubNo = estsubno;
+    model.raJrk = raJrk;
+    var result = Framework.submitAjaxFormUpdateAsync(model, "/Estmain/UpdateJiko");
+    if (result.resultStatus != 0) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    } else {
+        console.log(result.messageContent);
+    }
+
 }
