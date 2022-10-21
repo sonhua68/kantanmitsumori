@@ -363,14 +363,14 @@ String.prototype.compose = (function () {
  *  Create By HoaiPhong
  *  Date 2022/09/23
  /*/
-$(document).ready(function () {
-    $(window).keydown(function (event) {
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            return false;
-        }
-    });
-});
+//$(document).ready(function () {
+//    $(window).keydown(function (event) {
+//        if (event.keyCode == 13) {
+//            event.preventDefault();
+//            return false;
+//        }
+//    });
+//});
 /*
  * sortElements
  *  Create By HoaiPhong
@@ -484,6 +484,13 @@ var DATE_FORMAT_MOMENT = "DD-MMM-YY";
 var DATE_FORMAT_MOMENT_NEW = "DD-MM-YYYY";
 var DATE_FORMAT_MOMENT_WITH_TIME = "DD-MMM-YY hh:mm A";
 var DATE_FORMAT_MOMENT_WITH_TIME_NEW = "DD-MM-YYYY HH:mm:ss";
+$('textarea').keypress(function (event) {
+    if (event.which == 13) {
+        event.preventDefault();
+        var s = $(this).val();
+        $(this).val(s + "\n");
+    }
+});
 
 
 

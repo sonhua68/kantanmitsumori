@@ -16,7 +16,7 @@
     var hidConTaxInputKb = Model.ConTaxInputKb == true ? "True" : "false";
 
 }
-<form id="formInpZeiHoken">
+<form id="formInpZeiHoken" onkeydown="return NoSubmit(event);">
     <table border="0" width="100%">
         <tbody>
             <tr>
@@ -182,7 +182,7 @@
                                         <span id="Label12" class="inplabel" style="display:inline-block;width:211px;">任意保険料</span>
                                     </td>
                                     <td class="inptd" align="left">
-                                        <input name="MeiNiniHoken" type="text" id="MeiNiniHoken" language="javascript" maxlength="8" value="@MeiNiniHoken" class="inpbox_r" tabindex="48" onblur="EstSum();" style="width: 94px; background-color: rgb(224, 224, 224);" size="10">
+                                        <input name="MeiNiniHoken" type="text" id="MeiNiniHoken" language="javascript" maxlength="8" value="@MeiNiniHoken" class="inpbox_r" tabindex="48" onblur="EstSum();" style="width: 94px; background-color: rgb(255, 255, 255);" size="10">
                                         <span id="Label13" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
                                     </td>
                                     <td class="inptd" align="left">

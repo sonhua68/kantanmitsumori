@@ -10,7 +10,7 @@
         /// <summary>
         /// CEST-040D A page transition error has occurred.<br>Please start this service from the original screen of ASNET/Shopping Business NET. 
         /// </summary>
-        public const string CEST040D = "CEST-040D";
+        public const string CEST040D = "CEST-040D";        
         /// <summary>
         /// SMAL-041D Not authorized.
         /// </summary>
@@ -68,9 +68,59 @@
         public const string ISYS010I = "ISYS-010I";
         public const string SMAI000S = "SMAI-000S";
         public const string SMAI000D = "SMAI-000D";
+
+        /// <summary>
+        /// SSLE-010P Missing user info
+        /// ErrMsg3
+        /// </summary>
+        public const string SSLE010P = "SSLE-010P";
+        /// <summary>
+        /// SSLE-011C Missing user info
+        /// ErrMsg3
+        /// </summary>
+        public const string SSLE011C = "SSLE-011C";
+        /// <summary>
+        /// SSLE-012D Missing user info
+        /// ErrMsg3
+        /// </summary>
+        public const string SSLE012D = "SSLE-012D";
+        /// <summary>
+        /// SSLE-013S Missing user info
+        /// ErrMsg3
+        /// </summary>
+        public const string SSLE013S = "SSLE-013S";
+        /// <summary>
+        /// SSLE-014S Missing user info
+        /// ErrMsg3
+        /// </summary>
+        public const string SSLE014S = "SSLE-014S";
+        /// <summary>
+        /// SSLE-010P No user data
+        /// ErrMsg2
+        /// </summary>
+        public const string SSLE015P = "SSLE-015P";
+        /// <summary>
+        /// SSLE-010P No user data
+        /// ErrMsg2
+        /// </summary>
+        public const string SSLE020S = "SSLE-020S";
+        /// <summary>
+        /// SSLE-010P No user data
+        /// ErrMsg2
+        /// </summary>
+        public const string SSLE030S = "SSLE-030S";
+        /// <summary>
+        /// SSLE-010P No user data
+        /// ErrMsg2
+        /// </summary>
+        public const string SSLE040S = "SSLE-040S";       
+        /// <summary>
+        /// SSLE-010P Missing user info
+        /// ErrMsg4
+        /// </summary>
+        public const string SSLE016P = "SSLE-016P";
+
         #endregion
-
-
 
         #region Information
         public const string I0001 = "I0001";

@@ -1,18 +1,33 @@
-﻿@using KantanMitsumori.Model.Request
+﻿@using KantanMitsumori.Model
+@using KantanMitsumori.Model.Request
 @using KantanMitsumori.Model.Response;
 @using KantanMitsumori.Helper.CommonFuncs;
+@model LogToken;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
     var Month = DateTime.Now.Month;
 }
+<!-- Add css bootstrap-->
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/lib/bootstrap/dist/css/docs.css" rel="stylesheet">
+<script src="~/lib/bootstrap/dist/css/bootstrap.bundle.min.js"></script>
 <div>
     <div id="DIV2" style="border-right: #3c82ed 1px solid;
             border-top: #3c82ed 1px solid; z-index: 104; left: 8px; border-left: #3c82ed 1px solid;
             width: 142px; border-bottom: #3c82ed 1px solid; position: absolute; top: 68px;
             height: 173px; background-color: transparent;">
-        <input type="image" name="btnBack" onclick="Framework.GoBackReloadPage();return false" src="~/img/btn見積TOP.png" style="height:38px;width:110px;border-width:0px;z-index: 105;
+        @if (!string.IsNullOrEmpty(Model.sesEstNo))
+        {
+            <input type="image" name="btnBack" onclick="Framework.GoBackReloadPage();return false" src="~/img/btn見積TOP.png" style="height:38px;width:110px;border-width:0px;z-index: 105;
             left: 17px; position: absolute; top: 8px">
+        }
+        else
+        {
+           <input type="image" name="btnBack" onclick="window.close();return false;" src="~/img/btn閉じる.png" style="height:38px;width:110px;border-width:0px;z-index: 105;
+            left: 17px; position: absolute; top: 8px">
+        }
+
         &nbsp; &nbsp;
         <input type="image" name="btnFree" onclick="Framework.GoBackReloadPageUrl('/SelCar');return false" src="~/img/btnフリー見積.png" style="height:38px;width:110px;border-width:0px;z-index: 109; left: 17px; position: absolute; top: 60px">
         &nbsp; &nbsp;

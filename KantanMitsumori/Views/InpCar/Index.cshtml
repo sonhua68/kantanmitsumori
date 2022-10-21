@@ -10,7 +10,7 @@
     var NowOdometer = CommonFunction.FormatString(Model.NowOdometer);
     var FirstRegYm = string.IsNullOrEmpty(Model.FirstRegYm) ? "" : Model.FirstRegYm;
 }
-<form id="formInputCar">
+<form id="formInputCar" onkeydown="return NoSubmit(event);">
     <table border="0" width="100%">
         <tbody>
             <tr>
@@ -71,7 +71,7 @@
                                             @{
                                                 foreach (var item in ListDropDownFirstYM)
                                                 {
-                                                        <option value="@item.Value">@item.Text</option>
+                                                    <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -80,7 +80,7 @@
                                             @{
                                                 foreach (var item in listMonth)
                                                 {
-                                                        <option value="@item.Value">@item.Text</option>
+                                                    <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -94,7 +94,7 @@
                                             @{
                                                 foreach (var item in ListDropDownSyakenYM)
                                                 {
-                                                        <option value="@item.Value">@item.Text</option>
+                                                    <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -103,7 +103,7 @@
                                             @{
                                                 foreach (var item in listMonth)
                                                 {
-                                                        <option value="@item.Value">@item.Text</option>
+                                                    <option value="@item.Value">@item.Text</option>
                                                 }
                                             }
                                         </select>
@@ -198,14 +198,14 @@
                                 <tr>
                                     <td class="inptd" align="left">
                                         <span class="inplabel" style="display:inline-block;width:100px;">修復歴</span>
-                                        <span class="inplabel" style="display:inline-block;width:80px;"><input id="raSyuhukuU" type="radio" name="raJrk" value="1"><label for="raSyuhukuU">有</label></span>
-                                        <span class="inplabel" style="display:inline-block;width:78px;"><input id="raSyuhukuM" type="radio" name="raJrk" value="0"><label for="raSyuhukuM">無</label></span>
+                                        <span class="inplabel" style="display:inline-block;width:80px;"><input id="raSyuhukuU" type="radio" name="raSy" onclick="SetValue(1);" value="1"><label for="raSyuhukuU">有</label></span>
+                                        <span class="inplabel" style="display:inline-block;width:78px;"><input id="raSyuhukuM" type="radio" name="raSy" onclick="SetValue(0);" value="0"><label for="raSyuhukuM">無</label></span>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="inpbtntd">
                                         <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" class="Btn1" onclick="Framework.GoBackReloadPage();return false;" style="height:32px;width:100px;">
-                                        <input type="submit" name="btnInputCar" value="Ok" onclick="return onSummit();" form="formInputCar" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                                        <input type="submit" name="btnInputCar" value="OK" onclick="return onSummit();" form="formInputCar" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                     </td>
                                 </tr>
                                 <tr>
@@ -222,6 +222,7 @@
                         <input type="hidden" id="hidDispVolUnit" value="@Model.DispVolUnit">
                         <input type="hidden" id="hidMilUnit" value="@Model.MilUnit">
                         <input type="hidden" id="hidFirstRegYm" value="@FirstRegYm">
+                        <input type="hidden" name="raJrk" id="hidRaJrk" value="@Model.AccidentHis">
                     </div>
                 </td>
             </tr>
@@ -230,10 +231,12 @@
 </form>
 <script>
     SetInitData();
-    function onSummit() {
-        Framework.OnSubmitForm("/InpCar/UpdateInputCar", "formInputCar");
+      function onSummit() {
+        if (inputChk() == true) {
+           Framework.OnSubmitForm("/InpCar/UpdateInputCar", "formInputCar");
+        }
         return false;
-    }
+    }   
     function swichUnit(NameId, value) {
         var $this = $("#" + NameId + "");
         if (value == true) {
@@ -286,7 +289,7 @@
             swichUnit('MilUnit', true)
             $("#MilUnit").val(milUnit);
         };
-        var dispVolUnit = $("#hidDispVolUnit").val();       
+        var dispVolUnit = $("#hidDispVolUnit").val();
         if (dispVolUnit.includes("cc")) {
             $("#radDispVolUnitCC").attr('checked', true);
         } else if (dispVolUnit.includes("RE")) {
@@ -300,6 +303,10 @@
             $("#DispVolUnit").val(dispVolUnit);
         }
 
-    }
+    };
+
+          
 
 </script>
+<script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
+<script src="~/js/InpCar.js"></script>
