@@ -87,21 +87,21 @@
                 if (Model.EstModel.LeaseFlag == "1")
                 {
 
-                    <tr>
-                        <td style="height: 22px;">
-                            &nbsp;<input type="image" onclick="CheckNowOdometer();return false;" name="ImageButton30" id="ImageButton30" class="imgBtn" src="~/img/page_edit.png" style="border-width:0px;">
-                            <a id="LinkButton8" class="TxtLink" onclick="CheckNowOdometer();return false;" href="javascript:void(0)">リース計算</a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td style="height: 22px;">
+                                &nbsp;<input type="image" onclick="CheckNowOdometer();return false;" name="ImageButton30" id="ImageButton30" class="imgBtn" src="~/img/page_edit.png" style="border-width:0px;">
+                                <a id="LinkButton8" class="TxtLink" onclick="CheckNowOdometer();return false;" href="javascript:void(0)">リース計算</a>
+                            </td>
+                        </tr>
                 }
                 else
                 {
-                    <tr>
-                        <td style="height: 22px;">
-                            &nbsp;<input type="image" name="ImageButton30" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;" id="ImageButton30" class="imgBtn" src="~/img/page_edit.png" style="border-width:0px;">
-                            <a id="LinkButton8" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;" href="javascript:void(0)">ローン計算</a>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td style="height: 22px;">
+                                &nbsp;<input type="image" name="ImageButton30" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;" id="ImageButton30" class="imgBtn" src="~/img/page_edit.png" style="border-width:0px;">
+                                <a id="LinkButton8" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false;" href="javascript:void(0)">ローン計算</a>
+                            </td>
+                        </tr>
                 }
             }
 
@@ -129,21 +129,21 @@
     @{
         if (Model.EstModel.LeaseFlag == "0")
         {
-            <!-- CSV 出力 -->
-            <div id="DIV3" style="border-right: #3c82ed 1px solid; border-top: #3c82ed 1px solid;
-                                                                        z-index: 118; left: 8px; border-left: #3c82ed 1px solid; width: 142px; border-bottom: #3c82ed 1px solid;
-                                                                        position: absolute; top: 782px; height: 66px; background-color: transparent;">
-                <input type="image" name="btnCSV" id="btnCSV" src="img/btnCSV.png" onclick="Framework.GoBackReloadPageUrl('/Estmain/ExportCSV');return false;" style="height:38px;width:110px;border-width:0px;z-index: 106; left: 16px; position: absolute; top: 14px">
-            </div>
+                <!-- CSV 出力 -->
+                <div id="DIV3" style="border-right: #3c82ed 1px solid; border-top: #3c82ed 1px solid;
+                                                                            z-index: 118; left: 8px; border-left: #3c82ed 1px solid; width: 142px; border-bottom: #3c82ed 1px solid;
+                                                                            position: absolute; top: 782px; height: 66px; background-color: transparent;">
+                    <input type="image" name="btnCSV" id="btnCSV" src="img/btnCSV.png" onclick="Framework.GoBackReloadPageUrl('/Estmain/ExportCSV');return false;" style="height:38px;width:110px;border-width:0px;z-index: 106; left: 16px; position: absolute; top: 14px">
+                </div>
         }
         else
         {
-            <!-- Download pdf -->
-            <div id="btnDownloadPdf" style=" width: 142px; left:12px;text-align: initial;
-                                                                                            position: absolute; top: 745px; background-color: transparent;">
-                &nbsp;<input type="image" name="ImageButton37" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" id="ImageButton37" class="imgBtn" src="~/img/print.png" style="border-width:0px;">
-                <a id="LinkButton13" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" href="javascript:void(0)" style="text-decoration:none;">法人申込書印刷</a>
-            </div>
+                <!-- Download pdf -->
+                <div id="btnDownloadPdf" style=" width: 142px; left:12px;text-align: initial;
+                                                                                                position: absolute; top: 745px; background-color: transparent;">
+                    &nbsp;<input type="image" name="ImageButton37" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" id="ImageButton37" class="imgBtn" src="~/img/print.png" style="border-width:0px;">
+                    <a id="LinkButton13" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" href="javascript:void(0)" style="text-decoration:none;">法人申込書印刷</a>
+                </div>
         }
     }
     <table cellpadding="1" class="nomal" style="left: 160px; position: absolute; top: 68px;
@@ -170,40 +170,40 @@
     @{
         if (Model.EstModel.LeaseFlag == "0")
         {
-            <div id="tblSaleAll">
-                <table cellpadding="1" class="nomal" style="position: absolute; top: 123px; left: 165px;
-                                                                        width: 410px; z-index: 112;">
-                    <tbody>
-                        <tr>
-                            <td style="border-bottom: solid 2px crimson; width: 170px; height: 37px;text-align: initial;">
-                                <span id="Label86" class="EstTitle1" style="font-size:20pt;">お支払総額</span>
-                            </td>
-                            <td style="border-bottom: solid 2px crimson; text-align: right; height: 37px;">
-                                <span id="lbl_SaleAll" class="EstTitle1" style="display:inline-block;background-color:Transparent;font-size:20pt;width:192px;">@estModelView.SalesSum</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                <div id="tblSaleAll">
+                    <table cellpadding="1" class="nomal" style="position: absolute; top: 123px; left: 165px;
+                                                                            width: 410px; z-index: 112;">
+                        <tbody>
+                            <tr>
+                                <td style="border-bottom: solid 2px crimson; width: 170px; height: 37px;text-align: initial;">
+                                    <span id="Label86" class="EstTitle1" style="font-size:20pt;">お支払総額</span>
+                                </td>
+                                <td style="border-bottom: solid 2px crimson; text-align: right; height: 37px;">
+                                    <span id="lbl_SaleAll" class="EstTitle1" style="display:inline-block;background-color:Transparent;font-size:20pt;">@estModelView.SalesSum</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
         }
         else
         {
-            <div id="tblLeaseTotal">
-                <table cellpadding="1" class="nomal" style="position: absolute; top: 123px; left: 165px;
-                                                                        width: 455px; z-index: 112;">
-                    <tbody>
-                        <tr>
-                            <td style="border-bottom: solid 2px crimson; height: 37px;text-align: initial;">
-                                <span id="lblLeaseTotal" class="EstTitle1" style="font-size:20pt;">月額リース料(税込)</span>
-                            </td>
-                            <td style="border-bottom: solid 2px crimson; text-align: right; height: 37px;">
-                                <span id="lbl_SaleAll" class="EstTitle1" style="display:inline-block;background-color:Transparent;font-size:20pt;width:192px;">@estModelView.LeaseTotal</span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                <div id="tblLeaseTotal">
+                    <table cellpadding="1" class="nomal" style="position: absolute; top: 123px; left: 165px;
+                                                                            width: 455px; z-index: 112;">
+                        <tbody>
+                            <tr>
+                                <td style="border-bottom: solid 2px crimson; height: 37px;text-align: initial;">
+                                    <span id="lblLeaseTotal" class="EstTitle1" style="font-size:20pt;">月額リース料(税込)</span>
+                                </td>
+                                <td style="border-bottom: solid 2px crimson; text-align: right; height: 37px;">
+                                    <span id="lbl_SaleAll" class="EstTitle1" style="display:inline-block;background-color:Transparent;font-size:20pt;">@estModelView.LeaseTotal</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
         }
     }
 
@@ -1065,218 +1065,218 @@
                                                     @{
                                                         if (Model.EstModel.LeaseFlag == "0")
                                                         {
-                                                            <!-- 詳細情報：お支払プラン -->
-                                                            <div id="formTblInpLoan">
-                                                                <table id="Table1" class="nomal" style="width: 418px;">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
-                                                                                            vertical-align: middle;">
-                                                                                <input type="image" name="ImageButton21" id="ImageButton21" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false" src="~/img/sbtnローン計算.png" style="border-width:0px;">
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style="width: 610px; height: 22px;">
-                                                                                <span id="Label160" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">頭金</span>
-                                                                            </td>
-                                                                            <td id="idDeposit" class="data" style="text-align: right; height: 22px;">
-                                                                                <span id="lbl_Deposit" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.Deposit</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="title" style="width: 610px; text-align: left; height: 22px;">
-                                                                                <span id="Label157" class="EstTitle1" style="display:inline-block;font-size:10pt;width:152px;">現金・割賦元金</span>
-                                                                            </td>
-                                                                            <td id="idPrincipal" class="title" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lbl_Principal" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.Principal</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style="width: 610px; height: 22px;">
-                                                                                <span id="Label148" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">分割払手数料</span>
-                                                                            </td>
-                                                                            <td id="idPartitionFee" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lbl_PartitionFee" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PartitionFee</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="title" style="width: 610px; text-align: left; height: 22px;">
-                                                                                <span id="Label145" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">分割支払金合計</span>
-                                                                            </td>
-                                                                            <td id="idPartitionSum" class="title" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lbl_PartitionSum" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PartitionAmount</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style="width: 610px; height: 22px;">
-                                                                                <span id="Label142" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払回数</span>
-                                                                            </td>
-                                                                            <td id="idKaisu" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lbl_Kaisu" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PayTimes</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style="width: 610px; height: 22px;">
-                                                                                <span id="Label139" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払期間</span>
-                                                                            </td>
-                                                                            <td id="idKikan" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lbl_Kikan" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;">@estModelView.Kikan</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style="width: 610px; height: 22px;">
-                                                                                <span id="Label136" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">初回支払額</span>
-                                                                            </td>
-                                                                            <td id="idFirstPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lbl_FirstPrice" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.FirstPayAmount</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style="width: 610px; height: 22px;">
-                                                                                <span id="Label137" class="EstTitle1" style="display:inline-block;font-size:10pt;width:109px;">2回目以降支払額</span>
-                                                                                <span id="lbl_SecoTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;">@estModelView.PayTimes2</span>
-                                                                            </td>
-                                                                            <td id="idSecoPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lbl_SecoPrice" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PayAmount</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style="width: 610px; height: 22px;">
-                                                                                <span id="Label133" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">ボーナス加算月</span>
-                                                                            </td>
-                                                                            <td id="idBonusMonth" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lbl_BonusMonth" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.BonusMonth</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style="width: 610px; height: 22px;">
-                                                                                <span id="Label123" class="EstTitle1" style="display:inline-block;font-size:10pt;width:102px;">ボーナス加算額</span>
-                                                                                <span id="lbl_BonusTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;">@estModelView.BonusTimes</span>
-                                                                            </td>
-                                                                            <td id="idBonusAdd" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lbl_BonusAdd" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.BonusAmount</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" colspan="2" style="border-style: none;">
-                                                                                <span id="lbl_Rate" class="EstTitle1">@estModelView.Rate</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td id="idWarningRecalc" class="data" colspan="2" style="border-style: none; padding: 3px;text-align: right; vertical-align: middle;">
-                                                                                <strong>
-                                                                                    <span id="lblWarningRecalc" class="spanTxtSubject">@estModelView.WarningRecalc</span>
-                                                                                </strong>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
+                                                                <!-- 詳細情報：お支払プラン -->
+                                                                <div id="formTblInpLoan">
+                                                                    <table id="Table1" class="nomal" style="width: 418px;">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
+                                                                                                vertical-align: middle;">
+                                                                                    <input type="image" name="ImageButton21" id="ImageButton21" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false" src="~/img/sbtnローン計算.png" style="border-width:0px;">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style="width: 610px; height: 22px;">
+                                                                                    <span id="Label160" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">頭金</span>
+                                                                                </td>
+                                                                                <td id="idDeposit" class="data" style="text-align: right; height: 22px;">
+                                                                                    <span id="lbl_Deposit" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.Deposit</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="title" style="width: 610px; text-align: left; height: 22px;">
+                                                                                    <span id="Label157" class="EstTitle1" style="display:inline-block;font-size:10pt;width:152px;">現金・割賦元金</span>
+                                                                                </td>
+                                                                                <td id="idPrincipal" class="title" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lbl_Principal" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.Principal</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style="width: 610px; height: 22px;">
+                                                                                    <span id="Label148" class="EstTitle1" style="display:inline-block;font-size:10pt;width:100px;">分割払手数料</span>
+                                                                                </td>
+                                                                                <td id="idPartitionFee" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lbl_PartitionFee" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PartitionFee</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="title" style="width: 610px; text-align: left; height: 22px;">
+                                                                                    <span id="Label145" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">分割支払金合計</span>
+                                                                                </td>
+                                                                                <td id="idPartitionSum" class="title" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lbl_PartitionSum" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PartitionAmount</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style="width: 610px; height: 22px;">
+                                                                                    <span id="Label142" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払回数</span>
+                                                                                </td>
+                                                                                <td id="idKaisu" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lbl_Kaisu" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PayTimes</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style="width: 610px; height: 22px;">
+                                                                                    <span id="Label139" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">支払期間</span>
+                                                                                </td>
+                                                                                <td id="idKikan" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lbl_Kikan" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;">@estModelView.Kikan</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style="width: 610px; height: 22px;">
+                                                                                    <span id="Label136" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">初回支払額</span>
+                                                                                </td>
+                                                                                <td id="idFirstPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lbl_FirstPrice" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.FirstPayAmount</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style="width: 610px; height: 22px;">
+                                                                                    <span id="Label137" class="EstTitle1" style="display:inline-block;font-size:10pt;width:109px;">2回目以降支払額</span>
+                                                                                    <span id="lbl_SecoTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;">@estModelView.PayTimes2</span>
+                                                                                </td>
+                                                                                <td id="idSecoPrice" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lbl_SecoPrice" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.PayAmount</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style="width: 610px; height: 22px;">
+                                                                                    <span id="Label133" class="EstTitle1" style="display:inline-block;font-size:10pt;width:163px;">ボーナス加算月</span>
+                                                                                </td>
+                                                                                <td id="idBonusMonth" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lbl_BonusMonth" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.BonusMonth</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style="width: 610px; height: 22px;">
+                                                                                    <span id="Label123" class="EstTitle1" style="display:inline-block;font-size:10pt;width:102px;">ボーナス加算額</span>
+                                                                                    <span id="lbl_BonusTimes" class="EstTitle1" style="display:inline-block;font-size:10pt;width:62px;">@estModelView.BonusTimes</span>
+                                                                                </td>
+                                                                                <td id="idBonusAdd" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lbl_BonusAdd" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.BonusAmount</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" colspan="2" style="border-style: none;">
+                                                                                    <span id="lbl_Rate" class="EstTitle1">@estModelView.Rate</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td id="idWarningRecalc" class="data" colspan="2" style="border-style: none; padding: 3px;text-align: right; vertical-align: middle;">
+                                                                                    <strong>
+                                                                                        <span id="lblWarningRecalc" class="spanTxtSubject">@estModelView.WarningRecalc</span>
+                                                                                    </strong>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
                                                         }
                                                         else
                                                         {
-                                                            <!--Begin On リース計算情報  -->
-                                                            <div id="formTblInpLease">
-                                                                <table id="Table3" class="nomal" style="width: 418px;">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
-                                                                                            vertical-align: middle;">
-                                                                                <input type="image" name="imgBtnLease" id="imgBtnLease" onclick="CheckNowOdometer();return false;" src="~/img/btb_リース計算情報.png" style="border-width:0px;">
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style="height: 22px;">
-                                                                                <span id="Label1" class="EstTitle1" style="font-size:10pt;">初年度登録</span>
-                                                                            </td>
-                                                                            <td id="Td2" class="data" style="text-align: right; height: 22px;">
-                                                                                <span id="lblFirstRegistration" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.FirstRegistration</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style=" text-align: left; height: 22px;">
-                                                                                <span id="Label6" class="EstTitle1" style="font-size:10pt;">車検満了日(予定日)</span>
-                                                                            </td>
-                                                                            <td id="Td3" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lblInspectionExpiration" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.InspectionExpirationDate</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style=" height: 22px;">
-                                                                                <span id="Label9" class="EstTitle1" style="font-size:10pt;">リース開始月</span>
-                                                                            </td>
-                                                                            <td id="Td4" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lblLeaseStart" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.LeaseStartMonth</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style=" text-align: left; height: 22px;">
-                                                                                <span id="Label11" class="EstTitle1" style="font-size:10pt;">契約期間</span>
-                                                                            </td>
-                                                                            <td id="Td5" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lblLeasePeriod" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.LeasePeriod</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style=" height: 22px;">
-                                                                                <span id="Label13" class="EstTitle1" style="font-size:10pt;">リース満了日</span>
-                                                                            </td>
-                                                                            <td id="Td6" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lblLeaseExpirationDate" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.LeaseExpirationDate</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style="height: 22px;">
-                                                                                <span id="Label19" class="EstTitle1" style="font-size:10pt;">契約プラン</span>
-                                                                            </td>
-                                                                            <td id="Td13" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lblContractPlanName" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.ContractPlanName</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style=" height: 22px;">
-                                                                                <span id="Label15" class="EstTitle1" style="font-size:10pt;">延長保証(+1年)</span>
-                                                                            </td>
-                                                                            <td id="Td7" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lblExtendedGuarantee" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;">@estModelView.IsExtendedGuarantee</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style=" height: 22px;">
-                                                                                <span id="Label17" class="EstTitle1" style="font-size:10pt;">任意保険</span>
-                                                                            </td>
-                                                                            <td id="Td8" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lblInsuranceCompanyName" class="InpTitle2">@estModelView.InsuranceCompanyName</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style=" height: 22px;">
-                                                                                <span id="Label24" class="EstTitle1" style="font-size:10pt;">保険料)</span>
-                                                                            </td>
-                                                                            <td id="Td9" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lblInsuranceFee" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.InsuranceFee</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style=" height: 22px;">
-                                                                                <span id="Label22" class="EstTitle1" style="font-size:10pt;">頭金(税込)</span>
-                                                                            </td>
-                                                                            <td id="Td10" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lblDownPayment" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.DownPayment</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td class="data" style=" height: 22px;">
-                                                                                <span id="Label29" class="EstTitle1" style="font-size:10pt;">下取(税込)</span>
-                                                                            </td>
-                                                                            <td id="Td11" class="data" style="width: 271px; text-align: right; height: 22px;">
-                                                                                <span id="lblTradeInPrice" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.IdeTradeInPrice</span>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                            <!--Begin End リース計算情報  -->
+                                                                <!--Begin On リース計算情報  -->
+                                                                <div id="formTblInpLease">
+                                                                    <table id="Table3" class="nomal" style="width: 418px;">
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
+                                                                                                vertical-align: middle;">
+                                                                                    <input type="image" name="imgBtnLease" id="imgBtnLease" onclick="CheckNowOdometer();return false;" src="~/img/btb_リース計算情報.png" style="border-width:0px;">
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style="height: 22px;">
+                                                                                    <span id="Label1" class="EstTitle1" style="font-size:10pt;">初年度登録</span>
+                                                                                </td>
+                                                                                <td id="Td2" class="data" style="text-align: right; height: 22px;">
+                                                                                    <span id="lblFirstRegistration" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.FirstRegistration</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style=" text-align: left; height: 22px;">
+                                                                                    <span id="Label6" class="EstTitle1" style="font-size:10pt;">車検満了日(予定日)</span>
+                                                                                </td>
+                                                                                <td id="Td3" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lblInspectionExpiration" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.InspectionExpirationDate</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style=" height: 22px;">
+                                                                                    <span id="Label9" class="EstTitle1" style="font-size:10pt;">リース開始月</span>
+                                                                                </td>
+                                                                                <td id="Td4" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lblLeaseStart" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.LeaseStartMonth</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style=" text-align: left; height: 22px;">
+                                                                                    <span id="Label11" class="EstTitle1" style="font-size:10pt;">契約期間</span>
+                                                                                </td>
+                                                                                <td id="Td5" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lblLeasePeriod" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.LeasePeriod</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style=" height: 22px;">
+                                                                                    <span id="Label13" class="EstTitle1" style="font-size:10pt;">リース満了日</span>
+                                                                                </td>
+                                                                                <td id="Td6" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lblLeaseExpirationDate" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.LeaseExpirationDate</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style="height: 22px;">
+                                                                                    <span id="Label19" class="EstTitle1" style="font-size:10pt;">契約プラン</span>
+                                                                                </td>
+                                                                                <td id="Td13" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lblContractPlanName" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.ContractPlanName</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style=" height: 22px;">
+                                                                                    <span id="Label15" class="EstTitle1" style="font-size:10pt;">延長保証(+1年)</span>
+                                                                                </td>
+                                                                                <td id="Td7" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lblExtendedGuarantee" class="InpTitle2" style="display:inline-block;font-size:10pt;width:158px;">@estModelView.IsExtendedGuarantee</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style=" height: 22px;">
+                                                                                    <span id="Label17" class="EstTitle1" style="font-size:10pt;">任意保険</span>
+                                                                                </td>
+                                                                                <td id="Td8" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lblInsuranceCompanyName" class="InpTitle2">@estModelView.InsuranceCompanyName</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style=" height: 22px;">
+                                                                                    <span id="Label24" class="EstTitle1" style="font-size:10pt;">保険料)</span>
+                                                                                </td>
+                                                                                <td id="Td9" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lblInsuranceFee" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.InsuranceFee</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style=" height: 22px;">
+                                                                                    <span id="Label22" class="EstTitle1" style="font-size:10pt;">頭金(税込)</span>
+                                                                                </td>
+                                                                                <td id="Td10" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lblDownPayment" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.DownPayment</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td class="data" style=" height: 22px;">
+                                                                                    <span id="Label29" class="EstTitle1" style="font-size:10pt;">下取(税込)</span>
+                                                                                </td>
+                                                                                <td id="Td11" class="data" style="width: 271px; text-align: right; height: 22px;">
+                                                                                    <span id="lblTradeInPrice" class="InpTitle2" style="display:inline-block;width:132px;">@estModelView.IdeTradeInPrice</span>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                <!--Begin End リース計算情報  -->
                                                         }
                                                     }
 
