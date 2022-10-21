@@ -243,7 +243,8 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.InsuranceFee, o => { o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.DownPayment, o => { o.ConvertUsing(new YenCurrencyConverter()); })
                 .ForMember(t => t.TradeInPrice1, o => { o.ConvertUsing(new YenCurrencyConverter(), s => s.TradeInPrice); })
-                .ForMember(t => t.WeightTax, o => { o.Ignore(); });
+                .ForMember(t => t.WeightTax, o => { o.Ignore(); })
+                .ForMember(t => t.TradeInPrice, o => { o.Ignore(); });
 
             CreateMap<MtIdeContractPlan, EstimateReportModel>()
                 .ForMember(t => t.ContractPlanName, o => { o.MapFrom(s => s.PlanName); });
