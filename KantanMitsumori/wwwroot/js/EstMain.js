@@ -1,4 +1,5 @@
 ﻿//setInitialValue();
+ShowColorChangeCarPrice();
 DeleteBtnHanei()
 setInitValueCookie();
 function setInitialValue() {
@@ -180,4 +181,21 @@ function upJiko(estno, estsubno, raJrk) {
         console.log(result.messageContent);
     }
 
+}
+function ShowColorChangeCarPrice() {
+    if (document.getElementById("lblWarningRecalc").innerHTML != "") {
+        if (document.getElementById("lblWarningRecalc").style.display != "none") {
+            document.getElementById("idDeposit").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idPartitionFee").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idKaisu").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idKikan").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idFirstPrice").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idSecoPrice").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idBonusMonth").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idBonusAdd").style.backgroundColor = "#FFFFCC";
+        }
+    }
+    if (document.getElementById("lbl_GetTax").innerHTML == "") { document.getElementById("idGetTax").style.backgroundColor = "#FFFFCC"; }
+    if (document.getElementById("lbl_WeightTax").innerHTML == "") { document.getElementById("idWeightTax").style.backgroundColor = "#FFFFCC"; }
+    if (document.getElementById("lbl_JibaiHoken").innerHTML == "") { document.getElementById("idJibaiHoken").style.backgroundColor = "#FFFFCC"; }
 }

@@ -156,15 +156,15 @@ namespace KantanMitsumori.Service.Helper
                     {
                         CommonSimLon simLon = new(_logger)
                         {
-                            SaleSumPrice = Convert.ToInt32(estModel.SalesSum),
-                            Deposit = Convert.ToInt32(estModel.Deposit),
-                            MoneyRate = Convert.ToInt32(estModel.Rate),
-                            PayTimes = Convert.ToInt32(estModel.PayTimes),
+                            SaleSumPrice = estModel.SalesSum,
+                            Deposit =estModel.Deposit,
+                            MoneyRate = estModel.Rate,
+                            PayTimes = estModel.PayTimes,
                             FirstMonth = Convert.ToInt32(CommonFunction.Right(estModel.FirstPayMonth ?? "", 2))
                         };
                         if (estModel.BonusAmount > 0)
                         {
-                            simLon.Bonus = Convert.ToInt32(estModel.BonusAmount);
+                            simLon.Bonus = estModel.BonusAmount;
                             simLon.BonusFirst = Convert.ToInt32(estModel.BonusFirst);
                             simLon.BonusSecond = Convert.ToInt32(estModel.BonusSecond);
                         }
