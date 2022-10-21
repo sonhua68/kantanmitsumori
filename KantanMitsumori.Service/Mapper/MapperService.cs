@@ -100,7 +100,7 @@ namespace KantanMitsumori.Service.Mapper
 
             // Response mapping
             CreateMap<TEstimate, EstimateReportModel>()
-                .ForMember(t => t.EstNo, o => o.MapFrom(s => $"{s.EstNo}-{s.EstSubNo}"))
+                .ForMember(t => t.EstNoEstSubNo, o => o.MapFrom(s => $"{s.EstNo}-{s.EstSubNo}"))
                 .ForMember(t => t.BusiDate, o => o.MapFrom(s => s.TradeDate.ToString("yyyy年M月d日")))
                 .ForMember(t => t.CarName, o => o.MapFrom(s => $"{s.MakerName}{s.ModelName}"))
                 .ForMember(t => t.CaseName, o => o.MapFrom(s => s.Case ?? ""))
@@ -212,7 +212,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.ConTaxInputKb, o => { o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.ContaxInputKbDict), s => s.ConTaxInputKb ?? false); });
 
             CreateMap<TEstimateSub, EstimateReportModel>()
-                .ForMember(t => t.EstNo, opt => opt.Ignore())
+                .ForMember(t => t.EstNoEstSubNo, opt => opt.Ignore())
                 .ForMember(t => t.SonotaTitle, o => o.ConvertUsing(new SonotaTitleConverter()))
                 .ForMember(t => t.Sonota, o => o.ConvertUsing(new YenCurrencyConverter()))
                 .ForMember(t => t.TaxInsEquivalentAll, o => o.ConvertUsing(new YenCurrencyConverter()))
@@ -247,7 +247,7 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<MtIdeVoluntaryInsurance, EstimateReportModel>()
                 .ForMember(t => t.InsuranceCompanyName, o => { o.MapFrom(s => s.CompanyName); });
             CreateMap<RequestReport, EstimateReportModel>()
-                .ForMember(t => t.EstNo, o => o.Ignore())
+                .ForMember(t => t.EstNoEstSubNo, o => o.Ignore())
                 .ForMember(t => t.CustNm_forPrint, o => { o.MapFrom(new CustNmResolver()); })
                 .ForMember(t => t.CustZip_forPrint, o => { o.MapFrom(s => $"〒{s.CustZip_forPrint}"); })
                 .ForMember(t => t.CustTel_forPrint, o => { o.MapFrom(s => $"（TEL : {s.CustTel_forPrint}）"); });
