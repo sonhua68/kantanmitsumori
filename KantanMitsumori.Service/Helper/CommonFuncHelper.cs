@@ -255,7 +255,7 @@ namespace KantanMitsumori.Service.Helper
         // ***************************************************************************
         // 2011/04/12 商談メモ対応画像枚数追加
         // 2017/08/24 画像の保存名を指定できるようにI/F変更。指定されなかった場合は、URLのファイル名を利用する。
-        public void DownloadImg(string url, string SesName, string DefImage, ref string fileName, string strSaveName)
+        public void DownloadImg(string url, ref string fileName, string strSaveName)
         {
             try
             {

@@ -16,9 +16,8 @@ namespace KantanMitsumori.Service.Helper
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUnitOfWorkIDE _unitOfWorkIDE;
         private readonly IMapper _mapper;
-        private readonly HelperMapper _helperMapper;
 
-        private LogToken valToken;
+        private readonly HelperMapper _helperMapper;
         private readonly CommonFuncHelper _commonFuncHelper;
         private readonly List<string> reCalEstModel;
         private readonly List<string> reCalEstSubModel;
@@ -31,8 +30,6 @@ namespace KantanMitsumori.Service.Helper
             _mapper = mapper;
             _commonFuncHelper = commonFuncHelper;
             _helperMapper = helperMapper;
-
-            valToken = new LogToken();
             reCalEstModel = new List<string>() { "CarPrice", "Discount", "SyakenNew", "SyakenZok", "OptionPrice1", "OptionPrice2", "OptionPrice3", "OptionPrice4", "OptionPrice5", "OptionPrice6", "OptionPrice7", "OptionPrice8", "OptionPrice9", "OptionPrice10", "OptionPrice11", "OptionPrice12", "TaxCheck", "TaxGarage", "TaxTradeIn", "TaxRecycle", "TaxDelivery", "TaxOther" };
             reCalEstSubModel = new List<string>() { "YtiRieki", "RakuSatu", "Rikusou", "TaxTradeInSatei", "TaxSet1", "TaxSet2", "TaxSet3", "AutoTaxEquivalent", "DamageInsEquivalent" };
         }
@@ -49,7 +46,7 @@ namespace KantanMitsumori.Service.Helper
                 // 再計算前の総額
                 int? oldSalesSum = estModel.SalesSum;
                 var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.UserNo!);
-                valToken.sesTaxRatio = vTax;
+                logToken.sesTaxRatio = vTax;
                 var dtUserDef = _commonFuncHelper.getUserDefData(logToken.UserNo!);
                 if (dtUserDef != null)
                 {
@@ -240,15 +237,6 @@ namespace KantanMitsumori.Service.Helper
             {
                 var estModel = _unitOfWork.Estimates.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
                 var estSubModel = _unitOfWork.EstimateSubs.GetSingle(x => x.EstNo == inEstNo && x.EstSubNo == inEstSubNo && x.Dflag == false);
-                valToken.sesCarImgPath = CommonFunction.chkImgFile(estModel.CarImgPath ?? "", valToken.sesCarImgPath!, CommonConst.def_DmyImg);
-                valToken.sesCarImgPath1 = CommonFunction.chkImgFile(estModel.CarImgPath1 ?? "", valToken.sesCarImgPath1!, "");
-                valToken.sesCarImgPath2 = CommonFunction.chkImgFile(estModel.CarImgPath2 ?? "", valToken.sesCarImgPath2!, "");
-                valToken.sesCarImgPath3 = CommonFunction.chkImgFile(estModel.CarImgPath3 ?? "", valToken.sesCarImgPath3!, "");
-                valToken.sesCarImgPath4 = CommonFunction.chkImgFile(estModel.CarImgPath4 ?? "", valToken.sesCarImgPath4!, "");
-                valToken.sesCarImgPath5 = CommonFunction.chkImgFile(estModel.CarImgPath5 ?? "", valToken.sesCarImgPath5!, "");
-                valToken.sesCarImgPath6 = CommonFunction.chkImgFile(estModel.CarImgPath6 ?? "", valToken.sesCarImgPath6!, "");
-                valToken.sesCarImgPath7 = CommonFunction.chkImgFile(estModel.CarImgPath7 ?? "", valToken.sesCarImgPath7!, "");
-                valToken.sesCarImgPath8 = CommonFunction.chkImgFile(estModel.CarImgPath8 ?? "", valToken.sesCarImgPath8!, "");
                 if (estSubModel.Sonota == 0 && (estSubModel.RakuSatu + estSubModel.Rikusou) > 0)
                 {
                     estSubModel.Sonota = estSubModel.RakuSatu + estSubModel.Rikusou;
@@ -357,7 +345,7 @@ namespace KantanMitsumori.Service.Helper
                 {
                     estIdeModel = new TEstimateIde();
                     estIdeModel.IsExtendedGuarantee = 99;
-                }         
+                }
                 dataIDE = _mapper.Map<EstimateIdeModel>(estIdeModel);
             }
             catch (Exception ex)
