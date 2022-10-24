@@ -14,8 +14,11 @@ function inputChk() {
     if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
     outMsg = chkMin("ローン計算標準金利", $('#Rate').val());
     if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
-    outMsg = chkKingaku("金額欄", $('#YtiRiekiH').val());
-    if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
+    let ytiRiekiH = $('#YtiRiekiH').val();
+    if (typeof ytiRiekiH !== "undefined") {
+        outMsg = chkKingaku("金額欄", ytiRiekiH);
+        if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
+    }
     outMsg = chkKingaku("金額欄", $('#SyakenNewH').val());
     if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
     outMsg = chkKingaku("金額欄", $('#SyakenZokH').val());
@@ -44,8 +47,11 @@ function inputChk() {
     if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
     outMsg = chkKingaku("金額欄", $('#TaxSet3H').val());
     if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
-    outMsg = chkKingaku("金額欄", $('#YtiRiekiK').val());
-    if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
+    let ytiRiekiK = $('#YtiRiekiK').val();
+    if (typeof ytiRiekiK !== "undefined") {
+        outMsg = chkKingaku("金額欄", ytiRiekiK);
+        if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
+    }
     outMsg = chkKingaku("金額欄", $('#SyakenNewK').val());
     if (outMsg != "") { document.getElementById("txMsg").innerHTML = outMsg; return false; }
     outMsg = chkKingaku("金額欄", $('#SyakenZokK').val());

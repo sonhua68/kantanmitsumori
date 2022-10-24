@@ -31,18 +31,5 @@ namespace KantanMitsumori.Attribute
             context.Items["Authorized"] = _logToken;
             await _next(context);
         }
-
-        public string GetCookieforPrint(HttpContext context, string Key)
-        {
-            var cookies = context.Request.Cookies[Key]!;
-            if (!string.IsNullOrEmpty(cookies))
-            {
-                return cookies;
-            }
-            else
-            {
-                return "";
-            }
-        }
     }
 }

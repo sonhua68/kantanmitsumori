@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
+		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
@@ -18,7 +19,7 @@
 		<None Remove="Reports\Order.rpx" />
 		<None Remove="Reports\OrderWithArticle.rpx" />
 		<EmbeddedResource Include="Reports\LeaseEstimateWithMemo.rpx">
-		  <SubType>Component</SubType>
+			<SubType>Component</SubType>
 		</EmbeddedResource>
 		<EmbeddedResource Include="Reports\LeaseOrder.rpx" />
 		<EmbeddedResource Include="Reports\LeaseEstimate.rpx" />
@@ -44,14 +45,7 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
-		<PackageReference Include="GrapeCity.ActiveReports" Version="16.2.1" />
-		<PackageReference Include="GrapeCity.ActiveReports.Chart" Version="16.1.2" />
-		<PackageReference Include="GrapeCity.ActiveReports.Core.DataProviders" Version="2.1.0" />
-		<PackageReference Include="GrapeCity.ActiveReports.Core.Rdl" Version="3.3.1" />
-		<PackageReference Include="GrapeCity.ActiveReports.Core.Rendering" Version="3.3.1" />
-		<PackageReference Include="GrapeCity.ActiveReports.Document" Version="16.2.1" />
-		<PackageReference Include="GrapeCity.ActiveReports.Export.Pdf" Version="16.2.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />		
 		<!--Start: Conflict library with ActiveReport - Solved by use higher version of library  -->
 		<PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.3.1" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" />

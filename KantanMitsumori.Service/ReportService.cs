@@ -28,8 +28,9 @@ namespace KantanMitsumori.Service
         private readonly IUnitOfWorkIDE _unitOfWorkIDE;
         private readonly HelperMapper _helperMapper;
         private readonly PhysicalPathSettings _physicalPathSettings;
+        private readonly URLSettings _urlSettings;
 
-        public ReportService(IMapper mapper, ILogger<IReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper, IOptions<PhysicalPathSettings> physicalPathSettings)
+        public ReportService(IMapper mapper, ILogger<IReportService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, HelperMapper helperMapper, IOptions<PhysicalPathSettings> physicalPathSettings, IOptions<URLSettings> urlSettings)
         {
             _mapper = mapper;
             _logger = logger;
@@ -37,6 +38,7 @@ namespace KantanMitsumori.Service
             _unitOfWorkIDE = unitOfWorkIDE;
             _helperMapper = helperMapper;
             _physicalPathSettings = physicalPathSettings.Value;
+            _urlSettings = urlSettings.Value;
         }
 
         public ResponseBase<ReportFileModel> GenerateReport(RequestReport model)
@@ -81,14 +83,14 @@ namespace KantanMitsumori.Service
                 if (reportType == ReportType.Estimate)
                     return "LeaseEstimateWithMemo.rpx";
                 if (reportType == ReportType.Order)
-                    return "LeaseOrderWithMemo.rpx";
+                    return "LeaseOrderWithArticle.rpx";
             }
             else
             {
                 if (reportType == ReportType.Estimate)
                     return "EstimateWithMemo.rpx";
                 if (reportType == ReportType.Order)
-                    return "OrderWithMemo.rpx";
+                    return "OrderWithArticle.rpx";
             }
             return "";
         }
@@ -151,6 +153,9 @@ namespace KantanMitsumori.Service
         {
             UpdateSyakenNewZok(reportModel, estEntity, estSubEntity);
             UpdateUserDefInfo(reportModel, userEntity);
+
+            // set logo
+            reportModel.AutoFlatLogo = _urlSettings.AutoFlagLogoUrl;
         }
 
         private void UpdateUserDefInfo(EstimateReportModel reportModel, MUserDef userEntity)

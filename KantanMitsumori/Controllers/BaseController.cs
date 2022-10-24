@@ -7,6 +7,8 @@ using KantanMitsumori.Models;
 using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Net;
+using static GrapeCity.Enterprise.Data.DataEngine.ExpressionEvaluation.Eval;
 
 namespace KantanMitsumori.Controllers
 {
@@ -14,7 +16,7 @@ namespace KantanMitsumori.Controllers
     public class BaseController : Controller
     {
         private const string COOKIES = "CookiesASEST";
-        private List<string> optionListController = new List<string> { "Home", "SelCar", "SelGrd", "SerEst" };
+        private List<string> optionListController = new List<string> { "Home","Error", "SelCar", "SelGrd", "SerEst" };
         public LogToken? _logToken;
 
         public BaseController()
@@ -23,13 +25,15 @@ namespace KantanMitsumori.Controllers
 
         }
 
+        public string Referer => Request.Headers["Referer"];
+
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
-        {
-            var pramQuery = Request.Query.Count == 0;
+        {      
+            var cookies = filterContext.HttpContext.Request.Cookies[COOKIES];
             _logToken = filterContext.HttpContext.Items["Authorized"] as LogToken;
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
-            if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && pramQuery))
+           if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && cookies == null))
             {
                 await next();
             }
@@ -38,6 +42,11 @@ namespace KantanMitsumori.Controllers
 
                 if (_logToken == null)
                 {
+                    RemoveCookies(COOKIES);
+                    RemoveCookies(CommonConst.sesCustNm_forPrint);
+                    RemoveCookies(CommonConst.sesCustZip_forPrint);
+                    RemoveCookies(CommonConst.sesCustAdr_forPrint);
+                    RemoveCookies(CommonConst.sesCustTel_forPrint);
                     if (!actionName.Contains("Index"))
                         filterContext.Result = ErrorAction();
                     else
@@ -50,10 +59,10 @@ namespace KantanMitsumori.Controllers
                 }
                 else
                 {
-                    _logToken!.sesCustNm_forPrint = GetCookieforPrint(CommonConst.sesCustNm_forPrint);
-                    _logToken!.sesCustZip_forPrint = GetCookieforPrint(CommonConst.sesCustZip_forPrint);
-                    _logToken!.sesCustAdr_forPrint = GetCookieforPrint(CommonConst.sesCustAdr_forPrint);
-                    _logToken!.sesCustTel_forPrint = GetCookieforPrint(CommonConst.sesCustTel_forPrint);
+                    _logToken!.sesCustNm_forPrint =  GetCookieforPrint(filterContext, CommonConst.sesCustNm_forPrint);
+                    _logToken!.sesCustZip_forPrint = GetCookieforPrint(filterContext,CommonConst.sesCustZip_forPrint);
+                    _logToken!.sesCustAdr_forPrint = GetCookieforPrint(filterContext,CommonConst.sesCustAdr_forPrint);
+                    _logToken!.sesCustTel_forPrint = GetCookieforPrint(filterContext,CommonConst.sesCustTel_forPrint);
                 }
                 await next();
             }
@@ -67,7 +76,8 @@ namespace KantanMitsumori.Controllers
                 return new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
                 {
                     messageCode = response.MessageCode,
-                    messageContent = response.MessageContent
+                    messageContent = response.MessageContent,
+
                 }));
             else
                 return new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
@@ -88,7 +98,9 @@ namespace KantanMitsumori.Controllers
             var ErrorViewModel = new ErrorViewModel()
             {
                 MessageCode = model.messageCode,
-                MessageContent = model.messageContent
+                MessageContent = model.messageContent,
+                logToken = _logToken
+                
             };
             return View(ErrorViewModel);
         }
@@ -98,15 +110,14 @@ namespace KantanMitsumori.Controllers
         /// <param name="token"></param>     
         public void setTokenCookie(string accessExp, string token)
         {
-            var currentDate = DateTime.Now;
-            //var RefreshExpires = _commonSettings.JwtSettings.AccessExpires;
-            var refreshExpires = accessExp;
-            TimeSpan time = TimeSpan.Parse(refreshExpires);
+            //var currentDate = DateTime.Now;         
+            //var refreshExpires = accessExp;
+            //TimeSpan time = TimeSpan.Parse(refreshExpires);
             // append cookie with refresh token to the http response
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
-                Expires = currentDate.Add(time),
+                //Expires = currentDate.Add(time),
             };
             Response.Cookies.Append(COOKIES, token, cookieOptions);
         }
@@ -115,9 +126,9 @@ namespace KantanMitsumori.Controllers
         /// </summary>
         /// <param name="Key"></param>
         /// <returns></returns>
-        public string GetCookieforPrint(string Key)
+        public string GetCookieforPrint(ActionExecutingContext filterContext,string Key)
         {
-            var cookies = Request.Cookies[Key]!;
+            var cookies = filterContext.HttpContext.Request.Cookies[Key]!;
             if (!string.IsNullOrEmpty(cookies))
             {
                 return cookies;
@@ -127,5 +138,20 @@ namespace KantanMitsumori.Controllers
                 return "";
             }
         }
+        /// <summary>
+        /// Remove Cookies
+        /// </summary>
+        /// <param name="Key"></param>
+        public void RemoveCookies(string Key)
+        {
+            var cookies = Request.Cookies[Key]!??"";
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = DateTime.Now.AddMonths(-1),
+            };
+            Response.Cookies.Append(Key, cookies, cookieOptions);
+        }
+        
     }
 }

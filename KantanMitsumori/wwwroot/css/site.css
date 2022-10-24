@@ -97,7 +97,7 @@ body {
 }
 
 .InpTitle2 {
-    PADDING-RIGHT: 2px;
+ /*   PADDING-RIGHT: 2px;
     PADDING-LEFT: 2px;
     FONT-SIZE: 11pt;
     Z-INDEX: 149;
@@ -110,7 +110,7 @@ body {
     BORDER-LEFT-STYLE: none;
     BACKGROUND-COLOR: transparent;
     TEXT-ALIGN: right;
-    BORDER-BOTTOM-STYLE: none
+    BORDER-BOTTOM-STYLE: none*/
 }
 
 .InpTitle3 {

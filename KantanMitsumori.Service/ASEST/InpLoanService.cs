@@ -111,7 +111,8 @@ namespace KantanMitsumori.Service
                 dtEstimates.BonusTimes = model.BonusTimes;
                 dtEstimates.PayTimes = model.PayTimes;
                 dtEstimateSubs.LoanModifyFlag = model.LoanModifyFlag == 1 ? true : false;
-                dtEstimateSubs.LoanRecalcSettingFlag = model.chkProhibitAutoCalc == 1 ? true : false;
+                dtEstimateSubs.LoanRecalcSettingFlag = model.chkProhibitAutoCalc == 1 ? false : true;
+                dtEstimateSubs.LoanInfo = 0;
                 _unitOfWork.Estimates.Update(dtEstimates);
                 _unitOfWork.EstimateSubs.Update(dtEstimateSubs);
                 await _unitOfWork.CommitAsync();
@@ -119,7 +120,7 @@ namespace KantanMitsumori.Service
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "UpdateInputCar");
+                _logger.LogError(ex, "UpdateInputLoan");
                 return ResponseHelper.Error<string>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }

@@ -18,6 +18,7 @@ namespace KantanMitsumori.Service
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
+        private CommonEstimate _commonEst;
 
         public InpCarPriceService(IMapper mapper
             , ILogger<InpCarPriceService> logger
@@ -26,7 +27,8 @@ namespace KantanMitsumori.Service
         {
             _mapper = mapper;
             _logger = logger;
-            _unitOfWork = unitOfWork;            
+            _unitOfWork = unitOfWork;
+            _commonEst = commonEst;
         }
 
         public ResponseBase<ResponseInpCarPrice> GetCarPriceInfo(RequestInpCarPrice request)
@@ -47,8 +49,7 @@ namespace KantanMitsumori.Service
                 _mapper.Map(estEntity, model);
                 _mapper.Map(estSubEntity, model);
                 GetUserData(estEntity, estSubEntity, userEntity, model);
-
-                return ResponseHelper.Ok<ResponseInpCarPrice>("OK", "OK", model);
+                return ResponseHelper.Ok<ResponseInpCarPrice>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), model);
             }
             catch (Exception ex)
             {
@@ -73,13 +74,14 @@ namespace KantanMitsumori.Service
                     model.UserSyakenNew = $"{userEntity.SyakenNewH ?? 0}";
                 }
             }
-            catch {
+            catch
+            {
                 model.UserSyakenZok = $"{userEntity.SyakenZokH ?? 0}";
                 model.UserSyakenNew = $"{userEntity.SyakenNewH ?? 0}";
             }
         }
 
-        public ResponseBase<bool?> Update(RequestUpdateCarPrice request)
+        public async Task<ResponseBase<int>> UpdateCarPrice(RequestUpdateCarPrice request, LogToken logToken)
         {
             try
             {
@@ -87,29 +89,30 @@ namespace KantanMitsumori.Service
                 var estEntity = _unitOfWork.Estimates.GetSingle(i => i.EstNo == request.EstNo && i.EstSubNo == request.EstSubNo);
                 var estSubEntity = _unitOfWork.EstimateSubs.GetSingle(i => i.EstNo == request.EstNo && i.EstSubNo == request.EstSubNo);
                 if (estEntity == null || estSubEntity == null)
-                    return ResponseHelper.Error<bool?>(HelperMessage.CEST040D, KantanMitsumoriUtil.GetMessage(HelperMessage.CEST040D), false);
-                
+                    return ResponseHelper.Error<int>(HelperMessage.CEST040D, KantanMitsumoriUtil.GetMessage(HelperMessage.CEST040D));
+
                 // Map data from request
                 _mapper.Map(request, estEntity);
                 _mapper.Map(request, estSubEntity);
-                
-                // Update data
-                var result = _unitOfWork.Estimates.Update(estEntity);                
-                result &= _unitOfWork.EstimateSubs.Update(estSubEntity);
-                _unitOfWork.Commit();
 
+                // Update data
+                var result = _unitOfWork.Estimates.Update(estEntity);
+                result &= _unitOfWork.EstimateSubs.Update(estSubEntity);
+                await _unitOfWork.CommitAsync();
                 if (!result)
-                    return ResponseHelper.Error<bool?>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(HelperMessage.CEST050S), false);
-                return ResponseHelper.Ok<bool?>("OK", "OK", true);
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(HelperMessage.CEST050S));
+                // 小計・合計計算
+                if (!await _commonEst.CalcSum(request.EstNo, request.EstSubNo!, logToken))
+                    return ResponseHelper.LogicError<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
 
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetCarPriceInfo");
-                return ResponseHelper.Error<bool?>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(HelperMessage.ISYS010I), false);
+                _logger.LogError(ex, "UpdateCarPrice");
+                return ResponseHelper.Error<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(HelperMessage.ISYS010I));
             }
         }
-
-       
     }
 }
