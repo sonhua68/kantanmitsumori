@@ -314,7 +314,7 @@ namespace KantanMitsumori.Service.Helper
             memory.Dispose();
         }
 
-        public void CheckImgPath(string strImagePath, string strSesName, string strDefImage, ref string strOutImagePath, string strImgSuffix, string cor, string fex)
+        public void CheckImgPath(string strImagePath, ref string strOutImagePath, string strImgSuffix, string cor, string fex)
         {
             string strOutImg = "";
             string strSaveName = "";
@@ -329,7 +329,7 @@ namespace KantanMitsumori.Service.Helper
                 {
                     strSaveName = cor + fex + strImgSuffix;
                 }
-                DownloadImg(strImagePath, strSesName, strDefImage, ref strOutImg, strSaveName);
+                DownloadImg(strImagePath, ref strOutImg, strSaveName);
                 strOutImagePath = strOutImg;
             }
         }
