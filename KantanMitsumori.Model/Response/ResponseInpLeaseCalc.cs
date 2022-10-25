@@ -6,6 +6,25 @@ using System.Threading.Tasks;
 
 namespace KantanMitsumori.Model.Response
 {
+    public class ResponseInpLease
+    {
+        public EstModel EstModel { get; set; } 
+        public EstimateIdeModel EstIDEModel { get; set; } 
+        public InpLeaseModelView EstModelView { get; set; }
+
+    }
+    public class InpLeaseModelView
+    {
+        public string? FirstRegistration { get; set; }   
+        public string? IsData { get; set; }
+        public string? lbl_MonthlyLease { get; set; }
+        public string? Label15 { get; set; }
+        public string? CheckCarYm { get; set; }
+        public string? InspectionExpirationDate { get; set; }
+        public string? LeaseStartMonth { get; set; }
+        public int? InsuranceCompanyId { get; set; }
+    }
+
     public class ResponseInpLeaseCalc
     {
         public List<string>? ListUILog { get; set; }
@@ -40,6 +59,6 @@ namespace KantanMitsumori.Model.Response
         public int LowerLimit { get; set; }
         public int UpperLimit { get; set; }
         public int UnitPrice { get; set; }
-  
+
     }
 }

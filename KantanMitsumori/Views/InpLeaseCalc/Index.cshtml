@@ -1,28 +1,9 @@
 ﻿@using KantanMitsumori.Model.Response
 @using KantanMitsumori.Helper.CommonFuncs;
-@model ResponseEstMainModel
+@model ResponseInpLease
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
-    var listMonth = DropDownList.ListMonth(true);
-    var listDay = DropDownList.ListDay(true);
-    var FirstRegistration = string.IsNullOrEmpty(Model.EstIDEModel.FirstRegistration) ? Model.EstModel.FirstRegYm : Model.EstIDEModel.FirstRegistration;
-    var IdeModel = Model.EstIDEModel;
-    var CarType = IdeModel.CarType;
-    var InsuranceFee = (IdeModel.InsuranceFee);
-    var PrePay = (IdeModel.DownPayment);
-    var TradeIn = (IdeModel.TradeInPrice);
-    var AdjustFee = (IdeModel.FeeAdjustment);
-    var MonthlyLeaseFee = IdeModel.MonthlyLeaseFee;
-    var IsData = !string.IsNullOrEmpty(IdeModel.EstNo) ? "1" : "0";
-    var lbl_MonthlyLease = MonthlyLeaseFee != 0 ? CommonFunction.setFormatCurrency(IdeModel.MonthlyLeaseFee, "") : "";
-    var Label15 = MonthlyLeaseFee != 0 ? "円" : "";
-    var CheckCarYm = string.IsNullOrEmpty(Model.EstModel.CheckCarYm) || Model.EstModel.CheckCarYm.Contains("無し") ? "99999999" : Model.EstModel.CheckCarYm;
-    var InspectionExpirationDate = string.IsNullOrEmpty(IdeModel.InspectionExpirationDate) ? CheckCarYm : IdeModel.InspectionExpirationDate;
-    var LeaseStartMonth = string.IsNullOrEmpty(IdeModel.LeaseStartMonth) ? DateTime.Now.ToString("yyyyMM") : IdeModel.LeaseStartMonth;
-    var InsuranceCompanyId = IdeModel.InsuranceCompanyId == -1 ? 0 : IdeModel.InsuranceCompanyId;
-    var today = DateTime.Today;
-
 }
 <form id="formInpLeaseCalc">
     <table border="0" width="100%">
@@ -72,7 +53,7 @@
                                                     <span id="Label4" class="inplabel">年</span>
                                                     <select name="cboFirstMonth" id="cboFirstMonth" style="width: 45px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeFirstYM();">
                                                         @{
-                                                            foreach (var item in listMonth)
+                                                            foreach (var item in DropDownList.ListMonth(true))
                                                             {
                                                                 <option value="@item.Value">@item.Text</option>
                                                             }
@@ -98,7 +79,7 @@
                                                     <span id="Label6" class="inplabel">年</span>
                                                     <select name="cbo_ExpiresMon" id="cbo_ExpiresMon" class="inpbox" style="width: 45px; border: solid 1px mediumvioletred;" onchange="return changeExpiresMonth();">
                                                         @{
-                                                            foreach (var item in listMonth)
+                                                            foreach (var item in DropDownList.ListMonth(true))
                                                             {
                                                                 <option value="@item.Value">@item.Text</option>
                                                             }
@@ -107,7 +88,7 @@
                                                     <span id="Label7" class="inplabel">月</span>
                                                     <select name="cbo_ExpiresDay" id="cbo_ExpiresDay" class="inpbox" style="width: 55px; border: solid 1px mediumvioletred;" onchange="return changeExpiresDay();">
                                                         @{
-                                                            foreach (var item in listDay)
+                                                            foreach (var item in DropDownList.ListDay(true))
                                                             {
                                                                 <option value="@item.Value">@item.Text</option>
                                                             }
@@ -133,7 +114,7 @@
                                                     <span id="Label9" class="inplabel">年</span>
                                                     <select name="cbo_LeaseSttM" id="cbo_LeaseSttM" style="width: 45px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeLeaseSttYM();">
                                                         @{
-                                                            foreach (var item in listMonth)
+                                                            foreach (var item in DropDownList.ListMonth(true))
                                                             {
                                                                 <option value="@item.Value">@item.Text</option>
                                                             }
@@ -208,7 +189,7 @@
                                                     <span id="lbl_InsuranceFee" class="inplabel">保険料</span>
                                                 </td>
                                                 <td class="inptd" align="left" style="height: 28px">
-                                                    <input name="InsuranceFee" type="text" id="InsuranceFee" class="inpbox_r" style="border: 1px solid mediumvioletred; width: 90px; background-color: rgb(169, 169, 169);" onkeypress="return onlyNumbersInsuranceFee(event);" onchange="chgSetBtnConfim();" value="@InsuranceFee">
+                                                    <input name="InsuranceFee" type="text" id="InsuranceFee" class="inpbox_r" style="border: 1px solid mediumvioletred; width: 90px; background-color: rgb(169, 169, 169);" onkeypress="return onlyNumbersInsuranceFee(event);" onchange="chgSetBtnConfim();" value="@Model.EstIDEModel.InsuranceFee">
                                                     <span id="Label11" class="inplabel">円</span>
                                                 </td>
                                             </tr>
@@ -218,7 +199,7 @@
                                                 </td>
                                                 <td class="inptd" align="left">
                                                     <input name="PrePay" type="text" id="PrePay" class="inpbox_r" style="border: solid 1px mediumvioletred;
-                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="@PrePay">
+                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="@Model.EstIDEModel.DownPayment">
                                                     <span id="Label12" class="inplabel" style="display:inline-block;width:25px;">円</span>
                                                     <span id="lbl_ErrPrePay" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
                                                 </td>
@@ -229,7 +210,7 @@
                                                 </td>
                                                 <td class="inptd" align="left" style="height: 28px">
                                                     <input name="TradeIn" type="text" id="TradeIn" class="inpbox_r" style="border: solid 1px mediumvioletred;
-                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="@TradeIn">
+                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="@Model.EstIDEModel.TradeInPrice">
                                                     <span id="Label13" class="inplabel" style="display:inline-block;width:25px;">円</span>
                                                     <span id="lbl_ErrTradeIn" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
                                                 </td>
@@ -240,7 +221,7 @@
                                                 </td>
                                                 <td class="inptd" align="left">
                                                     <input name="AdjustFee" type="text" id="AdjustFee" class="inpbox_r" style="border: solid 1px mediumvioletred;
-                                                width: 90px" onkeypress="return onlyNegativeNumbers(event, event.target.value);" onchange="chgSetBtnConfim();" value="@AdjustFee">
+                                                width: 90px" onkeypress="return onlyNegativeNumbers(event, event.target.value);" onchange="chgSetBtnConfim();" value="@Model.EstIDEModel.FeeAdjustment">
                                                     <span id="Label14" class="inplabel" style="display:inline-block;width:25px;">円</span>
                                                     <span id="lbl_ErrAdjustFee" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
                                                 </td>
@@ -256,8 +237,8 @@
                                                     <span id="lbl_MonthlyLeaseTitle" class="inplabel">月額リース料(税込)</span>
                                                 </td>
                                                 <td class="inptd" align="left">
-                                                    <span id="lbl_MonthlyLease" class="inplabel" style="font-family:ＭＳ Ｐゴシック;margin-left: 15px;">@lbl_MonthlyLease</span>
-                                                    <span id="Label15" class="inplabel" style="display:inline-block;width:25px;">@Label15</span>
+                                                    <span id="lbl_MonthlyLease" class="inplabel" style="font-family:ＭＳ Ｐゴシック;margin-left: 15px;">@Model.EstModelView.lbl_MonthlyLease</span>
+                                                    <span id="Label15" class="inplabel" style="display:inline-block;width:25px;">@Model.EstModelView.Label15</span>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -279,16 +260,16 @@
                                 </td>
                         </tbody>
                     </table>
-                    <input name="IsData" type="hidden" id="hidIsData" value="@IsData">
-                    <input name="CarType" type="hidden" id="hidCarType" value="@CarType">
-                    <input name="ElectricCar" type="hidden" id="hidElectricCar" value="@IdeModel.IsElectricCar">
+                    <input name="IsData" type="hidden" id="hidIsData" value="@Model.EstModelView.IsData">
+                    <input name="CarType" type="hidden" id="hidCarType" value="@Model.EstIDEModel.CarType">
+                    <input name="ElectricCar" type="hidden" id="hidElectricCar" value="@Model.EstIDEModel.IsElectricCar">
                     <input name="FirstTerm" type="hidden" id="hidFirstTerm">
                     <input name="AfterSecondTerm" type="hidden" id="hidAfterSecondTerm">
                     <input name="FirstReg" type="hidden" id="hidFirstReg">
                     <input name="ExpiresDate" type="hidden" id="hidExpiresDate">
                     <input name="LeaseSttMonth" type="hidden" id="hidLeaseSttMonth">
-                    <input name="ContractTimes" type="hidden" id="hidContractTimes" value="@IdeModel.LeasePeriod">
-                    <input name="LeasePeriod" type="hidden" id="hidLeasePeriod" value="@IdeModel.LeasePeriod">
+                    <input name="ContractTimes" type="hidden" id="hidContractTimes" value="@Model.EstIDEModel.LeasePeriod">
+                    <input name="LeasePeriod" type="hidden" id="hidLeasePeriod" value="@Model.EstIDEModel.LeasePeriod">
                     <input name="LeaseExpirationDate" type="hidden" id="hidLeaseExpirationDate">
                     <input name="ContractPlan" type="hidden" id="hidContractPlan">
                     <input name="InsurExpanded" type="hidden" id="hidInsurExpanded">
@@ -308,29 +289,29 @@
 <script src="~/js/InpLeaseCalc.js"></script>
 <script>
     SetInitData();
-    if (@IdeModel.CarType!= 0) {
-        getValTerm(@IdeModel.CarType);
+    if (@Model.EstIDEModel.CarType!= 0) {
+        getValTerm(@Model.EstIDEModel.CarType);
     }
     setInitialValue();
-    Framework.SetSelectedNumber("cbo_ContractTimes", @IdeModel.LeasePeriod);
+    Framework.SetSelectedNumber("cbo_ContractTimes", @Model.EstIDEModel.LeasePeriod);
     changeLeaseEnd();
-    if (@InsuranceCompanyId != 0) {
+    if (@Model.EstModelView.InsuranceCompanyId != 0) {
         changeOptionIns(false)
-        Framework.SetSelectedNumber("cbo_InsuranceCompany", @IdeModel.InsuranceCompanyId);
+        Framework.SetSelectedNumber("cbo_InsuranceCompany", @Model.EstIDEModel.InsuranceCompanyId);
         Framework.SetSelectedNumber("cbo_OptionInsurance", 1);
     } else {
         $get('cbo_InsuranceCompany').value = '';
         Framework.SetSelectedNumber("cbo_OptionInsurance", 0);
     }
-    Framework.SetSelectedNumber("cbo_InsurExpanded", @IdeModel.IsExtendedGuarantee);
+    Framework.SetSelectedNumber("cbo_InsurExpanded", @Model.EstIDEModel.IsExtendedGuarantee);
 
-    $("#InsuranceFee").val(@InsuranceFee);
-    $("#hidInsuranceCompany").val(@InsuranceCompanyId)
+    $("#InsuranceFee").val(@Model.EstIDEModel.InsuranceFee);
+    $("#hidInsuranceCompany").val(@Model.EstModelView.InsuranceCompanyId)
     function SetInitData() {
-        Framework.SetSelectedNumber("cboCarType", @IdeModel.CarType);
-        let firstRegistration = @FirstRegistration;
-        let leaseStartMonth = @LeaseStartMonth;
-        let inspectionExpirationDate = @InspectionExpirationDate;
+        Framework.SetSelectedNumber("cboCarType", @Model.EstIDEModel.CarType);
+        let firstRegistration = @Model.EstModelView.FirstRegistration;
+        let leaseStartMonth = @Model.EstModelView.LeaseStartMonth;
+        let inspectionExpirationDate = @Model.EstModelView.InspectionExpirationDate;
         if (firstRegistration != null || firstRegistration != "") {
             setValueCbbYear("cboFirstYear", firstRegistration);
             setValueCbbMonth("cboFirstMonth", firstRegistration);
@@ -345,7 +326,7 @@
             setValueCbbMonth("cbo_ExpiresMon", inspectionExpirationDate);
             setValueCbbDay("cbo_ExpiresDay", inspectionExpirationDate);
         }
-        Framework.SetSelectedNumber("cbo_ContractPlan", @IdeModel.ContractPlanId);
+        Framework.SetSelectedNumber("cbo_ContractPlan", @Model.EstIDEModel.ContractPlanId);
 
     }
 

@@ -27,7 +27,7 @@ namespace KantanMitsumori.Controllers
         #region InpLeaseCalc 
         public IActionResult Index()
         {
-            var response = _inpLeaseCalc.GetDataEstimate(_logToken!);
+            var response = _inpLeaseCalc.GetDataInpLease(_logToken!);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);

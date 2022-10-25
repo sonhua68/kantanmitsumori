@@ -7,7 +7,7 @@ namespace KantanMitsumori.IService
 {
     public interface IInpLeaseCalcService
     {
-        ResponseBase<ResponseEstMainModel> GetDataEstimate(LogToken logtoken);
+        ResponseBase<ResponseInpLease> GetDataInpLease(LogToken logtoken);
         ResponseBase<List<ResponseCarType>> GetCarType();
         ResponseBase<List<ResponseContractPlan>> GetContractPlan();
         ResponseBase<List<ResponseVolInsurance>> GetVolInsurance();

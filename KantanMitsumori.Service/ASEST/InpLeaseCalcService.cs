@@ -43,34 +43,37 @@ namespace KantanMitsumori.Service
             _unitOfWorkIDE = unitOfWorkIDE;
             _testSettings = testSettings.Value;
         }
-        public ResponseBase<ResponseEstMainModel> GetDataEstimate(LogToken logtoken)
+        public ResponseBase<ResponseInpLease> GetDataInpLease(LogToken logtoken)
         {
             try
             {
-                var response = new ResponseEstMainModel
+                var response = new ResponseInpLease
                 {
-                    EstCustomerModel = new EstCustomerModel(),
                     EstIDEModel = new EstimateIdeModel(),
                     EstModel = new EstModel(),
-                    EstModelView = new EstModelView()
+                    EstModelView = new InpLeaseModelView()
+
                 };
                 var estData = _commonEst.SetEstData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
                 if (estData.ResultStatus == (int)enResponse.isSuccess)
-                    response.EstModel = estData.Data!;   
+                    response.EstModel = estData.Data!;
                 if (response.EstModel.LeaseFlag == "1")
                 {
                     response.EstIDEModel = _commonEst.SetEstIDEData(logtoken);
                     if (response.EstIDEModel == null)
-                        return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
-                }                           
+                        return ResponseHelper.Error<ResponseInpLease>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+                }
+                response = BindingData(response);
                 return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetDataEstimate");
-                return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+                return ResponseHelper.Error<ResponseInpLease>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
+
+
         public ResponseBase<List<ResponseCarType>> GetCarType()
         {
             try
@@ -169,7 +172,7 @@ namespace KantanMitsumori.Service
                 }
                 if (!IsFirstRegOverLeaseSttMonth(model))
                 {
-                    data.IsError = true;                 
+                    data.IsError = true;
                     return ResponseHelper.Ok<ResponseInpLeaseCalc>(HelperMessage.I0003, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0003), data);
 
                 }
@@ -496,8 +499,20 @@ namespace KantanMitsumori.Service
             return dRestriction;
 
         }
+        private ResponseInpLease BindingData(ResponseInpLease Model)
+        {
+            Model.EstModelView.FirstRegistration = string.IsNullOrEmpty(Model.EstIDEModel!.FirstRegistration) ? Model.EstModel!.FirstRegYm : Model.EstIDEModel.FirstRegistration;
+            var IdeModel = Model.EstIDEModel;
+            Model.EstModelView.IsData = !string.IsNullOrEmpty(IdeModel.EstNo) ? "1" : "0";
+            Model.EstModelView.lbl_MonthlyLease = IdeModel.MonthlyLeaseFee != 0 ? CommonFunction.setFormatCurrency(IdeModel.MonthlyLeaseFee, "") : "";
+            Model.EstModelView.Label15 = IdeModel.MonthlyLeaseFee != 0 ? "円" : "";
+            Model.EstModelView.CheckCarYm = string.IsNullOrEmpty(Model.EstModel.CheckCarYm) || Model.EstModel.CheckCarYm.Contains("無し") ? "99999999" : Model.EstModel.CheckCarYm;
+            Model.EstModelView.InspectionExpirationDate = string.IsNullOrEmpty(IdeModel.InspectionExpirationDate) ? Model.EstModelView.CheckCarYm : IdeModel.InspectionExpirationDate;
+            Model.EstModelView.LeaseStartMonth = string.IsNullOrEmpty(IdeModel.LeaseStartMonth) ? DateTime.Now.ToString("yyyyMM") : IdeModel.LeaseStartMonth;
+            Model.EstModelView.InsuranceCompanyId = IdeModel.InsuranceCompanyId == -1 ? 0 : IdeModel.InsuranceCompanyId;
+            return Model;
+        }
 
-       
         #endregion Func  private
     }
 
