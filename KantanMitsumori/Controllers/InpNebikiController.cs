@@ -33,7 +33,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpNebiki([FromForm] RequestUpdateInpNebiki requestData)
         {
-            var response = await _estimateService.UpdateInpNebiki(requestData);
+            var response = await _estimateService.UpdateInpNebiki(requestData,_logToken!);
             return Ok(response);
         }
         #endregion InpNebiki
