@@ -35,6 +35,7 @@ namespace KantanMitsumori.Controllers
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
            if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && cookies == null))
+
             {
                 await next();
             }

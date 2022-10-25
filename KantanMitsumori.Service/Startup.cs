@@ -21,9 +21,11 @@ namespace KantanMitsumori.Service
             // Add business services
             services.AddTransient<IEstMainService, EstMainService>();
             services.AddTransient<IEstimateIdeService, EstimateIdeService>();
-            services.AddTransient<IEstimateService, EstimateService>();            
+            services.AddTransient<IEstimateService, EstimateService>();
             services.AddTransient<IEstimateSubService, EstimateSubService>();
-            services.AddTransient<IReportService, ReportService>();
+            services.AddTransient<IEstimateService, EstimateService>();   
+            services.AddTransient<IEstimateSubService, EstimateSubService>();
+            //services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IInpLoanService, InpLoanService>();
             services.AddTransient<ISelCarService, SelCarService>();
             services.AddTransient<IInpZeiHokenService, InpZeiHokenService>();
@@ -32,12 +34,23 @@ namespace KantanMitsumori.Service
             services.AddTransient<IInpNotesService, InpNotesService>();
             services.AddTransient<IInpSitaCarService, InpSitaCarService>();
             services.AddTransient<IInpSyohiyoService, InpSyohiyoService>();
-            services.AddTransient<ISerEstService, SerEstService>();
+            services.AddTransient<IPreExaminationService, PreExaminationService>();
+            services.AddTransient<IInpLeaseCalcService, InpLeaseCalcService>();
+            services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();
+            services.AddTransient<IPreExaminationService, PreExaminationService>();            
+            services.AddTransient<IInpCarPriceService, InpCarPriceService>();
+            services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();  
+            return services;
+        }
 
+        public static IServiceCollection AddAuthenService(this IServiceCollection services)
+        {   
+            services.AddTransient<ISerEstService, SerEstService>();
             // Add generic DI
             services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();
             services.AddTransient<IPreExaminationService, PreExaminationService>();            
             services.AddTransient<IInpCarPriceService, InpCarPriceService>();
+
             return services;
         }
 

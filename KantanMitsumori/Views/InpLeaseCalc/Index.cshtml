@@ -1,0 +1,333 @@
+﻿@using KantanMitsumori.Model.Response
+@using KantanMitsumori.Helper.CommonFuncs;
+@model ResponseInpLease
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "かんたん見積";
+}
+<form id="formInpLeaseCalc">
+    <table border="0" width="100%">
+        <!-- Header -->
+        <tbody>
+            <tr>
+                <td align="center">
+                    <table border="0">
+                        <tbody>
+                            <tr>
+                                <td class="inptd" style="background-color: White; height: 27px;" align="left">
+                                    <span id="Label1" class="inplabel" style="color:#3C82ED;font-size:14pt;font-weight:bold;">オートフラットお手軽中古車・リース料計算情報の入力</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" align="right">
+                                    <table class="inptable" id="Table2" cellpadding="2" cellspacing="0" style="background-color: #ffccff;">
+                                        <tbody>
+                                            <tr>
+                                                <td class="tabletitle" colspan="2" style="background-color: mediumvioletred; height: 15px" align="left">
+                                                    <span id="Label2" class="titlelabel" style="display:inline-block;width:150px;">リース条件</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="Label3" class="inplabel">用途車種</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cboCarType" id="cboCarType" style="border: solid 1px mediumvioletred;" class="inpbox" onchange="changeCarType();">
+                                                    </select>
+                                                    <input name="chkElectricCar" type="checkbox" id="chkElectricCar" onchange="changeElectricCar();">電気自動車
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_CarModel" class="inplabel">初度登録月</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cboFirstYear" id="cboFirstYear" style="width: 70px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeFirstYM();">
+                                                        @{
+                                                            foreach (var item in DropDownList.ListMinusYears(true, 12))
+                                                            {
+                                                                <option value="@item.Value">@item.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <span id="Label4" class="inplabel">年</span>
+                                                    <select name="cboFirstMonth" id="cboFirstMonth" style="width: 45px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeFirstYM();">
+                                                        @{
+                                                            foreach (var item in DropDownList.ListMonth(true))
+                                                            {
+                                                                <option value="@item.Value">@item.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <span id="Label5" class="inplabel">月</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_InsurExpires" class="inplabel">車検満了日(予定日)</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_ExpiresYear" id="cbo_ExpiresYear" style="width: 70px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeExpiresYear();">
+
+                                                        @{
+                                                            foreach (var item in DropDownList.ListYear(true, 3))
+                                                            {
+                                                                <option value="@item.Value">@item.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <span id="Label6" class="inplabel">年</span>
+                                                    <select name="cbo_ExpiresMon" id="cbo_ExpiresMon" class="inpbox" style="width: 45px; border: solid 1px mediumvioletred;" onchange="return changeExpiresMonth();">
+                                                        @{
+                                                            foreach (var item in DropDownList.ListMonth(true))
+                                                            {
+                                                                <option value="@item.Value">@item.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <span id="Label7" class="inplabel">月</span>
+                                                    <select name="cbo_ExpiresDay" id="cbo_ExpiresDay" class="inpbox" style="width: 55px; border: solid 1px mediumvioletred;" onchange="return changeExpiresDay();">
+                                                        @{
+                                                            foreach (var item in DropDownList.ListDay(true))
+                                                            {
+                                                                <option value="@item.Value">@item.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <span id="Label8" class="inplabel">日</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_LeaseStart" class="inplabel">リース開始月</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_LeaseSttY" id="cbo_LeaseSttY" style="width: 70px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeLeaseSttYM();">
+
+                                                        @{
+                                                            foreach (var item in DropDownList.ListYear(false, 1))
+                                                            {
+                                                                <option value="@item.Value">@item.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <span id="Label9" class="inplabel">年</span>
+                                                    <select name="cbo_LeaseSttM" id="cbo_LeaseSttM" style="width: 45px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeLeaseSttYM();">
+                                                        @{
+                                                            foreach (var item in DropDownList.ListMonth(true))
+                                                            {
+                                                                <option value="@item.Value">@item.Text</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                    <span id="Label10" class="inplabel">月</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_ContractTimes" class="inplabel">契約期間</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_ContractTimes" id="cbo_ContractTimes" style="width: 95px; border: solid 1px mediumvioletred;
+                                                font-family:ＭＳ Ｐゴシック;" class="inpbox" onchange="changeContractTimes();">
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_LeaseEndTitle" class="inplabel">リース満了日</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_LeaseEnd" class="inplabel" style="font-family:ＭＳ Ｐゴシック;"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_ContractPlan" class="inplabel">契約プラン</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_ContractPlan" id="cbo_ContractPlan" style="width: 155px; border: solid 1px mediumvioletred;
+                                                font-family: ＭＳ Ｐゴシック;" onchange="changeContractPlan();">
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_InsurExpand" class="inplabel">延長保証（＋1年）</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_InsurExpanded" id="cbo_InsurExpanded" style="width: 95px; border: solid 1px mediumvioletred;
+                                                font-family:ＭＳ Ｐゴシック;" onchange="changeExtendedGuarantee();">
+                                                        <option value="0">あり</option>
+                                                        <option value="1">なし</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_OptionInsurance" class="inplabel">任意保険</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_OptionInsurance" id="cbo_OptionInsurance" style="width: 95px; border: solid 1px mediumvioletred;
+                                                font-family:ＭＳ Ｐゴシック;" onchange="changeOptionIns(true);">
+                                                        <option value="1">あり</option>
+                                                        <option value="0">なし</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_InsuranceCompany" class="inplabel">保険会社名</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <select name="cbo_InsuranceCompany" id="cbo_InsuranceCompany" style="width: 305px; border: 1px solid mediumvioletred; background-color: rgb(169, 169, 169);" onchange="changeInsuranCompany();" disabled="">
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left" style="height: 28px">
+                                                    <span id="lbl_InsuranceFee" class="inplabel">保険料</span>
+                                                </td>
+                                                <td class="inptd" align="left" style="height: 28px">
+                                                    <input name="InsuranceFee" type="text" id="InsuranceFee" class="inpbox_r" style="border: 1px solid mediumvioletred; width: 90px; background-color: rgb(169, 169, 169);" onkeypress="return onlyNumbersInsuranceFee(event);" onchange="chgSetBtnConfim();" value="@Model.EstIDEModel.InsuranceFee">
+                                                    <span id="Label11" class="inplabel">円</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_PrePay" class="inplabel">頭金(税込)</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <input name="PrePay" type="text" id="PrePay" class="inpbox_r" style="border: solid 1px mediumvioletred;
+                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="@Model.EstIDEModel.DownPayment">
+                                                    <span id="Label12" class="inplabel" style="display:inline-block;width:25px;">円</span>
+                                                    <span id="lbl_ErrPrePay" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left" style="height: 28px">
+                                                    <span id="lbl_TradeIn" class="inplabel">下取(税込)</span>
+                                                </td>
+                                                <td class="inptd" align="left" style="height: 28px">
+                                                    <input name="TradeIn" type="text" id="TradeIn" class="inpbox_r" style="border: solid 1px mediumvioletred;
+                                                width: 90px" onkeypress="return onlyNumbers(event);" onchange="chgSetBtnConfim();" value="@Model.EstIDEModel.TradeInPrice">
+                                                    <span id="Label13" class="inplabel" style="display:inline-block;width:25px;">円</span>
+                                                    <span id="lbl_ErrTradeIn" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_AdjustFee" class="inplabel">手数料調整(税込)</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <input name="AdjustFee" type="text" id="AdjustFee" class="inpbox_r" style="border: solid 1px mediumvioletred;
+                                                width: 90px" onkeypress="return onlyNegativeNumbers(event, event.target.value);" onchange="chgSetBtnConfim();" value="@Model.EstIDEModel.FeeAdjustment">
+                                                    <span id="Label14" class="inplabel" style="display:inline-block;width:25px;">円</span>
+                                                    <span id="lbl_ErrAdjustFee" class="inplabel" style="color:Red;background-color:Transparent;font-family:ＭＳ Ｐゴシック;font-size:Medium;"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inpbtntd" colspan="2" style="text-align: right;">
+                                                    <span id="lbl_ErrorMessage" class="inplabel" style="color:Red;font-size:Medium;display: none;"></span>
+                                                    <input type="button" name="btnLeaseCalc" value="リース料計算" onclick="return InpLeaseCal();return false;" id="btnLeaseCalc" class="Btn1" style="height:32px;">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_MonthlyLeaseTitle" class="inplabel">月額リース料(税込)</span>
+                                                </td>
+                                                <td class="inptd" align="left">
+                                                    <span id="lbl_MonthlyLease" class="inplabel" style="font-family:ＭＳ Ｐゴシック;margin-left: 15px;">@Model.EstModelView.lbl_MonthlyLease</span>
+                                                    <span id="Label15" class="inplabel" style="display:inline-block;width:25px;">@Model.EstModelView.Label15</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="inpbtntd" style="text-align: left;">
+                                                    <input type="button" name="btnBack" value="戻る" id="btnBack" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
+                                                </td>
+                                                <td class="inpbtntd" style="text-align: right;">
+                                                    <input type="button" name="btnPrintShow" onclick="return PrintShow();return false;" value="見積書印刷" id="btnPrintShow" class="Btn1" style="height:32px;" disabled="">
+                                                    <input type="button" name="btnBookExam" value="予定審査" onclick="return BookExam();return false;" id="btnBookExam" class="Btn1" style="height:32px;width:100px;" disabled="">
+                                                    <input type="button" name="btnExamination" value="確定審査" onclick="return Examination();return false;" id="btnExamination" class="Btn1" style="height:32px;width:100px;" disabled="">
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td id="listlogLease" class="inptd" style="background-color: White; height: 27px;" align="left">
+                                </td>
+                        </tbody>
+                    </table>
+                    <input name="IsData" type="hidden" id="hidIsData" value="@Model.EstModelView.IsData">
+                    <input name="CarType" type="hidden" id="hidCarType" value="@Model.EstIDEModel.CarType">
+                    <input name="ElectricCar" type="hidden" id="hidElectricCar" value="@Model.EstIDEModel.IsElectricCar">
+                    <input name="FirstTerm" type="hidden" id="hidFirstTerm">
+                    <input name="AfterSecondTerm" type="hidden" id="hidAfterSecondTerm">
+                    <input name="FirstReg" type="hidden" id="hidFirstReg">
+                    <input name="ExpiresDate" type="hidden" id="hidExpiresDate">
+                    <input name="LeaseSttMonth" type="hidden" id="hidLeaseSttMonth">
+                    <input name="ContractTimes" type="hidden" id="hidContractTimes" value="@Model.EstIDEModel.LeasePeriod">
+                    <input name="LeasePeriod" type="hidden" id="hidLeasePeriod" value="@Model.EstIDEModel.LeasePeriod">
+                    <input name="LeaseExpirationDate" type="hidden" id="hidLeaseExpirationDate">
+                    <input name="ContractPlan" type="hidden" id="hidContractPlan">
+                    <input name="InsurExpanded" type="hidden" id="hidInsurExpanded">
+                    <input name="OptionInsurance" type="hidden" id="hidOptionInsurance">
+                    <input name="InsuranceCompany" type="hidden" id="hidInsuranceCompany">
+                    <input name="DiffMonth" type="hidden" id="hidDiffMonth">
+                    <input name="CalcDiffMonth" type="hidden" id="hidCalcDiffMonth">
+                    <input name="LeaseSttDay" type="hidden" id="hidLeaseSttDay">
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+<script src="~/js/funcmoment.js"></script>
+<script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
+<script src="~/js/InpLeaseCalc.js"></script>
+<script>
+    SetInitData();
+    if (@Model.EstIDEModel.CarType!= 0) {
+        getValTerm(@Model.EstIDEModel.CarType);
+    }
+    setInitialValue();
+    Framework.SetSelectedNumber("cbo_ContractTimes", @Model.EstIDEModel.LeasePeriod);
+    changeLeaseEnd();
+    if (@Model.EstModelView.InsuranceCompanyId != 0) {
+        changeOptionIns(false)
+        Framework.SetSelectedNumber("cbo_InsuranceCompany", @Model.EstIDEModel.InsuranceCompanyId);
+        Framework.SetSelectedNumber("cbo_OptionInsurance", 1);
+    } else {
+        $get('cbo_InsuranceCompany').value = '';
+        Framework.SetSelectedNumber("cbo_OptionInsurance", 0);
+    }
+    Framework.SetSelectedNumber("cbo_InsurExpanded", @Model.EstIDEModel.IsExtendedGuarantee);
+
+    $("#InsuranceFee").val(@Model.EstIDEModel.InsuranceFee);
+    $("#hidInsuranceCompany").val(@Model.EstModelView.InsuranceCompanyId)
+    function SetInitData() {
+        Framework.SetSelectedNumber("cboCarType", @Model.EstIDEModel.CarType);
+        let firstRegistration = @Model.EstModelView.FirstRegistration;
+        let leaseStartMonth = @Model.EstModelView.LeaseStartMonth;
+        let inspectionExpirationDate = @Model.EstModelView.InspectionExpirationDate;
+        if (firstRegistration != null || firstRegistration != "") {
+            setValueCbbYear("cboFirstYear", firstRegistration);
+            setValueCbbMonth("cboFirstMonth", firstRegistration);
+        }
+        if (leaseStartMonth != null || leaseStartMonth != "") {
+
+            setValueCbbYear("cbo_LeaseSttY", leaseStartMonth);
+            setValueCbbMonth("cbo_LeaseSttM", leaseStartMonth);
+        }
+        if (inspectionExpirationDate != null || inspectionExpirationDate != "") {
+            setValueCbbYear("cbo_ExpiresYear", inspectionExpirationDate);
+            setValueCbbMonth("cbo_ExpiresMon", inspectionExpirationDate);
+            setValueCbbDay("cbo_ExpiresDay", inspectionExpirationDate);
+        }
+        Framework.SetSelectedNumber("cbo_ContractPlan", @Model.EstIDEModel.ContractPlanId);
+
+    }
+
+</script>

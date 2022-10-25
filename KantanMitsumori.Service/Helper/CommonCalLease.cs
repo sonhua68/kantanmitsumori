@@ -1,37 +1,36 @@
-﻿using KantanMitsumori.Helper.CommonFuncs;
+﻿// Create date 2022/06/2022 By Hoai Phong
+using GrapeCity.ActiveReports.Rendering.Tools;
+using GrapeCity.DataVisualization.TypeScript;
+using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Enum;
+using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure.Base;
+using KantanMitsumori.Model.Request;
 using Microsoft.Extensions.Logging;
-
 namespace KantanMitsumori.Service.Helper
 {
     internal class CommonCalLease
     {
         private readonly ILogger _logger;
         private readonly IUnitOfWorkIDE _unitOfWorkIde;
-        private int carType = 0;
-        private string firstReg = "";
-        private int contractTime = 0;
-        private string leaseSttMonth = "";
-        private string leaseExpirationDate = "";
-        private string expiresDate = "";
-        private int insurExpanded = 0;
-        private double consumptionTax = 0;
-        private int firstTerm = 0;
-        private int afterSecondTerm = 0;
-        private int insuranceCompany = 0;
-        private int contractPlan = 0;
-        private int leasePeriod = 0;
-        private double promotion = 0.0;
-        private int pricePropertyFee1 = 0;
-        private int pricePropertyFee2 = 0;
-        private int pricePropertyFee3 = 0;
-        private int pricePropertyFee4 = 0;
 
-        public CommonCalLease(ILogger logger, IUnitOfWorkIDE unitOfWorkIde)
+        public double consumptionTax = 0;
+        public double promotion = 0.0;
+        public int pricePropertyFee1 = 0;
+        public int pricePropertyFee2 = 0;
+        public int pricePropertyFee3 = 0;
+        public int pricePropertyFee4 = 0;
+        public int logCreditFee = 0;
+        private readonly TestSettings _testSettings;
+        public List<string> _lstWriteLogUI = new List<string>();
+        private RequestInpLeaseCalc _requestInCalc;
+        public CommonCalLease(ILogger logger, IUnitOfWorkIDE unitOfWorkIde, List<string> lstWriteLogUI, RequestInpLeaseCalc requestInCalc, TestSettings testSettings)
         {
             _logger = logger;
             _unitOfWorkIde = unitOfWorkIde;
+            _lstWriteLogUI = lstWriteLogUI;
+            _requestInCalc = requestInCalc;
+            _testSettings = testSettings;
         }
         /// <summary>
         /// 4-1 file doc  lay thue tieu thu  
@@ -41,12 +40,10 @@ namespace KantanMitsumori.Service.Helper
         public double GetConsumptionTax()
         {
             var dt = _unitOfWorkIde.ConsumptionTaxs.GetAll().ToList();
-            if (dt.Count > 0)
-            {
-                consumptionTax = dt.FirstOrDefault()!.ConsumptionTax;
-
-            }
-            _logger.LogInformation("4-1 ConsumptionTax:={0}", consumptionTax);
+            consumptionTax = dt.Count > 0 ? dt.FirstOrDefault()!.ConsumptionTax : 0;
+            _logger.LogInformation("4-1 ConsumptionTax: {0}", consumptionTax);
+            addLogUI("4-1 ConsumptionTax: " + consumptionTax);
+            addLogUI("--------------");
             return consumptionTax;
         }
         /// <summary>
@@ -58,13 +55,18 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="taxFreeAll"></param>
         /// <param name="consumptionTax"></param>
         /// <returns></returns>
-        public decimal GetPrice(int salesSum, int taxInsAll, int taxFreeAll, decimal consumptionTax)
+        public double GetPrice(int? salesSum, int? taxInsAll, int? taxFreeAll)
         {
-            decimal dPrice = (salesSum - taxInsAll - taxFreeAll) / (1 + consumptionTax) + taxInsAll + taxFreeAll;
-            _logger.LogInformation("SalesSum :={0}", salesSum);
-            _logger.LogInformation("TaxInsAll :={0}", taxInsAll);
-            _logger.LogInformation("TaxFreeAll :={0}", taxFreeAll);
-            _logger.LogInformation("4-2 Price = (SalesSum - TaxInsAll - TaxFreeAll) / (1 + ConsumptionTax) + TaxInsAll + TaxFreeAll :={0}", dPrice);
+            double dPrice = (double)((salesSum! - taxInsAll! - taxFreeAll!) / (1 + consumptionTax) + taxInsAll! + taxFreeAll!);
+            _logger.LogInformation("SalesSum: {0}", salesSum);
+            _logger.LogInformation("TaxInsAll:{0}", taxInsAll);
+            _logger.LogInformation("TaxFreeAll: {0}", taxFreeAll);
+            _logger.LogInformation("4-2 Price =(SalesSum - TaxInsAll - TaxFreeAll) / (1 + ConsumptionTax) + TaxInsAll + TaxFreeAll :={0}", dPrice);
+            addLogUI("SalesSum: " + salesSum);
+            addLogUI("TaxInsAllx: " + taxInsAll);
+            addLogUI("TaxFreeAllx: " + taxFreeAll);
+            addLogUI("4-2 Price = (SalesSum - TaxInsAll - TaxFreeAll) / (1 + ConsumptionTax) + TaxInsAll + TaxFreeAll: " + dPrice);
+            addLogUI("--------------");
             return dPrice;
         }
 
@@ -78,13 +80,12 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="displacementFrom"></param>
         /// <param name="displacementTo"></param>
         /// <returns></returns>
-        public decimal GetPriceTax(
-            int firstRegistrationDateFrom, int firstRegistrationDateTo,
-            int isElectricCar, int displacementFrom, int displacementTo)
+        public double GetPriceTax(
+            int? firstRegistrationDateFrom, int? firstRegistrationDateTo,
+            int? isElectricCar, int? displacementFrom, int? displacementTo)
         {
-            decimal monthlyPrice = 0;
-            var dt = _unitOfWorkIde.CarTaxs.Query(n => n.CarType == carType &&
-
+            double monthlyPrice = 0;
+            var dt = _unitOfWorkIde.CarTaxs.GetSingleOrDefault(n => n.CarType == _requestInCalc.CarType &&
             n.FirstRegistrationDateFrom <= firstRegistrationDateFrom &&
             n.FirstRegistrationDateTo >= firstRegistrationDateTo &&
             n.IsElectricCar == isElectricCar &&
@@ -92,8 +93,13 @@ namespace KantanMitsumori.Service.Helper
             && n.DisplacementTo >= displacementTo &&
             n.ElapsedYearsFrom <= 0
             && n.ElapsedYearsTo >= 12);
-            monthlyPrice = dt.FirstOrDefault()!.MonthlyPrice;
-            _logger.LogInformation("4-3-1 PriceTax :={0}", monthlyPrice);
+            if (dt != null)
+            {
+                monthlyPrice = dt.MonthlyPrice;
+            }
+            _logger.LogInformation("4-3-1 PriceTax: {0}", monthlyPrice);
+            addLogUI("4-3-1 PriceTax: " + monthlyPrice);
+            addLogUI("--------------");
             return monthlyPrice;
         }
         /// <summary>
@@ -106,71 +112,69 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="displacementFrom"></param>
         /// <param name="displacementTo"></param>
         /// <returns></returns>
-        public decimal GetTaxCollectionIncrease(
+        public double GetTaxCollectionIncrease(
             int firstRegistrationDateFrom, int firstRegistrationDateTo,
-            int isElectricCar, int displacementFrom, int displacementTo)
+            int displacementFrom, int displacementTo)
         {
-            decimal monthlyPrice = 0;
+            double monthlyPrice = 0;
             int elapsedYearsFrom = 0;
             int elapsedYearsTo = 99;
-            if (isElectricCar != 1)
+            if (_requestInCalc.ElectricCar != 1)
             {
                 elapsedYearsFrom = 13;
             }
-            var dt = _unitOfWorkIde.CarTaxs.Query(n => n.CarType == carType && n.FirstRegistrationDateFrom <= firstRegistrationDateFrom &&
-            n.FirstRegistrationDateTo >= firstRegistrationDateTo && n.IsElectricCar == isElectricCar &&
+            var dt = _unitOfWorkIde.CarTaxs.GetSingleOrDefault(n => n.CarType == _requestInCalc.CarType && n.FirstRegistrationDateFrom <= firstRegistrationDateFrom &&
+            n.FirstRegistrationDateTo >= firstRegistrationDateTo && n.IsElectricCar == _requestInCalc.ElectricCar &&
             n.DisplacementFrom <= displacementFrom && n.DisplacementTo >= displacementTo &&
             n.ElapsedYearsFrom <= elapsedYearsFrom && n.ElapsedYearsTo >= elapsedYearsTo);
-            monthlyPrice = dt.FirstOrDefault()!.MonthlyPrice;
-            _logger.LogInformation("4-3-2 PriceTax :={0}", monthlyPrice);
+            if (dt != null)
+            {
+                monthlyPrice = dt.MonthlyPrice;
+            }
+            _logger.LogInformation("4-3-2 PriceTax: {0}", monthlyPrice);
+            addLogUI("4-3-2 PriceTax: " + monthlyPrice);
+            addLogUI("--------------");
             return monthlyPrice;
         }
         /// <summary>
         ///  4-3-3  tinh tien thue cua xe trong thoi han 
         ///   期間中自動車計算  期間中自動車税金計算 156 = 3 Year
         /// </summary>
-        /// <param name="carType"></param>
-        /// <param name="autoTax"></param>
-        /// <param name="dispVolUnit"></param>
-        /// <param name="chkElectricCar"></param>
-        /// <param name="dispVol"></param>
         /// <returns></returns>
-        public decimal GetVehicleTaxWithinTheTerm(int carType, int autoTax, string dispVolUnit,
-            bool chkElectricCar, int dispVol)
+        public double GetVehicleTaxWithinTheTerm(int autoTax, string dispVolUnit,
+           int dispVol)
         {
-            decimal vehicleTaxPrice = 0;
+            var firstReg = Convert.ToInt32(_requestInCalc.FirstReg);
+            double vehicleTaxPrice = 0;
             int displacementFromAndTo = 0;
-            int isElectricCar = 0;
-            decimal priceMonth = 0;
-            if (chkElectricCar)
+            double priceMonth = 0;
+            bool ischeck = dispVolUnit != "cc" || _requestInCalc.ElectricCar == 1;
+            displacementFromAndTo = ischeck == false ? dispVol : displacementFromAndTo;
+            var priceTax = GetPriceTax(firstReg, firstReg, _requestInCalc.ElectricCar, displacementFromAndTo, displacementFromAndTo);
+            var diffMonth = _requestInCalc.CalcDiffMonth;
+            if (diffMonth == 0) //< 13Year 
             {
-                isElectricCar = 1;
-            }
-            if (dispVolUnit != "cc")
-            {
-                displacementFromAndTo = 0;
+                priceMonth = priceTax * _requestInCalc.ContractTimes;
+                _logger.LogInformation("4-3-3 PriceMonth  < 13Year: {0}", priceMonth);
+                addLogUI("4-3-3 PriceMonth  < 13Year: " + priceMonth);
             }
             else
             {
-                displacementFromAndTo = dispVol;
-            }
-            var priceTax = GetPriceTax(Convert.ToInt32(firstReg), Convert.ToInt32(firstReg), isElectricCar, displacementFromAndTo, displacementFromAndTo);
-            string endLeaseDate = leaseExpirationDate; //Ngay het han hop dong thue
-            string endDate = CheckYear(156);// 156 = 13Year
-            if (endDate == endLeaseDate) //< 13Year 
-            {
-                priceMonth = priceTax * contractTime;
-                _logger.LogInformation("4-3-3 PriceMonth  < 13Year :={0}", priceMonth);
-            }
-            else //'> 13Year
-            {
-                var taxCollection = GetTaxCollectionIncrease(Convert.ToInt32(firstReg), Convert.ToInt32(firstReg), isElectricCar, dispVol, dispVol);
-                priceMonth = (priceTax * GetMonthLease(1) + (taxCollection + GetMonthLease(0)));
-                _logger.LogInformation("4-3-3 PriceMonth  > 13Year :={0}", priceMonth);
+                var taxCollection = GetTaxCollectionIncrease(firstReg, firstReg, dispVol, dispVol);
+                var monthsOver13Year = _requestInCalc.ContractTimes - diffMonth;
+                _logger.LogInformation("getMonthLease  < Over13Year: {0}", diffMonth);
+                _logger.LogInformation("getMonthLease  > Over13Year: {0}", _requestInCalc.ContractTimes - diffMonth);
+                priceMonth = (priceTax * diffMonth + (taxCollection * monthsOver13Year));
+                _logger.LogInformation("4-3-3 PriceMonth  > 13Year: {0}", priceMonth);
 
+                addLogUI("getMonthLease  < Over13Year: " + diffMonth);
+                addLogUI("getMonthLease  > Over13Year: " + (_requestInCalc.ContractTimes - diffMonth));
+                addLogUI("4-3-3 PriceMonth  > 13Year: " + priceMonth);
             }
-            vehicleTaxPrice = priceMonth - autoTax;
-            _logger.LogInformation("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax) :={0}", priceMonth);
+            vehicleTaxPrice = (double)(priceMonth - autoTax);
+            _logger.LogInformation("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): {0}", vehicleTaxPrice);
+            addLogUI("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): " + priceMonth);
+            addLogUI("--------------");
             return vehicleTaxPrice;
 
         }
@@ -180,36 +184,40 @@ namespace KantanMitsumori.Service.Helper
         /// 期間中自賠責
         /// </summary>      
         /// <returns></returns>
-        public decimal GetPriceinsurance()
+        public double GetPriceinsurance()
         {
-            decimal priceinsurance = 0;
-            decimal insuranceFee = 0;
-            bool isFirstTime = true;
-            DateTime _expiresDate = DateTime.Parse(expiresDate);
-            DateTime _firstReg = DateTime.Parse(firstReg);
-            DateTime _leaseSttMonth = DateTime.Parse(leaseSttMonth);
-            DateTime _leaseExpirationDate = DateTime.Parse(leaseExpirationDate);
-            if (contractPlan != 99)
+            double priceInsurance = 0;
+            double insuranceFee = 0;
+            DateTime _expiresDate = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.ExpiresDate!));
+            DateTime _firstReg = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.FirstReg!));
+            DateTime _leaseSttMonth = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseSttMonth!));
+            DateTime _leaseExpirationDate = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseExpirationDate!));
+            if (_requestInCalc.ContractPlan != 99)
             {
-                insuranceFee = _unitOfWorkIde.LiabilityInsurances.Query(n => n.CarType == carType).FirstOrDefault()!.InsuranceFee;
+                var dt = _unitOfWorkIde.LiabilityInsurances.GetSingleOrDefault(n => n.CarType == _requestInCalc.CarType);
+                if (dt != null)
+                {
+                    insuranceFee = dt.InsuranceFee;
+                }
                 var registrationDate = _expiresDate.AddMonths(1);
                 var startLeaseDate = _leaseSttMonth;
                 var endLeaseDate = _leaseExpirationDate;
-                if (_expiresDate == DateTime.MinValue)
-                {
-                    isFirstTime = false;
-                }
-                var inspectionCount = InspectionCount(registrationDate, startLeaseDate, endLeaseDate, isFirstTime);
-                if ((contractTime % afterSecondTerm == 0 && inspectionCount > 0) & _expiresDate == startLeaseDate)
+                bool isFirstTime = string.IsNullOrEmpty(_requestInCalc.ExpiresDate) == true ? true : false;
+                var inspectionCount = InspectionCount(ref registrationDate, startLeaseDate, endLeaseDate, isFirstTime);
+                if ((_requestInCalc.ContractTimes % _requestInCalc.AfterSecondTerm == 0 && inspectionCount > 0) & _expiresDate == startLeaseDate)
                 {
                     inspectionCount -= 1;
                 }
-                _logger.LogInformation("InspectionCount :={0}", inspectionCount);
-                priceinsurance = inspectionCount * insuranceFee;
-
+                _logger.LogInformation("InspectionCount: {0}", inspectionCount);
+                _logger.LogInformation("InsuranceFee: {0}", insuranceFee);
+                addLogUI("InspectionCount: " + inspectionCount);
+                addLogUI("InsuranceFee: " + insuranceFee);
+                priceInsurance = inspectionCount * insuranceFee;
             }
-            _logger.LogInformation("4-4 PriceInsurance(InspectionCount * InsuranceFee) :={0}", priceinsurance);
-            return priceinsurance;
+            _logger.LogInformation("4-4 PriceInsurance(InspectionCount * InsuranceFee): {0}", priceInsurance);
+            addLogUI("4-4 PriceInsurance(InspectionCount * InsuranceFee): " + priceInsurance);
+            addLogUI("--------------");
+            return priceInsurance;
         }
         /// <summary>
         /// 4-5  4-5-1 4-5-2   4-5-3  Thue trong luong
@@ -217,12 +225,12 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="type"></param>    
         /// <returns></returns>
-        public decimal GetWeighTax(int type)
+        public double GetWeighTax(int type)
         {
-            decimal weighTax = 0;
+            double weighTax = 0;
             double rElapsedYearsFrom = 0;
             double rElapsedYearsTo = 0;
-            if (contractPlan != 99)
+            if (_requestInCalc.ContractPlan != 99)
             {
                 if (type == 0) //case 4-5-1
                 {
@@ -241,9 +249,12 @@ namespace KantanMitsumori.Service.Helper
                     rElapsedYearsFrom = 18;
                     rElapsedYearsTo = 99;
                 }
-                weighTax = _unitOfWorkIde.WeightTaxs.Query(n => n.CarType == carType && n.ElapsedYearsFrom <= rElapsedYearsFrom
-                                                         && n.ElapsedYearsTo >= rElapsedYearsTo).FirstOrDefault()!.WeightTax;
-
+                var dt = _unitOfWorkIde.WeightTaxs.GetSingleOrDefault(n => n.CarType == _requestInCalc.CarType && n.ElapsedYearsFrom <= rElapsedYearsFrom
+                                                       && n.ElapsedYearsTo >= rElapsedYearsTo);
+                if (dt != null)
+                {
+                    weighTax = dt.WeightTax;
+                }
             }
             return weighTax;
 
@@ -253,55 +264,59 @@ namespace KantanMitsumori.Service.Helper
         ///   重量税計算を行う
         /// </summary>
         /// <returns></returns>
-        public decimal getPriceWeighTax()
+        public double GetPriceWeighTax()
         {
-            decimal priceWeighTax = 0;
+            double priceWeighTax = 0;
             var weighTax = GetWeighTax(0); // case 4-5-1
-            var weighTax1 = GetWeighTax(0); // case 4-5-2
-            var weighTax2 = GetWeighTax(0); // case 4-5-3
-            _logger.LogInformation("4-5-1 WeighTax :={0}", weighTax);
-            _logger.LogInformation("4-5-2 WeighTax :={0}", weighTax1);
-            _logger.LogInformation("4-5-3 WeighTax :={0}", weighTax2);
+            var weighTax1 = GetWeighTax(1); // case 4-5-2
+            var weighTax2 = GetWeighTax(2); // case 4-5-3
+            _logger.LogInformation("4-5-1 WeighTax: {0}", weighTax);
+            _logger.LogInformation("4-5-2 WeighTax: {0}", weighTax1);
+            _logger.LogInformation("4-5-3 WeighTax: {0}", weighTax2);
+            addLogUI("4-5-1 WeighTax: " + weighTax);
+            addLogUI("4-5-2 WeighTax: " + weighTax1);
+            addLogUI("4-5-3 WeighTax: " + weighTax2);
             var inspectionCount = 0;
             var inspectionCount1 = 0;
             var inspectionCount2 = 0;
-            bool isFirstTime = true;
-            DateTime _expiresDate = DateTime.Parse(expiresDate);
-            DateTime _firstReg = DateTime.Parse(firstReg);
-            DateTime _leaseSttMonth = DateTime.Parse(leaseSttMonth);
-            DateTime _leaseExpirationDate = DateTime.Parse(leaseExpirationDate);
+            DateTime _expiresDate = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.ExpiresDate!));
+            DateTime _firstReg = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.FirstReg!));
+            DateTime _leaseSttMonth = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseSttMonth!));
+            DateTime _leaseExpirationDate = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseExpirationDate!));
             var registrationDate = _expiresDate.AddMonths(1);
             var startLeaseDate = _leaseSttMonth;
             var endLeaseDate = _leaseExpirationDate;
-            if (_expiresDate == DateTime.MinValue)
-            {
-                isFirstTime = false;
-            }
+            bool isFirstTime = (string.IsNullOrEmpty(_requestInCalc.ExpiresDate)) ? true : false;
             // First Time 
             var sttDate = startLeaseDate;
-            var endDate = DateTime.Parse(CheckYear(155));
+            var endDate = CheckYear(155);
             if (endDate < sttDate) { endDate = sttDate; };
             //Not over 13 year
-            inspectionCount = InspectionCount(registrationDate, startLeaseDate, endDate, isFirstTime);
-            if ((contractTime % afterSecondTerm == 0 && inspectionCount > 0) & _expiresDate == startLeaseDate)
+            inspectionCount = InspectionCount(ref registrationDate, startLeaseDate, endDate, isFirstTime);
+            if ((_requestInCalc.ContractTimes % _requestInCalc.AfterSecondTerm == 0 && inspectionCount > 0) & _expiresDate == startLeaseDate)
             {
                 inspectionCount -= 1;
             }
-            _logger.LogInformation("InspectionCount Not over 13 year:={0}", inspectionCount);
+            _logger.LogInformation("InspectionCount Not over 13 year: {0}", inspectionCount);
+            addLogUI("InspectionCount Not over 13 year: " + inspectionCount);
             //Over 13 year and not over 18 year        
-            var endDate1 = DateTime.Parse(CheckYear(215));
+            var endDate1 = CheckYear(215);
             if (endDate <= endDate1)
             {
-                inspectionCount1 = InspectionCount(registrationDate, endDate, endDate1, isFirstTime);
+                inspectionCount1 = InspectionCount(ref registrationDate, endDate, endDate1, isFirstTime);
             }
-            _logger.LogInformation("InspectionCount Not over 13 year:={0}", inspectionCount);
-
+            _logger.LogInformation("4-5-4 InspectionCount Over 13 year and not over 18 year: {0} ", inspectionCount1);
+            addLogUI("4-5-4 InspectionCount Over 13 year and not over 18 year: " + inspectionCount1);
             if (endDate1 <= endLeaseDate)
             {
-                inspectionCount2 = InspectionCount(registrationDate, endDate1, endLeaseDate, isFirstTime);
+                inspectionCount2 = InspectionCount(ref registrationDate, endDate1, endLeaseDate, isFirstTime);
             }
+            _logger.LogInformation("InspectionCount Over 18 year: {0}", inspectionCount2);
+            addLogUI("4-5-4 InspectionCount Over 18 year: " + inspectionCount2);
             priceWeighTax = (weighTax * inspectionCount) + (weighTax1 * inspectionCount1) + (weighTax2 * inspectionCount2);
-            _logger.LogInformation("4-5-4 PriceWeighTax::={0}", priceWeighTax);
+            _logger.LogInformation("4-5-4 PriceWeighTax: {0}", priceWeighTax);
+            addLogUI("4-5-4 PriceWeighTax: " + priceWeighTax);
+            addLogUI("--------------");
             return priceWeighTax;
 
         }
@@ -315,8 +330,9 @@ namespace KantanMitsumori.Service.Helper
         {
             double pricePromotional = 0;
             promotion = _unitOfWorkIde.Promotions.GetAll().FirstOrDefault()!.Promotion;
-            pricePromotional = salesSum * promotion * contractTime;
-            _logger.LogInformation("4-6 PricePromotional:={0}", pricePromotional);
+            pricePromotional = salesSum * promotion * _requestInCalc.ContractTimes;
+            _logger.LogInformation("4-6 PricePromotional: {0}", pricePromotional);
+            addLogUI("4-6 PricePromotional: " + pricePromotional);
             if (pricePromotional > 100000)
             {
                 pricePromotional = 100000;
@@ -325,7 +341,9 @@ namespace KantanMitsumori.Service.Helper
             {
                 pricePromotional = 15000;
             }
-            _logger.LogInformation("4-6 PricePromotional  > 100000= 100000 and < 15000= 15000::={0}", pricePromotional);
+            _logger.LogInformation("4-6 PricePromotional  > 100000= 100000 and < 15000= 15000: {0}", pricePromotional);
+            addLogUI("4-6 PricePromotional  > 100000= 100000 and < 15000= 15000: " + pricePromotional);
+            addLogUI("--------------");
             return pricePromotional;
         }
         /// <summary>
@@ -333,21 +351,25 @@ namespace KantanMitsumori.Service.Helper
         ///  出光興産手数料、出光クレジット手数料、特販店手数料、SMAS手数料の合計算出
         /// </summary>
         /// <returns></returns>
-        public decimal GetPropertyFeeIdemitsu()
+        public double GetPropertyFeeIdemitsu()
         {
-            decimal pricePropertyFeeIdemitsu = 0;
+            double pricePropertyFeeIdemitsu = 0;
             pricePropertyFee1 = GetPropertyFee(1);
             pricePropertyFee2 = GetPropertyFee(2);
             pricePropertyFee3 = GetPropertyFee(3);
-            pricePropertyFee4 = GetPropertyFee(carType + 3);
-
+            pricePropertyFee4 = GetPropertyFee(_requestInCalc.CarType + 3);
             pricePropertyFeeIdemitsu = pricePropertyFee1 + pricePropertyFee2 + pricePropertyFee3 + pricePropertyFee4;
-            _logger.LogInformation("ID =1:={0}", pricePropertyFee1);
-            _logger.LogInformation("ID =2:={0}", pricePropertyFee2);
-            _logger.LogInformation("ID =3:={0}", pricePropertyFee3);
-            _logger.LogInformation("ID =CarType+3:={0}", pricePropertyFee4);
-            _logger.LogInformation("4-7 PricePropertyFeeIdemitsu:={0}", pricePropertyFeeIdemitsu);
-
+            _logger.LogInformation("ID =1: {0}", pricePropertyFee1);
+            _logger.LogInformation("ID =2: {0}", pricePropertyFee2);
+            _logger.LogInformation("ID =3: {0}", pricePropertyFee3);
+            _logger.LogInformation("ID =CarType+3: {0}", pricePropertyFee4);
+            _logger.LogInformation("4-7 PricePropertyFeeIdemitsu: {0}", pricePropertyFeeIdemitsu);
+            addLogUI("ID =1: " + pricePropertyFee1);
+            addLogUI("ID =2: " + pricePropertyFee2);
+            addLogUI("ID =3: " + pricePropertyFee3);
+            addLogUI("ID =CarType+3: " + pricePropertyFee4);
+            addLogUI("4-7 PricePropertyFeeIdemitsu: " + pricePropertyFeeIdemitsu);
+            addLogUI("--------------");
             return pricePropertyFeeIdemitsu;
         }
         /// <summary>
@@ -356,20 +378,26 @@ namespace KantanMitsumori.Service.Helper
         /// GetGuaranteeFee
         /// </summary>
         /// <returns></returns>
-        public decimal GetGuaranteeFee()
+        public double GetGuaranteeFee()
         {
-            decimal priceGuaranteeCharg = 0;
+            double priceGuaranteeCharg = 0;
             var year = 0;
-            if (insurExpanded == 0)
+            if (_requestInCalc.InsurExpanded == 0)
             {
                 year = 2;
             }
-            else if (insurExpanded == 1)
+            else if (_requestInCalc.InsurExpanded == 1)
             {
                 year = 1;
             }
-            priceGuaranteeCharg = _unitOfWorkIde.Guarantees.Query(n => n.Years == year).FirstOrDefault()!.GuaranteeCharge;
-            _logger.LogInformation("4-8 PriceGuaranteeFee:={0}", priceGuaranteeCharg);
+            var dt = _unitOfWorkIde.Guarantees.GetSingleOrDefault(n => n.Years == year);
+            if (dt != null)
+            {
+                priceGuaranteeCharg = dt.GuaranteeCharge;
+            }
+            _logger.LogInformation("4-8 PriceGuaranteeFee: {0}", priceGuaranteeCharg);
+            addLogUI("4-8 PriceGuaranteeFee: " + priceGuaranteeCharg);
+            addLogUI("--------------");
             return priceGuaranteeCharg;
 
         }
@@ -378,11 +406,17 @@ namespace KantanMitsumori.Service.Helper
         /// 名義変更費用
         /// </summary>
         /// <returns></returns>
-        public decimal GetPriceNameChange()
+        public double GetPriceNameChange()
         {
-            decimal priceNameChange = 0;
-            priceNameChange = _unitOfWorkIde.NameChanges.GetAll().FirstOrDefault()!.NameChange;
-            _logger.LogInformation("4-9 PriceNameChange::={0}", priceNameChange);
+            double priceNameChange = 0;
+            var dt = _unitOfWorkIde.NameChanges.GetAll().FirstOrDefault();
+            if (dt != null)
+            {
+                priceNameChange = dt.NameChange;
+            }
+            _logger.LogInformation("4-9 PriceNameChange: {0}", priceNameChange);
+            addLogUI("4-9 PriceNameChange: " + priceNameChange);
+            addLogUI("--------------");
             return priceNameChange;
         }
         /// <summary>
@@ -390,41 +424,43 @@ namespace KantanMitsumori.Service.Helper
         /// メンテナンス料計算
         /// </summary>
         /// <returns></returns>
-        public decimal getPriceMantance()
+        public double GetPriceMantance()
         {
-            decimal priceMantance = 0;
+            double priceMantance = 0;
 
-            if (contractPlan != 99)
+            if (_requestInCalc.ContractPlan != 99)
             {
-                bool isFirstTime = true;
-                DateTime _expiresDate = DateTime.Parse(expiresDate);
-                DateTime _firstReg = DateTime.Parse(firstReg);
-                DateTime _leaseSttMonth = DateTime.Parse(leaseSttMonth);
-                DateTime _leaseExpirationDate = DateTime.Parse(leaseExpirationDate);
+                DateTime _expiresDate = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.ExpiresDate!));
+                DateTime _firstReg = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.FirstReg!));
+                DateTime _leaseSttMonth = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseSttMonth!));
+                DateTime _leaseExpirationDate = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseExpirationDate!));
                 var registrationDate = _expiresDate.AddMonths(1);
                 var startLeaseDate = _leaseSttMonth;
                 var endLeaseDate = _leaseExpirationDate;
-                if (_expiresDate == DateTime.MinValue)
-                {
-                    isFirstTime = false;
-                }
-                var inspectionCount = InspectionCount(registrationDate, startLeaseDate, endLeaseDate, isFirstTime);
-                if ((contractTime % afterSecondTerm == 0 && inspectionCount > 0) & _expiresDate == startLeaseDate)
+                bool isFirstTime = string.IsNullOrEmpty(_requestInCalc.ExpiresDate!) ? true : false;
+                var inspectionCount = InspectionCount(ref registrationDate, startLeaseDate, endLeaseDate, isFirstTime);
+                if ((_requestInCalc.ContractTimes % _requestInCalc.AfterSecondTerm == 0 && inspectionCount > 0) & _expiresDate == startLeaseDate)
                 {
                     inspectionCount -= 1;
                 }
-                _logger.LogInformation("InspectionCount:={0}", inspectionCount);
-                var isBeforeFirstInspection = carType == 3 ? 9 : IsBeforeFirstInspection();
-                var myMaintenancePrice = _unitOfWorkIde.Maintenances.Query(n => n.CarType == carType
-                && n.LeasePeriod == contractTime &&
-                n.BeforeFirstInspection == isBeforeFirstInspection
-                && n.InspectionCount == inspectionCount).FirstOrDefault()!.MyMaintenancePrice;
-                priceMantance = myMaintenancePrice * contractTime;
-                _logger.LogInformation("4-10 PriceMaintenance:={0}", priceMantance);
+                _logger.LogInformation("4-10 InspectionCount:={0}", inspectionCount);
+                addLogUI("4-10 InspectionCount: " + inspectionCount);
+                var isBeforeFirstInspection = _requestInCalc.CarType == 3 ? 9 : IsBeforeFirstInspection();
+                var dt = _unitOfWorkIde.Maintenances.GetSingleOrDefault(n => n.CarType == _requestInCalc.CarType
+                && n.LeasePeriod == _requestInCalc.ContractTimes && n.BeforeFirstInspection == isBeforeFirstInspection
+                && n.InspectionCount == inspectionCount);
+                if (dt != null)
+                {
+                    priceMantance = dt.MyMaintenancePrice * _requestInCalc.ContractTimes;
+                }
+                _logger.LogInformation("4-10 PriceMaintenance: {0}", priceMantance);
+                addLogUI("4-10 PriceMaintenance: " + priceMantance);
+                addLogUI("--------------");
             }
             return priceMantance;
         }
         /// <summary>
+        /// 
         ///  4-11  tinh phi lai suat ap dung
         ///  適用金利率取得する
         /// </summary>
@@ -432,9 +468,15 @@ namespace KantanMitsumori.Service.Helper
         public double GetInterest()
         {
             double interest = 0;
-            interest = _unitOfWorkIde.Interests.Query(n => n.LeasePeriodFrom <= contractTime
-            && n.LeasePeriodTo >= contractTime).FirstOrDefault()!.Interest;
-            _logger.LogInformation("4-11  PriceInterest:={0}", interest);
+            var dt = _unitOfWorkIde.Interests.GetSingleOrDefault(n => n.LeasePeriodFrom <= _requestInCalc.ContractTimes
+               && n.LeasePeriodTo >= _requestInCalc.ContractTimes);
+            if (dt != null)
+            {
+                interest = dt.Interest;
+            }
+            _logger.LogInformation("4-11 PriceInterest: {0}", interest);
+            addLogUI("4-11  PriceInterest: " + interest);
+            addLogUI("--------------");
             return interest;
         }
         #region Fuc
@@ -445,63 +487,14 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="firstReg"></param>
         /// <param name="leaseExpirationDate"></param>
         /// <returns></returns>
-        public string CheckYear(int imonth)
+        public DateTime CheckYear(int imonth)
         {
-            string date = "";
-            DateTime regDay = DateTime.Parse(firstReg);
-            DateTime ExpCurrY = DateTime.Parse(leaseExpirationDate);
+            DateTime regDay = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseSttMonth!));
+            DateTime ExpCurrY = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseExpirationDate!));
             var regCurrY = regDay.AddMonths(imonth);
-            if (ExpCurrY > regCurrY)
-            {
-                date = regCurrY.ToString("yyyyMMdd");
-            }
-            else
-            {
-                date = ExpCurrY.ToString("yyyyMMdd");
-            }
-            return date;
+            return ExpCurrY > regCurrY ? regCurrY : ExpCurrY;
         }
-        /// <summary>
-        /// getMonthLease
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="firstReg"></param>
-        /// <param name="leaseExpirationDate"></param>
-        /// <param name="leaseSttMonth"></param>
-        /// <returns></returns>
-        public int GetMonthLease(int type)
-        {
-            int month = 0;
-            DateTime regDay = DateTime.Parse(firstReg);
-            var over13Year = regDay.AddMonths(156);
-            var expCurrSttY = DateTime.Parse(leaseSttMonth);
-            var expCurrLeaseExpY = DateTime.Parse(leaseExpirationDate);
-            if (type == 0)
-            {
-                if (over13Year < expCurrSttY)
-                {
-                    month = Convert.ToInt32(CommonFunction.DateDiff(IntervalEnum.Months, expCurrSttY, expCurrLeaseExpY));
-                }
-                else
-                {
-                    month = Convert.ToInt32(CommonFunction.DateDiff(IntervalEnum.Months, over13Year, expCurrLeaseExpY));
-                }
-                _logger.LogInformation("getMonthLease  > Over13Year :={0}", month);
-            }
-            else if (type == 1)
-            {
-                if (over13Year < expCurrSttY)
-                {
-                    month = 0;
-                }
-                else
-                {
-                    month = Convert.ToInt32(CommonFunction.DateDiff(IntervalEnum.Months, expCurrSttY, over13Year));
-                }
-                _logger.LogInformation("getMonthLease  < Over13Year :={0}", month);
-            }
-            return month;
-        }
+
         /// <summary>
         /// InspectionCount
         /// </summary>
@@ -512,13 +505,13 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="afterSecondTerm"></param>
         /// <param name="isFirstTimes"></param>
         /// <returns></returns>
-        public int InspectionCount(DateTime currentExpiresDate, DateTime startDate, DateTime endDate, bool isFirstTimes)
+        public int InspectionCount(ref DateTime currentExpiresDate, DateTime startDate, DateTime endDate, bool isFirstTimes)
         {
             int inspectionCount = 0;
             DateTime currentCheckDate = currentExpiresDate;
             if (isFirstTimes)
             {
-                currentCheckDate = currentCheckDate.AddMonths(firstTerm);
+                currentCheckDate = currentCheckDate.AddMonths(_requestInCalc.FirstTerm);
 
                 if (currentCheckDate > startDate && currentCheckDate < endDate)
                 {
@@ -531,7 +524,7 @@ namespace KantanMitsumori.Service.Helper
                 {
                     if (isFirstTimes)
                     {
-                        currentCheckDate = currentCheckDate.AddMonths(afterSecondTerm);
+                        currentCheckDate = currentCheckDate.AddMonths(_requestInCalc.AfterSecondTerm);
                     }
                     if (currentCheckDate > startDate && currentCheckDate < endDate)
                     {
@@ -541,12 +534,13 @@ namespace KantanMitsumori.Service.Helper
                     }
                     if (!isFirstTimes)
                     {
-                        currentCheckDate = currentCheckDate.AddMonths(afterSecondTerm);
+                        currentCheckDate = currentCheckDate.AddMonths(_requestInCalc.AfterSecondTerm);
                     }
                 }
             }
             return inspectionCount;
         }
+
         /// <summary>
         /// IsBeforeFirstInspection
         /// </summary>      
@@ -554,20 +548,11 @@ namespace KantanMitsumori.Service.Helper
 
         public int IsBeforeFirstInspection()
         {
-            DateTime startP = DateTime.Parse(firstReg);
-            DateTime leaseSttM = DateTime.Parse(leaseSttMonth);
-            var currY = startP.AddMonths(firstTerm);
-            if (currY <= leaseSttM)
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
-
+            DateTime startP = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.FirstReg!));
+            DateTime leaseSttM = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseSttMonth!));
+            var currY = startP.AddMonths(_requestInCalc.FirstTerm);
+            return (currY <= leaseSttM) ? 0 : 1;
         }
-
         /// <summary>
         /// GetPropertyFee
         /// </summary>
@@ -576,22 +561,31 @@ namespace KantanMitsumori.Service.Helper
         public int GetPropertyFee(int id)
         {
             int pricePropertyFee = 0;
-
-            var commissions = _unitOfWorkIde.Commissions.Query(n => n.Id == id).FirstOrDefault();
-            if (commissions!.IsMonthly == 1)
+            var commissions = _unitOfWorkIde.Commissions.GetSingleOrDefault(n => n.Id == id);
+            if (commissions != null)
             {
-                pricePropertyFee = commissions!.Fee * contractTime;
-            }
-            else
-            {
-                pricePropertyFee = commissions!.Fee;
+                if (commissions.IsMonthly == 1)
+                {
+                    pricePropertyFee = commissions.Fee * _requestInCalc.ContractTimes;
+                    logCreditFee = commissions.Fee;
+                }
+                else
+                {
+                    pricePropertyFee = commissions.Fee;
+                }
             }
             return pricePropertyFee;
 
-
         }
+
+        public void addLogUI(string value)
+        {
+            if (_testSettings.IsShowLogUI == "True")
+            {
+                _lstWriteLogUI.Add(value);
+            }
+        }
+
         #endregion Fuc
     }
-
-
 }
