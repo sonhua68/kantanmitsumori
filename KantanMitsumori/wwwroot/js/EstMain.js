@@ -51,7 +51,7 @@ function inputChk() {
     }
 
     document.getElementById("Msg_CustTel").innerHTML = "";
-    outMsg = chkBytes("", $get('CustTel_forPrint').value, 13);
+    outMsg = chkBytesError("", $get('CustTel_forPrint').value, 13);
     if (outMsg) {
         document.getElementById("Msg_CustTel").innerHTML = '<br>' + outMsg;
         flgErr = true;
