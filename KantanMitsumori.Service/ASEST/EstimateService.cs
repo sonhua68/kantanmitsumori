@@ -360,7 +360,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<int>> UpdateInpNebiki(RequestUpdateInpNebiki model)
+        public async Task<ResponseBase<int>> UpdateInpNebiki(RequestUpdateInpNebiki model, LogToken logToken)
         {
             try
             {
@@ -374,6 +374,10 @@ namespace KantanMitsumori.Service
 
                 _unitOfWork.Estimates.Update(dtEstimates);
                 await _unitOfWork.CommitAsync();
+                // 小計・合計計算
+                if (!await _commonEst.CalcSum(dtEstimates.EstNo, dtEstimates.EstSubNo!, logToken))
+                    return ResponseHelper.LogicError<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
             }
             catch (Exception ex)

@@ -416,7 +416,7 @@ namespace KantanMitsumori.Service.Helper
         {
             if (intExaust <= 660)
             {
-                return -1;
+                return 0;
             }
             int intYEAR_AMOUNT = getYearAmount(intExaust);
             if (intYEAR_AMOUNT == -1)
