@@ -20,8 +20,8 @@ namespace KantanMitsumori.Service.Helper
 
         private LogToken valToken;
         private readonly CommonFuncHelper _commonFuncHelper;
-        private readonly List<string> reCalEstModel;
-        private readonly List<string> reCalEstSubModel;
+        private readonly List<string> reCalEstModel = new List<string> { "CarPrice", "Discount", "SyakenNew", "SyakenZok", "OptionPrice1", "OptionPrice2", "OptionPrice3", "OptionPrice4", "OptionPrice5", "OptionPrice6", "OptionPrice7", "OptionPrice8", "OptionPrice9", "OptionPrice10", "OptionPrice11", "OptionPrice12", "TaxCheck", "TaxGarage", "TaxTradeIn", "TaxRecycle", "TaxDelivery", "TaxOther" };
+        private readonly List<string> reCalEstSubModel = new List<string> { "YtiRieki", "RakuSatu", "Rikusou", "TaxTradeInSatei", "TaxSet1", "TaxSet2", "TaxSet3", "AutoTaxEquivalent", "DamageInsEquivalent" };
 
         public CommonEstimate(ILogger<CommonEstimate> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, IMapper mapper, HelperMapper helperMapper, CommonFuncHelper commonFuncHelper)
         {
@@ -31,10 +31,8 @@ namespace KantanMitsumori.Service.Helper
             _mapper = mapper;
             _commonFuncHelper = commonFuncHelper;
             _helperMapper = helperMapper;
-
             valToken = new LogToken();
-            reCalEstModel = new List<string>() { "CarPrice", "Discount", "SyakenNew", "SyakenZok", "OptionPrice1", "OptionPrice2", "OptionPrice3", "OptionPrice4", "OptionPrice5", "OptionPrice6", "OptionPrice7", "OptionPrice8", "OptionPrice9", "OptionPrice10", "OptionPrice11", "OptionPrice12", "TaxCheck", "TaxGarage", "TaxTradeIn", "TaxRecycle", "TaxDelivery", "TaxOther" };
-            reCalEstSubModel = new List<string>() { "YtiRieki", "RakuSatu", "Rikusou", "TaxTradeInSatei", "TaxSet1", "TaxSet2", "TaxSet3", "AutoTaxEquivalent", "DamageInsEquivalent" };
+
         }
         public async Task<bool> CalcSum(string inEstNo, string inEstSubNo, LogToken logToken)
         {
@@ -157,7 +155,7 @@ namespace KantanMitsumori.Service.Helper
                         CommonSimLon simLon = new(_logger)
                         {
                             SaleSumPrice = estModel.SalesSum,
-                            Deposit =estModel.Deposit,
+                            Deposit = estModel.Deposit,
                             MoneyRate = estModel.Rate,
                             PayTimes = estModel.PayTimes,
                             FirstMonth = Convert.ToInt32(CommonFunction.Right(estModel.FirstPayMonth ?? "", 2))
