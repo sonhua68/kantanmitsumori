@@ -8,10 +8,12 @@
   </StyleSheet>
   <Sections>
     <Section Type="Detail" Name="Section3" Height="15412.2" BackColor="16777215" KeepTogether="1">
+      <Control Type="AR.Field" Name="InspectionExpirationDate" DataField="InspectionExpirationDate" Left="7706.88" Top="12436.48" Width="2883.36" Height="260.6396" Text="InspectionExpirationDate" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Shape" Name="Box10" Left="5641.92" Top="12111.84" Width="5029.92" Height="3197.92" BackColor="16777215" RoundingRadius="10" />
+      <Control Type="AR.Shape" Name="Box32" Left="5652" Top="12124.8" Width="5001.121" Height="311.0408" BackColor="16507090" BackStyle="1" LineStyle="0" Shape="2" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box9" Left="260" Top="5600" Width="5010" Height="4450" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Field" Name="DamageIns1" DataField="DamageInsEquivalent" Left="8560" Top="6539" Width="1995" Height="224.64" Text="DamageIns" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Shape" Name="Box46" Left="5640" Top="5599" Width="5030" Height="1420" BackColor="16777215" RoundingRadius="10" />
-      <Control Type="AR.Shape" Name="Box10" Left="5641.92" Top="12166.24" Width="5029.92" Height="3140.64" BackColor="16777215" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box31" Left="260.64" Top="5600.16" Width="5009.76" Height="250.56" BackColor="16507090" BackStyle="1" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box17" Left="260" Top="13680" Width="5009.76" Height="1627.2" BackStyle="1" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box44" Left="5640.601" Top="9067.161" Width="5029.92" Height="240.48" BackColor="15652595" BackStyle="1" LineStyle="0" RoundingRadius="10" />
@@ -36,7 +38,6 @@
       <Control Type="AR.Shape" Name="Box18" Left="3465" Top="2990" Width="813.6" Height="840.96" BackColor="13882323" BackStyle="1" LineStyle="0" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box1" Left="260" Top="2430" Width="1094.4" Height="2139.84" BackColor="13882323" BackStyle="1" LineStyle="0" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box2" Left="254.88" Top="9770.399" Width="5010" Height="280" BackColor="13882323" BackStyle="1" LineStyle="0" RoundingRadius="10" />
-      <Control Type="AR.Shape" Name="Box32" Left="5641.92" Top="12166.24" Width="5029.92" Height="270.72" BackColor="16507090" BackStyle="1" LineStyle="0" RoundingRadius="10" />
       <Control Type="AR.Shape" Name="Box7" Left="260" Top="7250" Width="5003" Height="280" BackColor="13882323" BackStyle="1" LineStyle="0" RoundingRadius="10" />
       <Control Type="AR.Label" Name="Text2" Left="248" Top="609" Width="720" Height="211" Caption="お名前" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Label" Name="Text3" Left="248" Top="964" Width="742.0001" Height="211" Caption="ご連絡先" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
@@ -160,7 +161,6 @@
       <Control Type="AR.Field" Name="BalanceTitle1" DataField="BalanceTitle" Left="635" Top="9490" Width="2280" Height="279.36" Text="BalanceTitle" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; vertical-align: middle" />
       <Control Type="AR.Field" Name="Balance1" DataField="Balance" Left="3375.36" Top="9490" Width="1845" Height="279.36" Text="Balance" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="SaleAll1" DataField="SaleAll" Left="3375.36" Top="9770" Width="1845" Height="279.36" Text="SaleAll" Style="color: Black; font-family: MS PGothic; text-align: right; vertical-align: middle" />
-      <Control Type="AR.Field" Name="InspectionExpirationDate" DataField="InspectionExpirationDate" Left="7706.88" Top="12436.48" Width="2883.36" Height="260.6396" Text="InspectionExpirationDate" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="LeaseStartMonth" DataField="LeaseStartMonth" Left="7706.88" Top="12691.84" Width="2883.36" Height="260.6396" Text="LeaseStartMonth" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="LeasePeriodName" DataField="LeasePeriodName" Left="7706.88" Top="12952.48" Width="2883.36" Height="260.6396" Text="LeasePeriodName" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="LeaseExpirationDate" DataField="LeaseExpirationDate" Left="7706.88" Top="13213.12" Width="2883.36" Height="260.6396" Text="LeaseExpirationDate" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: right; vertical-align: middle" />
@@ -274,7 +274,6 @@
       <Control Type="AR.Line" Name="Line40" X1="267.84" Y1="8929.44" X2="5263.2" Y2="8929.44" />
       <Control Type="AR.Line" Name="Line42" X1="3085" Y1="5850.72" X2="3085" Y2="10042.56" />
       <Control Type="AR.Line" Name="Line41" X1="267.84" Y1="9210" X2="5263.2" Y2="9210" />
-      <Control Type="AR.Line" Name="Line44" X1="5648" Y1="12692.48" X2="10663" Y2="12692.48" />
       <Control Type="AR.Line" Name="Line45" X1="5648" Y1="12952.48" X2="10663" Y2="12952.48" />
       <Control Type="AR.Line" Name="Line46" X1="5648" Y1="13212.48" X2="10663" Y2="13212.48" />
       <Control Type="AR.Line" Name="Line47" X1="5648" Y1="13472.48" X2="10663" Y2="13472.48" />
@@ -341,6 +340,7 @@
       <Control Type="AR.Line" Name="Line14" X1="5647.68" Y1="15033.6" X2="10663.2" Y2="15033.6" />
       <Control Type="AR.Image" Name="AutoFlatLogo1" DataField="AutoFlatLogo" Left="3818.88" Top="84.96001" Width="2355.84" Height="414.72" BackColor="16777215" BackStyle="1" LineWeight="0" SizeMode="1" />
       <Control Type="AR.Field" Name="InsuranceCompanyName" DataField="InsuranceCompanyName" Left="7706.88" Top="14253.12" Width="2882.88" Height="259.1991" Text="InsuranceCompanyName" Style="color: Black; font-family: MS PGothic; font-size: 8.25pt; text-align: right; vertical-align: middle; white-space: nowrap; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Line" Name="Line44" X1="5648" Y1="12692.48" X2="10663" Y2="12692.48" />
     </Section>
   </Sections>
   <ReportComponentTray />
