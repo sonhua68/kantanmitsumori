@@ -220,7 +220,7 @@ namespace KantanMitsumori.Service
                 else
                 {
                     var result = EstInsertUpdateData(model, estimates, logToken, dPriceEnd, pricePromotional, priceNameChange,
-                        interest, priceGuaranteeFee, priceMantance, priceWeighTax, priceInsurance, priceWeighTax, 0, pricePromotional);
+                        interest, priceGuaranteeFee, priceMantance, vehicleTaxPrice, priceInsurance, priceWeighTax, 0, pricePromotional);
                     if (result)
                         data.IsShowButton = 1;
                     else
