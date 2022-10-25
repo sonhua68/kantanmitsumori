@@ -291,7 +291,7 @@
                                             <tr>
                                                 <td class="data" style="border: none; height: 29px; vertical-align: top; padding: 3px;
                                             width: 290px;">
-                                                    <span id="lbl_ShopName1" class="InpTitle3" style="text-align: left;">@Model.EstModel.ShopNm</span>
+                                                    <span id="lbl_ShopName1" class="InpTitle3" style="text-align: left;">@Html.Raw(Model.EstModel.ShopNm.ReplaceLineEndings("<br />"))</span>
                                                 </td>
                                             </tr>
                                             <tr>
