@@ -131,8 +131,8 @@
         {
             <!-- CSV 出力 -->
             <div id="DIV3" style="border-right: #3c82ed 1px solid; border-top: #3c82ed 1px solid;
-                                                                                        z-index: 118; left: 8px; border-left: #3c82ed 1px solid; width: 142px; border-bottom: #3c82ed 1px solid;
-                                                                                        position: absolute; top: 782px; height: 66px; background-color: transparent;">
+                                                                                            z-index: 118; left: 8px; border-left: #3c82ed 1px solid; width: 142px; border-bottom: #3c82ed 1px solid;
+                                                                                            position: absolute; top: 782px; height: 66px; background-color: transparent;">
                 <input type="image" name="btnCSV" id="btnCSV" src="img/btnCSV.png" onclick="Framework.GoBackReloadPageUrl('/Estmain/ExportCSV');return false;" style="height:38px;width:110px;border-width:0px;z-index: 106; left: 16px; position: absolute; top: 14px">
             </div>
         }
@@ -140,7 +140,7 @@
         {
             <!-- Download pdf -->
             <div id="btnDownloadPdf" style=" width: 142px; left:12px;text-align: initial;
-                                                                                                            position: absolute; top: 745px; background-color: transparent;">
+                                                                                                                position: absolute; top: 745px; background-color: transparent;">
                 &nbsp;<input type="image" name="ImageButton37" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" id="ImageButton37" class="imgBtn" src="~/img/print.png" style="border-width:0px;">
                 <a id="LinkButton13" class="TxtLink" onclick="Framework.GoBackReloadPageUrl('/Estmain/DownloadPdf');return false;" href="javascript:void(0)" style="text-decoration:none;">法人申込書印刷</a>
             </div>
@@ -172,7 +172,7 @@
         {
             <div id="tblSaleAll">
                 <table cellpadding="1" class="nomal" style="position: absolute; top: 123px; left: 165px;
-                                                                                        width: 410px; z-index: 112;">
+                                                                                            width: 410px; z-index: 112;">
                     <tbody>
                         <tr>
                             <td style="border-bottom: solid 2px crimson; width: 170px; height: 37px;text-align: initial;">
@@ -191,7 +191,7 @@
         {
             <div id="tblLeaseTotal">
                 <table cellpadding="1" class="nomal" style="position: absolute; top: 123px; left: 165px;
-                                                                                        width: 455px; z-index: 112;">
+                                                                                            width: 455px; z-index: 112;">
                     <tbody>
                         <tr>
                             <td style="border-bottom: solid 2px crimson; height: 37px;text-align: initial;">
@@ -245,7 +245,7 @@
                                                     お名前
                                                 </td>
                                                 <td class="data">
-                                                    &nbsp;<input name="CustNm_forPrint" type="text" value="@Model.EstCustomerModel.CustNm" maxlength="40" id="CustNm_forPrint" tabindex="130" class="inpbox" style="ime-mode: active; width: 200px;">
+                                                    &nbsp;<input name="CustNm_forPrint" type="text" value="@Model.EstCustomerModel.CustNm" maxlength="40" id="CustNm_forPrint" onblur="focusFunction('CustNm_forPrint');" tabindex="130" class="inpbox" style="ime-mode: active; width: 200px;">
                                                     <span id="Msg_CustNm" class="inpboxsum" style="color: red;"></span>
                                                 </td>
                                             </tr>
@@ -254,7 +254,7 @@
                                                     郵便番号
                                                 </td>
                                                 <td class="data">
-                                                    &nbsp;<input name="CustZip_forPrint" value="@Model.EstCustomerModel.CustZip" type="text" maxlength="8" id="CustZip_forPrint" tabindex="130" class="inpbox" style="ime-mode: disabled; width: 100px;">
+                                                    &nbsp;<input name="CustZip_forPrint" value="@Model.EstCustomerModel.CustZip" type="text" maxlength="8" id="CustZip_forPrint" onblur="focusFunction('CustZip_forPrint');" tabindex="130" class="inpbox" style="ime-mode: disabled; width: 100px;">
                                                     <span id="Msg_CustZip" class="inpboxsum" style="color: red;"></span>
                                                 </td>
                                             </tr>
@@ -263,7 +263,7 @@
                                                     住所
                                                 </td>
                                                 <td class="data">
-                                                    &nbsp;<input name="CustAdr_forPrint" type="text" maxlength="60" value="@Model.EstCustomerModel.CustAdr" id="CustAdr_forPrint" tabindex="130" class="inpbox" style="ime-mode: active; width: 395px;">
+                                                    &nbsp;<input name="CustAdr_forPrint" type="text" maxlength="60" value="@Model.EstCustomerModel.CustAdr" id="CustAdr_forPrint" onblur="focusFunction('CustAdr_forPrint');" tabindex="130" class="inpbox" style="ime-mode: active; width: 395px;">
                                                     <span id="Msg_CustAdr" class="inpboxsum" style="color: red;"></span>
                                                 </td>
                                             </tr>
@@ -272,7 +272,7 @@
                                                     電話番号
                                                 </td>
                                                 <td class="data">
-                                                    &nbsp;<input name="CustTel_forPrint" type="text" maxlength="13" id="CustTel_forPrint" value="@Model.EstCustomerModel.CustTel" tabindex="130" class="inpbox" style="ime-mode: disabled; width: 120px;">
+                                                    &nbsp;<input name="CustTel_forPrint" type="text" maxlength="13" id="CustTel_forPrint" value="@Model.EstCustomerModel.CustTel" onblur="focusFunction('CustTel_forPrint');" tabindex="130" class="inpbox" style="ime-mode: disabled; width: 120px;">
                                                     <span id="Msg_CustTel" class="inpboxsum" style="color: red;"></span>
                                                 </td>
                                             </tr>
@@ -1071,7 +1071,7 @@
                                                                     <tbody>
                                                                         <tr>
                                                                             <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
-                                                                                                            vertical-align: middle;">
+                                                                                                                vertical-align: middle;">
                                                                                 <input type="image" name="ImageButton21" id="ImageButton21" onclick="Framework.GoBackReloadPageUrl('/InpLoan');return false" src="~/img/sbtnローン計算.png" style="border-width:0px;">
                                                                             </td>
                                                                         </tr>
@@ -1181,7 +1181,7 @@
                                                                     <tbody>
                                                                         <tr>
                                                                             <td class="title" colspan="2" style="background-color: #d2e0fb; text-align: left;
-                                                                                                            vertical-align: middle;">
+                                                                                                                vertical-align: middle;">
                                                                                 <input type="image" name="imgBtnLease" id="imgBtnLease" onclick="CheckNowOdometer();return false;" src="~/img/btb_リース計算情報.png" style="border-width:0px;">
                                                                             </td>
                                                                         </tr>
@@ -1418,6 +1418,8 @@
     </script>
 
     <script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
+    <script src="~/js/punycode.js"></script>
+    <script src="~/js/strutil.js"></script>
     <script src="~/js/EstMain.js"></script>
 }
 

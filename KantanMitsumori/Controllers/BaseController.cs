@@ -8,6 +8,7 @@ using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Net;
+using System.Text;
 using static GrapeCity.Enterprise.Data.DataEngine.ExpressionEvaluation.Eval;
 
 namespace KantanMitsumori.Controllers
@@ -131,7 +132,9 @@ namespace KantanMitsumori.Controllers
             var cookies = filterContext.HttpContext.Request.Cookies[Key]!;
             if (!string.IsNullOrEmpty(cookies))
             {
-                return cookies;
+
+                //return cookies;
+                return Encoding.UTF8.GetString(Convert.FromBase64String(cookies));
             }
             else
             {
@@ -152,6 +155,8 @@ namespace KantanMitsumori.Controllers
             };
             Response.Cookies.Append(Key, cookies, cookieOptions);
         }
+
+
         
     }
 }

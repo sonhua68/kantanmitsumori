@@ -71,62 +71,27 @@ function setInitValueCookie() {
     var custZip_forPrint = getCookie("CustZip_forPrint")
     var custAdr_forPrint = getCookie("CustAdr_forPrint")
     var custTel_forPrint = getCookie("CustTel_forPrint")
-    console.log(custNm_forPrint);
-    $("#CustNm_forPrint").val(custNm_forPrint);
-    $("#CustZip_forPrint").val(custZip_forPrint);
-    $("#CustAdr_forPrint").val(custAdr_forPrint);
-    $("#CustTel_forPrint").val(custTel_forPrint);
+    $("#CustNm_forPrint").val(unescapeFromBase64(custNm_forPrint));
+    $("#CustZip_forPrint").val(unescapeFromBase64(custZip_forPrint));
+    $("#CustAdr_forPrint").val(unescapeFromBase64(custAdr_forPrint));
+    $("#CustTel_forPrint").val(unescapeFromBase64(custTel_forPrint));
 }
 /*
  * setCookiePageMain
  *  Create By HoaiPhong
  *  Date 2022/09/22
  /*/
-(function () {
-    var oldVal;
-    var idName = "CustNm_forPrint";
-    $('#' + idName).on('change textInput input', function () {
-        var val = this.value;
-        if (val !== oldVal) {
-            oldVal = val;
-            setCookie(idName, val, 1);
-        }
-    });
-}());
-(function () {
-    var oldVal;
-    var idName = "CustZip_forPrint";
-    $('#' + idName).on('change textInput input', function () {
-        var val = this.value;
-        if (val !== oldVal) {
-            oldVal = val;
-            setCookie(idName, val, 1);
-        }
-    });
-}());
-(function () {
-    var oldVal;
-    var idName = "CustAdr_forPrint";
-    $('#' + idName).on('change textInput input', function () {
-        var val = this.value;
-        if (val !== oldVal) {
-            oldVal = val;
-            setCookie(idName, val, 1);
-        }
-    });
-}());
-(function () {
-    var oldVal;
-    var idName = "CustTel_forPrint";
-    $('#' + idName).on('change textInput input', function () {
-        var val = this.value;
-        if (val !== oldVal) {
-            oldVal = val;
-            setCookie(idName, val, 1);
-        }
-    });
-}());
+function decodedString(encodedString) {
+    var decodedString = window.atob(encodedString);
+    return decodedString;
+}
 
+function focusFunction(idName) {
+    let value = $('#' + idName).val();
+    var encodedString = updateByBase64(value);
+    setCookie(idName, encodedString, 1);
+
+}
 function DeleteBtnHanei() {
     document.cookie = "btnHanei" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
@@ -183,7 +148,8 @@ function upJiko(estno, estsubno, raJrk) {
 
 }
 function ShowColorChangeCarPrice() {
-    if (document.getElementById("lblWarningRecalc").innerHTML != "") {
+    let lblWarningRecalc = $('#lblWarningRecalc').text();
+    if (lblWarningRecalc != "") {
         if (document.getElementById("lblWarningRecalc").style.display != "none") {
             document.getElementById("idDeposit").style.backgroundColor = "#FFFFCC";
             document.getElementById("idPartitionFee").style.backgroundColor = "#FFFFCC";
@@ -198,4 +164,12 @@ function ShowColorChangeCarPrice() {
     if (document.getElementById("lbl_GetTax").innerHTML == "") { document.getElementById("idGetTax").style.backgroundColor = "#FFFFCC"; }
     if (document.getElementById("lbl_WeightTax").innerHTML == "") { document.getElementById("idWeightTax").style.backgroundColor = "#FFFFCC"; }
     if (document.getElementById("lbl_JibaiHoken").innerHTML == "") { document.getElementById("idJibaiHoken").style.backgroundColor = "#FFFFCC"; }
+
 }
+function updateByBase64(str) {
+    return escapeToBase64(str, "UTF-8")
+}
+function unescapeFromBase64(str) {
+  return   unescapeFromBase64(str, "UTF-8");
+}
+
