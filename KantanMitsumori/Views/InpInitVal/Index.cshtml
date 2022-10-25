@@ -8,7 +8,7 @@
     var SyakenNewZok = CommonFunction.checkwSyakenValue(Model.SyakenNew, Model.SyakenZok, Model.CheckCarYm!);
 
 }
-<form id="formInpInitVal">
+<form id="formInpInitVal" onkeydown="return NoSubmit(event);">
     <table border="0" width="100%">
         <tbody>
             <tr>
@@ -55,19 +55,25 @@
                                         <span id="Label29" class="titlelabel">軽自動車</span>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="inptd" style="width: 300px" align="left">
-                                        <span id="lblRiekiCap" class="inplabel" style="display:inline-block;width:298px;">予定利益（ASNET価格への上乗せ分）（税抜）</span>
-                                    </td>
-                                    <td class="inptd" style="border-right:solid 2px white; width: 201px;" align="left">
-                                        <input name="YtiRiekiH" type="text" id="YtiRiekiH" language="javascript" value="" maxlength="8" class="inpbox_r" tabindex="3" onblur="//TaxCostSum();" style="WIDTH: 94px;" size="10">
-                                        <span id="lblYtiRiekiHYen" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
-                                    </td>
-                                    <td class="inptd" align="left">
-                                        <input name="YtiRiekiK" type="text" id="YtiRiekiK" language="javascript" maxlength="8" class="inpbox_r" tabindex="4" onblur="//TaxFreeSum();" style="WIDTH: 94px;" size="10">
-                                        <span id="lblYtiRiekiKYen" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
-                                    </td>
-                                </tr>
+                                @{
+                                    if (@Model.Mode != (byte)1)
+                                    {
+                                        <tr>
+                                            <td class="inptd" style="width: 300px" align="left">
+                                                <span id="lblRiekiCap" class="inplabel" style="display:inline-block;width:298px;">予定利益（ASNET価格への上乗せ分）（税抜）</span>
+                                            </td>
+                                            <td class="inptd" style="border-right:solid 2px white; width: 201px;" align="left">
+                                                <input name="YtiRiekiH" type="text" id="YtiRiekiH" language="javascript" value="" maxlength="8" class="inpbox_r" tabindex="3" onblur="//TaxCostSum();" style="WIDTH: 94px;" size="10">
+                                                <span id="lblYtiRiekiHYen" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                            </td>
+                                            <td class="inptd" align="left">
+                                                <input name="YtiRiekiK" type="text" id="YtiRiekiK" language="javascript" maxlength="8" class="inpbox_r" tabindex="4" onblur="//TaxFreeSum();" style="WIDTH: 94px;" size="10">
+                                                <span id="lblYtiRiekiKYen" class="inplabel" style="display:inline-block;width:41px;">&nbsp;円</span>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+
                                 <tr>
                                     <td class="inptd" style="background-color:#c5c5c5; height: 22px; width: 236px;" align="left">
                                         <span id="lblSyaken" class="inplabel" style="display:inline-block;width:150px;">整備費用（税抜）</span>
@@ -477,7 +483,7 @@
     $("form#formInpInitVal").submit(function (event) {
         event.preventDefault();
         if (inputChk() == true) {
-            var model = Framework.getFormData($("#formInpInitVal"));        
+            var model = Framework.getFormData($("#formInpInitVal"));
             model.AsArticle = model.Article == "radUse" ? 1 : 0;
             model.DamageInsMonth = 25;
             model.Rate = model.Rate == "" ? 0 : model.Rate;

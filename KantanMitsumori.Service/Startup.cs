@@ -44,7 +44,8 @@ namespace KantanMitsumori.Service
         }
 
         public static IServiceCollection AddAuthenService(this IServiceCollection services)
-        {            
+        {   
+            services.AddTransient<ISerEstService, SerEstService>();
             // Add generic DI
             services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();
             services.AddTransient<IPreExaminationService, PreExaminationService>();            

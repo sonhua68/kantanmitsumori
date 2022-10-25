@@ -309,7 +309,8 @@ namespace KantanMitsumori.Helper.CommonFuncs
             {
                 if (IsDate(Left(inYM, 4) + "/" + Right(inYM, 2) + "/01"))
                 {
-                    ret = DateDiff(IntervalEnum.Months, DateTime.Today, DateTime.Parse(Left(inYM, 4) + "/" + Right(inYM, 2) + "/01"));
+                    var date = DateTime.Parse(Left(inYM, 4) + "/" + Right(inYM, 2) + "/01");
+                    ret = DateDiff(IntervalEnum.Months, DateTime.Today, date);
                     if (ret > 36)
                         // 未来過ぎて不正なので、入力なし扱い
                         return "";
@@ -537,12 +538,16 @@ namespace KantanMitsumori.Helper.CommonFuncs
 
         public static int DateDiff(IntervalEnum eInterval, DateTime dtInit, DateTime dtEnd)
         {
-            if (dtEnd < dtInit)
-                throw new ArithmeticException("Init date should be previous to End date.");
+            var startDate = dtInit;
+            var endDate = dtEnd;
+            //if (dtEnd < dtInit)
+                //throw new ArithmeticException("Init date should be previous to End date.");
+                //startDate = dtEnd;
+                //endDate = dtInit;
 
             var periods = Period.Between(
-                        new LocalDate(dtInit.Year, dtInit.Month, dtInit.Day),
-                        new LocalDate(dtEnd.Year, dtEnd.Month, dtEnd.Day));
+                        new LocalDate(startDate.Year, startDate.Month, startDate.Day),
+                        new LocalDate(endDate.Year, endDate.Month, endDate.Day));
 
             switch (eInterval)
             {

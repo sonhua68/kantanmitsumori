@@ -7,6 +7,8 @@ using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System;
+using System.Security.Policy;
 using System.Text;
 
 namespace KantanMitsumori.Service.Helper
@@ -259,7 +261,7 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                Uri uri = new Uri(url);
+                Uri uri = new Uri(url);      
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
                 strCarImgPlace = _physicalPathSettings.CarImgPlace;
@@ -284,15 +286,7 @@ namespace KantanMitsumori.Service.Helper
                 {
                     fileName = Path.Combine(strCarImgPlace, strSaveName);
                 }
-
-                // Use HttpClient to download image
-                //var httpClient = _httpClientFactory.CreateClient();
-                //var task = httpClient.GetByteArrayAsync(uri);
-                //task.Wait();
-                //var data = task.Result;
-                //File.WriteAllBytes(fileName, task.Result);
                 clonefile(fileName, uri);
-
             }
             catch (Exception ex)
             {
@@ -303,17 +297,32 @@ namespace KantanMitsumori.Service.Helper
 
         public async void clonefile(string fileName, Uri uri)
         {
+
             HttpClient _client = new HttpClient();
             HttpResponseMessage task = await _client.GetAsync(uri);
-            Stream task2 = await task.Content.ReadAsStreamAsync();
-            var memory = new MemoryStream();
-            await task2.CopyToAsync(memory);
-            memory.Position = 0;
-            File.WriteAllBytes(fileName, memory.ToArray());
-            task2.Dispose();
-            memory.Dispose();
+            if ((int)task.StatusCode == 200)
+            {
+                Stream task2 = await task.Content.ReadAsStreamAsync();
+                var memory = new MemoryStream();
+                await task2.CopyToAsync(memory);
+                memory.Position = 0;
+                File.WriteAllBytes(fileName, memory.ToArray());
+                task2.Dispose();
+                memory.Dispose();
+            }
         }
+        public async Task<bool> CheckUrlImg(string url)
+        {
+            Uri uri = new Uri(url);
+            HttpClient _client = new HttpClient();
+            HttpResponseMessage task = await _client.GetAsync(uri);
+            if ((int)task.StatusCode == 200)
+            {
+                return true;
+            }
+            return false;
 
+        }
         public void CheckImgPath(string strImagePath, string strSesName, string strDefImage, ref string strOutImagePath, string strImgSuffix, string cor, string fex)
         {
             string strOutImg = "";
@@ -407,7 +416,7 @@ namespace KantanMitsumori.Service.Helper
         {
             if (intExaust <= 660)
             {
-                return 0;
+                return -1;
             }
             int intYEAR_AMOUNT = getYearAmount(intExaust);
             if (intYEAR_AMOUNT == -1)

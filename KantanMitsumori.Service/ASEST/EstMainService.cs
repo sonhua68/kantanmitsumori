@@ -11,8 +11,10 @@ using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
+using KantanMitsumori.Service.Mapper.MapperConverter;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.IO;
 
 namespace KantanMitsumori.Service.ASEST
 {
@@ -25,10 +27,12 @@ namespace KantanMitsumori.Service.ASEST
         private readonly CommonFuncHelper _commonFuncHelper;
         private readonly CommonEstimate _commonEst;
         private readonly JwtSettings _jwtSettings;
+        private readonly PhysicalPathSettings _jwtPhysicalSettings;
         private readonly DataSettings _dataSettings;
         private LogToken valToken;
 
-        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst, IOptions<DataSettings> dataSettings, IOptions<JwtSettings> jwtSettings)
+        public EstMainService(IMapper mapper, ILogger<EstMainService> logger, IUnitOfWork unitOfWork, IUnitOfWorkIDE unitOfWorkIDE, CommonFuncHelper commonFuncHelper, CommonEstimate commonEst,
+            IOptions<DataSettings> dataSettings, IOptions<JwtSettings> jwtSettings, IOptions<PhysicalPathSettings> jwtPhysicalSettings)
         {
             _mapper = mapper;
             _logger = logger;
@@ -39,10 +43,12 @@ namespace KantanMitsumori.Service.ASEST
             _unitOfWorkIDE = unitOfWorkIDE;
             _jwtSettings = jwtSettings.Value;
             _dataSettings = dataSettings.Value;
+            _jwtPhysicalSettings = jwtPhysicalSettings.Value;
         }
 
         public UserModel? getUserName(string userNo)
         {
+
             try
             {
                 var dtMUser = _mapper.Map<UserModel>(_unitOfWork.Users.GetSingle(x => x.UserNo == userNo));
@@ -292,13 +298,13 @@ namespace KantanMitsumori.Service.ASEST
                 {
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAI028D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI028D));
                 }
-                var estData = _commonEst.SetEstData(valToken.sesEstNo, valToken.sesEstSubNo);
-                if (estData.ResultStatus != (int)enResponse.isSuccess)
+                var estData = _commonEst.GetEstData(valToken.sesEstNo, valToken.sesEstSubNo);
+                if (estData == null)
                 {
                     return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
                 }
-                response.EstModel = estData.Data!;
+                response.EstModel = estData;
                 response.EstCustomerModel = new EstCustomerModel
                 {
                     CustNm = valToken.sesCustNm_forPrint ?? "",
@@ -824,6 +830,28 @@ namespace KantanMitsumori.Service.ASEST
             return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), data);
         }
 
+
+        public async Task<ResponseBase<int>> UpdateJiko(RequestUpdateJiko model)
+        {
+            try
+            {
+                TEstimate dtEstimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == model.EstNo && n.EstSubNo == model.EstSubNo && n.Dflag == false);
+                if (dtEstimates == null)
+                {
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
+                dtEstimates.AccidentHis = Convert.ToByte(model.raJrk);
+                _unitOfWork.Estimates.Update(dtEstimates);
+                await _unitOfWork.CommitAsync();
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "updateJiko");
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
+
         #region fuc private     
         private int ChkAANo(string? userNo, string AANo, string AAPlace, int CornerType, int mode)
         {
@@ -999,33 +1027,38 @@ namespace KantanMitsumori.Service.ASEST
                 string outImg2 = ""; string outImg3 = ""; string outImg4 = ""; string outImg5 = ""; string outImg6 = ""; string outImg7 = ""; string outImg8 = "";
                 if (string.IsNullOrEmpty(wCarImgPath))
                 {
-                    estModel.CarImgPath = CommonConst.def_DmyImg;
+                    estModel.CarImgPath = _jwtPhysicalSettings.DmyImg;
                 }
                 else
                 {
-                    strTempImagePath = wCarImgPath.ToUpper();
-                    if (!strTempImagePath.EndsWith(".JPG") && !strTempImagePath.EndsWith(".GIF") && !strTempImagePath.EndsWith(".PNG"))
+                    var isUrlImg = await _commonFuncHelper.CheckUrlImg(wCarImgPath);
+                    if (isUrlImg == true)
                     {
-                        strSavePath = request.cor + request.fex + "001.jpg";
+                        strTempImagePath = wCarImgPath.ToUpper();
+                        if (!strTempImagePath.EndsWith(".JPG") && !strTempImagePath.EndsWith(".GIF") && !strTempImagePath.EndsWith(".PNG"))
+                        {
+                            strSavePath = request.cor + request.fex + "001.jpg";
+                        }
+
+                        _commonFuncHelper.DownloadImg(wCarImgPath, valToken.sesCarImgPath!, _jwtPhysicalSettings.DmyImg, ref outImg, strSavePath);
+                        estModel.CarImgPath = outImg;
+                        _commonFuncHelper.CheckImgPath(request.img1, valToken.sesCarImgPath1!, "", ref outImg1, "201.jpg", request.cor, request.fex);
+                        _commonFuncHelper.CheckImgPath(request.img2, valToken.sesCarImgPath2!, "", ref outImg2, "202.jpg", request.cor, request.fex);
+                        _commonFuncHelper.CheckImgPath(request.img3, valToken.sesCarImgPath3!, "", ref outImg3, "203.jpg", request.cor, request.fex);
+                        _commonFuncHelper.CheckImgPath(request.img4, valToken.sesCarImgPath4!, "", ref outImg4, "204.jpg", request.cor, request.fex);
+                        _commonFuncHelper.CheckImgPath(request.img5, valToken.sesCarImgPath5!, "", ref outImg5, "205.jpg", request.cor, request.fex);
+                        _commonFuncHelper.CheckImgPath(request.img6, valToken.sesCarImgPath6!, "", ref outImg6, "206.jpg", request.cor, request.fex);
+                        _commonFuncHelper.CheckImgPath(request.img7, valToken.sesCarImgPath7!, "", ref outImg7, "207.jpg", request.cor, request.fex);
+                        _commonFuncHelper.CheckImgPath(request.img8, valToken.sesCarImgPath8!, "", ref outImg8, "208.jpg", request.cor, request.fex);
+                        estModel.CarImgPath1 = outImg1;
+                        estModel.CarImgPath2 = outImg2;
+                        estModel.CarImgPath3 = outImg3;
+                        estModel.CarImgPath4 = outImg4;
+                        estModel.CarImgPath5 = outImg5;
+                        estModel.CarImgPath6 = outImg6;
+                        estModel.CarImgPath7 = outImg7;
+                        estModel.CarImgPath8 = outImg8;
                     }
-                    _commonFuncHelper.DownloadImg(wCarImgPath, valToken.sesCarImgPath!, CommonConst.def_DmyImg, ref outImg, strSavePath);
-                    estModel.CarImgPath = outImg;
-                    _commonFuncHelper.CheckImgPath(request.img1, valToken.sesCarImgPath1!, "", ref outImg1, "201.jpg", request.cor, request.fex);
-                    _commonFuncHelper.CheckImgPath(request.img2, valToken.sesCarImgPath2!, "", ref outImg2, "202.jpg", request.cor, request.fex);
-                    _commonFuncHelper.CheckImgPath(request.img3, valToken.sesCarImgPath3!, "", ref outImg3, "203.jpg", request.cor, request.fex);
-                    _commonFuncHelper.CheckImgPath(request.img4, valToken.sesCarImgPath4!, "", ref outImg4, "204.jpg", request.cor, request.fex);
-                    _commonFuncHelper.CheckImgPath(request.img5, valToken.sesCarImgPath5!, "", ref outImg5, "205.jpg", request.cor, request.fex);
-                    _commonFuncHelper.CheckImgPath(request.img6, valToken.sesCarImgPath6!, "", ref outImg6, "206.jpg", request.cor, request.fex);
-                    _commonFuncHelper.CheckImgPath(request.img7, valToken.sesCarImgPath7!, "", ref outImg7, "207.jpg", request.cor, request.fex);
-                    _commonFuncHelper.CheckImgPath(request.img8, valToken.sesCarImgPath8!, "", ref outImg8, "208.jpg", request.cor, request.fex);
-                    estModel.CarImgPath1 = outImg1;
-                    estModel.CarImgPath2 = outImg2;
-                    estModel.CarImgPath3 = outImg3;
-                    estModel.CarImgPath4 = outImg4;
-                    estModel.CarImgPath5 = outImg5;
-                    estModel.CarImgPath6 = outImg6;
-                    estModel.CarImgPath7 = outImg7;
-                    estModel.CarImgPath8 = outImg8;
                 }
 
                 estModel.TotalCost = 0;
@@ -1239,7 +1272,7 @@ namespace KantanMitsumori.Service.ASEST
 
             return true;
         }
-        private static ResponseEstMainModel BindingDataEsmain(ResponseEstMainModel Model)
+        private ResponseEstMainModel BindingDataEsmain(ResponseEstMainModel Model)
         {
             var estModelView = Model.EstModelView;
             estModelView.TradeDate = CommonFunction.japaneseFormat(Model.EstModel.TradeDate);
@@ -1425,7 +1458,15 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.OptionPrice10 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice10);
             estModelView.OptionPrice11 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice11);
             estModelView.OptionPrice12 = CommonFunction.setFormatCurrency(Model.EstModel.OptionPrice12);
-            Model.EstModelView = estModelView;
+            estModelView.Notes = Model.EstModel.Notes.ReplaceLineEndings("<br />");
+            if (File.Exists(Model.EstModel.CarImgPath))
+            {
+                estModelView.CarImgPath = ConverterHelper.LoadImage(Model.EstModel.CarImgPath);
+            }
+            else
+            {
+                estModelView.CarImgPath = ConverterHelper.LoadImage(_jwtPhysicalSettings.DmyImg);
+            }
             return Model;
         }
 

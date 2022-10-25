@@ -18,7 +18,7 @@
       <Control Type="AR.Label" Name="Text94" Left="7400" Top="6940" Width="815.04" Height="211.68" Caption="【販売店】" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="txtSName" DataField="SName" Left="7480" Top="7220" Width="3629.6" Height="440" Text="SName" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="txtAddress" DataField="Address" Left="7480" Top="7720" Width="3629.6" Height="440" Text="Address" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
-      <Control Type="AR.Field" Name="txtTanto" DataField="Tanto" Left="7480" Top="8200" Width="1800" Height="223.2" Text="Tanto" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
+      <Control Type="AR.Field" Name="txtTanto" DataField="Tanto" Left="7480" Top="8200" Width="3628.16" Height="223.2" Text="Tanto" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="txtCarPrice" DataField="CarPrice" Left="2180.16" Top="6020.64" Width="1365" Height="293" Text="CarPrice" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 12pt; text-align: right; vertical-align: middle" />
       <Control Type="AR.Field" Name="txtCarName" DataField="CarName" Left="1392.48" Top="6379.2" Width="5581.44" Height="210.24" Text="CarName" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
       <Control Type="AR.Field" Name="txtGradeName" DataField="GradeName" Left="1392.48" Top="6668.64" Width="5582.88" Height="210.24" Text="GradeName" CanGrow="0" Style="background-color: White; color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left" />
@@ -69,7 +69,6 @@
       <Control Type="AR.Line" Name="Line20" X1="6079.68" Y1="7195.68" X2="6080" Y2="7754.399" />
       <Control Type="AR.Line" Name="Line18" X1="5270" Y1="7195" X2="5270" Y2="7754.399" />
       <Control Type="AR.Line" Name="Line4" X1="231.84" Y1="6915" X2="7065" Y2="6915" LineWeight="0" />
-      <Control Type="AR.Field" Name="SekininName1" DataField="SekininName" Left="9279.359" Top="8199.359" Width="1800" Height="223.2" Text="SekininName" Style="color: Black; font-family: MS PGothic; font-size: 9pt; text-align: left; white-space: nowrap; ddo-wrap-mode: nowrap" />
       <Control Type="AR.Shape" Name="Box6" Left="218" Top="6340" Width="6854.399" Height="2160" BackColor="16777215" RoundingRadius="10" />
     </Section>
   </Sections>

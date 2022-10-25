@@ -211,6 +211,25 @@ function chkBytes(cName, cTxt, cMaxLen) {
         return "";
     }
 }
+function chkBytesError(cName, cTxt, cMaxLen) {
+    if (cTxt.length == 0) { return "" };
+    var count = 0;
+    var wstr = "";
+    for (var i = 0; i < cTxt.length; i++) {
+        wstr = cTxt.charAt(i);
+        if (escape(wstr).length < 4 || wstr.match(/[｡-ﾟ]/)) {
+            count = count + 1;
+        } else {
+            count = count + 2;
+        }
+    }
+
+    if (count > cMaxLen) {
+        return cName + "電話番号に入力できる文字数は半角" + cMaxLen + "（全角" + Math.floor(cMaxLen / 2) + "）文字までです";
+    } else {
+        return "";
+    }
+}
 //2014/08/08 fukunaga add start
 /**********************************************
 /* Enterキーによるsubmitを無効にする
@@ -363,14 +382,14 @@ String.prototype.compose = (function () {
  *  Create By HoaiPhong
  *  Date 2022/09/23
  /*/
-$(document).ready(function () {
-    $(window).keydown(function (event) {
-        if (event.keyCode == 13) {
-            event.preventDefault();
-            return false;
-        }
-    });
-});
+//$(document).ready(function () {
+//    $(window).keydown(function (event) {
+//        if (event.keyCode == 13) {
+//            event.preventDefault();
+//            return false;
+//        }
+//    });
+//});
 /*
  * sortElements
  *  Create By HoaiPhong
@@ -484,6 +503,13 @@ var DATE_FORMAT_MOMENT = "DD-MMM-YY";
 var DATE_FORMAT_MOMENT_NEW = "DD-MM-YYYY";
 var DATE_FORMAT_MOMENT_WITH_TIME = "DD-MMM-YY hh:mm A";
 var DATE_FORMAT_MOMENT_WITH_TIME_NEW = "DD-MM-YYYY HH:mm:ss";
+$('textarea').keypress(function (event) {
+    if (event.which == 13) {
+        event.preventDefault();
+        var s = $(this).val();
+        $(this).val(s + "\n");
+    }
+});
 
 
 

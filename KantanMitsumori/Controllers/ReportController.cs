@@ -30,17 +30,6 @@ namespace KantanMitsumori.Controllers
             var model = new RequestReport();
             _mapper.Map(_logToken, model);
 
-            // Sample data            
-            model = new RequestReport()
-            {
-                EstNo = "22092300054",
-                EstSubNo = "01",
-                CustNm_forPrint = "DANG PHAM",
-                CustZip_forPrint = "702201",
-                CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
-                CustTel_forPrint = "028-3801-5151"
-            };
-
             // Set report type
             model.ReportType = ReportType.Estimate;
 
@@ -68,17 +57,6 @@ namespace KantanMitsumori.Controllers
             // Get request model
             var model = new RequestReport();
             _mapper.Map(_logToken, model);
-
-            // Sample data            
-            model = new RequestReport()
-            {
-                EstNo = "22092300054",
-                EstSubNo = "01",
-                CustNm_forPrint = "DANG PHAM",
-                CustZip_forPrint = "702201",
-                CustAdr_forPrint = "236/43/2 DIEN BIEN PHU P.17 Q.BT",
-                CustTel_forPrint = "028-3801-5151"
-            };
 
             // Set report type
             model.ReportType = ReportType.Order;

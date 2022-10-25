@@ -16,7 +16,6 @@ namespace KantanMitsumori.Controllers
             _inpCarPriceService = inpCarPriceService;
             _mapper = mapper;
         }
-
         public IActionResult Index()
         {
             // Create request model map values from logToken
@@ -29,35 +28,16 @@ namespace KantanMitsumori.Controllers
                 return ErrorAction(response);
             }
             // Show view
-            return View("Index", response.Data);
+            return View(response.Data);
         }
 
         [HttpPost]
-        public  IActionResult Update(RequestUpdateInpCarPrice requestData)
+        public async Task<IActionResult> Update([FromForm] RequestUpdateInpCarPrice requestData)
         {
-            // Create model for update car price
             var model = new RequestUpdateCarPrice();
             _mapper.Map(requestData, model);
-            // Get car price data
-            var response = _inpCarPriceService.Update(model);
-            return Json(response);
-        }
-
-        public IActionResult Demo()
-        {
-            CreateLogTokenForDemo();
-            return Index();
-        }
-
-        private void CreateLogTokenForDemo()
-        {
-            _logToken = new LogToken()
-            {
-                sesEstNo = "22092900010",
-                sesEstSubNo = "01",
-                UserNo = "88888195",
-                UserNm = "DANGPHAM"
-            };
+            var response = await _inpCarPriceService.UpdateCarPrice(model, _logToken!);
+            return Ok(response);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿setInitialValue();
+﻿//setInitialValue();
+ShowColorChangeCarPrice();
 DeleteBtnHanei()
 setInitValueCookie();
 function setInitialValue() {
@@ -28,31 +29,31 @@ function inputChk() {
     var outMsg = "";
     var flgErr = false;
 
-    document.getElementById("txtMsg_CustNm").innerHTML = "";
+    document.getElementById("Msg_CustNm").innerHTML = "";
     outMsg = chkBytes("お名前", $get('CustNm_forPrint').value, 40);
     if (outMsg) {
-        document.getElementById("txtMsg_CustNm").innerHTML = '<br>' + outMsg;
+        document.getElementById("Msg_CustNm").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
-    document.getElementById("txtMsg_CustZip").innerHTML = "";
+    document.getElementById("Msg_CustZip").innerHTML = "";
     outMsg = chkBytes("郵便番号", $get('CustZip_forPrint').value, 8);
     if (outMsg) {
-        document.getElementById("txtMsg_CustZip").innerHTML = '<br>' + outMsg;
+        document.getElementById("Msg_CustZip").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
-    document.getElementById("txtMsg_CustAdr").innerHTML = "";
+    document.getElementById("Msg_CustAdr").innerHTML = "";
     outMsg = chkBytes("住所", $get('CustAdr_forPrint').value, 60);
     if (outMsg) {
-        document.getElementById("txtMsg_CustAdr").innerHTML = '<br>' + outMsg;
+        document.getElementById("Msg_CustAdr").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
-    document.getElementById("txtMsg_CustTel").innerHTML = "";
-    outMsg = chkBytes("", $get('CustTel_forPrint').value, 13);
+    document.getElementById("Msg_CustTel").innerHTML = "";
+    outMsg = chkBytesError("", $get('CustTel_forPrint').value, 13);
     if (outMsg) {
-        document.getElementById("txtMsg_CustTel").innerHTML = '<br>' + outMsg;
+        document.getElementById("Msg_CustTel").innerHTML = '<br>' + outMsg;
         flgErr = true;
     }
 
@@ -70,62 +71,27 @@ function setInitValueCookie() {
     var custZip_forPrint = getCookie("CustZip_forPrint")
     var custAdr_forPrint = getCookie("CustAdr_forPrint")
     var custTel_forPrint = getCookie("CustTel_forPrint")
-    console.log(custNm_forPrint);
-    $("#CustNm_forPrint").val(custNm_forPrint);
-    $("#CustZip_forPrint").val(custZip_forPrint);
-    $("#CustAdr_forPrint").val(custAdr_forPrint);
-    $("#CustTel_forPrint").val(custTel_forPrint);
+    $("#CustNm_forPrint").val(unescapeFromBase64(custNm_forPrint));
+    $("#CustZip_forPrint").val(unescapeFromBase64(custZip_forPrint));
+    $("#CustAdr_forPrint").val(unescapeFromBase64(custAdr_forPrint));
+    $("#CustTel_forPrint").val(unescapeFromBase64(custTel_forPrint));
 }
 /*
  * setCookiePageMain
  *  Create By HoaiPhong
  *  Date 2022/09/22
  /*/
-(function () {
-    var oldVal;
-    var idName = "CustNm_forPrint";
-    $('#' + idName).on('change textInput input', function () {
-        var val = this.value;
-        if (val !== oldVal) {
-            oldVal = val;
-            setCookie(idName, val, 1);
-        }
-    });
-}());
-(function () {
-    var oldVal;
-    var idName = "CustZip_forPrint";
-    $('#' + idName).on('change textInput input', function () {
-        var val = this.value;
-        if (val !== oldVal) {
-            oldVal = val;
-            setCookie(idName, val, 1);
-        }
-    });
-}());
-(function () {
-    var oldVal;
-    var idName = "CustAdr_forPrint";
-    $('#' + idName).on('change textInput input', function () {
-        var val = this.value;
-        if (val !== oldVal) {
-            oldVal = val;
-            setCookie(idName, val, 1);
-        }
-    });
-}());
-(function () {
-    var oldVal;
-    var idName = "CustTel_forPrint";
-    $('#' + idName).on('change textInput input', function () {
-        var val = this.value;
-        if (val !== oldVal) {
-            oldVal = val;
-            setCookie(idName, val, 1);
-        }
-    });
-}());
+function decodedString(encodedString) {
+    var decodedString = window.atob(encodedString);
+    return decodedString;
+}
 
+function focusFunction(idName) {
+    let value = $('#' + idName).val();
+    var encodedString = updateByBase64(value);
+    setCookie(idName, encodedString, 1);
+
+}
 function DeleteBtnHanei() {
     document.cookie = "btnHanei" + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
@@ -156,3 +122,54 @@ function CheckNowOdometer() {
     }
 
 }
+
+function onReport(type) {
+    if (inputChk() == true) {
+        if (type == 1) {
+            Framework.GoBackReloadPageUrl('/Report/DownloadEstimateReport');
+        } else {
+            Framework.GoBackReloadPageUrl('/Report/DownloadOrderReport')
+        }
+
+    }
+    return false;
+}
+function upJiko(estno, estsubno, raJrk) {
+    var model = {};
+    model.EstNo = estno;
+    model.EstSubNo = estsubno;
+    model.raJrk = raJrk;
+    var result = Framework.submitAjaxFormUpdateAsync(model, "/Estmain/UpdateJiko");
+    if (result.resultStatus != 0) {
+        Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+    } else {
+        console.log(result.messageContent);
+    }
+
+}
+function ShowColorChangeCarPrice() {
+    let lblWarningRecalc = $('#lblWarningRecalc').text();
+    if (lblWarningRecalc != "") {
+        if (document.getElementById("lblWarningRecalc").style.display != "none") {
+            document.getElementById("idDeposit").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idPartitionFee").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idKaisu").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idKikan").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idFirstPrice").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idSecoPrice").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idBonusMonth").style.backgroundColor = "#FFFFCC";
+            document.getElementById("idBonusAdd").style.backgroundColor = "#FFFFCC";
+        }
+    }
+    if (document.getElementById("lbl_GetTax").innerHTML == "") { document.getElementById("idGetTax").style.backgroundColor = "#FFFFCC"; }
+    if (document.getElementById("lbl_WeightTax").innerHTML == "") { document.getElementById("idWeightTax").style.backgroundColor = "#FFFFCC"; }
+    if (document.getElementById("lbl_JibaiHoken").innerHTML == "") { document.getElementById("idJibaiHoken").style.backgroundColor = "#FFFFCC"; }
+
+}
+function updateByBase64(str) {
+    return escapeToBase64(str, "UTF-8")
+}
+function unescapeFromBase64(str) {
+  return   unescapeFromBase64(str, "UTF-8");
+}
+
