@@ -160,9 +160,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
             for (int i = 0; i <= 3; i++)
             {
-                if (CurrentMonth == 13)
+                if (setMonth > 12)
                 {
                     setMonth = 1;
+                    ListMonth.Add(new DropDownList { Value = setMonth, Text = setMonth.ToString() });
+                    setMonth = setMonth + 1;
                 }
                 else
                 {
