@@ -1,6 +1,7 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Utility;
+using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService.ASEST;
 using KantanMitsumori.Model;
 using KantanMitsumori.Model.Request;
@@ -16,12 +17,14 @@ namespace KantanMitsumori.Service.ASEST
 
         private readonly CommonEstimate _commonEst;
         private readonly CommonIDE _commonIDE;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PreExaminationService(ILogger<InpCustKanaService> logger, CommonEstimate commonEst, CommonIDE commonIDE)
+        public PreExaminationService(ILogger<InpCustKanaService> logger, CommonEstimate commonEst, CommonIDE commonIDE, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _commonEst = commonEst;
             _commonIDE = commonIDE;
+            _unitOfWork = unitOfWork;
         }
 
         public ResponseBase<ResponsePreExamination> GetInfoPreExamination(string estNo, string estSubNo)
@@ -75,7 +78,26 @@ namespace KantanMitsumori.Service.ASEST
                 return ResponseHelper.Error<ResponsePreExamination>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
-
+        public async Task<ResponseBase<int>> UpdatePreExamination(LogToken logToken)
+        {
+            try
+            {
+                var dtEstimateIdes = _unitOfWork.EstimateIdes.GetSingle(n => n.EstNo == logToken.sesEstNo && n.EstSubNo == logToken.sesEstSubNo);
+                if (dtEstimateIdes == null)
+                {
+                    return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));
+                }
+                dtEstimateIdes.IsApplyLease = 1;
+                _unitOfWork.EstimateIdes.Update(dtEstimateIdes);
+                await _unitOfWork.CommitAsync();
+                return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "UpdatePreExamination");
+                return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
+            }
+        }
         private ResponsePreExamination ToModel(RequestPreExaminationModel model)
         {
             // set binding data

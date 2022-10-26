@@ -130,13 +130,13 @@ function getCarTax() {
 }
 
 function setCarTax(retCarTax) {
-    if (retCarTax != "") {
-        $("#MeiCarTax").val(retCarTax);
-    } else {
+    if (parseInt(retCarTax) == -1 || parseInt(retCarTax) == 0) {
         $("#MeiCarTax").val("");
         if (document.getElementById("ddlCarTaxMonth").value != "") {
             alert("自動計算はできませんでした");
         }
+    } else {
+        $("#MeiCarTax").val(retCarTax);
     }
     document.getElementById("chkMeiCarTaxEquivalent").checked = false;
     changeProps("MeiCarTax");

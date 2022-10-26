@@ -7,6 +7,7 @@ namespace KantanMitsumori.Helper.CommonFuncs
     {
         public object? Value { set; get; }
         public string? Text { set; get; }
+
         public static List<DropDownList> ListMonth(bool isEmpty)
         {
             var ListMonth = new List<DropDownList>();
@@ -31,12 +32,43 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
             DateTime now = DateTime.Now;
             var year = now.Year;
-            for (int i = 1; i <= numberYear; i++)
+            for (int i = 0; i <= numberYear; i++)
             {
                 ListYear.Add(new DropDownList { Value = year, Text = year.ToString() });
                 year++;
             }
             return ListYear.ToList();
+        }
+        public static List<DropDownList> ListMinusYears(bool isEmpty, int numberYear)
+        {
+            var ListYear = new List<DropDownList>();
+            if (isEmpty)
+            {
+                ListYear.Add(new DropDownList { Value = "", Text = "" });
+
+            }
+            DateTime now = DateTime.Now;
+            var year = now.Year;
+            for (int i = 0; i <= numberYear; i++)
+            {
+                ListYear.Add(new DropDownList { Value = year, Text = year.ToString() });
+                year--;
+            }
+            return ListYear.ToList();
+        }
+        public static List<DropDownList> ListDay(bool isEmpty)
+        {
+            var ListDay = new List<DropDownList>();
+            if (isEmpty)
+            {
+                ListDay.Add(new DropDownList { Value = "", Text = "" });
+
+            }
+            for (int i = 1; i <= 31; i++)
+            {
+                ListDay.Add(new DropDownList { Value = i, Text = i.ToString() });
+            }
+            return ListDay.ToList();
         }
         public static List<DropDownList> ListObjectData(bool isEmpty, object data)
         {
@@ -128,9 +160,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
             }
             for (int i = 0; i <= 3; i++)
             {
-                if (CurrentMonth == 13)
+                if (setMonth > 12)
                 {
                     setMonth = 1;
+                    ListMonth.Add(new DropDownList { Value = setMonth, Text = setMonth.ToString() });
+                    setMonth = setMonth + 1;
                 }
                 else
                 {
@@ -208,6 +242,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
             return ListMonth.ToList();
         }
         #endregion InpZeiHoken
+
+
+        #region InpLeaseCalc
+
+        #endregion InpLeaseCalc
     }
 
 

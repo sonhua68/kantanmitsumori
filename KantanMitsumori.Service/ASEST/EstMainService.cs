@@ -799,8 +799,8 @@ namespace KantanMitsumori.Service.ASEST
             strOutdata += formatCsvItem(CommonFunction.FormatString(estData.Rate)) + CSV_DELIMITER;
             // -- （ローン計算情報）頭金
             strOutdata += formatCsvItem(CommonFunction.FormatString(estData.Deposit)) + CSV_DELIMITER;
-            // -- （ローン計算情報）現金・割賦元金
-            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.Principal)) + CSV_DELIMITER;
+            // -- （ローン計算情報）現金・割賦元金     
+            strOutdata += formatCsvItem(CommonFunction.FormatString(estData.SalesSum - estData.Deposit)) + CSV_DELIMITER;
             // -- （ローン計算情報）分割払手数料
             strOutdata += formatCsvItem(CommonFunction.FormatString(estData.PartitionFee)) + CSV_DELIMITER;
             // -- （ローン計算情報）分割支払金合計

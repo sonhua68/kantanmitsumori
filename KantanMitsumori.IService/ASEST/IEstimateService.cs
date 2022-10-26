@@ -16,7 +16,7 @@ namespace KantanMitsumori.IService
         Task<ResponseBase<int>> UpdateInpZeiHoken(RequestUpdateInpZeiHoken model, LogToken logToken);
         ResponseBase<List<ResponseEstimate>> GetMakerNameAndModelName(string userNo, string makerName);
         Task<ResponseBase<int>> DeleteEstimate(string EstNo, string EstSubNo);
-        Task<ResponseBase<int>> UpdateInpNebiki(RequestUpdateInpNebiki model);
+        Task<ResponseBase<int>> UpdateInpNebiki(RequestUpdateInpNebiki model, LogToken logToken);
 
     }
 }

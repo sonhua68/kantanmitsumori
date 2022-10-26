@@ -59,6 +59,13 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<SerEstEntity, ResponseSerEst>();
             CreateMap<MUserDef, ResponseUserDef>();
             CreateMap<RequestUpdateInpInitVal, MUserDef>();
+    
+            CreateMap<MtIdeCartype, ResponseCarType>();
+            CreateMap<MtIdeContractPlan, ResponseContractPlan>();
+            CreateMap<MtIdeVoluntaryInsurance, ResponseVolInsurance>();
+            CreateMap<MtIdeInspection, ResponseFirstAfterSecondTerm>();
+            CreateMapForReport();
+
 
             // Mapping for InpCarPrice
             CreateMap<LogToken, RequestInpCarPrice>();
@@ -85,7 +92,6 @@ namespace KantanMitsumori.Service.Mapper
 
             CreateMap<RequestUpdateCarPrice, TEstimate>();
             CreateMap<RequestUpdateCarPrice, TEstimateSub>();
-
             // Mapping for reports
             CreateMapForReport();
 
