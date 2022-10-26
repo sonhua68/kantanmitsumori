@@ -97,7 +97,7 @@ namespace KantanMitsumori.Service
                     return ResponseHelper.Error<string>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S), remesg);
                 }
                 dtEstimates.Rate = model.MoneyRateCl;
-                dtEstimates.Deposit = model.Deposit;
+                dtEstimates.Deposit = model.DepositCl;
                 dtEstimates.Principal = model.Principal;
                 dtEstimates.PartitionFee = model.Fee;
                 dtEstimates.PartitionAmount = model.PayTotal;
@@ -109,7 +109,7 @@ namespace KantanMitsumori.Service
                 dtEstimates.BonusFirst = model.BonusFirstMonth;
                 dtEstimates.BonusSecond = model.BonusSecondMonth;
                 dtEstimates.BonusTimes = model.BonusTimes;
-                dtEstimates.PayTimes = model.PayTimes;
+                dtEstimates.PayTimes = model.PayTimesCl;
                 dtEstimateSubs.LoanModifyFlag = model.LoanModifyFlag == 1 ? true : false;
                 dtEstimateSubs.LoanRecalcSettingFlag = model.chkProhibitAutoCalc == 1 ? false : true;
                 dtEstimateSubs.LoanInfo = 0;
@@ -163,9 +163,9 @@ namespace KantanMitsumori.Service
         {
             string errMsg = "";
 
-            if (model.Deposit != 0)
+            if (model.DepositCl != 0)
             {
-                errMsg = chkNumber(model.Deposit.ToString(), "頭金");
+                errMsg = chkNumber(model.DepositCl.ToString(), "頭金");
             }
             if (model.MoneyRateCl != 0)
                 errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.MoneyRateCl.ToString(), "金利（実質年率）", true);
@@ -176,8 +176,8 @@ namespace KantanMitsumori.Service
             if (model.PayTotal != 0)
                 errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.PayTotal.ToString(), "分割支払金合計");
 
-            if (model.PayTimes != 0)
-                errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.PayTimes.ToString(), "支払回数");
+            if (model.PayTimesCl != 0)
+                errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.PayTimesCl.ToString(), "支払回数");
 
             if (!string.IsNullOrEmpty(model.FirstPayMonth))
             {
