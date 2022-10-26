@@ -20,7 +20,7 @@
     string BonusFirst = string.IsNullOrEmpty(Model.BonusFirst) == true ? "" : Model.BonusFirst;
     string BonusSecond = string.IsNullOrEmpty(Model.BonusSecond) == true ? "" : Model.BonusSecond;
     var LoanModifyFlag = Model.LoanModifyFlag == true ? "1" : "0";
-    var LoanRecalcSettingFlag = Model.LoanRecalcSettingFlag;
+    var LoanRecalcSettingFlag = Model.LoanRecalcSettingFlag == true ? "1" : "0";
 }
 <form id="formInpLoan" onkeydown="return NoSubmit(event);">
     <table border="0" width="100%">
@@ -360,7 +360,7 @@
                                                 <tr>
                                                     <td class="inpbtntd" colspan="2" style=" height: 21px; text-align:right;">
                                                         <input type="button" name="btnCancel" value="キャンセル" id="btnCancel" onclick="Framework.GoBackReloadPage();return false;" class="Btn1" style="height:32px;width:100px;">
-                                                        <input type="submit" name="btnOK" value="OK" onclick="return onSummit();" form="formInpLoan" id="btnOK" class="Btn1" style="height:32px;width:100px;">
+                                                        <input type="submit" name="btnOK" value="OK" @*onclick="return onSummit();"*@ form="formInpLoan" id="btnOK" class="Btn1" style="height:32px;width:100px;">
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -384,12 +384,24 @@
 </form>
 <script>
     SetInitData();
-    function onSummit() {
-        Framework.OnSubmitForm("/InpLoan/UpdateInpLoan", "formInpLoan");
-        return false;
-    }
+    $('#formInpLoan').validate({
+        submitHandler: function (form) {
+            var model = Framework.getFormData($("#formInpLoan"));
+            var result = Framework.submitAjaxFormUpdateAsync(model, "/InpLoan/UpdateInpLoan");
+            if (result.resultStatus == 0 && result.messageCode === 'I0002') {
+                Framework.GoBackReloadPage();
+            } else if (result.resultStatus == 0 && result.messageCode === 'I0003') {
+                let Items = result.data;
+                $("#Msg2").html(Items)
+                return;
+            }
+            else {
+                Framework.GoBackErrorPage(result.messageCode, result.messageContent);
+            }
+        }
+    });
     function SetInitData() {
-        if (@LoanModifyFlag == "0") {
+        if (@LoanModifyFlag == 0) {
             $("#hidLoanModifyFlag").val("0");
             var isCheck = parseInt(@isRbBonus);
             if (isCheck > 0) {
@@ -399,8 +411,9 @@
                 $("#rbBonusM").prop("checked", true);
                 $("#rbBonusM_Result").prop("checked", true);
             }
-            $("#chkProhibitAutoCalc").attr('checked', @LoanRecalcSettingFlag);
+
         } else {
+            $("#chkProhibitAutoCalc").attr('checked', @LoanRecalcSettingFlag);
             $("#hidLoanModifyFlag").val("1");
             $("#lbl_SalesSum").val(@SalesSum);
             $("#PayTimes").val("");

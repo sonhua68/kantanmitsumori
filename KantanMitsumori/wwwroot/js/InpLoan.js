@@ -14,10 +14,13 @@ function setInitialValue() {
     chgBonus_Result();
 
     if ($('#hidLoanModifyFlag').val() == "1") {
+        $("#lbl_SalesSum").text("");
+        $("#Deposit").val("");
+        $("#lbl_Principal").text("");
+        $("#PayTimes").val("")
         $('#chkProhibitAutoCalc').attr('checked', true);
         $('#chkProhibitAutoCalc').attr("disabled", true);
     }
-
 }
 function clickOK() {
     $('#chkProhibitAutoCalc').disabled = "";
@@ -56,6 +59,7 @@ function chgBonus() {
         $('#cbBonusSecond').val("");
         $('#hidBonusSecond').val("");
         $('#Bonus').attr("disabled", true);
+        $('#cbBonusFirst').attr("disabled", true);
         $('#cbBonusSecond').attr("disabled", true);
         $('#Bonus').css('background-color', FALSE_COLOR);
         $('#cbBonusFirst').css('background-color', FALSE_COLOR);
@@ -76,6 +80,7 @@ function chgBonus_Result() {
     var valueRbBonusU = $("#rbBonusU_Result").val();
 
     if (valueRbBonusU == (checkedValue)) {
+        $("#rbBonusU_Result").prop("checked", true); 
         $('#BonusCl').attr("disabled", false);
         $('#BonusFirstMonth').attr("disabled", false);
         $('#BonusSecondMonth').attr("disabled", false);
@@ -86,7 +91,8 @@ function chgBonus_Result() {
         $('#BonusSecondMonth').css('background-color', TRUE_COLOR);
         $('#BonusTimes').css('background-color', TRUE_COLOR);
 
-    } else if ($("#hidLoanModifyFlag").val() != "1") {
+    } else {
+        $("#rbBonusM_Result").prop("checked", true);
         $('#BonusCl').val("");
         $('#BonusFirstMonth').val("");
         $('#BonusSecondMonth').val("");
@@ -99,9 +105,10 @@ function chgBonus_Result() {
         $('#BonusFirstMonth').css('background-color', FALSE_COLOR_RES);
         $('#BonusSecondMonth').css('background-color', FALSE_COLOR_RES);
         $('#BonusTimes').css('background-color', FALSE_COLOR_RES);
-    } else {
-        $("#rbBonusU_Result").prop("checked", true);
     }
+    //} else {
+    //    $("#rbBonusU_Result").prop("checked", true);
+    //}
 }
 function chgBonusMonth(mode) {
     let value = $("#cbBonusSecond").val();
