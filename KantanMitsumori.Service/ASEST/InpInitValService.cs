@@ -145,7 +145,7 @@ namespace KantanMitsumori.Service
                 dtEstimates.TaxRecycle = isCheckHaiKi ? model.TaxRecycleH : model.TaxRecycleK;
                 dtEstimates.TaxDelivery = isCheckHaiKi ? model.TaxDeliveryH : model.TaxDeliveryK;
                 dtEstimates.TaxFreeCheck = isCheckHaiKi ? model.TaxFreeCheckH : model.TaxFreeCheckK;
-                dtEstimates.TaxFreeGarage = isCheckHaiKi ? model.TaxRecycleH : model.TaxRecycleH;
+                dtEstimates.TaxFreeGarage = isCheckHaiKi ? model.TaxFreeGarageH : model.TaxFreeGarageK;
                 if (model.sesMode == "0" && dtEstimates.EstInpKbn != "2")
                 {
                     var price = isCheckHaiKi ? (model.YtiRiekiH - dtEstimateSubs.YtiRieki) : (model.YtiRiekiK - dtEstimateSubs.YtiRieki);
