@@ -55,7 +55,7 @@ namespace KantanMitsumori.Service
                 // Load report
                 var report = LoadReport(reportName);
                 // Setting max pages report
-                if (data[0].AsArticle == "0")
+                if (data[0].AsArticle == "0" && model.ReportType == ReportType.Order)
                     report.MaxPages = 1;
                 // Bind data 
                 report.DataSource = data;
