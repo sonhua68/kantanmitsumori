@@ -2,21 +2,21 @@
 {
     public class EstimateIdeModel
     {
-        public string EstNo { get; set; } = null!;
-        public string EstSubNo { get; set; } = null!;
-        public string EstUserNo { get; set; } = null!;
+        public string EstNo { get; set; } = string.Empty;
+        public string EstSubNo { get; set; } = string.Empty;
+        public string EstUserNo { get; set; } = string.Empty;
         public int CarType { get; set; }
         public byte IsElectricCar { get; set; }
-        public string FirstRegistration { get; set; } = null!;
-        public string InspectionExpirationDate { get; set; } = null!;
-        public string LeaseStartMonth { get; set; } = null!;
+        public string FirstRegistration { get; set; } = string.Empty;
+        public string InspectionExpirationDate { get; set; } = string.Empty;
+        public string LeaseStartMonth { get; set; } = string.Empty;
         public int LeasePeriod { get; set; }
-        public string LeaseExpirationDate { get; set; } = null!;
+        public string LeaseExpirationDate { get; set; } = string.Empty;
         public int ContractPlanId { get; set; }
-        public string ContractPlanName { get; set; }
+        public string ContractPlanName { get; set; } = string.Empty;
         public byte IsExtendedGuarantee { get; set; } = 99;
         public int InsuranceCompanyId { get; set; }
-        public string InsuranceCompanyName { get; set; }
+        public string InsuranceCompanyName { get; set; } = string.Empty;
         public int InsuranceFee { get; set; }
         public int DownPayment { get; set; }
         public int TradeInPrice { get; set; }
@@ -43,6 +43,6 @@
         public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string? UpdateUser { get; set; }
-        public bool? IsData { get; set; } = false;
+        public bool IsData => !string.IsNullOrEmpty(EstNo);
     }
 }

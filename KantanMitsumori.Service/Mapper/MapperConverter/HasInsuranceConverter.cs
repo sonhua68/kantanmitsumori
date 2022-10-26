@@ -1,9 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service.Mapper.MapperConverter
 {
@@ -11,7 +6,7 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
     {
         public string Convert(int? source, ResolutionContext context)
         {
-            if (source.HasValue && (source.Value == -1 || source.Value == 99))
+            if (source.HasValue && (source.Value <= 0 || source.Value == 99))
                 return "なし";
             return "あり";
         }

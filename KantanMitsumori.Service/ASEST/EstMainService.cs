@@ -14,7 +14,6 @@ using KantanMitsumori.Service.Helper;
 using KantanMitsumori.Service.Mapper.MapperConverter;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System.IO;
 
 namespace KantanMitsumori.Service.ASEST
 {
@@ -1432,7 +1431,8 @@ namespace KantanMitsumori.Service.ASEST
             estModelView.LeaseTotal = string.IsNullOrEmpty(estModelView.LeasePeriod) ? "" : estModelView.MonthlyLeaseFee + " (" + estModelView.LeasePeriod + ")";
             estModelView.ContractPlanName = Model.EstIDEModel.ContractPlanName;
             estModelView.IsExtendedGuarantee = Model.EstIDEModel.IsExtendedGuarantee == 99 ? "" : Model.EstIDEModel.IsExtendedGuarantee == 0 ? "あり" : "なし";
-            estModelView.InsuranceCompanyName = Model.EstIDEModel.InsuranceCompanyName;
+            var insuranceCompany = string.IsNullOrEmpty(Model.EstIDEModel.InsuranceCompanyName) ? "なし" : Model.EstIDEModel.InsuranceCompanyName;
+            estModelView.InsuranceCompanyName = Model.EstIDEModel.IsData ? insuranceCompany : "";
             estModelView.InsuranceFee = CommonFunction.setFormatCurrency(Model.EstIDEModel.InsuranceFee);
             estModelView.DownPayment = CommonFunction.setFormatCurrency(Model.EstIDEModel.DownPayment);
             estModelView.IdeTradeInPrice = CommonFunction.setFormatCurrency(Model.EstIDEModel.TradeInPrice);

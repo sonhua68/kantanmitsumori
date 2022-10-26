@@ -338,7 +338,7 @@ namespace KantanMitsumori.Service.Helper
         public EstimateIdeModel SetEstIDEData(LogToken logtoken)
         {
             var dataEstIDE = GetEstIDEData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
-            if (dataEstIDE != null)
+            if (!string.IsNullOrEmpty(dataEstIDE!.EstNo) || !string.IsNullOrEmpty(dataEstIDE.EstSubNo))
             {
                 var dtContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);
                 dataEstIDE.ContractPlanName = dtContractPlan == null ? "" : dtContractPlan.PlanName;
