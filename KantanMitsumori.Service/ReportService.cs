@@ -54,6 +54,9 @@ namespace KantanMitsumori.Service
                 var reportName = GetReportName(model.ReportType, data[0].LeaseFlag);
                 // Load report
                 var report = LoadReport(reportName);
+                // Setting max pages report
+                if (data[0].AsArticle == "0")
+                    report.MaxPages = 1;
                 // Bind data 
                 report.DataSource = data;
                 // Generate report
