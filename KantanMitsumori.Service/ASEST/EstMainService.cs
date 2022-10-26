@@ -612,7 +612,7 @@ namespace KantanMitsumori.Service.ASEST
             strOutdata += formatCsvItem(estData.CheckCarYm) + CSV_DELIMITER;
             // -- 走行距離、走行距離単位
             strOutdata += formatCsvItem(CommonFunction.FormatString(estData.NowOdometer)) + CSV_DELIMITER;
-            strOutdata += (string.IsNullOrEmpty(estData.NowOdometer.ToString()) ? "" : formatCsvItem(estData.MilUnit)) + CSV_DELIMITER;
+            strOutdata += (estData.NowOdometer > 0 ? formatCsvItem(estData.MilUnit) : "") + CSV_DELIMITER;
             // -- 修復歴
             string csvAccidentHis = estData.AccidentHis == 0 ? "無し" : estData.AccidentHis == 1 ? "有り" : "";
             strOutdata += csvAccidentHis + CSV_DELIMITER;
