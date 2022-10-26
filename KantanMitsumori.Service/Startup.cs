@@ -39,13 +39,14 @@ namespace KantanMitsumori.Service
             services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();
             services.AddTransient<IPreExaminationService, PreExaminationService>();            
             services.AddTransient<IInpCarPriceService, InpCarPriceService>();
-            services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();  
+            services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();
+            services.AddTransient<ISerEstService, SerEstService>();
             return services;
         }
 
         public static IServiceCollection AddAuthenService(this IServiceCollection services)
         {   
-            services.AddTransient<ISerEstService, SerEstService>();
+          
             // Add generic DI
             services.AddTransient<Dictionary<bool, string>, Dictionary<bool, string>>();
             services.AddTransient<IPreExaminationService, PreExaminationService>();            
