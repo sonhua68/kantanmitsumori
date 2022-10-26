@@ -5,7 +5,7 @@ const selectDefCarName = "車種を選択して下さい"
 const def_SelMakerMsg = "メーカーを選択して下さい"
 const def_SelModelMsg = "車種を選択して下さい"
 const def_SelTypeMsg = "型式指定は必ず入力して下さい"
-const def_GradeNotFoundMsg = "該当するグレードが見つかりません"
+const def_GradeNotFoundMsg = "該当する車種が見つかりません"
 const def_DataNotFoundMsg_NULL = "該当するデータがありませんでした<br>[車名を直接入力する >>] ボタンから作成してください"
 GetListASOPMaker();
 SetIntData();
