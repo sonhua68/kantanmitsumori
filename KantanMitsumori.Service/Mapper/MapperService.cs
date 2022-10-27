@@ -59,7 +59,7 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<SerEstEntity, ResponseSerEst>();
             CreateMap<MUserDef, ResponseUserDef>();
             CreateMap<RequestUpdateInpInitVal, MUserDef>();
-    
+
             CreateMap<MtIdeCartype, ResponseCarType>();
             CreateMap<MtIdeContractPlan, ResponseContractPlan>();
             CreateMap<MtIdeVoluntaryInsurance, ResponseVolInsurance>();
@@ -135,7 +135,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.TradeInBodyColor, o => o.PreCondition(c => c.IsTradeIn()))
                 .ForMember(t => t.CarPriceTitle, o => o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.CarPriceTitleDict), s => s.ConTaxInputKb ?? false))
                 .ForMember(t => t.CarPrice, o => o.ConvertUsing(new YenCurrencyConverter()))
-                .ForMember(t => t.NebikiTitle, o => o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.NebikiTitleDict), s => s.ConTaxInputKb ?? false))
+                .ForMember(t => t.NebikiTitle, o => { o.Condition(c => c.Discount > 0); o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.NebikiTitleDict), s => s.ConTaxInputKb ?? false); })
                 .ForMember(t => t.Discount, o => o.ConvertUsing(new YenCurrencyConverter(prefix: "▲")))
                 .ForMember(t => t.NouCost, opt => opt.Ignore())
                 .ForMember(t => t.CarKei, o => o.ConvertUsing(new YenCurrencyConverter(), s => s.CarSum))
@@ -259,8 +259,8 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<RequestReport, EstimateReportModel>()
                 .ForMember(t => t.EstNo, o => o.Ignore())
                 .ForMember(t => t.CustNm_forPrint, o => { o.MapFrom(new CustNmResolver()); })
-                .ForMember(t => t.CustZip_forPrint, o => { o.MapFrom(s => $"〒{s.CustZip_forPrint}"); })
-                .ForMember(t => t.CustTel_forPrint, o => { o.MapFrom(s => $"（TEL : {s.CustTel_forPrint}）"); });
+                .ForMember(t => t.CustZip_forPrint, o => { o.Condition(s => !string.IsNullOrWhiteSpace(s.CustZip_forPrint)); o.MapFrom(s => $"〒{s.CustZip_forPrint}"); })
+                .ForMember(t => t.CustTel_forPrint, o => { o.Condition(s => !string.IsNullOrWhiteSpace(s.CustTel_forPrint)); o.MapFrom(s => $"（TEL : {s.CustTel_forPrint}）"); });
         }
 
         private void CreateMapForEstMain()

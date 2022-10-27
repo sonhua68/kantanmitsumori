@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
-using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response.Report;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service.Mapper.MapperConverter
 {
@@ -16,17 +10,22 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         {
             try
             {
-                switch (source.ReportType)
+                if (source.CustNm_forPrint.Trim() != "")
                 {
-                    case ReportType.Estimate:                    
-                        return $"{source.CustNm_forPrint}　様";
-                    case ReportType.Order:
-                        if (source.CustNm_forPrint.Length <= 11)
-                            return $"{source.CustNm_forPrint.PadRight(14, '　')}印";
-                        else
-                            return $"{source.CustNm_forPrint.PadRight(23, '　')}印";
-                    default: throw new ArgumentException();
+                    switch (source.ReportType)
+                    {
+                        case ReportType.Estimate:
+                            return $"{source.CustNm_forPrint}　様";
+                        case ReportType.Order:
+                            if (source.CustNm_forPrint.Length <= 11)
+                                return $"{source.CustNm_forPrint.PadRight(14, '　')}印";
+                            else
+                                return $"{source.CustNm_forPrint.PadRight(23, '　')}印";
+                        default: throw new ArgumentException();
+                    }
                 }
+                else
+                    return "";
             }
             catch
             {
