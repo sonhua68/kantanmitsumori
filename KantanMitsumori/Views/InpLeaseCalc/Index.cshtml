@@ -114,7 +114,7 @@
                                                     <span id="Label9" class="inplabel">年</span>
                                                     <select name="cbo_LeaseSttM" id="cbo_LeaseSttM" style="width: 45px; border: solid 1px mediumvioletred;" class="inpbox" onchange="return changeLeaseSttYM();">
                                                         @{
-                                                            foreach (var item in DropDownList.ListMonth(true))
+                                                            foreach (var item in DropDownList.ListMonth(false))
                                                             {
                                                                 <option value="@item.Value">@item.Text</option>
                                                             }

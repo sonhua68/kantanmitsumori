@@ -1,4 +1,5 @@
 ﻿//setInitialValue();
+ShowErrorCallKbn();
 ShowColorChangeCarPrice();
 DeleteBtnHanei()
 setInitValueCookie();
@@ -170,6 +171,18 @@ function updateByBase64(str) {
     return escapeToBase64(str, "UTF-8")
 }
 function unescapeFromBase64(str) {
-  return   unescapeFromBase64(str, "UTF-8");
+    if (str != "") {
+        return unescapeFromBase64(str, "UTF-8");
+    }
+    return "";
 }
 
+function ShowErrorCallKbn() {
+    //let callkbn = $("#hidCallKbn").val();
+    var callKbn = getCookie("CallKbn")
+    let isError = $("#hidIsError").val();
+    if (parseInt(callKbn) == 1 || parseInt(isError) == 1) {
+        alert("最初に車両本体価格をご確認下さい")
+        setCookie("CallKbn", "0", 1);
+    }
+}

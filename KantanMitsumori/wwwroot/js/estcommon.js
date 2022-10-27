@@ -485,6 +485,7 @@ function CleanCookies() {
     let sesMaker = "sesMaker";
     let sesCarNM = "sesCarNM";
     let btnHanei = "btnHanei";
+    let callKbn = "CallKbn";
     RemoveCookies(custZip_forPrint);
     RemoveCookies(custNm_forPrint);
     RemoveCookies(custAdr_forPrint);
@@ -494,6 +495,7 @@ function CleanCookies() {
     RemoveCookies(sesMaker);
     RemoveCookies(sesCarNM);
     RemoveCookies(btnHanei);
+    RemoveCookies(callKbn);
     function RemoveCookies(name) {
         document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
