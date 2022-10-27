@@ -59,7 +59,7 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<SerEstEntity, ResponseSerEst>();
             CreateMap<MUserDef, ResponseUserDef>();
             CreateMap<RequestUpdateInpInitVal, MUserDef>();
-    
+
             CreateMap<MtIdeCartype, ResponseCarType>();
             CreateMap<MtIdeContractPlan, ResponseContractPlan>();
             CreateMap<MtIdeVoluntaryInsurance, ResponseVolInsurance>();
@@ -259,8 +259,8 @@ namespace KantanMitsumori.Service.Mapper
             CreateMap<RequestReport, EstimateReportModel>()
                 .ForMember(t => t.EstNo, o => o.Ignore())
                 .ForMember(t => t.CustNm_forPrint, o => { o.MapFrom(new CustNmResolver()); })
-                .ForMember(t => t.CustZip_forPrint, o => { o.MapFrom(s => $"〒{s.CustZip_forPrint}"); })
-                .ForMember(t => t.CustTel_forPrint, o => { o.MapFrom(s => $"（TEL : {s.CustTel_forPrint}）"); });
+                .ForMember(t => t.CustZip_forPrint, o => { o.Condition(s => !string.IsNullOrWhiteSpace(s.CustZip_forPrint)); o.MapFrom(s => $"〒{s.CustZip_forPrint}"); })
+                .ForMember(t => t.CustTel_forPrint, o => { o.Condition(s => !string.IsNullOrWhiteSpace(s.CustTel_forPrint)); o.MapFrom(s => $"（TEL : {s.CustTel_forPrint}）"); });
         }
 
         private void CreateMapForEstMain()
