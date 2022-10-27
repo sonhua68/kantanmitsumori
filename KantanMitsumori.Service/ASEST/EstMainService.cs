@@ -1274,10 +1274,17 @@ namespace KantanMitsumori.Service.ASEST
             {
                 estModelView.FirstRegYm = CommonFunction.getWareki(CommonFunction.Mid(Model.EstModel.FirstRegYm, 0, 4)) + "年" + Convert.ToInt32(CommonFunction.Mid(Model.EstModel.FirstRegYm, 4, 2)) + "月";
             }
-            string Ysc = "";
-            string Msc = "";
-            CommonFunction.FormatDay(Model.EstModel.CheckCarYm ?? "0", ref Ysc, ref Msc);
-            estModelView.CheckCarYm = Model.EstModel.CheckCarYm == "無し" || string.IsNullOrEmpty(Model.EstModel.CheckCarYm) ? Model.EstModel.CheckCarYm : CommonFunction.getWareki(Ysc) + "年" + Msc + "月";
+
+            if (Model.EstModel.CheckCarYm == "無し" || string.IsNullOrEmpty(Model.EstModel.CheckCarYm))
+            {
+                estModelView.CheckCarYm = Model.EstModel.CheckCarYm;
+            }
+            else
+            {
+                string Ysc = ""; string Msc = "";
+                CommonFunction.FormatDay(Model.EstModel.CheckCarYm, ref Ysc, ref Msc);
+                estModelView.CheckCarYm = CommonFunction.getWareki(Ysc) + "年" + (Msc.Trim() != "" ? Msc + "月" : "");
+            }
             estModelView.NowRun = CommonFunction.IsNumeric(Model.EstModel.NowOdometer.ToString()) ? CommonFunction.setFormatCurrency(Model.EstModel.NowOdometer, Model.EstModel.MilUnit) : "";
             var DispVol = string.IsNullOrEmpty(Model.EstModel.DispVol) ? 0 : Convert.ToInt32(Model.EstModel.DispVol);
             estModelView.Vol = CommonFunction.setFormatCurrency(DispVol, Model.EstModel.DispVolUnit);
