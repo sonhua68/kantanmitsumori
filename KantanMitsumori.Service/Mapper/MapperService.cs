@@ -135,7 +135,7 @@ namespace KantanMitsumori.Service.Mapper
                 .ForMember(t => t.TradeInBodyColor, o => o.PreCondition(c => c.IsTradeIn()))
                 .ForMember(t => t.CarPriceTitle, o => o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.CarPriceTitleDict), s => s.ConTaxInputKb ?? false))
                 .ForMember(t => t.CarPrice, o => o.ConvertUsing(new YenCurrencyConverter()))
-                .ForMember(t => t.NebikiTitle, o => o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.NebikiTitleDict), s => s.ConTaxInputKb ?? false))
+                .ForMember(t => t.NebikiTitle, o => { o.Condition(c => c.Discount > 0); o.ConvertUsing(new BoolKeyValueConverter(KeyValueConverterHelper.NebikiTitleDict), s => s.ConTaxInputKb ?? false); })
                 .ForMember(t => t.Discount, o => o.ConvertUsing(new YenCurrencyConverter(prefix: "▲")))
                 .ForMember(t => t.NouCost, opt => opt.Ignore())
                 .ForMember(t => t.CarKei, o => o.ConvertUsing(new YenCurrencyConverter(), s => s.CarSum))
