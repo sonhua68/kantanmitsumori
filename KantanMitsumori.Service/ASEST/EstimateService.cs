@@ -10,7 +10,6 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System.Data;
 
 namespace KantanMitsumori.Service
@@ -132,11 +131,10 @@ namespace KantanMitsumori.Service
                 }
                 else
                 {
-                    if (!string.IsNullOrEmpty(model.ddlSyakenYear) || !string.IsNullOrEmpty(model.ddlSyakenMonth))
+                    if (!string.IsNullOrEmpty(model.ddlSyakenYear))
                     {
-                        var syakenMonth = Convert.ToInt32(model.ddlSyakenMonth!);
-                        string syakenm = syakenMonth < 10 ? "0" + syakenMonth : syakenMonth.ToString();
-                        checkCarYm = CommonFunction.Right(model.ddlSyakenYear!, 5).Replace(")", syakenm);
+                        var syakenMonth = string.IsNullOrEmpty(model.ddlSyakenMonth) ? "" : model.ddlSyakenMonth.Length < 2 ? "0" + model.ddlSyakenMonth : model.ddlSyakenMonth;
+                        checkCarYm = CommonFunction.Right(model.ddlSyakenYear!, 5).Replace(")", syakenMonth);
                     }
                 }
                 string radDispVol = model.radDispVol! == "その他" ? "" : model.radDispVol!;
