@@ -7,6 +7,7 @@ const caseSet = "CaseSet";
 const sesMaker = "sesMaker";
 const sesCarNM = "sesCarNM";
 const btnHanei = "btnHanei";
+const callKbn = "CallKbn";
 const cookiesASEST = "CookiesASEST";
 RemoveCookies(custZip_forPrint);
 RemoveCookies(custNm_forPrint);
@@ -18,6 +19,7 @@ RemoveCookies(caseSet);
 RemoveCookies(sesMaker);
 RemoveCookies(sesCarNM);
 RemoveCookies(btnHanei);
+RemoveCookies(callKbn);
 function RemoveCookies(name) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }

@@ -136,7 +136,8 @@ function SetFreeEst(gradeName, carCase, dispVol, driveTypeCode) {
     model.DispVol = dispVol;
     var result = Framework.submitAjaxFormUpdateAsync(model, "/SelGrd/SetFreeEst");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
-        CleanCookies();
+        CleanCookies();     
+        setCookie("CallKbn", "1", 1);
         Framework.GoBackReloadPage();
     } else {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);

@@ -112,13 +112,7 @@ namespace KantanMitsumori.Service.ASEST
                         return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAL041D));
                 }
                 response = BindingDataEsmain(response);
-                //show Mess error 
-                if (response.EstModel.CallKbn == "2")
-                {
-                    response.EstModel.IsError = 1;
-
-                } //show Mess error 
-                else if (request.mod == "1" && request.PriDisp == "1")
+                if (request.mod == "1" && request.PriDisp == "1")
                 {
                     response.EstModel.IsError = 1;
                 }
@@ -158,11 +152,6 @@ namespace KantanMitsumori.Service.ASEST
                     response.EstIDEModel = _commonEst.SetEstIDEData(logtoken);
                     if (response.EstIDEModel == null)
                         return ResponseHelper.Error<ResponseEstMainModel>(HelperMessage.SMAL041D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
-                }
-                //show Mess error 
-                if (response.EstModel.CallKbn == "2")
-                {
-                    response.EstModel.IsError = 1;
                 }
                 response = BindingDataEsmain(response);
                 return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), response);
