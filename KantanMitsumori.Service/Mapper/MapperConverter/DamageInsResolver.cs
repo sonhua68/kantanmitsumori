@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Model.Response.Report;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service.Mapper.MapperConverter
 {
@@ -17,8 +12,6 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
             {
                 var estSubEntity = context.Items["estSubEntity"] as TEstimateSub;
                 if (estSubEntity == null)
-                    return "";
-                if (!string.IsNullOrEmpty(source.CheckCarYm) && source.CheckCarYm != "無し")
                     return "";
                 if (estSubEntity.DamageInsEquivalent.HasValue && estSubEntity.DamageInsEquivalent.Value > 0)
                     return estSubEntity.DamageInsEquivalent.Value.ToYenCurrency();
