@@ -1,10 +1,5 @@
 ﻿using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Model.Request;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -50,10 +45,10 @@ namespace KantanMitsumori.Service.Helper
             {
                 SQL += "And ClassNumber= '" + requestSel.KbnSet + "' ";
             }
-            return @"SELECT DISTINCT 
-                    MakerId,
-                    ModelName,
-					MakerName,
+
+            string makerName = "'" + requestSel.sesMaker + "'" + " as MakerName";
+            string query = "SELECT DISTINCT MakerId,ModelName," + makerName + ",";
+            return query + @"
                     GradeNameOrd = 
 	                    CASE GradeName 
 	                    WHEN '' THEN 0 WHEN '不明' THEN 0 ELSE 1 END,

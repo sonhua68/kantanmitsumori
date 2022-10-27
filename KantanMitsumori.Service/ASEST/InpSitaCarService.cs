@@ -95,11 +95,11 @@ namespace KantanMitsumori.Service.ASEST
             {
                 _logger.LogError(ex, "setRikuji - GCMF-050D");
                 return ResponseHelper.Error<List<string>>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
-               
+
             }
         }
 
-        public async Task<ResponseBase<int>> UpdateInpSitaCar(RequestUpdateInpSitaCar request)
+        public async Task<ResponseBase<int>> UpdateInpSitaCar(RequestUpdateInpSitaCar request, LogToken logToken)
         {
             try
             {
@@ -170,11 +170,15 @@ namespace KantanMitsumori.Service.ASEST
 
                 await _unitOfWork.CommitAsync();
 
+                // 小計・合計計算
+                if (!await _commonEst.CalcSum(request.EstNo, request.EstSubNo!, logToken))
+                    return ResponseHelper.LogicError<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
+
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "UpdateInpCustKana");             
+                _logger.LogError(ex, "UpdateInpSitaCar");
                 return ResponseHelper.Error<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
 
             }

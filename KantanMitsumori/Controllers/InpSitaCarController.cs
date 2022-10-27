@@ -17,7 +17,7 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             // 見積書番号を取得
-            string estNo = _logToken.sesEstNo!;
+            string estNo = _logToken!.sesEstNo!;
             string estSubNo = _logToken.sesEstSubNo!;
             string userNo = _logToken.UserNo!;
 
@@ -38,11 +38,10 @@ namespace KantanMitsumori.Controllers
             return Ok(response);
         }
 
-
         [HttpPost]
         public async Task<IActionResult> UpdateInpSitaCar([FromForm] RequestUpdateInpSitaCar requestData)
         {
-            var response = await _inpSitaCarService.UpdateInpSitaCar(requestData);
+            var response = await _inpSitaCarService.UpdateInpSitaCar(requestData, _logToken!);
             return Ok(response);
         }
     }
