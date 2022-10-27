@@ -173,7 +173,7 @@ namespace KantanMitsumori.Service.Helper
             }
             vehicleTaxPrice = (double)(priceMonth - autoTax);
             _logger.LogInformation("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): {0}", vehicleTaxPrice);
-            addLogUI("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): " + priceMonth);
+            addLogUI("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): " + vehicleTaxPrice);
             addLogUI("--------------");
             return vehicleTaxPrice;
 
