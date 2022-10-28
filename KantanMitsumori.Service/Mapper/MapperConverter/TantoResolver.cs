@@ -2,11 +2,6 @@
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response.Report;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service.Mapper.MapperConverter
 {
@@ -21,13 +16,13 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                     return "";
                 switch (requestReport.ReportType)
                 {
-                    case ReportType.Estimate:                    
+                    case ReportType.Estimate:
                         return GetEstimateTanto(source);
-                    case ReportType.Order:                    
+                    case ReportType.Order:
                         var tanto = $"担当 : {source.EstTanName}";
-                        if (tanto.Length > 23)
-                            return tanto.Substring(0, 23);
-                        return tanto;                            
+                        if (tanto.Length > 13)
+                            return tanto.Substring(0, 13);
+                        return tanto;
                     default:
                         return "";
                 }
@@ -49,7 +44,7 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                 sekinin = $"責任者 : {estEntity.SekininName}　　";
             if (!string.IsNullOrWhiteSpace(estEntity.ShopTel))
                 tel = $"TEL : {estEntity.ShopTel}";
-            if(tanto.Length + sekinin.Length + tel.Length > 42)
+            if (tanto.Length + sekinin.Length + tel.Length > 42)
                 return $"{tanto}{sekinin}\r\n{tel}";
             return $"{tanto}{sekinin}{tel}";
         }
