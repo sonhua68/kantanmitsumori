@@ -155,7 +155,7 @@ namespace KantanMitsumori.Service.Helper
             catch (Exception ex)
             {
                 CalcInfo = CommonConst.msgCalcException;
-                _logger.LogInformation(ex, "CalcRegLoan", "CSIM-010C");
+                _logger.LogError(ex, "CalcRegLoan", "CSIM-010C");
                 return false;
             }
 
