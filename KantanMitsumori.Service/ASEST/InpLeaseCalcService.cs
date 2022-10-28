@@ -469,7 +469,7 @@ namespace KantanMitsumori.Service
             }
             catch (Exception ex)
             {
-                _logger.LogDebug("EstInsertUpdateData: {0}", ex.ToString());
+                _logger.LogError("EstInsertUpdateData: {0}", ex.ToString());
                 return false;
             }
         }
