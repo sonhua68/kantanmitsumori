@@ -491,7 +491,7 @@ namespace KantanMitsumori.Service.Helper
         /// <returns></returns>
         public DateTime CheckYear(int imonth)
         {
-            DateTime regDay = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseSttMonth!));
+            DateTime regDay = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.FirstReg!));
             DateTime ExpCurrY = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseExpirationDate!));
             var regCurrY = regDay.AddMonths(imonth);
             return ExpCurrY > regCurrY ? regCurrY : ExpCurrY;
