@@ -123,6 +123,11 @@ namespace KantanMitsumori.Service.Helper
             {
                 elapsedYearsFrom = 13;
             }
+            else
+            {
+                displacementFrom = 0; displacementTo = 0;
+            }
+
             var dt = _unitOfWorkIde.CarTaxs.GetSingleOrDefault(n => n.CarType == _requestInCalc.CarType && n.FirstRegistrationDateFrom <= firstRegistrationDateFrom &&
             n.FirstRegistrationDateTo >= firstRegistrationDateTo && n.IsElectricCar == _requestInCalc.ElectricCar &&
             n.DisplacementFrom <= displacementFrom && n.DisplacementTo >= displacementTo &&
@@ -160,7 +165,7 @@ namespace KantanMitsumori.Service.Helper
             }
             else
             {
-                var taxCollection = GetTaxCollectionIncrease(firstReg, firstReg, dispVol, dispVol);
+                var taxCollection = GetTaxCollectionIncrease(firstReg, firstReg, dispVol, dispVol);              
                 var monthsOver13Year = _requestInCalc.ContractTimes - diffMonth;
                 _logger.LogDebug("getMonthLease  < Over13Year: {0}", diffMonth);
                 _logger.LogDebug("getMonthLease  > Over13Year: {0}", _requestInCalc.ContractTimes - diffMonth);
