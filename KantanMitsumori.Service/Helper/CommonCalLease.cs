@@ -44,7 +44,7 @@ namespace KantanMitsumori.Service.Helper
             _logger.LogDebug("4-1 ConsumptionTax: {0}", consumptionTax);
             addLogUI("4-1 ConsumptionTax: " + consumptionTax);
             addLogUI("--------------");
-            return consumptionTax;
+            return (double)consumptionTax;
         }
         /// <summary>
         /// 4-2  file doc   tinh gia xe tu du lieu bao gia
@@ -55,9 +55,9 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="taxFreeAll"></param>
         /// <param name="consumptionTax"></param>
         /// <returns></returns>
-        public double GetPrice(int? salesSum, int? taxInsAll, int? taxFreeAll)
+        public decimal GetPrice(int? salesSum, int? taxInsAll, int? taxFreeAll)
         {
-            double dPrice = (double)((salesSum! - taxInsAll! - taxFreeAll!) / (1 + consumptionTax) + taxInsAll! + taxFreeAll!);
+            decimal dPrice = (decimal)((salesSum! - taxInsAll! - taxFreeAll!) / (1 + consumptionTax) + taxInsAll! + taxFreeAll!);
             _logger.LogDebug("SalesSum: {0}", salesSum);
             _logger.LogDebug("TaxInsAll:{0}", taxInsAll);
             _logger.LogDebug("TaxFreeAll: {0}", taxFreeAll);
@@ -80,11 +80,11 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="displacementFrom"></param>
         /// <param name="displacementTo"></param>
         /// <returns></returns>
-        public double GetPriceTax(
+        public decimal GetPriceTax(
             int? firstRegistrationDateFrom, int? firstRegistrationDateTo,
             int? isElectricCar, int? displacementFrom, int? displacementTo)
         {
-            double monthlyPrice = 0;
+            decimal monthlyPrice = 0;
             var dt = _unitOfWorkIde.CarTaxs.GetSingleOrDefault(n => n.CarType == _requestInCalc.CarType &&
             n.FirstRegistrationDateFrom <= firstRegistrationDateFrom &&
             n.FirstRegistrationDateTo >= firstRegistrationDateTo &&
@@ -112,11 +112,11 @@ namespace KantanMitsumori.Service.Helper
         /// <param name="displacementFrom"></param>
         /// <param name="displacementTo"></param>
         /// <returns></returns>
-        public double GetTaxCollectionIncrease(
+        public decimal GetTaxCollectionIncrease(
             int firstRegistrationDateFrom, int firstRegistrationDateTo,
             int displacementFrom, int displacementTo)
         {
-            double monthlyPrice = 0;
+            decimal monthlyPrice = 0;
             int elapsedYearsFrom = 0;
             int elapsedYearsTo = 99;
             if (_requestInCalc.ElectricCar != 1)
@@ -141,13 +141,13 @@ namespace KantanMitsumori.Service.Helper
         ///   期間中自動車計算  期間中自動車税金計算 156 = 3 Year
         /// </summary>
         /// <returns></returns>
-        public double GetVehicleTaxWithinTheTerm(int autoTax, string dispVolUnit,
+        public decimal GetVehicleTaxWithinTheTerm(int autoTax, string dispVolUnit,
            int dispVol)
         {
             var firstReg = Convert.ToInt32(_requestInCalc.FirstReg);
-            double vehicleTaxPrice = 0;
+            decimal vehicleTaxPrice = 0;
             int displacementFromAndTo = 0;
-            double priceMonth = 0;
+            decimal priceMonth = 0;
             bool ischeck = dispVolUnit != "cc" || _requestInCalc.ElectricCar == 1;
             displacementFromAndTo = ischeck == false ? dispVol : displacementFromAndTo;
             var priceTax = GetPriceTax(firstReg, firstReg, _requestInCalc.ElectricCar, displacementFromAndTo, displacementFromAndTo);
@@ -173,7 +173,7 @@ namespace KantanMitsumori.Service.Helper
                 addLogUI("4-3-3 PriceMonth  > 13Year: " + priceMonth);
                 addLogUI("AutoTax: " + autoTax);
             }
-            vehicleTaxPrice = (double)(priceMonth - autoTax);
+            vehicleTaxPrice = (priceMonth - autoTax);
             _logger.LogDebug("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): {0}", vehicleTaxPrice);
             addLogUI("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): " + vehicleTaxPrice);
             addLogUI("--------------");
@@ -186,10 +186,10 @@ namespace KantanMitsumori.Service.Helper
         /// 期間中自賠責
         /// </summary>      
         /// <returns></returns>
-        public double GetPriceinsurance()
+        public decimal GetPriceinsurance()
         {
-            double priceInsurance = 0;
-            double insuranceFee = 0;
+            decimal priceInsurance = 0;
+            decimal insuranceFee = 0;
             DateTime _expiresDate = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.ExpiresDate!));
             DateTime _firstReg = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.FirstReg!));
             DateTime _leaseSttMonth = DateTime.Parse(CommonFunction.ConvertDate(_requestInCalc.LeaseSttMonth!));
@@ -227,11 +227,11 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="type"></param>    
         /// <returns></returns>
-        public double GetWeighTax(int type)
+        public decimal GetWeighTax(int type)
         {
-            double weighTax = 0;
-            double rElapsedYearsFrom = 0;
-            double rElapsedYearsTo = 0;
+            decimal weighTax = 0;
+            decimal rElapsedYearsFrom = 0;
+            decimal rElapsedYearsTo = 0;
             if (_requestInCalc.ContractPlan != 99)
             {
                 if (type == 0) //case 4-5-1
@@ -266,9 +266,9 @@ namespace KantanMitsumori.Service.Helper
         ///   重量税計算を行う
         /// </summary>
         /// <returns></returns>
-        public double GetPriceWeighTax()
+        public decimal GetPriceWeighTax()
         {
-            double priceWeighTax = 0;
+            decimal priceWeighTax = 0;
             var weighTax = GetWeighTax(0); // case 4-5-1
             var weighTax1 = GetWeighTax(1); // case 4-5-2
             var weighTax2 = GetWeighTax(2); // case 4-5-3
@@ -328,11 +328,11 @@ namespace KantanMitsumori.Service.Helper
         /// </summary>
         /// <param name="salesSum"></param>
         /// <returns></returns>
-        public double GetPricePromotional(int salesSum)
+        public decimal GetPricePromotional(int salesSum)
         {
-            double pricePromotional = 0;
+            decimal pricePromotional = 0;
             promotion = _unitOfWorkIde.Promotions.GetAll().FirstOrDefault()!.Promotion;
-            pricePromotional = salesSum * promotion * _requestInCalc.ContractTimes;
+            pricePromotional = (decimal)(salesSum * promotion * _requestInCalc.ContractTimes);
             _logger.LogDebug("4-6 PricePromotional: {0}", pricePromotional);
             addLogUI("4-6 PricePromotional: " + pricePromotional);
             if (pricePromotional > 100000)
@@ -353,9 +353,9 @@ namespace KantanMitsumori.Service.Helper
         ///  出光興産手数料、出光クレジット手数料、特販店手数料、SMAS手数料の合計算出
         /// </summary>
         /// <returns></returns>
-        public double GetPropertyFeeIdemitsu()
+        public decimal GetPropertyFeeIdemitsu()
         {
-            double pricePropertyFeeIdemitsu = 0;
+            decimal pricePropertyFeeIdemitsu = 0;
             pricePropertyFee1 = GetPropertyFee(1);
             pricePropertyFee2 = GetPropertyFee(2);
             pricePropertyFee3 = GetPropertyFee(3);
@@ -380,9 +380,9 @@ namespace KantanMitsumori.Service.Helper
         /// GetGuaranteeFee
         /// </summary>
         /// <returns></returns>
-        public double GetGuaranteeFee()
+        public decimal GetGuaranteeFee()
         {
-            double priceGuaranteeCharg = 0;
+            decimal priceGuaranteeCharg = 0;
             var year = 0;
             if (_requestInCalc.InsurExpanded == 0)
             {
@@ -408,9 +408,9 @@ namespace KantanMitsumori.Service.Helper
         /// 名義変更費用
         /// </summary>
         /// <returns></returns>
-        public double GetPriceNameChange()
+        public decimal GetPriceNameChange()
         {
-            double priceNameChange = 0;
+            decimal priceNameChange = 0;
             var dt = _unitOfWorkIde.NameChanges.GetAll().FirstOrDefault();
             if (dt != null)
             {
@@ -426,9 +426,9 @@ namespace KantanMitsumori.Service.Helper
         /// メンテナンス料計算
         /// </summary>
         /// <returns></returns>
-        public double GetPriceMantance()
+        public decimal GetPriceMantance()
         {
-            double priceMantance = 0;
+            decimal priceMantance = 0;
 
             if (_requestInCalc.ContractPlan != 99)
             {

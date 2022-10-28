@@ -190,11 +190,11 @@ namespace KantanMitsumori.Helper.CommonFuncs
             else
                 return Math.Ceiling(dValue * dCoef) / dCoef;
         }
-        public static double PMT(double yearlyInterestRate, int totalNumberOfMonths, double loanAmount)
+        public static decimal PMT(double yearlyInterestRate, int totalNumberOfMonths, decimal loanAmount)
         {
             var rate = (double)yearlyInterestRate / 100 / 12;
             var denominator = Math.Pow((1 + rate), totalNumberOfMonths) - 1;
-            return (rate + (rate / denominator)) * loanAmount;
+            return (decimal)(rate + (rate / denominator)) * loanAmount;
         }
         public static double ToRoundUp(double value, int iDigits)
         {

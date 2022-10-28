@@ -160,9 +160,9 @@ namespace KantanMitsumori.Service
         {
             try
             {
-                double dPriceEnd = 0; double dPriceMonthly = 0;
-                double dPriceMonthNoTax = 0; double dPriceProcedure = 0;
-                double dPricePrincipalInterest = 0;
+                decimal dPriceEnd = 0; decimal dPriceMonthly = 0;
+                decimal dPriceMonthNoTax = 0; decimal dPriceProcedure = 0;
+                decimal dPricePrincipalInterest = 0;
                 var data = new ResponseInpLeaseCalc();
                 var estimates = _unitOfWork.Estimates.GetSingle(n => n.EstNo == logToken.sesEstNo && n.EstSubNo == logToken.sesEstSubNo);
                 var estimateSubs = _unitOfWork.EstimateSubs.GetSingle(n => n.EstNo == logToken.sesEstNo && n.EstSubNo == logToken.sesEstSubNo);
@@ -178,7 +178,7 @@ namespace KantanMitsumori.Service
                 }
                 _logger.LogDebug("\"-------************* EstNo:{0} EstSubNo: {1} *************-------\"", estimates.EstNo, estimates.EstSubNo);
                 _calLease = new CommonCalLease(_logger, _unitOfWorkIDE, lstWriteLog, model, _testSettings);
-                var consumptionTax = _calLease.GetConsumptionTax();
+                var consumptionTax = (decimal)_calLease.GetConsumptionTax();
                 var price = _calLease.GetPrice(estimates.SalesSum, estimates.TaxInsAll, estimates.TaxFreeAll);  // '4-2 get Price
                 var vehicleTaxPrice = _calLease.GetVehicleTaxWithinTheTerm((int)estimates.AutoTax!, estimateSubs.DispVolUnit!, Convert.ToInt32(estimates.DispVol!));  // '4-3 VehicleTaxPrice
                 var priceInsurance = _calLease.GetPriceinsurance();   // '4-4 getPriceinsurance()
@@ -193,14 +193,15 @@ namespace KantanMitsumori.Service
                 dPriceMonthNoTax = dPriceMonthNoTax - (model.TradeIn / (1 + consumptionTax)) - (model.PrePay / (1 + consumptionTax));
                 // 'tien goc chiu lai
                 dPricePrincipalInterest = dPriceMonthNoTax;
-                dPriceMonthNoTax = (double)CommonFunction.ToRoundDown(Convert.ToDecimal(dPriceMonthNoTax), 0);
-                //'dPriceMonthNoTax phi lease 1 thang khong bao gom thue     
-                dPriceMonthNoTax = CommonFunction.ToRoundUp(CommonFunction.PMT(interest, model.ContractTimes, dPriceMonthNoTax), -2);
+                dPriceMonthNoTax = CommonFunction.ToRoundDown(dPriceMonthNoTax, 0);
+                //'dPriceMonthNoTax phi lease 1 thang khong bao gom thue
+                var pricePTM = CommonFunction.PMT(interest, model.ContractTimes, dPriceMonthNoTax);
+                dPriceMonthNoTax = (decimal)CommonFunction.ToRoundUp(Convert.ToDouble(pricePTM) , -2);
                 //'dPriceProcedure phi thu tuc
                 dPriceProcedure = (model.AdjustFee / (1 + consumptionTax)) / model.ContractTimes;
                 dPriceProcedure = CommonFunction.ToRoundDown(dPriceProcedure, -2);
                 //'dPriceMonthly phi lease moi thang
-                dPriceMonthly = CommonFunction.ToRoundUp(dPriceMonthNoTax + dPriceProcedure, -2);
+                dPriceMonthly = (decimal)CommonFunction.ToRoundUp(Convert.ToDouble(dPriceMonthNoTax + dPriceProcedure), -2);
                 // 'dPriceEnd phi lease hang thang cuoi cung 
                 dPriceEnd = CommonFunction.ToRoundDown(dPriceMonthly + (dPriceMonthly * consumptionTax), 0);
                 data.ListUILog = _calLease._lstWriteLogUI;
@@ -261,9 +262,9 @@ namespace KantanMitsumori.Service
             }
         }
         #region Func  private
-        private void saveLog(double consumptionTax, RequestInpLeaseCalc model, TEstimate oEst, double dPrice,
-            double dVehicleTaxPrice, double priceInsurance, double priceWeighTax, double pricePromotional, double pricetPropertyFeeIdemitsu,
-            double priceGuaranteeFee, double priceNameChange, double priceMantance, double interest)
+        private void saveLog(decimal consumptionTax, RequestInpLeaseCalc model, TEstimate oEst, decimal dPrice,
+            decimal dVehicleTaxPrice, decimal priceInsurance, decimal priceWeighTax, decimal pricePromotional, decimal pricetPropertyFeeIdemitsu,
+            decimal priceGuaranteeFee, decimal priceNameChange, decimal priceMantance, double interest)
         {
             _logger.LogDebug("-------**********LOG FILE EXCEL************-------");
             _logger.LogDebug("15.お支払総額: {0}", oEst.SalesSum.ToString());
@@ -375,7 +376,7 @@ namespace KantanMitsumori.Service
             }
 
         }
-        private void saveLogFinal(double consumptionTax, double dPriceEnd, double dPriceMonthly, double dPriceMonthNoTax, double dPriceProcedure)
+        private void saveLogFinal(decimal consumptionTax, decimal dPriceEnd, decimal dPriceMonthly, decimal dPriceMonthNoTax, decimal dPriceProcedure)
         {
             var priceMonthNoTax = CommonFunction.ToRoundDown(dPriceMonthNoTax + (dPriceMonthNoTax * consumptionTax), 0);
             _logger.LogDebug("1【税別】月額リース料(B)（10円単位切上）={0}", dPriceMonthNoTax);
@@ -407,9 +408,9 @@ namespace KantanMitsumori.Service
         }
 
         private bool EstInsertUpdateData(RequestInpLeaseCalc requestModel, TEstimate oEst, LogToken logToken,
-            double iMonthlyLeaseFee, double iPromotionFee, double iNameChange, double iInterest,
-            double iGuaranteeCharge, double iMaintenancePrice, double iCarTax, double iLiabilityInsurance,
-            double iWeightTax, double iLeaseProgress, double pricePromotional)
+            decimal iMonthlyLeaseFee, decimal iPromotionFee, decimal iNameChange, double iInterest,
+            decimal iGuaranteeCharge, decimal iMaintenancePrice, decimal iCarTax, decimal iLiabilityInsurance,
+            decimal iWeightTax, decimal iLeaseProgress, decimal pricePromotional)
         {
             try
             {
