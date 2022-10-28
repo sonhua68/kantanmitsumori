@@ -1,10 +1,5 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service.Mapper.MapperConverter
 {
@@ -37,8 +32,8 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         {
             try
             {
-                if(string.IsNullOrWhiteSpace(text))
-                    return default;                
+                if (string.IsNullOrWhiteSpace(text))
+                    return default;
                 if (typeof(T) == typeof(byte))
                     return (T)Convert.ChangeType(Convert.ToByte(text), typeof(T));
                 if (typeof(T) == typeof(short))
@@ -48,7 +43,7 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                 if (typeof(T) == typeof(long))
                     return (T)Convert.ChangeType(Convert.ToInt64(text), typeof(T));
                 if (typeof(T) == typeof(bool))
-                    return (T)Convert.ChangeType(Convert.ToBoolean(text), typeof(T));                
+                    return (T)Convert.ChangeType(Convert.ToBoolean(text), typeof(T));
                 if (typeof(T) == typeof(double))
                     return (T)Convert.ChangeType(Convert.ToDouble(text), typeof(T));
                 if (typeof(T) == typeof(float))
@@ -104,8 +99,8 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         /// <summary>
         /// #,##0 円
         /// </summary>        
-        public static string ToYenCurrency(this int? number, string unit= " 円") => number.HasValue && number.Value != 0 ? $"{number.Value:N0}{unit}" : "";
+        public static string ToYenCurrency(this int? number, string unit = " 円") => number.HasValue && number.Value != 0 ? $"{number.Value:N0}{unit}" : "";
 
-       
+
     }
 }
