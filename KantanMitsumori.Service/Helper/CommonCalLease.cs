@@ -131,8 +131,8 @@ namespace KantanMitsumori.Service.Helper
             {
                 monthlyPrice = dt.MonthlyPrice;
             }
-            _logger.LogDebug("4-3-2 PriceTax: {0}", monthlyPrice);
-            addLogUI("4-3-2 PriceTax: " + monthlyPrice);
+            _logger.LogDebug("4-3-2 PriceTaxCollectionIncrease: {0}", monthlyPrice);
+            addLogUI("4-3-2 PriceTaxCollectionIncrease: " + monthlyPrice);
             addLogUI("--------------");
             return monthlyPrice;
         }
@@ -166,10 +166,12 @@ namespace KantanMitsumori.Service.Helper
                 _logger.LogDebug("getMonthLease  > Over13Year: {0}", _requestInCalc.ContractTimes - diffMonth);
                 priceMonth = (priceTax * diffMonth + (taxCollection * monthsOver13Year));
                 _logger.LogDebug("4-3-3 PriceMonth  > 13Year: {0}", priceMonth);
+                _logger.LogDebug("AutoTax: {0}", priceMonth);
 
                 addLogUI("getMonthLease  < Over13Year: " + diffMonth);
                 addLogUI("getMonthLease  > Over13Year: " + (_requestInCalc.ContractTimes - diffMonth));
                 addLogUI("4-3-3 PriceMonth  > 13Year: " + priceMonth);
+                addLogUI("AutoTax: " + autoTax);
             }
             vehicleTaxPrice = (double)(priceMonth - autoTax);
             _logger.LogDebug("4-3-3 PriceVehicleTaxWithinTheTerm(PriceMonth - AutoTax): {0}", vehicleTaxPrice);

@@ -183,6 +183,7 @@ function AddEstimate() {
     var result = Framework.submitAjaxFormUpdateAsync(model, "/SelCar/SetFreeEst");
     if (result.resultStatus == 0 && result.messageCode === 'I0002') {
         CleanCookies();
+        setCookie("CallKbn", "1", 1);
         Framework.GoBackReloadPage();
     } else if (result.resultStatus == -1) {
         Framework.GoBackErrorPage(result.messageCode, result.messageContent);

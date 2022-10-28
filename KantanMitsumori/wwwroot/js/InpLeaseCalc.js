@@ -980,6 +980,7 @@ function isCheckDay(valExpriesMonth, valExpriesDay) {
  * Create [2022/08/10] by HoaiPhong 
  */
 function appendLogUI(array) {
+    $("#listlogLease")[0].innerText = "";
     for (var item in array) {
         var div = document.getElementById("listlogLease")
         var span = document.createElement("span");
