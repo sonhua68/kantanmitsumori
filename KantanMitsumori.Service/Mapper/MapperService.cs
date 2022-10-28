@@ -92,6 +92,7 @@ namespace KantanMitsumori.Service.Mapper
 
             CreateMap<RequestUpdateCarPrice, TEstimate>();
             CreateMap<RequestUpdateCarPrice, TEstimateSub>();
+
             // Mapping for reports
             CreateMapForReport();
 
