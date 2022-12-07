@@ -10,6 +10,6 @@ namespace KantanMitsumori.Model.Response
         public EstimateIdeModel EstIDEModel { get; set; }
 
         [JsonIgnore]
-        public string AccessToken { get; set; }
+        public LogSession LogSession { get; set; }
     }
 }

@@ -22,4 +22,8 @@
     <ProjectReference Include="..\KantanMitsumori.Model\KantanMitsumori.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CommonFuncs\Constants\" />
+  </ItemGroup>
+
 </Project>

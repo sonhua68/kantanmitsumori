@@ -18,9 +18,9 @@ namespace KantanMitsumori.Controllers
         }
         public IActionResult Index()
         {
-            // Create request model map values from logToken
+            // Create request model map values from LogSession
             RequestInpCarPrice request = new RequestInpCarPrice();
-            _mapper.Map(_logToken, request);
+            _mapper.Map(_logSession, request);
             // Get car price data
             var response = _inpCarPriceService.GetCarPriceInfo(request);
             if (response.ResultStatus != (int)enResponse.isSuccess)
@@ -36,7 +36,7 @@ namespace KantanMitsumori.Controllers
         {
             var model = new RequestUpdateCarPrice();
             _mapper.Map(requestData, model);
-            var response = await _inpCarPriceService.UpdateCarPrice(model, _logToken!);
+            var response = await _inpCarPriceService.UpdateCarPrice(model, _logSession!);
             return Ok(response);
         }
     }

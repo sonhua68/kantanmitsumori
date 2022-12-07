@@ -10,6 +10,6 @@ namespace KantanMitsumori.IService.ASEST
 {
     public interface ISerEstService
     {
-        ResponseBase<LogToken> GenerateToken(RequestSerEstExternal model);
+        ResponseBase<LogSession> SetLogSession(RequestSerEstExternal model);
     }
 }

@@ -5,11 +5,12 @@ using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Settings;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model;
+using KantanMitsumori.Model.Request;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using System;
-using System.Security.Policy;
+using Newtonsoft.Json;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace KantanMitsumori.Service.Helper
 {
@@ -20,13 +21,18 @@ namespace KantanMitsumori.Service.Helper
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly PhysicalPathSettings _physicalPathSettings;
-        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, IOptions<PhysicalPathSettings> physicalPathSetting)
+        private readonly URLSettings _URLSettings;
+        private readonly HttpClient httpClient;
+        public CommonFuncHelper(IMapper mapper, ILogger<CommonFuncHelper> logger, IUnitOfWork unitOfWork, IHttpClientFactory httpClientFactory, IOptions<PhysicalPathSettings> physicalPathSetting, IOptions<URLSettings> uRLSettings)
         {
             _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
             _httpClientFactory = httpClientFactory;
             _physicalPathSettings = physicalPathSetting.Value;
+            _URLSettings = uRLSettings.Value;
+            httpClient = _httpClientFactory.CreateClient();
+            httpClient.BaseAddress = new Uri(_URLSettings.HostPrintService);
         }
 
         #region Constant Initialization
@@ -122,7 +128,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "getTaxRatioID " + "CTAX-010D");
+                _logger.LogError( ex, "getTaxRatioID " + "CTAX-010D");
                 return -1;
             }
         }
@@ -144,7 +150,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "getUserDefData " + "CUSR-010D");
+                _logger.LogError( ex, "getUserDefData " + "CUSR-010D");
                 return null;
             }
         }
@@ -193,7 +199,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "CommonFuncs - DecUserNo - GCMF-010C ◆会員認証エラー◆ 復号化前会員番号：{0}", vEncNo);
+                _logger.LogError( ex, "CommonFuncs - DecUserNo - GCMF-010C ◆会員認証エラー◆ 復号化前会員番号：{0}", vEncNo);
                 return false;
             }
         }
@@ -218,7 +224,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "CommonFuncs - GetCornerType - GCMF-090D");
+                _logger.LogError( ex, "CommonFuncs - GetCornerType - GCMF-090D");
                 return -1;
             }
 
@@ -247,7 +253,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "CommonFuncs - GetAACount - GCMF-090D");
+                _logger.LogError( ex, "CommonFuncs - GetAACount - GCMF-090D");
                 return -1;
             }
         }
@@ -261,7 +267,7 @@ namespace KantanMitsumori.Service.Helper
         {
             try
             {
-                Uri uri = new Uri(url);      
+                Uri uri = new Uri(url);
                 string strCarImgPlace;
                 // 画像用に年月フォルダを作成する。
                 strCarImgPlace = _physicalPathSettings.CarImgPlace;
@@ -290,7 +296,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "CommonFuncs - DownloadImg - GCMF-030F 取得失敗 " + url);
+                _logger.LogError( ex, "CommonFuncs - DownloadImg - GCMF-030F 取得失敗 " + url);
                 return;
             }
         }
@@ -371,7 +377,7 @@ namespace KantanMitsumori.Service.Helper
             catch (Exception ex)
             {
                 // エラーログ書出し
-                _logger.LogError(ex, "CommonFuncs - GetRecDeposit - GCMF-100D");
+                _logger.LogError( ex, "CommonFuncs - GetRecDeposit - GCMF-100D");
                 return -1;
             }
 
@@ -399,7 +405,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "CommonFuncs - enableTaxCalc - GCMF-110F");
+                _logger.LogError( ex, "CommonFuncs - enableTaxCalc - GCMF-110F");
                 return false;
             }
 
@@ -448,7 +454,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "getSelfInsurance error ");
+                _logger.LogError( ex, "getSelfInsurance error ");
                 return false;
             }
 
@@ -473,7 +479,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "getSelfInsurance");
+                _logger.LogError( ex, "getSelfInsurance");
                 return 0;
             }
         }
@@ -496,7 +502,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "getYearAmount");
+                _logger.LogError( ex, "getYearAmount");
                 return -1;
             }
         }
@@ -511,6 +517,39 @@ namespace KantanMitsumori.Service.Helper
             return intPassedMonth;
         }
 
+        public async Task<HttpResponseMessage> ExportFile(string action, RequestReport requestModel)
+        {
+            try
+            {
+                var model = new StringContent(
+                               JsonConvert.SerializeObject(requestModel),
+                              Encoding.UTF8,
+                              Application.Json);
+                var httpResponseMessage = await httpClient.PostAsync(action, model);
+                return httpResponseMessage;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError( ex.ToString());
+                _logger.LogError(ex.ToString());
+                return null;
+            }
+        }
+        public async Task<HttpResponseMessage> ConnectApiReport(string action)
+        {
+            try
+            {
+
+                var httpResponseMessage = await httpClient.GetAsync(action);
+                return httpResponseMessage;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError( ex.ToString());
+                return null;
+            }
+
+        }
         #endregion
 
     }

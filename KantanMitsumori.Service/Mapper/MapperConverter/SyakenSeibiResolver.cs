@@ -1,12 +1,6 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Model.Response;
-using KantanMitsumori.Model.Response.Report;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service.Mapper.MapperConverter
 {

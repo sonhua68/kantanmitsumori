@@ -1,14 +1,7 @@
-﻿using AutoMapper;
-using KantanMitsumori.Entity.ASESTEntities;
-
-namespace KantanMitsumori.Service.Mapper.MapperConverter
+﻿namespace KantanMitsumori.Service.Mapper.MapperConverter
 {
     public static class ConverterExtension
     {
-        /// <summary>
-        /// Return empty string when object is null, or return ToString with format of DateTime
-        /// </summary>
-        public static string ToString(this DateTime? date, string format) => date?.ToString(format) ?? "";
         /// <summary>
         /// Return empty string when object is null, or return ToString
         /// </summary>
@@ -18,12 +11,6 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
         /// </summary>        
         /// <returns></returns>
         public static string ToStringWithNoZero(this int? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
-        public static string ToStringWithNoZero(this long? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
-        public static string ToStringWithNoZero(this byte? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
-        public static string ToStringWithNoZero(this short? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
-        public static string ToStringWithNoZero(this float? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
-        public static string ToStringWithNoZero(this double? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
-        public static string ToStringWithNoZero(this decimal? obj) => obj == null || obj == 0 ? "" : obj.Value.ToString();
 
         /// <summary>
         /// Convert string to built-in type or default value
@@ -57,50 +44,5 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
                 return default;
             }
         }
-        /// <summary>
-        /// Check TradeInUm value
-        /// </summary>        
-        public static bool IsTradeIn(this ResolutionContext context)
-        {
-            var estSubEntity = context.Items["estSubEntity"] as TEstimateSub;
-            if (estSubEntity == null)
-                return false;
-            if (!estSubEntity.TradeInUm.HasValue || estSubEntity.TradeInUm.Value == 0)
-                return false;
-            return true;
-        }
-        /// <summary>
-        /// Check TradeInUm value
-        /// </summary>        
-        public static bool IsTaxFreeKb(this ResolutionContext context)
-        {
-            var estEntity = context.Items["estEntity"] as TEstimate;
-            if (estEntity == null)
-                return false;
-            return estEntity.TaxFreeKb ?? false;
-        }
-
-        /// <summary>
-        /// Check TradeInUm value
-        /// </summary>        
-        public static bool IsTaxCostKb(this ResolutionContext context)
-        {
-            var estEntity = context.Items["estEntity"] as TEstimate;
-            if (estEntity == null)
-                return false;
-            return estEntity.TaxCostKb ?? false;
-        }
-
-        /// <summary>
-        /// #,##0 円
-        /// </summary>        
-        public static string ToYenCurrency(this int number, string unit = " 円") => number != 0 ? $"{number:N0}{unit}" : "";
-
-        /// <summary>
-        /// #,##0 円
-        /// </summary>        
-        public static string ToYenCurrency(this int? number, string unit = " 円") => number.HasValue && number.Value != 0 ? $"{number.Value:N0}{unit}" : "";
-
-
     }
 }

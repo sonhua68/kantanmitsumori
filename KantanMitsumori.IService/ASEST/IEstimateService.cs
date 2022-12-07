@@ -12,11 +12,11 @@ namespace KantanMitsumori.IService
         Task<ResponseBase<int>> Create(TEstimate model);
         Task<ResponseBase<int>> UpdateInputCar(RequestUpdateInputCar model);
         Task<ResponseBase<int>> UpdateInpHanbaiten(RequestUpdateInpHanbaiten model);
-        Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model, LogToken logToken);
-        Task<ResponseBase<int>> UpdateInpZeiHoken(RequestUpdateInpZeiHoken model, LogToken logToken);
+        Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model, LogSession logSession);
+        Task<ResponseBase<int>> UpdateInpZeiHoken(RequestUpdateInpZeiHoken model, LogSession logSession);
         ResponseBase<List<ResponseEstimate>> GetMakerNameAndModelName(string userNo, string makerName);
         Task<ResponseBase<int>> DeleteEstimate(string EstNo, string EstSubNo);
-        Task<ResponseBase<int>> UpdateInpNebiki(RequestUpdateInpNebiki model, LogToken logToken);
+        Task<ResponseBase<int>> UpdateInpNebiki(RequestUpdateInpNebiki model, LogSession logSession);
 
     }
 }

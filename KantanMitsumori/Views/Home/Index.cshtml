@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@addTagHelper *, WebOptimizer.Core
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="shift_jis" />
@@ -8,7 +10,7 @@
 <body>
     <h1>かんたん見積もりテスト画面</h1>
     <form method="post" id="esmain" target=_blank>
-        <input type="submit" value="送信" /><br><br>
+        <input type="submit" value="送信"  /><br><br>
         <table>
             <tbody>
                 <tr>
@@ -208,6 +210,6 @@
         <input type="hidden" name="nonTax" value="1" />
     </form>
 </body>
-<script src="~/js/testsubmit.js"></script>
+<script src="~/js/TestSubmit.js"></script>
 </html>
 

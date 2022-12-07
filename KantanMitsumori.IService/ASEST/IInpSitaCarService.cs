@@ -8,6 +8,6 @@ namespace KantanMitsumori.IService.ASEST
     {
         ResponseBase<ResponseInpSitaCar> GetInfoSitaCar(string estNo, string estSubNo, string userNo);
         ResponseBase<List<string>> GetListOffice();
-        Task<ResponseBase<int>> UpdateInpSitaCar(RequestUpdateInpSitaCar request, LogToken logToken);
+        Task<ResponseBase<int>> UpdateInpSitaCar(RequestUpdateInpSitaCar request, LogSession logSession);
     }
 }

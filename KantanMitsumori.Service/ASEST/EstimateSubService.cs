@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
+using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
@@ -18,7 +19,7 @@ namespace KantanMitsumori.Service
         {
             _mapper = mapper;
             _logger = logger;
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;           
         }
 
         public Task<ResponseBase<int>> Create(TEstimateSub model)

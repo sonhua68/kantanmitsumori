@@ -54,7 +54,7 @@ namespace KantanMitsumori.Service.ASEST
             }
         }
 
-        public async Task<ResponseBase<int>> UpdateInpSyohiyo(RequestUpdateInpSyohiyo request, LogToken logToken)
+        public async Task<ResponseBase<int>> UpdateInpSyohiyo(RequestUpdateInpSyohiyo request, LogSession LogSession)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace KantanMitsumori.Service.ASEST
                 await _unitOfWork.CommitAsync();
 
                 // 小計・合計計算
-                if (!await _commonEst.CalcSum(request.EstNo, request.EstSubNo!, logToken))
+                if (!await _commonEst.CalcSum(request.EstNo, request.EstSubNo!, LogSession))
                     return ResponseHelper.LogicError<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
 
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));

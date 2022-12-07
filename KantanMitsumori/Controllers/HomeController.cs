@@ -11,12 +11,13 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Index()
         {
+            RemoveAllCookies();
             return View();
         }
 
         public IActionResult Header()
         {
-            return PartialView("_Header", _logToken);
+            return PartialView("_Header", _logSession);
         }
 
 

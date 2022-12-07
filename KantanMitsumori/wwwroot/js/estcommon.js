@@ -1,5 +1,4 @@
 ﻿// JScript File
-
 function closeWin() {
     window.close();
 }

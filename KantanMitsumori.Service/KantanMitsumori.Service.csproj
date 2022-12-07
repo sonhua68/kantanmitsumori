@@ -8,14 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
-    <PackageReference Include="GrapeCity.ActiveReports.Chart.ja" Version="16.1.2" />
-    <PackageReference Include="GrapeCity.ActiveReports.Core.DataProviders" Version="2.1.0" />
-    <PackageReference Include="GrapeCity.ActiveReports.Core.Rdl" Version="3.3.2" />
-    <PackageReference Include="GrapeCity.ActiveReports.Core.Rendering" Version="3.3.2" />
-    <PackageReference Include="GrapeCity.ActiveReports.Document.ja" Version="16.1.0" />
-    <PackageReference Include="GrapeCity.ActiveReports.Export.Pdf.ja" Version="16.1.0" />
-    <PackageReference Include="GrapeCity.ActiveReports.ja" Version="16.1.0" />	
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />	
 
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
 	<PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />

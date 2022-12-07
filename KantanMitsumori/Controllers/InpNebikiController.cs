@@ -18,10 +18,10 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {
             RequestInp request = new RequestInp();
-            request.EstNo = _logToken.sesEstNo;
-            request.EstSubNo = _logToken.sesEstSubNo;
-            request.UserNo = _logToken.UserNo;
-            request.TaxRatio = _logToken.sesTaxRatio;
+            request.EstNo = _logSession.sesEstNo;
+            request.EstSubNo = _logSession.sesEstSubNo;
+            request.UserNo = _logSession.UserNo;
+            request.TaxRatio = _logSession.sesTaxRatio;
             var response = _estimateService.GetDetail(request);
             if (response.ResultStatus != (int)enResponse.isSuccess)
             {
@@ -33,7 +33,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateInpNebiki([FromForm] RequestUpdateInpNebiki requestData)
         {
-            var response = await _estimateService.UpdateInpNebiki(requestData,_logToken!);
+            var response = await _estimateService.UpdateInpNebiki(requestData,_logSession!);
             return Ok(response);
         }
         #endregion InpNebiki

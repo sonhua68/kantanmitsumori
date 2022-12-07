@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using GrapeCity.Enterprise.Data.VisualBasicReplacement;
-using KantanMitsumori.Entity.ASESTEntities;
+﻿using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Utility;
@@ -11,17 +9,17 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace KantanMitsumori.Service
 {
     public class InpLoanService : IInpLoanService
     {
-        private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private readonly IUnitOfWork _unitOfWork;
-        public InpLoanService(IMapper mapper, ILogger<InpLoanService> logger, IUnitOfWork unitOfWork)
+
+        public InpLoanService(ILogger<InpLoanService> logger, IUnitOfWork unitOfWork)
         {
-            _mapper = mapper;
             _logger = logger;
             _unitOfWork = unitOfWork;
         }
@@ -130,27 +128,27 @@ namespace KantanMitsumori.Service
         {
             string errMsg = "";
             errMsg = chkNumber(model.Deposit.ToString(), "頭金");
-            errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.MoneyRate.ToString(), "金利（実質年率）", true);
+            errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.MoneyRate.ToString(), "金利（実質年率）", true);
 
-            errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.PayTimes.ToString(), "支払回数");
+            errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.PayTimes.ToString(), "支払回数");
 
-            errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.FirstMonth.ToString(), "第1回支払月");
+            errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.FirstMonth.ToString(), "第1回支払月");
 
             if (model.rdBonus)
             {
 
-                errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.Bonus.ToString(), "ボーナス加算額");
+                errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.Bonus.ToString(), "ボーナス加算額");
 
                 if (chkNumber(model.BonusFirst.ToString(), "ボーナス第1回支払月") != "")
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "ボーナス第1回支払月が正しく選択されていません。";
+                    errMsg += CommonFunction.AppendBr(errMsg) + "ボーナス第1回支払月が正しく選択されていません。";
                 else if (model.BonusFirst < 1 || model.BonusFirst > 12)
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "ボーナス第1回支払月が正しく選択されていません。";
+                    errMsg += CommonFunction.AppendBr(errMsg) + "ボーナス第1回支払月が正しく選択されていません。";
 
                 if (chkNumber(model.BonusSecond.ToString(), "ボーナス第2回支払月") != "")
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "ボーナス第2回支払月が正しく選択されていません。";
+                    errMsg += CommonFunction.AppendBr(errMsg) + "ボーナス第2回支払月が正しく選択されていません。";
                 else
                     if (model.BonusSecond < 1 || model.BonusSecond > 12)
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "ボーナス第2回支払月が正しく選択されていません。";
+                    errMsg += CommonFunction.AppendBr(errMsg) + "ボーナス第2回支払月が正しく選択されていません。";
             }
             if (errMsg == "<br />")
                 return "";
@@ -168,67 +166,67 @@ namespace KantanMitsumori.Service
                 errMsg = chkNumber(model.DepositCl.ToString(), "頭金");
             }
             if (model.MoneyRateCl != 0)
-                errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.MoneyRateCl.ToString(), "金利（実質年率）", true);
+                errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.MoneyRateCl.ToString(), "金利（実質年率）", true);
 
             if (model.Fee != 0)
-                errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.Fee.ToString(), "分割手数料");
+                errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.Fee.ToString(), "分割手数料");
 
             if (model.PayTotal != 0)
-                errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.PayTotal.ToString(), "分割支払金合計");
+                errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.PayTotal.ToString(), "分割支払金合計");
 
             if (model.PayTimesCl != 0)
-                errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.PayTimesCl.ToString(), "支払回数");
+                errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.PayTimesCl.ToString(), "支払回数");
 
             if (!string.IsNullOrEmpty(model.FirstPayMonth))
             {
                 if (chkNumber(model.FirstPayMonth!, "支払期間（開始年月）") != "")
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.FirstPayMonth!, "支払期間（開始年月）");
-                else if (Strings.Len(model.FirstPayMonth!) != 6)
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "支払期間（開始年月）の日付形式が不正です。";
-                else if (Information.IsDate(Strings.Left(model.FirstPayMonth!, 4) + "/" + Strings.Right(model.FirstPayMonth!, 2) + "/01") == false)
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "支払期間（開始年月）の日付形式が不正です。";
+                    errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.FirstPayMonth!, "支払期間（開始年月）");
+                else if (model.FirstPayMonth.Length != 6)
+                    errMsg += CommonFunction.AppendBr(errMsg) + "支払期間（開始年月）の日付形式が不正です。";
+                else if (CommonFunction.IsDate(CommonFunction.Left(model.FirstPayMonth!, 4) + "/" + CommonFunction.Right(model.FirstPayMonth!, 2) + "/01") == false)
+                    errMsg += CommonFunction.AppendBr(errMsg) + "支払期間（開始年月）の日付形式が不正です。";
             }
             if (!string.IsNullOrEmpty(model.LastPayMonth))
             {
                 if (chkNumber(model.LastPayMonth, "支払期間（終了年月）") != "")
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.LastPayMonth, "支払期間（終了年月）");
-                else if (Strings.Len(model.LastPayMonth) != 6)
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "支払期間（終了年月）の日付形式が不正です。";
-                else if (Information.IsDate(Strings.Left(model.LastPayMonth, 4) + "/" + Strings.Right(model.LastPayMonth, 2) + "/01") == false)
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "支払期間（終了年月）の日付形式が不正です。";
+                    errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.LastPayMonth, "支払期間（終了年月）");
+                else if (model.LastPayMonth.Length != 6)
+                    errMsg += CommonFunction.AppendBr(errMsg) + "支払期間（終了年月）の日付形式が不正です。";
+                else if (CommonFunction.IsDate(CommonFunction.Left(model.LastPayMonth, 4) + "/" + CommonFunction.Right(model.LastPayMonth, 2) + "/01") == false)
+                    errMsg += CommonFunction.AppendBr(errMsg) + "支払期間（終了年月）の日付形式が不正です。";
             }
             if (model.FirstPay != 0)
-                errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.FirstPay.ToString(), "初回支払額");
+                errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.FirstPay.ToString(), "初回支払額");
 
             if (model.PayMonth != 0)
-                errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.PayMonth.ToString(), "2回目以降支払額");
+                errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.PayMonth.ToString(), "2回目以降支払額");
 
             if (model.rdBonus_Result!.Contains("rbBonusU_Result"))
             {
                 if (model.BonusCl != 0)
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.BonusCl.ToString(), "ボーナス加算額");
+                    errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.BonusCl.ToString(), "ボーナス加算額");
                 else
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "ボーナス加算額が未入力です。";
+                    errMsg += CommonFunction.AppendBr(errMsg) + "ボーナス加算額が未入力です。";
 
                 if (!string.IsNullOrEmpty(model.BonusFirstMonth))
                 {
                     if (chkNumber(model.BonusFirstMonth!, "ボーナス第1回支払月") != "")
-                        errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.BonusFirstMonth, "ボーナス第1回支払月");
+                        errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.BonusFirstMonth, "ボーナス第1回支払月");
                     else if (Convert.ToInt32(model.BonusFirstMonth) < 1 | Convert.ToInt32(model.BonusFirstMonth) > 12)
-                        errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "ボーナス第1回支払月の値が不正です。";
+                        errMsg += CommonFunction.AppendBr(errMsg) + "ボーナス第1回支払月の値が不正です。";
                 }
                 if (!string.IsNullOrEmpty(model.BonusSecondMonth))
                 {
                     if (chkNumber(model.BonusSecondMonth, "ボーナス第2回支払月") != "")
-                        errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.BonusSecondMonth, "ボーナス第2回支払月");
+                        errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.BonusSecondMonth, "ボーナス第2回支払月");
                     else if (Convert.ToInt32(model.BonusSecondMonth) < 1 | Convert.ToInt32(model.BonusSecondMonth) > 12)
-                        errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + "ボーナス第2回支払月の値が不正です。";
+                        errMsg += CommonFunction.AppendBr(errMsg) + "ボーナス第2回支払月の値が不正です。";
                 }
                 if (model.BonusTimes != 0)
-                    errMsg += Interaction.IIf(Strings.Right(errMsg, 6) == "<br />", "", "<br />") + chkNumber(model.BonusTimes.ToString(), "ボーナス加算回数");
+                    errMsg += CommonFunction.AppendBr(errMsg) + chkNumber(model.BonusTimes.ToString(), "ボーナス加算回数");
             }
-            if (Strings.Right(errMsg, 6) == "<br />")
-                errMsg = errMsg.Substring(0, Strings.Len(errMsg) - 6);
+            if (CommonFunction.Right(errMsg, 6) == "<br />")
+                errMsg = errMsg.Substring(0, errMsg.Length - 6);
             if (errMsg == "")
                 return "";
             else
@@ -239,7 +237,7 @@ namespace KantanMitsumori.Service
 
         private string chkNumber(string strNumber, string itemName, bool isDec = false)
         {
-            var ByteLength = System.Text.Encoding.GetEncoding("Shift_JIS").GetByteCount(strNumber);
+            var ByteLength = Encoding.GetEncoding("Shift_JIS").GetByteCount(strNumber);
             int n;
             decimal m;
             bool isNumeric = isDec ? decimal.TryParse(strNumber, out m) : int.TryParse(strNumber, out n);
@@ -254,7 +252,7 @@ namespace KantanMitsumori.Service
             {
                 try
                 {
-                    double num = System.Convert.ToDouble(strNumber);
+                    double num = Convert.ToDouble(strNumber);
                 }
                 catch (Exception)
                 {

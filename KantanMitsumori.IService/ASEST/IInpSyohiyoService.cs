@@ -7,6 +7,6 @@ namespace KantanMitsumori.IService.ASEST
     public interface IInpSyohiyoService
     {
         ResponseBase<ResponseInpSyohiyo> GetInfoSyohiyo(string estNo, string estSubNo);
-        Task<ResponseBase<int>> UpdateInpSyohiyo(RequestUpdateInpSyohiyo request, LogToken logToken);
+        Task<ResponseBase<int>> UpdateInpSyohiyo(RequestUpdateInpSyohiyo request, LogSession logSession);
     }
 }

@@ -9,12 +9,13 @@ namespace KantanMitsumori.IService.ASEST
         UserModel getUserName(string userNo);
         ResponseBase<UserModel> getUserInfo(string mem);
         Task<ResponseBase<ResponseEstMainModel>> getEstMain(RequestActionModel requestAction, RequestHeaderModel request);
-        ResponseBase<ResponseEstMainModel> ReloadGetEstMain(LogToken logtoken);
-        Task<ResponseBase<ResponseEstMainModel>> setFreeEst(RequestSelGrdFreeEst model, LogToken logtoken);
-        Task<ResponseBase<string>> AddEstimate(RequestSerEst model, LogToken logToken);
-        Task<ResponseBase<string>> CalcSum(RequestSerEst model, LogToken logToken);
+        ResponseBase<ResponseEstMainModel> ReloadGetEstMain(LogSession LogSession);
+        Task<ResponseBase<ResponseEstMainModel>> setFreeEst(RequestSelGrdFreeEst model, LogSession logSession);
+        Task<ResponseBase<LogSession>> AddEstimate(RequestSerEst model, LogSession logSession);    
+        Task<ResponseBase<LogSession>> CalcSum(RequestSerEst model, LogSession logSession);
         ResponseBase<int> CheckGoPageLease(string firstRegYm, string makerName, int nowOdometer);
-        ResponseBase<string> ExportDataCSV(LogToken logToken);
+        ResponseBase<string> ExportDataCSV(LogSession logSession);
         Task<ResponseBase<int>> UpdateJiko(RequestUpdateJiko model);
+        void ConnectApiReport();
     }
 }

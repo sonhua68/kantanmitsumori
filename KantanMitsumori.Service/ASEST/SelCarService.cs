@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using GrapeCity.ActiveReports.Core.DataProviders;
-using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Entity.ASESTSQL;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
@@ -14,8 +12,6 @@ using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System.Data.SqlClient;
 
 namespace KantanMitsumori.Service.ASEST
 {
@@ -209,7 +205,7 @@ namespace KantanMitsumori.Service.ASEST
             }
 
         }
- 
+
         public ResponseBase<List<ResponseSerEst>> GetListSerEst(RequestSerEst requestSerEst)
         {
             try

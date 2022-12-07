@@ -7,7 +7,7 @@ namespace KantanMitsumori.Models
         public string? MessageCode { get; set; }
 
         public string? MessageContent { get; set; }
-        public LogToken? logToken { get; set; }
+        public LogSession? LogSession { get; set; }
 
     }
 }

@@ -6,6 +6,7 @@ using KantanMitsumori.DataAccess;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System;
+using KantanMitsumori.Helper.CommonFuncs;
 
 namespace KantanMitsumori.Infrastructure.Base
 {
@@ -65,7 +66,7 @@ namespace KantanMitsumori.Infrastructure.Base
         public virtual IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> expression, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy)
         {
             IQueryable<TEntity> query = dbSet;
-            query = query.Where(expression);
+            query = query.Where(expression);          
             _logger.LogTrace(query.Where(expression).ToQueryString());
             if (orderBy != null)
             {
@@ -75,14 +76,14 @@ namespace KantanMitsumori.Infrastructure.Base
         }
         public virtual TEntity? GetSingle(Expression<Func<TEntity, bool>> predicate)
         {
-            _logger.LogTrace(dbSet.Where(predicate).ToQueryString());
+             _logger.LogTrace(dbSet.Where(predicate).ToQueryString());
             return  dbSet.Where(predicate).FirstOrDefault();
         }
         public virtual TEntity GetSingleOrDefault(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy)
         {
             IQueryable<TEntity> query = dbSet;
             query = query.Where(predicate);
-            _logger.LogTrace(dbSet.Where(predicate).ToQueryString());
+             _logger.LogTrace(dbSet.Where(predicate).ToQueryString());
             if (orderBy != null)
             {
                 query = orderBy(query);
@@ -92,7 +93,7 @@ namespace KantanMitsumori.Infrastructure.Base
 
         public  IEnumerable<TEntity> Query(Expression<Func<TEntity, bool>> predicate)
         {
-            _logger.LogTrace(dbSet.Where(predicate).ToQueryString());
+             _logger.LogTrace(dbSet.Where(predicate).ToQueryString());
             return  dbSet.Where(predicate).ToList();
         }
 
@@ -101,7 +102,7 @@ namespace KantanMitsumori.Infrastructure.Base
         {
             IQueryable<TEntity> query = dbSet;
             query = query.Where(expression);
-            _logger.LogTrace(query.Where(expression).ToQueryString());
+             _logger.LogTrace(query.Where(expression).ToQueryString());
             if (orderBy != null)
             {
                 query = orderBy(query);
@@ -167,7 +168,7 @@ namespace KantanMitsumori.Infrastructure.Base
         {
             if (allowTracking)
             {
-                _logger.LogTrace(dbSet.FromSqlRaw(queryString).ToQueryString());
+                 _logger.LogTrace(dbSet.FromSqlRaw(queryString).ToQueryString());
                 return dbSet.FromSqlRaw(queryString).ToList();
             }
             else
@@ -181,7 +182,7 @@ namespace KantanMitsumori.Infrastructure.Base
         {
             if (allowTracking)
             {
-                _logger.LogTrace(dbSet.FromSqlRaw(queryString).ToQueryString());
+                 _logger.LogTrace(dbSet.FromSqlRaw(queryString).ToQueryString());
                 return dbSet.FromSqlRaw(queryString).FirstOrDefault();
             }
             else

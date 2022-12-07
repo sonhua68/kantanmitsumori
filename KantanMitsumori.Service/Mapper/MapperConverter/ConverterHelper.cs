@@ -1,44 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace KantanMitsumori.Service.Mapper.MapperConverter
+﻿namespace KantanMitsumori.Service.Mapper.MapperConverter
 {
     public static class ConverterHelper
     {
-        /// <summary>
-        /// Get Japanese year with Japanese Era in English
-        /// </summary>        
-        public static string GetWarekiEn(int year)
-        {
-            if (year >= 2099)
-                return "";
-            if (year >= 2019)
-                return $"R{year - 2018}";
-            if (year >= 1989)
-                return $"H{year - 1988}";
-            if (year >= 1926)
-                return $"S{year - 1925}";
-            return "";
-        }
-        /// <summary>
-        /// Get Japanese year with Japanese Era in Japanese
-        /// </summary>      
-        public static string GetWarekiJp(int year)
-        {
-            if (year >= 2099)
-                return "";
-            if (year >= 2019)
-                return $"令和{year - 2018:00}";
-            if (year >= 1989)
-                return $"平成{year - 1988:00}";
-            if (year >= 1926)
-                return $"昭和{year - 1925:00}";
-            return "";
-        }
-
         /// <summary>
         /// Load image from path return base64 string
         /// </summary>        
@@ -84,70 +47,6 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
             {
                 return null;
             }
-        }
-
-        /// <summary>
-        /// fromDate - toDate in Jp Date
-        /// </summary>        
-        public static string GetKikan(string? fromDate, string? toDate)
-        {
-            if (!string.IsNullOrEmpty(fromDate) && !string.IsNullOrEmpty(toDate))
-                return $"{GetJpDate(fromDate)} - {GetJpDate(toDate)}";
-            return "";
-        }
-
-        /// <summary>
-        /// Date japanese date as yyyy年MM月dd日 from yyyyMM
-        /// </summary>        
-        public static string GetJpDate(string? date)
-        {
-            try
-            {                
-                if (string.IsNullOrEmpty(date))
-                    return "";
-                date = date.Replace("/", "");
-                if (date.Length == 6)
-                {
-                    int year = int.Parse(date.Substring(0, 4));
-                    int month = int.Parse(date.Substring(4, 2));
-                    return $"{year}年{month}月";
-                }
-                if (date.Length == 8)
-                {
-                    int year = int.Parse(date.Substring(0, 4));
-                    int month = int.Parse(date.Substring(4, 2));
-                    int day = int.Parse(date.Substring(6, 2));
-                    return $"{year}年{month}月{day}日";
-                }
-                return "";
-            }
-            catch
-            {
-                return "";
-            }
-        }
-
-        /// <summary>
-        /// BonusFirst月・BonusSecond月
-        /// </summary>        
-        public static string GetBonusMonth(string? bonusFirst, string? bonusSecond)
-        {
-            if (!string.IsNullOrEmpty(bonusFirst) && !string.IsNullOrEmpty(bonusSecond))
-                return $"{GetBonusMonth(bonusFirst)}・{GetBonusMonth(bonusSecond)}";
-            return "";
-        }
-        public static string GetBonusMonth(string? month)
-        {
-            if (string.IsNullOrEmpty(month))
-                return "";
-            return $"{month}月";
-        }
-
-        public static string GetRateText(double? rate)
-        {
-            if (rate == null || rate.Value == 0)
-                return "";
-            return $"分割払手数料は実質年率 {rate.Value:0.0}% で計算しています";
         }
     }
 }

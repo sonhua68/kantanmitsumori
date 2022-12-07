@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
-using GrapeCity.DataVisualization.TypeScript;
-using GrapeCity.Enterprise.Data.VisualBasicReplacement;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Helper.Constant;
-using KantanMitsumori.Helper.Enum;
 using KantanMitsumori.Helper.Utility;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
@@ -13,8 +10,6 @@ using KantanMitsumori.Model.Request;
 using KantanMitsumori.Model.Response;
 using KantanMitsumori.Service.Helper;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Principal;
 
 namespace KantanMitsumori.Service
 {
@@ -49,7 +44,7 @@ namespace KantanMitsumori.Service
 
             }
         }
-        public async Task<ResponseBase<int>> UpdateInpInitVal(RequestUpdateInpInitVal model, LogToken logToken)
+        public async Task<ResponseBase<int>> UpdateInpInitVal(RequestUpdateInpInitVal model, LogSession LogSession)
         {
             try
             {
@@ -68,7 +63,7 @@ namespace KantanMitsumori.Service
                 await _unitOfWork.CommitAsync();
                 if (model.ButtonSummit == "btnHanei")
                 {
-                    if (!await _commonEst.CalcSum(model.EstNo!, model.EstSubNo!, logToken!))
+                    if (!await _commonEst.CalcSum(model.EstNo!, model.EstSubNo!, LogSession!))
                     {
                         return ResponseHelper.Error<int>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
                     }
@@ -77,7 +72,7 @@ namespace KantanMitsumori.Service
                     UpdateEstimates(model, dtEstimates, dtEstimateSubs);
                     UpdateEstimateSub(model, dtEstimates, dtEstimateSubs);
                     await _unitOfWork.CommitAsync();
-                    if (!await _commonEst.CalcSum(model.EstNo!, model.EstSubNo!, logToken!))
+                    if (!await _commonEst.CalcSum(model.EstNo!, model.EstSubNo!, LogSession!))
                     {
                         return ResponseHelper.Error<int>(HelperMessage.SMAI014D, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI014D));
                     }

@@ -1,9 +1,7 @@
 ﻿using KantanMitsumori.Helper.Constant;
 using KantanMitsumori.Helper.Enum;
 using NodaTime;
-using System;
 using System.Globalization;
-using System.IO;
 
 namespace KantanMitsumori.Helper.CommonFuncs
 {
@@ -541,9 +539,9 @@ namespace KantanMitsumori.Helper.CommonFuncs
             var startDate = dtInit;
             var endDate = dtEnd;
             //if (dtEnd < dtInit)
-                //throw new ArithmeticException("Init date should be previous to End date.");
-                //startDate = dtEnd;
-                //endDate = dtInit;
+            //throw new ArithmeticException("Init date should be previous to End date.");
+            //startDate = dtEnd;
+            //endDate = dtInit;
 
             var periods = Period.Between(
                         new LocalDate(startDate.Year, startDate.Month, startDate.Day),
@@ -605,6 +603,16 @@ namespace KantanMitsumori.Helper.CommonFuncs
             if (tempHybrid != "")
                 return tempHybrid;
             return "";
+        }
+
+        public static string AppendBr(string errMsg)
+        {
+            if (Right(errMsg, 6) == "<br />")
+            {
+                return "";
+            }
+
+            return "<br />";
         }
 
     }

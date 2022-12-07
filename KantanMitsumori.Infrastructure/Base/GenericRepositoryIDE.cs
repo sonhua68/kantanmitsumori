@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 using KantanMitsumori.DataAccess;
+using KantanMitsumori.Helper.CommonFuncs;
+
 namespace KantanMitsumori.Infrastructure.Base
 {
     public class GenericRepositoryIDE<TEntity> : IGenericRepository<TEntity> where TEntity : class
@@ -17,7 +19,7 @@ namespace KantanMitsumori.Infrastructure.Base
         {
             _context = context;
             this.dbSet = context.Set<TEntity>();
-            this._logger = logger;
+            this._logger = logger;       
         }
 
         public virtual bool Add(TEntity entity)
@@ -69,9 +71,9 @@ namespace KantanMitsumori.Infrastructure.Base
             }
             return query.ToList();
         }
-        public virtual  TEntity? GetSingle(Expression<Func<TEntity, bool>> predicate)
+        public virtual TEntity? GetSingle(Expression<Func<TEntity, bool>> predicate)
         {
-            return  dbSet.Where(predicate).FirstOrDefault();
+            return dbSet.Where(predicate).FirstOrDefault();
         }
         public virtual TEntity GetSingleOrDefault(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy)
         {
@@ -84,9 +86,9 @@ namespace KantanMitsumori.Infrastructure.Base
             return query.FirstOrDefault()!;
         }
 
-        public  IEnumerable<TEntity> Query(Expression<Func<TEntity, bool>> predicate)
+        public IEnumerable<TEntity> Query(Expression<Func<TEntity, bool>> predicate)
         {
-            return  dbSet.Where(predicate).ToList();
+            return dbSet.Where(predicate).ToList();
         }
 
 

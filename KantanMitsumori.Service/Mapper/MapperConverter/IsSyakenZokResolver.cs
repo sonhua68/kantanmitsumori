@@ -1,25 +1,19 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
 using KantanMitsumori.Model.Response;
-using KantanMitsumori.Model.Response.Report;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KantanMitsumori.Service.Mapper.MapperConverter
 {
     public class IsSyakenZokResolver : IValueResolver<TEstimate, ResponseInpCarPrice, bool>
     {
-        public bool Resolve(TEstimate source, ResponseInpCarPrice destination, bool destMember, ResolutionContext context)        
+        public bool Resolve(TEstimate source, ResponseInpCarPrice destination, bool destMember, ResolutionContext context)
         {
             try
             {
                 if (source.SyakenZok.HasValue && source.SyakenZok > 0)
                     return true;
                 if (source.SyakenNew.HasValue && source.SyakenNew > 0)
-                    return false;                
+                    return false;
                 // Check Expiration Date
                 var expiredYm = ConverterHelper.ParseDate(source.CheckCarYm);
                 if (expiredYm != null)
@@ -34,6 +28,6 @@ namespace KantanMitsumori.Service.Mapper.MapperConverter
             {
                 return false;
             }
-        }        
+        }
     }
 }

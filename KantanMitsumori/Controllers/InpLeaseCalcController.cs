@@ -27,7 +27,7 @@ namespace KantanMitsumori.Controllers
         #region InpLeaseCalc 
         public IActionResult Index()
         {
-            var response = _inpLeaseCalc.GetDataInpLease(_logToken!);
+            var response = _inpLeaseCalc.GetDataInpLease(_logSession!);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return ErrorAction(response);
@@ -69,13 +69,13 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public IActionResult InpLeaseCal([FromForm] RequestInpLeaseCalc requestData)
         {
-            var response = _inpLeaseCalc.InpLeaseCal(requestData, _logToken!);
+            var response = _inpLeaseCalc.InpLeaseCal(requestData, _logSession!);
             return Ok(response);
         }
         [HttpPost]
         public async Task<IActionResult> UpdateLeaseProgressIde(int requestData)
         {
-            var response = await _inpLeaseCalc.UpdateLeaseProgressIde(requestData, _logToken!);
+            var response = await _inpLeaseCalc.UpdateLeaseProgressIde(requestData, _logSession!);
             return Ok(response);
         }
 

@@ -19,14 +19,12 @@ namespace KantanMitsumori.Controllers
         private readonly IEstimateService _estimateService;
         private readonly IEstMainService _estMainService;
         private readonly ISerEstService _serEstService;
-        private readonly JwtSettings _jwtSettings;
 
-        public SerEstController(ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, IOptions<JwtSettings> jwtSettings, ISerEstService serEstService) : base()
+        public SerEstController(ISelCarService selCarService, IEstimateService estimateService, IEstMainService estMainService, ISerEstService serEstService) : base()
         {
             _selCarService = selCarService;
             _estimateService = estimateService;
-            _estMainService = estMainService;
-            _jwtSettings = jwtSettings.Value;
+            _estMainService = estMainService;      
             _serEstService = serEstService;
         }
 
@@ -38,11 +36,11 @@ namespace KantanMitsumori.Controllers
         public IActionResult Index()
         {            
             if(string.IsNullOrEmpty(Referer))
-                return ErrorAction(ResponseHelper.Error<LogToken>(HelperMessage.SSLE016P, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE016P)));
-            if (_logToken == null || string.IsNullOrEmpty(_logToken.UserNo))            
+                return ErrorAction(ResponseHelper.Error<LogSession>(HelperMessage.SSLE016P, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE016P)));
+            if (_logSession == null || string.IsNullOrEmpty(_logSession.UserNo))            
                 return ErrorAction(ResponseHelper.Error<int>(HelperMessage.SSLE013S, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE013S)));
             
-            return View(_logToken);
+            return View(_logSession);
         }
 
         /// <summary>
@@ -53,15 +51,15 @@ namespace KantanMitsumori.Controllers
         {
             // Validate model data
             if (string.IsNullOrEmpty(request.Mode))
-                return ErrorAction(ResponseHelper.Error<LogToken>(HelperMessage.SSLE016P, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE016P)));
+                return ErrorAction(ResponseHelper.Error<LogSession>(HelperMessage.SSLE016P, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE016P)));
             if (string.IsNullOrEmpty(request.Mem))
-                return ErrorAction(ResponseHelper.Error<LogToken>(HelperMessage.SSLE010P, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE010P)));            
-            // Generate token
-            var res = _serEstService.GenerateToken(request);
+                return ErrorAction(ResponseHelper.Error<LogSession>(HelperMessage.SSLE010P, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE010P)));            
+            // Generate 
+            var res = _serEstService.SetLogSession(request);
             if (res.ResultStatus == (int)enResponse.isError)
                 return ErrorAction(res);
-            // Set cookie with token
-            setTokenCookie(_jwtSettings.AccessExpires, res.Data?.Token ?? "");
+            // Set cookie with token  
+            setSession(res.Data!);
             return View(res.Data);
         }
 
@@ -69,8 +67,8 @@ namespace KantanMitsumori.Controllers
         public async Task<IActionResult> LoadData([FromForm] RequestSerEst requestData)
         {
 
-            requestData.EstUserNo = _logToken!.UserNo;
-            requestData.sesMode = _logToken.sesMode;
+            requestData.EstUserNo = _logSession!.UserNo;
+            requestData.sesMode = _logSession.sesMode;
             var response = _selCarService.GetListSerEst(requestData);
             if (response.ResultStatus == (int)enResponse.isError)
             {
@@ -87,7 +85,7 @@ namespace KantanMitsumori.Controllers
         [HttpGet]
         public IActionResult GetMakerNameAndModelName(string makerName)
         {
-            var response = _estimateService.GetMakerNameAndModelName(_logToken.UserNo!, makerName);
+            var response = _estimateService.GetMakerNameAndModelName(_logSession.UserNo!, makerName);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return Ok(response);
@@ -107,23 +105,23 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEstimate(RequestSerEst requestData)
         {
-            var response = await _estMainService.AddEstimate(requestData, _logToken);
+            var response = await _estMainService.AddEstimate(requestData, _logSession!);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return Ok(response);
-            }
-            setTokenCookie(_jwtSettings.AccessExpires, response.Data!);
+            }           
+            setSession(response.Data!);
             return Ok(response);
         }
         [HttpPost]
         public async Task<IActionResult> CalcSum(RequestSerEst requestData)
         {
-            var response = await _estMainService.CalcSum(requestData, _logToken);
+            var response = await _estMainService.CalcSum(requestData, _logSession!);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return Ok(response);
-            }
-            setTokenCookie(_jwtSettings.AccessExpires, response.Data!);
+            }           
+            setSession(response.Data!);
             return Ok(response);
         }
         #endregion SerEstController

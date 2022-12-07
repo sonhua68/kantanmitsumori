@@ -1,0 +1,79 @@
+variables:  
+  IISCmdPath: C:\Windows\system32\inetsrv\
+  SolutionFile: KantanMitsumori.sln
+  MainProjectPath: KantanMitsumori
+  MainProjectFile: KantanMitsumori.csproj    
+  ReleasePath: C:\Gitlab-Runner\work\release\asest2\
+  IISRootPath: C:\inetpub\
+  IISRootName: Default Web Site
+  IISDefaultURL: http://192.168.200.114/    
+  ASNETFtpHost: ftp://ftp102.autoserver.co.jp/ASEST.NETCORE/
+  ASNETFtpUser: ASNVN
+  ASNETFtpPass: MAZV9mfm
+stages:
+    # define build process as build -> test -> deploy for develop branch    
+    - deploy
+    # define build process as release for release branch
+    - release
+deploy-dev:
+  stage: deploy
+  only: 
+    - develop
+    #- feature/setup_cicd
+  before_script:
+    - '$env:Path += ";$IISCmdPath"'
+    - '$appName = "asest2"'
+    - '$appPoolName = "asest2"'
+    - '$appDir = $IISRootPath + $appname'
+    - '$appUrl = $IISDefaultURL + $appname'
+  script:    
+    - 'cd "$MainProjectPath"'    
+    # stop AppPool asest2
+    - 'echo "# stop AppPool @appPoolName"'
+    - 'appcmd.exe stop apppool /apppool.name:$appPoolName'
+    # publish web project to $appDir
+    - 'echo "# publish web project to $appDir"'
+    - 'dotnet publish --configuration Release --framework net6.0 --runtime win-x64 --output "$appDir"'
+    # start AppPool asest2
+    - 'echo "# start AppPool @appPoolName"'
+    - 'appcmd.exe start apppool /apppool.name:$appPoolName'    
+    # check working tento url
+    - 'echo "# check appUrl $appUrl"'
+    - '$statusCode = wget $appUrl -UseBasicParsing | % {$_.StatusCode}'
+    - 'echo "appUrl: $appUrl"'
+    - 'echo "statusCode: $statusCode"'
+    - 'if($statusCode -ne 200){ exit 1}'
+    
+release-ftp:
+  stage: release
+  only: 
+    # regular expresion for 'release/...' branch
+    - /^release\/.+$/
+    #- feature/setup_cicd
+  before_script:    
+    - '$datename = (Get-Date).ToString("yyyyMMdd")'
+    - '$releaseDir = $ReleasePath + $datename'    
+    - '$zipFile = $ReleasePath + $datename + ".zip"'    
+    - '$ftp = $ASNETFtpHost + $datename + ".zip"'
+  script:    
+    - 'cd "$MainProjectPath"'
+    # publish to $releaseDir
+    - 'echo "# publish to $releaseDir"'
+    - 'dotnet publish --configuration Release --framework net6.0 --runtime win-x64 --output "$releaseDir"'    
+    # zip publish to $zipFile
+    - 'echo "# zip publish to $zipFile"'
+    - 'Compress-Archive -Path "$releaseDir" -DestinationPath $zipFile -Force'    
+    # upload publish to asnet ftp  
+    - '$FTPRequest = [System.Net.FtpWebRequest]::Create("$ftp")'
+    - '$FTPRequest = [System.Net.FtpWebRequest]$FTPRequest'
+    - '$FTPRequest.Method = [System.Net.WebRequestMethods+Ftp]::UploadFile'
+    - '$FTPRequest.Credentials = new-object System.Net.NetworkCredential($ASNETFtpUser, $ASNETFtpPass)'
+    - '$FTPRequest.UseBinary = $true'
+    - '$FTPRequest.UsePassive = $true'
+    - '$FileContent = [System.IO.File]::ReadAllBytes("$zipFile")'
+    - '$FTPRequest.ContentLength = $FileContent.Length'    
+    - '$Run = $FTPRequest.GetRequestStream()'
+    - '$Run.Write($FileContent, 0, $FileContent.Length)'    
+    - '$Run.Dispose()'
+    - 'echo "uri: $ftp"'
+    - 'echo "zipfile: $zipFile"'  

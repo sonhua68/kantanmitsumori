@@ -12,13 +12,11 @@ namespace KantanMitsumori.Controllers
     {
         private readonly ISelCarService _selCarService;
         private readonly IEstMainService _estMainService;
-        private readonly JwtSettings _jwtSettings;
 
-        public SelCarController(ISelCarService selCarService, IEstMainService estMainService, ILogger<SelCarController> logger, IOptions<JwtSettings> jwtSettings)
+        public SelCarController(ISelCarService selCarService, IEstMainService estMainService, ILogger<SelCarController> logger)
         {
             _selCarService = selCarService;
-            _estMainService = estMainService;
-            _jwtSettings = jwtSettings.Value;
+            _estMainService = estMainService;           
         }
 
         #region SelCar 
@@ -75,12 +73,12 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> SetFreeEst(RequestSelGrdFreeEst requestData)
         {
-            var response = await _estMainService.setFreeEst(requestData, _logToken);
+            var response = await _estMainService.setFreeEst(requestData, _logSession!);
             if (response.ResultStatus == (int)enResponse.isError)
             {
                 return Ok(response);
-            }
-            setTokenCookie(_jwtSettings.AccessExpires, response.Data!.AccessToken);
+            }  
+            setSession(response.Data!.LogSession);
             return Ok(response);
         }
 

@@ -15,59 +15,64 @@ using System.Threading.Tasks;
 namespace KantanMitsumori.Helper.CommonFuncs
 {
     public static class HelperToken
-    {           
-        public static LogToken? EncodingToken(JwtSettings settings, string token)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(token)) return null;
-                var tokenHandler = new JwtSecurityTokenHandler();            
-                var key = Encoding.UTF8.GetBytes(settings.Key);
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,               
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken validatedToken);
-                var jwtToken = (JwtSecurityToken)validatedToken;
-                var genderStr = jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
-                if (!string.IsNullOrWhiteSpace(genderStr))
-                {
-                    var model = JsonConvert.DeserializeObject<LogToken>(genderStr);
-                    return model;
-                }
-                return null;
-            }
-            catch 
-            {
-                return null;
-            }
-        }
-        public static string GenerateJsonToken(JwtSettings settings, LogToken model)
-        {           
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            string genderStr = JsonConvert.SerializeObject(model);
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub,genderStr),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
-            var currentDate = DateTime.Now;
-            var AccessExpires = settings.AccessExpires;
-            TimeSpan time = TimeSpan.Parse(AccessExpires);
-            var token = new JwtSecurityToken(
-                issuer: settings.Issuer,
-                audience: settings.Issuer,
-                claims,
-                notBefore: currentDate,
-                expires: currentDate.Add(time),
-                signingCredentials: credentials
-             );
-            var encodetoken = new JwtSecurityTokenHandler().WriteToken(token);
-            return encodetoken;
-        }
+    {
+        //public static LogSession? LogSession { get; set; }
+        //public static LogSession? EncodingToken(JwtSettings settings, string token)
+        //{
+        //    try
+        //    {
+        //        if (string.IsNullOrWhiteSpace(token)) return null;
+        //        var tokenHandler = new JwtSecurityTokenHandler();
+        //        var key = Encoding.UTF8.GetBytes(settings.Key);
+        //        tokenHandler.ValidateToken(token, new TokenValidationParameters
+        //        {
+        //            ValidateIssuerSigningKey = true,
+        //            IssuerSigningKey = new SymmetricSecurityKey(key),
+        //            ValidateIssuer = false,
+        //            ValidateAudience = false,
+        //            ClockSkew = TimeSpan.Zero
+        //        }, out SecurityToken validatedToken);
+        //        var jwtToken = (JwtSecurityToken)validatedToken;
+        //        var genderStr = jwtToken.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
+        //        if (!string.IsNullOrWhiteSpace(genderStr))
+        //        {
+        //            var model = JsonConvert.DeserializeObject<LogSession>(genderStr);
+        //            LogSession = model;
+        //            return model;
+        //        }
+        //        return null;
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //}
+        //public static string GenerateJsonToken(JwtSettings settings, LogSession model)
+        //{
+        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.Key));
+        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        //    string genderStr = JsonConvert.SerializeObject(model);
+        //    var claims = new[]
+        //    {
+        //        new Claim(JwtRegisteredClaimNames.Sub,genderStr),
+        //        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+        //    };
+        //    var currentDate = DateTime.Now;
+        //    var AccessExpires = settings.AccessExpires;
+        //    TimeSpan time = TimeSpan.Parse(AccessExpires);
+        //    var token = new JwtSecurityToken(
+        //        issuer: settings.Issuer,
+        //        audience: settings.Issuer,
+        //        claims,
+        //        notBefore: currentDate,
+        //        expires: currentDate.Add(time),
+        //        signingCredentials: credentials
+        //     );
+        //    var encodetoken = new JwtSecurityTokenHandler().WriteToken(token);
+        //    return encodetoken;
+        //}
+
+
+
     }
 }

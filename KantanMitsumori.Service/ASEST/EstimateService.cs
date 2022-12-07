@@ -21,7 +21,7 @@ namespace KantanMitsumori.Service
         private readonly IUnitOfWork _unitOfWork;
         private readonly CommonEstimate _commonEst;
         private readonly HelperMapper _helperMapper;
-        private readonly CommonFuncHelper _commonFuncHelper;
+        private readonly CommonFuncHelper _commonFuncHelper;  
 
         public EstimateService(IMapper mapper, ILogger<EstimateService> logger, IUnitOfWork unitOfWork, CommonEstimate commonEst, HelperMapper helperMapper, CommonFuncHelper commonFuncHelper)
         {
@@ -30,7 +30,7 @@ namespace KantanMitsumori.Service
             _unitOfWork = unitOfWork;
             _commonEst = commonEst;
             _helperMapper = helperMapper;
-            _commonFuncHelper = commonFuncHelper;
+            _commonFuncHelper = commonFuncHelper;          
         }
 
         public async Task<ResponseBase<int>> Create(TEstimate model)
@@ -43,7 +43,7 @@ namespace KantanMitsumori.Service
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "CreateTEstimate");
+                _logger.LogError(ex, "CreateTEstimate");           
                 return ResponseHelper.Error<int>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
             }
         }
@@ -61,7 +61,7 @@ namespace KantanMitsumori.Service
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "GetList");
+                _logger.LogError( ex, "GetList");
                 return ResponseHelper.Error<List<TEstimate>>(HelperMessage.SICR001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SICR001S));
 
             }
@@ -192,7 +192,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model, LogToken logToken)
+        public async Task<ResponseBase<int>> UpdateInpOption(RequestUpdateInpOption model, LogSession LogSession)
         {
             try
             {
@@ -229,7 +229,7 @@ namespace KantanMitsumori.Service
                 _unitOfWork.Estimates.Update(dtEstimates);
                 await _unitOfWork.CommitAsync();
                 // 小計・合計計算
-                if (!await _commonEst.CalcSum(dtEstimates.EstNo, dtEstimates.EstSubNo!, logToken))
+                if (!await _commonEst.CalcSum(dtEstimates.EstNo, dtEstimates.EstSubNo!, LogSession))
                     return ResponseHelper.LogicError<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
 
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
@@ -241,7 +241,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<int>> UpdateInpZeiHoken(RequestUpdateInpZeiHoken model, LogToken logToken)
+        public async Task<ResponseBase<int>> UpdateInpZeiHoken(RequestUpdateInpZeiHoken model, LogSession LogSession)
         {
             try
             {
@@ -269,7 +269,7 @@ namespace KantanMitsumori.Service
                 await _unitOfWork.CommitAsync();
 
                 // 小計・合計計算
-                if (!await _commonEst.CalcSum(model.EstNo!, model.EstSubNo!, logToken))
+                if (!await _commonEst.CalcSum(model.EstNo!, model.EstSubNo!, LogSession))
                     return ResponseHelper.LogicError<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
 
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));
@@ -358,7 +358,7 @@ namespace KantanMitsumori.Service
             }
         }
 
-        public async Task<ResponseBase<int>> UpdateInpNebiki(RequestUpdateInpNebiki model, LogToken logToken)
+        public async Task<ResponseBase<int>> UpdateInpNebiki(RequestUpdateInpNebiki model, LogSession LogSession)
         {
             try
             {
@@ -373,7 +373,7 @@ namespace KantanMitsumori.Service
                 _unitOfWork.Estimates.Update(dtEstimates);
                 await _unitOfWork.CommitAsync();
                 // 小計・合計計算
-                if (!await _commonEst.CalcSum(dtEstimates.EstNo, dtEstimates.EstSubNo!, logToken))
+                if (!await _commonEst.CalcSum(dtEstimates.EstNo, dtEstimates.EstSubNo!, LogSession))
                     return ResponseHelper.LogicError<int>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
 
                 return ResponseHelper.Ok<int>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002));

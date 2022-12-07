@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using KantanMitsumori.Entity.ASESTEntities;
+using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.IService;
 using KantanMitsumori.Model;
@@ -13,15 +14,15 @@ namespace KantanMitsumori.Service
     {
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
-        private readonly IUnitOfWork _unitOfWork;
-
+        private readonly IUnitOfWork _unitOfWork;       
 
 
         public EstimateIdeService(IMapper mapper, ILogger<EstimateIdeService> logger, IUnitOfWork unitOfWork)
         {
             _mapper = mapper;
             _logger = logger;
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork;           
+
         }
 
         public Task<ResponseBase<int>> Create(TEstimateIde model)

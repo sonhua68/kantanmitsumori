@@ -1,4 +1,5 @@
 ﻿using KantanMitsumori.DataAccess;
+using KantanMitsumori.Helper.CommonFuncs;
 using KantanMitsumori.Infrastructure.IRepositories;
 using KantanMitsumori.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;

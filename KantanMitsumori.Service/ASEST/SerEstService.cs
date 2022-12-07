@@ -21,55 +21,50 @@ namespace KantanMitsumori.Service.ASEST
 {
     public class SerEstService : ISerEstService
     {
-        private readonly ILogger _logger;
-        private readonly JwtSettings _jwtSettings;
+        private readonly ILogger _logger;      
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly CommonFuncHelper _commonFuncHelper;
 
-        public SerEstService(ILogger<SerEstService> logger,
-            IOptions<JwtSettings> jwtSettings,
+        public SerEstService(ILogger<SerEstService> logger,         
             IUnitOfWork unitOfWork,
             IMapper mapper,
             CommonFuncHelper commonFuncHelper)
         {
-            _logger = logger;
-            _jwtSettings = jwtSettings.Value;
+            _logger = logger;        
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _commonFuncHelper = commonFuncHelper;
         }
 
-        public ResponseBase<LogToken> GenerateToken(RequestSerEstExternal model)
+        public ResponseBase<LogSession> SetLogSession(RequestSerEstExternal model)
         {
             try
             {                
                 // Decode userNo
                 string decUsrNo = "";
                 if (!_commonFuncHelper.DecUserNo(model.Mem.Trim(), ref decUsrNo))
-                    return ResponseHelper.Error<LogToken>(HelperMessage.SSLE011C, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE011C));
+                    return ResponseHelper.Error<LogSession>(HelperMessage.SSLE011C, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE011C));
 
                 // Get userInfo
                 var userInfo = getUserName(decUsrNo);
                 if(userInfo == null)
-                    return ResponseHelper.Error<LogToken>(HelperMessage.SSLE012D, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE012D));
+                    return ResponseHelper.Error<LogSession>(HelperMessage.SSLE012D, KantanMitsumoriUtil.GetMessage(HelperMessage.SSLE012D));
 
                 // Create token
-                var token = new LogToken()
+                var logSession = new LogSession()
                 {
                     UserNo = userInfo.UserNo,
                     UserNm = userInfo.UserNm,
                     sesMode = model.Mode,
-                };
-                token.Token = HelperToken.GenerateJsonToken(_jwtSettings, token);
-
-                return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(HelperMessage.I0002), token);
+                };   
+                return ResponseHelper.Ok(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(HelperMessage.I0002), logSession);
 
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "GetAsnetInfo");
-                return ResponseHelper.Error<LogToken>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(HelperMessage.CEST050S));
+                return ResponseHelper.Error<LogSession>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(HelperMessage.CEST050S));
             }
         }
 

@@ -1,8 +1,10 @@
-﻿@using KantanMitsumori.Model
+﻿@addTagHelper *, WebOptimizer.Core
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using KantanMitsumori.Model
 @using KantanMitsumori.Model.Request
 @using KantanMitsumori.Model.Response;
 @using KantanMitsumori.Helper.CommonFuncs;
-@model LogToken;
+@model LogSession;
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "かんたん見積";
@@ -152,7 +154,6 @@
     <div style=" position:absolute; top:1300px; left:0px; z-index: 109;">&nbsp;</div>
     <input type="hidden" id="SortPage" value="10">
 </div>
-<script src="~/js/funcmoment.js"></script>
 <script src="~/js/SerEst.js"></script>
 
 

@@ -78,11 +78,11 @@ namespace KantanMitsumori.Service.ASEST
                 return ResponseHelper.Error<ResponsePreExamination>(HelperMessage.ISYS010I, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.ISYS010I));
             }
         }
-        public async Task<ResponseBase<int>> UpdatePreExamination(LogToken logToken)
+        public async Task<ResponseBase<int>> UpdatePreExamination(LogSession LogSession)
         {
             try
             {
-                var dtEstimateIdes = _unitOfWork.EstimateIdes.GetSingle(n => n.EstNo == logToken.sesEstNo && n.EstSubNo == logToken.sesEstSubNo);
+                var dtEstimateIdes = _unitOfWork.EstimateIdes.GetSingle(n => n.EstNo == LogSession.sesEstNo && n.EstSubNo == LogSession.sesEstSubNo);
                 if (dtEstimateIdes == null)
                 {
                     return ResponseHelper.Error<int>(HelperMessage.CEST050S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.CEST050S));

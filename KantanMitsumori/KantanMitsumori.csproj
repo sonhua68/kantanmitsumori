@@ -8,35 +8,15 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="Reports\Article.rpx" />
-		<None Remove="Reports\Estimate.rpx" />
-		<None Remove="Reports\EstimateWithMemo.rpx" />
-		<None Remove="Reports\LeaseEstimate.rpx" />
-		<None Remove="Reports\LeaseEstimateWithMemo.rpx" />
-		<None Remove="Reports\LeaseOrder.rpx" />
-		<None Remove="Reports\LeaseOrderWithArticle.rpx" />
-		<None Remove="Reports\Memo.rpx" />
-		<None Remove="Reports\Order.rpx" />
-		<None Remove="Reports\OrderWithArticle.rpx" />
-		<EmbeddedResource Include="Reports\LeaseEstimateWithMemo.rpx">
-			<SubType>Component</SubType>
-		</EmbeddedResource>
-		<EmbeddedResource Include="Reports\LeaseOrder.rpx" />
-		<EmbeddedResource Include="Reports\LeaseEstimate.rpx" />
-		<EmbeddedResource Include="Reports\LeaseOrderWithArticle.rpx" />
-		<EmbeddedResource Include="Reports\OrderWithArticle.rpx" />
-		<EmbeddedResource Include="Reports\EstimateWithMemo.rpx" />
-		<EmbeddedResource Include="Reports\Estimate.rpx" />
-		<EmbeddedResource Include="Reports\Memo.rpx" />
-		<EmbeddedResource Include="Reports\Article.rpx" />
-		<EmbeddedResource Include="Reports\Order.rpx" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Include="..\.editorconfig" Link=".editorconfig" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="LigerShark.WebOptimizer.Analyzers" Version="3.0.2">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.372" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
 		<PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.3.1" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
@@ -51,6 +31,7 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" />
 		<PackageReference Include="NLog" Version="5.0.5" />
 		<PackageReference Include="NLog.Web.AspNetCore" Version="5.1.5" />
+		<PackageReference Include="SharpScss" Version="2.0.0" />
 		<!--End: Conflict library with ActiveReport - Solved by use higher version of library  -->
 	</ItemGroup>
 

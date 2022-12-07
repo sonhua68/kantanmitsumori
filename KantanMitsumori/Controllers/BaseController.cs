@@ -7,64 +7,52 @@ using KantanMitsumori.Models;
 using KantanMitsumori.Service.Helper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Net;
 using System.Text;
-using static GrapeCity.Enterprise.Data.DataEngine.ExpressionEvaluation.Eval;
 
 namespace KantanMitsumori.Controllers
 {
 
     public class BaseController : Controller
-    {
-        private const string COOKIES = "CookiesASEST";
-        private List<string> optionListController = new List<string> { "Home","Error", "SelCar", "SelGrd", "SerEst" };
-        public LogToken? _logToken;
-
+    {     
+        private List<string> optionListController = new List<string> { "Home", "Error", "SelCar", "SelGrd", "SerEst" };
+        public LogSession? _logSession;
         public BaseController()
         {
-            _logToken = new LogToken();
-
+            _logSession = new LogSession();
         }
-
         public string Referer => Request.Headers["Referer"];
-
         public override async Task OnActionExecutionAsync(ActionExecutingContext filterContext, ActionExecutionDelegate next)
-        {      
-            var cookies = filterContext.HttpContext.Request.Cookies[COOKIES];
-            _logToken = filterContext.HttpContext.Items["Authorized"] as LogToken;
+        {        
+            _logSession = HelperSession.Get<LogSession>(filterContext.HttpContext.Session, CommonConst.KEY_SESSION_ASEST);
             string actionName = filterContext.RouteData.Values["action"]!.ToString()!;
             string controllerName = filterContext.RouteData.Values["controller"]!.ToString()!;
-           if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && cookies == null))
-
+            if (controllerName == "Home" && actionName == "Index") { RemoveSession(); }
+            if ((optionListController.Contains(controllerName)) || (controllerName.Contains("Estmain") && _logSession == null))
             {
                 await next();
             }
             else
             {
-
-                if (_logToken == null)
+                if (_logSession == null)
                 {
-                    RemoveCookies(COOKIES);
-                    RemoveCookies(CommonConst.sesCustNm_forPrint);
-                    RemoveCookies(CommonConst.sesCustZip_forPrint);
-                    RemoveCookies(CommonConst.sesCustAdr_forPrint);
-                    RemoveCookies(CommonConst.sesCustTel_forPrint);
+                    RemoveAllCookies();
                     if (!actionName.Contains("Index"))
                         filterContext.Result = ErrorAction();
                     else
                         filterContext.Result = new RedirectToActionResult("ErrorPage", "Error", new RouteValueDictionary(new RequestError
                         {
-                            messageCode = HelperMessage.SMAI001P,
-                            messageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P)
+                            messageCode = HelperMessage.SCOM001S,
+                            messageContent = KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SCOM001S)
                         }));
                     return;
                 }
                 else
                 {
-                    _logToken!.sesCustNm_forPrint =  GetCookieforPrint(filterContext, CommonConst.sesCustNm_forPrint);
-                    _logToken!.sesCustZip_forPrint = GetCookieforPrint(filterContext,CommonConst.sesCustZip_forPrint);
-                    _logToken!.sesCustAdr_forPrint = GetCookieforPrint(filterContext,CommonConst.sesCustAdr_forPrint);
-                    _logToken!.sesCustTel_forPrint = GetCookieforPrint(filterContext,CommonConst.sesCustTel_forPrint);
+                    _logSession!.sesCustNm_forPrint = GetCookieforPrint(filterContext, CommonConst.sesCustNm_forPrint);
+                    _logSession!.sesCustZip_forPrint = GetCookieforPrint(filterContext, CommonConst.sesCustZip_forPrint);
+                    _logSession!.sesCustAdr_forPrint = GetCookieforPrint(filterContext, CommonConst.sesCustAdr_forPrint);
+                    _logSession!.sesCustTel_forPrint = GetCookieforPrint(filterContext, CommonConst.sesCustTel_forPrint);
+                    setSession(_logSession);
                 }
                 await next();
             }
@@ -91,7 +79,7 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult ErrorAction()
         {
-            var response = ResponseHelper.Error<int>(HelperMessage.SMAI001P, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SMAI001P));
+            var response = ResponseHelper.Error<int>(HelperMessage.SCOM001S, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.SCOM001S));
             return Ok(response);
         }
         [Route("[controller]/[action]")]
@@ -101,40 +89,27 @@ namespace KantanMitsumori.Controllers
             {
                 MessageCode = model.messageCode,
                 MessageContent = model.messageContent,
-                logToken = _logToken
-                
+                LogSession = _logSession
+
             };
             return View(ErrorViewModel);
-        }
-        /// <summary> 
-        ///setTokenCookie
-        /// </summary>
-        /// <param name="token"></param>     
-        public void setTokenCookie(string accessExp, string token)
+        }    
+        public void setSession(LogSession logSession)
         {
-            //var currentDate = DateTime.Now;         
-            //var refreshExpires = accessExp;
-            //TimeSpan time = TimeSpan.Parse(refreshExpires);
-            // append cookie with refresh token to the http response
-            var cookieOptions = new CookieOptions
-            {
-                HttpOnly = true,
-                //Expires = currentDate.Add(time),
-            };
-            Response.Cookies.Append(COOKIES, token, cookieOptions);
+            HelperSession.Set<LogSession>(HttpContext.Session, CommonConst.KEY_SESSION_ASEST, logSession);
+            HelperSession.Set<string>(HttpContext.Session, CommonConst.KEY_SESSION_USERNO, logSession.UserNo!);
         }
-        /// <summary>
-        /// GetCookie
-        /// </summary>
-        /// <param name="Key"></param>
-        /// <returns></returns>
-        public string GetCookieforPrint(ActionExecutingContext filterContext,string Key)
+        public void RemoveSession()
+        {
+            HttpContext.Session.Remove(CommonConst.KEY_SESSION_ASEST);
+            HttpContext.Session.Remove(CommonConst.KEY_SESSION_USERNO);
+        }
+      
+        public string GetCookieforPrint(ActionExecutingContext filterContext, string Key)
         {
             var cookies = filterContext.HttpContext.Request.Cookies[Key]!;
             if (!string.IsNullOrEmpty(cookies))
-            {
-
-                //return cookies;
+            {         
                 return Encoding.UTF8.GetString(Convert.FromBase64String(cookies));
             }
             else
@@ -142,13 +117,17 @@ namespace KantanMitsumori.Controllers
                 return "";
             }
         }
-        /// <summary>
-        /// Remove Cookies
-        /// </summary>
-        /// <param name="Key"></param>
+
+        public void RemoveAllCookies()
+        {
+            RemoveCookies(CommonConst.sesCustNm_forPrint);
+            RemoveCookies(CommonConst.sesCustZip_forPrint);
+            RemoveCookies(CommonConst.sesCustAdr_forPrint);
+            RemoveCookies(CommonConst.sesCustTel_forPrint);
+        }       
         public void RemoveCookies(string Key)
         {
-            var cookies = Request.Cookies[Key]!??"";
+            var cookies = Request.Cookies[Key]! ?? "";
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
@@ -157,7 +136,5 @@ namespace KantanMitsumori.Controllers
             Response.Cookies.Append(Key, cookies, cookieOptions);
         }
 
-
-        
     }
 }

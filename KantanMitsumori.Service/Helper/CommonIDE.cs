@@ -3,7 +3,7 @@ using KantanMitsumori.Entity.IDEEnitities;
 using KantanMitsumori.Infrastructure.Base;
 using KantanMitsumori.Model.Response;
 using Microsoft.Extensions.Logging;
-
+using KantanMitsumori.Helper.CommonFuncs;
 namespace KantanMitsumori.Service.Helper
 {
     public class CommonIDE
@@ -135,7 +135,7 @@ namespace KantanMitsumori.Service.Helper
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "getGuarantee - CEST-040D");
+                _logger.LogError(ex, "getGuarantee - CEST-040D");           
                 return null;
             }
         }

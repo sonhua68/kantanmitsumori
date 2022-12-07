@@ -23,7 +23,6 @@ namespace KantanMitsumori.Service
             services.AddTransient<IEstimateSubService, EstimateSubService>();
             services.AddTransient<IEstimateService, EstimateService>();
             services.AddTransient<IEstimateSubService, EstimateSubService>();
-            services.AddTransient<IReportService, ReportService>();
             services.AddTransient<IInpLoanService, InpLoanService>();
             services.AddTransient<ISelCarService, SelCarService>();
             services.AddTransient<IInpZeiHokenService, InpZeiHokenService>();

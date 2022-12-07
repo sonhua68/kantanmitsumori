@@ -4,6 +4,8 @@ using KantanMitsumori.Infrastructure.Repositories;
 using Microsoft.Extensions.Logging;
 
 using KantanMitsumori.DataAccess;
+using KantanMitsumori.Helper.CommonFuncs;
+
 namespace KantanMitsumori.Infrastructure.Base
 {
     public class UnitOfWork : IUnitOfWork
@@ -11,7 +13,8 @@ namespace KantanMitsumori.Infrastructure.Base
         private readonly ILogger _logger;
         private readonly ASESTContext _context;
         private bool _disposed = false;
-        public ASESTContext DbContext => _context;
+        public ASESTContext DbContext => _context;   
+
 
         public IASOPCarNameRepository ASOPCarNames { get; private set; }
         public IASOPMakerRepository ASOPMakers { get; private set; }
@@ -68,11 +71,13 @@ namespace KantanMitsumori.Infrastructure.Base
             Syss = new SysRepository(context, logger);
             SysExhs = new SysExhRepository(context, logger);
             AsMembers = new AsMemberRepository(context, logger);
+
         }
 
         public async Task<bool> CommitAsync()
         {
-            _logger.LogInformation("[UnitOfWork] begin process [SaveChanges]...");
+
+            _logger.LogInformation("[UnitOfWork] begin process [SaveChanges]...");   
             var result = true;
             var errorCode = 0;
             using (var transaction = _context.Database.BeginTransaction())

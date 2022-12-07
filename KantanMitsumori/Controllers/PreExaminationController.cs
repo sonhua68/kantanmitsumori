@@ -19,8 +19,8 @@ namespace KantanMitsumori.Controllers
 
         public IActionResult Index()
         {
-            string estNo = _logToken!.sesEstNo ?? "";
-            string estSubNo = _logToken.sesEstSubNo ?? "";
+            string estNo = _logSession!.sesEstNo ?? "";
+            string estSubNo = _logSession.sesEstSubNo ?? "";
             var response = _preExaminationService.GetInfoPreExamination(estNo, estSubNo);
             if (response.ResultStatus != (int)enResponse.isSuccess)
             {
@@ -33,7 +33,7 @@ namespace KantanMitsumori.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdatePreExamination()
         {
-            var response = await _preExaminationService.UpdatePreExamination(_logToken!);
+            var response = await _preExaminationService.UpdatePreExamination(_logSession!);
             return Ok(response);
         }
     }

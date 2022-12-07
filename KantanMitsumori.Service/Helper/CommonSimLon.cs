@@ -1,6 +1,6 @@
 ﻿using KantanMitsumori.Helper.Constant;
 using Microsoft.Extensions.Logging;
-
+using KantanMitsumori.Helper.CommonFuncs;
 namespace KantanMitsumori.Service.Helper
 {
     public class CommonSimLon

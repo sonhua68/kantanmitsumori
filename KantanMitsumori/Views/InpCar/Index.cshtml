@@ -1,4 +1,6 @@
-﻿@using KantanMitsumori.Helper.CommonFuncs;
+﻿@addTagHelper *, WebOptimizer.Core
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using KantanMitsumori.Helper.CommonFuncs;
 @using KantanMitsumori.Model.Response;
 @model ResponseInp
 @{
@@ -305,8 +307,5 @@
 
     };
 
-          
-
 </script>
-<script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
 <script src="~/js/InpCar.js"></script>

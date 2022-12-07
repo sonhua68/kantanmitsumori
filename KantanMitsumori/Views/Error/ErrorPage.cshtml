@@ -3,11 +3,6 @@
     ViewData["Title"] = "かんたん見積";
 }
 @model ErrorViewModel
-
-
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,22 +10,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, user-scalable=no, minimal-ui">
-
-
-
     <!-- Remove Tap Highlight on Windows Phone IE -->
     <meta name="msapplication-tap-highlight" content="no">
     <link rel="shortcut icon" href="~/favicon.ico">
-    <!-- Add css bootstrap-->
-    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/lib/bootstrap/dist/css/docs.css" rel="stylesheet">
-    <script src="~/lib/bootstrap/dist/css/bootstrap.bundle.min.js"></script>
-    <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-reboot.css" rel="stylesheet" />
-    <link href="~/lib/bootstrap/dist/css/bootstrap-utilities.css" rel="stylesheet" />
-
-
-
     <!-- custom bootstrap-->
     <link href="~/css/site.css" rel="stylesheet" />
     <!-- add jquery -->
@@ -54,20 +36,20 @@
                          <br>ASNET/店頭商談NETの元の画面から本サービスを起動して下さい。<br>（エラー番号：@Model.MessageCode）
                     </span>
                     @{
-                        if (Model.logToken == null)
+                        if (Model.LogSession == null)
                         {
                             <img id="Image1" src="~/img/BlankLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
                                     left: 2px; position: absolute; top: 1px" />
                         }
                         else
                         {
-                            if (Model.logToken!.sesMode == "1")
+                            if (Model.LogSession!.sesMode == "1")
                             {
                                 <img id="Image1" src="~/img/TentoLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
                                         left: 2px; position: absolute; top: 1px" />
 
                             }
-                            else if (Model.logToken!.sesMode == "0")
+                            else if (Model.LogSession!.sesMode == "0")
                             {
                                 <img id="Image1" src="~/img/AsLogo.png" style="height:36px;width:110px;border-width:0px;z-index: 100;
                                     left: 2px; position: absolute; top: 1px" />

@@ -1,4 +1,6 @@
-﻿@using KantanMitsumori.Model.Response;
+﻿@addTagHelper *, WebOptimizer.Core
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using KantanMitsumori.Model.Response;
 @model ResponseInpCarPrice
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -151,5 +153,4 @@
         return false;
     }
 </script>
-<script src="~/lib/MicrosoftAjax/MicrosoftAjax.js"></script>
 <script src="~/js/InpCarPrice.js"></script>

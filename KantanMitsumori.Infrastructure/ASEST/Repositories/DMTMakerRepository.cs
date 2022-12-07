@@ -4,6 +4,7 @@ using KantanMitsumori.Infrastructure.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using KantanMitsumori.DataAccess;
+using KantanMitsumori.Helper.CommonFuncs;
 namespace KantanMitsumori.Infrastructure.Repositories
 {
     public class DMTMakerRepository : GenericRepository<DmtMaker>, IDMTMakerRepository

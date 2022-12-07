@@ -18,7 +18,7 @@ namespace KantanMitsumori.Service.Helper
         private readonly IMapper _mapper;
         private readonly HelperMapper _helperMapper;
 
-        private LogToken valToken;
+        private LogSession valToken;
         private readonly CommonFuncHelper _commonFuncHelper;
         private readonly List<string> reCalEstModel = new List<string> { "CarPrice", "Discount", "SyakenNew", "SyakenZok", "OptionPrice1", "OptionPrice2", "OptionPrice3", "OptionPrice4", "OptionPrice5", "OptionPrice6", "OptionPrice7", "OptionPrice8", "OptionPrice9", "OptionPrice10", "OptionPrice11", "OptionPrice12", "TaxCheck", "TaxGarage", "TaxTradeIn", "TaxRecycle", "TaxDelivery", "TaxOther" };
         private readonly List<string> reCalEstSubModel = new List<string> { "YtiRieki", "RakuSatu", "Rikusou", "TaxTradeInSatei", "TaxSet1", "TaxSet2", "TaxSet3", "AutoTaxEquivalent", "DamageInsEquivalent" };
@@ -31,10 +31,10 @@ namespace KantanMitsumori.Service.Helper
             _mapper = mapper;
             _commonFuncHelper = commonFuncHelper;
             _helperMapper = helperMapper;
-            valToken = new LogToken();
+            valToken = new LogSession();
 
         }
-        public async Task<bool> CalcSum(string inEstNo, string inEstSubNo, LogToken logToken)
+        public async Task<bool> CalcSum(string inEstNo, string inEstSubNo, LogSession LogSession)
         {
             try
             {
@@ -54,9 +54,9 @@ namespace KantanMitsumori.Service.Helper
 
                 // 再計算前の総額
                 int? oldSalesSum = estModel.SalesSum;
-                var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, logToken.sesTaxRatio, logToken.UserNo!);
+                var vTax = _commonFuncHelper.getTax((DateTime)estModel.Udate!, LogSession.sesTaxRatio, LogSession.UserNo!);
                 valToken.sesTaxRatio = vTax;
-                var dtUserDef = _commonFuncHelper.getUserDefData(logToken.UserNo!);
+                var dtUserDef = _commonFuncHelper.getUserDefData(LogSession.UserNo!);
                 if (dtUserDef != null)
                 {
                     if (estModel.ConTaxInputKb != dtUserDef.ConTaxInputKb)
@@ -335,9 +335,9 @@ namespace KantanMitsumori.Service.Helper
             return ResponseHelper.Ok<EstModel>(HelperMessage.I0002, KantanMitsumoriUtil.GetMessage(CommonConst.language_JP, HelperMessage.I0002), estData);
         }
 
-        public EstimateIdeModel SetEstIDEData(LogToken logtoken)
+        public EstimateIdeModel SetEstIDEData(LogSession LogSession)
         {
-            var dataEstIDE = GetEstIDEData(logtoken.sesEstNo!, logtoken.sesEstSubNo!);
+            var dataEstIDE = GetEstIDEData(LogSession.sesEstNo!, LogSession.sesEstSubNo!);
             if (!string.IsNullOrEmpty(dataEstIDE!.EstNo) || !string.IsNullOrEmpty(dataEstIDE.EstSubNo))
             {
                 var dtContractPlan = _unitOfWorkIDE.ContractPlans.GetSingleOrDefault(x => x.Id == dataEstIDE.ContractPlanId);

@@ -68,6 +68,7 @@
         public const string ISYS010I = "ISYS-010I";
         public const string SMAI000S = "SMAI-000S";
         public const string SMAI000D = "SMAI-000D";
+        public const string SCOM001S = "SCOM-001S";
 
         /// <summary>
         /// SSLE-010P Missing user info

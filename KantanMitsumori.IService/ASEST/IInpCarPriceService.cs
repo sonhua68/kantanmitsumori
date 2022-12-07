@@ -7,7 +7,7 @@ namespace KantanMitsumori.IService
     public interface IInpCarPriceService
     {
         ResponseBase<ResponseInpCarPrice> GetCarPriceInfo(RequestInpCarPrice request);
-        Task<ResponseBase<int>> UpdateCarPrice(RequestUpdateCarPrice request, LogToken logToken);
+        Task<ResponseBase<int>> UpdateCarPrice(RequestUpdateCarPrice request, LogSession logSession);
 
 
     }

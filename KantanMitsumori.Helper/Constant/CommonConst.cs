@@ -212,5 +212,9 @@
 
         public const decimal TAX_10_PERCENT_VALUE = 0.1M;
 
+        public const string HostPrintService = "HostPrintService";
+        public const string KEY_SESSION_ASEST = "KEY_SESSION_ASEST";
+        public const string KEY_SESSION_USERNO = "KEY_SESSION_USERNO";
+
     }
 }
